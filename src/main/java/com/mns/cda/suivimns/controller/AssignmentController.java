@@ -1,7 +1,9 @@
 package com.mns.cda.suivimns.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.mns.cda.suivimns.dao.AssignmentDao;
 import com.mns.cda.suivimns.model.Assignment;
+import com.mns.cda.suivimns.view.AssignmentView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,11 +25,13 @@ public class AssignmentController {
     }
 
     @GetMapping("/assignment/list")
+    @JsonView(AssignmentView.class)
     public List<Assignment> getAll() {
         return assignmentDao.findAll();
     }
 
     @GetMapping("/assignment/{id}")
+    @JsonView(AssignmentView.class)
     public ResponseEntity<Assignment> getById(@PathVariable int id) {
         Optional<Assignment> assignment = assignmentDao.findById(id);
         if (assignment.isEmpty()) {
@@ -59,6 +63,7 @@ public class AssignmentController {
     }
 
     @PutMapping("/assignment/{id}")
+    @JsonView(AssignmentView.class)
     public ResponseEntity<Assignment> update(@PathVariable int id, @RequestBody @Validated() Assignment assignmentToUpdate) {
         Optional<Assignment> assignment = assignmentDao.findById(id);
 

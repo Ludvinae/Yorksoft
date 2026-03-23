@@ -1,9 +1,11 @@
 package com.mns.cda.suivimns.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.mns.cda.suivimns.dao.EmployeeDao;
 import com.mns.cda.suivimns.model.Employee;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
+import com.mns.cda.suivimns.view.EmployeeView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,11 +26,13 @@ public class EmployeeController {
     }
 
     @GetMapping("/employee/list")
+    @JsonView(EmployeeView.class)
     public List<Employee> getAll() {
         return employeeDao.findAll();
     }
 
     @GetMapping("/employee/{id}")
+    @JsonView(EmployeeView.class)
     public ResponseEntity<Employee> getById(@PathVariable int id) {
 
         Optional<Employee> employee = employeeDao.findById(id);
@@ -59,6 +63,7 @@ public class EmployeeController {
     }
 
     @PutMapping("/employee/{id}")
+    @JsonView(EmployeeView.class)
     public ResponseEntity<Employee> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Employee employeeToUpdate) {
         Optional<Employee> employee = employeeDao.findById(id);
 

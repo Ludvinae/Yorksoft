@@ -1,15 +1,19 @@
 package com.mns.cda.suivimns.model;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.mns.cda.suivimns.model.groups.OnCreate;
+import com.mns.cda.suivimns.view.AssignmentView;
+import com.mns.cda.suivimns.view.EmployeeView;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -20,25 +24,30 @@ public class Employee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView(EmployeeView.class)
     protected Integer idEmployee;
 
     @Column(nullable = false, length = 127)
     @NotBlank(groups = {OnCreate.class})
     @Length(max = 127)
+    @JsonView(EmployeeView.class)
     protected String firstName;
 
     @Column(nullable = false, length = 127)
     @NotBlank(groups = {OnCreate.class})
     @Length(max = 127)
+    @JsonView(EmployeeView.class)
     protected String lastName;
 
     @Column(length = 127)
     @Email(groups = {OnCreate.class})
     @Length(max = 127)
+    @JsonView(EmployeeView.class)
     protected String email;
 
     @Column(length = 31)
     @Length(max = 31)
+    @JsonView(EmployeeView.class)
     protected String phoneNumber;
 
     @Column(nullable = false, length = 127)
@@ -48,5 +57,12 @@ public class Employee {
 
     @ManyToOne
     @JoinColumn(name = "id_role")
+    @JsonView({EmployeeView.class, AssignmentView.class})
     protected Role role;
+
+    @OneToMany(mappedBy = "manager")
+    protected List<Assignment> assignedBy;
+
+    @OneToMany(mappedBy = "technician")
+    protected List<Assignment> assignedTO;
 }
