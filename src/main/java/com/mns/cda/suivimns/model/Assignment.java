@@ -27,15 +27,15 @@ public class Assignment {
 
     protected LocalDateTime endDate;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "id_ticket")
     protected Ticket ticket;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "id_manager")
     protected Employee manager;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "id_technician")
     protected Employee technician;
 }

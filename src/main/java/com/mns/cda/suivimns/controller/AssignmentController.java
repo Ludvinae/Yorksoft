@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,6 +40,7 @@ public class AssignmentController {
     @PostMapping("/assignment")
     public ResponseEntity<Assignment> create(@RequestBody @Validated() Assignment assignment) {
         assignment.setIdAssignment(null);
+        assignment.setAssigmentDate(LocalDateTime.now());
         assignmentDao.save(assignment);
 
         return new ResponseEntity<>(assignment, HttpStatus.CREATED);
@@ -64,10 +66,41 @@ public class AssignmentController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
+        if (assignmentToUpdate.getTicket() == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        if (assignmentToUpdate.getManager() == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        if (assignmentToUpdate.getTechnician() == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
         assignmentToUpdate.setIdAssignment(id);
+        assignmentToUpdate.setAssigmentDate(assignment.get().getAssigmentDate());
         assignmentDao.save(assignmentToUpdate);
 
         return new ResponseEntity<>(assignmentToUpdate, HttpStatus.OK);
     }
 
+    @PutMapping("assignment/close/{id}")
+    public ResponseEntity<Assignment> close(@PathVariable int id, @RequestBody @Validated() Assignment assignmentToUpdate) {
+        Optional<Assignment> assignment = assignmentDao.findById(id);
+
+        if (assignment.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        assignmentToUpdate.setIdAssignment(id);
+        assignmentToUpdate.setAssigmentDate(assignment.get().getAssigmentDate());
+        assignmentToUpdate.setTicket(assignment.get().getTicket());
+        assignmentToUpdate.setManager(assignment.get().getManager());
+        assignmentToUpdate.setTechnician(assignment.get().getTechnician());
+        assignmentToUpdate.setEndDate(LocalDateTime.now());
+        assignmentDao.save(assignmentToUpdate);
+
+        return new ResponseEntity<>(assignmentToUpdate, HttpStatus.OK);
+    }
 }

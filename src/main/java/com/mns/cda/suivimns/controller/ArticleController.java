@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,6 +44,7 @@ public class ArticleController {
     public ResponseEntity<Article> create(@RequestBody @Validated(OnCreate.class) Article article) {
         article.setIdArticle(null);
         article.setModificationDate(null);
+        article.setCreationDate(LocalDateTime.now());
 
         articleDao.save(article);
 
@@ -74,6 +76,7 @@ public class ArticleController {
         }
 
         articleToUpdate.setCreationDate(null);
+        articleToUpdate.setModificationDate(LocalDateTime.now());
         articleDao.save(articleToUpdate);
         return new ResponseEntity<>(article.get(), HttpStatus.OK);
     }
