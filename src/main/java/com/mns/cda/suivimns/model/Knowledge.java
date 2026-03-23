@@ -33,8 +33,8 @@ public class Knowledge {
     protected Theme theme;
 
     @ManyToMany
-    @JoinTable(name = "document",
-            joinColumns = @JoinColumn(name = "id_version"),
-            inverseJoinColumns = @JoinColumn(name = "id_knowledge"))
-    protected List<Knowledge> knowledgeList;
+    @JoinTable(name = "knowledge_versions",
+            joinColumns = @JoinColumn(name = "id_knowledge"),
+            inverseJoinColumns = @JoinColumn(name = "id_version"))
+    protected List<Version> versionList;
 }
