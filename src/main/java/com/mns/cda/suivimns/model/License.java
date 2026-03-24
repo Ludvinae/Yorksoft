@@ -1,35 +1,44 @@
 package com.mns.cda.suivimns.model;
 
-import com.mns.cda.suivimns.model.keys.LicenseKey;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.time.LocalDate;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@IdClass(LicenseKey.class)
 public class License {
 
     @Id
-    protected Integer id_software;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    protected Integer idLicense;
 
-    @Id
-    protected Integer id_organisation;
+    @Column(nullable = false, unique = true)
+    @NotBlank
+    protected String licenseNumber;
 
-    @ManyToOne
-    @MapsId("id_software")
+    protected LocalDate expirationDate;
+
+    @Column(nullable = false)
+    @NotBlank
+    protected Integer userCount;
+
+    @ManyToOne(optional = false)
     @JoinColumn(name = "id_software")
     protected Software software;
 
     @ManyToOne
-    @MapsId("id_organisation")
     @JoinColumn(name = "id_organisation")
     protected Organisation organisation;
 
-
+    @ManyToOne
+    @JoinColumn(name = "id_client")
+    protected Client client;
 }

@@ -9,8 +9,8 @@ import java.io.Serializable;
 public class ClassificationKey implements Serializable {
 
     @Column(name = "id_ticket")
-    Integer id_ticket;
+    Integer idTicket;
 
     @Column(name = "id_theme")
-    Integer id_theme;
+    Integer idTheme;
 }

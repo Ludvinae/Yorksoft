@@ -14,5 +14,5 @@ JOIN software s on v.id_software = s.id_software
 JOIN software_type st on s.id_software_type = st.id_software_type
 JOIN history h ON t.id_ticket = h.id_ticket
 JOIN status sta ON h.id_status = sta.id_status
-JOIN regroup r ON t.id_ticket = r.id_ticket
-JOIN theme th ON r.id_theme = th.id_theme;
+JOIN classification cl ON t.id_ticket = cl.id_ticket
+JOIN theme th ON cl.id_theme = th.id_theme;

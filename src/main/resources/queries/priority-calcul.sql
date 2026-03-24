@@ -5,5 +5,5 @@ FROM ticket AS t
 LEFT JOIN public.impact i on t.id_impact = i.id_impact
 LEFT JOIN public.urgency u on t.id_urgency = u.id_urgency
 LEFT JOIN public.client c on t.id_client = c.id_client
-JOIN regroup r on t.id_ticket = r.id_ticket
-JOIN theme th on r.id_theme = th.id_theme;
+JOIN classification cl on t.id_ticket = cl.id_ticket
+JOIN theme th on cl.id_theme = th.id_theme;

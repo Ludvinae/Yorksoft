@@ -1,9 +1,6 @@
 package com.mns.cda.suivimns.model;
 
-import com.mns.cda.suivimns.model.groups.OnCreate;
-import com.mns.cda.suivimns.model.groups.OnUpdate;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,11 +29,15 @@ public class History {
     @UpdateTimestamp
     protected LocalDateTime endDate;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "id_status")
     protected Status status;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "id_ticket")
     protected Ticket ticket;
+
+    @ManyToOne
+    @JoinColumn(name = "id_employee")
+    protected Employee employee;
 }

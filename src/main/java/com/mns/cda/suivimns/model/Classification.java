@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
 
@@ -17,22 +18,23 @@ import java.time.LocalDateTime;
 public class Classification {
 
     @Id
-    protected Integer id_ticket;
+    protected Integer idTicket;
 
     @Id
-    protected Integer id_theme;
+    protected Integer idTheme;
+
+    @CreatedDate
+    protected LocalDateTime affectation_date;
 
     @ManyToOne
-    @MapsId("id_ticket")
+    @MapsId("idTicket")
     @JoinColumn(name = "id_ticket")
     protected Ticket ticket;
 
     @ManyToOne
-    @MapsId("id_theme")
+    @MapsId("idTheme")
     @JoinColumn(name = "id_theme")
     protected Theme theme;
 
-
-    protected LocalDateTime affectation_date;
 
 }

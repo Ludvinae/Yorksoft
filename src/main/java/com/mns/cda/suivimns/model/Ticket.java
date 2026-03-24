@@ -64,9 +64,4 @@ public class Ticket {
     @JoinColumn(name = "id_client")
     protected Client client;
 
-    @ManyToMany
-    @JoinTable(name = "ticket_themes",
-            joinColumns = @JoinColumn(name = "id_ticket"),
-            inverseJoinColumns = @JoinColumn(name = "id_theme"))
-    protected List<Theme> themeList;
 }
