@@ -2,7 +2,7 @@ package com.mns.cda.suivimns.model;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.mns.cda.suivimns.model.groups.OnCreate;
-import com.mns.cda.suivimns.view.NewTicketSoftware;
+import com.mns.cda.suivimns.view.ClientSoftwareListView;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -10,6 +10,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -20,7 +22,7 @@ public class Organisation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView(NewTicketSoftware.class)
+    @JsonView(ClientSoftwareListView.class)
     protected Integer idOrganisation;
 
     @Column(nullable = false, length = 127)
@@ -37,6 +39,10 @@ public class Organisation {
 
     @ManyToOne
     @JoinColumn(name = "id_organisation_type")
-    @JsonView(NewTicketSoftware.class)
+    @JsonView(ClientSoftwareListView.class)
     protected OrganisationType type;
+
+    @OneToMany(mappedBy = "organisation")
+    @JsonView(ClientSoftwareListView.class)
+    protected List<License> licenseList;
 }

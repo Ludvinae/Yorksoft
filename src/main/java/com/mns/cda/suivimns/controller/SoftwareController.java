@@ -5,7 +5,7 @@ import com.mns.cda.suivimns.dao.SoftwareDao;
 import com.mns.cda.suivimns.model.Software;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
-import com.mns.cda.suivimns.view.NewTicketVersionView;
+import com.mns.cda.suivimns.view.SoftwareVersionListView;
 import com.mns.cda.suivimns.view.SoftwareView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -46,7 +46,7 @@ public class SoftwareController {
     }
 
     @GetMapping("/software/{id}/version/list")
-    @JsonView(NewTicketVersionView.class)
+    @JsonView(SoftwareVersionListView.class)
     public ResponseEntity<Software> getSoftwareVersionById(@PathVariable Integer id) {
         Optional<Software> software = softwareDao.findById(id);
 

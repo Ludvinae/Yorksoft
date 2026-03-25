@@ -2,8 +2,8 @@ package com.mns.cda.suivimns.model;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.mns.cda.suivimns.model.groups.OnCreate;
+import com.mns.cda.suivimns.view.ClientSoftwareListView;
 import com.mns.cda.suivimns.view.ClientView;
-import com.mns.cda.suivimns.view.NewTicketSoftware;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -24,7 +24,7 @@ public class Client {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView({NewTicketSoftware.class, ClientView.class})
+    @JsonView({ClientSoftwareListView.class, ClientView.class})
     protected Integer idClient;
 
     @Column(nullable = false, length = 127)
@@ -61,12 +61,12 @@ public class Client {
 
     @ManyToOne
     @JoinColumn(name = "id_organisation")
-    @JsonView(NewTicketSoftware.class)
+    @JsonView(ClientSoftwareListView.class)
     protected Organisation organisation;
 
 
-    @OneToMany
-    @JsonView(NewTicketSoftware.class)
+    @OneToMany(mappedBy = "client")
+    @JsonView(ClientSoftwareListView.class)
     protected List<License> licenseList;
 
 

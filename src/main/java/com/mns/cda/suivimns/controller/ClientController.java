@@ -5,8 +5,8 @@ import com.mns.cda.suivimns.dao.ClientDao;
 import com.mns.cda.suivimns.model.Client;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
+import com.mns.cda.suivimns.view.ClientSoftwareListView;
 import com.mns.cda.suivimns.view.ClientView;
-import com.mns.cda.suivimns.view.NewTicketSoftware;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,7 +45,7 @@ public class ClientController {
     }
 
     @GetMapping("/client/{id}/software/list")
-    @JsonView(NewTicketSoftware.class)
+    @JsonView(ClientSoftwareListView.class)
     public ResponseEntity<Client> getClientSofwareList(@PathVariable int id) {
 
         Optional<Client> client = clientDao.findById(id);
