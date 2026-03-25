@@ -1,9 +1,12 @@
 package com.mns.cda.suivimns.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.mns.cda.suivimns.dao.SoftwareDao;
 import com.mns.cda.suivimns.model.Software;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
+import com.mns.cda.suivimns.view.NewTicketVersionView;
+import com.mns.cda.suivimns.view.SoftwareView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,12 +28,26 @@ public class SoftwareController {
     }
 
     @GetMapping("/software/list")
+    @JsonView(SoftwareView.class)
     public List<Software> getAll() {
         return softwareDao.findAll();
     }
 
     @GetMapping("/software/{id}")
+    @JsonView(SoftwareView.class)
     public ResponseEntity<Software> getById(@PathVariable Integer id) {
+        Optional<Software> software = softwareDao.findById(id);
+
+        if (software.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(software.get(), HttpStatus.OK);
+    }
+
+    @GetMapping("/software/{id}/version/list")
+    @JsonView(NewTicketVersionView.class)
+    public ResponseEntity<Software> getSoftwareVersionById(@PathVariable Integer id) {
         Optional<Software> software = softwareDao.findById(id);
 
         if (software.isEmpty()) {

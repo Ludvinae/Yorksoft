@@ -1,5 +1,7 @@
 package com.mns.cda.suivimns.model;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.mns.cda.suivimns.view.NewTicketVersionView;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -9,7 +11,6 @@ import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Getter
 @Setter
@@ -20,11 +21,13 @@ public class Version {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView(NewTicketVersionView.class)
     protected Integer idVersion;
 
     @Column(nullable = false, length = 63)
     @NotBlank
     @Length(min = 1, max = 63)
+    @JsonView(NewTicketVersionView.class)
     protected String versionNumber;
 
 
@@ -32,6 +35,7 @@ public class Version {
 
     @ManyToOne
     @JoinColumn(name = "id_version_type")
+    @JsonView(NewTicketVersionView.class)
     protected VersionType versionType;
 
     @ManyToOne

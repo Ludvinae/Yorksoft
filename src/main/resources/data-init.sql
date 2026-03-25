@@ -106,7 +106,8 @@ VALUES ('2024-04-06', null, 'Explication sur la résolution des problemes de sau
 INSERT INTO license (id_client, id_organisation, id_software, user_count, expiration_date, license_number)
 VALUES (1, null, 1, 1, '2027-12-02', 'azerty123456'),
        (2, null, 2, 1, '2028-03-03', 'plopplop8511'),
-       (null, 1, 2, 1000, '2030-10-10', 'plopplop1234');
+       (null, 1, 2, 1000, '2030-10-10', 'plopplop1234'),
+       (1, null, 2, 1, '2027-12-02', 'ploplop2345');
 
 
 INSERT INTO classification (id_theme, id_ticket, affectation_date)

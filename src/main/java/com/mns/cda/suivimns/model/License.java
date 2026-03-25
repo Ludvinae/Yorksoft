@@ -1,5 +1,7 @@
 package com.mns.cda.suivimns.model;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.mns.cda.suivimns.view.NewTicketSoftware;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -18,6 +20,7 @@ public class License {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView(NewTicketSoftware.class)
     protected Integer idLicense;
 
     @Column(nullable = false, unique = true)
@@ -32,6 +35,7 @@ public class License {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_software")
+    @JsonView(NewTicketSoftware.class)
     protected Software software;
 
     @ManyToOne

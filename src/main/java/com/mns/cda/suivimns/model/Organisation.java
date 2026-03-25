@@ -1,7 +1,8 @@
 package com.mns.cda.suivimns.model;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.mns.cda.suivimns.model.groups.OnCreate;
-import com.mns.cda.suivimns.model.groups.OnUpdate;
+import com.mns.cda.suivimns.view.NewTicketSoftware;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -19,6 +20,7 @@ public class Organisation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView(NewTicketSoftware.class)
     protected Integer idOrganisation;
 
     @Column(nullable = false, length = 127)
@@ -35,5 +37,6 @@ public class Organisation {
 
     @ManyToOne
     @JoinColumn(name = "id_organisation_type")
+    @JsonView(NewTicketSoftware.class)
     protected OrganisationType type;
 }

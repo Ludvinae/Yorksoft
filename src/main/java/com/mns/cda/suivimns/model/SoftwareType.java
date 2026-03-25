@@ -1,5 +1,7 @@
 package com.mns.cda.suivimns.model;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.mns.cda.suivimns.view.NewTicketSoftware;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -22,6 +24,7 @@ public class SoftwareType {
     @Column(nullable = false, length = 127)
     @NotBlank
     @Length(min = 3, max = 127)
+    @JsonView(NewTicketSoftware.class)
     protected String designation;
 
 }
