@@ -5,6 +5,7 @@ import com.mns.cda.suivimns.dao.EmployeeDao;
 import com.mns.cda.suivimns.model.Employee;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
+import com.mns.cda.suivimns.view.EmployeeTicketListView;
 import com.mns.cda.suivimns.view.EmployeeView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,6 +35,18 @@ public class EmployeeController {
     @GetMapping("/employee/{id}")
     @JsonView(EmployeeView.class)
     public ResponseEntity<Employee> getById(@PathVariable int id) {
+
+        Optional<Employee> employee = employeeDao.findById(id);
+        if (employee.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(employee.get(), HttpStatus.OK);
+    }
+
+    @GetMapping("/employee/{id}/ticket/list")
+    @JsonView(EmployeeTicketListView.class)
+    public ResponseEntity<Employee> getEmployeeTicketList(@PathVariable int id) {
 
         Optional<Employee> employee = employeeDao.findById(id);
         if (employee.isEmpty()) {

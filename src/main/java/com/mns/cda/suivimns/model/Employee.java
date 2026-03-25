@@ -3,6 +3,7 @@ package com.mns.cda.suivimns.model;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.view.AssignmentView;
+import com.mns.cda.suivimns.view.EmployeeTicketListView;
 import com.mns.cda.suivimns.view.EmployeeView;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -24,7 +25,7 @@ public class Employee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView(EmployeeView.class)
+    @JsonView({EmployeeView.class, EmployeeTicketListView.class})
     protected Integer idEmployee;
 
     @Column(nullable = false, length = 127)
@@ -61,8 +62,10 @@ public class Employee {
     protected Role role;
 
     @OneToMany(mappedBy = "manager")
+    @JsonView(EmployeeTicketListView.class)
     protected List<Assignment> assignedBy;
 
     @OneToMany(mappedBy = "technician")
+    @JsonView(EmployeeTicketListView.class)
     protected List<Assignment> assignedTO;
 }

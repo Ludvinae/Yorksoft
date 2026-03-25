@@ -1,6 +1,9 @@
 package com.mns.cda.suivimns.model;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.mns.cda.suivimns.model.groups.OnCreate;
+import com.mns.cda.suivimns.view.EmployeeTicketListView;
+import com.mns.cda.suivimns.view.TicketStatusListView;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -22,6 +25,7 @@ public class Ticket {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView({EmployeeTicketListView.class, TicketStatusListView.class})
     protected Integer idTicket;
 
     @CreationTimestamp
@@ -63,5 +67,9 @@ public class Ticket {
     @ManyToOne
     @JoinColumn(name = "id_client")
     protected Client client;
+
+    @OneToMany(mappedBy = "ticket")
+    @JsonView(TicketStatusListView.class)
+    protected List<History> history;
 
 }
