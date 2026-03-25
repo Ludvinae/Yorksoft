@@ -14,7 +14,7 @@ import java.util.Optional;
 @RestController
 public class VersionTypeController {
 
-    private VersionTypeDao versionTypeDao;
+    private final VersionTypeDao versionTypeDao;
 
     @Autowired
     public VersionTypeController(VersionTypeDao versionTypeDao) {

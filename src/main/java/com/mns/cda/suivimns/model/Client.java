@@ -39,7 +39,8 @@ public class Client {
     @JsonView(ClientView.class)
     protected String lastName;
 
-    @Column(length = 127)
+    @Column(length = 127,nullable = false, unique = true )
+    @NotBlank(groups = {OnCreate.class})
     @Email(groups = {OnCreate.class})
     @Length(max = 127)
     @JsonView(ClientView.class)
@@ -53,7 +54,6 @@ public class Client {
     @Column(nullable = false, length = 127)
     @NotBlank(groups = {OnCreate.class})
     @Length(max = 127)
-    @JsonView(ClientView.class)
     protected String password;
 
     @JsonView(ClientView.class)

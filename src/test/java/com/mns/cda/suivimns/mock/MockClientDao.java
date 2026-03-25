@@ -162,4 +162,9 @@ public class MockClientDao implements ClientDao {
     public Page<Client> findAll(Pageable pageable) {
         return null;
     }
+
+    @Override
+    public Optional<Client> findByEmail(String email) {
+        return Optional.empty();
+    }
 }

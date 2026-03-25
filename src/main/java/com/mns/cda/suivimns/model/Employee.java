@@ -40,7 +40,8 @@ public class Employee {
     @JsonView(EmployeeView.class)
     protected String lastName;
 
-    @Column(length = 127)
+    @Column(length = 127, nullable = false, unique = true)
+    @NotBlank(groups = {OnCreate.class})
     @Email(groups = {OnCreate.class})
     @Length(max = 127)
     @JsonView(EmployeeView.class)

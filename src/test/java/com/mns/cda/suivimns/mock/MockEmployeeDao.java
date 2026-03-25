@@ -162,4 +162,9 @@ public class MockEmployeeDao implements EmployeeDao {
     public Page<Employee> findAll(Pageable pageable) {
         return null;
     }
+
+    @Override
+    public Optional<Employee> findByEmail(String email) {
+        return Optional.empty();
+    }
 }
