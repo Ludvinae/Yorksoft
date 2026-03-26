@@ -1,5 +1,6 @@
 package com.mns.cda.suivimns.model;
 
+import com.mns.cda.suivimns.model.keys.ClassificationKey;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,14 +15,19 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@IdClass(Classification.class)
+//@IdClass(Classification.class)
 public class Classification {
 
+    /*
     @Id
     protected Integer idTicket;
 
     @Id
     protected Integer idTheme;
+     */
+
+    @EmbeddedId
+    protected ClassificationKey id;
 
     @CreatedDate
     protected LocalDateTime affectation_date;
