@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.view.EmployeeTicketListView;
 import com.mns.cda.suivimns.view.TicketStatusListView;
+import com.mns.cda.suivimns.view.TicketView;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -25,27 +26,34 @@ public class Ticket {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView({EmployeeTicketListView.class, TicketStatusListView.class})
+    @JsonView({EmployeeTicketListView.class, TicketStatusListView.class, TicketView.class})
     protected Integer idTicket;
 
     @CreationTimestamp
+    @JsonView(TicketView.class)
     protected LocalDateTime openDate;
 
+    @JsonView(TicketView.class)
     protected LocalDateTime closeDate;
 
     @UpdateTimestamp
+    @JsonView(TicketView.class)
     protected LocalDateTime modificationDate;
 
     @Column(nullable = false, columnDefinition = "TEXT")
     @NotBlank(groups = {OnCreate.class})
+    @JsonView(TicketView.class)
     protected String description;
 
+    @JsonView(TicketView.class)
     protected Integer callDuration;
 
     @Column(nullable = false)
     @NotBlank(groups = {OnCreate.class})
+    @JsonView(TicketView.class)
     protected Integer initialPriority;
 
+    @JsonView(TicketView.class)
     protected Integer finalPriority;
 
     @ManyToOne

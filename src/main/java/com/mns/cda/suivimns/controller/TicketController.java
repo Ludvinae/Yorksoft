@@ -6,6 +6,7 @@ import com.mns.cda.suivimns.model.Ticket;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
 import com.mns.cda.suivimns.view.TicketStatusListView;
+import com.mns.cda.suivimns.view.TicketView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin
 public class TicketController {
 
     protected TicketDao ticketDao;
@@ -26,6 +28,7 @@ public class TicketController {
     }
 
     @GetMapping("/ticket/list")
+    @JsonView(TicketView.class)
     public List<Ticket> getAll() {
         return ticketDao.findAll();
     }
