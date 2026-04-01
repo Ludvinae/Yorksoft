@@ -7,5 +7,7 @@ type Ticket = {
   callDuration: number;
   initialPriority: number;
   finalPriority: number;
-  theme: string;
+  urgency: Urgency;
+  impact: Impact;
+  classificationList: List<Classification>;
 }

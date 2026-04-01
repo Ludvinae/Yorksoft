@@ -17,4 +17,5 @@ export class Tickets implements OnInit {
       .get<Ticket[]>('http://localhost:8080/ticket/list')
       .subscribe((listeTicket) => this.listeTicket.set(listeTicket));
   }
+
 }
