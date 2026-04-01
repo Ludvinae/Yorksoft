@@ -7,4 +7,5 @@ type Ticket = {
   callDuration: number;
   initialPriority: number;
   finalPriority: number;
+  theme: string;
 }

@@ -1,9 +1,10 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { TicketCard } from '../../components/ticket-card/ticket-card';
 
 @Component({
   selector: 'app-tickets',
-  imports: [],
+  imports: [TicketCard],
   templateUrl: './tickets.html',
   styleUrl: './tickets.css',
 })
