@@ -62,22 +62,30 @@ public class Ticket {
 
     @ManyToOne
     @JoinColumn(name = "id_version")
+    @JsonView(TicketView.class)
     protected Version version;
 
     @ManyToOne
     @JoinColumn(name = "id_urgency")
+    @JsonView(TicketView.class)
     protected Urgency urgency;
 
     @ManyToOne
     @JoinColumn(name = "id_impact")
+    @JsonView(TicketView.class)
     protected Impact impact;
 
     @ManyToOne
     @JoinColumn(name = "id_client")
+    @JsonView(TicketView.class)
     protected Client client;
 
     @OneToMany(mappedBy = "ticket")
-    @JsonView(TicketStatusListView.class)
-    protected List<History> history;
+    @JsonView({TicketStatusListView.class, TicketView.class})
+    protected List<History> historyList;
+
+    @OneToMany(mappedBy = "ticket")
+    @JsonView(TicketView.class)
+    protected List<Classification> classificationList;
 
 }

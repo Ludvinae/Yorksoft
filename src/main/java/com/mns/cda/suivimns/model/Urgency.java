@@ -1,7 +1,9 @@
 package com.mns.cda.suivimns.model;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
+import com.mns.cda.suivimns.view.TicketView;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -19,13 +21,16 @@ public class Urgency {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView(TicketView.class)
     protected Integer idUrgency;
 
     @Column(nullable = false, length = 63, unique = true)
     @NotBlank(groups = {OnCreate.class})
     @Length(max = 63)
+    @JsonView(TicketView.class)
     protected String designation;
 
+    @JsonView(TicketView.class)
     protected Byte priorityFactor;
 
     @Column(columnDefinition = "TEXT")
