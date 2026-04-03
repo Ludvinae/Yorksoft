@@ -18,18 +18,10 @@ VALUES ('1.0', '2011-11-11 14:30:00', 1, 1),
        ('2.0', '2025-02-19 11:10:00', 2, 1),
        ('0.6.3', '2026-01-01 22:00:00', 3, 2);
 
-INSERT INTO organisation_type (designation)
-VALUES ('PME'),
-       ('Grande entreprise'),
-       ('Institution');
-
-INSERT INTO organisation (name, domain, siret_number, id_organisation_type)
-VALUES ('Crédit Mutuel', 'Banque', '123456789AZERTY', 2);
-
-INSERT INTO client (importance, phone_number, email, first_name, last_name, password, id_organisation)
-VALUES (1, '06 84 54 56 11', 'barbara.dupont99@gmail.com', 'Barbara', 'Dupont', 'WeshAlors99', null),
-       (1, '07 44 12 33 13', 'bdupont@hotmail.com', 'Barbara', 'Dupont', 'TangoNocturne', null),
-       (5, '', 'kevin@creditmutuel.fr', 'Kevin', 'Martin', 'kékédu57', 1);
+INSERT INTO client (importance, phone_number, email, first_name, last_name, password)
+VALUES (1, '06 84 54 56 11', 'barbara.dupont99@gmail.com', 'Barbara', 'Dupont', 'WeshAlors99'),
+       (1, '07 44 12 33 13', 'bdupont@hotmail.com', 'Barbara', 'Dupont', 'TangoNocturne'),
+       (5, '', 'kevin@creditmutuel.fr', 'Kevin', 'Martin', 'kékédu57');
 
 INSERT INTO role (rank, designation)
 VALUES ('', 'Manager'),
@@ -52,10 +44,6 @@ VALUES (1, 'Nouveau'),
        (5, 'Résolu'),
        (6, 'Clos');
 
-INSERT INTO communication_canal (designation)
-VALUES ('Téléphone'),
-       ('Portail web'),
-       ('Courriel');
 
 INSERT INTO urgency (priority_factor, designation, description)
 VALUES (1, 'Basse', 'Inconvenience d''utilisation'),
@@ -80,9 +68,9 @@ VALUES (1, 'Erreur de manipulation', ''),
        (1, 'Autres cas', '');
 
 INSERT INTO ticket (open_date, call_duration, final_priority, initial_priority, close_date, modification_date,
-                    description, id_client, id_urgency, id_impact, id_version, id_communication_canal)
-VALUES (NOW(), null, 1, 2, null, null, 'Ca marche pas', 1, 1, 1, 2, 2),
-       (NOW(), 1035, null, 80, null, null, 'Indisponibilité du service de sauvegarde en ligne', 3, 2, 2, 3, 1);
+                    description, id_client, id_urgency, id_impact, id_version)
+VALUES (NOW(), null, 1, 2, null, null, 'Ca marche pas', 1, 1, 1, 2),
+       (NOW(), 1035, null, 80, null, null, 'Indisponibilité du service de sauvegarde en ligne', 3, 2, 2, 3);
 
 INSERT INTO history (id_status, id_ticket, id_employee)
 VALUES (1, 1, null),
@@ -103,11 +91,11 @@ VALUES ('Service Cloud indisponible', 4);
 INSERT INTO article (creation_date, modification_date, content, id_knowledge, id_employee)
 VALUES ('2024-04-06', null, 'Explication sur la résolution des problemes de sauvegarde sur le Cloud', 1, 3);
 
-INSERT INTO license (id_client, id_organisation, id_software, user_count, expiration_date, license_number)
-VALUES (1, null, 1, 1, '2027-12-02', 'azerty123456'),
-       (2, null, 2, 1, '2028-03-03', 'plopplop8511'),
-       (null, 1, 2, 1000, '2030-10-10', 'plopplop1234'),
-       (1, null, 2, 1, '2027-12-02', 'ploplop2345');
+INSERT INTO license (id_client, id_software, user_count, expiration_date, license_number)
+VALUES (1,  1, 1, '2027-12-02', 'azerty123456'),
+       (2, 2, 1, '2028-03-03', 'plopplop8511'),
+       (null,  2, 1000, '2030-10-10', 'plopplop1234'),
+       (1,  2, 1, '2027-12-02', 'ploplop2345');
 
 
 INSERT INTO classification (id_theme, id_ticket, affectation_date)

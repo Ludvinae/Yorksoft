@@ -39,10 +39,6 @@ public class License {
     protected Software software;
 
     @ManyToOne
-    @JoinColumn(name = "id_organisation")
-    protected Organisation organisation;
-
-    @ManyToOne
     @JoinColumn(name = "id_client")
     protected Client client;
 }

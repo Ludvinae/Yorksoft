@@ -56,9 +56,6 @@ public class Ticket {
     @JsonView(TicketView.class)
     protected Integer finalPriority;
 
-    @ManyToOne
-    @JoinColumn(name = "id_communication_canal")
-    protected CommunicationCanal canal;
 
     @ManyToOne
     @JoinColumn(name = "id_version")

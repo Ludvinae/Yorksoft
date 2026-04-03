@@ -59,11 +59,6 @@ public class Client {
     @JsonView(ClientView.class)
     protected Byte importance;
 
-    @ManyToOne
-    @JoinColumn(name = "id_organisation")
-    @JsonView(ClientSoftwareListView.class)
-    protected Organisation organisation;
-
 
     @OneToMany(mappedBy = "client")
     @JsonView(ClientSoftwareListView.class)
