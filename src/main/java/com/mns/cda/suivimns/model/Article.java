@@ -41,6 +41,6 @@ public class Article {
     protected Knowledge knowledge;
 
     @ManyToOne
-    @JoinColumn(name = "id_employee")
-    protected Employee employee;
+    @JoinColumn(name = "id_technician")
+    protected Technician technician;
 }

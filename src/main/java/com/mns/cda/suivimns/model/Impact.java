@@ -5,6 +5,7 @@ import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.view.TicketView;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,7 +26,7 @@ public class Impact {
 
     @Column(nullable = false, length = 63, unique = true)
     @NotBlank(groups = {OnCreate.class})
-    @Length(max = 63)
+    @Size(max = 63)
     @JsonView(TicketView.class)
     protected String designation;
 

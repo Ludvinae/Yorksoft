@@ -4,6 +4,7 @@ import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,7 +26,7 @@ public class Knowledge {
 
     @Column(nullable = false)
     @NotBlank(groups = {OnCreate.class, OnUpdate.class})
-    @Length(max = 255)
+    @Size(max = 255)
     protected String subject;
 
     @ManyToOne

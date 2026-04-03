@@ -41,6 +41,6 @@ public class History {
     protected Ticket ticket;
 
     @ManyToOne
-    @JoinColumn(name = "id_employee")
-    protected Employee employee;
+    @JoinColumn(name = "id_app_user")
+    protected AppUser actor;
 }

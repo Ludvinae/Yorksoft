@@ -5,6 +5,7 @@ import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.view.TicketStatusListView;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,7 +26,7 @@ public class Status {
 
     @Column(nullable = false, length = 63, unique = true)
     @NotBlank(groups = {OnCreate.class})
-    @Length(min = 3, max = 63)
+    @Size(min = 3, max = 63)
     @JsonView(TicketStatusListView.class)
     protected String designation;
 

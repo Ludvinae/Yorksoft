@@ -41,10 +41,10 @@ public class Assignment {
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_manager")
     @JsonView(AssignmentView.class)
-    protected Employee manager;
+    protected Manager manager;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_technician")
     @JsonView(AssignmentView.class)
-    protected Employee technician;
+    protected Technician technician;
 }

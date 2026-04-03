@@ -42,11 +42,7 @@ public class Comment {
     protected Ticket ticket;
 
     @ManyToOne
-    @JoinColumn(name = "id_employee")
-    protected Employee employee;
-
-    @ManyToOne
-    @JoinColumn(name = "id_client")
-    protected Client client;
+    @JoinColumn(name = "id_app_user")
+    protected AppUser author;
 
 }

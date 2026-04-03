@@ -5,6 +5,7 @@ import com.mns.cda.suivimns.view.ClientSoftwareListView;
 import com.mns.cda.suivimns.view.SoftwareView;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,7 +25,7 @@ public class SoftwareType {
 
     @Column(nullable = false, length = 127)
     @NotBlank
-    @Length(min = 3, max = 127)
+    @Size(min = 3, max = 127)
     @JsonView({ClientSoftwareListView.class, SoftwareView.class})
     protected String designation;
 

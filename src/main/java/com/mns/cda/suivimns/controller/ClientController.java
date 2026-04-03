@@ -57,6 +57,7 @@ public class ClientController {
         return new ResponseEntity<>(client.get(), HttpStatus.OK);
     }
 
+    /*
     @PostMapping("/client")
     public ResponseEntity<Client> create(@RequestBody @Validated(OnCreate.class) Client client) {
         client.setIdClient(null);
@@ -64,6 +65,8 @@ public class ClientController {
 
         return new ResponseEntity<>(client, HttpStatus.CREATED);
     }
+
+
 
     @DeleteMapping("/client/{id}")
     public ResponseEntity<Client> delete(@PathVariable int id) {
@@ -89,4 +92,6 @@ public class ClientController {
         clientDao.save(clientToUpdate);
         return new ResponseEntity<>(client.get(), HttpStatus.OK);
     }
+    */
+
 }

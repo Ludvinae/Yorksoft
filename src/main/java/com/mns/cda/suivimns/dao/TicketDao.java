@@ -17,7 +17,7 @@ public interface TicketDao extends JpaRepository<Ticket, Integer> {
             "t.description, t.callDuration, t.initialPriority, " +
             "t.finalPriority, u.designation, u.priorityFactor, i.designation, " +
             "i.priorityFactor, v.versionNumber, vt.designation, " +
-            "s.name, c.idClient, c.firstName, c.lastName, c.importance, " +
+            "s.name, c.idAppUser, c.firstName, c.lastName, c.importance, " +
             "th.designation, th.priorityFactor, st.designation) " +
             "FROM Ticket t " +
             "JOIN t.urgency u " +

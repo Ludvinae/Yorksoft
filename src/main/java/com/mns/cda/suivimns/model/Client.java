@@ -7,6 +7,7 @@ import com.mns.cda.suivimns.view.ClientView;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,45 +21,10 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Client {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView({ClientSoftwareListView.class, ClientView.class})
-    protected Integer idClient;
-
-    @Column(nullable = false, length = 127)
-    @NotBlank(groups = {OnCreate.class})
-    @Length(max = 127)
-    @JsonView(ClientView.class)
-    protected String firstName;
-
-    @Column(nullable = false, length = 127)
-    @NotBlank(groups = {OnCreate.class})
-    @Length(max = 127)
-    @JsonView(ClientView.class)
-    protected String lastName;
-
-    @Column(length = 127,nullable = false, unique = true )
-    @NotBlank(groups = {OnCreate.class})
-    @Email(groups = {OnCreate.class})
-    @Length(max = 127)
-    @JsonView(ClientView.class)
-    protected String email;
-
-    @Column(length = 31)
-    @Length(max = 31)
-    @JsonView(ClientView.class)
-    protected String phoneNumber;
-
-    @Column(nullable = false, length = 127)
-    @NotBlank(groups = {OnCreate.class})
-    @Length(max = 127)
-    protected String password;
+public class Client extends AppUser {
 
     @JsonView(ClientView.class)
     protected Byte importance;
-
 
     @OneToMany(mappedBy = "client")
     @JsonView(ClientSoftwareListView.class)

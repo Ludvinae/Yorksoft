@@ -7,6 +7,7 @@ import com.mns.cda.suivimns.view.SoftwareVersionListView;
 import com.mns.cda.suivimns.view.SoftwareView;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,7 +30,7 @@ public class Software {
 
     @Column(nullable = false, length = 127)
     @NotBlank(groups = {OnCreate.class})
-    @Length(min = 1, max = 127)
+    @Size(min = 1, max = 127)
     @JsonView({ClientSoftwareListView.class, SoftwareView.class})
     protected String name;
 
