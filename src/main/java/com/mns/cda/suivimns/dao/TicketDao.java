@@ -1,6 +1,7 @@
 package com.mns.cda.suivimns.dao;
 
 import com.mns.cda.suivimns.dto.TicketFullWithLatest;
+import com.mns.cda.suivimns.model.Classification;
 import com.mns.cda.suivimns.model.Ticket;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,7 +18,7 @@ public interface TicketDao extends JpaRepository<Ticket, Integer> {
             "t.finalPriority, u.designation, u.priorityFactor, i.designation, " +
             "i.priorityFactor, v.versionNumber, vt.designation, " +
             "s.name, c.idClient, c.firstName, c.lastName, c.importance, " +
-            "th.designation, th.priorityFactor) " +
+            "th.designation, th.priorityFactor, st.designation) " +
             "FROM Ticket t " +
             "JOIN t.urgency u " +
             "JOIN t.impact i " +
@@ -27,12 +28,10 @@ public interface TicketDao extends JpaRepository<Ticket, Integer> {
             "JOIN t.client c " +
             "JOIN t.classificationList cl " +
             "JOIN cl.theme th " +
-            "WHERE cl.id = (" +
-            "    SELECT MAX(cl2.id) " +
-            "    FROM Classification cl2 " +
-            "    WHERE cl2.ticket = t )" )
+            "JOIN t.historyList h " +
+            "JOIN h.status st")
     List<TicketFullWithLatest> returnTicketFullWithLatest();
 
-    @Query("SELECT cl from  Classification cl JOIN cl.theme th")
+
 
 }
