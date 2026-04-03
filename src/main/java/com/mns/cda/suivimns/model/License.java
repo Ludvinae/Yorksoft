@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -38,7 +39,10 @@ public class License {
     @JsonView(ClientSoftwareListView.class)
     protected Software software;
 
-    @ManyToOne
-    @JoinColumn(name = "id_client")
-    protected Client client;
+
+    @ManyToMany
+    @JoinTable(name = "license_clients",
+            joinColumns = @JoinColumn(name = "id_license"),
+            inverseJoinColumns = @JoinColumn(name = "id_client"))
+    protected List<Client> clientList;
 }
