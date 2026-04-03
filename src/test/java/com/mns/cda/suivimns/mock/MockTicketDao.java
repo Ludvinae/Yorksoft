@@ -1,6 +1,7 @@
 package com.mns.cda.suivimns.mock;
 
 import com.mns.cda.suivimns.dao.TicketDao;
+import com.mns.cda.suivimns.dto.TicketFullWithLatest;
 import com.mns.cda.suivimns.model.Ticket;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -161,5 +162,10 @@ public class MockTicketDao implements TicketDao {
     @Override
     public Page<Ticket> findAll(Pageable pageable) {
         return null;
+    }
+
+    @Override
+    public List<TicketFullWithLatest> returnTicketFullWithLatest() {
+        return List.of();
     }
 }
