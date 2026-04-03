@@ -12,6 +12,7 @@ export class Tickets implements OnInit {
   http: HttpClient = inject(HttpClient);
   listeTicket = signal<Ticket[]>([]);
 
+
   ngOnInit() {
     this.http
       .get<Ticket[]>('http://localhost:8080/ticket/list')
