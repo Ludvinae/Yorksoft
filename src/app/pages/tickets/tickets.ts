@@ -10,12 +10,12 @@ import { TicketCard } from '../../components/ticket-card/ticket-card';
 })
 export class Tickets implements OnInit {
   http: HttpClient = inject(HttpClient);
-  listeTicket = signal<Ticket[]>([]);
+  listeTicket = signal<TicketFullLatest[]>([]);
 
 
   ngOnInit() {
     this.http
-      .get<Ticket[]>('http://localhost:8080/ticket/list')
+      .get<TicketFullLatest[]>('http://localhost:8080/ticket/list-full-latest')
       .subscribe((listeTicket) => this.listeTicket.set(listeTicket));
   }
 

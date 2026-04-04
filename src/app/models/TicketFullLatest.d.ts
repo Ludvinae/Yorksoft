@@ -20,4 +20,8 @@ type TicketFullLatest = {
   clientImportance: number;
   themeDesignation: string;
   themePriority: number;
+  statusDesignation: string;
+  comment: string;
+  commentAuthorFirstName: string;
+  commentAuthorLastName: string;
 }
