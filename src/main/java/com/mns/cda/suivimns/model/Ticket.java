@@ -85,4 +85,7 @@ public class Ticket {
     @JsonView(TicketView.class)
     protected List<Classification> classificationList;
 
+    @OneToMany(mappedBy = "ticket")
+    @JsonView(TicketView.class)
+    protected List<Comment> commentList;
 }

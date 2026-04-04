@@ -24,6 +24,9 @@ public record TicketFullWithLatest(
     int clientImportance,
     String themeDesignation,
     int themePriority,
-    String statusDesignation
+    String statusDesignation,
+    String comment,
+    String commentAuthorFirstName,
+    String commentAuthorLastName
 ) {
 }
