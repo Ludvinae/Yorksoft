@@ -7,6 +7,7 @@ import com.mns.cda.suivimns.view.TicketStatusListView;
 import com.mns.cda.suivimns.view.TicketView;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,6 +29,11 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonView({EmployeeTicketListView.class, TicketStatusListView.class, TicketView.class})
     protected Integer idTicket;
+
+    @Column(nullable = false, length = 63)
+    @NotBlank
+    @Size(max = 63)
+    protected String title;
 
     @CreationTimestamp
     @JsonView(TicketView.class)

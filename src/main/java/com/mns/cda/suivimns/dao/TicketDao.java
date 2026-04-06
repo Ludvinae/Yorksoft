@@ -13,15 +13,12 @@ import java.util.List;
 public interface TicketDao extends JpaRepository<Ticket, Integer> {
 
     @Query("SELECT new com.mns.cda.suivimns.dto.TicketFullWithLatest(" +
-            "t.idTicket, t.openDate, t.closeDate, t.modificationDate, " +
+            "t.idTicket, t.title, t.openDate, t.closeDate, t.modificationDate, " +
             "t.description, t.callDuration, t.initialPriority, " +
-            "t.finalPriority, u.designation, u.priorityFactor, i.designation, " +
-            "i.priorityFactor, v.versionNumber, vt.designation, " +
-            "s.name, c.idAppUser, c.firstName, c.lastName, c.importance, " +
-            "th.designation, th.priorityFactor, st.designation, cm.content, a.firstName, a.lastName) " +
+            "t.finalPriority, v.versionNumber, vt.designation, " +
+            "s.name, c.idAppUser, c.firstName, c.lastName, " +
+            "th.designation, st.designation, cm.content, a.firstName, a.lastName) " +
             "FROM Ticket t " +
-            "JOIN t.urgency u " +
-            "JOIN t.impact i " +
             "JOIN t.version v " +
             "JOIN v.versionType vt " +
             "JOIN v.software s " +
