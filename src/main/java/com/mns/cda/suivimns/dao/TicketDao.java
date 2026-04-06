@@ -17,7 +17,8 @@ public interface TicketDao extends JpaRepository<Ticket, Integer> {
             "t.description, t.callDuration, t.initialPriority, " +
             "t.finalPriority, v.versionNumber, vt.designation, " +
             "s.name, c.idAppUser, c.firstName, c.lastName, " +
-            "th.designation, st.designation, cm.content, a.firstName, a.lastName) " +
+            "th.designation, st.designation, cm.content, a.firstName, a.lastName," +
+            "te.idAppUser, mg.idAppUser) " +
             "FROM Ticket t " +
             "JOIN t.version v " +
             "JOIN v.versionType vt " +
@@ -27,8 +28,11 @@ public interface TicketDao extends JpaRepository<Ticket, Integer> {
             "JOIN cl.theme th " +
             "JOIN t.historyList h " +
             "JOIN h.status st " +
-            "JOIN t.commentList cm " +
-            "JOIN cm.author a")
+            "LEFT JOIN t.commentList cm " +
+            "LEFT JOIN cm.author a " +
+            "LEFT JOIN t.assignmentList at " +
+            "LEFT JOIN at.technician te " +
+            "LEFT JOIN at.manager mg")
     List<TicketFullWithLatest> returnTicketFullWithLatest();
 
 

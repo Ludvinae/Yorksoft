@@ -70,10 +70,10 @@ VALUES (1, 'Erreur de manipulation', ''),
        (1, 'Erreur de paramétrage', ''),
        (1, 'Autres cas', '');
 
-INSERT INTO ticket (open_date, call_duration, final_priority, initial_priority, close_date, modification_date,
+INSERT INTO ticket (title, open_date, call_duration, final_priority, initial_priority, close_date, modification_date,
                     description, id_client, id_urgency, id_impact, id_version)
-VALUES (NOW(), null, 1, 2, null, null, 'Ca marche pas', 1, 1, 1, 2),
-       (NOW(), 1035, null, 80, null, null, 'Indisponibilité du service de sauvegarde en ligne', 3, 2, 2, 3);
+VALUES ('Ca marche pas', NOW(), null, 1, 2, null, null, 'Ca marche pas', 1, 1, 1, 2),
+       ('Indisponibilité du service de sauvegarde en ligne', NOW(), 1035, 80, 80, null, null, 'Impossible d''acceder au dossiers sur le cloud dans le gestionnaire de projets.', 3, 2, 2, 3);
 
 INSERT INTO history (id_status, id_ticket, id_app_user)
 VALUES (1, 1, 1),

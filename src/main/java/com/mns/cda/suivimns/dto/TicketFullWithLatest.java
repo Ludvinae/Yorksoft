@@ -22,6 +22,8 @@ public record TicketFullWithLatest(
     String statusDesignation,
     String comment,
     String commentAuthorFirstName,
-    String commentAuthorLastName
+    String commentAuthorLastName,
+    Integer technicianId,
+    Integer managerId
 ) {
 }
