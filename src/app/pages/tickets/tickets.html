@@ -1,3 +1,5 @@
-@for (ticket of listeTicket(); track $index) {
-  <app-ticket-card [ticket]="ticket" />
-}
+<div class="container">
+  @for (ticket of listeTicket(); track $index) {
+    <app-ticket-card [ticket]="ticket" />
+  }
+</div>
