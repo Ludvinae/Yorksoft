@@ -19,4 +19,6 @@ type TicketFullLatest = {
   comment: string;
   commentAuthorFirstName: string;
   commentAuthorLastName: string;
+  technicianId: number;
+  managerId: number;
 }

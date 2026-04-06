@@ -2,14 +2,13 @@
   <div class="card-body">
     <div>
       <h2 class="card-title">{{ ticket.title }}</h2>
-      <p>{{ ticket.description }}</p>
       <p>{{ ticket.themeDesignation }} ({{ ticket.softwareName }} v.{{ ticket.versionNumber }} {{ ticket.versionTypeDesignation }})</p>
+      <p>{{ ticket.openDate | date : 'short' }}</p>
     </div>
 
     <div class="card-actions justify-end">
       <app-badge>{{ ticket.statusDesignation }}</app-badge>
       <app-badge>{{ ticket.initialPriority}}</app-badge>
-      <p>{{ ticket.openDate | date : 'short' }}</p>
     </div>
   </div>
 </div>
