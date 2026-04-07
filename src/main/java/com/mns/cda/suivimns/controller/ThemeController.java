@@ -4,6 +4,8 @@ import com.mns.cda.suivimns.dao.ThemeDao;
 import com.mns.cda.suivimns.model.Theme;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
+import com.mns.cda.suivimns.service.ThemeService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,24 +17,21 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin
+@RequestMapping("/theme")
+@RequiredArgsConstructor
 public class ThemeController {
 
-    protected ThemeDao themeDao;
+    protected final ThemeService themeService;
 
-    @Autowired
-    public ThemeController(ThemeDao themeDao) {
-        this.themeDao = themeDao;
-    }
-
-    @GetMapping("/theme/list")
+    @GetMapping("/list")
     public List<Theme> getAll() {
-        return themeDao.findAll();
+        return themeService.findAll();
     }
 
-    @GetMapping("/theme/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Theme> getById(@PathVariable int id) {
 
-        Optional<Theme> theme = themeDao.findById(id);
+        Optional<Theme> theme = themeService.findById(id);
         if (theme.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -40,35 +39,35 @@ public class ThemeController {
         return new ResponseEntity<>(theme.get(), HttpStatus.OK);
     }
 
-    @PostMapping("/theme")
+    @PostMapping("/")
     public ResponseEntity<Theme> create(@RequestBody @Validated(OnCreate.class) Theme theme) {
         theme.setIdTheme(null);
-        themeDao.save(theme);
+        themeService.save(theme);
 
         return new ResponseEntity<>(theme, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/theme/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Theme> delete(@PathVariable int id) {
-        Optional<Theme> theme = themeDao.findById(id);
+        Optional<Theme> theme = themeService.findById(id);
         if (theme.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        themeDao.delete(theme.get());
+        themeService.delete(theme.get());
         return new ResponseEntity<>(theme.get(), HttpStatus.OK);
     }
 
-    @PutMapping("/theme/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Theme> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Theme themeToUpdate) {
-        Optional<Theme> theme = themeDao.findById(id);
+        Optional<Theme> theme = themeService.findById(id);
 
         if (theme.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         themeToUpdate.setIdTheme(theme.get().getIdTheme());
-        themeDao.save(themeToUpdate);
+        themeService.save(themeToUpdate);
 
         return new ResponseEntity<>(theme.get(), HttpStatus.OK);
     }

@@ -2,6 +2,8 @@ package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dao.VersionTypeDao;
 import com.mns.cda.suivimns.model.VersionType;
+import com.mns.cda.suivimns.service.VersionTypeService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,23 +15,20 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin
+@RequestMapping("/version-type")
+@RequiredArgsConstructor
 public class VersionTypeController {
 
-    private final VersionTypeDao versionTypeDao;
+    private final VersionTypeService versionTypeService;
 
-    @Autowired
-    public VersionTypeController(VersionTypeDao versionTypeDao) {
-        this.versionTypeDao = versionTypeDao;
-    }
-
-    @GetMapping("/version-type/list")
+    @GetMapping("/list")
     public List<VersionType> getAll() {
-        return versionTypeDao.findAll();
+        return versionTypeService.findAll();
     }
 
-    @GetMapping("/version-type/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<VersionType> getById(@PathVariable Integer id) {
-        Optional<VersionType> versionType = versionTypeDao.findById(id);
+        Optional<VersionType> versionType = versionTypeService.findById(id);
 
         if (versionType.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -38,34 +37,34 @@ public class VersionTypeController {
         return new ResponseEntity<>(versionType.get() , HttpStatus.OK);
     }
 
-    @PostMapping("/version-type")
+    @PostMapping("/")
     public ResponseEntity<VersionType> create(@RequestBody @Validated() VersionType versionType) {
         versionType.setIdVersionType(null);
 
-        versionTypeDao.save(versionType);
+        versionTypeService.save(versionType);
         return new ResponseEntity<>(versionType , HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/version-type/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<VersionType> delete(@PathVariable Integer id) {
-        Optional<VersionType> versionType = versionTypeDao.findById(id);
+        Optional<VersionType> versionType = versionTypeService.findById(id);
         if (versionType.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        versionTypeDao.delete(versionType.get());
+        versionTypeService.delete(versionType.get());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping("/version-type/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<VersionType> update(@PathVariable Integer id, @RequestBody @Validated() VersionType typeToUpdate) {
-        Optional<VersionType> versionType = versionTypeDao.findById(id);
+        Optional<VersionType> versionType = versionTypeService.findById(id);
 
         if (versionType.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         typeToUpdate.setIdVersionType(id);
-        versionTypeDao.save(typeToUpdate);
+        versionTypeService.save(typeToUpdate);
 
         return new ResponseEntity<>(typeToUpdate, HttpStatus.OK);
     }

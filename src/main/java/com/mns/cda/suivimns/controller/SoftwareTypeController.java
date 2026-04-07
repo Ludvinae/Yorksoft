@@ -4,6 +4,8 @@ import com.mns.cda.suivimns.dao.SoftwareTypeDao;
 import com.mns.cda.suivimns.model.SoftwareType;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
+import com.mns.cda.suivimns.service.SoftwareTypeService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,24 +17,21 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin
+@RequiredArgsConstructor
+@RequestMapping("/software-type")
 public class SoftwareTypeController {
 
-    protected SoftwareTypeDao softwareTypeDao;
+    protected final SoftwareTypeService softwareTypeService;
 
-    @Autowired
-    public SoftwareTypeController(SoftwareTypeDao softwareTypeDao) {
-        this.softwareTypeDao = softwareTypeDao;
-    }
-
-    @GetMapping("/software-type/list")
+    @GetMapping("/list")
     public List<SoftwareType> findAll() {
-        return softwareTypeDao.findAll();
+        return softwareTypeService.findAll();
     }
 
-    @GetMapping("/software-type/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<SoftwareType> findById(@PathVariable Integer id) {
 
-        Optional<SoftwareType> softwareType = softwareTypeDao.findById(id);
+        Optional<SoftwareType> softwareType = softwareTypeService.findById(id);
 
         if (softwareType.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -40,36 +39,36 @@ public class SoftwareTypeController {
         return new ResponseEntity<>(softwareType.get(), HttpStatus.OK);
     }
 
-    @PostMapping("/software-type")
+    @PostMapping("/")
     public ResponseEntity<SoftwareType> create(@RequestBody @Validated(OnCreate.class) SoftwareType typeToInsert) {
 
         typeToInsert.setIdSoftwareType(null);
-        softwareTypeDao.save(typeToInsert);
+        softwareTypeService.save(typeToInsert);
 
         return new ResponseEntity<>(typeToInsert, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/software-type/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<SoftwareType> delete(@PathVariable Integer id) {
 
-        Optional<SoftwareType> softwareType = softwareTypeDao.findById(id);
+        Optional<SoftwareType> softwareType = softwareTypeService.findById(id);
 
         if (softwareType.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        softwareTypeDao.deleteById(id);
+        softwareTypeService.deleteById(id);
 
         return new ResponseEntity<>(softwareType.get(), HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping("/software-type/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<SoftwareType> update(@PathVariable Integer id, @RequestBody @Validated(OnUpdate.class) SoftwareType typeToUpdate) {
-        Optional<SoftwareType> softwareType = softwareTypeDao.findById(id);
+        Optional<SoftwareType> softwareType = softwareTypeService.findById(id);
         if (softwareType.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         typeToUpdate.setIdSoftwareType(id);
-        softwareTypeDao.save(typeToUpdate);
+        softwareTypeService.save(typeToUpdate);
 
         return new ResponseEntity<>(typeToUpdate, HttpStatus.OK);
     }

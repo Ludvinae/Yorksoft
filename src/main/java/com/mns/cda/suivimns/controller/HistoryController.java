@@ -4,6 +4,8 @@ import com.mns.cda.suivimns.dao.HistoryDao;
 import com.mns.cda.suivimns.model.History;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
+import com.mns.cda.suivimns.service.HistoryService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,24 +17,21 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin
+@RequiredArgsConstructor
+@RequestMapping("/history")
 public class HistoryController {
 
-    protected HistoryDao historyDao;
-
-    @Autowired
-    public HistoryController(HistoryDao historyDao) {
-        this.historyDao = historyDao;
-    }
+    protected final HistoryService historyService;
 
     @GetMapping("/history/list")
     public List<History> getAll() {
-        return historyDao.findAll();
+        return historyService.findAll();
     }
 
     @GetMapping("/history/{id}")
     public ResponseEntity<History> getById(@PathVariable int id) {
 
-        Optional<History> history = historyDao.findById(id);
+        Optional<History> history = historyService.findById(id);
         if (history.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -43,32 +42,32 @@ public class HistoryController {
     @PostMapping("/history")
     public ResponseEntity<History> create(@RequestBody @Validated(OnCreate.class) History history) {
         history.setIdHistory(null);
-        historyDao.save(history);
+        historyService.save(history);
 
         return new ResponseEntity<>(history, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/history/{id}")
     public ResponseEntity<History> delete(@PathVariable int id) {
-        Optional<History> history = historyDao.findById(id);
+        Optional<History> history = historyService.findById(id);
         if (history.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        historyDao.delete(history.get());
+        historyService.delete(history.get());
         return new ResponseEntity<>(history.get(), HttpStatus.OK);
     }
 
     @PutMapping("/history/{id}")
     public ResponseEntity<History> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) History historyToUpdate) {
-        Optional<History> history = historyDao.findById(id);
+        Optional<History> history = historyService.findById(id);
 
         if (history.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         historyToUpdate.setIdHistory(history.get().getIdHistory());
-        historyDao.save(historyToUpdate);
+        historyService.save(historyToUpdate);
         
         return new ResponseEntity<>(history.get(), HttpStatus.OK);
     }

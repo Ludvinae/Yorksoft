@@ -4,6 +4,8 @@ import com.mns.cda.suivimns.dao.ArticleDao;
 import com.mns.cda.suivimns.model.Article;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
+import com.mns.cda.suivimns.service.ArticleService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,24 +17,21 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/article")
 @CrossOrigin
+@RequiredArgsConstructor
 public class ArticleController {
 
-    protected ArticleDao articleDao;
+    protected final ArticleService articleService;
 
-    @Autowired
-    public ArticleController(ArticleDao articleDao) {
-        this.articleDao = articleDao;
-    }
-
-    @GetMapping("/article/list")
+    @GetMapping("/list")
     public List<Article> getAll() {
-        return articleDao.findAll();
+        return articleService.findAll();
     }
 
-    @GetMapping("/article/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Article> getById(@PathVariable int id) {
-        Optional<Article> article = articleDao.findById(id);
+        Optional<Article> article = articleService.findById(id);
 
         if (article.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -47,26 +46,26 @@ public class ArticleController {
         article.setModificationDate(null);
         article.setCreationDate(LocalDateTime.now());
 
-        articleDao.save(article);
+        articleService.save(article);
 
         return new ResponseEntity<>(article, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/article/{id}")
     public ResponseEntity<Article> delete(@PathVariable int id) {
-        Optional<Article> article = articleDao.findById(id);
+        Optional<Article> article = articleService.findById(id);
 
         if (article.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        articleDao.delete(article.get());
+        articleService.delete(article.get());
         return new ResponseEntity<>(article.get(), HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/article/{id}")
     public ResponseEntity<Article> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Article articleToUpdate) {
-        Optional<Article> article = articleDao.findById(id);
+        Optional<Article> article = articleService.findById(id);
 
         if (article.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -78,7 +77,7 @@ public class ArticleController {
 
         articleToUpdate.setCreationDate(null);
         articleToUpdate.setModificationDate(LocalDateTime.now());
-        articleDao.save(articleToUpdate);
+        articleService.save(articleToUpdate);
         return new ResponseEntity<>(article.get(), HttpStatus.OK);
     }
 }

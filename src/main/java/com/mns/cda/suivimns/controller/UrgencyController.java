@@ -4,6 +4,8 @@ import com.mns.cda.suivimns.dao.UrgencyDao;
 import com.mns.cda.suivimns.model.Urgency;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
+import com.mns.cda.suivimns.service.UrgencyService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,24 +17,21 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin
+@RequestMapping("/urgency")
+@RequiredArgsConstructor
 public class UrgencyController {
 
-    protected UrgencyDao urgencyDao;
+    protected final UrgencyService urgencyService;
 
-    @Autowired
-    public UrgencyController(UrgencyDao urgencyDao) {
-        this.urgencyDao = urgencyDao;
-    }
-
-    @GetMapping("/urgency/list")
+    @GetMapping("/list")
     public List<Urgency> getAll() {
-        return urgencyDao.findAll();
+        return urgencyService.findAll();
     }
 
-    @GetMapping("/urgency/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Urgency> getById(@PathVariable int id) {
 
-        Optional<Urgency> urgency = urgencyDao.findById(id);
+        Optional<Urgency> urgency = urgencyService.findById(id);
         if (urgency.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -40,35 +39,35 @@ public class UrgencyController {
         return new ResponseEntity<>(urgency.get(), HttpStatus.OK);
     }
 
-    @PostMapping("/urgency")
+    @PostMapping("/")
     public ResponseEntity<Urgency> create(@RequestBody @Validated(OnCreate.class) Urgency urgency) {
         urgency.setIdUrgency(null);
-        urgencyDao.save(urgency);
+        urgencyService.save(urgency);
 
         return new ResponseEntity<>(urgency, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/urgency/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Urgency> delete(@PathVariable int id) {
-        Optional<Urgency> urgency = urgencyDao.findById(id);
+        Optional<Urgency> urgency = urgencyService.findById(id);
         if (urgency.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        urgencyDao.delete(urgency.get());
+        urgencyService.delete(urgency.get());
         return new ResponseEntity<>(urgency.get(), HttpStatus.OK);
     }
 
-    @PutMapping("/urgency/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Urgency> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Urgency urgencyToUpdate) {
-        Optional<Urgency> urgency = urgencyDao.findById(id);
+        Optional<Urgency> urgency = urgencyService.findById(id);
 
         if (urgency.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         urgencyToUpdate.setIdUrgency(urgency.get().getIdUrgency());
-        urgencyDao.save(urgencyToUpdate);
+        urgencyService.save(urgencyToUpdate);
 
         return new ResponseEntity<>(urgency.get(), HttpStatus.OK);
     }

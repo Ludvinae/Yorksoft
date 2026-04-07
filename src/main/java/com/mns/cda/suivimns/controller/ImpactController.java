@@ -4,6 +4,8 @@ import com.mns.cda.suivimns.dao.ImpactDao;
 import com.mns.cda.suivimns.model.Impact;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
+import com.mns.cda.suivimns.service.ImpactService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,24 +17,21 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin
+@RequiredArgsConstructor
+@RequestMapping("/impact")
 public class ImpactController {
 
-    protected ImpactDao impactDao;
+    protected final ImpactService impactService;
 
-    @Autowired
-    public ImpactController(ImpactDao impactDao) {
-        this.impactDao = impactDao;
-    }
-
-    @GetMapping("/impact/list")
+    @GetMapping("/list")
     public List<Impact> getAll() {
-        return impactDao.findAll();
+        return impactService.findAll();
     }
 
-    @GetMapping("/impact/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Impact> getById(@PathVariable int id) {
 
-        Optional<Impact> impact = impactDao.findById(id);
+        Optional<Impact> impact = impactService.findById(id);
         if (impact.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -40,35 +39,35 @@ public class ImpactController {
         return new ResponseEntity<>(impact.get(), HttpStatus.OK);
     }
 
-    @PostMapping("/impact")
+    @PostMapping("/")
     public ResponseEntity<Impact> create(@RequestBody @Validated(OnCreate.class) Impact impact) {
         impact.setIdImpact(null);
-        impactDao.save(impact);
+        impactService.save(impact);
 
         return new ResponseEntity<>(impact, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/impact/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Impact> delete(@PathVariable int id) {
-        Optional<Impact> impact = impactDao.findById(id);
+        Optional<Impact> impact = impactService.findById(id);
         if (impact.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        impactDao.delete(impact.get());
+        impactService.delete(impact.get());
         return new ResponseEntity<>(impact.get(), HttpStatus.OK);
     }
 
-    @PutMapping("/impact/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Impact> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Impact impactToUpdate) {
-        Optional<Impact> impact = impactDao.findById(id);
+        Optional<Impact> impact = impactService.findById(id);
 
         if (impact.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         impactToUpdate.setIdImpact(impact.get().getIdImpact());
-        impactDao.save(impactToUpdate);
+        impactService.save(impactToUpdate);
 
         return new ResponseEntity<>(impact.get(), HttpStatus.OK);
     }

@@ -18,24 +18,25 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/ticket")
 @CrossOrigin
 public class TicketController {
 
     protected final TicketService ticketService;
 
 
-    @GetMapping("/ticket/list")
+    @GetMapping("/list")
     @JsonView(TicketView.class)
     public List<Ticket> getAll() {
         return ticketService.findAll();
     }
 
-    @GetMapping("/ticket/list-full-latest")
+    @GetMapping("/list-full-latest")
     public List<TicketFullWithLatest> getTicketFullLatest() {
         return ticketService.getTicketFullWithLatest();
     }
 
-    @GetMapping("/ticket/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Ticket> getById(@PathVariable int id) {
 
         Optional<Ticket> ticket = ticketService.findById(id);
@@ -93,14 +94,14 @@ public class TicketController {
 
 
 
-    @PostMapping("/ticket")
+    @PostMapping("/")
     public ResponseEntity<Ticket> create(@RequestBody @Validated(OnCreate.class) Ticket ticket) {
         ticketService.save(ticket);
 
         return new ResponseEntity<>(ticket, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/ticket/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
         Optional<Ticket> ticket = ticketService.findById(id);
         if (ticket.isEmpty()) {
@@ -111,7 +112,7 @@ public class TicketController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping("/ticket/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Ticket ticketToUpdate) throws TicketService.TicketNotFoundException {
        try {
            ticketService.update(ticketToUpdate, id);

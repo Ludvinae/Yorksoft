@@ -5,8 +5,10 @@ import com.mns.cda.suivimns.dao.ClientDao;
 import com.mns.cda.suivimns.model.Client;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
+import com.mns.cda.suivimns.service.ClientService;
 import com.mns.cda.suivimns.view.ClientSoftwareListView;
 import com.mns.cda.suivimns.view.ClientView;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,38 +20,23 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin
+@RequestMapping("/client")
+@RequiredArgsConstructor
 public class ClientController {
 
-    protected ClientDao clientDao;
+    protected final ClientService clientService;
 
-    @Autowired
-    public ClientController(ClientDao clientDao) {
-        this.clientDao = clientDao;
-    }
-
-    @GetMapping("/client/list")
+    @GetMapping("/list")
     @JsonView(ClientView.class)
     public List<Client> getAll() {
-        return clientDao.findAll();
+        return clientService.findAll();
     }
 
-    @GetMapping("/client/{id}")
+    @GetMapping("/{id}")
     @JsonView(ClientView.class)
     public ResponseEntity<Client> getById(@PathVariable int id) {
 
-        Optional<Client> client = clientDao.findById(id);
-        if (client.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        return new ResponseEntity<>(client.get(), HttpStatus.OK);
-    }
-
-    @GetMapping("/client/{id}/software/list")
-    @JsonView(ClientSoftwareListView.class)
-    public ResponseEntity<Client> getClientSofwareList(@PathVariable int id) {
-
-        Optional<Client> client = clientDao.findById(id);
+        Optional<Client> client = clientService.findById(id);
         if (client.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -58,30 +45,45 @@ public class ClientController {
     }
 
     /*
-    @PostMapping("/client")
+    @GetMapping("/{id}/software/list")
+    @JsonView(ClientSoftwareListView.class)
+    public ResponseEntity<Client> getClientSofwareList(@PathVariable int id) {
+
+        Optional<Client> client = clientService.findById(id);
+        if (client.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(client.get(), HttpStatus.OK);
+    }
+
+     */
+
+
+    @PostMapping("/")
     public ResponseEntity<Client> create(@RequestBody @Validated(OnCreate.class) Client client) {
         client.setIdClient(null);
-        clientDao.save(client);
+        clientService.save(client);
 
         return new ResponseEntity<>(client, HttpStatus.CREATED);
     }
 
 
 
-    @DeleteMapping("/client/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Client> delete(@PathVariable int id) {
-        Optional<Client> client = clientDao.findById(id);
+        Optional<Client> client = clientService.findById(id);
         if (client.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        clientDao.delete(client.get());
+        clientService.delete(client.get());
         return new ResponseEntity<>(client.get(), HttpStatus.OK);
     }
 
-    @PutMapping("/client/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Client> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Client clientToUpdate) {
-        Optional<Client> client = clientDao.findById(id);
+        Optional<Client> client = clientService.findById(id);
 
         if (client.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -89,9 +91,9 @@ public class ClientController {
 
         clientToUpdate.setIdClient(client.get().getIdClient());
         clientToUpdate.setPassword(client.get().getPassword());
-        clientDao.save(clientToUpdate);
+        clientService.save(clientToUpdate);
         return new ResponseEntity<>(client.get(), HttpStatus.OK);
     }
-    */
+
 
 }
