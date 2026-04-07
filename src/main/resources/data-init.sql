@@ -25,7 +25,8 @@ VALUES ( '06 84 54 56 11', 'barbara.dupont99@gmail.com', 'Barbara', 'Dupont', 'W
        ('03 55 65 45 25', 'jeanvaljean@yorksoft.fr', 'Jean', 'Valjean', 'kGz4579c!AF5'),
        ('03 55 65 78 99', 'sandraschmidt@yorksoft.fr', 'Sandra', 'Schmidt', 'sqqZ7A!784mK'),
        ('03 55 65 77 11', 'damienmuller@yorksoft.fr', 'Damien', 'Muller', '78!dsQAE75Vcv'),
-       ('03 55 65 00 01', 'patrickthierry', 'Patrick', 'Thierry', 'kjiZ!51sd3Z' );
+       ('03 55 65 00 01', 'patrickthierry', 'Patrick', 'Thierry', 'kjiZ!51sd3Z' ),
+       ('', 'jeanclaude@creditmutuel.fr', 'Jean-Claude', 'Convenant', 'fjJH45pM2');
 
 INSERT INTO manager (id_app_user)
 VALUES (4);
@@ -101,7 +102,8 @@ VALUES ( 1, 1, '2027-12-02', 'azerty123456'),
        ( 2, 1, '2027-12-02', 'ploplop2345');
 
 INSERT INTO license_clients (id_license, id_client)
-VALUES (1, 1), (2, 2), (3, 3), (4, 1);
+VALUES (1, 1), (2, 2), (3, 3),
+       (4, 1), (3, 8);
 
 INSERT INTO classification (id_theme, id_ticket, affectation_date)
 VALUES (6, 1, now()),
