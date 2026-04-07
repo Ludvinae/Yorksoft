@@ -5,6 +5,7 @@ import com.mns.cda.suivimns.model.Version;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
 import com.mns.cda.suivimns.service.VersionService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import java.util.Optional;
 @RestController
 @CrossOrigin
 @RequestMapping("/version")
+@RequiredArgsConstructor
 public class VersionController {
 
     protected final VersionService versionService;
@@ -52,7 +54,7 @@ public class VersionController {
         if (version.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        versionService.deleteById(id);
+        versionService.delete(version.get());
         return new ResponseEntity<>(version.get(), HttpStatus.NO_CONTENT);
     }
 

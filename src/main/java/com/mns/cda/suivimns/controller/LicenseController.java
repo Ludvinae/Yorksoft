@@ -1,14 +1,9 @@
 package com.mns.cda.suivimns.controller;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import com.mns.cda.suivimns.dao.LicenseDao;
-import com.mns.cda.suivimns.model.Ticket;
+import com.mns.cda.suivimns.model.License;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
-import com.mns.cda.suivimns.service.AppUserService;
 import com.mns.cda.suivimns.service.LicenseService;
-import com.mns.cda.suivimns.service.TicketService;
-import com.mns.cda.suivimns.view.TicketView;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,46 +22,45 @@ public class LicenseController {
     protected final LicenseService licenseservice;
 
     @GetMapping("/list")
-    @JsonView(TicketView.class)
-    public List<Ticket> getAll() {
+    public List<License> getAll() {
         return licenseservice.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Ticket> getById(@PathVariable int id) {
+    public ResponseEntity<License> getById(@PathVariable int id) {
 
-        Optional<Ticket> ticket = licenseservice.findById(id);
-        if (ticket.isEmpty()) {
+        Optional<License> license = licenseservice.findById(id);
+        if (license.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(ticket.get(), HttpStatus.OK);
+        return new ResponseEntity<>(license.get(), HttpStatus.OK);
     }
 
     @PostMapping("/")
-    public ResponseEntity<Ticket> create(@RequestBody @Validated(OnCreate.class) Ticket ticket) {
-        licenseservice.save(ticket);
+    public ResponseEntity<License> create(@RequestBody @Validated(OnCreate.class) License license) {
+        licenseservice.save(license);
 
-        return new ResponseEntity<>(ticket, HttpStatus.CREATED);
+        return new ResponseEntity<>(license, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
-        Optional<Ticket> ticket = licenseservice.findById(id);
-        if (ticket.isEmpty()) {
+        Optional<License> license = licenseservice.findById(id);
+        if (license.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        licenseservice.delete(ticket.get());
+        licenseservice.delete(license.get());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Ticket ticketToUpdate) throws TicketService.TicketNotFoundException {
+    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) License licenseToUpdate) throws LicenseService.LicenseNotFoundException {
         try {
-            licenseservice.update(ticketToUpdate, id);
+            licenseservice.update(licenseToUpdate, id);
             return new ResponseEntity<>(HttpStatus.OK);
-        } catch (TicketService.TicketNotFoundException e) {
+        } catch (LicenseService.LicenseNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

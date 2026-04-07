@@ -2,13 +2,13 @@ package com.mns.cda.suivimns.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.mns.cda.suivimns.dao.TechnicianDao;
-import com.mns.cda.suivimns.model.Ticket;
+import com.mns.cda.suivimns.model.Technician;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
 import com.mns.cda.suivimns.service.AppUserService;
 import com.mns.cda.suivimns.service.TechnicianService;
-import com.mns.cda.suivimns.service.TicketService;
-import com.mns.cda.suivimns.view.TicketView;
+import com.mns.cda.suivimns.service.TechnicianService;
+import com.mns.cda.suivimns.view.TechnicianView;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,46 +27,46 @@ public class TechnicianController {
     protected final TechnicianService technicianservice;
 
     @GetMapping("/list")
-    @JsonView(TicketView.class)
-    public List<Ticket> getAll() {
+    @JsonView(TechnicianView.class)
+    public List<Technician> getAll() {
         return technicianservice.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Ticket> getById(@PathVariable int id) {
+    public ResponseEntity<Technician> getById(@PathVariable int id) {
 
-        Optional<Ticket> ticket = technicianservice.findById(id);
-        if (ticket.isEmpty()) {
+        Optional<Technician> technician = technicianservice.findById(id);
+        if (technician.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(ticket.get(), HttpStatus.OK);
+        return new ResponseEntity<>(technician.get(), HttpStatus.OK);
     }
 
     @PostMapping("/")
-    public ResponseEntity<Ticket> create(@RequestBody @Validated(OnCreate.class) Ticket ticket) {
-        technicianservice.save(ticket);
+    public ResponseEntity<Technician> create(@RequestBody @Validated(OnCreate.class) Technician technician) {
+        technicianservice.save(technician);
 
-        return new ResponseEntity<>(ticket, HttpStatus.CREATED);
+        return new ResponseEntity<>(technician, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
-        Optional<Ticket> ticket = technicianservice.findById(id);
-        if (ticket.isEmpty()) {
+        Optional<Technician> technician = technicianservice.findById(id);
+        if (technician.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        technicianservice.delete(ticket.get());
+        technicianservice.delete(technician.get());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Ticket ticketToUpdate) throws TicketService.TicketNotFoundException {
+    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Technician technicianToUpdate) throws TechnicianService.TechnicianNotFoundException {
         try {
-            technicianservice.update(ticketToUpdate, id);
+            technicianservice.update(technicianToUpdate, id);
             return new ResponseEntity<>(HttpStatus.OK);
-        } catch (TicketService.TicketNotFoundException e) {
+        } catch (TechnicianService.TechnicianNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

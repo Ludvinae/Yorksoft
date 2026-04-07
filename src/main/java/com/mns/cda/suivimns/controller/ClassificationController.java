@@ -1,14 +1,9 @@
 package com.mns.cda.suivimns.controller;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import com.mns.cda.suivimns.dao.ClassificationDao;
-import com.mns.cda.suivimns.model.Ticket;
+import com.mns.cda.suivimns.model.Classification;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
-import com.mns.cda.suivimns.service.AppUserService;
 import com.mns.cda.suivimns.service.ClassificationService;
-import com.mns.cda.suivimns.service.TicketService;
-import com.mns.cda.suivimns.view.TicketView;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,46 +22,45 @@ public class ClassificationController {
     protected final ClassificationService classificationservice;
 
     @GetMapping("/list")
-    @JsonView(TicketView.class)
-    public List<Ticket> getAll() {
+    public List<Classification> getAll() {
         return classificationservice.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Ticket> getById(@PathVariable int id) {
+    public ResponseEntity<Classification> getById(@PathVariable int id) {
 
-        Optional<Ticket> ticket = classificationservice.findById(id);
-        if (ticket.isEmpty()) {
+        Optional<Classification> classification = classificationservice.findById(id);
+        if (classification.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(ticket.get(), HttpStatus.OK);
+        return new ResponseEntity<>(classification.get(), HttpStatus.OK);
     }
 
     @PostMapping("/")
-    public ResponseEntity<Ticket> create(@RequestBody @Validated(OnCreate.class) Ticket ticket) {
-        classificationservice.save(ticket);
+    public ResponseEntity<Classification> create(@RequestBody @Validated(OnCreate.class) Classification classification) {
+        classificationservice.save(classification);
 
-        return new ResponseEntity<>(ticket, HttpStatus.CREATED);
+        return new ResponseEntity<>(classification, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
-        Optional<Ticket> ticket = classificationservice.findById(id);
-        if (ticket.isEmpty()) {
+        Optional<Classification> classification = classificationservice.findById(id);
+        if (classification.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        classificationservice.delete(ticket.get());
+        classificationservice.delete(classification.get());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Ticket ticketToUpdate) throws TicketService.TicketNotFoundException {
+    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Classification classificationToUpdate) throws ClassificationService.ClassificationNotFoundException {
         try {
-            classificationservice.update(ticketToUpdate, id);
+            classificationservice.update(classificationToUpdate, id);
             return new ResponseEntity<>(HttpStatus.OK);
-        } catch (TicketService.TicketNotFoundException e) {
+        } catch (ClassificationService.ClassificationNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

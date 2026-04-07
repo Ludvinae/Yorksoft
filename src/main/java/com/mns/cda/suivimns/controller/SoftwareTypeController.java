@@ -56,7 +56,7 @@ public class SoftwareTypeController {
         if (softwareType.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        softwareTypeService.deleteById(id);
+        softwareTypeService.delete(softwareType.get());
 
         return new ResponseEntity<>(softwareType.get(), HttpStatus.NO_CONTENT);
     }

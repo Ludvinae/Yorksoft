@@ -1,13 +1,13 @@
 package com.mns.cda.suivimns.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.mns.cda.suivimns.model.Ticket;
+import com.mns.cda.suivimns.model.Manager;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
 import com.mns.cda.suivimns.service.AppUserService;
 import com.mns.cda.suivimns.service.ManagerService;
-import com.mns.cda.suivimns.service.TicketService;
-import com.mns.cda.suivimns.view.TicketView;
+import com.mns.cda.suivimns.service.ManagerService;
+import com.mns.cda.suivimns.view.ManagerView;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,46 +26,46 @@ public class ManagerController {
     protected final ManagerService managerservice;
 
     @GetMapping("/list")
-    @JsonView(TicketView.class)
-    public List<Ticket> getAll() {
+    @JsonView(ManagerView.class)
+    public List<Manager> getAll() {
         return managerservice.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Ticket> getById(@PathVariable int id) {
+    public ResponseEntity<Manager> getById(@PathVariable int id) {
 
-        Optional<Ticket> ticket = managerservice.findById(id);
-        if (ticket.isEmpty()) {
+        Optional<Manager> manager = managerservice.findById(id);
+        if (manager.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(ticket.get(), HttpStatus.OK);
+        return new ResponseEntity<>(manager.get(), HttpStatus.OK);
     }
 
     @PostMapping("/")
-    public ResponseEntity<Ticket> create(@RequestBody @Validated(OnCreate.class) Ticket ticket) {
-        managerservice.save(ticket);
+    public ResponseEntity<Manager> create(@RequestBody @Validated(OnCreate.class) Manager manager) {
+        managerservice.save(manager);
 
-        return new ResponseEntity<>(ticket, HttpStatus.CREATED);
+        return new ResponseEntity<>(manager, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
-        Optional<Ticket> ticket = managerservice.findById(id);
-        if (ticket.isEmpty()) {
+        Optional<Manager> manager = managerservice.findById(id);
+        if (manager.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        managerservice.delete(ticket.get());
+        managerservice.delete(manager.get());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Ticket ticketToUpdate) throws TicketService.TicketNotFoundException {
+    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Manager managerToUpdate) throws ManagerService.ManagerNotFoundException {
         try {
-            managerservice.update(ticketToUpdate, id);
+            managerservice.update(managerToUpdate, id);
             return new ResponseEntity<>(HttpStatus.OK);
-        } catch (TicketService.TicketNotFoundException e) {
+        } catch (ManagerService.ManagerNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

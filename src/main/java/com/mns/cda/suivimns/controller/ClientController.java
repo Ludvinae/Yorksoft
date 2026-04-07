@@ -62,7 +62,7 @@ public class ClientController {
 
     @PostMapping("/")
     public ResponseEntity<Client> create(@RequestBody @Validated(OnCreate.class) Client client) {
-        client.setIdClient(null);
+        client.setIdAppUser(null);
         clientService.save(client);
 
         return new ResponseEntity<>(client, HttpStatus.CREATED);
@@ -89,7 +89,7 @@ public class ClientController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        clientToUpdate.setIdClient(client.get().getIdClient());
+        clientToUpdate.setIdAppUser(client.get().getIdAppUser());
         clientToUpdate.setPassword(client.get().getPassword());
         clientService.save(clientToUpdate);
         return new ResponseEntity<>(client.get(), HttpStatus.OK);

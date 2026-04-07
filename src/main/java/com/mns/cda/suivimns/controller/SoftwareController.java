@@ -25,12 +25,8 @@ import java.util.Optional;
 public class SoftwareController {
 
 
-    protected SoftwareService softwareService;
+    protected final SoftwareService softwareService;
 
-    @Autowired
-    public SoftwareController(SoftwareDao softwareDao) {
-        this.softwareService = softwareDao;
-    }
 
     @GetMapping("/list")
     @JsonView(SoftwareView.class)

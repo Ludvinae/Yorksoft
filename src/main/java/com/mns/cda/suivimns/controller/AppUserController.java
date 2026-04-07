@@ -3,6 +3,7 @@ package com.mns.cda.suivimns.controller;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.mns.cda.suivimns.dao.AppUserDao;
 import com.mns.cda.suivimns.dto.TicketFullWithLatest;
+import com.mns.cda.suivimns.model.AppUser;
 import com.mns.cda.suivimns.model.Ticket;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
@@ -28,45 +29,45 @@ public class AppUserController {
 
     @GetMapping("/list")
     @JsonView(TicketView.class)
-    public List<Ticket> getAll() {
+    public List<AppUser> getAll() {
         return appUserservice.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Ticket> getById(@PathVariable int id) {
+    public ResponseEntity<AppUser> getById(@PathVariable int id) {
 
-        Optional<Ticket> ticket = appUserservice.findById(id);
-        if (ticket.isEmpty()) {
+        Optional<AppUser> user = appUserservice.findById(id);
+        if (user.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(ticket.get(), HttpStatus.OK);
+        return new ResponseEntity<>(user.get(), HttpStatus.OK);
     }
 
     @PostMapping("/")
-    public ResponseEntity<Ticket> create(@RequestBody @Validated(OnCreate.class) Ticket ticket) {
-        appUserservice.save(ticket);
+    public ResponseEntity<AppUser> create(@RequestBody @Validated(OnCreate.class) AppUser user) {
+        appUserservice.save(user);
 
-        return new ResponseEntity<>(ticket, HttpStatus.CREATED);
+        return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
-        Optional<Ticket> ticket = appUserservice.findById(id);
-        if (ticket.isEmpty()) {
+        Optional<AppUser> user = appUserservice.findById(id);
+        if (user.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        appUserservice.delete(ticket.get());
+        appUserservice.delete(user.get());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Ticket ticketToUpdate) throws TicketService.TicketNotFoundException {
+    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) AppUser userToUpdate) throws AppUserService.AppUserNotFoundException {
         try {
-            appUserservice.update(ticketToUpdate, id);
+            appUserservice.update(userToUpdate, id);
             return new ResponseEntity<>(HttpStatus.OK);
-        } catch (TicketService.TicketNotFoundException e) {
+        } catch (AppUserService.AppUserNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
