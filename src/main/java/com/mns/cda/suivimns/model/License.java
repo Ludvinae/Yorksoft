@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.mns.cda.suivimns.view.ClientSoftwareListView;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,14 +26,15 @@ public class License {
     @JsonView(ClientSoftwareListView.class)
     protected Integer idLicense;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 127)
     @NotBlank
+    @Size(max = 127)
     protected String licenseNumber;
 
     protected LocalDate expirationDate;
 
     @Column(nullable = false)
-    @NotBlank
+    @NotNull
     protected Integer userCount;
 
     @ManyToOne(optional = false)

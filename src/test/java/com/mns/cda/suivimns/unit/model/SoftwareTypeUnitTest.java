@@ -39,7 +39,7 @@ public class SoftwareTypeUnitTest {
         boolean constraintExists = TestUtils.constraintViolationExists(
                 validator.validate(type),
                 "designation",
-                "Length"
+                "Size"
         );
 
         Assertions.assertTrue(constraintExists, "Designation field must be at least 3 characters long");
@@ -55,7 +55,7 @@ public class SoftwareTypeUnitTest {
         boolean constraintExists = TestUtils.constraintViolationExists(
                 validator.validate(type),
                 "designation",
-                "Length");
+                "Size");
 
         Assertions.assertTrue(constraintExists, "Designation field must be a maximum of 127 characters long");
     }

@@ -5,6 +5,7 @@ import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.view.ClientSoftwareListView;
 import com.mns.cda.suivimns.view.ClientView;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

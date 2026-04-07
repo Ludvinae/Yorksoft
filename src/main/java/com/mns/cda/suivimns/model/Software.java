@@ -30,7 +30,7 @@ public class Software {
 
     @Column(nullable = false, length = 127)
     @NotBlank(groups = {OnCreate.class})
-    @Size(min = 1, max = 127)
+    @Size(max = 127)
     @JsonView({ClientSoftwareListView.class, SoftwareView.class})
     protected String name;
 

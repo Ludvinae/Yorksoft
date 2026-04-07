@@ -43,7 +43,7 @@ public class SoftwareUnitTest {
         boolean constraintExists = TestUtils.constraintViolationExists(
                 validator.validate(software),
                 "name",
-                "Length"
+                "Size"
         );
 
         Assertions.assertTrue(constraintExists, "Software name should be at maximum 127 characters long");
