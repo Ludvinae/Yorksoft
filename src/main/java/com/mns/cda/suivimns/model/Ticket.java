@@ -7,6 +7,7 @@ import com.mns.cda.suivimns.view.TicketStatusListView;
 import com.mns.cda.suivimns.view.TicketView;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -55,7 +56,7 @@ public class Ticket {
     protected Integer callDuration;
 
     @Column(nullable = false)
-    @NotBlank(groups = {OnCreate.class})
+    @NotNull(groups = {OnCreate.class})
     @JsonView(TicketView.class)
     protected Integer initialPriority;
 

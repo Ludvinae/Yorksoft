@@ -36,13 +36,12 @@ public class VersionUnitTest {
     @Test
     public void validVersionWithTooLongNumber_shouldBeInvalid() {
         Version version = new Version();
-        version.setVersionNumber("123456789jjqsdoiqsjdsqjdoiqjsdiuqhdiudizdiudzqui" +
-                "cjwkhckshiuqhiuzudhquhdoizjqoidjziqodjizqjdlksjqdknrjnfrfnsjnvnjnvnd");
+        version.setVersionNumber("a".repeat(64));
 
         boolean constraintExists = TestUtils.constraintViolationExists(
                 validator.validate(version),
                 "versionNumber",
-                "Length"
+                "Size"
         );
 
         Assertions.assertTrue(constraintExists, "Version number field must be at maximum 63 characters long");

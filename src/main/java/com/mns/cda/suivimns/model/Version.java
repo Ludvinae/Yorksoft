@@ -27,7 +27,7 @@ public class Version {
 
     @Column(nullable = false, length = 63)
     @NotBlank
-    @Size(min = 1, max = 63)
+    @Size(max = 63)
     @JsonView(SoftwareVersionListView.class)
     protected String versionNumber;
 
