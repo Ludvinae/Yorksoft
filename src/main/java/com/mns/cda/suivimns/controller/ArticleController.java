@@ -4,6 +4,7 @@ import com.mns.cda.suivimns.dao.ArticleDao;
 import com.mns.cda.suivimns.model.Article;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
+import com.mns.cda.suivimns.service.AppUserService;
 import com.mns.cda.suivimns.service.ArticleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,9 +43,6 @@ public class ArticleController {
 
     @PostMapping("/article")
     public ResponseEntity<Article> create(@RequestBody @Validated(OnCreate.class) Article article) {
-        article.setIdArticle(null);
-        article.setModificationDate(null);
-        article.setCreationDate(LocalDateTime.now());
 
         articleService.save(article);
 
@@ -64,20 +62,13 @@ public class ArticleController {
     }
 
     @PutMapping("/article/{id}")
-    public ResponseEntity<Article> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Article articleToUpdate) {
-        Optional<Article> article = articleService.findById(id);
+    public ResponseEntity<Article> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Article articleToUpdate) throws ArticleService.ArticleNotFoundException {
 
-        if (article.isEmpty()) {
+        try {
+            articleService.update(articleToUpdate, id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (ArticleService.ArticleNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
-        if (articleToUpdate.getContent() == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-        articleToUpdate.setCreationDate(null);
-        articleToUpdate.setModificationDate(LocalDateTime.now());
-        articleService.save(articleToUpdate);
-        return new ResponseEntity<>(article.get(), HttpStatus.OK);
     }
 }

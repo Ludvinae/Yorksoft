@@ -3,6 +3,7 @@ package com.mns.cda.suivimns.controller;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.mns.cda.suivimns.dao.AssignmentDao;
 import com.mns.cda.suivimns.model.Assignment;
+import com.mns.cda.suivimns.service.AppUserService;
 import com.mns.cda.suivimns.service.AssignmentService;
 import com.mns.cda.suivimns.view.AssignmentView;
 import lombok.RequiredArgsConstructor;
@@ -43,9 +44,8 @@ public class AssignmentController {
 
     @PostMapping("/assignment")
     public ResponseEntity<Assignment> create(@RequestBody @Validated() Assignment assignment) {
-        assignment.setIdAssignment(null);
-        assignment.setAssigmentDate(LocalDateTime.now());
-        assignmentService.save(assignment);
+
+        assignmentService.firstSave(assignment);
 
         return new ResponseEntity<>(assignment, HttpStatus.CREATED);
     }
@@ -83,29 +83,19 @@ public class AssignmentController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        assignmentToUpdate.setIdAssignment(id);
-        assignmentToUpdate.setAssigmentDate(assignment.get().getAssigmentDate());
-        assignmentService.save(assignmentToUpdate);
+        assignmentService.modify(assignmentToUpdate, id);
 
         return new ResponseEntity<>(assignmentToUpdate, HttpStatus.OK);
     }
 
     @PutMapping("assignment/close/{id}")
-    public ResponseEntity<Assignment> close(@PathVariable int id, @RequestBody @Validated() Assignment assignmentToUpdate) {
-        Optional<Assignment> assignment = assignmentService.findById(id);
-
-        if (assignment.isEmpty()) {
+    public ResponseEntity<Assignment> close(@PathVariable int id, @RequestBody @Validated() Assignment assignmentToUpdate) throws AssignmentService.AssignmentNotFoundException {
+        try {
+            assignmentService.update(assignmentToUpdate, id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (AssignmentService.AssignmentNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        assignmentToUpdate.setIdAssignment(id);
-        assignmentToUpdate.setAssigmentDate(assignment.get().getAssigmentDate());
-        assignmentToUpdate.setTicket(assignment.get().getTicket());
-        assignmentToUpdate.setManager(assignment.get().getManager());
-        assignmentToUpdate.setTechnician(assignment.get().getTechnician());
-        assignmentToUpdate.setEndDate(LocalDateTime.now());
-        assignmentService.save(assignmentToUpdate);
-
-        return new ResponseEntity<>(assignmentToUpdate, HttpStatus.OK);
     }
 }

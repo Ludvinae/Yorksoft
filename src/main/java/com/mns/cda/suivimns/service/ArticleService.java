@@ -6,6 +6,7 @@ import com.mns.cda.suivimns.model.Article;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +28,9 @@ public class ArticleService {
 
     public void save(Article article) {
         article.setIdArticle(null);
+        article.setModificationDate(null);
+        article.setCreationDate(LocalDateTime.now());
+
         articleDao.save(article);
     }
 
@@ -42,6 +46,8 @@ public class ArticleService {
         }
 
         articleToUpdate.setIdArticle(article.get().getIdArticle());
+        articleToUpdate.setCreationDate(null);
+        articleToUpdate.setModificationDate(LocalDateTime.now());
 
         articleDao.save(articleToUpdate);
     }
