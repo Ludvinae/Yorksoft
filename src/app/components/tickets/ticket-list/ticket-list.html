@@ -1,0 +1,10 @@
+
+@if (isMobile()) {
+  <ng-container>
+    <app-ticket-vue-mobile [ticketList]="tickets()"/>
+  </ng-container>
+} @else {
+  <ng-container>
+    <app-ticket-vue-desktop [ticketList]="tickets()"/>
+  </ng-container>
+}

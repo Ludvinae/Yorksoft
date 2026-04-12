@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Badge } from '../badge/badge';
+import { Badge } from '../../badge/badge';
 import { DatePipe } from '@angular/common';
 
 

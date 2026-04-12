@@ -1,0 +1,23 @@
+<div>
+  <table class="table table-pin-rows">
+    <thead>
+      <tr>
+        <th><input type="checkbox"></th>
+        <th>ID</th>
+        <th>Dernière modif.</th>
+        <th>Titre</th>
+        <th>Thématique</th>
+        <th>Logiciel</th>
+        <th>Version</th>
+        <th>Statut</th>
+        <th>Priorité</th>
+        <th>Messages</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (ticket of ticketList; track ticket.id) {
+        <tr app-ticket-table-row [ticket]="ticket"></tr>
+      }
+    </tbody>
+  </table>
+</div>
