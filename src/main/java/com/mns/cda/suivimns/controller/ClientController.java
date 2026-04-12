@@ -2,9 +2,11 @@ package com.mns.cda.suivimns.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.mns.cda.suivimns.dao.ClientDao;
+import com.mns.cda.suivimns.dto.ClientDto;
 import com.mns.cda.suivimns.model.Client;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
+import com.mns.cda.suivimns.service.AppUserService;
 import com.mns.cda.suivimns.service.ClientService;
 import com.mns.cda.suivimns.view.ClientSoftwareListView;
 import com.mns.cda.suivimns.view.ClientView;
@@ -27,21 +29,16 @@ public class ClientController {
     protected final ClientService clientService;
 
     @GetMapping("/list")
-    @JsonView(ClientView.class)
-    public List<Client> getAll() {
+    public List<ClientDto> getAll() {
         return clientService.findAll();
     }
 
     @GetMapping("/{id}")
-    @JsonView(ClientView.class)
-    public ResponseEntity<Client> getById(@PathVariable int id) {
+    public ResponseEntity<ClientDto> getById(@PathVariable int id) {
 
-        Optional<Client> client = clientService.findById(id);
-        if (client.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        ClientDto client = clientService.findDtoById(id);
 
-        return new ResponseEntity<>(client.get(), HttpStatus.OK);
+        return new ResponseEntity<>(client, HttpStatus.OK);
     }
 
     /*
@@ -62,7 +59,6 @@ public class ClientController {
 
     @PostMapping("/")
     public ResponseEntity<Client> create(@RequestBody @Validated(OnCreate.class) Client client) {
-        client.setIdAppUser(null);
         clientService.save(client);
 
         return new ResponseEntity<>(client, HttpStatus.CREATED);
@@ -82,17 +78,13 @@ public class ClientController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Client> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Client clientToUpdate) {
-        Optional<Client> client = clientService.findById(id);
-
-        if (client.isEmpty()) {
+    public ResponseEntity<Client> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Client clientToUpdate) throws ClientService.ClientNotFoundException {
+        try {
+            clientService.update(clientToUpdate, id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (ClientService.ClientNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
-        clientToUpdate.setIdAppUser(client.get().getIdAppUser());
-        clientToUpdate.setPassword(client.get().getPassword());
-        clientService.save(clientToUpdate);
-        return new ResponseEntity<>(client.get(), HttpStatus.OK);
     }
 
 
