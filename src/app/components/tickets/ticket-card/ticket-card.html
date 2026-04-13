@@ -2,13 +2,14 @@
   <div class="card-body">
     <div>
       <h2 class="card-title">{{ ticket.title }}</h2>
-      <p>{{ ticket.themeDesignation }} ({{ ticket.softwareName }} v.{{ ticket.versionNumber }} {{ ticket.versionTypeDesignation }})</p>
-      <p>{{ ticket.openDate | date : 'short' }}</p>
+      <span>{{ ticket.themeDesignation }} ({{ ticket.softwareName }} v.{{ ticket.versionNumber }} {{ ticket.versionTypeDesignation }})</span>
+      <span>{{ ticket.modificationDate | date : 'short' }}</span>
     </div>
 
     <div class="card-actions justify-end">
       <app-badge>{{ ticket.statusDesignation }}</app-badge>
-      <app-badge>{{ ticket.initialPriority}}</app-badge>
+      <app-badge>{{ ticket.finalPriority}}</app-badge>
+      <span>{{ ticket.commentCount }}</span>
     </div>
   </div>
 </div>

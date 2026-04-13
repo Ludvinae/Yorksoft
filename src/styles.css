@@ -1,2 +1,13 @@
 @import "tailwindcss";
 @plugin "daisyui";
+
+.window {
+  width: 100%;
+}
+
+.container {
+  max-width: 90%;
+  min-width:  350px;
+  justify-content: center;
+  align-items: center;
+}
