@@ -73,14 +73,14 @@ VALUES (1, 'Erreur de manipulation', ''),
 
 INSERT INTO ticket (title, open_date, call_duration, final_priority, initial_priority, close_date, modification_date,
                     description, id_client, id_urgency, id_impact, id_version)
-VALUES ('Ca marche pas', NOW(), null, 1, 2, null, null, 'Ca marche pas', 1, 1, 1, 2),
-       ('Indisponibilité du service de sauvegarde en ligne', NOW(), 1035, 80, 80, null, null, 'Impossible d''acceder au dossiers sur le cloud dans le gestionnaire de projets.', 3, 2, 2, 3);
+VALUES ('Ca marche pas', NOW(), null, 1, 2, null, NOW(), 'Ca marche pas', 1, 1, 1, 2),
+       ('Indisponibilité du service de sauvegarde en ligne', NOW(), 1035, 80, 80, null, NOW(), 'Impossible d''acceder au dossiers sur le cloud dans le gestionnaire de projets.', 3, 2, 2, 3);
 
-INSERT INTO history (id_status, id_ticket, id_app_user)
-VALUES (1, 1, 1),
-       (1, 2, 3),
-       (2, 1, 1),
-       (4, 1, 3);
+INSERT INTO history (id_status, id_ticket, id_app_user, start_date, end_date)
+VALUES (1, 1, 1, '2026-04-11 09:12:00', '2026-04-11 09:27:00'),
+       (1, 2, 3, '2026-04-11 11:31:00', null),
+       (2, 1, 1, '2026-04-11 09:27:00', '2026-04-11 10:13:00'),
+       (4, 1, 3, '2026-04-11 10:13:00', null);
 
 INSERT INTO comment (date_sent, last_modification, content, id_ticket, id_app_user)
 VALUES (NOW(), null, 'Bonjour, pourriez vous préciser la nature de votre problème ?', 1, 5);
@@ -106,7 +106,7 @@ VALUES (1, 1), (2, 2), (3, 3),
        (4, 1), (3, 8);
 
 INSERT INTO classification (id_theme, id_ticket, affectation_date)
-VALUES (6, 1, now()),
+VALUES (6, 1, '2026-04-11 09:12:00'),
        (3, 2, now()),
        (8, 1, now());
 

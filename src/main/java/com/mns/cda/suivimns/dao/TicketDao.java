@@ -13,27 +13,54 @@ import java.util.List;
 public interface TicketDao extends JpaRepository<Ticket, Integer> {
 
     @Query("SELECT new com.mns.cda.suivimns.dto.TicketFullWithLatest(" +
-            "t.idTicket, t.title, t.openDate, t.closeDate, t.modificationDate, " +
-            "t.description, t.callDuration, t.initialPriority, " +
-            "t.finalPriority, v.versionNumber, vt.designation, " +
-            "s.name, c.idAppUser, c.firstName, c.lastName, " +
-            "th.designation, st.designation, cm.content, a.firstName, a.lastName," +
-            "te.idAppUser, mg.idAppUser) " +
+                "t.idTicket, t.title, t.modificationDate, " +
+                "t.finalPriority, v.versionNumber, vt.designation, " +
+                "s.name, th.designation, st.designation, " +
+                "COUNT(DISTINCT cm.idComment) AS commentCount) " +
             "FROM Ticket t " +
             "JOIN t.version v " +
             "JOIN v.versionType vt " +
             "JOIN v.software s " +
-            "JOIN t.client c " +
             "JOIN t.classificationList cl " +
             "JOIN cl.theme th " +
             "JOIN t.historyList h " +
             "JOIN h.status st " +
             "LEFT JOIN t.commentList cm " +
-            "LEFT JOIN cm.author a " +
-            "LEFT JOIN t.assignmentList at " +
-            "LEFT JOIN at.technician te " +
-            "LEFT JOIN at.manager mg")
+            "WHERE h.endDate IS NULL " +
+            "AND cl.affectation_date = (" +
+                "SELECT MAX(cl2.affectation_date) " +
+                "FROM Classification cl2 " +
+                "WHERE cl2.ticket = t)" +
+            "GROUP BY t.idTicket, t.title, t.modificationDate, " +
+                "t.finalPriority, v.versionNumber, vt.designation, " +
+                "s.name, th.designation, st.designation")
     List<TicketFullWithLatest> returnTicketFullWithLatest();
+
+    /*
+    @Query("SELECT new com.mns.cda.suivimns.dto.TicketFullWithLatest(" +
+            "t.idTicket, t.title, t.openDate, t.modificationDate, " +
+            "t.description, t.callDuration, t.initialPriority, " +
+            "t.finalPriority, v.versionNumber, vt.designation, " +
+            "s.name, th.designation, st.designation, COUNT(DISTINCT cm.idComment) AS commentCount) " +
+            "FROM Ticket t " +
+            "JOIN t.version v " +
+            "JOIN v.versionType vt " +
+            "JOIN v.software s " +
+            "JOIN t.classificationList cl " +
+            "JOIN cl.theme th " +
+            "JOIN t.historyList h " +
+            "JOIN h.status st " +
+            "LEFT JOIN t.commentList cm")
+    List<TicketFullWithLatest> returnTicketFullWithLatest();
+
+     */
+
+/*
+    @Query("FROM Ticket t1 WHERE t1.idTicket = (" +
+            "SELECT t2.idTicket, max(t2.creationdate) FROM Ticket T2" +
+            "GROUP BY Ticket t2.user)")
+
+ */
 
 
 
