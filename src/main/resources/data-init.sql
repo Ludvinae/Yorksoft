@@ -67,7 +67,7 @@ VALUES (1, 'Erreur de manipulation', ''),
        (4, 'Problème réseau', ''),
        (2, 'Temps de réponse', ''),
        (3, 'Dysfonctionnement', ''),
-       (2, 'Bug', ''),
+       (2, 'bug', ''),
        (1, 'Erreur de paramétrage', ''),
        (1, 'Autres cas', '');
 

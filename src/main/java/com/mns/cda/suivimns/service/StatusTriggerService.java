@@ -26,7 +26,7 @@ public class StatusTriggerService {
     protected final HistoryDao historyDao;
     protected final AppUserDao appUserDao;
 
-    @Transactional
+
     public void updateHistory(Ticket ticket, Integer actorId, String nextStatus) {
 
         Status statusNouveau = statusDao.findByDesignation(nextStatus)
@@ -49,15 +49,8 @@ public class StatusTriggerService {
         Optional<History> previousHistory = historyDao.findLatestByTicket(ticket.getIdTicket());
         previousHistory.ifPresent(history -> history.setEndDate(LocalDateTime.now()));
 
-        History history = new History(null, null, null, statusNouveau, ticket, actor);
+        History history = new History(null, LocalDateTime.now(), null, statusNouveau, ticket, actor);
         historyDao.save(history);
-
-        /*
-        historyList.add(history);
-        ticket.setHistoryList(historyList);
-        ticketDao.save(ticket);
-
-         */
 
     }
 }

@@ -1,6 +1,7 @@
 package com.mns.cda.suivimns.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.mns.cda.suivimns.dto.TicketCreation;
 import com.mns.cda.suivimns.dto.TicketFullWithLatest;
 import com.mns.cda.suivimns.model.*;
 import com.mns.cda.suivimns.model.groups.OnCreate;
@@ -52,67 +53,23 @@ public class TicketController {
         return new ResponseEntity<>(ticket.get(), HttpStatus.OK);
     }
 
-    /*
-    @GetMapping("/ticket/{id}/status/list")
-    @JsonView(TicketStatusListView.class)
-    public ResponseEntity<Ticket> getStatusList(@PathVariable int id) {
-
-        Optional<Ticket> ticket = ticketDao.findById(id);
-        if (ticket.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        return new ResponseEntity<>(ticket.get(), HttpStatus.OK);
-    }
-
-    @GetMapping("/ticket/{id}/status/latest")
-    @JsonView(TicketStatusListView.class)
-    public ResponseEntity<Status> getLatestStatus(@PathVariable int id) {
-
-        Optional<Ticket> ticket = ticketDao.findById(id);
-        if (ticket.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        History history = ticket.get().getHistoryList().get(0);
-        Status status = history.getStatus();
-
-        return new ResponseEntity<>(status, HttpStatus.OK);
-    }
-
-    @GetMapping("/ticket/{id}/theme/latest")
-    @JsonView(TicketStatusListView.class)
-    public ResponseEntity<Theme> getLatestTheme(@PathVariable int id) {
-
-        Optional<Ticket> ticket = ticketDao.findById(id);
-        if (ticket.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        Classification classification = ticket.get().getClassificationList().getLast();
-        Theme theme = classification.getTheme();
-
-        return new ResponseEntity<>(theme, HttpStatus.OK);
-    }
-
-     */
-
-
 
     @PostMapping("/")
-    public ResponseEntity<Ticket> create(@RequestBody @Validated(OnCreate.class) Ticket ticket) {
-        ticketService.save(ticket);
+    public ResponseEntity<Ticket> create(@RequestBody @Validated(OnCreate.class) TicketCreation ticket) {
 
-        return new ResponseEntity<>(ticket, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ticketService.createTicket(ticket));
     }
 
-    @PostMapping("/{id}")
-    public ResponseEntity<Ticket> createWithStatusUpdate(@RequestBody @Validated(OnCreate.class) Ticket ticket,
-                                                         @PathVariable Integer id) {
-        ticketService.saveWithStatusUpdate(ticket, id);
+    @PostMapping("/{id}/{theme}")
+    public ResponseEntity<Ticket> createTicket(@RequestBody @Validated(OnCreate.class) Ticket ticket,
+                                                         @PathVariable Integer id,
+                                                         @PathVariable String theme) {
 
-        return new ResponseEntity<>(ticket, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ticketService.createTicketOld(ticket, id, theme));
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
