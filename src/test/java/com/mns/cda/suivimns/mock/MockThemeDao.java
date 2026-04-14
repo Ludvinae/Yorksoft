@@ -162,4 +162,9 @@ public class MockThemeDao implements ThemeDao {
     public Page<Theme> findAll(Pageable pageable) {
         return null;
     }
+
+    @Override
+    public Optional<Theme> findByDesignation(String designation) {
+        return Optional.empty();
+    }
 }

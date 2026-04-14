@@ -20,13 +20,6 @@ import java.time.LocalDateTime;
 //@IdClass(Classification.class)
 public class Classification {
 
-    /*
-    @Id
-    protected Integer idTicket;
-
-    @Id
-    protected Integer idTheme;
-     */
 
     @EmbeddedId
     @JsonView(TicketView.class)

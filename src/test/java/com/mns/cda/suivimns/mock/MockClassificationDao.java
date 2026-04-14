@@ -162,4 +162,10 @@ public class MockClassificationDao implements ClassificationDao {
     public Page<Classification> findAll(Pageable pageable) {
         return null;
     }
+
+
+    @Override
+    public Optional<Classification> findLatestByTicket(Integer idTicket) {
+        return Optional.empty();
+    }
 }

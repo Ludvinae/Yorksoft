@@ -25,6 +25,10 @@ public class ThemeService {
         return themeDao.findById(id);
     }
 
+    public Optional<Theme> findByDesignation(String designation) {
+        return themeDao.findByDesignation(designation);
+    }
+
     public void save(Theme theme) {
         theme.setIdTheme(null);
         themeDao.save(theme);

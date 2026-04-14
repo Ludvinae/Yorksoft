@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -41,24 +42,22 @@ public class StatusTriggerService {
                     .orElseThrow(() -> new RuntimeException("User introuvable"));
         }
 
-        History history = new History(null, null, null, statusNouveau, ticket, actor);
-        historyDao.save(history);
-
         if (ticket.getHistoryList() == null) {
             ticket.setHistoryList(new ArrayList<>());
         }
-        List<History> historyList = ticket.getHistoryList();
 
+        Optional<History> previousHistory = historyDao.findLatestByTicket(ticket.getIdTicket());
+        previousHistory.ifPresent(history -> history.setEndDate(LocalDateTime.now()));
 
-        for (History lastHistory : historyList) {
-            if (lastHistory.getEndDate() == null) {
-                lastHistory.setEndDate(LocalDateTime.now());
-            }
-        }
+        History history = new History(null, null, null, statusNouveau, ticket, actor);
+        historyDao.save(history);
 
+        /*
         historyList.add(history);
         ticket.setHistoryList(historyList);
         ticketDao.save(ticket);
+
+         */
 
     }
 }

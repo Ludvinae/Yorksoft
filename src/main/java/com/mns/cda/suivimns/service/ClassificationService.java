@@ -36,13 +36,13 @@ public class ClassificationService {
         classificationDao.delete(classification);
     }
 
+
     public void update(Classification classificationToUpdate, int id) throws ClassificationService.ClassificationNotFoundException {
         Optional<Classification> classification = classificationDao.findById(id);
 
         if (classification.isEmpty()) {
             throw new ClassificationService.ClassificationNotFoundException();
         }
-
 
         classificationDao.save(classificationToUpdate);
     }
