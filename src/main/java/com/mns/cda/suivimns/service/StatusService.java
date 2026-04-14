@@ -25,6 +25,10 @@ public class StatusService {
         return statusDao.findById(id);
     }
 
+    public Optional<Status> findByDesignation(String designation) {
+        return statusDao.findByDesignation(designation);
+    }
+
     public void save(Status status) {
         status.setIdStatus(null);
         statusDao.save(status);

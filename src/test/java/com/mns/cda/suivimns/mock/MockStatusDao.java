@@ -162,4 +162,9 @@ public class MockStatusDao implements StatusDao {
     public Page<Status> findAll(Pageable pageable) {
         return null;
     }
+
+    @Override
+    public Optional<Status> findByDesignation(String designation) {
+        return null;
+    }
 }

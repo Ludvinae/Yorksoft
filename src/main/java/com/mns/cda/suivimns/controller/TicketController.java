@@ -106,6 +106,14 @@ public class TicketController {
         return new ResponseEntity<>(ticket, HttpStatus.CREATED);
     }
 
+    @PostMapping("/{id}")
+    public ResponseEntity<Ticket> createWithStatusUpdate(@RequestBody @Validated(OnCreate.class) Ticket ticket,
+                                                         @PathVariable Integer id) {
+        ticketService.saveWithStatusUpdate(ticket, id);
+
+        return new ResponseEntity<>(ticket, HttpStatus.CREATED);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
         Optional<Ticket> ticket = ticketService.findById(id);

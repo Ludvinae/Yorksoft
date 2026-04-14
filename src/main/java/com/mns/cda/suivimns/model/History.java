@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
@@ -17,6 +20,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class History {
 
     @Id
@@ -24,11 +28,10 @@ public class History {
     @JsonView(TicketStatusListView.class)
     protected Integer idHistory;
 
-    @CreationTimestamp
+    @CreatedDate
     @Column(updatable = false)
     protected LocalDateTime startDate;
 
-    @UpdateTimestamp
     protected LocalDateTime endDate;
 
     @ManyToOne(optional = false)

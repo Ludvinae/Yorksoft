@@ -2,6 +2,7 @@ package com.mns.cda.suivimns.service;
 
 import com.mns.cda.suivimns.dao.TicketDao;
 import com.mns.cda.suivimns.dto.TicketFullWithLatest;
+import com.mns.cda.suivimns.model.AppUser;
 import com.mns.cda.suivimns.model.Ticket;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,8 @@ public class TicketService {
     public static class TicketNotFoundException extends Exception {}
 
     protected final TicketDao ticketDao;
+
+    protected final StatusTriggerService trigger;
 
     public List<Ticket> findAll() {
         return ticketDao.findAll();
@@ -38,7 +41,14 @@ public class TicketService {
     public void save(Ticket ticket) {
         ticket.setIdTicket(null);
         ticket.setFinalPriority(ticket.getInitialPriority());
+        ticket.setOpenDate(null);
+        ticket.setModificationDate(null);
         ticketDao.save(ticket);
+    }
+
+    public void saveWithStatusUpdate(Ticket ticket, Integer actorId) {
+        save(ticket);
+        trigger.updateHistory(ticket, actorId, "Nouveau");
     }
 
     public void delete(Ticket ticket) {
@@ -56,5 +66,6 @@ public class TicketService {
 
         ticketDao.save(ticketToUpdate);
     }
+
 
 }
