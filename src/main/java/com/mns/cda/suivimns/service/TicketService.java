@@ -26,8 +26,18 @@ public class TicketService {
         return ticketDao.findById(id);
     }
 
+
+    public List<TicketFullWithLatest> getAllTicketFullWithLatest() {
+        return ticketDao.returnTicketFullWithLatest();
+    }
+
+    public List<TicketFullWithLatest> getTicketFullWithLatestByTechnician(int id) {
+        return ticketDao.returnTicketAttributed(id);
+    }
+
     public void save(Ticket ticket) {
         ticket.setIdTicket(null);
+        ticket.setFinalPriority(ticket.getInitialPriority());
         ticketDao.save(ticket);
     }
 
@@ -47,24 +57,4 @@ public class TicketService {
         ticketDao.save(ticketToUpdate);
     }
 
-    public List<TicketFullWithLatest> getTicketFullWithLatest() {
-        /*
-        List<TicketFullWithLatest> ticketList = ticketDao.returnTicketFullWithLatest();
-        Collections.reverse(ticketList);
-
-        List<TicketFullWithLatest> ticketListParsed = new ArrayList<>();
-        HashSet<Integer> ticketIdSet = new HashSet<Integer>();
-
-        for (TicketFullWithLatest ticket : ticketList) {
-            if (ticketIdSet.contains(ticket.id())) {
-                continue;
-            }
-            ticketIdSet.add(ticket.id());
-            ticketListParsed.add(ticket);
-        }
-        return ticketListParsed;
-
-         */
-        return ticketDao.returnTicketFullWithLatest();
-    }
 }

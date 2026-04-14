@@ -15,6 +15,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,6 +27,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class Ticket {
 
     @Id
@@ -36,15 +40,16 @@ public class Ticket {
     @Size(max = 63)
     protected String title;
 
-    @CreationTimestamp
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
     @JsonView(TicketView.class)
     protected LocalDateTime openDate;
 
     @JsonView(TicketView.class)
     protected LocalDateTime closeDate;
 
-    @UpdateTimestamp
     @JsonView(TicketView.class)
+    @LastModifiedDate
     protected LocalDateTime modificationDate;
 
     @Column(nullable = false, columnDefinition = "TEXT")

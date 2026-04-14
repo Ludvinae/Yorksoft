@@ -33,7 +33,12 @@ public class TicketController {
 
     @GetMapping("/list-full-latest")
     public List<TicketFullWithLatest> getTicketFullLatest() {
-        return ticketService.getTicketFullWithLatest();
+        return ticketService.getAllTicketFullWithLatest();
+    }
+
+    @GetMapping("/list-full-latest/{id}")
+    public List<TicketFullWithLatest> getTicketFullWithLatestByTechnician(@PathVariable Integer id) {
+        return ticketService.getTicketFullWithLatestByTechnician(id);
     }
 
     @GetMapping("/{id}")
