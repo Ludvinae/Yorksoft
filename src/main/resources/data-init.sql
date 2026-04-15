@@ -50,10 +50,8 @@ VALUES (1, 'Nouveau'),
 
 
 INSERT INTO urgency (priority_factor, designation, description)
-VALUES (1, 'Basse', 'Inconvenience d''utilisation'),
-       (2, 'Moyenne', 'Capacité d''utilisation restreinte'),
-       (3, 'Elevée', 'Arrêt de production'),
-       (4, 'Critique', 'Faille de sécurité');
+VALUES (1, 'Basse', 'Solution de contournement disponible'),
+       (2, 'Haute', 'Pas de solution de contournement');
 
 INSERT INTO impact (priority_factor, designation, description)
 VALUES (1, 'Bas', 'Une seule personne concernée'),
@@ -61,20 +59,20 @@ VALUES (1, 'Bas', 'Une seule personne concernée'),
        (3, 'Elevé', 'Un département'),
        (4, 'Critique', 'Toute l''entreprise');
 
-INSERT INTO theme (priority_factor, designation, description)
-VALUES (1, 'Erreur de manipulation', ''),
-       (3, 'Erreur système', ''),
-       (4, 'Problème réseau', ''),
-       (2, 'Temps de réponse', ''),
-       (3, 'Dysfonctionnement', ''),
-       (2, 'bug', ''),
-       (1, 'Erreur de paramétrage', ''),
-       (1, 'Autres cas', '');
+INSERT INTO theme (designation, description)
+VALUES ('Erreur de manipulation', ''),
+       ( 'Erreur système', ''),
+       ( 'Problème réseau', ''),
+       ( 'Temps de réponse', ''),
+       ( 'Dysfonctionnement', ''),
+       ( 'Bug', ''),
+       ( 'Erreur de paramétrage', ''),
+       ('Autres cas', '');
 
 INSERT INTO ticket (title, open_date, call_duration, final_priority, initial_priority, close_date, modification_date,
                     description, id_client, id_urgency, id_impact, id_version)
-VALUES ('Ca marche pas', NOW(), null, 1, 2, null, NOW(), 'Ca marche pas', 1, 1, 1, 2),
-       ('Indisponibilité du service de sauvegarde en ligne', NOW(), 1035, 80, 80, null, NOW(), 'Impossible d''acceder au dossiers sur le cloud dans le gestionnaire de projets.', 3, 2, 2, 3);
+VALUES ('Ca marche pas', NOW(), null, 5, 4, null, NOW(), 'Ca marche pas', 1, 1, 1, 2),
+       ('Indisponibilité du service de sauvegarde en ligne', NOW(), 1035, 3, 3, null, NOW(), 'Impossible d''acceder au dossiers sur le cloud dans le gestionnaire de projets.', 3, 2, 2, 3);
 
 INSERT INTO history (id_status, id_ticket, id_app_user, start_date, end_date)
 VALUES (1, 1, 1, '2026-04-11 09:12:00', '2026-04-11 09:27:00'),

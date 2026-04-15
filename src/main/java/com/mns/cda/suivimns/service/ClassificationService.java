@@ -1,8 +1,9 @@
 package com.mns.cda.suivimns.service;
 
 import com.mns.cda.suivimns.dao.ClassificationDao;
-import com.mns.cda.suivimns.dao.ClassificationDao;
 import com.mns.cda.suivimns.model.Classification;
+import com.mns.cda.suivimns.model.History;
+import com.mns.cda.suivimns.model.Theme;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -45,5 +46,13 @@ public class ClassificationService {
         }
 
         classificationDao.save(classificationToUpdate);
+    }
+
+    public Theme getTheme(Integer ticketId) {
+        Optional<Classification> classification = classificationDao.findLatestByTicket(ticketId);
+        if (classification.isEmpty()) {
+            return null;
+        }
+        return classification.get().getTheme();
     }
 }

@@ -3,6 +3,7 @@ package com.mns.cda.suivimns.service;
 import com.mns.cda.suivimns.dao.*;
 import com.mns.cda.suivimns.dto.TicketCreation;
 import com.mns.cda.suivimns.dto.TicketFullWithLatest;
+import com.mns.cda.suivimns.dto.TicketResponse;
 import com.mns.cda.suivimns.model.*;
 import com.mns.cda.suivimns.model.keys.ClassificationKey;
 import jakarta.transaction.Transactional;
@@ -24,6 +25,7 @@ public class TicketService {
 
     protected final StatusTriggerService trigger;
     protected final ClassificationDao classificationDao;
+    protected final ClassificationService classificationService;
     protected final ClientDao clientDao;
     protected final ImpactDao impactDao;
     protected final UrgencyDao urgencyDao;
@@ -54,11 +56,6 @@ public class TicketService {
         ticketDao.save(ticket);
     }
 
-
-    public void saveStatusUpdate(Ticket ticket, Integer actorId) {
-        trigger.updateHistory(ticket, actorId, "Nouveau");
-    }
-
     public void delete(Ticket ticket) {
         ticketDao.delete(ticket);
     }
@@ -75,10 +72,51 @@ public class TicketService {
         ticketDao.save(ticketToUpdate);
     }
 
+
+    @Transactional
+    public Ticket createTicket(TicketCreation ticketDto) {
+
+        Ticket ticket = new Ticket();
+        ticket.setTitle(ticketDto.title());
+        ticket.setDescription(ticketDto.description());
+
+        // Retrieve relations
+        Client client = clientDao.findById(ticketDto.idClient())
+                .orElseThrow(() -> new RuntimeException("Client introuvable"));
+
+        Impact impact = impactDao.findById(ticketDto.idImpact())
+                .orElseThrow(() -> new RuntimeException("Impact introuvable"));
+
+        Urgency urgency = urgencyDao.findById(ticketDto.idUrgency())
+                .orElseThrow(() -> new RuntimeException("Urgence introuvable"));
+
+        Version version = versionDao.findById(ticketDto.idVersion())
+                .orElseThrow(() -> new RuntimeException("Version introuvable"));
+
+        // Automatic priority calcul
+        int priority = computePriority(impact.getPriorityFactor(), urgency.getPriorityFactor(), client.getImportance());
+        ticket.setInitialPriority(priority);
+        ticket.setFinalPriority(priority);
+
+        ticket.setClient(client);
+        ticket.setImpact(impact);
+        ticket.setUrgency(urgency);
+        ticket.setVersion(version);
+
+        Ticket savedTicket = ticketDao.save(ticket);
+
+        trigger.updateHistory(savedTicket, ticketDto.idCreator(), "Nouveau");
+        addThemeToTicket(savedTicket, ticketDto.themeDesignation());
+
+        return savedTicket;
+    }
+
+    // METHODS
+
     public void addThemeToTicket(Ticket ticket, String designation) {
 
         // 1. récupérer la thématique
-        Theme theme = themeDao.findByDesignation(designation.toLowerCase())
+        Theme theme = themeDao.findByDesignation(designation)
                 .orElseThrow(() -> new RuntimeException("Thématique introuvable"));
 
         // 2. créer la classification
@@ -93,48 +131,8 @@ public class TicketService {
         classificationDao.save(classification);
     }
 
-    @Transactional
-    public Ticket createTicket(TicketCreation ticketDto) {
 
-        // 1. construire le ticket
-        Ticket ticket = new Ticket();
-        ticket.setTitle(ticketDto.title());
-        ticket.setDescription(ticketDto.description());
-
-        // 2. récupérer les relations
-        Client client = clientDao.findById(ticketDto.idClient())
-                .orElseThrow(() -> new RuntimeException("Client introuvable"));
-
-        Impact impact = impactDao.findById(ticketDto.idImpact())
-                .orElseThrow(() -> new RuntimeException("Impact introuvable"));
-
-        Urgency urgency = urgencyDao.findById(ticketDto.idUrgency())
-                .orElseThrow(() -> new RuntimeException("Urgence introuvable"));
-
-        Version version = versionDao.findById(ticketDto.idVersion())
-                .orElseThrow(() -> new RuntimeException("Version introuvable"));
-
-        int priority = computePriority(impact.getPriorityFactor(), urgency.getPriorityFactor(), client.getImportance());
-        ticket.setInitialPriority(priority);
-        ticket.setFinalPriority(priority);
-
-        ticket.setClient(client);
-        ticket.setImpact(impact);
-        ticket.setUrgency(urgency);
-        ticket.setVersion(version);
-
-        // 3. save ticket
-        Ticket savedTicket = ticketDao.save(ticket);
-
-        // 4. historique
-        trigger.updateHistory(savedTicket, ticketDto.idCreator(), "Nouveau");
-
-        // 5. thématique
-        addThemeToTicket(savedTicket, ticketDto.themeDesignation());
-
-        return savedTicket;
-    }
-
+    // Priorité
 
     private static final int[][] priorityMatrix =
             {{5, 4},
@@ -146,4 +144,29 @@ public class TicketService {
         int finalImpact = Math.min(impact + importance, 4);
         return priorityMatrix[finalImpact - 1][urgence - 1];
     }
+
+
+    //DTO
+
+    public TicketResponse responseToDto(Ticket ticket) {
+        System.out.println(ticket.getIdTicket());
+        Status status = trigger.getStatus(ticket.getIdTicket());
+        Theme theme = classificationService.getTheme(ticket.getIdTicket());
+
+        return new TicketResponse(
+                ticket.getIdTicket(),
+                ticket.getTitle(),
+                ticket.getDescription(),
+                ticket.getModificationDate(),
+                ticket.getFinalPriority(),
+                ticket.getVersion().getVersionNumber(),
+                ticket.getVersion().getVersionType().getDesignation(),
+                ticket.getVersion().getSoftware().getName(),
+                ticket.getClient().getFirstName(),
+                ticket.getClient().getLastName(),
+                status.getDesignation(),
+                theme.getDesignation());
+    }
+
+
 }

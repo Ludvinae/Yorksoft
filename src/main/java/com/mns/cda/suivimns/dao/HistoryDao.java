@@ -13,9 +13,10 @@ public interface HistoryDao extends JpaRepository<History, Integer> {
 
     @Query("""
         SELECT h FROM History h
-        WHERE h.ticket.idTicket = :ticketId
-        AND h.endDate = NULL 
+        WHERE h.ticket.idTicket = :idTicket
+        AND h.endDate = null 
         ORDER BY h.startDate DESC
+        LIMIT 1
         """)
-    Optional<History> findLatestByTicket(@Param("ticketId") Integer ticketId);
+    Optional<History> findLatestByTicket(@Param("idTicket") Integer idTicket);
 }

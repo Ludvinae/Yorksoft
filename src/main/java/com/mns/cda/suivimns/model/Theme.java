@@ -33,7 +33,4 @@ public class Theme {
     @Column(columnDefinition = "TEXT")
     protected String description;
 
-    @JsonView(TicketView.class)
-    protected Byte priorityFactor;
-
 }

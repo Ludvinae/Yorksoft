@@ -3,6 +3,7 @@ package com.mns.cda.suivimns.controller;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.mns.cda.suivimns.dto.TicketCreation;
 import com.mns.cda.suivimns.dto.TicketFullWithLatest;
+import com.mns.cda.suivimns.dto.TicketResponse;
 import com.mns.cda.suivimns.model.*;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
@@ -43,22 +44,25 @@ public class TicketController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Ticket> getById(@PathVariable int id) {
+    public ResponseEntity<TicketResponse> getById(@PathVariable int id) {
 
         Optional<Ticket> ticket = ticketService.findById(id);
         if (ticket.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(ticket.get(), HttpStatus.OK);
+        return new ResponseEntity<>(ticketService.responseToDto(ticket.get()), HttpStatus.OK);
     }
 
 
     @PostMapping("/")
-    public ResponseEntity<Ticket> create(@RequestBody @Validated(OnCreate.class) TicketCreation ticket) {
+    public ResponseEntity<TicketResponse> create(@RequestBody @Validated(OnCreate.class) TicketCreation ticketCreated) {
+
+        Ticket ticket = ticketService.createTicket(ticketCreated);
+        System.out.println("history :" + ticket.getHistoryList());
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ticketService.createTicket(ticket));
+                .body(ticketService.responseToDto(ticket));
     }
 
 
