@@ -17,13 +17,11 @@ import java.util.*;
 @RequiredArgsConstructor
 public class TicketService {
 
-    private final ThemeDao themeDao;
-
     public static class TicketNotFoundException extends Exception {}
 
     protected final TicketDao ticketDao;
-
-    protected final StatusTriggerService trigger;
+    private final ThemeDao themeDao;
+    protected final HistoryService historyService;
     protected final ClassificationDao classificationDao;
     protected final ClassificationService classificationService;
     protected final ClientDao clientDao;
@@ -105,7 +103,7 @@ public class TicketService {
 
         Ticket savedTicket = ticketDao.save(ticket);
 
-        trigger.updateHistory(savedTicket, ticketDto.idCreator(), "Nouveau");
+        historyService.updateHistory(savedTicket, ticketDto.idCreator(), "Nouveau");
         addThemeToTicket(savedTicket, ticketDto.themeDesignation());
 
         return savedTicket;
@@ -146,11 +144,10 @@ public class TicketService {
     }
 
 
-    //DTO
+    // Mapping
 
     public TicketResponse responseToDto(Ticket ticket) {
-        System.out.println(ticket.getIdTicket());
-        Status status = trigger.getStatus(ticket.getIdTicket());
+        Status status = historyService.getStatus(ticket.getIdTicket());
         Theme theme = classificationService.getTheme(ticket.getIdTicket());
 
         return new TicketResponse(

@@ -83,8 +83,9 @@ VALUES (1, 1, 1, '2026-04-11 09:12:00', '2026-04-11 09:27:00'),
 INSERT INTO comment (date_sent, last_modification, content, id_ticket, id_app_user)
 VALUES (NOW(), null, 'Bonjour, pourriez vous préciser la nature de votre problème ?', 1, 5);
 
-INSERT INTO assignment (assigment_date, end_date, id_ticket, id_manager, id_technician)
-VALUES (NOW(), null, 1, 4, 5);
+INSERT INTO assignment (assignment_date, end_date, id_ticket, id_manager, id_technician)
+VALUES (NOW(), null, 1, 4, 5),
+       ('2026-03-03 13:24', '2026-03-03 16:21',  2, 4, 5);
 
 
 INSERT INTO knowledge (subject, id_theme)

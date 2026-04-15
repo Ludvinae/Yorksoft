@@ -59,7 +59,6 @@ public class TicketController {
     public ResponseEntity<TicketResponse> create(@RequestBody @Validated(OnCreate.class) TicketCreation ticketCreated) {
 
         Ticket ticket = ticketService.createTicket(ticketCreated);
-        System.out.println("history :" + ticket.getHistoryList());
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ticketService.responseToDto(ticket));

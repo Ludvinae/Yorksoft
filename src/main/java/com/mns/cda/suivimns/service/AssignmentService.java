@@ -27,19 +27,20 @@ public class AssignmentService {
 
     public void modify(Assignment assignment, int id) {
         assignment.setIdAssignment(id);
-        assignment.setAssigmentDate(assignment.getAssigmentDate());
+        assignment.setAssignmentDate(assignment.getAssignmentDate());
         assignmentDao.save(assignment);
     }
 
     public void firstSave(Assignment assignment) {
         assignment.setIdAssignment(null);
-        assignment.setAssigmentDate(LocalDateTime.now());
+        assignment.setAssignmentDate(LocalDateTime.now());
         assignmentDao.save(assignment);
     }
 
+
     public void close(Assignment assignment, int id) {
         assignment.setIdAssignment(id);
-        assignment.setAssigmentDate(assignment.getAssigmentDate());
+        assignment.setAssignmentDate(assignment.getAssignmentDate());
         assignment.setTicket(assignment.getTicket());
         assignment.setManager(assignment.getManager());
         assignment.setTechnician(assignment.getTechnician());

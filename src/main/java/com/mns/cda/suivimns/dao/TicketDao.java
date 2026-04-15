@@ -79,7 +79,7 @@ public interface TicketDao extends JpaRepository<Ticket, Integer> {
             "JOIN h.status st " +
             "LEFT JOIN t.commentList cm " +
             "WHERE h.endDate IS NULL " +
-            "AND t.finalPriority > 10 " +
+            "AND t.finalPriority <= 2 " +
             "AND cl.affectation_date = (" +
             "SELECT MAX(cl2.affectation_date) " +
             "FROM Classification cl2 " +

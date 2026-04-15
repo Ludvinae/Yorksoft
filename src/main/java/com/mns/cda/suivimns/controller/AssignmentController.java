@@ -25,13 +25,13 @@ public class AssignmentController {
 
     protected final AssignmentService assignmentService;
 
-    @GetMapping("/assignment/list")
+    @GetMapping("/list")
     @JsonView(AssignmentView.class)
     public List<Assignment> getAll() {
         return assignmentService.findAll();
     }
 
-    @GetMapping("/assignment/{id}")
+    @GetMapping("/{id}")
     @JsonView(AssignmentView.class)
     public ResponseEntity<Assignment> getById(@PathVariable int id) {
         Optional<Assignment> assignment = assignmentService.findById(id);
@@ -42,15 +42,17 @@ public class AssignmentController {
         return new ResponseEntity<>(assignment.get(), HttpStatus.OK);
     }
 
-    @PostMapping("/assignment")
+    @PostMapping("")
     public ResponseEntity<Assignment> create(@RequestBody @Validated() Assignment assignment) {
 
         assignmentService.firstSave(assignment);
 
-        return new ResponseEntity<>(assignment, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(assignment);
     }
 
-    @DeleteMapping("/assignment/{id}")
+
+    @DeleteMapping("/{id}")
     public ResponseEntity<Assignment> delete(@PathVariable int id) {
         Optional<Assignment> assignment = assignmentService.findById(id);
 
@@ -62,7 +64,18 @@ public class AssignmentController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping("/assignment/{id}")
+
+    @PutMapping("/close/{id}")
+    public ResponseEntity<Assignment> close(@PathVariable int id, @RequestBody @Validated() Assignment assignmentToUpdate) throws AssignmentService.AssignmentNotFoundException {
+        try {
+            assignmentService.update(assignmentToUpdate, id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (AssignmentService.AssignmentNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PutMapping("/{id}")
     @JsonView(AssignmentView.class)
     public ResponseEntity<Assignment> update(@PathVariable int id, @RequestBody @Validated() Assignment assignmentToUpdate) {
         Optional<Assignment> assignment = assignmentService.findById(id);
@@ -88,14 +101,4 @@ public class AssignmentController {
         return new ResponseEntity<>(assignmentToUpdate, HttpStatus.OK);
     }
 
-    @PutMapping("assignment/close/{id}")
-    public ResponseEntity<Assignment> close(@PathVariable int id, @RequestBody @Validated() Assignment assignmentToUpdate) throws AssignmentService.AssignmentNotFoundException {
-        try {
-            assignmentService.update(assignmentToUpdate, id);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (AssignmentService.AssignmentNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-    }
 }

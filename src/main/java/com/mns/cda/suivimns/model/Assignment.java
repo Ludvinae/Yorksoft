@@ -8,7 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class Assignment {
 
     @Id
@@ -24,11 +26,9 @@ public class Assignment {
     @JsonView({AssignmentView.class, EmployeeTicketListView.class})
     protected Integer idAssignment;
 
-    @CreationTimestamp
-    //@Column(nullable = false)
-    //@NotBlank(groups = {OnCreate.class})
+    @CreatedDate
     @JsonView({AssignmentView.class, EmployeeTicketListView.class})
-    protected LocalDateTime assigmentDate;
+    protected LocalDateTime assignmentDate;
 
     @JsonView({AssignmentView.class, EmployeeTicketListView.class})
     protected LocalDateTime endDate;
@@ -41,10 +41,10 @@ public class Assignment {
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_manager")
     @JsonView(AssignmentView.class)
-    protected Manager manager;
+    protected AppUser manager;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_technician")
     @JsonView(AssignmentView.class)
-    protected Technician technician;
+    protected AppUser technician;
 }

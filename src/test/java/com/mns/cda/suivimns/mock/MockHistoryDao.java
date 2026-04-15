@@ -162,4 +162,9 @@ public class MockHistoryDao implements HistoryDao {
     public Page<History> findAll(Pageable pageable) {
         return null;
     }
+
+    @Override
+    public Optional<History> findLatestByTicket(Integer idTicket) {
+        return Optional.empty();
+    }
 }
