@@ -7,8 +7,6 @@ import com.mns.cda.suivimns.model.*;
 import com.mns.cda.suivimns.model.keys.ClassificationKey;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -102,8 +100,6 @@ public class TicketService {
         Ticket ticket = new Ticket();
         ticket.setTitle(ticketDto.title());
         ticket.setDescription(ticketDto.description());
-        ticket.setInitialPriority(ticketDto.initialPriority());
-        ticket.setFinalPriority(ticketDto.initialPriority());
 
         // 2. récupérer les relations
         Client client = clientDao.findById(ticketDto.idClient())
@@ -117,6 +113,10 @@ public class TicketService {
 
         Version version = versionDao.findById(ticketDto.idVersion())
                 .orElseThrow(() -> new RuntimeException("Version introuvable"));
+
+        int priority = computePriority(impact.getPriorityFactor(), urgency.getPriorityFactor(), client.getImportance());
+        ticket.setInitialPriority(priority);
+        ticket.setFinalPriority(priority);
 
         ticket.setClient(client);
         ticket.setImpact(impact);
@@ -136,24 +136,14 @@ public class TicketService {
     }
 
 
-    @Transactional
-    public Ticket createTicketOld(Ticket ticket, Integer actorId, String themeDesignation) {
+    private static final int[][] priorityMatrix =
+            {{5, 4},
+            {4, 3},
+            {3, 2},
+            {2, 1}};
 
-        // 1. init ticket
-        ticket.setIdTicket(null);
-        ticket.setFinalPriority(ticket.getInitialPriority());
-        ticket.setOpenDate(null);
-        ticket.setModificationDate(null);
-
-        // 2. save ticket
-        Ticket savedTicket = ticketDao.save(ticket);
-
-        // 3. historique initial
-        trigger.updateHistory(savedTicket, actorId, "Nouveau");
-
-        // 4. thématique initiale
-        addThemeToTicket(savedTicket, themeDesignation);
-
-        return savedTicket;
+    public int computePriority(int impact, int urgence, int importance) {
+        int finalImpact = Math.min(impact + importance, 4);
+        return priorityMatrix[finalImpact - 1][urgence - 1];
     }
 }

@@ -38,7 +38,7 @@ INSERT INTO director (id_app_user)
 VALUES (7);
 
 INSERT INTO client (id_app_user, importance)
-VALUES (1, 1), (2, 1), (3, 5), (8, 1);
+VALUES (1, 0), (2, 0), (3, 2), (8, 0);
 
 INSERT INTO status (display_order, designation)
 VALUES (1, 'Nouveau'),

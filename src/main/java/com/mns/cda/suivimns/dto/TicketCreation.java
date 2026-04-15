@@ -6,7 +6,6 @@ import com.mns.cda.suivimns.model.Ticket;
 public record TicketCreation(
         String title,
         String description,
-        int initialPriority,
         Integer idImpact,
         Integer idUrgency,
         Integer idClient,

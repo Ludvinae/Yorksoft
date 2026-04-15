@@ -61,15 +61,6 @@ public class TicketController {
                 .body(ticketService.createTicket(ticket));
     }
 
-    @PostMapping("/{id}/{theme}")
-    public ResponseEntity<Ticket> createTicket(@RequestBody @Validated(OnCreate.class) Ticket ticket,
-                                                         @PathVariable Integer id,
-                                                         @PathVariable String theme) {
-
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ticketService.createTicketOld(ticket, id, theme));
-    }
-
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
