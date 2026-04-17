@@ -37,7 +37,7 @@ public class ImpactController {
         return new ResponseEntity<>(impact.get(), HttpStatus.OK);
     }
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<Impact> create(@RequestBody @Validated(OnCreate.class) Impact impact) {
         impact.setIdImpact(null);
         iImpactService.save(impact);

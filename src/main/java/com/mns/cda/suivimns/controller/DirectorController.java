@@ -37,7 +37,7 @@ public class DirectorController {
         return new ResponseEntity<>(director.get(), HttpStatus.OK);
     }
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<Director> create(@RequestBody @Validated(OnCreate.class) Director director) {
         directorservice.save(director);
 

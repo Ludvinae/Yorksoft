@@ -36,7 +36,7 @@ public class ClientController {
     }
 
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<Client> create(@RequestBody @Validated(OnCreate.class) Client client) {
         iClientService.save(client);
 

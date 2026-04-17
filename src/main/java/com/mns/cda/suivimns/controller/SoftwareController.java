@@ -56,7 +56,7 @@ public class SoftwareController {
         return new ResponseEntity<>(software.get(), HttpStatus.OK);
     }
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<Software> create(@RequestBody @Validated(OnCreate.class) Software software) {
         software.setIdSoftware(null);
         iSoftwareService.save(software);

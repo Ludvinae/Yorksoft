@@ -37,7 +37,7 @@ public class StatusController {
         return new ResponseEntity<>(status.get(), HttpStatus.OK);
     }
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<Status> create(@RequestBody @Validated(OnCreate.class) Status status) {
         status.setIdStatus(null);
         iStatusService.save(status);

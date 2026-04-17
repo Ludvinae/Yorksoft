@@ -37,7 +37,7 @@ public class ThemeController {
         return new ResponseEntity<>(theme.get(), HttpStatus.OK);
     }
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<Theme> create(@RequestBody @Validated(OnCreate.class) Theme theme) {
         theme.setIdTheme(null);
         iThemeService.save(theme);

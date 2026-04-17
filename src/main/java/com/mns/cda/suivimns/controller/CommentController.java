@@ -37,7 +37,7 @@ public class CommentController {
         return new ResponseEntity<>(comment.get(), HttpStatus.OK);
     }
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<Comment> create(@RequestBody @Validated(OnCreate.class) Comment comment) {
         comment.setIdComment(null);
         comment.setLastModification(null);

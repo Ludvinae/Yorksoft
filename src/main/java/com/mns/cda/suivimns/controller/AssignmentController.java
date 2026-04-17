@@ -38,7 +38,7 @@ public class AssignmentController {
         return new ResponseEntity<>(assignment.get(), HttpStatus.OK);
     }
 
-    @PostMapping("")
+    @PostMapping
     public ResponseEntity<Assignment> create(@RequestBody @Validated() Assignment assignment) {
 
         iAssignmentService.firstSave(assignment);

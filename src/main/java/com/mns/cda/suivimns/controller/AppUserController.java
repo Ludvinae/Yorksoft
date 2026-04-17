@@ -40,7 +40,7 @@ public class AppUserController {
         return new ResponseEntity<>(user.get(), HttpStatus.OK);
     }
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<AppUser> create(@RequestBody @Validated(OnCreate.class) AppUser user) {
         iAppUserservice.save(user);
 

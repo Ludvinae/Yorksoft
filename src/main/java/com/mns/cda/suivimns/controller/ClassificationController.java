@@ -37,7 +37,7 @@ public class ClassificationController {
         return new ResponseEntity<>(classification.get(), HttpStatus.OK);
     }
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<Classification> create(@RequestBody @Validated(OnCreate.class) Classification classification) {
         classificationservice.save(classification);
 

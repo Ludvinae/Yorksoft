@@ -37,7 +37,7 @@ public class ArticleController {
         return new ResponseEntity<>(article.get(), HttpStatus.OK);
     }
 
-    @PostMapping("/article")
+    @PostMapping
     public ResponseEntity<Article> create(@RequestBody @Validated(OnCreate.class) Article article) {
 
         iArticleService.save(article);
@@ -45,7 +45,7 @@ public class ArticleController {
         return new ResponseEntity<>(article, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/article/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Article> delete(@PathVariable int id) {
         Optional<Article> article = iArticleService.findById(id);
 
@@ -57,7 +57,7 @@ public class ArticleController {
         return new ResponseEntity<>(article.get(), HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping("/article/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Article> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Article articleToUpdate) throws iArticleService.ArticleNotFoundException {
 
         try {

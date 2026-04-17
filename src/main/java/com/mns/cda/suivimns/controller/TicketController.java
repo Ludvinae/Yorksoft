@@ -55,7 +55,7 @@ public class TicketController {
     }
 
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<TicketResponse> create(@RequestBody @Validated(OnCreate.class) TicketCreation ticketCreated) {
 
         Ticket ticket = iTicketService.createTicket(ticketCreated);

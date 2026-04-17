@@ -21,12 +21,12 @@ public class HistoryController {
 
     protected final iHistoryService iHistoryService;
 
-    @GetMapping("/history/list")
+    @GetMapping("/list")
     public List<History> getAll() {
         return iHistoryService.findAll();
     }
 
-    @GetMapping("/history/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<History> getById(@PathVariable int id) {
 
         Optional<History> history = iHistoryService.findById(id);
@@ -37,7 +37,7 @@ public class HistoryController {
         return new ResponseEntity<>(history.get(), HttpStatus.OK);
     }
 
-    @PostMapping("/history")
+    @PostMapping
     public ResponseEntity<History> create(@RequestBody @Validated(OnCreate.class) History history) {
         history.setIdHistory(null);
         iHistoryService.save(history);
@@ -45,7 +45,7 @@ public class HistoryController {
         return new ResponseEntity<>(history, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/history/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<History> delete(@PathVariable int id) {
         Optional<History> history = iHistoryService.findById(id);
         if (history.isEmpty()) {
@@ -56,7 +56,7 @@ public class HistoryController {
         return new ResponseEntity<>(history.get(), HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping("/history/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<History> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) History historyToUpdate) {
         Optional<History> history = iHistoryService.findById(id);
 

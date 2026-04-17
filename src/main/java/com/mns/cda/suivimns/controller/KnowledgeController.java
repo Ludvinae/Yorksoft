@@ -37,7 +37,7 @@ public class KnowledgeController {
         return new ResponseEntity<>(knowledge.get(), HttpStatus.OK);
     }
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<Knowledge> create(@RequestBody @Validated(OnCreate.class) Knowledge knowledge) {
         knowledge.setIdKnowledge(null);
         iKnowledgeService.save(knowledge);

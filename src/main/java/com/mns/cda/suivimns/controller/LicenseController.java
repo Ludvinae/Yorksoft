@@ -37,7 +37,7 @@ public class LicenseController {
         return new ResponseEntity<>(license.get(), HttpStatus.OK);
     }
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<License> create(@RequestBody @Validated(OnCreate.class) License license) {
         licenseservice.save(license);
 

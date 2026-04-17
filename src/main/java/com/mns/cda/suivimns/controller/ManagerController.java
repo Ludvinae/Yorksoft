@@ -40,7 +40,7 @@ public class ManagerController {
         return new ResponseEntity<>(manager.get(), HttpStatus.OK);
     }
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<Manager> create(@RequestBody @Validated(OnCreate.class) Manager manager) {
         managerservice.save(manager);
 

@@ -40,7 +40,7 @@ public class TechnicianController {
         return new ResponseEntity<>(technician.get(), HttpStatus.OK);
     }
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<Technician> create(@RequestBody @Validated(OnCreate.class) Technician technician) {
         technicianservice.save(technician);
 

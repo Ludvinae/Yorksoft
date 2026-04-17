@@ -36,7 +36,7 @@ public class VersionController {
         return new ResponseEntity<>(version.get(), HttpStatus.OK);
     }
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<Version> create(@RequestBody @Validated(OnCreate.class) Version version) {
 
         version.setIdVersion(null);

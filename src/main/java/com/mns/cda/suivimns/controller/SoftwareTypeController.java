@@ -37,7 +37,7 @@ public class SoftwareTypeController {
         return new ResponseEntity<>(softwareType.get(), HttpStatus.OK);
     }
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<SoftwareType> create(@RequestBody @Validated(OnCreate.class) SoftwareType typeToInsert) {
 
         typeToInsert.setIdSoftwareType(null);

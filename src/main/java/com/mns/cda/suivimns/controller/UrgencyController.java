@@ -37,7 +37,7 @@ public class UrgencyController {
         return new ResponseEntity<>(urgency.get(), HttpStatus.OK);
     }
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<Urgency> create(@RequestBody @Validated(OnCreate.class) Urgency urgency) {
         urgency.setIdUrgency(null);
         iUrgencyService.save(urgency);
