@@ -3,6 +3,7 @@ package com.mns.cda.suivimns.unit.model;
 import com.mns.cda.suivimns.TestUtils;
 import com.mns.cda.suivimns.model.AppUser;
 import com.mns.cda.suivimns.model.Knowledge;
+import com.mns.cda.suivimns.model.Knowledge;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
 import jakarta.validation.Validation;
@@ -60,5 +61,19 @@ public class KnowledgeUnitTest {
         );
 
         Assertions.assertTrue(constraintExists, "Subject must be <= 255 characters");
+    }
+
+    @Test
+    public void validKnowledgeWithBlankTheme_shouldNotBeValid() {
+        Knowledge knowledge = new Knowledge();
+        knowledge.setTheme(null);
+
+        boolean constraintExists = TestUtils.constraintViolationExists(
+                validator.validate(knowledge),
+                "theme",
+                "NotNull"
+        );
+
+        Assertions.assertTrue(constraintExists, "Knowledge should have a theme associated");
     }
 }

@@ -4,6 +4,7 @@ import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,8 +30,9 @@ public class Knowledge {
     @Size(max = 255)
     protected String subject;
 
-    @ManyToOne
-    @JoinColumn(name = "id_theme")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "id_theme", nullable = false)
+    @NotNull
     protected Theme theme;
 
     @ManyToMany

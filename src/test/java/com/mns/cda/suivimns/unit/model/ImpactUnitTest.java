@@ -1,6 +1,7 @@
 package com.mns.cda.suivimns.unit.model;
 
 import com.mns.cda.suivimns.TestUtils;
+import com.mns.cda.suivimns.model.Impact;
 import com.mns.cda.suivimns.model.Comment;
 import com.mns.cda.suivimns.model.Impact;
 import com.mns.cda.suivimns.model.groups.OnCreate;
@@ -46,5 +47,19 @@ public class ImpactUnitTest {
         );
 
         Assertions.assertTrue(constraintExists, "Designation should be at most 63 characters long");
+    }
+
+    @Test
+    public void validImpactWithBlankPriorityFactor_shouldNotBeValid() {
+        Impact impact = new Impact();
+        impact.setPriorityFactor(null);
+
+        boolean constraintExists = TestUtils.constraintViolationExists(
+                validator.validate(impact),
+                "priorityFactor",
+                "NotNull"
+        );
+
+        Assertions.assertTrue(constraintExists, "Impact priorityFactor should not be blank");
     }
 }

@@ -1,6 +1,7 @@
 package com.mns.cda.suivimns.unit.model;
 
 import com.mns.cda.suivimns.TestUtils;
+import com.mns.cda.suivimns.model.License;
 import com.mns.cda.suivimns.model.Knowledge;
 import com.mns.cda.suivimns.model.License;
 import jakarta.validation.Validation;
@@ -58,5 +59,19 @@ public class LicenseUnitTest {
         );
 
         Assertions.assertTrue(constraintExists, "User count must not be blank");
+    }
+
+    @Test
+    public void validLicenseWithBlankSoftware_shouldNotBeValid() {
+        License license = new License();
+        license.setSoftware(null);
+
+        boolean constraintExists = TestUtils.constraintViolationExists(
+                validator.validate(license),
+                "software",
+                "NotNull"
+        );
+
+        Assertions.assertTrue(constraintExists, "License should have a software associated");
     }
 }

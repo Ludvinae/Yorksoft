@@ -3,6 +3,7 @@ package com.mns.cda.suivimns.unit.model;
 import com.mns.cda.suivimns.TestUtils;
 import com.mns.cda.suivimns.model.Impact;
 import com.mns.cda.suivimns.model.Urgency;
+import com.mns.cda.suivimns.model.Urgency;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -45,6 +46,20 @@ public class UrgencyUnitTest {
         );
 
         Assertions.assertTrue(constraintExists, "Designation should be at most 63 characters long");
+    }
+
+    @Test
+    public void urgencyWithNullPriorityFactor_shouldNotBeValid() {
+        Urgency urgency = new Urgency();
+        urgency.setPriorityFactor(null);
+
+        boolean constraintExists = TestUtils.constraintViolationExists(
+                validator.validate(urgency),
+                "priorityFactor",
+                "NotNull"
+        );
+
+        Assertions.assertTrue(constraintExists, "Urgency Priority factor must not be blank");
     }
 }
 

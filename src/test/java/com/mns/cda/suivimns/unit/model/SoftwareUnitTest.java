@@ -20,7 +20,7 @@ public class SoftwareUnitTest {
     }
 
     @Test
-    public void validSoftwareWithBlankDesignation_shouldNotBeValid() {
+    public void validSoftwareWithBlankName_shouldNotBeValid() {
         Software software = new Software();
         software.setName("");
 

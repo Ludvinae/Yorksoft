@@ -1,5 +1,6 @@
 package com.mns.cda.suivimns.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.view.EmployeeTicketListView;
@@ -14,6 +15,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -60,33 +63,37 @@ public class Ticket {
     @JsonView(TicketView.class)
     protected Integer callDuration;
 
-    @Column(nullable = false)
-    @NotNull(groups = {OnCreate.class})
+    @Column(nullable = false, updatable = false)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY) // Empeche le changement de cette valeur meme avec le setter
     @JsonView(TicketView.class)
     protected Integer initialPriority;
 
+    @Column(nullable = false)
     @JsonView(TicketView.class)
     protected Integer finalPriority;
-
 
     @ManyToOne
     @JoinColumn(name = "id_version")
     @JsonView(TicketView.class)
     protected Version version;
 
-    @ManyToOne
-    @JoinColumn(name = "id_urgency")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "id_urgency", nullable = false)
     @JsonView(TicketView.class)
+    @NotNull(groups = {OnCreate.class})
     protected Urgency urgency;
 
-    @ManyToOne
-    @JoinColumn(name = "id_impact")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "id_impact", nullable = false)
     @JsonView(TicketView.class)
+    @NotNull(groups = {OnCreate.class})
     protected Impact impact;
 
     @ManyToOne
     @JoinColumn(name = "id_client")
     @JsonView(TicketView.class)
+    @OnDelete(action = OnDeleteAction.SET_NULL)
+    @NotNull(groups = {OnCreate.class})
     protected Client client;
 
     @OneToMany(mappedBy = "ticket")

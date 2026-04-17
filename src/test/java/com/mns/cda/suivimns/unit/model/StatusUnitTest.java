@@ -20,7 +20,7 @@ public class StatusUnitTest {
     }
 
     @Test
-    public void statusWithBlankCreatedStatus_shouldNotBeValid() {
+    public void statusWithBlankDesignation_shouldNotBeValid() {
         Status status = new Status();
         status.setDesignation("");
 

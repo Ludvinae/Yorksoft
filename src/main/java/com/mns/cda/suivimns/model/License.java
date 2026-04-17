@@ -10,6 +10,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -38,8 +40,10 @@ public class License {
     protected Integer userCount;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "id_software")
+    @JoinColumn(name = "id_software", nullable = false)
+    @NotNull
     @JsonView(ClientSoftwareListView.class)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     protected Software software;
 
 

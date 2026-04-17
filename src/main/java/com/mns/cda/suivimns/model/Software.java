@@ -12,6 +12,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.validator.constraints.Length;
 
 import java.util.List;
@@ -41,6 +43,7 @@ public class Software {
     @ManyToOne
     @JoinColumn(name = "id_software_type")
     @JsonView({ClientSoftwareListView.class, SoftwareView.class})
+    @OnDelete(action= OnDeleteAction.SET_NULL)
     protected SoftwareType type;
 
     // Doit rester nullable, on crée d'abord un software avant de créer ses versions

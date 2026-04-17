@@ -2,6 +2,8 @@ package com.mns.cda.suivimns.unit.model;
 
 import com.mns.cda.suivimns.TestUtils;
 import com.mns.cda.suivimns.model.Version;
+import com.mns.cda.suivimns.model.Version;
+import com.mns.cda.suivimns.model.groups.OnCreate;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import org.junit.jupiter.api.Assertions;
@@ -45,6 +47,20 @@ public class VersionUnitTest {
         );
 
         Assertions.assertTrue(constraintExists, "Version number field must be at maximum 63 characters long");
+    }
+
+    @Test
+    public void versionWithNullSoftware_shouldNotBeValid() {
+        Version version = new Version();
+        version.setSoftware(null);
+
+        boolean constraintExists = TestUtils.constraintViolationExists(
+                validator.validate(version),
+                "software",
+                "NotNull"
+        );
+
+        Assertions.assertTrue(constraintExists, "Version must be associated with a software");
     }
 
 }

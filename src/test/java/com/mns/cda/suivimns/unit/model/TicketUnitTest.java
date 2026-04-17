@@ -2,6 +2,8 @@ package com.mns.cda.suivimns.unit.model;
 
 import com.mns.cda.suivimns.TestUtils;
 import com.mns.cda.suivimns.model.Ticket;
+import com.mns.cda.suivimns.model.Ticket;
+import com.mns.cda.suivimns.model.Ticket;
 import com.mns.cda.suivimns.model.VersionType;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import jakarta.validation.Validation;
@@ -61,18 +63,49 @@ public class TicketUnitTest {
         Assertions.assertTrue(constraintExists, "Description must not be blank");
     }
 
+
     @Test
-    public void ticketWithNullCreatedInitialPriority_shouldNotBeValid() {
+    public void validTicketWithBlankImpact_shouldNotBeValid() {
         Ticket ticket = new Ticket();
-        ticket.setInitialPriority(null);
+        ticket.setImpact(null);
 
         boolean constraintExists = TestUtils.constraintViolationExists(
                 validator.validate(ticket, OnCreate.class),
-                "initialPriority",
+                "impact",
                 "NotNull"
         );
 
-        Assertions.assertTrue(constraintExists, "Initial priority must not be blank");
+        Assertions.assertTrue(constraintExists, "Ticket should have an impact associated");
     }
+
+    @Test
+    public void validTicketWithBlankUrgency_shouldNotBeValid() {
+        Ticket ticket = new Ticket();
+        ticket.setUrgency(null);
+
+        boolean constraintExists = TestUtils.constraintViolationExists(
+                validator.validate(ticket, OnCreate.class),
+                "urgency",
+                "NotNull"
+        );
+
+        Assertions.assertTrue(constraintExists, "Ticket should have an urgency associated");
+    }
+
+    @Test
+    public void validTicketWithBlankClient_shouldNotBeValid() {
+        Ticket ticket = new Ticket();
+        ticket.setClient(null);
+
+        boolean constraintExists = TestUtils.constraintViolationExists(
+                validator.validate(ticket, OnCreate.class),
+                "client",
+                "NotNull"
+        );
+
+        Assertions.assertTrue(constraintExists, "Ticket should have a client associated on creation");
+    }
+
+
 
 }
