@@ -2,6 +2,7 @@ package com.mns.cda.suivimns.unit.model;
 
 import com.mns.cda.suivimns.TestUtils;
 import com.mns.cda.suivimns.model.AppUser;
+import com.mns.cda.suivimns.model.Classification;
 import com.mns.cda.suivimns.model.Comment;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
@@ -46,6 +47,20 @@ public class CommentUnitTest {
         );
 
         Assertions.assertTrue(constraintExists, "Content should not be blank");
+    }
+
+    @Test
+    public void validCommentWithBlankTicket_shouldNotBeValid() {
+        Comment comment = new Comment();
+        comment.setTicket(null);
+
+        boolean constraintExists = TestUtils.constraintViolationExists(
+                validator.validate(comment),
+                "ticket",
+                "NotNull"
+        );
+
+        Assertions.assertTrue(constraintExists, "Comment should have a ticket associated");
     }
 
 }

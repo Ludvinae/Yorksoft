@@ -2,6 +2,7 @@ package com.mns.cda.suivimns.unit.model;
 
 import com.mns.cda.suivimns.TestUtils;
 import com.mns.cda.suivimns.model.Article;
+import com.mns.cda.suivimns.model.Classification;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
 import jakarta.validation.Validation;
@@ -59,5 +60,19 @@ public class ArticleUnitTest {
         );
 
         Assertions.assertFalse(constraintExists, "Content should be valid");
+    }
+
+    @Test
+    public void validArticleWithBlankKnowledge_shouldNotBeValid() {
+        Article article = new Article();
+        article.setKnowledge(null);
+
+        boolean constraintExists = TestUtils.constraintViolationExists(
+                validator.validate(article),
+                "knowledge",
+                "NotNull"
+        );
+
+        Assertions.assertTrue(constraintExists, "Article should have a knowledge associated");
     }
 }

@@ -1,6 +1,7 @@
 package com.mns.cda.suivimns.unit.model;
 
 import com.mns.cda.suivimns.TestUtils;
+import com.mns.cda.suivimns.model.Manager;
 import com.mns.cda.suivimns.model.Status;
 import com.mns.cda.suivimns.model.Technician;
 import com.mns.cda.suivimns.model.groups.OnCreate;
@@ -31,5 +32,20 @@ public class TechnicianUnitTest {
         );
 
         Assertions.assertTrue(constraintExists, "Rank must not be null");
+    }
+
+    @Test
+    public void technicianWithValidData_shouldBeValid() {
+        Technician technician = new Technician();
+        technician.setFirstName("John");
+        technician.setLastName("Doe");
+        technician.setEmail("john.doe@test.com");
+        technician.setPhoneNumber("0123456789");
+        technician.setPassword("securePassword");
+        technician.setRank((byte) 1);
+
+        boolean hasViolation = !validator.validate(technician, OnCreate.class).isEmpty();
+
+        Assertions.assertFalse(hasViolation, "Technician should be valid");
     }
 }

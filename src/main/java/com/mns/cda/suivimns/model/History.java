@@ -3,6 +3,7 @@ package com.mns.cda.suivimns.model;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.mns.cda.suivimns.view.TicketStatusListView;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,12 +36,14 @@ public class History {
     protected LocalDateTime endDate;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "id_status")
+    @JoinColumn(name = "id_status", nullable = false)
     @JsonView(TicketStatusListView.class)
+    @NotNull
     protected Status status;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "id_ticket")
+    @JoinColumn(name = "id_ticket", nullable = false)
+    @NotNull
     protected Ticket ticket;
 
     @ManyToOne

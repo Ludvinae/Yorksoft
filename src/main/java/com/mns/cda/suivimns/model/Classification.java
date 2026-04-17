@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.mns.cda.suivimns.model.keys.ClassificationKey;
 import com.mns.cda.suivimns.view.TicketView;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,15 +30,17 @@ public class Classification {
     @JsonView(TicketView.class)
     protected LocalDateTime affectation_date;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @MapsId("idTicket")
-    @JoinColumn(name = "id_ticket")
+    @JoinColumn(nullable = false, name = "id_ticket")
+    @NotNull
     protected Ticket ticket;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @MapsId("idTheme")
-    @JoinColumn(name = "id_theme")
+    @JoinColumn(nullable = false, name = "id_theme")
     @JsonView(TicketView.class)
+    @NotNull
     protected Theme theme;
 
 

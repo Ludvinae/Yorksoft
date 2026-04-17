@@ -4,6 +4,7 @@ import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,8 +39,10 @@ public class Article {
     @NotBlank(groups = {OnCreate.class, OnUpdate.class})
     protected String content;
 
-    @ManyToOne
-    @JoinColumn(name = "id_knowledge")
+    @ManyToOne(optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "id_knowledge", nullable = false)
+    @NotNull
     protected Knowledge knowledge;
 
     @ManyToOne

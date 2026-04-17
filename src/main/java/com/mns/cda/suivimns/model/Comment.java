@@ -6,12 +6,17 @@ import com.mns.cda.suivimns.model.groups.OnUpdate;
 import com.mns.cda.suivimns.view.TicketView;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 
@@ -32,21 +37,24 @@ public class Comment {
     @JsonView(TicketView.class)
     protected String content;
 
-    @CreationTimestamp
+    @CreatedDate
     @Column(updatable = false)
     @JsonView(TicketView.class)
     protected LocalDateTime dateSent;
 
-    @UpdateTimestamp
+    @LastModifiedDate
     @JsonView(TicketView.class)
     protected LocalDateTime lastModification;
 
-    @ManyToOne
-    @JoinColumn(name = "id_ticket")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "id_ticket", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @NotNull
     protected Ticket ticket;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "id_app_user")
+    @OnDelete(action = OnDeleteAction.SET_NULL)
     protected AppUser author;
 
 }

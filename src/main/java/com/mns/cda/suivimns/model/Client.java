@@ -27,12 +27,4 @@ public class Client extends AppUser {
     @JsonView(ClientView.class)
     protected Byte importance;
 
-    /*
-    @OneToMany(mappedBy = "client")
-    @JsonView(ClientSoftwareListView.class)
-    protected List<License> licenseList;
-
-     */
-
-
 }

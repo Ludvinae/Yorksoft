@@ -29,4 +29,7 @@ public class VersionType {
     @Size(max = 127)
     @JsonView({SoftwareVersionListView.class, SoftwareView.class})
     protected String designation;
+
+    @JsonView({SoftwareVersionListView.class})
+    protected Byte urgencyMalus;
 }

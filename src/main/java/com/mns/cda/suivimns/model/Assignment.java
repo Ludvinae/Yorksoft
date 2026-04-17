@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.mns.cda.suivimns.view.AssignmentView;
 import com.mns.cda.suivimns.view.EmployeeTicketListView;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,17 +35,20 @@ public class Assignment {
     protected LocalDateTime endDate;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "id_ticket")
+    @JoinColumn(name = "id_ticket", nullable = false)
     @JsonView({AssignmentView.class, EmployeeTicketListView.class})
+    @NotNull
     protected Ticket ticket;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_manager")
     @JsonView(AssignmentView.class)
+    @NotNull
     protected AppUser manager;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_technician")
     @JsonView(AssignmentView.class)
+    @NotNull
     protected AppUser technician;
 }
