@@ -1,7 +1,7 @@
-package com.mns.cda.suivimns.mock;
+package com.mns.cda.suivimns.mock.dao;
 
-import com.mns.cda.suivimns.dao.AssignmentDao;
-import com.mns.cda.suivimns.model.Assignment;
+import com.mns.cda.suivimns.dao.TechnicianDao;
+import com.mns.cda.suivimns.model.Technician;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,24 +12,24 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class MockAssignmentDao implements AssignmentDao {
+public class MocktechnicianDao implements TechnicianDao {
     @Override
     public void flush() {
 
     }
 
     @Override
-    public <S extends Assignment> S saveAndFlush(S entity) {
+    public <S extends Technician> S saveAndFlush(S entity) {
         return null;
     }
 
     @Override
-    public <S extends Assignment> List<S> saveAllAndFlush(Iterable<S> entities) {
+    public <S extends Technician> List<S> saveAllAndFlush(Iterable<S> entities) {
         return List.of();
     }
 
     @Override
-    public void deleteAllInBatch(Iterable<Assignment> entities) {
+    public void deleteAllInBatch(Iterable<Technician> entities) {
 
     }
 
@@ -44,67 +44,67 @@ public class MockAssignmentDao implements AssignmentDao {
     }
 
     @Override
-    public Assignment getOne(Integer integer) {
+    public Technician getOne(Integer integer) {
         return null;
     }
 
     @Override
-    public Assignment getById(Integer integer) {
+    public Technician getById(Integer integer) {
         return null;
     }
 
     @Override
-    public Assignment getReferenceById(Integer integer) {
+    public Technician getReferenceById(Integer integer) {
         return null;
     }
 
     @Override
-    public <S extends Assignment> Optional<S> findOne(Example<S> example) {
+    public <S extends Technician> Optional<S> findOne(Example<S> example) {
         return Optional.empty();
     }
 
     @Override
-    public <S extends Assignment> List<S> findAll(Example<S> example) {
+    public <S extends Technician> List<S> findAll(Example<S> example) {
         return List.of();
     }
 
     @Override
-    public <S extends Assignment> List<S> findAll(Example<S> example, Sort sort) {
+    public <S extends Technician> List<S> findAll(Example<S> example, Sort sort) {
         return List.of();
     }
 
     @Override
-    public <S extends Assignment> Page<S> findAll(Example<S> example, Pageable pageable) {
+    public <S extends Technician> Page<S> findAll(Example<S> example, Pageable pageable) {
         return null;
     }
 
     @Override
-    public <S extends Assignment> long count(Example<S> example) {
+    public <S extends Technician> long count(Example<S> example) {
         return 0;
     }
 
     @Override
-    public <S extends Assignment> boolean exists(Example<S> example) {
+    public <S extends Technician> boolean exists(Example<S> example) {
         return false;
     }
 
     @Override
-    public <S extends Assignment, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
+    public <S extends Technician, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
         return null;
     }
 
     @Override
-    public <S extends Assignment> S save(S entity) {
+    public <S extends Technician> S save(S entity) {
         return null;
     }
 
     @Override
-    public <S extends Assignment> List<S> saveAll(Iterable<S> entities) {
+    public <S extends Technician> List<S> saveAll(Iterable<S> entities) {
         return List.of();
     }
 
     @Override
-    public Optional<Assignment> findById(Integer integer) {
+    public Optional<Technician> findById(Integer integer) {
         return Optional.empty();
     }
 
@@ -114,12 +114,12 @@ public class MockAssignmentDao implements AssignmentDao {
     }
 
     @Override
-    public List<Assignment> findAll() {
+    public List<Technician> findAll() {
         return List.of();
     }
 
     @Override
-    public List<Assignment> findAllById(Iterable<Integer> integers) {
+    public List<Technician> findAllById(Iterable<Integer> integers) {
         return List.of();
     }
 
@@ -134,7 +134,7 @@ public class MockAssignmentDao implements AssignmentDao {
     }
 
     @Override
-    public void delete(Assignment entity) {
+    public void delete(Technician entity) {
 
     }
 
@@ -144,7 +144,7 @@ public class MockAssignmentDao implements AssignmentDao {
     }
 
     @Override
-    public void deleteAll(Iterable<? extends Assignment> entities) {
+    public void deleteAll(Iterable<? extends Technician> entities) {
 
     }
 
@@ -154,12 +154,12 @@ public class MockAssignmentDao implements AssignmentDao {
     }
 
     @Override
-    public List<Assignment> findAll(Sort sort) {
+    public List<Technician> findAll(Sort sort) {
         return List.of();
     }
 
     @Override
-    public Page<Assignment> findAll(Pageable pageable) {
+    public Page<Technician> findAll(Pageable pageable) {
         return null;
     }
 }

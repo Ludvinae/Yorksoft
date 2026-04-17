@@ -1,7 +1,7 @@
-package com.mns.cda.suivimns.mock;
+package com.mns.cda.suivimns.mock.dao;
 
-import com.mns.cda.suivimns.dao.LicenseDao;
-import com.mns.cda.suivimns.model.License;
+import com.mns.cda.suivimns.dao.HistoryDao;
+import com.mns.cda.suivimns.model.History;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,24 +12,24 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class MockLicenseDao implements LicenseDao {
+public class MockHistoryDao implements HistoryDao {
     @Override
     public void flush() {
 
     }
 
     @Override
-    public <S extends License> S saveAndFlush(S entity) {
+    public <S extends History> S saveAndFlush(S entity) {
         return null;
     }
 
     @Override
-    public <S extends License> List<S> saveAllAndFlush(Iterable<S> entities) {
+    public <S extends History> List<S> saveAllAndFlush(Iterable<S> entities) {
         return List.of();
     }
 
     @Override
-    public void deleteAllInBatch(Iterable<License> entities) {
+    public void deleteAllInBatch(Iterable<History> entities) {
 
     }
 
@@ -44,67 +44,67 @@ public class MockLicenseDao implements LicenseDao {
     }
 
     @Override
-    public License getOne(Integer integer) {
+    public History getOne(Integer integer) {
         return null;
     }
 
     @Override
-    public License getById(Integer integer) {
+    public History getById(Integer integer) {
         return null;
     }
 
     @Override
-    public License getReferenceById(Integer integer) {
+    public History getReferenceById(Integer integer) {
         return null;
     }
 
     @Override
-    public <S extends License> Optional<S> findOne(Example<S> example) {
+    public <S extends History> Optional<S> findOne(Example<S> example) {
         return Optional.empty();
     }
 
     @Override
-    public <S extends License> List<S> findAll(Example<S> example) {
+    public <S extends History> List<S> findAll(Example<S> example) {
         return List.of();
     }
 
     @Override
-    public <S extends License> List<S> findAll(Example<S> example, Sort sort) {
+    public <S extends History> List<S> findAll(Example<S> example, Sort sort) {
         return List.of();
     }
 
     @Override
-    public <S extends License> Page<S> findAll(Example<S> example, Pageable pageable) {
+    public <S extends History> Page<S> findAll(Example<S> example, Pageable pageable) {
         return null;
     }
 
     @Override
-    public <S extends License> long count(Example<S> example) {
+    public <S extends History> long count(Example<S> example) {
         return 0;
     }
 
     @Override
-    public <S extends License> boolean exists(Example<S> example) {
+    public <S extends History> boolean exists(Example<S> example) {
         return false;
     }
 
     @Override
-    public <S extends License, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
+    public <S extends History, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
         return null;
     }
 
     @Override
-    public <S extends License> S save(S entity) {
+    public <S extends History> S save(S entity) {
         return null;
     }
 
     @Override
-    public <S extends License> List<S> saveAll(Iterable<S> entities) {
+    public <S extends History> List<S> saveAll(Iterable<S> entities) {
         return List.of();
     }
 
     @Override
-    public Optional<License> findById(Integer integer) {
+    public Optional<History> findById(Integer integer) {
         return Optional.empty();
     }
 
@@ -114,12 +114,12 @@ public class MockLicenseDao implements LicenseDao {
     }
 
     @Override
-    public List<License> findAll() {
+    public List<History> findAll() {
         return List.of();
     }
 
     @Override
-    public List<License> findAllById(Iterable<Integer> integers) {
+    public List<History> findAllById(Iterable<Integer> integers) {
         return List.of();
     }
 
@@ -134,7 +134,7 @@ public class MockLicenseDao implements LicenseDao {
     }
 
     @Override
-    public void delete(License entity) {
+    public void delete(History entity) {
 
     }
 
@@ -144,7 +144,7 @@ public class MockLicenseDao implements LicenseDao {
     }
 
     @Override
-    public void deleteAll(Iterable<? extends License> entities) {
+    public void deleteAll(Iterable<? extends History> entities) {
 
     }
 
@@ -154,12 +154,17 @@ public class MockLicenseDao implements LicenseDao {
     }
 
     @Override
-    public List<License> findAll(Sort sort) {
+    public List<History> findAll(Sort sort) {
         return List.of();
     }
 
     @Override
-    public Page<License> findAll(Pageable pageable) {
+    public Page<History> findAll(Pageable pageable) {
         return null;
+    }
+
+    @Override
+    public Optional<History> findLatestByTicket(Integer idTicket) {
+        return Optional.empty();
     }
 }

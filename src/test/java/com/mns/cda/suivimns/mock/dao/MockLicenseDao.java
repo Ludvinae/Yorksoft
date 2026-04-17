@@ -1,7 +1,7 @@
-package com.mns.cda.suivimns.mock;
+package com.mns.cda.suivimns.mock.dao;
 
-import com.mns.cda.suivimns.dao.ManagerDao;
-import com.mns.cda.suivimns.model.Manager;
+import com.mns.cda.suivimns.dao.LicenseDao;
+import com.mns.cda.suivimns.model.License;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,24 +12,24 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class MockManagerDao implements ManagerDao {
+public class MockLicenseDao implements LicenseDao {
     @Override
     public void flush() {
 
     }
 
     @Override
-    public <S extends Manager> S saveAndFlush(S entity) {
+    public <S extends License> S saveAndFlush(S entity) {
         return null;
     }
 
     @Override
-    public <S extends Manager> List<S> saveAllAndFlush(Iterable<S> entities) {
+    public <S extends License> List<S> saveAllAndFlush(Iterable<S> entities) {
         return List.of();
     }
 
     @Override
-    public void deleteAllInBatch(Iterable<Manager> entities) {
+    public void deleteAllInBatch(Iterable<License> entities) {
 
     }
 
@@ -44,67 +44,67 @@ public class MockManagerDao implements ManagerDao {
     }
 
     @Override
-    public Manager getOne(Integer integer) {
+    public License getOne(Integer integer) {
         return null;
     }
 
     @Override
-    public Manager getById(Integer integer) {
+    public License getById(Integer integer) {
         return null;
     }
 
     @Override
-    public Manager getReferenceById(Integer integer) {
+    public License getReferenceById(Integer integer) {
         return null;
     }
 
     @Override
-    public <S extends Manager> Optional<S> findOne(Example<S> example) {
+    public <S extends License> Optional<S> findOne(Example<S> example) {
         return Optional.empty();
     }
 
     @Override
-    public <S extends Manager> List<S> findAll(Example<S> example) {
+    public <S extends License> List<S> findAll(Example<S> example) {
         return List.of();
     }
 
     @Override
-    public <S extends Manager> List<S> findAll(Example<S> example, Sort sort) {
+    public <S extends License> List<S> findAll(Example<S> example, Sort sort) {
         return List.of();
     }
 
     @Override
-    public <S extends Manager> Page<S> findAll(Example<S> example, Pageable pageable) {
+    public <S extends License> Page<S> findAll(Example<S> example, Pageable pageable) {
         return null;
     }
 
     @Override
-    public <S extends Manager> long count(Example<S> example) {
+    public <S extends License> long count(Example<S> example) {
         return 0;
     }
 
     @Override
-    public <S extends Manager> boolean exists(Example<S> example) {
+    public <S extends License> boolean exists(Example<S> example) {
         return false;
     }
 
     @Override
-    public <S extends Manager, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
+    public <S extends License, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
         return null;
     }
 
     @Override
-    public <S extends Manager> S save(S entity) {
+    public <S extends License> S save(S entity) {
         return null;
     }
 
     @Override
-    public <S extends Manager> List<S> saveAll(Iterable<S> entities) {
+    public <S extends License> List<S> saveAll(Iterable<S> entities) {
         return List.of();
     }
 
     @Override
-    public Optional<Manager> findById(Integer integer) {
+    public Optional<License> findById(Integer integer) {
         return Optional.empty();
     }
 
@@ -114,12 +114,12 @@ public class MockManagerDao implements ManagerDao {
     }
 
     @Override
-    public List<Manager> findAll() {
+    public List<License> findAll() {
         return List.of();
     }
 
     @Override
-    public List<Manager> findAllById(Iterable<Integer> integers) {
+    public List<License> findAllById(Iterable<Integer> integers) {
         return List.of();
     }
 
@@ -134,7 +134,7 @@ public class MockManagerDao implements ManagerDao {
     }
 
     @Override
-    public void delete(Manager entity) {
+    public void delete(License entity) {
 
     }
 
@@ -144,7 +144,7 @@ public class MockManagerDao implements ManagerDao {
     }
 
     @Override
-    public void deleteAll(Iterable<? extends Manager> entities) {
+    public void deleteAll(Iterable<? extends License> entities) {
 
     }
 
@@ -154,12 +154,12 @@ public class MockManagerDao implements ManagerDao {
     }
 
     @Override
-    public List<Manager> findAll(Sort sort) {
+    public List<License> findAll(Sort sort) {
         return List.of();
     }
 
     @Override
-    public Page<Manager> findAll(Pageable pageable) {
+    public Page<License> findAll(Pageable pageable) {
         return null;
     }
 }

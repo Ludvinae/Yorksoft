@@ -1,7 +1,7 @@
-package com.mns.cda.suivimns.mock;
+package com.mns.cda.suivimns.mock.dao;
 
-import com.mns.cda.suivimns.dao.KnowledgeDao;
-import com.mns.cda.suivimns.model.Knowledge;
+import com.mns.cda.suivimns.dao.StatusDao;
+import com.mns.cda.suivimns.model.Status;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,24 +12,24 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class MockKnowledgeDao implements KnowledgeDao {
+public class MockStatusDao implements StatusDao {
     @Override
     public void flush() {
 
     }
 
     @Override
-    public <S extends Knowledge> S saveAndFlush(S entity) {
+    public <S extends Status> S saveAndFlush(S entity) {
         return null;
     }
 
     @Override
-    public <S extends Knowledge> List<S> saveAllAndFlush(Iterable<S> entities) {
+    public <S extends Status> List<S> saveAllAndFlush(Iterable<S> entities) {
         return List.of();
     }
 
     @Override
-    public void deleteAllInBatch(Iterable<Knowledge> entities) {
+    public void deleteAllInBatch(Iterable<Status> entities) {
 
     }
 
@@ -44,67 +44,67 @@ public class MockKnowledgeDao implements KnowledgeDao {
     }
 
     @Override
-    public Knowledge getOne(Integer integer) {
+    public Status getOne(Integer integer) {
         return null;
     }
 
     @Override
-    public Knowledge getById(Integer integer) {
+    public Status getById(Integer integer) {
         return null;
     }
 
     @Override
-    public Knowledge getReferenceById(Integer integer) {
+    public Status getReferenceById(Integer integer) {
         return null;
     }
 
     @Override
-    public <S extends Knowledge> Optional<S> findOne(Example<S> example) {
+    public <S extends Status> Optional<S> findOne(Example<S> example) {
         return Optional.empty();
     }
 
     @Override
-    public <S extends Knowledge> List<S> findAll(Example<S> example) {
+    public <S extends Status> List<S> findAll(Example<S> example) {
         return List.of();
     }
 
     @Override
-    public <S extends Knowledge> List<S> findAll(Example<S> example, Sort sort) {
+    public <S extends Status> List<S> findAll(Example<S> example, Sort sort) {
         return List.of();
     }
 
     @Override
-    public <S extends Knowledge> Page<S> findAll(Example<S> example, Pageable pageable) {
+    public <S extends Status> Page<S> findAll(Example<S> example, Pageable pageable) {
         return null;
     }
 
     @Override
-    public <S extends Knowledge> long count(Example<S> example) {
+    public <S extends Status> long count(Example<S> example) {
         return 0;
     }
 
     @Override
-    public <S extends Knowledge> boolean exists(Example<S> example) {
+    public <S extends Status> boolean exists(Example<S> example) {
         return false;
     }
 
     @Override
-    public <S extends Knowledge, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
+    public <S extends Status, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
         return null;
     }
 
     @Override
-    public <S extends Knowledge> S save(S entity) {
+    public <S extends Status> S save(S entity) {
         return null;
     }
 
     @Override
-    public <S extends Knowledge> List<S> saveAll(Iterable<S> entities) {
+    public <S extends Status> List<S> saveAll(Iterable<S> entities) {
         return List.of();
     }
 
     @Override
-    public Optional<Knowledge> findById(Integer integer) {
+    public Optional<Status> findById(Integer integer) {
         return Optional.empty();
     }
 
@@ -114,12 +114,12 @@ public class MockKnowledgeDao implements KnowledgeDao {
     }
 
     @Override
-    public List<Knowledge> findAll() {
+    public List<Status> findAll() {
         return List.of();
     }
 
     @Override
-    public List<Knowledge> findAllById(Iterable<Integer> integers) {
+    public List<Status> findAllById(Iterable<Integer> integers) {
         return List.of();
     }
 
@@ -134,7 +134,7 @@ public class MockKnowledgeDao implements KnowledgeDao {
     }
 
     @Override
-    public void delete(Knowledge entity) {
+    public void delete(Status entity) {
 
     }
 
@@ -144,7 +144,7 @@ public class MockKnowledgeDao implements KnowledgeDao {
     }
 
     @Override
-    public void deleteAll(Iterable<? extends Knowledge> entities) {
+    public void deleteAll(Iterable<? extends Status> entities) {
 
     }
 
@@ -154,12 +154,17 @@ public class MockKnowledgeDao implements KnowledgeDao {
     }
 
     @Override
-    public List<Knowledge> findAll(Sort sort) {
+    public List<Status> findAll(Sort sort) {
         return List.of();
     }
 
     @Override
-    public Page<Knowledge> findAll(Pageable pageable) {
+    public Page<Status> findAll(Pageable pageable) {
+        return null;
+    }
+
+    @Override
+    public Optional<Status> findByDesignation(String designation) {
         return null;
     }
 }

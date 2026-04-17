@@ -1,7 +1,7 @@
-package com.mns.cda.suivimns.mock;
+package com.mns.cda.suivimns.mock.dao;
 
-import com.mns.cda.suivimns.dao.VersionDao;
-import com.mns.cda.suivimns.model.Version;
+import com.mns.cda.suivimns.dao.AppUserDao;
+import com.mns.cda.suivimns.model.AppUser;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,24 +12,24 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class MockVersionDao implements VersionDao {
+public class MockAppUserDao implements AppUserDao {
     @Override
     public void flush() {
 
     }
 
     @Override
-    public <S extends Version> S saveAndFlush(S entity) {
+    public <S extends AppUser> S saveAndFlush(S entity) {
         return null;
     }
 
     @Override
-    public <S extends Version> List<S> saveAllAndFlush(Iterable<S> entities) {
+    public <S extends AppUser> List<S> saveAllAndFlush(Iterable<S> entities) {
         return List.of();
     }
 
     @Override
-    public void deleteAllInBatch(Iterable<Version> entities) {
+    public void deleteAllInBatch(Iterable<AppUser> entities) {
 
     }
 
@@ -44,67 +44,67 @@ public class MockVersionDao implements VersionDao {
     }
 
     @Override
-    public Version getOne(Integer integer) {
+    public AppUser getOne(Integer integer) {
         return null;
     }
 
     @Override
-    public Version getById(Integer integer) {
+    public AppUser getById(Integer integer) {
         return null;
     }
 
     @Override
-    public Version getReferenceById(Integer integer) {
+    public AppUser getReferenceById(Integer integer) {
         return null;
     }
 
     @Override
-    public <S extends Version> Optional<S> findOne(Example<S> example) {
+    public <S extends AppUser> Optional<S> findOne(Example<S> example) {
         return Optional.empty();
     }
 
     @Override
-    public <S extends Version> List<S> findAll(Example<S> example) {
+    public <S extends AppUser> List<S> findAll(Example<S> example) {
         return List.of();
     }
 
     @Override
-    public <S extends Version> List<S> findAll(Example<S> example, Sort sort) {
+    public <S extends AppUser> List<S> findAll(Example<S> example, Sort sort) {
         return List.of();
     }
 
     @Override
-    public <S extends Version> Page<S> findAll(Example<S> example, Pageable pageable) {
+    public <S extends AppUser> Page<S> findAll(Example<S> example, Pageable pageable) {
         return null;
     }
 
     @Override
-    public <S extends Version> long count(Example<S> example) {
+    public <S extends AppUser> long count(Example<S> example) {
         return 0;
     }
 
     @Override
-    public <S extends Version> boolean exists(Example<S> example) {
+    public <S extends AppUser> boolean exists(Example<S> example) {
         return false;
     }
 
     @Override
-    public <S extends Version, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
+    public <S extends AppUser, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
         return null;
     }
 
     @Override
-    public <S extends Version> S save(S entity) {
+    public <S extends AppUser> S save(S entity) {
         return null;
     }
 
     @Override
-    public <S extends Version> List<S> saveAll(Iterable<S> entities) {
+    public <S extends AppUser> List<S> saveAll(Iterable<S> entities) {
         return List.of();
     }
 
     @Override
-    public Optional<Version> findById(Integer integer) {
+    public Optional<AppUser> findById(Integer integer) {
         return Optional.empty();
     }
 
@@ -114,12 +114,12 @@ public class MockVersionDao implements VersionDao {
     }
 
     @Override
-    public List<Version> findAll() {
+    public List<AppUser> findAll() {
         return List.of();
     }
 
     @Override
-    public List<Version> findAllById(Iterable<Integer> integers) {
+    public List<AppUser> findAllById(Iterable<Integer> integers) {
         return List.of();
     }
 
@@ -134,7 +134,7 @@ public class MockVersionDao implements VersionDao {
     }
 
     @Override
-    public void delete(Version entity) {
+    public void delete(AppUser entity) {
 
     }
 
@@ -144,7 +144,7 @@ public class MockVersionDao implements VersionDao {
     }
 
     @Override
-    public void deleteAll(Iterable<? extends Version> entities) {
+    public void deleteAll(Iterable<? extends AppUser> entities) {
 
     }
 
@@ -154,12 +154,12 @@ public class MockVersionDao implements VersionDao {
     }
 
     @Override
-    public List<Version> findAll(Sort sort) {
+    public List<AppUser> findAll(Sort sort) {
         return List.of();
     }
 
     @Override
-    public Page<Version> findAll(Pageable pageable) {
+    public Page<AppUser> findAll(Pageable pageable) {
         return null;
     }
 }

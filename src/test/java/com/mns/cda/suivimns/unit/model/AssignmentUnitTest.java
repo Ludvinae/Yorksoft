@@ -29,7 +29,7 @@ public class AssignmentUnitTest {
     public void assignmentWithAllFieldsFilled_shouldBeValid() {
         Assignment assignment = new Assignment();
 
-        assignment.setAssigmentDate(null); // auto généré normalement
+        assignment.setAssignmentDate(null); // auto généré normalement
         assignment.setEndDate(null);
 
         boolean hasViolation = !validator.validate(assignment).isEmpty();

@@ -1,7 +1,7 @@
-package com.mns.cda.suivimns.mock;
+package com.mns.cda.suivimns.mock.dao;
 
-import com.mns.cda.suivimns.dao.AppUserDao;
-import com.mns.cda.suivimns.model.AppUser;
+import com.mns.cda.suivimns.dao.CommentDao;
+import com.mns.cda.suivimns.model.Comment;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,24 +12,24 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class MockAppUserDao implements AppUserDao {
+public class MockCommentDao implements CommentDao {
     @Override
     public void flush() {
 
     }
 
     @Override
-    public <S extends AppUser> S saveAndFlush(S entity) {
+    public <S extends Comment> S saveAndFlush(S entity) {
         return null;
     }
 
     @Override
-    public <S extends AppUser> List<S> saveAllAndFlush(Iterable<S> entities) {
+    public <S extends Comment> List<S> saveAllAndFlush(Iterable<S> entities) {
         return List.of();
     }
 
     @Override
-    public void deleteAllInBatch(Iterable<AppUser> entities) {
+    public void deleteAllInBatch(Iterable<Comment> entities) {
 
     }
 
@@ -44,67 +44,67 @@ public class MockAppUserDao implements AppUserDao {
     }
 
     @Override
-    public AppUser getOne(Integer integer) {
+    public Comment getOne(Integer integer) {
         return null;
     }
 
     @Override
-    public AppUser getById(Integer integer) {
+    public Comment getById(Integer integer) {
         return null;
     }
 
     @Override
-    public AppUser getReferenceById(Integer integer) {
+    public Comment getReferenceById(Integer integer) {
         return null;
     }
 
     @Override
-    public <S extends AppUser> Optional<S> findOne(Example<S> example) {
+    public <S extends Comment> Optional<S> findOne(Example<S> example) {
         return Optional.empty();
     }
 
     @Override
-    public <S extends AppUser> List<S> findAll(Example<S> example) {
+    public <S extends Comment> List<S> findAll(Example<S> example) {
         return List.of();
     }
 
     @Override
-    public <S extends AppUser> List<S> findAll(Example<S> example, Sort sort) {
+    public <S extends Comment> List<S> findAll(Example<S> example, Sort sort) {
         return List.of();
     }
 
     @Override
-    public <S extends AppUser> Page<S> findAll(Example<S> example, Pageable pageable) {
+    public <S extends Comment> Page<S> findAll(Example<S> example, Pageable pageable) {
         return null;
     }
 
     @Override
-    public <S extends AppUser> long count(Example<S> example) {
+    public <S extends Comment> long count(Example<S> example) {
         return 0;
     }
 
     @Override
-    public <S extends AppUser> boolean exists(Example<S> example) {
+    public <S extends Comment> boolean exists(Example<S> example) {
         return false;
     }
 
     @Override
-    public <S extends AppUser, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
+    public <S extends Comment, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
         return null;
     }
 
     @Override
-    public <S extends AppUser> S save(S entity) {
+    public <S extends Comment> S save(S entity) {
         return null;
     }
 
     @Override
-    public <S extends AppUser> List<S> saveAll(Iterable<S> entities) {
+    public <S extends Comment> List<S> saveAll(Iterable<S> entities) {
         return List.of();
     }
 
     @Override
-    public Optional<AppUser> findById(Integer integer) {
+    public Optional<Comment> findById(Integer integer) {
         return Optional.empty();
     }
 
@@ -114,12 +114,12 @@ public class MockAppUserDao implements AppUserDao {
     }
 
     @Override
-    public List<AppUser> findAll() {
+    public List<Comment> findAll() {
         return List.of();
     }
 
     @Override
-    public List<AppUser> findAllById(Iterable<Integer> integers) {
+    public List<Comment> findAllById(Iterable<Integer> integers) {
         return List.of();
     }
 
@@ -134,7 +134,7 @@ public class MockAppUserDao implements AppUserDao {
     }
 
     @Override
-    public void delete(AppUser entity) {
+    public void delete(Comment entity) {
 
     }
 
@@ -144,7 +144,7 @@ public class MockAppUserDao implements AppUserDao {
     }
 
     @Override
-    public void deleteAll(Iterable<? extends AppUser> entities) {
+    public void deleteAll(Iterable<? extends Comment> entities) {
 
     }
 
@@ -154,12 +154,12 @@ public class MockAppUserDao implements AppUserDao {
     }
 
     @Override
-    public List<AppUser> findAll(Sort sort) {
+    public List<Comment> findAll(Sort sort) {
         return List.of();
     }
 
     @Override
-    public Page<AppUser> findAll(Pageable pageable) {
+    public Page<Comment> findAll(Pageable pageable) {
         return null;
     }
 }

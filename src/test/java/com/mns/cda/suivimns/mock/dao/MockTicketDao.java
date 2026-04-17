@@ -1,8 +1,8 @@
-package com.mns.cda.suivimns.mock;
+package com.mns.cda.suivimns.mock.dao;
 
-import com.mns.cda.suivimns.dao.ClientDao;
-import com.mns.cda.suivimns.dto.ClientDto;
-import com.mns.cda.suivimns.model.Client;
+import com.mns.cda.suivimns.dao.TicketDao;
+import com.mns.cda.suivimns.dto.TicketFullWithLatest;
+import com.mns.cda.suivimns.model.Ticket;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,24 +13,24 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class MockClientDao implements ClientDao {
+public class MockTicketDao implements TicketDao {
     @Override
     public void flush() {
 
     }
 
     @Override
-    public <S extends Client> S saveAndFlush(S entity) {
+    public <S extends Ticket> S saveAndFlush(S entity) {
         return null;
     }
 
     @Override
-    public <S extends Client> List<S> saveAllAndFlush(Iterable<S> entities) {
+    public <S extends Ticket> List<S> saveAllAndFlush(Iterable<S> entities) {
         return List.of();
     }
 
     @Override
-    public void deleteAllInBatch(Iterable<Client> entities) {
+    public void deleteAllInBatch(Iterable<Ticket> entities) {
 
     }
 
@@ -45,67 +45,67 @@ public class MockClientDao implements ClientDao {
     }
 
     @Override
-    public Client getOne(Integer integer) {
+    public Ticket getOne(Integer integer) {
         return null;
     }
 
     @Override
-    public Client getById(Integer integer) {
+    public Ticket getById(Integer integer) {
         return null;
     }
 
     @Override
-    public Client getReferenceById(Integer integer) {
+    public Ticket getReferenceById(Integer integer) {
         return null;
     }
 
     @Override
-    public <S extends Client> Optional<S> findOne(Example<S> example) {
+    public <S extends Ticket> Optional<S> findOne(Example<S> example) {
         return Optional.empty();
     }
 
     @Override
-    public <S extends Client> List<S> findAll(Example<S> example) {
+    public <S extends Ticket> List<S> findAll(Example<S> example) {
         return List.of();
     }
 
     @Override
-    public <S extends Client> List<S> findAll(Example<S> example, Sort sort) {
+    public <S extends Ticket> List<S> findAll(Example<S> example, Sort sort) {
         return List.of();
     }
 
     @Override
-    public <S extends Client> Page<S> findAll(Example<S> example, Pageable pageable) {
+    public <S extends Ticket> Page<S> findAll(Example<S> example, Pageable pageable) {
         return null;
     }
 
     @Override
-    public <S extends Client> long count(Example<S> example) {
+    public <S extends Ticket> long count(Example<S> example) {
         return 0;
     }
 
     @Override
-    public <S extends Client> boolean exists(Example<S> example) {
+    public <S extends Ticket> boolean exists(Example<S> example) {
         return false;
     }
 
     @Override
-    public <S extends Client, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
+    public <S extends Ticket, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
         return null;
     }
 
     @Override
-    public <S extends Client> S save(S entity) {
+    public <S extends Ticket> S save(S entity) {
         return null;
     }
 
     @Override
-    public <S extends Client> List<S> saveAll(Iterable<S> entities) {
+    public <S extends Ticket> List<S> saveAll(Iterable<S> entities) {
         return List.of();
     }
 
     @Override
-    public Optional<Client> findById(Integer integer) {
+    public Optional<Ticket> findById(Integer integer) {
         return Optional.empty();
     }
 
@@ -115,12 +115,12 @@ public class MockClientDao implements ClientDao {
     }
 
     @Override
-    public List<Client> findAll() {
+    public List<Ticket> findAll() {
         return List.of();
     }
 
     @Override
-    public List<Client> findAllById(Iterable<Integer> integers) {
+    public List<Ticket> findAllById(Iterable<Integer> integers) {
         return List.of();
     }
 
@@ -135,7 +135,7 @@ public class MockClientDao implements ClientDao {
     }
 
     @Override
-    public void delete(Client entity) {
+    public void delete(Ticket entity) {
 
     }
 
@@ -145,7 +145,7 @@ public class MockClientDao implements ClientDao {
     }
 
     @Override
-    public void deleteAll(Iterable<? extends Client> entities) {
+    public void deleteAll(Iterable<? extends Ticket> entities) {
 
     }
 
@@ -155,28 +155,27 @@ public class MockClientDao implements ClientDao {
     }
 
     @Override
-    public List<Client> findAll(Sort sort) {
+    public List<Ticket> findAll(Sort sort) {
         return List.of();
     }
 
     @Override
-    public Page<Client> findAll(Pageable pageable) {
+    public Page<Ticket> findAll(Pageable pageable) {
         return null;
     }
 
     @Override
-    public Optional<Client> findByEmail(String email) {
-        return Optional.empty();
-    }
-
-    @Override
-    public ClientDto getClient(int id) {
-        return null;
-    }
-
-    @Override
-    public List<ClientDto> getAllClient() {
+    public List<TicketFullWithLatest> returnTicketFullWithLatest() {
         return List.of();
     }
 
+    @Override
+    public List<TicketFullWithLatest> returnTicketAttributed(int id) {
+        return List.of();
+    }
+
+    @Override
+    public List<TicketFullWithLatest> returnPriorityTicketFullWithLatest() {
+        return List.of();
+    }
 }

@@ -1,7 +1,7 @@
-package com.mns.cda.suivimns.mock;
+package com.mns.cda.suivimns.mock.dao;
 
-import com.mns.cda.suivimns.dao.ThemeDao;
-import com.mns.cda.suivimns.model.Theme;
+import com.mns.cda.suivimns.dao.ManagerDao;
+import com.mns.cda.suivimns.model.Manager;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,24 +12,24 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class MockThemeDao implements ThemeDao {
+public class MockManagerDao implements ManagerDao {
     @Override
     public void flush() {
 
     }
 
     @Override
-    public <S extends Theme> S saveAndFlush(S entity) {
+    public <S extends Manager> S saveAndFlush(S entity) {
         return null;
     }
 
     @Override
-    public <S extends Theme> List<S> saveAllAndFlush(Iterable<S> entities) {
+    public <S extends Manager> List<S> saveAllAndFlush(Iterable<S> entities) {
         return List.of();
     }
 
     @Override
-    public void deleteAllInBatch(Iterable<Theme> entities) {
+    public void deleteAllInBatch(Iterable<Manager> entities) {
 
     }
 
@@ -44,67 +44,67 @@ public class MockThemeDao implements ThemeDao {
     }
 
     @Override
-    public Theme getOne(Integer integer) {
+    public Manager getOne(Integer integer) {
         return null;
     }
 
     @Override
-    public Theme getById(Integer integer) {
+    public Manager getById(Integer integer) {
         return null;
     }
 
     @Override
-    public Theme getReferenceById(Integer integer) {
+    public Manager getReferenceById(Integer integer) {
         return null;
     }
 
     @Override
-    public <S extends Theme> Optional<S> findOne(Example<S> example) {
+    public <S extends Manager> Optional<S> findOne(Example<S> example) {
         return Optional.empty();
     }
 
     @Override
-    public <S extends Theme> List<S> findAll(Example<S> example) {
+    public <S extends Manager> List<S> findAll(Example<S> example) {
         return List.of();
     }
 
     @Override
-    public <S extends Theme> List<S> findAll(Example<S> example, Sort sort) {
+    public <S extends Manager> List<S> findAll(Example<S> example, Sort sort) {
         return List.of();
     }
 
     @Override
-    public <S extends Theme> Page<S> findAll(Example<S> example, Pageable pageable) {
+    public <S extends Manager> Page<S> findAll(Example<S> example, Pageable pageable) {
         return null;
     }
 
     @Override
-    public <S extends Theme> long count(Example<S> example) {
+    public <S extends Manager> long count(Example<S> example) {
         return 0;
     }
 
     @Override
-    public <S extends Theme> boolean exists(Example<S> example) {
+    public <S extends Manager> boolean exists(Example<S> example) {
         return false;
     }
 
     @Override
-    public <S extends Theme, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
+    public <S extends Manager, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
         return null;
     }
 
     @Override
-    public <S extends Theme> S save(S entity) {
+    public <S extends Manager> S save(S entity) {
         return null;
     }
 
     @Override
-    public <S extends Theme> List<S> saveAll(Iterable<S> entities) {
+    public <S extends Manager> List<S> saveAll(Iterable<S> entities) {
         return List.of();
     }
 
     @Override
-    public Optional<Theme> findById(Integer integer) {
+    public Optional<Manager> findById(Integer integer) {
         return Optional.empty();
     }
 
@@ -114,12 +114,12 @@ public class MockThemeDao implements ThemeDao {
     }
 
     @Override
-    public List<Theme> findAll() {
+    public List<Manager> findAll() {
         return List.of();
     }
 
     @Override
-    public List<Theme> findAllById(Iterable<Integer> integers) {
+    public List<Manager> findAllById(Iterable<Integer> integers) {
         return List.of();
     }
 
@@ -134,7 +134,7 @@ public class MockThemeDao implements ThemeDao {
     }
 
     @Override
-    public void delete(Theme entity) {
+    public void delete(Manager entity) {
 
     }
 
@@ -144,7 +144,7 @@ public class MockThemeDao implements ThemeDao {
     }
 
     @Override
-    public void deleteAll(Iterable<? extends Theme> entities) {
+    public void deleteAll(Iterable<? extends Manager> entities) {
 
     }
 
@@ -154,17 +154,12 @@ public class MockThemeDao implements ThemeDao {
     }
 
     @Override
-    public List<Theme> findAll(Sort sort) {
+    public List<Manager> findAll(Sort sort) {
         return List.of();
     }
 
     @Override
-    public Page<Theme> findAll(Pageable pageable) {
+    public Page<Manager> findAll(Pageable pageable) {
         return null;
-    }
-
-    @Override
-    public Optional<Theme> findByDesignation(String designation) {
-        return Optional.empty();
     }
 }

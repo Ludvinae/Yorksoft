@@ -1,7 +1,7 @@
-package com.mns.cda.suivimns.mock;
+package com.mns.cda.suivimns.mock.dao;
 
-import com.mns.cda.suivimns.dao.UrgencyDao;
-import com.mns.cda.suivimns.model.Urgency;
+import com.mns.cda.suivimns.dao.KnowledgeDao;
+import com.mns.cda.suivimns.model.Knowledge;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,24 +12,24 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class MockUrgencyDao implements UrgencyDao {
+public class MockKnowledgeDao implements KnowledgeDao {
     @Override
     public void flush() {
 
     }
 
     @Override
-    public <S extends Urgency> S saveAndFlush(S entity) {
+    public <S extends Knowledge> S saveAndFlush(S entity) {
         return null;
     }
 
     @Override
-    public <S extends Urgency> List<S> saveAllAndFlush(Iterable<S> entities) {
+    public <S extends Knowledge> List<S> saveAllAndFlush(Iterable<S> entities) {
         return List.of();
     }
 
     @Override
-    public void deleteAllInBatch(Iterable<Urgency> entities) {
+    public void deleteAllInBatch(Iterable<Knowledge> entities) {
 
     }
 
@@ -44,67 +44,67 @@ public class MockUrgencyDao implements UrgencyDao {
     }
 
     @Override
-    public Urgency getOne(Integer integer) {
+    public Knowledge getOne(Integer integer) {
         return null;
     }
 
     @Override
-    public Urgency getById(Integer integer) {
+    public Knowledge getById(Integer integer) {
         return null;
     }
 
     @Override
-    public Urgency getReferenceById(Integer integer) {
+    public Knowledge getReferenceById(Integer integer) {
         return null;
     }
 
     @Override
-    public <S extends Urgency> Optional<S> findOne(Example<S> example) {
+    public <S extends Knowledge> Optional<S> findOne(Example<S> example) {
         return Optional.empty();
     }
 
     @Override
-    public <S extends Urgency> List<S> findAll(Example<S> example) {
+    public <S extends Knowledge> List<S> findAll(Example<S> example) {
         return List.of();
     }
 
     @Override
-    public <S extends Urgency> List<S> findAll(Example<S> example, Sort sort) {
+    public <S extends Knowledge> List<S> findAll(Example<S> example, Sort sort) {
         return List.of();
     }
 
     @Override
-    public <S extends Urgency> Page<S> findAll(Example<S> example, Pageable pageable) {
+    public <S extends Knowledge> Page<S> findAll(Example<S> example, Pageable pageable) {
         return null;
     }
 
     @Override
-    public <S extends Urgency> long count(Example<S> example) {
+    public <S extends Knowledge> long count(Example<S> example) {
         return 0;
     }
 
     @Override
-    public <S extends Urgency> boolean exists(Example<S> example) {
+    public <S extends Knowledge> boolean exists(Example<S> example) {
         return false;
     }
 
     @Override
-    public <S extends Urgency, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
+    public <S extends Knowledge, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
         return null;
     }
 
     @Override
-    public <S extends Urgency> S save(S entity) {
+    public <S extends Knowledge> S save(S entity) {
         return null;
     }
 
     @Override
-    public <S extends Urgency> List<S> saveAll(Iterable<S> entities) {
+    public <S extends Knowledge> List<S> saveAll(Iterable<S> entities) {
         return List.of();
     }
 
     @Override
-    public Optional<Urgency> findById(Integer integer) {
+    public Optional<Knowledge> findById(Integer integer) {
         return Optional.empty();
     }
 
@@ -114,12 +114,12 @@ public class MockUrgencyDao implements UrgencyDao {
     }
 
     @Override
-    public List<Urgency> findAll() {
+    public List<Knowledge> findAll() {
         return List.of();
     }
 
     @Override
-    public List<Urgency> findAllById(Iterable<Integer> integers) {
+    public List<Knowledge> findAllById(Iterable<Integer> integers) {
         return List.of();
     }
 
@@ -134,7 +134,7 @@ public class MockUrgencyDao implements UrgencyDao {
     }
 
     @Override
-    public void delete(Urgency entity) {
+    public void delete(Knowledge entity) {
 
     }
 
@@ -144,7 +144,7 @@ public class MockUrgencyDao implements UrgencyDao {
     }
 
     @Override
-    public void deleteAll(Iterable<? extends Urgency> entities) {
+    public void deleteAll(Iterable<? extends Knowledge> entities) {
 
     }
 
@@ -154,12 +154,12 @@ public class MockUrgencyDao implements UrgencyDao {
     }
 
     @Override
-    public List<Urgency> findAll(Sort sort) {
+    public List<Knowledge> findAll(Sort sort) {
         return List.of();
     }
 
     @Override
-    public Page<Urgency> findAll(Pageable pageable) {
+    public Page<Knowledge> findAll(Pageable pageable) {
         return null;
     }
 }

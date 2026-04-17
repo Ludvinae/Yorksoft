@@ -1,7 +1,7 @@
-package com.mns.cda.suivimns.mock;
+package com.mns.cda.suivimns.mock.dao;
 
-import com.mns.cda.suivimns.dao.ArticleDao;
-import com.mns.cda.suivimns.model.Article;
+import com.mns.cda.suivimns.dao.AssignmentDao;
+import com.mns.cda.suivimns.model.Assignment;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,24 +12,24 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class MockArticleDao implements ArticleDao {
+public class MockAssignmentDao implements AssignmentDao {
     @Override
     public void flush() {
 
     }
 
     @Override
-    public <S extends Article> S saveAndFlush(S entity) {
+    public <S extends Assignment> S saveAndFlush(S entity) {
         return null;
     }
 
     @Override
-    public <S extends Article> List<S> saveAllAndFlush(Iterable<S> entities) {
+    public <S extends Assignment> List<S> saveAllAndFlush(Iterable<S> entities) {
         return List.of();
     }
 
     @Override
-    public void deleteAllInBatch(Iterable<Article> entities) {
+    public void deleteAllInBatch(Iterable<Assignment> entities) {
 
     }
 
@@ -44,67 +44,67 @@ public class MockArticleDao implements ArticleDao {
     }
 
     @Override
-    public Article getOne(Integer integer) {
+    public Assignment getOne(Integer integer) {
         return null;
     }
 
     @Override
-    public Article getById(Integer integer) {
+    public Assignment getById(Integer integer) {
         return null;
     }
 
     @Override
-    public Article getReferenceById(Integer integer) {
+    public Assignment getReferenceById(Integer integer) {
         return null;
     }
 
     @Override
-    public <S extends Article> Optional<S> findOne(Example<S> example) {
+    public <S extends Assignment> Optional<S> findOne(Example<S> example) {
         return Optional.empty();
     }
 
     @Override
-    public <S extends Article> List<S> findAll(Example<S> example) {
+    public <S extends Assignment> List<S> findAll(Example<S> example) {
         return List.of();
     }
 
     @Override
-    public <S extends Article> List<S> findAll(Example<S> example, Sort sort) {
+    public <S extends Assignment> List<S> findAll(Example<S> example, Sort sort) {
         return List.of();
     }
 
     @Override
-    public <S extends Article> Page<S> findAll(Example<S> example, Pageable pageable) {
+    public <S extends Assignment> Page<S> findAll(Example<S> example, Pageable pageable) {
         return null;
     }
 
     @Override
-    public <S extends Article> long count(Example<S> example) {
+    public <S extends Assignment> long count(Example<S> example) {
         return 0;
     }
 
     @Override
-    public <S extends Article> boolean exists(Example<S> example) {
+    public <S extends Assignment> boolean exists(Example<S> example) {
         return false;
     }
 
     @Override
-    public <S extends Article, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
+    public <S extends Assignment, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
         return null;
     }
 
     @Override
-    public <S extends Article> S save(S entity) {
+    public <S extends Assignment> S save(S entity) {
         return null;
     }
 
     @Override
-    public <S extends Article> List<S> saveAll(Iterable<S> entities) {
+    public <S extends Assignment> List<S> saveAll(Iterable<S> entities) {
         return List.of();
     }
 
     @Override
-    public Optional<Article> findById(Integer integer) {
+    public Optional<Assignment> findById(Integer integer) {
         return Optional.empty();
     }
 
@@ -114,12 +114,12 @@ public class MockArticleDao implements ArticleDao {
     }
 
     @Override
-    public List<Article> findAll() {
+    public List<Assignment> findAll() {
         return List.of();
     }
 
     @Override
-    public List<Article> findAllById(Iterable<Integer> integers) {
+    public List<Assignment> findAllById(Iterable<Integer> integers) {
         return List.of();
     }
 
@@ -134,7 +134,7 @@ public class MockArticleDao implements ArticleDao {
     }
 
     @Override
-    public void delete(Article entity) {
+    public void delete(Assignment entity) {
 
     }
 
@@ -144,7 +144,7 @@ public class MockArticleDao implements ArticleDao {
     }
 
     @Override
-    public void deleteAll(Iterable<? extends Article> entities) {
+    public void deleteAll(Iterable<? extends Assignment> entities) {
 
     }
 
@@ -154,12 +154,12 @@ public class MockArticleDao implements ArticleDao {
     }
 
     @Override
-    public List<Article> findAll(Sort sort) {
+    public List<Assignment> findAll(Sort sort) {
         return List.of();
     }
 
     @Override
-    public Page<Article> findAll(Pageable pageable) {
+    public Page<Assignment> findAll(Pageable pageable) {
         return null;
     }
 }

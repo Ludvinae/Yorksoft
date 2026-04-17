@@ -1,7 +1,7 @@
-package com.mns.cda.suivimns.mock;
+package com.mns.cda.suivimns.mock.dao;
 
-import com.mns.cda.suivimns.dao.SoftwareTypeDao;
-import com.mns.cda.suivimns.model.SoftwareType;
+import com.mns.cda.suivimns.dao.ArticleDao;
+import com.mns.cda.suivimns.model.Article;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,24 +12,24 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class MockSoftwareTypeDao implements SoftwareTypeDao {
+public class MockArticleDao implements ArticleDao {
     @Override
     public void flush() {
 
     }
 
     @Override
-    public <S extends SoftwareType> S saveAndFlush(S entity) {
+    public <S extends Article> S saveAndFlush(S entity) {
         return null;
     }
 
     @Override
-    public <S extends SoftwareType> List<S> saveAllAndFlush(Iterable<S> entities) {
+    public <S extends Article> List<S> saveAllAndFlush(Iterable<S> entities) {
         return List.of();
     }
 
     @Override
-    public void deleteAllInBatch(Iterable<SoftwareType> entities) {
+    public void deleteAllInBatch(Iterable<Article> entities) {
 
     }
 
@@ -44,67 +44,67 @@ public class MockSoftwareTypeDao implements SoftwareTypeDao {
     }
 
     @Override
-    public SoftwareType getOne(Integer integer) {
+    public Article getOne(Integer integer) {
         return null;
     }
 
     @Override
-    public SoftwareType getById(Integer integer) {
+    public Article getById(Integer integer) {
         return null;
     }
 
     @Override
-    public SoftwareType getReferenceById(Integer integer) {
+    public Article getReferenceById(Integer integer) {
         return null;
     }
 
     @Override
-    public <S extends SoftwareType> Optional<S> findOne(Example<S> example) {
+    public <S extends Article> Optional<S> findOne(Example<S> example) {
         return Optional.empty();
     }
 
     @Override
-    public <S extends SoftwareType> List<S> findAll(Example<S> example) {
+    public <S extends Article> List<S> findAll(Example<S> example) {
         return List.of();
     }
 
     @Override
-    public <S extends SoftwareType> List<S> findAll(Example<S> example, Sort sort) {
+    public <S extends Article> List<S> findAll(Example<S> example, Sort sort) {
         return List.of();
     }
 
     @Override
-    public <S extends SoftwareType> Page<S> findAll(Example<S> example, Pageable pageable) {
+    public <S extends Article> Page<S> findAll(Example<S> example, Pageable pageable) {
         return null;
     }
 
     @Override
-    public <S extends SoftwareType> long count(Example<S> example) {
+    public <S extends Article> long count(Example<S> example) {
         return 0;
     }
 
     @Override
-    public <S extends SoftwareType> boolean exists(Example<S> example) {
+    public <S extends Article> boolean exists(Example<S> example) {
         return false;
     }
 
     @Override
-    public <S extends SoftwareType, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
+    public <S extends Article, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
         return null;
     }
 
     @Override
-    public <S extends SoftwareType> S save(S entity) {
+    public <S extends Article> S save(S entity) {
         return null;
     }
 
     @Override
-    public <S extends SoftwareType> List<S> saveAll(Iterable<S> entities) {
+    public <S extends Article> List<S> saveAll(Iterable<S> entities) {
         return List.of();
     }
 
     @Override
-    public Optional<SoftwareType> findById(Integer integer) {
+    public Optional<Article> findById(Integer integer) {
         return Optional.empty();
     }
 
@@ -114,12 +114,12 @@ public class MockSoftwareTypeDao implements SoftwareTypeDao {
     }
 
     @Override
-    public List<SoftwareType> findAll() {
+    public List<Article> findAll() {
         return List.of();
     }
 
     @Override
-    public List<SoftwareType> findAllById(Iterable<Integer> integers) {
+    public List<Article> findAllById(Iterable<Integer> integers) {
         return List.of();
     }
 
@@ -134,7 +134,7 @@ public class MockSoftwareTypeDao implements SoftwareTypeDao {
     }
 
     @Override
-    public void delete(SoftwareType entity) {
+    public void delete(Article entity) {
 
     }
 
@@ -144,7 +144,7 @@ public class MockSoftwareTypeDao implements SoftwareTypeDao {
     }
 
     @Override
-    public void deleteAll(Iterable<? extends SoftwareType> entities) {
+    public void deleteAll(Iterable<? extends Article> entities) {
 
     }
 
@@ -154,12 +154,12 @@ public class MockSoftwareTypeDao implements SoftwareTypeDao {
     }
 
     @Override
-    public List<SoftwareType> findAll(Sort sort) {
+    public List<Article> findAll(Sort sort) {
         return List.of();
     }
 
     @Override
-    public Page<SoftwareType> findAll(Pageable pageable) {
+    public Page<Article> findAll(Pageable pageable) {
         return null;
     }
 }

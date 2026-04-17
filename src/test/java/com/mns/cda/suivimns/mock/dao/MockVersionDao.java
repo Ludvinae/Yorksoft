@@ -1,7 +1,7 @@
-package com.mns.cda.suivimns.mock;
+package com.mns.cda.suivimns.mock.dao;
 
-import com.mns.cda.suivimns.dao.ImpactDao;
-import com.mns.cda.suivimns.model.Impact;
+import com.mns.cda.suivimns.dao.VersionDao;
+import com.mns.cda.suivimns.model.Version;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,24 +12,24 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class MockImpactDao implements ImpactDao {
+public class MockVersionDao implements VersionDao {
     @Override
     public void flush() {
 
     }
 
     @Override
-    public <S extends Impact> S saveAndFlush(S entity) {
+    public <S extends Version> S saveAndFlush(S entity) {
         return null;
     }
 
     @Override
-    public <S extends Impact> List<S> saveAllAndFlush(Iterable<S> entities) {
+    public <S extends Version> List<S> saveAllAndFlush(Iterable<S> entities) {
         return List.of();
     }
 
     @Override
-    public void deleteAllInBatch(Iterable<Impact> entities) {
+    public void deleteAllInBatch(Iterable<Version> entities) {
 
     }
 
@@ -44,67 +44,67 @@ public class MockImpactDao implements ImpactDao {
     }
 
     @Override
-    public Impact getOne(Integer integer) {
+    public Version getOne(Integer integer) {
         return null;
     }
 
     @Override
-    public Impact getById(Integer integer) {
+    public Version getById(Integer integer) {
         return null;
     }
 
     @Override
-    public Impact getReferenceById(Integer integer) {
+    public Version getReferenceById(Integer integer) {
         return null;
     }
 
     @Override
-    public <S extends Impact> Optional<S> findOne(Example<S> example) {
+    public <S extends Version> Optional<S> findOne(Example<S> example) {
         return Optional.empty();
     }
 
     @Override
-    public <S extends Impact> List<S> findAll(Example<S> example) {
+    public <S extends Version> List<S> findAll(Example<S> example) {
         return List.of();
     }
 
     @Override
-    public <S extends Impact> List<S> findAll(Example<S> example, Sort sort) {
+    public <S extends Version> List<S> findAll(Example<S> example, Sort sort) {
         return List.of();
     }
 
     @Override
-    public <S extends Impact> Page<S> findAll(Example<S> example, Pageable pageable) {
+    public <S extends Version> Page<S> findAll(Example<S> example, Pageable pageable) {
         return null;
     }
 
     @Override
-    public <S extends Impact> long count(Example<S> example) {
+    public <S extends Version> long count(Example<S> example) {
         return 0;
     }
 
     @Override
-    public <S extends Impact> boolean exists(Example<S> example) {
+    public <S extends Version> boolean exists(Example<S> example) {
         return false;
     }
 
     @Override
-    public <S extends Impact, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
+    public <S extends Version, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
         return null;
     }
 
     @Override
-    public <S extends Impact> S save(S entity) {
+    public <S extends Version> S save(S entity) {
         return null;
     }
 
     @Override
-    public <S extends Impact> List<S> saveAll(Iterable<S> entities) {
+    public <S extends Version> List<S> saveAll(Iterable<S> entities) {
         return List.of();
     }
 
     @Override
-    public Optional<Impact> findById(Integer integer) {
+    public Optional<Version> findById(Integer integer) {
         return Optional.empty();
     }
 
@@ -114,12 +114,12 @@ public class MockImpactDao implements ImpactDao {
     }
 
     @Override
-    public List<Impact> findAll() {
+    public List<Version> findAll() {
         return List.of();
     }
 
     @Override
-    public List<Impact> findAllById(Iterable<Integer> integers) {
+    public List<Version> findAllById(Iterable<Integer> integers) {
         return List.of();
     }
 
@@ -134,7 +134,7 @@ public class MockImpactDao implements ImpactDao {
     }
 
     @Override
-    public void delete(Impact entity) {
+    public void delete(Version entity) {
 
     }
 
@@ -144,7 +144,7 @@ public class MockImpactDao implements ImpactDao {
     }
 
     @Override
-    public void deleteAll(Iterable<? extends Impact> entities) {
+    public void deleteAll(Iterable<? extends Version> entities) {
 
     }
 
@@ -154,12 +154,12 @@ public class MockImpactDao implements ImpactDao {
     }
 
     @Override
-    public List<Impact> findAll(Sort sort) {
+    public List<Version> findAll(Sort sort) {
         return List.of();
     }
 
     @Override
-    public Page<Impact> findAll(Pageable pageable) {
+    public Page<Version> findAll(Pageable pageable) {
         return null;
     }
 }

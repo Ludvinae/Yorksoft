@@ -1,7 +1,7 @@
-package com.mns.cda.suivimns.mock;
+package com.mns.cda.suivimns.mock.dao;
 
-import com.mns.cda.suivimns.dao.CommentDao;
-import com.mns.cda.suivimns.model.Comment;
+import com.mns.cda.suivimns.dao.ImpactDao;
+import com.mns.cda.suivimns.model.Impact;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,24 +12,24 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class MockCommentDao implements CommentDao {
+public class MockImpactDao implements ImpactDao {
     @Override
     public void flush() {
 
     }
 
     @Override
-    public <S extends Comment> S saveAndFlush(S entity) {
+    public <S extends Impact> S saveAndFlush(S entity) {
         return null;
     }
 
     @Override
-    public <S extends Comment> List<S> saveAllAndFlush(Iterable<S> entities) {
+    public <S extends Impact> List<S> saveAllAndFlush(Iterable<S> entities) {
         return List.of();
     }
 
     @Override
-    public void deleteAllInBatch(Iterable<Comment> entities) {
+    public void deleteAllInBatch(Iterable<Impact> entities) {
 
     }
 
@@ -44,67 +44,67 @@ public class MockCommentDao implements CommentDao {
     }
 
     @Override
-    public Comment getOne(Integer integer) {
+    public Impact getOne(Integer integer) {
         return null;
     }
 
     @Override
-    public Comment getById(Integer integer) {
+    public Impact getById(Integer integer) {
         return null;
     }
 
     @Override
-    public Comment getReferenceById(Integer integer) {
+    public Impact getReferenceById(Integer integer) {
         return null;
     }
 
     @Override
-    public <S extends Comment> Optional<S> findOne(Example<S> example) {
+    public <S extends Impact> Optional<S> findOne(Example<S> example) {
         return Optional.empty();
     }
 
     @Override
-    public <S extends Comment> List<S> findAll(Example<S> example) {
+    public <S extends Impact> List<S> findAll(Example<S> example) {
         return List.of();
     }
 
     @Override
-    public <S extends Comment> List<S> findAll(Example<S> example, Sort sort) {
+    public <S extends Impact> List<S> findAll(Example<S> example, Sort sort) {
         return List.of();
     }
 
     @Override
-    public <S extends Comment> Page<S> findAll(Example<S> example, Pageable pageable) {
+    public <S extends Impact> Page<S> findAll(Example<S> example, Pageable pageable) {
         return null;
     }
 
     @Override
-    public <S extends Comment> long count(Example<S> example) {
+    public <S extends Impact> long count(Example<S> example) {
         return 0;
     }
 
     @Override
-    public <S extends Comment> boolean exists(Example<S> example) {
+    public <S extends Impact> boolean exists(Example<S> example) {
         return false;
     }
 
     @Override
-    public <S extends Comment, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
+    public <S extends Impact, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
         return null;
     }
 
     @Override
-    public <S extends Comment> S save(S entity) {
+    public <S extends Impact> S save(S entity) {
         return null;
     }
 
     @Override
-    public <S extends Comment> List<S> saveAll(Iterable<S> entities) {
+    public <S extends Impact> List<S> saveAll(Iterable<S> entities) {
         return List.of();
     }
 
     @Override
-    public Optional<Comment> findById(Integer integer) {
+    public Optional<Impact> findById(Integer integer) {
         return Optional.empty();
     }
 
@@ -114,12 +114,12 @@ public class MockCommentDao implements CommentDao {
     }
 
     @Override
-    public List<Comment> findAll() {
+    public List<Impact> findAll() {
         return List.of();
     }
 
     @Override
-    public List<Comment> findAllById(Iterable<Integer> integers) {
+    public List<Impact> findAllById(Iterable<Integer> integers) {
         return List.of();
     }
 
@@ -134,7 +134,7 @@ public class MockCommentDao implements CommentDao {
     }
 
     @Override
-    public void delete(Comment entity) {
+    public void delete(Impact entity) {
 
     }
 
@@ -144,7 +144,7 @@ public class MockCommentDao implements CommentDao {
     }
 
     @Override
-    public void deleteAll(Iterable<? extends Comment> entities) {
+    public void deleteAll(Iterable<? extends Impact> entities) {
 
     }
 
@@ -154,12 +154,12 @@ public class MockCommentDao implements CommentDao {
     }
 
     @Override
-    public List<Comment> findAll(Sort sort) {
+    public List<Impact> findAll(Sort sort) {
         return List.of();
     }
 
     @Override
-    public Page<Comment> findAll(Pageable pageable) {
+    public Page<Impact> findAll(Pageable pageable) {
         return null;
     }
 }

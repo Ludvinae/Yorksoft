@@ -1,4 +1,4 @@
-package com.mns.cda.suivimns.mock;
+package com.mns.cda.suivimns.mock.dao;
 
 import com.mns.cda.suivimns.dao.DirectorDao;
 import com.mns.cda.suivimns.model.Director;

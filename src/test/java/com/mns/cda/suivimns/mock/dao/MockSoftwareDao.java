@@ -1,18 +1,14 @@
-package com.mns.cda.suivimns.mock;
+package com.mns.cda.suivimns.mock.dao;
 
 import com.mns.cda.suivimns.dao.SoftwareDao;
 import com.mns.cda.suivimns.model.Software;
 import com.mns.cda.suivimns.model.SoftwareType;
-import com.mns.cda.suivimns.model.Version;
-import com.mns.cda.suivimns.model.VersionType;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
