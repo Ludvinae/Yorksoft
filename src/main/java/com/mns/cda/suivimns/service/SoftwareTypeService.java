@@ -1,8 +1,8 @@
 package com.mns.cda.suivimns.service;
 
 import com.mns.cda.suivimns.dao.SoftwareTypeDao;
-import com.mns.cda.suivimns.dao.SoftwareTypeDao;
 import com.mns.cda.suivimns.model.SoftwareType;
+import com.mns.cda.suivimns.service.inter.iSoftwareTypeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,34 +11,37 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class SoftwareTypeService {
-
-    public static class SoftwareTypeNotFoundException extends Exception {}
+public class SoftwareTypeService implements iSoftwareTypeService {
 
     protected final SoftwareTypeDao softwareTypeDao;
 
+    @Override
     public List<SoftwareType> findAll() {
         return softwareTypeDao.findAll();
     }
 
+    @Override
     public Optional<SoftwareType> findById(int id) {
         return softwareTypeDao.findById(id);
     }
 
+    @Override
     public void save(SoftwareType softwareType) {
         softwareType.setIdSoftwareType(null);
         softwareTypeDao.save(softwareType);
     }
 
+    @Override
     public void delete(SoftwareType softwareType) {
         softwareTypeDao.delete(softwareType);
     }
 
-    public void update(SoftwareType softwareTypeToUpdate, int id) throws SoftwareTypeService.SoftwareTypeNotFoundException {
+    @Override
+    public void update(SoftwareType softwareTypeToUpdate, int id) throws iSoftwareTypeService.SoftwareTypeNotFoundException {
         Optional<SoftwareType> softwareType = softwareTypeDao.findById(id);
 
         if (softwareType.isEmpty()) {
-            throw new SoftwareTypeService.SoftwareTypeNotFoundException();
+            throw new iSoftwareTypeService.SoftwareTypeNotFoundException();
         }
 
         softwareTypeToUpdate.setIdSoftwareType(softwareType.get().getIdSoftwareType());

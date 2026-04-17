@@ -4,9 +4,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.mns.cda.suivimns.model.Manager;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
-import com.mns.cda.suivimns.service.AppUserService;
-import com.mns.cda.suivimns.service.ManagerService;
-import com.mns.cda.suivimns.service.ManagerService;
+import com.mns.cda.suivimns.service.inter.iManagerService;
 import com.mns.cda.suivimns.view.ManagerView;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,7 +21,7 @@ import java.util.Optional;
 @RequestMapping("/manager")
 public class ManagerController {
 
-    protected final ManagerService managerservice;
+    protected final iManagerService managerservice;
 
     @GetMapping("/list")
     @JsonView(ManagerView.class)
@@ -61,11 +59,11 @@ public class ManagerController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Manager managerToUpdate) throws ManagerService.ManagerNotFoundException {
+    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Manager managerToUpdate) throws iManagerService.ManagerNotFoundException {
         try {
             managerservice.update(managerToUpdate, id);
             return new ResponseEntity<>(HttpStatus.OK);
-        } catch (ManagerService.ManagerNotFoundException e) {
+        } catch (iManagerService.ManagerNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

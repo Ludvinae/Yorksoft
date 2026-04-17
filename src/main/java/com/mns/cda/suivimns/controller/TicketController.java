@@ -7,7 +7,7 @@ import com.mns.cda.suivimns.dto.TicketResponse;
 import com.mns.cda.suivimns.model.*;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
-import com.mns.cda.suivimns.service.TicketService;
+import com.mns.cda.suivimns.service.inter.iTicketService;
 import com.mns.cda.suivimns.view.TicketView;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,64 +24,64 @@ import java.util.Optional;
 @CrossOrigin
 public class TicketController {
 
-    protected final TicketService ticketService;
+    protected final iTicketService iTicketService;
 
 
     @GetMapping("/list")
     @JsonView(TicketView.class)
     public List<Ticket> getAll() {
-        return ticketService.findAll();
+        return iTicketService.findAll();
     }
 
     @GetMapping("/list-full-latest")
     public List<TicketFullWithLatest> getTicketFullLatest() {
-        return ticketService.getAllTicketFullWithLatest();
+        return iTicketService.getAllTicketFullWithLatest();
     }
 
     @GetMapping("/list-full-latest/{id}")
     public List<TicketFullWithLatest> getTicketFullWithLatestByTechnician(@PathVariable Integer id) {
-        return ticketService.getTicketFullWithLatestByTechnician(id);
+        return iTicketService.getTicketFullWithLatestByTechnician(id);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<TicketResponse> getById(@PathVariable int id) {
 
-        Optional<Ticket> ticket = ticketService.findById(id);
+        Optional<Ticket> ticket = iTicketService.findById(id);
         if (ticket.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(ticketService.responseToDto(ticket.get()), HttpStatus.OK);
+        return new ResponseEntity<>(iTicketService.responseToDto(ticket.get()), HttpStatus.OK);
     }
 
 
     @PostMapping("/")
     public ResponseEntity<TicketResponse> create(@RequestBody @Validated(OnCreate.class) TicketCreation ticketCreated) {
 
-        Ticket ticket = ticketService.createTicket(ticketCreated);
+        Ticket ticket = iTicketService.createTicket(ticketCreated);
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ticketService.responseToDto(ticket));
+                .body(iTicketService.responseToDto(ticket));
     }
 
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
-        Optional<Ticket> ticket = ticketService.findById(id);
+        Optional<Ticket> ticket = iTicketService.findById(id);
         if (ticket.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        ticketService.delete(ticket.get());
+        iTicketService.delete(ticket.get());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Ticket ticketToUpdate) throws TicketService.TicketNotFoundException {
+    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Ticket ticketToUpdate) throws iTicketService.TicketNotFoundException {
        try {
-           ticketService.update(ticketToUpdate, id);
+           iTicketService.update(ticketToUpdate, id);
            return new ResponseEntity<>(HttpStatus.OK);
-       } catch (TicketService.TicketNotFoundException e) {
+       } catch (iTicketService.TicketNotFoundException e) {
            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
        }
     }

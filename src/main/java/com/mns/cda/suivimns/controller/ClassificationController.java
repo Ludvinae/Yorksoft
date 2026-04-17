@@ -3,7 +3,7 @@ package com.mns.cda.suivimns.controller;
 import com.mns.cda.suivimns.model.Classification;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
-import com.mns.cda.suivimns.service.ClassificationService;
+import com.mns.cda.suivimns.service.inter.iClassificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,7 @@ import java.util.Optional;
 @RequestMapping("/classification")
 public class ClassificationController {
 
-    protected final ClassificationService classificationservice;
+    protected final iClassificationService classificationservice;
 
     @GetMapping("/list")
     public List<Classification> getAll() {
@@ -56,11 +56,11 @@ public class ClassificationController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Classification classificationToUpdate) throws ClassificationService.ClassificationNotFoundException {
+    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Classification classificationToUpdate) throws iClassificationService.ClassificationNotFoundException {
         try {
             classificationservice.update(classificationToUpdate, id);
             return new ResponseEntity<>(HttpStatus.OK);
-        } catch (ClassificationService.ClassificationNotFoundException e) {
+        } catch (iClassificationService.ClassificationNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

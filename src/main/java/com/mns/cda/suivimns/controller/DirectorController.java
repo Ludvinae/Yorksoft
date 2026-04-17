@@ -3,7 +3,7 @@ package com.mns.cda.suivimns.controller;
 import com.mns.cda.suivimns.model.Director;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
-import com.mns.cda.suivimns.service.DirectorService;
+import com.mns.cda.suivimns.service.inter.iDirectorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,7 @@ import java.util.Optional;
 @RequestMapping("/director")
 public class DirectorController {
 
-    protected final DirectorService directorservice;
+    protected final iDirectorService directorservice;
 
     @GetMapping("/list")
     public List<Director> getAll() {
@@ -56,11 +56,11 @@ public class DirectorController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Director directorToUpdate) throws DirectorService.DirectorNotFoundException {
+    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Director directorToUpdate) throws iDirectorService.DirectorNotFoundException {
         try {
             directorservice.update(directorToUpdate, id);
             return new ResponseEntity<>(HttpStatus.OK);
-        } catch (DirectorService.DirectorNotFoundException e) {
+        } catch (iDirectorService.DirectorNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

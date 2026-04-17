@@ -1,12 +1,10 @@
 package com.mns.cda.suivimns.controller;
 
-import com.mns.cda.suivimns.dao.StatusDao;
 import com.mns.cda.suivimns.model.Status;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
-import com.mns.cda.suivimns.service.StatusService;
+import com.mns.cda.suivimns.service.inter.iStatusService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -21,17 +19,17 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class StatusController {
 
-    protected final StatusService statusService;
+    protected final iStatusService iStatusService;
 
     @GetMapping("/list")
     public List<Status> getAll() {
-        return statusService.findAll();
+        return iStatusService.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Status> getById(@PathVariable int id) {
 
-        Optional<Status> status = statusService.findById(id);
+        Optional<Status> status = iStatusService.findById(id);
         if (status.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -42,32 +40,32 @@ public class StatusController {
     @PostMapping("/")
     public ResponseEntity<Status> create(@RequestBody @Validated(OnCreate.class) Status status) {
         status.setIdStatus(null);
-        statusService.save(status);
+        iStatusService.save(status);
 
         return new ResponseEntity<>(status, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Status> delete(@PathVariable int id) {
-        Optional<Status> status = statusService.findById(id);
+        Optional<Status> status = iStatusService.findById(id);
         if (status.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        statusService.delete(status.get());
+        iStatusService.delete(status.get());
         return new ResponseEntity<>(status.get(), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Status> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Status statusToUpdate) {
-        Optional<Status> status = statusService.findById(id);
+        Optional<Status> status = iStatusService.findById(id);
 
         if (status.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         statusToUpdate.setIdStatus(status.get().getIdStatus());
-        statusService.save(statusToUpdate);
+        iStatusService.save(statusToUpdate);
 
         return new ResponseEntity<>(status.get(), HttpStatus.OK);
     }

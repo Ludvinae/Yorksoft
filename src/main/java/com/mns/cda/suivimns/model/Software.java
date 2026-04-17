@@ -45,6 +45,6 @@ public class Software {
 
     // Doit rester nullable, on crée d'abord un software avant de créer ses versions
     @OneToMany(mappedBy = "software")
-    @JsonView(SoftwareVersionListView.class)
+    @JsonView({SoftwareVersionListView.class, SoftwareView.class})
     protected List<Version> versionList;
 }

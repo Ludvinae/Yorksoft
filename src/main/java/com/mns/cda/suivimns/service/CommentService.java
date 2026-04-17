@@ -1,8 +1,8 @@
 package com.mns.cda.suivimns.service;
 
 import com.mns.cda.suivimns.dao.CommentDao;
-import com.mns.cda.suivimns.dao.CommentDao;
 import com.mns.cda.suivimns.model.Comment;
+import com.mns.cda.suivimns.service.inter.iCommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,34 +11,37 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class CommentService {
-
-    public static class CommentNotFoundException extends Exception {}
+public class CommentService implements iCommentService {
 
     protected final CommentDao commentDao;
 
+    @Override
     public List<Comment> findAll() {
         return commentDao.findAll();
     }
 
+    @Override
     public Optional<Comment> findById(int id) {
         return commentDao.findById(id);
     }
 
+    @Override
     public void save(Comment comment) {
         comment.setIdComment(null);
         commentDao.save(comment);
     }
 
+    @Override
     public void delete(Comment comment) {
         commentDao.delete(comment);
     }
 
-    public void update(Comment commentToUpdate, int id) throws CommentService.CommentNotFoundException {
+    @Override
+    public void update(Comment commentToUpdate, int id) throws iCommentService.CommentNotFoundException {
         Optional<Comment> comment = commentDao.findById(id);
 
         if (comment.isEmpty()) {
-            throw new CommentService.CommentNotFoundException();
+            throw new iCommentService.CommentNotFoundException();
         }
 
         commentToUpdate.setIdComment(comment.get().getIdComment());

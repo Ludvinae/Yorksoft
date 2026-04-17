@@ -1,13 +1,10 @@
 package com.mns.cda.suivimns.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.mns.cda.suivimns.dao.TechnicianDao;
 import com.mns.cda.suivimns.model.Technician;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
-import com.mns.cda.suivimns.service.AppUserService;
-import com.mns.cda.suivimns.service.TechnicianService;
-import com.mns.cda.suivimns.service.TechnicianService;
+import com.mns.cda.suivimns.service.inter.iTechnicianService;
 import com.mns.cda.suivimns.view.TechnicianView;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,7 +21,7 @@ import java.util.Optional;
 @RequestMapping("/technician")
 public class TechnicianController {
 
-    protected final TechnicianService technicianservice;
+    protected final iTechnicianService technicianservice;
 
     @GetMapping("/list")
     @JsonView(TechnicianView.class)
@@ -62,11 +59,11 @@ public class TechnicianController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Technician technicianToUpdate) throws TechnicianService.TechnicianNotFoundException {
+    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Technician technicianToUpdate) throws iTechnicianService.TechnicianNotFoundException {
         try {
             technicianservice.update(technicianToUpdate, id);
             return new ResponseEntity<>(HttpStatus.OK);
-        } catch (TechnicianService.TechnicianNotFoundException e) {
+        } catch (iTechnicianService.TechnicianNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

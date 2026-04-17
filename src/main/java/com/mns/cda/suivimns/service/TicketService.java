@@ -6,6 +6,9 @@ import com.mns.cda.suivimns.dto.TicketFullWithLatest;
 import com.mns.cda.suivimns.dto.TicketResponse;
 import com.mns.cda.suivimns.model.*;
 import com.mns.cda.suivimns.model.keys.ClassificationKey;
+import com.mns.cda.suivimns.service.inter.iClassificationService;
+import com.mns.cda.suivimns.service.inter.iHistoryService;
+import com.mns.cda.suivimns.service.inter.iTicketService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,37 +18,40 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
-public class TicketService {
-
-    public static class TicketNotFoundException extends Exception {}
+public class TicketService implements iTicketService {
 
     protected final TicketDao ticketDao;
     private final ThemeDao themeDao;
-    protected final HistoryService historyService;
+    protected final iHistoryService iHistoryService;
     protected final ClassificationDao classificationDao;
-    protected final ClassificationService classificationService;
+    protected final iClassificationService iClassificationService;
     protected final ClientDao clientDao;
     protected final ImpactDao impactDao;
     protected final UrgencyDao urgencyDao;
     protected final VersionDao versionDao;
 
+    @Override
     public List<Ticket> findAll() {
         return ticketDao.findAll();
     }
 
+    @Override
     public Optional<Ticket> findById(int id) {
         return ticketDao.findById(id);
     }
 
 
+    @Override
     public List<TicketFullWithLatest> getAllTicketFullWithLatest() {
         return ticketDao.returnTicketFullWithLatest();
     }
 
+    @Override
     public List<TicketFullWithLatest> getTicketFullWithLatestByTechnician(int id) {
         return ticketDao.returnTicketAttributed(id);
     }
 
+    @Override
     public void save(Ticket ticket) {
         ticket.setIdTicket(null);
         ticket.setFinalPriority(ticket.getInitialPriority());
@@ -54,10 +60,12 @@ public class TicketService {
         ticketDao.save(ticket);
     }
 
+    @Override
     public void delete(Ticket ticket) {
         ticketDao.delete(ticket);
     }
 
+    @Override
     public void update(Ticket ticketToUpdate, int id) throws TicketNotFoundException {
         Optional<Ticket> ticket = ticketDao.findById(id);
 
@@ -72,6 +80,7 @@ public class TicketService {
 
 
     @Transactional
+    @Override
     public Ticket createTicket(TicketCreation ticketDto) {
 
         Ticket ticket = new Ticket();
@@ -103,7 +112,7 @@ public class TicketService {
 
         Ticket savedTicket = ticketDao.save(ticket);
 
-        historyService.updateHistory(savedTicket, ticketDto.idCreator(), "Nouveau");
+        iHistoryService.updateHistory(savedTicket, ticketDto.idCreator(), "Nouveau");
         addThemeToTicket(savedTicket, ticketDto.themeDesignation());
 
         return savedTicket;
@@ -111,6 +120,7 @@ public class TicketService {
 
     // METHODS
 
+    @Override
     public void addThemeToTicket(Ticket ticket, String designation) {
 
         // 1. récupérer la thématique
@@ -138,6 +148,7 @@ public class TicketService {
             {3, 2},
             {2, 1}};
 
+    @Override
     public int computePriority(int impact, int urgence, int importance) {
         int finalImpact = Math.min(impact + importance, 4);
         return priorityMatrix[finalImpact - 1][urgence - 1];
@@ -146,9 +157,10 @@ public class TicketService {
 
     // Mapping
 
+    @Override
     public TicketResponse responseToDto(Ticket ticket) {
-        Status status = historyService.getStatus(ticket.getIdTicket());
-        Theme theme = classificationService.getTheme(ticket.getIdTicket());
+        Status status = iHistoryService.getStatus(ticket.getIdTicket());
+        Theme theme = iClassificationService.getTheme(ticket.getIdTicket());
 
         return new TicketResponse(
                 ticket.getIdTicket(),

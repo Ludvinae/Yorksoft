@@ -1,8 +1,8 @@
 package com.mns.cda.suivimns.service;
 
 import com.mns.cda.suivimns.dao.VersionDao;
-import com.mns.cda.suivimns.dao.VersionDao;
 import com.mns.cda.suivimns.model.Version;
+import com.mns.cda.suivimns.service.inter.iVersionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,34 +11,37 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class VersionService {
-
-    public static class VersionNotFoundException extends Exception {}
+public class VersionService implements iVersionService {
 
     protected final VersionDao versionDao;
 
+    @Override
     public List<Version> findAll() {
         return versionDao.findAll();
     }
 
+    @Override
     public Optional<Version> findById(int id) {
         return versionDao.findById(id);
     }
 
+    @Override
     public void save(Version version) {
         version.setIdVersion(null);
         versionDao.save(version);
     }
 
+    @Override
     public void delete(Version version) {
         versionDao.delete(version);
     }
 
-    public void update(Version versionToUpdate, int id) throws VersionService.VersionNotFoundException {
+    @Override
+    public void update(Version versionToUpdate, int id) throws iVersionService.VersionNotFoundException {
         Optional<Version> version = versionDao.findById(id);
 
         if (version.isEmpty()) {
-            throw new VersionService.VersionNotFoundException();
+            throw new iVersionService.VersionNotFoundException();
         }
 
         versionToUpdate.setIdVersion(version.get().getIdVersion());

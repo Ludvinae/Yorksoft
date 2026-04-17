@@ -2,8 +2,8 @@ package com.mns.cda.suivimns.service;
 
 import com.mns.cda.suivimns.dao.ClassificationDao;
 import com.mns.cda.suivimns.model.Classification;
-import com.mns.cda.suivimns.model.History;
 import com.mns.cda.suivimns.model.Theme;
+import com.mns.cda.suivimns.service.inter.iClassificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,42 +12,46 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class ClassificationService {
+public class ClassificationService implements iClassificationService {
 
     // NEED REWORKING TO ACCOUNT FOR ID FOR BOTH LINKED TABLES
 
-    public static class ClassificationNotFoundException extends Exception {}
-
     protected final ClassificationDao classificationDao;
 
+    @Override
     public List<Classification> findAll() {
         return classificationDao.findAll();
     }
 
+    @Override
     public Optional<Classification> findById(int id) {
         return classificationDao.findById(id);
     }
 
+    @Override
     public void save(Classification classification) {
 
         classificationDao.save(classification);
     }
 
+    @Override
     public void delete(Classification classification) {
         classificationDao.delete(classification);
     }
 
 
-    public void update(Classification classificationToUpdate, int id) throws ClassificationService.ClassificationNotFoundException {
+    @Override
+    public void update(Classification classificationToUpdate, int id) throws iClassificationService.ClassificationNotFoundException {
         Optional<Classification> classification = classificationDao.findById(id);
 
         if (classification.isEmpty()) {
-            throw new ClassificationService.ClassificationNotFoundException();
+            throw new iClassificationService.ClassificationNotFoundException();
         }
 
         classificationDao.save(classificationToUpdate);
     }
 
+    @Override
     public Theme getTheme(Integer ticketId) {
         Optional<Classification> classification = classificationDao.findLatestByTicket(ticketId);
         if (classification.isEmpty()) {

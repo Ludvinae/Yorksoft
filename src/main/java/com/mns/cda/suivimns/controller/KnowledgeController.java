@@ -1,12 +1,10 @@
 package com.mns.cda.suivimns.controller;
 
-import com.mns.cda.suivimns.dao.KnowledgeDao;
 import com.mns.cda.suivimns.model.Knowledge;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
-import com.mns.cda.suivimns.service.KnowledgeService;
+import com.mns.cda.suivimns.service.inter.iKnowledgeService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -21,17 +19,17 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class KnowledgeController {
 
-    protected final KnowledgeService knowledgeService;
+    protected final iKnowledgeService iKnowledgeService;
 
     @GetMapping("/list")
     public List<Knowledge> getAll() {
-        return knowledgeService.findAll();
+        return iKnowledgeService.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Knowledge> getById(@PathVariable int id) {
 
-        Optional<Knowledge> knowledge = knowledgeService.findById(id);
+        Optional<Knowledge> knowledge = iKnowledgeService.findById(id);
         if (knowledge.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -42,32 +40,32 @@ public class KnowledgeController {
     @PostMapping("/")
     public ResponseEntity<Knowledge> create(@RequestBody @Validated(OnCreate.class) Knowledge knowledge) {
         knowledge.setIdKnowledge(null);
-        knowledgeService.save(knowledge);
+        iKnowledgeService.save(knowledge);
 
         return new ResponseEntity<>(knowledge, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Knowledge> delete(@PathVariable int id) {
-        Optional<Knowledge> knowledge = knowledgeService.findById(id);
+        Optional<Knowledge> knowledge = iKnowledgeService.findById(id);
         if (knowledge.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        knowledgeService.delete(knowledge.get());
+        iKnowledgeService.delete(knowledge.get());
         return new ResponseEntity<>(knowledge.get(), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Knowledge> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Knowledge knowledgeToUpdate) {
-        Optional<Knowledge> knowledge = knowledgeService.findById(id);
+        Optional<Knowledge> knowledge = iKnowledgeService.findById(id);
 
         if (knowledge.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         knowledgeToUpdate.setIdKnowledge(knowledge.get().getIdKnowledge());
-        knowledgeService.save(knowledgeToUpdate);
+        iKnowledgeService.save(knowledgeToUpdate);
 
         return new ResponseEntity<>(knowledge.get(), HttpStatus.OK);
     }

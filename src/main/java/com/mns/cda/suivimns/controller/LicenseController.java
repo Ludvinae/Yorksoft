@@ -3,7 +3,7 @@ package com.mns.cda.suivimns.controller;
 import com.mns.cda.suivimns.model.License;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
-import com.mns.cda.suivimns.service.LicenseService;
+import com.mns.cda.suivimns.service.inter.iLicenseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,7 @@ import java.util.Optional;
 @RequestMapping("/license")
 public class LicenseController {
 
-    protected final LicenseService licenseservice;
+    protected final iLicenseService licenseservice;
 
     @GetMapping("/list")
     public List<License> getAll() {
@@ -56,11 +56,11 @@ public class LicenseController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) License licenseToUpdate) throws LicenseService.LicenseNotFoundException {
+    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) License licenseToUpdate) throws iLicenseService.LicenseNotFoundException {
         try {
             licenseservice.update(licenseToUpdate, id);
             return new ResponseEntity<>(HttpStatus.OK);
-        } catch (LicenseService.LicenseNotFoundException e) {
+        } catch (iLicenseService.LicenseNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

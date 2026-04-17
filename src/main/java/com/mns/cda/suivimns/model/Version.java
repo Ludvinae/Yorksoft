@@ -2,6 +2,7 @@ package com.mns.cda.suivimns.model;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.mns.cda.suivimns.view.SoftwareVersionListView;
+import com.mns.cda.suivimns.view.SoftwareView;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -22,13 +23,13 @@ public class Version {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView(SoftwareVersionListView.class)
+    @JsonView({SoftwareVersionListView.class, SoftwareView.class})
     protected Integer idVersion;
 
     @Column(nullable = false, length = 63)
     @NotBlank
     @Size(max = 63)
-    @JsonView(SoftwareVersionListView.class)
+    @JsonView({SoftwareVersionListView.class, SoftwareView.class})
     protected String versionNumber;
 
 

@@ -1,12 +1,10 @@
 package com.mns.cda.suivimns.controller;
 
-import com.mns.cda.suivimns.dao.SoftwareTypeDao;
 import com.mns.cda.suivimns.model.SoftwareType;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
-import com.mns.cda.suivimns.service.SoftwareTypeService;
+import com.mns.cda.suivimns.service.inter.iSoftwareTypeService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -21,17 +19,17 @@ import java.util.Optional;
 @RequestMapping("/software-type")
 public class SoftwareTypeController {
 
-    protected final SoftwareTypeService softwareTypeService;
+    protected final iSoftwareTypeService iSoftwareTypeService;
 
     @GetMapping("/list")
     public List<SoftwareType> findAll() {
-        return softwareTypeService.findAll();
+        return iSoftwareTypeService.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<SoftwareType> findById(@PathVariable Integer id) {
 
-        Optional<SoftwareType> softwareType = softwareTypeService.findById(id);
+        Optional<SoftwareType> softwareType = iSoftwareTypeService.findById(id);
 
         if (softwareType.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -43,7 +41,7 @@ public class SoftwareTypeController {
     public ResponseEntity<SoftwareType> create(@RequestBody @Validated(OnCreate.class) SoftwareType typeToInsert) {
 
         typeToInsert.setIdSoftwareType(null);
-        softwareTypeService.save(typeToInsert);
+        iSoftwareTypeService.save(typeToInsert);
 
         return new ResponseEntity<>(typeToInsert, HttpStatus.CREATED);
     }
@@ -51,24 +49,24 @@ public class SoftwareTypeController {
     @DeleteMapping("/{id}")
     public ResponseEntity<SoftwareType> delete(@PathVariable Integer id) {
 
-        Optional<SoftwareType> softwareType = softwareTypeService.findById(id);
+        Optional<SoftwareType> softwareType = iSoftwareTypeService.findById(id);
 
         if (softwareType.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        softwareTypeService.delete(softwareType.get());
+        iSoftwareTypeService.delete(softwareType.get());
 
         return new ResponseEntity<>(softwareType.get(), HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<SoftwareType> update(@PathVariable Integer id, @RequestBody @Validated(OnUpdate.class) SoftwareType typeToUpdate) {
-        Optional<SoftwareType> softwareType = softwareTypeService.findById(id);
+        Optional<SoftwareType> softwareType = iSoftwareTypeService.findById(id);
         if (softwareType.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         typeToUpdate.setIdSoftwareType(id);
-        softwareTypeService.save(typeToUpdate);
+        iSoftwareTypeService.save(typeToUpdate);
 
         return new ResponseEntity<>(typeToUpdate, HttpStatus.OK);
     }

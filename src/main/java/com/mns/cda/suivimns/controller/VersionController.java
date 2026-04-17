@@ -1,12 +1,10 @@
 package com.mns.cda.suivimns.controller;
 
-import com.mns.cda.suivimns.dao.VersionDao;
 import com.mns.cda.suivimns.model.Version;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
-import com.mns.cda.suivimns.service.VersionService;
+import com.mns.cda.suivimns.service.inter.iVersionService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -21,17 +19,17 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class VersionController {
 
-    protected final VersionService versionService;
+    protected final iVersionService iVersionService;
 
     @GetMapping("/list")
     public List<Version> findAll() {
-        return versionService.findAll();
+        return iVersionService.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Version> findById(@PathVariable Integer id) {
 
-        Optional<Version> version = versionService.findById(id);
+        Optional<Version> version = iVersionService.findById(id);
         if (version.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -43,29 +41,29 @@ public class VersionController {
 
         version.setIdVersion(null);
 
-        versionService.save(version);
+        iVersionService.save(version);
         return new ResponseEntity<>(version, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Version> delete(@PathVariable Integer id) {
 
-        Optional<Version> version = versionService.findById(id);
+        Optional<Version> version = iVersionService.findById(id);
         if (version.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        versionService.delete(version.get());
+        iVersionService.delete(version.get());
         return new ResponseEntity<>(version.get(), HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Version> update(@PathVariable Integer id, @RequestBody @Validated(OnUpdate.class) Version versionToModify) {
-        Optional<Version> version = versionService.findById(id);
+        Optional<Version> version = iVersionService.findById(id);
         if (version.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         versionToModify.setIdVersion(id);
-        versionService.save(versionToModify);
+        iVersionService.save(versionToModify);
 
         if (versionToModify.getPublicationDate() == null) {
             versionToModify.setPublicationDate(version.get().getPublicationDate());
