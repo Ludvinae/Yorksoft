@@ -19,6 +19,6 @@ public interface iClassificationService {
 
     Theme getTheme(Integer ticketId);
 
-    public static class ClassificationNotFoundException extends Exception {
+    class ClassificationNotFoundException extends Exception {
     }
 }

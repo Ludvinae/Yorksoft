@@ -16,6 +16,6 @@ public interface iVersionService {
 
     void update(Version versionToUpdate, int id) throws VersionNotFoundException;
 
-    public static class VersionNotFoundException extends Exception {
+    class VersionNotFoundException extends Exception {
     }
 }

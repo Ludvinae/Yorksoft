@@ -53,7 +53,7 @@ public class StatusController {
         }
 
         iStatusService.delete(status.get());
-        return new ResponseEntity<>(status.get(), HttpStatus.OK);
+        return new ResponseEntity<>(status.get(), HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}")

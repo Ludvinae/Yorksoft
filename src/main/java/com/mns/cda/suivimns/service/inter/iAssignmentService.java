@@ -20,6 +20,6 @@ public interface iAssignmentService {
 
     void update(Assignment assignmentToUpdate, int id) throws AssignmentNotFoundException;
 
-    public static class AssignmentNotFoundException extends Exception {
+    class AssignmentNotFoundException extends Exception {
     }
 }

@@ -53,7 +53,7 @@ public class ImpactController {
         }
 
         iImpactService.delete(impact.get());
-        return new ResponseEntity<>(impact.get(), HttpStatus.OK);
+        return new ResponseEntity<>(impact.get(), HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}")

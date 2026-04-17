@@ -19,6 +19,6 @@ public interface iClientService {
 
     void update(Client clientToUpdate, int id) throws ClientNotFoundException;
 
-    public static class ClientNotFoundException extends Exception {
+    class ClientNotFoundException extends Exception {
     }
 }

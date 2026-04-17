@@ -18,6 +18,6 @@ public interface iStatusService {
 
     void update(Status statusToUpdate, int id) throws StatusNotFoundException;
 
-    public static class StatusNotFoundException extends Exception {
+    class StatusNotFoundException extends Exception {
     }
 }

@@ -16,6 +16,6 @@ public interface iSoftwareTypeService {
 
     void update(SoftwareType softwareTypeToUpdate, int id) throws SoftwareTypeNotFoundException;
 
-    public static class SoftwareTypeNotFoundException extends Exception {
+    class SoftwareTypeNotFoundException extends Exception {
     }
 }

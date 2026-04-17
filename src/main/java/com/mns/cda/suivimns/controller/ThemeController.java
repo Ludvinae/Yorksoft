@@ -53,7 +53,7 @@ public class ThemeController {
         }
 
         iThemeService.delete(theme.get());
-        return new ResponseEntity<>(theme.get(), HttpStatus.OK);
+        return new ResponseEntity<>(theme.get(), HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}")

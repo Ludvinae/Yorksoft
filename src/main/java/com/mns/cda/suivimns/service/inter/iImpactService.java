@@ -16,6 +16,6 @@ public interface iImpactService {
 
     void update(Impact impactToUpdate, int id) throws ImpactNotFoundException;
 
-    public static class ImpactNotFoundException extends Exception {
+    class ImpactNotFoundException extends Exception {
     }
 }

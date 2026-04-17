@@ -16,6 +16,6 @@ public interface iLicenseService {
 
     void update(License licenseToUpdate, int id) throws LicenseNotFoundException;
 
-    public static class LicenseNotFoundException extends Exception {
+    class LicenseNotFoundException extends Exception {
     }
 }

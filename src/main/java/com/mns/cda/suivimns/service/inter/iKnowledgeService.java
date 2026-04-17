@@ -16,6 +16,6 @@ public interface iKnowledgeService {
 
     void update(Knowledge knowledgeToUpdate, int id) throws KnowledgeNotFoundException;
 
-    public static class KnowledgeNotFoundException extends Exception {
+    class KnowledgeNotFoundException extends Exception {
     }
 }

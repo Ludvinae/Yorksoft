@@ -16,6 +16,6 @@ public interface iCommentService {
 
     void update(Comment commentToUpdate, int id) throws CommentNotFoundException;
 
-    public static class CommentNotFoundException extends Exception {
+    class CommentNotFoundException extends Exception {
     }
 }

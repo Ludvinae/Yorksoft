@@ -16,6 +16,6 @@ public interface iUrgencyService {
 
     void update(Urgency urgencyToUpdate, int id) throws UrgencyNotFoundException;
 
-    public static class UrgencyNotFoundException extends Exception {
+    class UrgencyNotFoundException extends Exception {
     }
 }

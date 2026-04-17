@@ -16,6 +16,6 @@ public interface iAppUserService {
 
     void update(AppUser appUserToUpdate, int id) throws AppUserNotFoundException;
 
-    public static class AppUserNotFoundException extends Exception {
+    class AppUserNotFoundException extends Exception {
     }
 }

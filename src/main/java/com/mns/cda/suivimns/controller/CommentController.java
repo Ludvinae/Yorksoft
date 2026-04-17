@@ -54,7 +54,7 @@ public class CommentController {
         }
 
         iCommentService.delete(comment.get());
-        return new ResponseEntity<>(comment.get(), HttpStatus.OK);
+        return new ResponseEntity<>(comment.get(), HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}")

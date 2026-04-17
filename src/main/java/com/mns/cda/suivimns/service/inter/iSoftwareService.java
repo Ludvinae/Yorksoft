@@ -16,6 +16,6 @@ public interface iSoftwareService {
 
     void update(Software softwareToUpdate, int id) throws SoftwareNotFoundException;
 
-    public static class SoftwareNotFoundException extends Exception {
+    class SoftwareNotFoundException extends Exception {
     }
 }

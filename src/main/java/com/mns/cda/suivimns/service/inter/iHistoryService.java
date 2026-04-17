@@ -22,6 +22,6 @@ public interface iHistoryService {
 
     Status getStatus(Integer idTicket);
 
-    public static class HistoryNotFoundException extends Exception {
+    class HistoryNotFoundException extends Exception {
     }
 }

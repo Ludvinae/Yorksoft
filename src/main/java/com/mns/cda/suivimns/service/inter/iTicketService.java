@@ -33,6 +33,6 @@ public interface iTicketService {
 
     TicketResponse responseToDto(Ticket ticket);
 
-    public static class TicketNotFoundException extends Exception {
+    class TicketNotFoundException extends Exception {
     }
 }

@@ -16,6 +16,6 @@ public interface iArticleService {
 
     void update(Article articleToUpdate, int id) throws ArticleNotFoundException;
 
-    public static class ArticleNotFoundException extends Exception {
+    class ArticleNotFoundException extends Exception {
     }
 }

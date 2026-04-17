@@ -16,6 +16,6 @@ public interface iDirectorService {
 
     void update(Director directorToUpdate, int id) throws DirectorNotFoundException;
 
-    public static class DirectorNotFoundException extends Exception {
+    class DirectorNotFoundException extends Exception {
     }
 }

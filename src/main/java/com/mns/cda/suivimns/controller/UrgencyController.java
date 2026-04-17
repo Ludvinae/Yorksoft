@@ -53,7 +53,7 @@ public class UrgencyController {
         }
 
         iUrgencyService.delete(urgency.get());
-        return new ResponseEntity<>(urgency.get(), HttpStatus.OK);
+        return new ResponseEntity<>(urgency.get(), HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}")

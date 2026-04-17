@@ -16,6 +16,6 @@ public interface iTechnicianService {
 
     void update(Technician technicianToUpdate, int id) throws TechnicianNotFoundException;
 
-    public static class TechnicianNotFoundException extends Exception {
+    class TechnicianNotFoundException extends Exception {
     }
 }

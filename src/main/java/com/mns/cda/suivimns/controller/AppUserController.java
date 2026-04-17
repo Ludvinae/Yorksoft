@@ -55,7 +55,7 @@ public class AppUserController {
         }
 
         iAppUserservice.delete(user.get());
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}")

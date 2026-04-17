@@ -73,7 +73,7 @@ public class TicketController {
         }
 
         iTicketService.delete(ticket.get());
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}")

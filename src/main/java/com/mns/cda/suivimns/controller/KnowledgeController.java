@@ -53,7 +53,7 @@ public class KnowledgeController {
         }
 
         iKnowledgeService.delete(knowledge.get());
-        return new ResponseEntity<>(knowledge.get(), HttpStatus.OK);
+        return new ResponseEntity<>(knowledge.get(), HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}")

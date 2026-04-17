@@ -18,6 +18,6 @@ public interface iThemeService {
 
     void update(Theme themeToUpdate, int id) throws ThemeNotFoundException;
 
-    public static class ThemeNotFoundException extends Exception {
+    class ThemeNotFoundException extends Exception {
     }
 }

@@ -53,7 +53,7 @@ public class HistoryController {
         }
 
         iHistoryService.delete(history.get());
-        return new ResponseEntity<>(history.get(), HttpStatus.OK);
+        return new ResponseEntity<>(history.get(), HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/history/{id}")

@@ -52,7 +52,7 @@ public class ClassificationController {
         }
 
         classificationservice.delete(classification.get());
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}")

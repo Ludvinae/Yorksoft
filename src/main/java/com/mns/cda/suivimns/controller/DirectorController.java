@@ -52,7 +52,7 @@ public class DirectorController {
         }
 
         directorservice.delete(director.get());
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}")

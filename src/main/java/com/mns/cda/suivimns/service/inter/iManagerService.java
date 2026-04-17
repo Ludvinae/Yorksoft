@@ -16,6 +16,6 @@ public interface iManagerService {
 
     void update(Manager managerToUpdate, int id) throws ManagerNotFoundException;
 
-    public static class ManagerNotFoundException extends Exception {
+    class ManagerNotFoundException extends Exception {
     }
 }

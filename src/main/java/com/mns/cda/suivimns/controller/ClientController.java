@@ -35,21 +35,6 @@ public class ClientController {
         return new ResponseEntity<>(client, HttpStatus.OK);
     }
 
-    /*
-    @GetMapping("/{id}/software/list")
-    @JsonView(ClientSoftwareListView.class)
-    public ResponseEntity<Client> getClientSofwareList(@PathVariable int id) {
-
-        Optional<Client> client = clientService.findById(id);
-        if (client.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        return new ResponseEntity<>(client.get(), HttpStatus.OK);
-    }
-
-     */
-
 
     @PostMapping("/")
     public ResponseEntity<Client> create(@RequestBody @Validated(OnCreate.class) Client client) {
@@ -68,7 +53,7 @@ public class ClientController {
         }
 
         iClientService.delete(client.get());
-        return new ResponseEntity<>(client.get(), HttpStatus.OK);
+        return new ResponseEntity<>(client.get(), HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}")
