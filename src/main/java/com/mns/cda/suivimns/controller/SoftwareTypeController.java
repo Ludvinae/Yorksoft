@@ -60,7 +60,7 @@ public class SoftwareTypeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SoftwareType> update(@PathVariable Integer id, @RequestBody @Validated(OnUpdate.class) SoftwareType typeToUpdate) {
+    public ResponseEntity<Void> update(@PathVariable Integer id, @RequestBody @Validated(OnUpdate.class) SoftwareType typeToUpdate) {
         Optional<SoftwareType> softwareType = iSoftwareTypeService.findById(id);
         if (softwareType.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -68,6 +68,6 @@ public class SoftwareTypeController {
         typeToUpdate.setIdSoftwareType(id);
         iSoftwareTypeService.save(typeToUpdate);
 
-        return new ResponseEntity<>(typeToUpdate, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

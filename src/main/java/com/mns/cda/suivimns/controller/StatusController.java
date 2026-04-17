@@ -57,7 +57,7 @@ public class StatusController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Status> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Status statusToUpdate) {
+    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Status statusToUpdate) {
         Optional<Status> status = iStatusService.findById(id);
 
         if (status.isEmpty()) {
@@ -67,6 +67,6 @@ public class StatusController {
         statusToUpdate.setIdStatus(status.get().getIdStatus());
         iStatusService.save(statusToUpdate);
 
-        return new ResponseEntity<>(status.get(), HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

@@ -57,7 +57,7 @@ public class ThemeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Theme> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Theme themeToUpdate) {
+    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Theme themeToUpdate) {
         Optional<Theme> theme = iThemeService.findById(id);
 
         if (theme.isEmpty()) {
@@ -67,6 +67,6 @@ public class ThemeController {
         themeToUpdate.setIdTheme(theme.get().getIdTheme());
         iThemeService.save(themeToUpdate);
 
-        return new ResponseEntity<>(theme.get(), HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

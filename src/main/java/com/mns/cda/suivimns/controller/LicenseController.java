@@ -59,7 +59,7 @@ public class LicenseController {
     public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) License licenseToUpdate) throws iLicenseService.LicenseNotFoundException {
         try {
             licenseservice.update(licenseToUpdate, id);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (iLicenseService.LicenseNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

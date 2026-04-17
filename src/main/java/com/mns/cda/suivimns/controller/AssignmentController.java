@@ -73,7 +73,7 @@ public class AssignmentController {
 
     @PutMapping("/{id}")
     @JsonView(AssignmentView.class)
-    public ResponseEntity<Assignment> update(@PathVariable int id, @RequestBody @Validated() Assignment assignmentToUpdate) {
+    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated() Assignment assignmentToUpdate) {
         Optional<Assignment> assignment = iAssignmentService.findById(id);
 
         if (assignment.isEmpty()) {
@@ -94,7 +94,7 @@ public class AssignmentController {
 
         iAssignmentService.modify(assignmentToUpdate, id);
 
-        return new ResponseEntity<>(assignmentToUpdate, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }

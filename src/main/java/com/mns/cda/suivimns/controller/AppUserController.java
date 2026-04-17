@@ -62,7 +62,7 @@ public class AppUserController {
     public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) AppUser userToUpdate) throws iAppUserService.AppUserNotFoundException {
         try {
             iAppUserservice.update(userToUpdate, id);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (iAppUserService.AppUserNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

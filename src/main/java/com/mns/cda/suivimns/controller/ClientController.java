@@ -57,10 +57,10 @@ public class ClientController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Client> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Client clientToUpdate) throws iClientService.ClientNotFoundException {
+    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Client clientToUpdate) throws iClientService.ClientNotFoundException {
         try {
             iClientService.update(clientToUpdate, id);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (iClientService.ClientNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

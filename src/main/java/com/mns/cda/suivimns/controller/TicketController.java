@@ -80,7 +80,7 @@ public class TicketController {
     public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Ticket ticketToUpdate) throws iTicketService.TicketNotFoundException {
        try {
            iTicketService.update(ticketToUpdate, id);
-           return new ResponseEntity<>(HttpStatus.OK);
+           return new ResponseEntity<>(HttpStatus.NO_CONTENT);
        } catch (iTicketService.TicketNotFoundException e) {
            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
        }

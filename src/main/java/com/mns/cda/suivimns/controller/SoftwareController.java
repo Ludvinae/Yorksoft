@@ -76,7 +76,7 @@ public class SoftwareController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Software> update(@PathVariable Integer id, @RequestBody @Validated(OnUpdate.class) Software softwareData) {
+    public ResponseEntity<Void> update(@PathVariable Integer id, @RequestBody @Validated(OnUpdate.class) Software softwareData) {
         Optional<Software> software = iSoftwareService.findById(id);
 
         if (software.isEmpty()) {
@@ -97,6 +97,6 @@ public class SoftwareController {
 
         softwareData.setIdSoftware(id);
         iSoftwareService.save(softwareData);
-        return new ResponseEntity<>(software.get(), HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

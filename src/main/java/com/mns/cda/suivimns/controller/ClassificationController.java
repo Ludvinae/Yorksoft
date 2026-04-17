@@ -59,7 +59,7 @@ public class ClassificationController {
     public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Classification classificationToUpdate) throws iClassificationService.ClassificationNotFoundException {
         try {
             classificationservice.update(classificationToUpdate, id);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (iClassificationService.ClassificationNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

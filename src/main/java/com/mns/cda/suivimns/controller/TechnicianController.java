@@ -62,7 +62,7 @@ public class TechnicianController {
     public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Technician technicianToUpdate) throws iTechnicianService.TechnicianNotFoundException {
         try {
             technicianservice.update(technicianToUpdate, id);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (iTechnicianService.TechnicianNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

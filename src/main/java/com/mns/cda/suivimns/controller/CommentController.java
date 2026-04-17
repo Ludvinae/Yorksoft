@@ -58,7 +58,7 @@ public class CommentController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Comment> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Comment commentToUpdate) {
+    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Comment commentToUpdate) {
         Optional<Comment> comment = iCommentService.findById(id);
 
         if (comment.isEmpty()) {
@@ -69,6 +69,6 @@ public class CommentController {
         commentToUpdate.setDateSent(comment.get().getDateSent());
 
         iCommentService.save(commentToUpdate);
-        return new ResponseEntity<>(comment.get(), HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

@@ -57,7 +57,7 @@ public class VersionController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Version> update(@PathVariable Integer id, @RequestBody @Validated(OnUpdate.class) Version versionToModify) {
+    public ResponseEntity<Void> update(@PathVariable Integer id, @RequestBody @Validated(OnUpdate.class) Version versionToModify) {
         Optional<Version> version = iVersionService.findById(id);
         if (version.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -69,6 +69,6 @@ public class VersionController {
             versionToModify.setPublicationDate(version.get().getPublicationDate());
         }
 
-        return new ResponseEntity<>(versionToModify, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

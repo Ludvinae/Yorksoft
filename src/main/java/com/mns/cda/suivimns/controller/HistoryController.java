@@ -57,7 +57,7 @@ public class HistoryController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<History> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) History historyToUpdate) {
+    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) History historyToUpdate) {
         Optional<History> history = iHistoryService.findById(id);
 
         if (history.isEmpty()) {
@@ -67,6 +67,6 @@ public class HistoryController {
         historyToUpdate.setIdHistory(history.get().getIdHistory());
         iHistoryService.save(historyToUpdate);
         
-        return new ResponseEntity<>(history.get(), HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

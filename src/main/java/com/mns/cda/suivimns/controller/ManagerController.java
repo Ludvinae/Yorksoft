@@ -62,7 +62,7 @@ public class ManagerController {
     public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Manager managerToUpdate) throws iManagerService.ManagerNotFoundException {
         try {
             managerservice.update(managerToUpdate, id);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (iManagerService.ManagerNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

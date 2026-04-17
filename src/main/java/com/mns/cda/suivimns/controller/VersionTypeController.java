@@ -54,7 +54,7 @@ public class VersionTypeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<VersionType> update(@PathVariable Integer id, @RequestBody @Validated() VersionType typeToUpdate) {
+    public ResponseEntity<Void> update(@PathVariable Integer id, @RequestBody @Validated() VersionType typeToUpdate) {
         Optional<VersionType> versionType = iVersionTypeService.findById(id);
 
         if (versionType.isEmpty()) {
@@ -64,6 +64,6 @@ public class VersionTypeController {
         typeToUpdate.setIdVersionType(id);
         iVersionTypeService.save(typeToUpdate);
 
-        return new ResponseEntity<>(typeToUpdate, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

@@ -57,7 +57,7 @@ public class ImpactController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Impact> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Impact impactToUpdate) {
+    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Impact impactToUpdate) {
         Optional<Impact> impact = iImpactService.findById(id);
 
         if (impact.isEmpty()) {
@@ -67,6 +67,6 @@ public class ImpactController {
         impactToUpdate.setIdImpact(impact.get().getIdImpact());
         iImpactService.save(impactToUpdate);
 
-        return new ResponseEntity<>(impact.get(), HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

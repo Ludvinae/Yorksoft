@@ -58,11 +58,11 @@ public class ArticleController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Article> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Article articleToUpdate) throws iArticleService.ArticleNotFoundException {
+    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Article articleToUpdate) throws iArticleService.ArticleNotFoundException {
 
         try {
             iArticleService.update(articleToUpdate, id);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (iArticleService.ArticleNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

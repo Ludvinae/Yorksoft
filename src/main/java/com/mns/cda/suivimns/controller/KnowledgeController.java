@@ -57,7 +57,7 @@ public class KnowledgeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Knowledge> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Knowledge knowledgeToUpdate) {
+    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Knowledge knowledgeToUpdate) {
         Optional<Knowledge> knowledge = iKnowledgeService.findById(id);
 
         if (knowledge.isEmpty()) {
@@ -67,6 +67,6 @@ public class KnowledgeController {
         knowledgeToUpdate.setIdKnowledge(knowledge.get().getIdKnowledge());
         iKnowledgeService.save(knowledgeToUpdate);
 
-        return new ResponseEntity<>(knowledge.get(), HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

@@ -57,7 +57,7 @@ public class UrgencyController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Urgency> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Urgency urgencyToUpdate) {
+    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Urgency urgencyToUpdate) {
         Optional<Urgency> urgency = iUrgencyService.findById(id);
 
         if (urgency.isEmpty()) {
@@ -67,6 +67,6 @@ public class UrgencyController {
         urgencyToUpdate.setIdUrgency(urgency.get().getIdUrgency());
         iUrgencyService.save(urgencyToUpdate);
 
-        return new ResponseEntity<>(urgency.get(), HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

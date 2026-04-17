@@ -59,7 +59,7 @@ public class DirectorController {
     public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Director directorToUpdate) throws iDirectorService.DirectorNotFoundException {
         try {
             directorservice.update(directorToUpdate, id);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (iDirectorService.DirectorNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
