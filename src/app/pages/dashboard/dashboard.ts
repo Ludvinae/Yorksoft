@@ -8,9 +8,5 @@ import { Auth } from '../../services/auth';
   styleUrl: './dashboard.css',
 })
 export class Dashboard {
-  private auth = inject(Auth);
 
-  ngOnInit(): void {
-    this.auth.login();
-  }
 }
