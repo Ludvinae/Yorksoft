@@ -44,7 +44,7 @@ public class AppUserService implements iAppUserService {
             throw new iAppUserService.AppUserNotFoundException();
         }
 
-        appUserToUpdate.setIdAppUser(appUser.get().getIdAppUser());
+        appUserToUpdate.setIdAppUser(id);
 
         appUserDao.save(appUserToUpdate);
     }
