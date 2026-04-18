@@ -1,0 +1,12 @@
+<div>
+  <fieldset class="fieldset">
+    <span class="label">Logiciels</span>
+    <select class="select">
+      <option disabled selected>Choisir le logiciel</option>
+      @for (software of softwareSignal(); track software.idSoftware) {
+        <option>{{ software.name }}</option>
+      }
+    </select>
+
+  </fieldset>
+</div>

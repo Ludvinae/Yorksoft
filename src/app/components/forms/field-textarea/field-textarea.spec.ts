@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Home } from './home';
+import { FieldTextarea } from './field-textarea';
 
-describe('Home', () => {
-  let component: Home;
-  let fixture: ComponentFixture<Home>;
+describe('FieldTextarea', () => {
+  let component: FieldTextarea;
+  let fixture: ComponentFixture<FieldTextarea>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Home],
+      imports: [FieldTextarea],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(Home);
+    fixture = TestBed.createComponent(FieldTextarea);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

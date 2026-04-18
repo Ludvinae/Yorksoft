@@ -1,21 +1,27 @@
 import { Routes } from '@angular/router';
-import { Home } from './pages/home/home';
+import { Login } from './pages/login/login';
 import { NotFound } from './pages/not-found/not-found';
 import { Tickets } from './pages/tickets/tickets';
 import { Clients } from './pages/clients/clients';
 import { Knowledge } from './pages/knowledge/knowledge';
 import { Settings } from './pages/settings/settings';
+import { NewTicket } from './pages/new-ticket/new-ticket';
 
 export const routes: Routes = [
   {
     path: '',
-    component: Home,
-    title: 'Home',
+    component: Login,
+    title: 'Login',
   },
   {
     path: 'tickets',
     component: Tickets,
     title: 'Tickets',
+  },
+  {
+    path: 'new-ticket',
+    component: NewTicket,
+    title: 'Nouveau ticket'
   },
   {
     path: 'clients',

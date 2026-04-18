@@ -16,4 +16,5 @@ export class TicketService {
   getTickets(): Observable<TicketFullLatest[]> {
     return this.http.get<TicketFullLatest[]>(`${this.apiUrl}/list-full-latest`);
   }
+
 }
