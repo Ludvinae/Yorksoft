@@ -1,4 +1,6 @@
 <div class="window">
-  <h1>Menu</h1>
+  <ng-container>
+    <app-header [auth]="isAuthenticated()"></app-header>
+  </ng-container>
   <router-outlet></router-outlet>
 </div>

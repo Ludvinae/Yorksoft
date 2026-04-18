@@ -1,1 +1,8 @@
-<p>header works!</p>
+@if (auth) {
+  @if (isMobile()) {
+    <app-menu-mobile></app-menu-mobile>
+  } @else {
+    <app-menu-desktop></app-menu-desktop>
+  }
+}
+

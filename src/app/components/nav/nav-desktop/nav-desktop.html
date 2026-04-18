@@ -1,7 +1,71 @@
-<ul class="nav">
-  <li><a [routerLink]="'dashboard'">DASHBOARD</a> </li>
-  <li><a [routerLink]="'tickets'">TICKETS</a> </li>
-  <li><a [routerLink]="'clients'">CLIENTS</a> </li>
-  <li><a [routerLink]="'knowledge'">CONNAISSANCES</a> </li>
-  <li><a [routerLink]="'setttings'">REGLAGES</a> </li>
-</ul>
+
+<nav class="flex-1 p-4 space-y-1">
+
+  <!-- DASHBOARD -->
+  <a
+    routerLink="/dashboard"
+    routerLinkActive="text-primary-content"
+    class="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-base-300 transition relative"
+  >
+    <span>DASHBOARD</span>
+
+    <!-- Indicator (barre droite) -->
+    @if (isActive('/dashboard')) {
+      <span class="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-primary rounded-l"></span>
+    }
+  </a>
+
+  <!-- TICKETS -->
+  <a
+    routerLink="/tickets"
+    routerLinkActive="text-primary-content"
+    class="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-base-300 transition relative"
+  >
+    <span>TICKETS</span>
+
+    <!-- Indicator (barre droite) -->
+    @if (isActive('/tickets')) {
+      <span class="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-primary rounded-l"></span>
+    }
+  </a>
+
+  <!-- CLIENTS -->
+  <a
+    routerLink="/clients"
+    routerLinkActive="text-primary-content"
+    class="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-base-300 transition relative"
+  >
+    <span>CLIENTS</span>
+
+    @if (isActive('/clients')) {
+      <span class="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-primary rounded-l"></span>
+    }
+  </a>
+
+  <!-- CONNAISSANCES -->
+  <a
+    routerLink="/knowledge"
+    routerLinkActive="text-primary-content"
+    class="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-base-300 transition relative"
+  >
+    <span>CONNAISSANCES</span>
+
+    @if (isActive('/knowledge')) {
+      <span class="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-primary rounded-l"></span>
+    }
+  </a>
+
+  <!-- REGLAGES -->
+  <a
+    routerLink="/settings"
+    routerLinkActive="text-primary-content"
+    class="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-base-300 transition relative"
+  >
+    <span>RÉGLAGES</span>
+
+    @if (isActive('/settings')) {
+      <span class="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-primary rounded-l"></span>
+    }
+  </a>
+
+</nav>

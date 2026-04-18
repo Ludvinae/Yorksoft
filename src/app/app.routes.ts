@@ -6,12 +6,18 @@ import { Clients } from './pages/clients/clients';
 import { Knowledge } from './pages/knowledge/knowledge';
 import { Settings } from './pages/settings/settings';
 import { NewTicket } from './pages/new-ticket/new-ticket';
+import { Dashboard } from './pages/dashboard/dashboard';
 
 export const routes: Routes = [
   {
     path: '',
     component: Login,
     title: 'Login',
+  },
+  {
+    path: 'dashboard',
+    component: Dashboard,
+    title: 'Tableau de bord',
   },
   {
     path: 'tickets',

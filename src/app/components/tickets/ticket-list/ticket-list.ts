@@ -5,6 +5,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { map } from 'rxjs';
 import { TicketVueMobile } from '../ticket-vue-mobile/ticket-vue-mobile';
 import { Table } from '../ticket-vue-desktop/table';
+import { BreakpointSwitch } from '../../../services/breakpoint-switch';
 
 @Component({
   selector: 'app-ticket-list',
@@ -20,12 +21,9 @@ import { Table } from '../ticket-vue-desktop/table';
  */
 export class TicketList {
   private ticketService = inject(TicketService);
-  private breakpointObserver = inject(BreakpointObserver);
+  private breakpointObserver = inject(BreakpointSwitch);
 
   tickets = toSignal(this.ticketService.getTickets(), { initialValue: [] });
 
-  isMobile = toSignal(
-    this.breakpointObserver.observe([Breakpoints.Handset]).pipe(map((result) => result.matches)),
-    { initialValue: false },
-  );
+  isMobile = this.breakpointObserver.isMobile
 }
