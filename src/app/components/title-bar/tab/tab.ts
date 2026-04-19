@@ -22,12 +22,16 @@ export class Tab {
   nextTab() {
     if (this.currentIndex < this.tabs.length - 1) {
       this.currentIndex++;
+    } else {
+      this.currentIndex = 0;
     }
   }
 
   prevTab() {
     if (this.currentIndex > 0) {
       this.currentIndex--;
+    } else {
+      this.currentIndex = this.tabs.length - 1;
     }
   }
 }

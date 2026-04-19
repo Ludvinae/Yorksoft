@@ -1,10 +1,10 @@
 
 @if (isMobile()) {
   <ng-container>
-    <app-ticket-vue-mobile [ticketList]="tickets()"/>
+    <app-ticket-vue-mobile [ticketList]="ticketsFull()"/>
   </ng-container>
 } @else {
   <ng-container>
-    <app-ticket-vue-desktop [ticketList]="tickets()"/>
+    <app-ticket-vue-desktop [ticketList]="ticketsFull()"/>
   </ng-container>
 }

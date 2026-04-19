@@ -13,8 +13,21 @@ export class TicketService {
   private http = inject(HttpClient);
   private apiUrl = 'http://localhost:8080/ticket';
 
-  getTickets(): Observable<TicketFullLatest[]> {
+  getTicketsFull(): Observable<TicketFullLatest[]> {
     return this.http.get<TicketFullLatest[]>(`${this.apiUrl}/list-full-latest`);
+  }
+
+  getTicketsPriority(): Observable<TicketFullLatest[]> {
+    return this.http.get<TicketFullLatest[]>(`${this.apiUrl}/list-priority`);
+  }
+
+  getTicketsAssigned(): Observable<TicketFullLatest[]> {
+    return this.http.get<TicketFullLatest[]>(`${this.apiUrl}/list-assigned`);
+  }
+
+  getTickets(tab: string): Observable<TicketFullLatest[]> {
+
+    return this.http.get<TicketFullLatest[]>(`${this.apiUrl}/list-` + tab);
   }
 
 }

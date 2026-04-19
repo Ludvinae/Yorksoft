@@ -6,7 +6,7 @@
     <!-- Avatar carré -->
     <div class="avatar">
       <div class="w-8 h-8 rounded-lg">
-        <img src="https://ui-avatars.com/api/?name=Stephane+Martin" />
+        <img src="https://ui-avatars.com/api/?name=Stephane+Martin"  alt=""/>
       </div>
     </div>
 
@@ -42,10 +42,11 @@
     <!-- Burger -->
 
     <div class="flex justify-end">
-      <button class="btn btn-ghost btn-circle text-2xl" (click)="toggleMenu()">
+      <button (click)="toggleMenu.emit()" class="btn btn-ghost btn-circle text-2xl">
         ☰
       </button>
     </div>
+
 
     <!-- date -->
     <div class="mt-auto text-right pb-2">

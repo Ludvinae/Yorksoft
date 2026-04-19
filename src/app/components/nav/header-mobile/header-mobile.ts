@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, input, Output } from '@angular/core';
 import { DatePipe } from '@angular/common';
 
 @Component({
@@ -10,8 +10,8 @@ import { DatePipe } from '@angular/common';
 export class HeaderMobile {
   today = new Date();
 
-  toggleMenu() {
-    console.log('open sidebar mobile');
-    // ici tu peux ouvrir un drawer DaisyUI
-  }
+  @Output() toggleMenu = new EventEmitter<void>();
+
+  @Input() isOpen = false;
+
 }

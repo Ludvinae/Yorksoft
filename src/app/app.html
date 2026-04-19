@@ -1,16 +1,64 @@
-
 @if (isAuthenticated()) {
-  <div class="window flex" [class.flex-col]="isMobile()" [class.flex-row]="!isMobile()">
 
-    <app-header></app-header>
+  @if (isMobile()) {
 
-    <router-outlet></router-outlet>
+    <!-- 📱 MOBILE -->
+    <div class="drawer">
 
-  </div>
+      <input
+        id="drawer"
+        type="checkbox"
+        class="drawer-toggle"
+        [(ngModel)]="isDrawerOpen"
+      />
+
+      <!-- CONTENT -->
+      <div class="drawer-content flex flex-col h-screen">
+
+        <app-header-mobile
+          [isOpen]="isDrawerOpen"
+          (toggleMenu)="toggleDrawer()"
+        ></app-header-mobile>
+
+        <div class="flex-1 overflow-auto">
+          <router-outlet></router-outlet>
+        </div>
+
+      </div>
+
+      <!-- MENU MOBILE -->
+      <div class="drawer-side z-50">
+        <label for="drawer" class="drawer-overlay"></label>
+
+        <div class="w-72 min-h-full bg-base-200">
+          <app-nav-mobile (navigateEvent)="closeDrawer()"></app-nav-mobile>
+        </div>
+      </div>
+
+    </div>
+
+  } @else {
+
+    <!-- 💻 DESKTOP -->
+    <div class="flex h-screen">
+
+      <!-- TA SIDEBAR COMPLETE -->
+      <app-header-desktop class="w-72"></app-header-desktop>
+
+      <!-- CONTENT -->
+      <div class="flex-1 overflow-auto">
+        <router-outlet></router-outlet>
+      </div>
+
+    </div>
+
+  }
+
 } @else {
-  <div class="window">
 
+  <!-- 🔐 LOGIN -->
+  <div class="h-screen">
     <router-outlet></router-outlet>
-
   </div>
+
 }
