@@ -1,0 +1,22 @@
+<nav class="bg-neutral text-neutral-content">
+
+  <div class="flex items-center justify-between px-3 py-2">
+
+    <!-- LEFT arrow -->
+    <button class="btn btn-ghost btn-sm" (click)="prevTab()">
+      ←
+    </button>
+
+    <!-- Title -->
+    <span class="font-medium tracking-wide">
+      {{ currentTab.label }}
+    </span>
+
+    <!-- RIGHT arrow -->
+    <button class="btn btn-ghost btn-sm" (click)="nextTab()">
+      →
+    </button>
+
+  </div>
+
+</nav>

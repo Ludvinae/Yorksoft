@@ -15,5 +15,5 @@ export class Header {
 
   isMobile = this.breakpointObserver.isMobile;
 
-  @Input() auth!: boolean;
+
 }

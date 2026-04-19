@@ -1,1 +1,59 @@
-<p>menu-mobile works!</p>
+<header class="bg-base-200 border-b border-base-300 grid grid-cols-3 h-28">
+
+  <!-- LEFT (profil) -->
+  <div class="flex flex-col items-center justify-center gap-1 p-2 text-center">
+
+    <!-- Avatar carré -->
+    <div class="avatar">
+      <div class="w-8 h-8 rounded-lg">
+        <img src="https://ui-avatars.com/api/?name=Stephane+Martin" />
+      </div>
+    </div>
+
+    <!-- User info -->
+    <div class="leading-tight">
+      <p class="text-sm font-medium">Stéphane Martin</p>
+      <p class="text-xs text-base-content/60">Technicien N1</p>
+    </div>
+
+  </div>
+
+
+  <!-- CENTER (titre) -->
+  <div class="flex flex-col items-center relative">
+
+    <!-- nom entreprise -->
+    <h1 class="text-xl font-bold tracking-wide text-center pt-4">
+      YorkSoft
+    </h1>
+
+    <!-- notifications -->
+    <button class="btn btn-ghost btn-circle absolute bottom-4">
+      <span class="text-2xl">🔔</span>
+      <span class="absolute top-1 right-1 badge badge-error badge-xs"></span>
+    </button>
+
+  </div>
+
+
+  <!-- RIGHT -->
+  <div class="flex flex-col p-2">
+
+    <!-- Burger -->
+
+    <div class="flex justify-end">
+      <button class="btn btn-ghost btn-circle text-2xl" (click)="toggleMenu()">
+        ☰
+      </button>
+    </div>
+
+    <!-- date -->
+    <div class="mt-auto text-right pb-2">
+      <p class="text-xs text-base-content/60">
+        {{ today | date:'EEEE d MMMM yyyy' }}
+      </p>
+    </div>
+
+  </div>
+
+</header>
