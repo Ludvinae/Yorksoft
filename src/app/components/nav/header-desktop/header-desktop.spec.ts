@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MenuDesktop } from './menu-desktop';
+import { HeaderDesktop } from './header-desktop';
 
-describe('MenuDesktop', () => {
-  let component: MenuDesktop;
-  let fixture: ComponentFixture<MenuDesktop>;
+describe('HeaderDesktop', () => {
+  let component: HeaderDesktop;
+  let fixture: ComponentFixture<HeaderDesktop>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MenuDesktop],
+      imports: [HeaderDesktop],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(MenuDesktop);
+    fixture = TestBed.createComponent(HeaderDesktop);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

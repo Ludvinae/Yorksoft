@@ -2,12 +2,12 @@ import { Component } from '@angular/core';
 import { DatePipe } from '@angular/common';
 
 @Component({
-  selector: 'app-menu-mobile',
+  selector: 'app-header-mobile',
   imports: [DatePipe],
-  templateUrl: './menu-mobile.html',
-  styleUrl: './menu-mobile.css',
+  templateUrl: './header-mobile.html',
+  styleUrl: './header-mobile.css',
 })
-export class MenuMobile {
+export class HeaderMobile {
   today = new Date();
 
   toggleMenu() {

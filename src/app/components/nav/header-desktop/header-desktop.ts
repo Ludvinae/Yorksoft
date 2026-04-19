@@ -4,12 +4,12 @@ import { Router } from '@angular/router';
 import { Auth } from '../../../services/auth';
 
 @Component({
-  selector: 'app-menu-desktop',
+  selector: 'app-header-desktop',
   imports: [NavDesktop],
-  templateUrl: './menu-desktop.html',
-  styleUrl: './menu-desktop.css',
+  templateUrl: './header-desktop.html',
+  styleUrl: './header-desktop.css',
 })
-export class MenuDesktop {
+export class HeaderDesktop {
   private auth = inject(Auth);
 
   constructor(protected router: Router) {}
