@@ -1,8 +1,13 @@
 package com.mns.cda.suivimns.service;
 
 import com.mns.cda.suivimns.dao.SoftwareDao;
+import com.mns.cda.suivimns.dao.SoftwareTypeDao;
+import com.mns.cda.suivimns.dto.SoftwareDto;
+import com.mns.cda.suivimns.model.Client;
 import com.mns.cda.suivimns.model.Software;
+import com.mns.cda.suivimns.model.SoftwareType;
 import com.mns.cda.suivimns.service.inter.iSoftwareService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +19,7 @@ import java.util.Optional;
 public class SoftwareService implements iSoftwareService {
 
     protected final SoftwareDao softwareDao;
+    protected final SoftwareTypeDao softwareTypeDao;
 
     @Override
     public List<Software> findAll() {
@@ -27,6 +33,7 @@ public class SoftwareService implements iSoftwareService {
 
     @Override
     public void save(Software software) {
+
         software.setIdSoftware(null);
         softwareDao.save(software);
     }
@@ -47,5 +54,17 @@ public class SoftwareService implements iSoftwareService {
         softwareToUpdate.setIdSoftware(software.get().getIdSoftware());
 
         softwareDao.save(softwareToUpdate);
+    }
+
+    @Transactional
+    @Override
+    public Software createSoftware(SoftwareDto softwareToCreate) {
+        Software software = new Software();
+        software.setName(softwareToCreate.name());
+        software.setDescription(softwareToCreate.description());
+
+        software.setType(softwareToCreate.type());
+
+        return softwareDao.save(software);
     }
 }

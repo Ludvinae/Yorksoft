@@ -1,9 +1,11 @@
 package com.mns.cda.suivimns.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.mns.cda.suivimns.model.Version;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
 import com.mns.cda.suivimns.service.inter.iVersionService;
+import com.mns.cda.suivimns.view.SoftwareView;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,11 +24,13 @@ public class VersionController {
     protected final iVersionService iVersionService;
 
     @GetMapping("/list")
+    @JsonView(SoftwareView.class)
     public List<Version> findAll() {
         return iVersionService.findAll();
     }
 
     @GetMapping("/{id}")
+    @JsonView(SoftwareView.class)
     public ResponseEntity<Version> findById(@PathVariable Integer id) {
 
         Optional<Version> version = iVersionService.findById(id);

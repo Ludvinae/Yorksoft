@@ -1,6 +1,7 @@
 package com.mns.cda.suivimns.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.mns.cda.suivimns.dto.SoftwareDto;
 import com.mns.cda.suivimns.model.Software;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
@@ -57,11 +58,11 @@ public class SoftwareController {
     }
 
     @PostMapping
-    public ResponseEntity<Software> create(@RequestBody @Validated(OnCreate.class) Software software) {
-        software.setIdSoftware(null);
-        iSoftwareService.save(software);
+    public ResponseEntity<Software> create(@RequestBody @Validated(OnCreate.class) SoftwareDto software) {
 
-        return new ResponseEntity<>(software, HttpStatus.CREATED);
+        Software savedSoftware = iSoftwareService.createSoftware(software);
+
+        return new ResponseEntity<>(savedSoftware, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
