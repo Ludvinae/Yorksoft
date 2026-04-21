@@ -18,8 +18,8 @@ public class MockSoftwareTypeService implements iSoftwareTypeService {
     }
 
     @Override
-    public void save(SoftwareType softwareType) {
-
+    public SoftwareType save(SoftwareType softwareType) {
+        return null;
     }
 
     @Override

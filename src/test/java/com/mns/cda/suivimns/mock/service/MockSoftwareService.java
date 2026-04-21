@@ -29,8 +29,8 @@ public class MockSoftwareService implements iSoftwareService {
     }
 
     @Override
-    public void save(Software software) {
-
+    public Software save(Software software) {
+        return null;
     }
 
     @Override

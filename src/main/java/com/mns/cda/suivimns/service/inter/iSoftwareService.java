@@ -13,7 +13,7 @@ public interface iSoftwareService {
 
     Optional<Software> findById(int id);
 
-    void save(Software software);
+    Software save(Software software);
 
     void delete(Software software);
 

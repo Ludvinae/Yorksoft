@@ -39,10 +39,9 @@ public class ThemeController {
 
     @PostMapping
     public ResponseEntity<Theme> create(@RequestBody @Validated(OnCreate.class) Theme theme) {
-        theme.setIdTheme(null);
-        themeService.save(theme);
+        Theme themeSaved = themeService.save(theme);
 
-        return new ResponseEntity<>(theme, HttpStatus.CREATED);
+        return new ResponseEntity<>(themeSaved, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")

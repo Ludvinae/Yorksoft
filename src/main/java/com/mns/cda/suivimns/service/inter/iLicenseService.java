@@ -10,7 +10,7 @@ public interface iLicenseService {
 
     Optional<License> findById(int id);
 
-    void save(License license);
+    License save(License license);
 
     void delete(License license);
 

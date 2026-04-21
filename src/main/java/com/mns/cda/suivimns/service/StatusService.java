@@ -31,9 +31,9 @@ public class StatusService implements iStatusService {
     }
 
     @Override
-    public void save(Status status) {
+    public Status save(Status status) {
         status.setIdStatus(null);
-        statusDao.save(status);
+        return statusDao.save(status);
     }
 
     @Override

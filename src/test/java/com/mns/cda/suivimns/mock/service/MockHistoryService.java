@@ -20,8 +20,8 @@ public class MockHistoryService implements iHistoryService {
     }
 
     @Override
-    public void save(History history) {
-
+    public History save(History history) {
+        return null;
     }
 
     @Override

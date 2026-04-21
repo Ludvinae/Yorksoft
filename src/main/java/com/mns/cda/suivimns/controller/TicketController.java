@@ -60,8 +60,7 @@ public class TicketController {
 
         Ticket ticket = ticketService.createTicket(ticketCreated);
 
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ticketService.responseToDto(ticket));
+        return new ResponseEntity<>(ticketService.responseToDto(ticket), HttpStatus.CREATED);
     }
 
 

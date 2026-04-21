@@ -23,8 +23,8 @@ public class MockStatusService implements iStatusService {
     }
 
     @Override
-    public void save(Status status) {
-
+    public Status save(Status status) {
+        return null;
     }
 
     @Override

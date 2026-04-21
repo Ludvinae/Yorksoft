@@ -26,9 +26,9 @@ public class ManagerService implements iManagerService {
     }
 
     @Override
-    public void save(Manager manager) {
+    public Manager save(Manager manager) {
         manager.setIdAppUser(null);
-        managerDao.save(manager);
+        return managerDao.save(manager);
     }
 
     @Override

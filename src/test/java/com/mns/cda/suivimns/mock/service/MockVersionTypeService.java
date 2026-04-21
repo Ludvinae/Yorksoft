@@ -19,8 +19,8 @@ public class MockVersionTypeService implements iVersionTypeService {
     }
 
     @Override
-    public void save(VersionType versionType) {
-
+    public VersionType save(VersionType versionType) {
+        return null;
     }
 
     @Override

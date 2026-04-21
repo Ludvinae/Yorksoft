@@ -39,9 +39,9 @@ public class DirectorController {
 
     @PostMapping
     public ResponseEntity<Director> create(@RequestBody @Validated(OnCreate.class) Director director) {
-        directorService.save(director);
+        Director directorSaved = directorService.save(director);
 
-        return new ResponseEntity<>(director, HttpStatus.CREATED);
+        return new ResponseEntity<>(directorSaved, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")

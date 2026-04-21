@@ -26,9 +26,9 @@ public class ImpactService implements iImpactService {
     }
 
     @Override
-    public void save(Impact impact) {
+    public Impact save(Impact impact) {
         impact.setIdImpact(null);
-        impactDao.save(impact);
+        return impactDao.save(impact);
     }
 
     @Override

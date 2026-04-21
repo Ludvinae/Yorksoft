@@ -10,7 +10,7 @@ public interface iSoftwareTypeService {
 
     Optional<SoftwareType> findById(int id);
 
-    void save(SoftwareType softwareType);
+    SoftwareType save(SoftwareType softwareType);
 
     void delete(SoftwareType softwareType);
 

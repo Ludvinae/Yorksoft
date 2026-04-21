@@ -39,10 +39,9 @@ public class KnowledgeController {
 
     @PostMapping
     public ResponseEntity<Knowledge> create(@RequestBody @Validated(OnCreate.class) Knowledge knowledge) {
-        knowledge.setIdKnowledge(null);
-        knowledgeService.save(knowledge);
+        Knowledge knowledgeSaved = knowledgeService.save(knowledge);
 
-        return new ResponseEntity<>(knowledge, HttpStatus.CREATED);
+        return new ResponseEntity<>(knowledgeSaved, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")

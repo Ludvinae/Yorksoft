@@ -10,7 +10,7 @@ public interface iDirectorService {
 
     Optional<Director> findById(int id);
 
-    void save(Director director);
+    Director save(Director director);
 
     void delete(Director director);
 

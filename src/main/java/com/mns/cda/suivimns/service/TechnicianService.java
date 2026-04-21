@@ -26,9 +26,9 @@ public class TechnicianService implements iTechnicianService {
     }
 
     @Override
-    public void save(Technician technician) {
+    public Technician save(Technician technician) {
         technician.setIdAppUser(null);
-        technicianDao.save(technician);
+        return technicianDao.save(technician);
     }
 
     @Override

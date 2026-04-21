@@ -18,8 +18,8 @@ public class MockImpactService implements iImpactService {
     }
 
     @Override
-    public void save(Impact impact) {
-
+    public Impact save(Impact impact) {
+        return null;
     }
 
     @Override

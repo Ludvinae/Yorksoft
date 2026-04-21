@@ -52,12 +52,12 @@ public class TicketService implements iTicketService {
     }
 
     @Override
-    public void save(Ticket ticket) {
+    public Ticket save(Ticket ticket) {
         ticket.setIdTicket(null);
         ticket.setFinalPriority(ticket.getInitialPriority());
         ticket.setOpenDate(null);
         ticket.setModificationDate(null);
-        ticketDao.save(ticket);
+        return ticketDao.save(ticket);
     }
 
     @Override

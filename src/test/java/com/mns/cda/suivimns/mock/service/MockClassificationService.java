@@ -19,8 +19,8 @@ public class MockClassificationService implements iClassificationService {
     }
 
     @Override
-    public void save(Classification classification) {
-
+    public Classification save(Classification classification) {
+        return null;
     }
 
     @Override

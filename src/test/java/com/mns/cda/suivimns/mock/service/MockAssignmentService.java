@@ -23,8 +23,8 @@ public class MockAssignmentService implements iAssignmentService {
     }
 
     @Override
-    public void firstSave(Assignment assignment) {
-
+    public Assignment firstSave(Assignment assignment) {
+        return null;
     }
 
     @Override

@@ -23,8 +23,8 @@ public class MockThemeService implements iThemeService {
     }
 
     @Override
-    public void save(Theme theme) {
-
+    public Theme save(Theme theme) {
+        return null;
     }
 
     @Override

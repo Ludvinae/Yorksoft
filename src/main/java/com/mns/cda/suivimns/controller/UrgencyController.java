@@ -39,10 +39,9 @@ public class UrgencyController {
 
     @PostMapping
     public ResponseEntity<Urgency> create(@RequestBody @Validated(OnCreate.class) Urgency urgency) {
-        urgency.setIdUrgency(null);
-        urgencyService.save(urgency);
+        Urgency urgencySaved = urgencyService.save(urgency);
 
-        return new ResponseEntity<>(urgency, HttpStatus.CREATED);
+        return new ResponseEntity<>(urgencySaved, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")

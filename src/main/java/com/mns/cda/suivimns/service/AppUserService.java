@@ -26,9 +26,9 @@ public class AppUserService implements iAppUserService {
     }
 
     @Override
-    public void save(AppUser appUser) {
+    public AppUser save(AppUser appUser) {
         appUser.setIdAppUser(null);
-        appUserDao.save(appUser);
+        return appUserDao.save(appUser);
     }
 
     @Override

@@ -10,7 +10,7 @@ public interface iArticleService {
 
     Optional<Article> findById(int id);
 
-    void save(Article article);
+    Article save(Article article);
 
     void delete(Article article);
 

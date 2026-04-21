@@ -55,9 +55,9 @@ public class ArticleController {
     @PostMapping
     public ResponseEntity<Article> create(@RequestBody @Validated(OnCreate.class) Article article) {
 
-        articleService.save(article);
+        Article articleSaved = articleService.save(article);
 
-        return new ResponseEntity<>(article, HttpStatus.CREATED);
+        return new ResponseEntity<>(articleSaved, HttpStatus.CREATED);
     }
 
     @Operation(summary = "Supprimer un article")

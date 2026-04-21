@@ -58,10 +58,10 @@ public class AssignmentController {
     @PostMapping
     public ResponseEntity<Assignment> create(@RequestBody @Valid Assignment assignment) {
 
-        assignmentService.firstSave(assignment);
+        Assignment assignmentSaved = assignmentService.firstSave(assignment);
 
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(assignment);
+        return new ResponseEntity<>(assignmentSaved, HttpStatus.CREATED);
+
     }
 
     @Operation(summary = "Supprimer une affectation")

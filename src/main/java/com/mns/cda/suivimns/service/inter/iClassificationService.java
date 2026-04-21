@@ -11,7 +11,7 @@ public interface iClassificationService {
 
     Optional<Classification> findById(int id);
 
-    void save(Classification classification);
+    Classification save(Classification classification);
 
     void delete(Classification classification);
 

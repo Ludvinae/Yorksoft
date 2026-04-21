@@ -39,9 +39,9 @@ public class LicenseController {
 
     @PostMapping
     public ResponseEntity<License> create(@RequestBody @Validated(OnCreate.class) License license) {
-        licenseService.save(license);
+        License licenseSaved = licenseService.save(license);
 
-        return new ResponseEntity<>(license, HttpStatus.CREATED);
+        return new ResponseEntity<>(licenseSaved, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")

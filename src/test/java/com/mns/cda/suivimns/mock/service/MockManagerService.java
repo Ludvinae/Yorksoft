@@ -19,8 +19,8 @@ public class MockManagerService implements iManagerService {
     }
 
     @Override
-    public void save(Manager manager) {
-
+    public Manager save(Manager manager) {
+        return null;
     }
 
     @Override

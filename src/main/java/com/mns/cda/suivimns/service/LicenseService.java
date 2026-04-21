@@ -26,9 +26,9 @@ public class LicenseService implements iLicenseService {
     }
 
     @Override
-    public void save(License license) {
+    public License save(License license) {
         license.setIdLicense(null);
-        licenseDao.save(license);
+        return licenseDao.save(license);
     }
 
     @Override

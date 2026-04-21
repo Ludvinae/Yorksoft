@@ -10,7 +10,7 @@ public interface iManagerService {
 
     Optional<Manager> findById(int id);
 
-    void save(Manager manager);
+    Manager save(Manager manager);
 
     void delete(Manager manager);
 

@@ -42,9 +42,9 @@ public class ManagerController {
 
     @PostMapping
     public ResponseEntity<Manager> create(@RequestBody @Validated(OnCreate.class) Manager manager) {
-        managerService.save(manager);
+        Manager managerSaved = managerService.save(manager);
 
-        return new ResponseEntity<>(manager, HttpStatus.CREATED);
+        return new ResponseEntity<>(managerSaved, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")

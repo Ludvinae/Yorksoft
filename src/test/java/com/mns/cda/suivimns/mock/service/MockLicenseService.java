@@ -18,8 +18,8 @@ public class MockLicenseService implements iLicenseService {
     }
 
     @Override
-    public void save(License license) {
-
+    public License save(License license) {
+        return null;
     }
 
     @Override

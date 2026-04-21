@@ -42,9 +42,9 @@ public class TechnicianController {
 
     @PostMapping
     public ResponseEntity<Technician> create(@RequestBody @Validated(OnCreate.class) Technician technician) {
-        technicianService.save(technician);
+        Technician technicianSaved = technicianService.save(technician);
 
-        return new ResponseEntity<>(technician, HttpStatus.CREATED);
+        return new ResponseEntity<>(technicianSaved, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")

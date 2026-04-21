@@ -12,7 +12,7 @@ public interface iThemeService {
 
     Optional<Theme> findByDesignation(String designation);
 
-    void save(Theme theme);
+    Theme save(Theme theme);
 
     void delete(Theme theme);
 

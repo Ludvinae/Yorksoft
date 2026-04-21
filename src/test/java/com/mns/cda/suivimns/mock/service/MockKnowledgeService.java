@@ -18,8 +18,8 @@ public class MockKnowledgeService implements iKnowledgeService {
     }
 
     @Override
-    public void save(Knowledge knowledge) {
-
+    public Knowledge save(Knowledge knowledge) {
+        return null;
     }
 
     @Override

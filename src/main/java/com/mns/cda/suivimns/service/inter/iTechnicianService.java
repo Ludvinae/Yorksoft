@@ -10,7 +10,7 @@ public interface iTechnicianService {
 
     Optional<Technician> findById(int id);
 
-    void save(Technician technician);
+    Technician save(Technician technician);
 
     void delete(Technician technician);
 

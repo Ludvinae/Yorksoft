@@ -26,9 +26,9 @@ public class DirectorService implements iDirectorService {
     }
 
     @Override
-    public void save(Director director) {
+    public Director save(Director director) {
         director.setIdAppUser(null);
-        directorDao.save(director);
+        return directorDao.save(director);
     }
 
     @Override

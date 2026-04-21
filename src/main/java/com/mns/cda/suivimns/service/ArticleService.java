@@ -27,12 +27,12 @@ public class ArticleService implements iArticleService {
     }
 
     @Override
-    public void save(Article article) {
+    public Article save(Article article) {
         article.setIdArticle(null);
         article.setModificationDate(null);
         article.setCreationDate(LocalDateTime.now());
 
-        articleDao.save(article);
+        return articleDao.save(article);
     }
 
     @Override

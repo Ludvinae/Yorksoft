@@ -39,10 +39,9 @@ public class StatusController {
 
     @PostMapping
     public ResponseEntity<Status> create(@RequestBody @Validated(OnCreate.class) Status status) {
-        status.setIdStatus(null);
-        statusService.save(status);
+        Status statusSaved = statusService.save(status);
 
-        return new ResponseEntity<>(status, HttpStatus.CREATED);
+        return new ResponseEntity<>(statusSaved, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")

@@ -39,10 +39,9 @@ public class ImpactController {
 
     @PostMapping
     public ResponseEntity<Impact> create(@RequestBody @Validated(OnCreate.class) Impact impact) {
-        impact.setIdImpact(null);
-        impactService.save(impact);
+        Impact impactSaved = impactService.save(impact);
 
-        return new ResponseEntity<>(impact, HttpStatus.CREATED);
+        return new ResponseEntity<>(impactSaved, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")

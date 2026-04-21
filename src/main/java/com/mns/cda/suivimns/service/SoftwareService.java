@@ -32,10 +32,10 @@ public class SoftwareService implements iSoftwareService {
     }
 
     @Override
-    public void save(Software software) {
+    public Software save(Software software) {
 
         software.setIdSoftware(null);
-        softwareDao.save(software);
+        return softwareDao.save(software);
     }
 
     @Override

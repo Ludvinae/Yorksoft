@@ -54,9 +54,9 @@ public class ClassificationController {
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PostMapping
     public ResponseEntity<Classification> create(@RequestBody @Validated(OnCreate.class) Classification classification) {
-        classificationService.save(classification);
+        Classification classificationSaved = classificationService.save(classification);
 
-        return new ResponseEntity<>(classification, HttpStatus.CREATED);
+        return new ResponseEntity<>(classificationSaved, HttpStatus.CREATED);
     }
 
 

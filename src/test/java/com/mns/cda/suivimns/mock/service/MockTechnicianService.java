@@ -18,8 +18,8 @@ public class MockTechnicianService implements iTechnicianService {
     }
 
     @Override
-    public void save(Technician technician) {
-
+    public Technician save(Technician technician) {
+        return null;
     }
 
     @Override

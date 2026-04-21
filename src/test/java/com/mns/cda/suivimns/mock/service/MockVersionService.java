@@ -18,8 +18,8 @@ public class MockVersionService implements iVersionService {
     }
 
     @Override
-    public void save(Version version) {
-
+    public Version save(Version version) {
+        return null;
     }
 
     @Override

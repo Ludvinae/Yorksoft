@@ -18,7 +18,7 @@ public interface iTicketService {
 
     List<TicketFullWithLatest> getTicketFullWithLatestByTechnician(int id);
 
-    void save(Ticket ticket);
+    Ticket save(Ticket ticket);
 
     void delete(Ticket ticket);
 

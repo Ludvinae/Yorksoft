@@ -26,9 +26,9 @@ public class SoftwareTypeService implements iSoftwareTypeService {
     }
 
     @Override
-    public void save(SoftwareType softwareType) {
+    public SoftwareType save(SoftwareType softwareType) {
         softwareType.setIdSoftwareType(null);
-        softwareTypeDao.save(softwareType);
+        return softwareTypeDao.save(softwareType);
     }
 
     @Override

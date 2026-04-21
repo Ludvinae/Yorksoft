@@ -39,10 +39,9 @@ public class HistoryController {
 
     @PostMapping
     public ResponseEntity<History> create(@RequestBody @Validated(OnCreate.class) History history) {
-        history.setIdHistory(null);
-        historyService.save(history);
+        History historySaved = historyService.save(history);
 
-        return new ResponseEntity<>(history, HttpStatus.CREATED);
+        return new ResponseEntity<>(historySaved, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")

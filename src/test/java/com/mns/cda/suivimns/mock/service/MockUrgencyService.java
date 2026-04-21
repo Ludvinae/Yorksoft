@@ -18,8 +18,8 @@ public class MockUrgencyService implements iUrgencyService {
     }
 
     @Override
-    public void save(Urgency urgency) {
-
+    public Urgency save(Urgency urgency) {
+        return null;
     }
 
     @Override

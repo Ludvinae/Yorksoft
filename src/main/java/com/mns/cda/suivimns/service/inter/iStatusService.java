@@ -12,7 +12,7 @@ public interface iStatusService {
 
     Optional<Status> findByDesignation(String designation);
 
-    void save(Status status);
+    Status save(Status status);
 
     void delete(Status status);
 

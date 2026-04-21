@@ -10,7 +10,7 @@ public interface iUrgencyService {
 
     Optional<Urgency> findById(int id);
 
-    void save(Urgency urgency);
+    Urgency save(Urgency urgency);
 
     void delete(Urgency urgency);
 

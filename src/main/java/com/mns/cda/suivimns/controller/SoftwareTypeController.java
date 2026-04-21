@@ -40,10 +40,9 @@ public class SoftwareTypeController {
     @PostMapping
     public ResponseEntity<SoftwareType> create(@RequestBody @Validated(OnCreate.class) SoftwareType typeToInsert) {
 
-        typeToInsert.setIdSoftwareType(null);
-        softwareTypeService.save(typeToInsert);
+        SoftwareType typeSaved = softwareTypeService.save(typeToInsert);
 
-        return new ResponseEntity<>(typeToInsert, HttpStatus.CREATED);
+        return new ResponseEntity<>(typeSaved, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")

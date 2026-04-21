@@ -26,9 +26,9 @@ public class VersionTypeService implements iVersionTypeService {
     }
 
     @Override
-    public void save(VersionType versionType) {
+    public VersionType save(VersionType versionType) {
         versionType.setIdVersionType(null);
-        versionTypeDao.save(versionType);
+        return versionTypeDao.save(versionType);
     }
 
     @Override

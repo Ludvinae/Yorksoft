@@ -18,9 +18,10 @@ public class MockAppUserService implements iAppUserService {
     }
 
     @Override
-    public void save(AppUser appUser) {
-
+    public AppUser save(AppUser appUser) {
+        return null;
     }
+
 
     @Override
     public void delete(AppUser appUser) {

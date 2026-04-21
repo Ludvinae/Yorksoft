@@ -10,7 +10,7 @@ public interface iKnowledgeService {
 
     Optional<Knowledge> findById(int id);
 
-    void save(Knowledge knowledge);
+    Knowledge save(Knowledge knowledge);
 
     void delete(Knowledge knowledge);
 

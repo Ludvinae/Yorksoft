@@ -18,8 +18,8 @@ public class MockDirectorService implements iDirectorService {
     }
 
     @Override
-    public void save(Director director) {
-
+    public Director save(Director director) {
+        return null;
     }
 
     @Override

@@ -42,11 +42,9 @@ public class VersionController {
 
     @PostMapping
     public ResponseEntity<Version> create(@RequestBody @Validated(OnCreate.class) Version version) {
+        Version versionSaved = versionService.save(version);
 
-        version.setIdVersion(null);
-
-        versionService.save(version);
-        return new ResponseEntity<>(version, HttpStatus.CREATED);
+        return new ResponseEntity<>(versionSaved, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")

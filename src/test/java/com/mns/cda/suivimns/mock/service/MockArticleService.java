@@ -18,8 +18,8 @@ public class MockArticleService implements iArticleService {
     }
 
     @Override
-    public void save(Article article) {
-
+    public Article save(Article article) {
+        return null;
     }
 
     @Override

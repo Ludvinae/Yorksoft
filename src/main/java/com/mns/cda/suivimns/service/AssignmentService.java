@@ -36,10 +36,10 @@ public class AssignmentService implements iAssignmentService {
     }
 
     @Override
-    public void firstSave(Assignment assignment) {
+    public Assignment firstSave(Assignment assignment) {
         assignment.setIdAssignment(null);
         assignment.setAssignmentDate(LocalDateTime.now());
-        assignmentDao.save(assignment);
+        return assignmentDao.save(assignment);
     }
 
 

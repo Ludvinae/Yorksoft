@@ -31,9 +31,9 @@ public class ThemeService implements iThemeService {
     }
 
     @Override
-    public void save(Theme theme) {
+    public Theme save(Theme theme) {
         theme.setIdTheme(null);
-        themeDao.save(theme);
+        return themeDao.save(theme);
     }
 
     @Override

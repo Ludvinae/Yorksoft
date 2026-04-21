@@ -12,7 +12,7 @@ public interface iAssignmentService {
 
     void modify(Assignment assignment, int id);
 
-    void firstSave(Assignment assignment);
+    Assignment firstSave(Assignment assignment);
 
     void close(Assignment assignment, int id);
 

@@ -26,14 +26,14 @@ import java.util.Optional;
 @CrossOrigin
 public class AppUserController {
 
-    protected final iAppUserService appUserservice;
+    protected final iAppUserService appUserService;
 
     @Operation(summary = "Lister tous les utilisateurs")
     @ApiResponse(responseCode = "200", description = "Liste récupérée avec succès")
     @GetMapping("/list")
     @JsonView(TicketView.class)
     public List<AppUser> getAll() {
-        return appUserservice.findAll();
+        return appUserService.findAll();
     }
 
     @Operation(summary = "Récupérer un utilisateur par ID")
@@ -42,7 +42,7 @@ public class AppUserController {
     @GetMapping("/{id}")
     public ResponseEntity<AppUser> getById(@PathVariable int id) {
 
-        Optional<AppUser> user = appUserservice.findById(id);
+        Optional<AppUser> user = appUserService.findById(id);
         if (user.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -56,9 +56,9 @@ public class AppUserController {
                    @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PostMapping
     public ResponseEntity<AppUser> create(@RequestBody @Validated(OnCreate.class) AppUser user) {
-        appUserservice.save(user);
+        AppUser userSaved = appUserService.save(user);
 
-        return new ResponseEntity<>(user, HttpStatus.CREATED);
+        return new ResponseEntity<>(userSaved, HttpStatus.CREATED);
     }
 
     @Operation(summary = "Supprimer un utilisateur")
@@ -67,12 +67,12 @@ public class AppUserController {
             @ApiResponse(responseCode = "404", description = "Utilisateur non trouvé")})
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
-        Optional<AppUser> user = appUserservice.findById(id);
+        Optional<AppUser> user = appUserService.findById(id);
         if (user.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        appUserservice.delete(user.get());
+        appUserService.delete(user.get());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -84,7 +84,7 @@ public class AppUserController {
     @PutMapping("/{id}")
     public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) AppUser userToUpdate) {
         try {
-            appUserservice.update(userToUpdate, id);
+            appUserService.update(userToUpdate, id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (iAppUserService.AppUserNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

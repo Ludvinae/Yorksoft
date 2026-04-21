@@ -26,9 +26,9 @@ public class UrgencyService implements iUrgencyService {
     }
 
     @Override
-    public void save(Urgency urgency) {
+    public Urgency save(Urgency urgency) {
         urgency.setIdUrgency(null);
-        urgencyDao.save(urgency);
+        return urgencyDao.save(urgency);
     }
 
     @Override

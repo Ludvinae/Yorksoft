@@ -26,9 +26,9 @@ public class KnowledgeService implements iKnowledgeService {
     }
 
     @Override
-    public void save(Knowledge knowledge) {
+    public Knowledge save(Knowledge knowledge) {
         knowledge.setIdKnowledge(null);
-        knowledgeDao.save(knowledge);
+        return knowledgeDao.save(knowledge);
     }
 
     @Override

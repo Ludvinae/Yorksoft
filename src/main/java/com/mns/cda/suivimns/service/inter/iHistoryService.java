@@ -12,7 +12,7 @@ public interface iHistoryService {
 
     Optional<History> findById(int id);
 
-    void save(History history);
+    History save(History history);
 
     void delete(History history);
 

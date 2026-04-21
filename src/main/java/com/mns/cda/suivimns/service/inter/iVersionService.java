@@ -10,7 +10,7 @@ public interface iVersionService {
 
     Optional<Version> findById(int id);
 
-    void save(Version version);
+    Version save(Version version);
 
     void delete(Version version);
 

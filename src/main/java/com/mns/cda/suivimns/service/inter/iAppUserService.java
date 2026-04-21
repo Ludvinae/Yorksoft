@@ -10,7 +10,7 @@ public interface iAppUserService {
 
     Optional<AppUser> findById(int id);
 
-    void save(AppUser appUser);
+    AppUser save(AppUser appUser);
 
     void delete(AppUser appUser);
 

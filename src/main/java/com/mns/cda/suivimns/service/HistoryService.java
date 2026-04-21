@@ -32,9 +32,9 @@ public class HistoryService implements iHistoryService {
     }
 
     @Override
-    public void save(History history) {
+    public History save(History history) {
         history.setIdHistory(null);
-        historyDao.save(history);
+        return historyDao.save(history);
     }
 
     @Override

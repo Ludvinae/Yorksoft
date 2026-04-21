@@ -10,7 +10,7 @@ public interface iImpactService {
 
     Optional<Impact> findById(int id);
 
-    void save(Impact impact);
+    Impact save(Impact impact);
 
     void delete(Impact impact);
 
