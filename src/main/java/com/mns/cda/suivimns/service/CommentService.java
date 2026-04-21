@@ -4,6 +4,8 @@ import com.mns.cda.suivimns.dao.CommentDao;
 import com.mns.cda.suivimns.model.Comment;
 import com.mns.cda.suivimns.service.inter.iCommentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -40,15 +42,13 @@ public class CommentService implements iCommentService {
     }
 
     @Override
-    public void update(Comment commentToUpdate, int id) throws iCommentService.CommentNotFoundException {
-        Optional<Comment> comment = commentDao.findById(id);
+    public Comment update(Comment commentToUpdate, int id) throws iCommentService.CommentNotFoundException {
+        Comment currentComment = commentDao.findById(id)
+                .orElseThrow(iCommentService.CommentNotFoundException::new);
 
-        if (comment.isEmpty()) {
-            throw new iCommentService.CommentNotFoundException();
-        }
+        // Modification des champs qui sont authorisés a changer
+        currentComment.setContent(commentToUpdate.getContent());
 
-        commentToUpdate.setIdComment(comment.get().getIdComment());
-
-        commentDao.save(commentToUpdate);
+        return commentDao.save(currentComment);
     }
 }

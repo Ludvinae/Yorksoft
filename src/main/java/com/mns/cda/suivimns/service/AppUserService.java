@@ -1,12 +1,15 @@
 package com.mns.cda.suivimns.service;
 
 import com.mns.cda.suivimns.dao.AppUserDao;
+import com.mns.cda.suivimns.dto.AppUserDto;
+import com.mns.cda.suivimns.dto.PasswordDto;
 import com.mns.cda.suivimns.model.AppUser;
 import com.mns.cda.suivimns.service.inter.iAppUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -37,15 +40,46 @@ public class AppUserService implements iAppUserService {
     }
 
     @Override
-    public void update(AppUser appUserToUpdate, int id) throws iAppUserService.AppUserNotFoundException {
-        Optional<AppUser> appUser = appUserDao.findById(id);
+    public void update(AppUserDto dto, int id)
+            throws AppUserNotFoundException {
 
-        if (appUser.isEmpty()) {
-            throw new iAppUserService.AppUserNotFoundException();
+        AppUser user = appUserDao.findById(id)
+                .orElseThrow(AppUserNotFoundException::new);
+
+        if (dto.firstName() != null) {
+            user.setFirstName(dto.firstName());
         }
 
-        appUserToUpdate.setIdAppUser(id);
+        if (dto.lastName() != null) {
+            user.setLastName(dto.lastName());
+        }
 
-        appUserDao.save(appUserToUpdate);
+        if (dto.email() != null) {
+            // 🔥 idéalement vérifier unicité ici
+            user.setEmail(dto.email());
+        }
+
+        if (dto.phoneNumber() != null) {
+            user.setPhoneNumber(dto.phoneNumber());
+        }
+
+        appUserDao.save(user);
+    }
+
+    @Override
+    public void updatePassword(int id, PasswordDto dto)
+            throws AppUserNotFoundException, BadPasswordException {
+
+        AppUser user = appUserDao.findById(id)
+                .orElseThrow(AppUserNotFoundException::new);
+
+        // vérifier ancien mot de passe
+        if (Objects.equals(user.getPassword(), dto.oldPassword())) {
+            throw new BadPasswordException();
+        }
+
+        user.setPassword(dto.newPassword());
+
+        appUserDao.save(user);
     }
 }

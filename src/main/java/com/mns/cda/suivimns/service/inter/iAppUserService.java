@@ -1,5 +1,7 @@
 package com.mns.cda.suivimns.service.inter;
 
+import com.mns.cda.suivimns.dto.AppUserDto;
+import com.mns.cda.suivimns.dto.PasswordDto;
 import com.mns.cda.suivimns.model.AppUser;
 
 import java.util.List;
@@ -14,8 +16,14 @@ public interface iAppUserService {
 
     void delete(AppUser appUser);
 
-    void update(AppUser appUserToUpdate, int id) throws AppUserNotFoundException;
+    void update(AppUserDto appUserToUpdate, int id) throws AppUserNotFoundException, EmailAlreadyUsedException;
+
+    void updatePassword(int id, PasswordDto dto) throws AppUserNotFoundException, BadPasswordException;
 
     class AppUserNotFoundException extends Exception {
     }
+
+    class EmailAlreadyUsedException extends Exception {}
+
+    class BadPasswordException extends Exception {}
 }

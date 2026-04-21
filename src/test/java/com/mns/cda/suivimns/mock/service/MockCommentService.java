@@ -28,7 +28,7 @@ public class MockCommentService implements iCommentService {
     }
 
     @Override
-    public void update(Comment commentToUpdate, int id) throws CommentNotFoundException {
-
+    public Comment update(Comment commentToUpdate, int id) throws CommentNotFoundException {
+        return null;
     }
 }

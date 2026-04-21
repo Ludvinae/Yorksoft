@@ -1,6 +1,8 @@
 package com.mns.cda.suivimns.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.mns.cda.suivimns.dto.AppUserDto;
+import com.mns.cda.suivimns.dto.PasswordDto;
 import com.mns.cda.suivimns.model.AppUser;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
@@ -76,6 +78,7 @@ public class AppUserController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    /*
     @Operation(summary = "Mettre à jour un utilisateur")
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Utilisateur mis à jour"),
@@ -88,6 +91,45 @@ public class AppUserController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (iAppUserService.AppUserNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (iAppUserService.EmailAlreadyUsedException e) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+    }
+
+     */
+
+    @Operation(summary = "Mettre à jour un utilisateur")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Utilisateur mis à jour"),
+            @ApiResponse(responseCode = "404", description = "Utilisateur non trouvé"),
+            @ApiResponse(responseCode = "400", description = "Email déja utilisé")})
+    @PatchMapping("/{id}")
+    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated AppUserDto dto) {
+
+        try {
+            appUserService.update(dto, id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (iAppUserService.AppUserNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (iAppUserService.EmailAlreadyUsedException e) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+    }
+
+    @Operation(summary = "Changer le mot de passe d'un utilisateur")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Mot de passe mis à jour"),
+            @ApiResponse(responseCode = "404", description = "Utilisateur non trouvé"),
+            @ApiResponse(responseCode = "400", description = "Données invalides")})
+    @PatchMapping("/{id}/password")
+    public ResponseEntity<Void> patch(@PathVariable int id, @RequestBody PasswordDto dto) {
+        try {
+            appUserService.updatePassword(id, dto);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (iAppUserService.AppUserNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (iAppUserService.BadPasswordException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 }

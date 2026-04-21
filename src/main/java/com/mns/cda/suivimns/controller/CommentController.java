@@ -3,6 +3,7 @@ package com.mns.cda.suivimns.controller;
 import com.mns.cda.suivimns.model.Comment;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
+import com.mns.cda.suivimns.service.inter.iAppUserService;
 import com.mns.cda.suivimns.service.inter.iCommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -57,16 +58,11 @@ public class CommentController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Comment commentToUpdate) {
-        Optional<Comment> comment = commentService.findById(id);
-
-        if (comment.isEmpty()) {
+        try {
+            commentService.update(commentToUpdate, id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (iCommentService.CommentNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
-        commentToUpdate.setIdComment(comment.get().getIdComment());
-        commentToUpdate.setDateSent(comment.get().getDateSent());
-
-        commentService.save(commentToUpdate);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

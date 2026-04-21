@@ -14,7 +14,7 @@ public interface iCommentService {
 
     void delete(Comment comment);
 
-    void update(Comment commentToUpdate, int id) throws CommentNotFoundException;
+    Comment update(Comment commentToUpdate, int id) throws CommentNotFoundException;
 
     class CommentNotFoundException extends Exception {
     }

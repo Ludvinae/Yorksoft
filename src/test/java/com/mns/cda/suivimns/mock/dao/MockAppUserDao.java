@@ -162,4 +162,9 @@ public class MockAppUserDao implements AppUserDao {
     public Page<AppUser> findAll(Pageable pageable) {
         return null;
     }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        return false;
+    }
 }

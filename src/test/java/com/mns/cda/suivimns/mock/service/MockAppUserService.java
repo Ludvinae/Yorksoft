@@ -1,5 +1,7 @@
 package com.mns.cda.suivimns.mock.service;
 
+import com.mns.cda.suivimns.dto.AppUserDto;
+import com.mns.cda.suivimns.dto.PasswordDto;
 import com.mns.cda.suivimns.model.AppUser;
 import com.mns.cda.suivimns.service.inter.iAppUserService;
 
@@ -29,7 +31,12 @@ public class MockAppUserService implements iAppUserService {
     }
 
     @Override
-    public void update(AppUser appUserToUpdate, int id) throws AppUserNotFoundException {
+    public void update(AppUserDto appUserToUpdate, int id) throws AppUserNotFoundException {
+
+    }
+
+    @Override
+    public void updatePassword(int id, PasswordDto dto) throws AppUserNotFoundException, BadPasswordException {
 
     }
 }
