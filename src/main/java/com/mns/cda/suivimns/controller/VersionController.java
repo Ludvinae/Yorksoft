@@ -8,6 +8,10 @@ import com.mns.cda.suivimns.model.groups.OnUpdate;
 import com.mns.cda.suivimns.service.inter.iLicenseService;
 import com.mns.cda.suivimns.service.inter.iVersionService;
 import com.mns.cda.suivimns.view.SoftwareView;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,16 +25,23 @@ import java.util.Optional;
 @CrossOrigin
 @RequestMapping("/version")
 @RequiredArgsConstructor
+@Tag(name = "Version", description = "Gestion des versions de logiciels")
 public class VersionController {
 
     protected final iVersionService versionService;
 
+    @Operation(summary = "Récupérer toutes les versions")
+    @ApiResponse(responseCode = "200", description = "Liste des versions récupérée")
     @GetMapping("/list")
     @JsonView(SoftwareView.class)
     public List<Version> findAll() {
         return versionService.findAll();
     }
 
+    @Operation(summary = "Récupérer une version par son ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Version trouvée"),
+            @ApiResponse(responseCode = "404", description = "Version non trouvée")})
     @GetMapping("/{id}")
     @JsonView(SoftwareView.class)
     public ResponseEntity<Version> findById(@PathVariable Integer id) {
@@ -42,6 +53,10 @@ public class VersionController {
         return new ResponseEntity<>(version.get(), HttpStatus.OK);
     }
 
+    @Operation(summary = "Créer une nouvelle version")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Version créée"),
+            @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PostMapping
     public ResponseEntity<Version> create(@RequestBody @Validated(OnCreate.class) Version version) {
         Version versionSaved = versionService.save(version);
@@ -49,6 +64,10 @@ public class VersionController {
         return new ResponseEntity<>(versionSaved, HttpStatus.CREATED);
     }
 
+    @Operation(summary = "Supprimer une version")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Version supprimée"),
+            @ApiResponse(responseCode = "404", description = "Version non trouvée")})
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
 
@@ -65,6 +84,14 @@ public class VersionController {
      * publicationDate
      * versionType
      */
+    @Operation(
+            summary = "Mettre à jour une version",
+            description = "Modifie le numéro de version, la date de publication et le type de version"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Version mise à jour"),
+            @ApiResponse(responseCode = "404", description = "Version non trouvée"),
+            @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PutMapping("/{id}")
     public ResponseEntity<Version> update(@PathVariable Integer id, @RequestBody @Validated(OnUpdate.class) Version versionToUpdate) {
         try {

@@ -6,6 +6,10 @@ import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
 import com.mns.cda.suivimns.service.inter.iLicenseService;
 import com.mns.cda.suivimns.service.inter.iThemeService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,15 +23,22 @@ import java.util.Optional;
 @CrossOrigin
 @RequestMapping("/theme")
 @RequiredArgsConstructor
+@Tag(name = "Theme", description = "Gestion des thématiques des tickets")
 public class ThemeController {
 
     protected final iThemeService themeService;
 
+    @Operation(summary = "Récupérer toutes les thématiques")
+    @ApiResponse(responseCode = "200", description = "Liste des thématiques récupérée")
     @GetMapping("/list")
     public List<Theme> getAll() {
         return themeService.findAll();
     }
 
+    @Operation(summary = "Récupérer une thématique par son ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Thématique trouvée"),
+            @ApiResponse(responseCode = "404", description = "Thématique non trouvée")})
     @GetMapping("/{id}")
     public ResponseEntity<Theme> getById(@PathVariable int id) {
 
@@ -39,6 +50,10 @@ public class ThemeController {
         return new ResponseEntity<>(theme.get(), HttpStatus.OK);
     }
 
+    @Operation(summary = "Créer une thématique")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Thématique créée"),
+            @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PostMapping
     public ResponseEntity<Theme> create(@RequestBody @Validated(OnCreate.class) Theme theme) {
         Theme themeSaved = themeService.save(theme);
@@ -46,6 +61,10 @@ public class ThemeController {
         return new ResponseEntity<>(themeSaved, HttpStatus.CREATED);
     }
 
+    @Operation(summary = "Supprimer une thématique")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Thématique supprimée"),
+            @ApiResponse(responseCode = "404", description = "Thématique non trouvée")})
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
         Optional<Theme> theme = themeService.findById(id);
@@ -61,6 +80,13 @@ public class ThemeController {
      * designation
      * description
      */
+    @Operation(
+            summary = "Mettre à jour une thématique",
+            description = "Modifie la désignation et la description")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Thématique mise à jour"),
+            @ApiResponse(responseCode = "404", description = "Thématique non trouvée"),
+            @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PutMapping("/{id}")
     public ResponseEntity<Theme> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Theme themeToUpdate) {
         try {
