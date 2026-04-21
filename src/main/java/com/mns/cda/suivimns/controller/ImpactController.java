@@ -19,17 +19,17 @@ import java.util.Optional;
 @RequestMapping("/impact")
 public class ImpactController {
 
-    protected final iImpactService iImpactService;
+    protected final iImpactService impactService;
 
     @GetMapping("/list")
     public List<Impact> getAll() {
-        return iImpactService.findAll();
+        return impactService.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Impact> getById(@PathVariable int id) {
 
-        Optional<Impact> impact = iImpactService.findById(id);
+        Optional<Impact> impact = impactService.findById(id);
         if (impact.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -40,32 +40,32 @@ public class ImpactController {
     @PostMapping
     public ResponseEntity<Impact> create(@RequestBody @Validated(OnCreate.class) Impact impact) {
         impact.setIdImpact(null);
-        iImpactService.save(impact);
+        impactService.save(impact);
 
         return new ResponseEntity<>(impact, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
-        Optional<Impact> impact = iImpactService.findById(id);
+        Optional<Impact> impact = impactService.findById(id);
         if (impact.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        iImpactService.delete(impact.get());
+        impactService.delete(impact.get());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Impact impactToUpdate) {
-        Optional<Impact> impact = iImpactService.findById(id);
+        Optional<Impact> impact = impactService.findById(id);
 
         if (impact.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         impactToUpdate.setIdImpact(impact.get().getIdImpact());
-        iImpactService.save(impactToUpdate);
+        impactService.save(impactToUpdate);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

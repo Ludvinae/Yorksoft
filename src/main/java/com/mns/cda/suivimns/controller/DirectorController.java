@@ -19,17 +19,17 @@ import java.util.Optional;
 @RequestMapping("/director")
 public class DirectorController {
 
-    protected final iDirectorService directorservice;
+    protected final iDirectorService directorService;
 
     @GetMapping("/list")
     public List<Director> getAll() {
-        return directorservice.findAll();
+        return directorService.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Director> getById(@PathVariable int id) {
 
-        Optional<Director> director = directorservice.findById(id);
+        Optional<Director> director = directorService.findById(id);
         if (director.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -39,26 +39,26 @@ public class DirectorController {
 
     @PostMapping
     public ResponseEntity<Director> create(@RequestBody @Validated(OnCreate.class) Director director) {
-        directorservice.save(director);
+        directorService.save(director);
 
         return new ResponseEntity<>(director, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
-        Optional<Director> director = directorservice.findById(id);
+        Optional<Director> director = directorService.findById(id);
         if (director.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        directorservice.delete(director.get());
+        directorService.delete(director.get());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Director directorToUpdate) {
         try {
-            directorservice.update(directorToUpdate, id);
+            directorService.update(directorToUpdate, id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (iDirectorService.DirectorNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

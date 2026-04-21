@@ -15,8 +15,6 @@ public interface iClassificationService {
 
     void delete(Classification classification);
 
-    void update(Classification classificationToUpdate, int id) throws ClassificationNotFoundException;
-
     Theme getTheme(Integer ticketId);
 
     class ClassificationNotFoundException extends Exception {

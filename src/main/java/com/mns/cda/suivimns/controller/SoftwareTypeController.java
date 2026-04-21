@@ -19,17 +19,17 @@ import java.util.Optional;
 @RequestMapping("/software-type")
 public class SoftwareTypeController {
 
-    protected final iSoftwareTypeService iSoftwareTypeService;
+    protected final iSoftwareTypeService softwareTypeService;
 
     @GetMapping("/list")
     public List<SoftwareType> findAll() {
-        return iSoftwareTypeService.findAll();
+        return softwareTypeService.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<SoftwareType> findById(@PathVariable Integer id) {
 
-        Optional<SoftwareType> softwareType = iSoftwareTypeService.findById(id);
+        Optional<SoftwareType> softwareType = softwareTypeService.findById(id);
 
         if (softwareType.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -41,7 +41,7 @@ public class SoftwareTypeController {
     public ResponseEntity<SoftwareType> create(@RequestBody @Validated(OnCreate.class) SoftwareType typeToInsert) {
 
         typeToInsert.setIdSoftwareType(null);
-        iSoftwareTypeService.save(typeToInsert);
+        softwareTypeService.save(typeToInsert);
 
         return new ResponseEntity<>(typeToInsert, HttpStatus.CREATED);
     }
@@ -49,24 +49,24 @@ public class SoftwareTypeController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
 
-        Optional<SoftwareType> softwareType = iSoftwareTypeService.findById(id);
+        Optional<SoftwareType> softwareType = softwareTypeService.findById(id);
 
         if (softwareType.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        iSoftwareTypeService.delete(softwareType.get());
+        softwareTypeService.delete(softwareType.get());
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> update(@PathVariable Integer id, @RequestBody @Validated(OnUpdate.class) SoftwareType typeToUpdate) {
-        Optional<SoftwareType> softwareType = iSoftwareTypeService.findById(id);
+        Optional<SoftwareType> softwareType = softwareTypeService.findById(id);
         if (softwareType.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         typeToUpdate.setIdSoftwareType(id);
-        iSoftwareTypeService.save(typeToUpdate);
+        softwareTypeService.save(typeToUpdate);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

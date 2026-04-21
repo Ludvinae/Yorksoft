@@ -19,17 +19,17 @@ import java.util.Optional;
 @RequestMapping("/history")
 public class HistoryController {
 
-    protected final iHistoryService iHistoryService;
+    protected final iHistoryService historyService;
 
     @GetMapping("/list")
     public List<History> getAll() {
-        return iHistoryService.findAll();
+        return historyService.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<History> getById(@PathVariable int id) {
 
-        Optional<History> history = iHistoryService.findById(id);
+        Optional<History> history = historyService.findById(id);
         if (history.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -40,32 +40,32 @@ public class HistoryController {
     @PostMapping
     public ResponseEntity<History> create(@RequestBody @Validated(OnCreate.class) History history) {
         history.setIdHistory(null);
-        iHistoryService.save(history);
+        historyService.save(history);
 
         return new ResponseEntity<>(history, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
-        Optional<History> history = iHistoryService.findById(id);
+        Optional<History> history = historyService.findById(id);
         if (history.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        iHistoryService.delete(history.get());
+        historyService.delete(history.get());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) History historyToUpdate) {
-        Optional<History> history = iHistoryService.findById(id);
+        Optional<History> history = historyService.findById(id);
 
         if (history.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         historyToUpdate.setIdHistory(history.get().getIdHistory());
-        iHistoryService.save(historyToUpdate);
+        historyService.save(historyToUpdate);
         
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

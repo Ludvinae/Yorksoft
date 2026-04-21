@@ -26,14 +26,14 @@ import java.util.Optional;
 @Tag(name = "Assignment", description = "Affectation des tickets à un technicien par un manager")
 public class AssignmentController {
 
-    protected final iAssignmentService iAssignmentService;
+    protected final iAssignmentService assignmentService;
 
     @Operation(summary = "Récupérer toutes les affectations")
     @ApiResponse(responseCode = "200", description = "Liste récupérée")
     @GetMapping("/list")
     @JsonView(AssignmentView.class)
     public List<Assignment> getAll() {
-        return iAssignmentService.findAll();
+        return assignmentService.findAll();
     }
 
     @Operation(summary = "Récupérer une affectation par ID")
@@ -43,7 +43,7 @@ public class AssignmentController {
     @GetMapping("/{id}")
     @JsonView(AssignmentView.class)
     public ResponseEntity<Assignment> getById(@PathVariable int id) {
-        Optional<Assignment> assignment = iAssignmentService.findById(id);
+        Optional<Assignment> assignment = assignmentService.findById(id);
         if (assignment.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -58,7 +58,7 @@ public class AssignmentController {
     @PostMapping
     public ResponseEntity<Assignment> create(@RequestBody @Valid Assignment assignment) {
 
-        iAssignmentService.firstSave(assignment);
+        assignmentService.firstSave(assignment);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(assignment);
@@ -70,13 +70,13 @@ public class AssignmentController {
             @ApiResponse(responseCode = "404", description = "Non trouvé")})
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
-        Optional<Assignment> assignment = iAssignmentService.findById(id);
+        Optional<Assignment> assignment = assignmentService.findById(id);
 
         if (assignment.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        iAssignmentService.delete(assignment.get());
+        assignmentService.delete(assignment.get());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -90,7 +90,7 @@ public class AssignmentController {
     public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Valid Assignment assignmentToUpdate){
 
         try {
-            iAssignmentService.update(assignmentToUpdate, id);
+            assignmentService.update(assignmentToUpdate, id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (iAssignmentService.AssignmentNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

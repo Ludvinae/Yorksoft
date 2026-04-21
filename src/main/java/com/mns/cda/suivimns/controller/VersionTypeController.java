@@ -17,16 +17,16 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class VersionTypeController {
 
-    private final iVersionTypeService iVersionTypeService;
+    private final iVersionTypeService versionTypeService;
 
     @GetMapping("/list")
     public List<VersionType> getAll() {
-        return iVersionTypeService.findAll();
+        return versionTypeService.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<VersionType> getById(@PathVariable Integer id) {
-        Optional<VersionType> versionType = iVersionTypeService.findById(id);
+        Optional<VersionType> versionType = versionTypeService.findById(id);
 
         if (versionType.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -39,30 +39,30 @@ public class VersionTypeController {
     public ResponseEntity<VersionType> create(@RequestBody @Validated() VersionType versionType) {
         versionType.setIdVersionType(null);
 
-        iVersionTypeService.save(versionType);
+        versionTypeService.save(versionType);
         return new ResponseEntity<>(versionType , HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
-        Optional<VersionType> versionType = iVersionTypeService.findById(id);
+        Optional<VersionType> versionType = versionTypeService.findById(id);
         if (versionType.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        iVersionTypeService.delete(versionType.get());
+        versionTypeService.delete(versionType.get());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> update(@PathVariable Integer id, @RequestBody @Validated() VersionType typeToUpdate) {
-        Optional<VersionType> versionType = iVersionTypeService.findById(id);
+        Optional<VersionType> versionType = versionTypeService.findById(id);
 
         if (versionType.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         typeToUpdate.setIdVersionType(id);
-        iVersionTypeService.save(typeToUpdate);
+        versionTypeService.save(typeToUpdate);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

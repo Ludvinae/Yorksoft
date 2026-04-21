@@ -19,17 +19,17 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ThemeController {
 
-    protected final iThemeService iThemeService;
+    protected final iThemeService themeService;
 
     @GetMapping("/list")
     public List<Theme> getAll() {
-        return iThemeService.findAll();
+        return themeService.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Theme> getById(@PathVariable int id) {
 
-        Optional<Theme> theme = iThemeService.findById(id);
+        Optional<Theme> theme = themeService.findById(id);
         if (theme.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -40,32 +40,32 @@ public class ThemeController {
     @PostMapping
     public ResponseEntity<Theme> create(@RequestBody @Validated(OnCreate.class) Theme theme) {
         theme.setIdTheme(null);
-        iThemeService.save(theme);
+        themeService.save(theme);
 
         return new ResponseEntity<>(theme, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
-        Optional<Theme> theme = iThemeService.findById(id);
+        Optional<Theme> theme = themeService.findById(id);
         if (theme.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        iThemeService.delete(theme.get());
+        themeService.delete(theme.get());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Theme themeToUpdate) {
-        Optional<Theme> theme = iThemeService.findById(id);
+        Optional<Theme> theme = themeService.findById(id);
 
         if (theme.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         themeToUpdate.setIdTheme(theme.get().getIdTheme());
-        iThemeService.save(themeToUpdate);
+        themeService.save(themeToUpdate);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

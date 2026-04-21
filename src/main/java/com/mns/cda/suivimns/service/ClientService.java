@@ -22,7 +22,7 @@ public class ClientService implements iClientService {
     }
 
     @Override
-    public ClientDto findDtoById(int id) {
+    public Optional<ClientDto> findDtoById(int id) {
         return clientDao.getClient(id);
     }
 
@@ -32,9 +32,9 @@ public class ClientService implements iClientService {
     }
 
     @Override
-    public void save(Client client) {
+    public Client save(Client client) {
         client.setIdAppUser(null);
-        clientDao.save(client);
+        return clientDao.save(client);
     }
 
     @Override
@@ -54,5 +54,16 @@ public class ClientService implements iClientService {
         clientToUpdate.setPassword(client.get().getPassword());
 
         clientDao.save(clientToUpdate);
+    }
+
+    public ClientDto toDto(Client client) {
+        return new ClientDto(
+                client.getIdAppUser(),
+                client.getFirstName(),
+                client.getLastName(),
+                client.getEmail(),
+                client.getPhoneNumber(),
+                client.getImportance()
+        );
     }
 }

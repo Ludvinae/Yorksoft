@@ -3,6 +3,7 @@ package com.mns.cda.suivimns.service;
 import com.mns.cda.suivimns.dao.ClassificationDao;
 import com.mns.cda.suivimns.model.Classification;
 import com.mns.cda.suivimns.model.Theme;
+import com.mns.cda.suivimns.model.keys.ClassificationKey;
 import com.mns.cda.suivimns.service.inter.iClassificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -40,16 +41,7 @@ public class ClassificationService implements iClassificationService {
     }
 
 
-    @Override
-    public void update(Classification classificationToUpdate, int id) throws iClassificationService.ClassificationNotFoundException {
-        Optional<Classification> classification = classificationDao.findById(id);
 
-        if (classification.isEmpty()) {
-            throw new iClassificationService.ClassificationNotFoundException();
-        }
-
-        classificationDao.save(classificationToUpdate);
-    }
 
     @Override
     public Theme getTheme(Integer ticketId) {

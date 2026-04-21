@@ -9,13 +9,18 @@ import java.util.Optional;
 
 public class MockClientService implements iClientService {
     @Override
+    public ClientDto toDto(Client client) {
+        return null;
+    }
+
+    @Override
     public List<ClientDto> findAll() {
         return List.of();
     }
 
     @Override
-    public ClientDto findDtoById(int id) {
-        return null;
+    public Optional<ClientDto> findDtoById(int id) {
+        return Optional.empty();
     }
 
     @Override
@@ -24,8 +29,8 @@ public class MockClientService implements iClientService {
     }
 
     @Override
-    public void save(Client client) {
-
+    public Client save(Client client) {
+        return null;
     }
 
     @Override

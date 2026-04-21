@@ -21,18 +21,18 @@ import java.util.Optional;
 @RequestMapping("/technician")
 public class TechnicianController {
 
-    protected final iTechnicianService technicianservice;
+    protected final iTechnicianService technicianService;
 
     @GetMapping("/list")
     @JsonView(TechnicianView.class)
     public List<Technician> getAll() {
-        return technicianservice.findAll();
+        return technicianService.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Technician> getById(@PathVariable int id) {
 
-        Optional<Technician> technician = technicianservice.findById(id);
+        Optional<Technician> technician = technicianService.findById(id);
         if (technician.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -42,26 +42,26 @@ public class TechnicianController {
 
     @PostMapping
     public ResponseEntity<Technician> create(@RequestBody @Validated(OnCreate.class) Technician technician) {
-        technicianservice.save(technician);
+        technicianService.save(technician);
 
         return new ResponseEntity<>(technician, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
-        Optional<Technician> technician = technicianservice.findById(id);
+        Optional<Technician> technician = technicianService.findById(id);
         if (technician.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        technicianservice.delete(technician.get());
+        technicianService.delete(technician.get());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Technician technicianToUpdate){
         try {
-            technicianservice.update(technicianToUpdate, id);
+            technicianService.update(technicianToUpdate, id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (iTechnicianService.TechnicianNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

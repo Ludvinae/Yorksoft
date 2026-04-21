@@ -24,19 +24,19 @@ import java.util.Optional;
 public class SoftwareController {
 
 
-    protected final iSoftwareService iSoftwareService;
+    protected final iSoftwareService softwareService;
 
 
     @GetMapping("/list")
     @JsonView(SoftwareView.class)
     public List<Software> getAll() {
-        return iSoftwareService.findAll();
+        return softwareService.findAll();
     }
 
     @GetMapping("/{id}")
     @JsonView(SoftwareView.class)
     public ResponseEntity<Software> getById(@PathVariable Integer id) {
-        Optional<Software> software = iSoftwareService.findById(id);
+        Optional<Software> software = softwareService.findById(id);
 
         if (software.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -48,7 +48,7 @@ public class SoftwareController {
     @GetMapping("/{id}/version/list")
     @JsonView(SoftwareVersionListView.class)
     public ResponseEntity<Software> getSoftwareVersionById(@PathVariable Integer id) {
-        Optional<Software> software = iSoftwareService.findById(id);
+        Optional<Software> software = softwareService.findById(id);
 
         if (software.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -60,25 +60,25 @@ public class SoftwareController {
     @PostMapping
     public ResponseEntity<Software> create(@RequestBody @Validated(OnCreate.class) SoftwareDto software) {
 
-        Software savedSoftware = iSoftwareService.createSoftware(software);
+        Software savedSoftware = softwareService.createSoftware(software);
 
         return new ResponseEntity<>(savedSoftware, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
-        Optional<Software> software = iSoftwareService.findById(id);
+        Optional<Software> software = softwareService.findById(id);
         if (software.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        iSoftwareService.delete(software.get());
+        softwareService.delete(software.get());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> update(@PathVariable Integer id, @RequestBody @Validated(OnUpdate.class) Software softwareData) {
-        Optional<Software> software = iSoftwareService.findById(id);
+        Optional<Software> software = softwareService.findById(id);
 
         if (software.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -97,7 +97,7 @@ public class SoftwareController {
         }
 
         softwareData.setIdSoftware(id);
-        iSoftwareService.save(softwareData);
+        softwareService.save(softwareData);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

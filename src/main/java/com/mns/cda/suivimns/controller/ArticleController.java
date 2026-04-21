@@ -24,13 +24,13 @@ import java.util.Optional;
 @Tag(name = "Article", description = "Gestion des articles")
 public class ArticleController {
 
-    protected final iArticleService iArticleService;
+    protected final iArticleService articleService;
 
     @Operation(summary = "Récupérer tous les articles")
     @ApiResponse(responseCode = "200", description = "Liste des articles récupérée avec succès")
     @GetMapping("/list")
     public List<Article> getAll() {
-        return iArticleService.findAll();
+        return articleService.findAll();
     }
 
     @Operation(summary = "Récupérer un article par son ID")
@@ -39,7 +39,7 @@ public class ArticleController {
             @ApiResponse(responseCode = "404", description = "Article non trouvé")})
     @GetMapping("/{id}")
     public ResponseEntity<Article> getById(@PathVariable int id) {
-        Optional<Article> article = iArticleService.findById(id);
+        Optional<Article> article = articleService.findById(id);
 
         if (article.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -55,7 +55,7 @@ public class ArticleController {
     @PostMapping
     public ResponseEntity<Article> create(@RequestBody @Validated(OnCreate.class) Article article) {
 
-        iArticleService.save(article);
+        articleService.save(article);
 
         return new ResponseEntity<>(article, HttpStatus.CREATED);
     }
@@ -66,13 +66,13 @@ public class ArticleController {
             @ApiResponse(responseCode = "404", description = "Article non trouvé")})
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
-        Optional<Article> article = iArticleService.findById(id);
+        Optional<Article> article = articleService.findById(id);
 
         if (article.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        iArticleService.delete(article.get());
+        articleService.delete(article.get());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -85,7 +85,7 @@ public class ArticleController {
     public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Article articleToUpdate) {
 
         try {
-            iArticleService.update(articleToUpdate, id);
+            articleService.update(articleToUpdate, id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (iArticleService.ArticleNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

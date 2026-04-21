@@ -21,18 +21,18 @@ import java.util.Optional;
 @RequestMapping("/manager")
 public class ManagerController {
 
-    protected final iManagerService managerservice;
+    protected final iManagerService managerService;
 
     @GetMapping("/list")
     @JsonView(ManagerView.class)
     public List<Manager> getAll() {
-        return managerservice.findAll();
+        return managerService.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Manager> getById(@PathVariable int id) {
 
-        Optional<Manager> manager = managerservice.findById(id);
+        Optional<Manager> manager = managerService.findById(id);
         if (manager.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -42,26 +42,26 @@ public class ManagerController {
 
     @PostMapping
     public ResponseEntity<Manager> create(@RequestBody @Validated(OnCreate.class) Manager manager) {
-        managerservice.save(manager);
+        managerService.save(manager);
 
         return new ResponseEntity<>(manager, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
-        Optional<Manager> manager = managerservice.findById(id);
+        Optional<Manager> manager = managerService.findById(id);
         if (manager.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        managerservice.delete(manager.get());
+        managerService.delete(manager.get());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Manager managerToUpdate){
         try {
-            managerservice.update(managerToUpdate, id);
+            managerService.update(managerToUpdate, id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (iManagerService.ManagerNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

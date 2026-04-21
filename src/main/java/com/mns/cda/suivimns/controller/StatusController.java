@@ -19,17 +19,17 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class StatusController {
 
-    protected final iStatusService iStatusService;
+    protected final iStatusService statusService;
 
     @GetMapping("/list")
     public List<Status> getAll() {
-        return iStatusService.findAll();
+        return statusService.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Status> getById(@PathVariable int id) {
 
-        Optional<Status> status = iStatusService.findById(id);
+        Optional<Status> status = statusService.findById(id);
         if (status.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -40,32 +40,32 @@ public class StatusController {
     @PostMapping
     public ResponseEntity<Status> create(@RequestBody @Validated(OnCreate.class) Status status) {
         status.setIdStatus(null);
-        iStatusService.save(status);
+        statusService.save(status);
 
         return new ResponseEntity<>(status, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
-        Optional<Status> status = iStatusService.findById(id);
+        Optional<Status> status = statusService.findById(id);
         if (status.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        iStatusService.delete(status.get());
+        statusService.delete(status.get());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Status statusToUpdate) {
-        Optional<Status> status = iStatusService.findById(id);
+        Optional<Status> status = statusService.findById(id);
 
         if (status.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         statusToUpdate.setIdStatus(status.get().getIdStatus());
-        iStatusService.save(statusToUpdate);
+        statusService.save(statusToUpdate);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

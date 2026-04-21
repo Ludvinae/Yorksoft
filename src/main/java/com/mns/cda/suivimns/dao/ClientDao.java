@@ -20,7 +20,7 @@ public interface ClientDao extends JpaRepository<Client, Integer> {
             "c.phoneNumber, c.importance) " +
             "FROM Client c " +
             "WHERE c.idAppUser = :id ")
-    ClientDto getClient(@Param("id") int id);
+    Optional<ClientDto> getClient(@Param("id") int id);
 
     @Query("SELECT new com.mns.cda.suivimns.dto.ClientDto(" +
                   "c.idAppUser, c.firstName, c.lastName, c.email, " +

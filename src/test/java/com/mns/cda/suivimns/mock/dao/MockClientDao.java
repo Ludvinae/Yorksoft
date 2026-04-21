@@ -170,8 +170,8 @@ public class MockClientDao implements ClientDao {
     }
 
     @Override
-    public ClientDto getClient(int id) {
-        return null;
+    public Optional<ClientDto> getClient(int id) {
+        return Optional.empty();
     }
 
     @Override

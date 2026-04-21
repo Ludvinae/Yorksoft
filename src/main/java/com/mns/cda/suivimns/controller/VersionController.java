@@ -21,19 +21,19 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class VersionController {
 
-    protected final iVersionService iVersionService;
+    protected final iVersionService versionService;
 
     @GetMapping("/list")
     @JsonView(SoftwareView.class)
     public List<Version> findAll() {
-        return iVersionService.findAll();
+        return versionService.findAll();
     }
 
     @GetMapping("/{id}")
     @JsonView(SoftwareView.class)
     public ResponseEntity<Version> findById(@PathVariable Integer id) {
 
-        Optional<Version> version = iVersionService.findById(id);
+        Optional<Version> version = versionService.findById(id);
         if (version.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -45,29 +45,29 @@ public class VersionController {
 
         version.setIdVersion(null);
 
-        iVersionService.save(version);
+        versionService.save(version);
         return new ResponseEntity<>(version, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
 
-        Optional<Version> version = iVersionService.findById(id);
+        Optional<Version> version = versionService.findById(id);
         if (version.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        iVersionService.delete(version.get());
+        versionService.delete(version.get());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> update(@PathVariable Integer id, @RequestBody @Validated(OnUpdate.class) Version versionToModify) {
-        Optional<Version> version = iVersionService.findById(id);
+        Optional<Version> version = versionService.findById(id);
         if (version.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         versionToModify.setIdVersion(id);
-        iVersionService.save(versionToModify);
+        versionService.save(versionToModify);
 
         if (versionToModify.getPublicationDate() == null) {
             versionToModify.setPublicationDate(version.get().getPublicationDate());

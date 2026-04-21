@@ -19,17 +19,17 @@ import java.util.Optional;
 @RequestMapping("/license")
 public class LicenseController {
 
-    protected final iLicenseService licenseservice;
+    protected final iLicenseService licenseService;
 
     @GetMapping("/list")
     public List<License> getAll() {
-        return licenseservice.findAll();
+        return licenseService.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<License> getById(@PathVariable int id) {
 
-        Optional<License> license = licenseservice.findById(id);
+        Optional<License> license = licenseService.findById(id);
         if (license.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -39,26 +39,26 @@ public class LicenseController {
 
     @PostMapping
     public ResponseEntity<License> create(@RequestBody @Validated(OnCreate.class) License license) {
-        licenseservice.save(license);
+        licenseService.save(license);
 
         return new ResponseEntity<>(license, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
-        Optional<License> license = licenseservice.findById(id);
+        Optional<License> license = licenseService.findById(id);
         if (license.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        licenseservice.delete(license.get());
+        licenseService.delete(license.get());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) License licenseToUpdate){
         try {
-            licenseservice.update(licenseToUpdate, id);
+            licenseService.update(licenseToUpdate, id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (iLicenseService.LicenseNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

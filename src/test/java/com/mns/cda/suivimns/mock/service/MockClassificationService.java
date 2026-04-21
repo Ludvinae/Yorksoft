@@ -28,10 +28,6 @@ public class MockClassificationService implements iClassificationService {
 
     }
 
-    @Override
-    public void update(Classification classificationToUpdate, int id) throws ClassificationNotFoundException {
-
-    }
 
     @Override
     public Theme getTheme(Integer ticketId) {

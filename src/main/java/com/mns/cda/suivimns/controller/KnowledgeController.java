@@ -19,17 +19,17 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class KnowledgeController {
 
-    protected final iKnowledgeService iKnowledgeService;
+    protected final iKnowledgeService knowledgeService;
 
     @GetMapping("/list")
     public List<Knowledge> getAll() {
-        return iKnowledgeService.findAll();
+        return knowledgeService.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Knowledge> getById(@PathVariable int id) {
 
-        Optional<Knowledge> knowledge = iKnowledgeService.findById(id);
+        Optional<Knowledge> knowledge = knowledgeService.findById(id);
         if (knowledge.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -40,32 +40,32 @@ public class KnowledgeController {
     @PostMapping
     public ResponseEntity<Knowledge> create(@RequestBody @Validated(OnCreate.class) Knowledge knowledge) {
         knowledge.setIdKnowledge(null);
-        iKnowledgeService.save(knowledge);
+        knowledgeService.save(knowledge);
 
         return new ResponseEntity<>(knowledge, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
-        Optional<Knowledge> knowledge = iKnowledgeService.findById(id);
+        Optional<Knowledge> knowledge = knowledgeService.findById(id);
         if (knowledge.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        iKnowledgeService.delete(knowledge.get());
+        knowledgeService.delete(knowledge.get());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Knowledge knowledgeToUpdate) {
-        Optional<Knowledge> knowledge = iKnowledgeService.findById(id);
+        Optional<Knowledge> knowledge = knowledgeService.findById(id);
 
         if (knowledge.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         knowledgeToUpdate.setIdKnowledge(knowledge.get().getIdKnowledge());
-        iKnowledgeService.save(knowledgeToUpdate);
+        knowledgeService.save(knowledgeToUpdate);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

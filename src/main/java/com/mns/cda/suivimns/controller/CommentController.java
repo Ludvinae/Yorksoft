@@ -19,17 +19,17 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CommentController {
 
-    protected final iCommentService iCommentService;
+    protected final iCommentService commentService;
 
     @GetMapping("/list")
     public List<Comment> getAll() {
-        return iCommentService.findAll();
+        return commentService.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Comment> getById(@PathVariable int id) {
 
-        Optional<Comment> comment = iCommentService.findById(id);
+        Optional<Comment> comment = commentService.findById(id);
         if (comment.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -41,25 +41,25 @@ public class CommentController {
     public ResponseEntity<Comment> create(@RequestBody @Validated(OnCreate.class) Comment comment) {
         comment.setIdComment(null);
         comment.setLastModification(null);
-        iCommentService.save(comment);
+        commentService.save(comment);
 
         return new ResponseEntity<>(comment, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
-        Optional<Comment> comment = iCommentService.findById(id);
+        Optional<Comment> comment = commentService.findById(id);
         if (comment.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        iCommentService.delete(comment.get());
+        commentService.delete(comment.get());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Comment commentToUpdate) {
-        Optional<Comment> comment = iCommentService.findById(id);
+        Optional<Comment> comment = commentService.findById(id);
 
         if (comment.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -68,7 +68,7 @@ public class CommentController {
         commentToUpdate.setIdComment(comment.get().getIdComment());
         commentToUpdate.setDateSent(comment.get().getDateSent());
 
-        iCommentService.save(commentToUpdate);
+        commentService.save(commentToUpdate);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
