@@ -82,7 +82,7 @@ public class AppUserController {
             @ApiResponse(responseCode = "404", description = "Utilisateur non trouvé"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) AppUser userToUpdate) throws iAppUserService.AppUserNotFoundException {
+    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) AppUser userToUpdate) {
         try {
             iAppUserservice.update(userToUpdate, id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

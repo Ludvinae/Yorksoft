@@ -19,17 +19,17 @@ import java.util.Optional;
 @RequestMapping("/classification")
 public class ClassificationController {
 
-    protected final iClassificationService classificationservice;
+    protected final iClassificationService classificationService;
 
     @GetMapping("/list")
     public List<Classification> getAll() {
-        return classificationservice.findAll();
+        return classificationService.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Classification> getById(@PathVariable int id) {
 
-        Optional<Classification> classification = classificationservice.findById(id);
+        Optional<Classification> classification = classificationService.findById(id);
         if (classification.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -39,26 +39,26 @@ public class ClassificationController {
 
     @PostMapping
     public ResponseEntity<Classification> create(@RequestBody @Validated(OnCreate.class) Classification classification) {
-        classificationservice.save(classification);
+        classificationService.save(classification);
 
         return new ResponseEntity<>(classification, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
-        Optional<Classification> classification = classificationservice.findById(id);
+        Optional<Classification> classification = classificationService.findById(id);
         if (classification.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        classificationservice.delete(classification.get());
+        classificationService.delete(classification.get());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Classification classificationToUpdate) throws iClassificationService.ClassificationNotFoundException {
+    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Classification classificationToUpdate) {
         try {
-            classificationservice.update(classificationToUpdate, id);
+            classificationService.update(classificationToUpdate, id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (iClassificationService.ClassificationNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

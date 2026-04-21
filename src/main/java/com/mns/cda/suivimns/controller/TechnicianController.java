@@ -59,7 +59,7 @@ public class TechnicianController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Technician technicianToUpdate) throws iTechnicianService.TechnicianNotFoundException {
+    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Technician technicianToUpdate){
         try {
             technicianservice.update(technicianToUpdate, id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

@@ -82,7 +82,7 @@ public class ArticleController {
             @ApiResponse(responseCode = "404", description = "Article non trouvé"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Article articleToUpdate) throws iArticleService.ArticleNotFoundException {
+    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Article articleToUpdate) {
 
         try {
             iArticleService.update(articleToUpdate, id);

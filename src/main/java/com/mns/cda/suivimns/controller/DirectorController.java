@@ -56,7 +56,7 @@ public class DirectorController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Director directorToUpdate) throws iDirectorService.DirectorNotFoundException {
+    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Director directorToUpdate) {
         try {
             directorservice.update(directorToUpdate, id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

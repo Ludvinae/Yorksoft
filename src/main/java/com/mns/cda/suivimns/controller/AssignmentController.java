@@ -87,7 +87,7 @@ public class AssignmentController {
             @ApiResponse(responseCode = "400", description = "Requête invalide")})
     @PutMapping("/{id}")
     @JsonView(AssignmentView.class)
-    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Valid Assignment assignmentToUpdate) throws iAssignmentService.AssignmentNotFoundException, iAssignmentService.AssignmentBadRequestException {
+    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Valid Assignment assignmentToUpdate){
 
         try {
             iAssignmentService.update(assignmentToUpdate, id);
