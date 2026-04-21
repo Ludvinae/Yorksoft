@@ -64,6 +64,7 @@ public class SoftwareService implements iSoftwareService {
         software.setDescription(softwareToCreate.description());
 
         software.setType(softwareToCreate.type());
+        software.setVersionList(softwareToCreate.versionList());
 
         return softwareDao.save(software);
     }

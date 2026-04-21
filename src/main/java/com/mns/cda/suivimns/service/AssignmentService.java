@@ -4,6 +4,8 @@ import com.mns.cda.suivimns.dao.AssignmentDao;
 import com.mns.cda.suivimns.model.Assignment;
 import com.mns.cda.suivimns.service.inter.iAssignmentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -58,15 +60,27 @@ public class AssignmentService implements iAssignmentService {
     }
 
     @Override
-    public void update(Assignment assignmentToUpdate, int id) throws iAssignmentService.AssignmentNotFoundException {
+    public void update(Assignment assignmentToUpdate, int id) throws iAssignmentService.AssignmentNotFoundException, AssignmentBadRequestException {
         Optional<Assignment> assignment = assignmentDao.findById(id);
 
         if (assignment.isEmpty()) {
             throw new iAssignmentService.AssignmentNotFoundException();
         }
 
+        if (assignmentToUpdate.getTicket() == null ||
+            assignmentToUpdate.getManager() == null ||
+            assignmentToUpdate.getTechnician() == null) {
+            throw new iAssignmentService.AssignmentBadRequestException();
+        }
+
+
         assignmentToUpdate.setIdAssignment(assignment.get().getIdAssignment());
 
         assignmentDao.save(assignmentToUpdate);
+
+
+        // Pour remplacer la ligne precedente?
+        // modify(assignmentToUpdate, id);
+
     }
 }

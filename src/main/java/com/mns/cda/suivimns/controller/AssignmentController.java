@@ -2,6 +2,7 @@ package com.mns.cda.suivimns.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.mns.cda.suivimns.model.Assignment;
+import com.mns.cda.suivimns.service.inter.iArticleService;
 import com.mns.cda.suivimns.service.inter.iAssignmentService;
 import com.mns.cda.suivimns.view.AssignmentView;
 import lombok.RequiredArgsConstructor;
@@ -62,39 +63,29 @@ public class AssignmentController {
 
 
     @PutMapping("/close/{id}")
-    public ResponseEntity<Assignment> close(@PathVariable int id, @RequestBody @Validated() Assignment assignmentToUpdate) throws iAssignmentService.AssignmentNotFoundException {
+    public ResponseEntity<Assignment> close(@PathVariable int id, @RequestBody @Validated() Assignment assignmentToUpdate) throws iAssignmentService.AssignmentNotFoundException, iAssignmentService.AssignmentBadRequestException {
         try {
             iAssignmentService.update(assignmentToUpdate, id);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (iAssignmentService.AssignmentNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (iAssignmentService.AssignmentBadRequestException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     @PutMapping("/{id}")
     @JsonView(AssignmentView.class)
-    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated() Assignment assignmentToUpdate) {
-        Optional<Assignment> assignment = iAssignmentService.findById(id);
+    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated() Assignment assignmentToUpdate) throws iAssignmentService.AssignmentNotFoundException, iAssignmentService.AssignmentBadRequestException {
 
-        if (assignment.isEmpty()) {
+        try {
+            iAssignmentService.update(assignmentToUpdate, id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (iAssignmentService.AssignmentNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        if (assignmentToUpdate.getTicket() == null) {
+        } catch (iAssignmentService.AssignmentBadRequestException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-
-        if (assignmentToUpdate.getManager() == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-        if (assignmentToUpdate.getTechnician() == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-        iAssignmentService.modify(assignmentToUpdate, id);
-
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }

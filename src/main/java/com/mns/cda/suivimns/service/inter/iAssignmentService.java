@@ -18,8 +18,11 @@ public interface iAssignmentService {
 
     void delete(Assignment assignment);
 
-    void update(Assignment assignmentToUpdate, int id) throws AssignmentNotFoundException;
+    void update(Assignment assignmentToUpdate, int id) throws AssignmentNotFoundException, AssignmentBadRequestException;
 
     class AssignmentNotFoundException extends Exception {
+    }
+
+    class AssignmentBadRequestException extends Exception {
     }
 }

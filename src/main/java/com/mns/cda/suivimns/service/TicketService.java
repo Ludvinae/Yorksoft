@@ -112,7 +112,11 @@ public class TicketService implements iTicketService {
 
         Ticket savedTicket = ticketDao.save(ticket);
 
-        iHistoryService.updateHistory(savedTicket, ticketDto.idCreator(), "Nouveau");
+        // En attendant l'authentification
+        AppUser userBidon = new AppUser();
+        userBidon.setIdAppUser(1);
+
+        iHistoryService.updateHistory(savedTicket, userBidon.getIdAppUser(), "Nouveau");
         addThemeToTicket(savedTicket, ticketDto.themeDesignation());
 
         return savedTicket;
