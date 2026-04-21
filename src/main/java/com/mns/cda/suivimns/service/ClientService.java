@@ -3,7 +3,9 @@ package com.mns.cda.suivimns.service;
 import com.mns.cda.suivimns.dao.ClientDao;
 import com.mns.cda.suivimns.dto.ClientDto;
 import com.mns.cda.suivimns.model.Client;
+import com.mns.cda.suivimns.model.Status;
 import com.mns.cda.suivimns.service.inter.iClientService;
+import com.mns.cda.suivimns.service.inter.iStatusService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -43,17 +45,13 @@ public class ClientService implements iClientService {
     }
 
     @Override
-    public void update(Client clientToUpdate, int id) throws iClientService.ClientNotFoundException {
-        Optional<Client> client = clientDao.findById(id);
+    public Client update(Client clientToUpdate, int id) throws iClientService.ClientNotFoundException {
+        Client currentClient = clientDao.findById(id)
+                .orElseThrow(iClientService.ClientNotFoundException::new);
 
-        if (client.isEmpty()) {
-            throw new iClientService.ClientNotFoundException();
-        }
+        currentClient.setImportance(clientToUpdate.getImportance());
 
-        clientToUpdate.setIdAppUser(client.get().getIdAppUser());
-        clientToUpdate.setPassword(client.get().getPassword());
-
-        clientDao.save(clientToUpdate);
+        return clientDao.save(currentClient);
     }
 
     public ClientDto toDto(Client client) {

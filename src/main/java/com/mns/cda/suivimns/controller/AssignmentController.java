@@ -64,39 +64,6 @@ public class AssignmentController {
 
     }
 
-    @Operation(summary = "Supprimer une affectation")
-    @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "Supprimé"),
-            @ApiResponse(responseCode = "404", description = "Non trouvé")})
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable int id) {
-        Optional<Assignment> assignment = assignmentService.findById(id);
 
-        if (assignment.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        assignmentService.delete(assignment.get());
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    @Operation(summary = "Mettre à jour une affectation")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Mis à jour"),
-            @ApiResponse(responseCode = "404", description = "Non trouvé"),
-            @ApiResponse(responseCode = "400", description = "Requête invalide")})
-    @PutMapping("/{id}")
-    @JsonView(AssignmentView.class)
-    public ResponseEntity<Assignment> update(@PathVariable int id, @RequestBody @Valid Assignment assignmentToUpdate){
-
-        try {
-            Assignment assignmentSaved = assignmentService.update(assignmentToUpdate, id);
-            return new ResponseEntity<>(assignmentSaved, HttpStatus.OK);
-        } catch (iAssignmentService.AssignmentNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (iAssignmentService.AssignmentBadRequestException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-    }
-
+    // Pas de route DELETE et PUT
 }

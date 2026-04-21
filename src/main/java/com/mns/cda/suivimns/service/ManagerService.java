@@ -37,7 +37,7 @@ public class ManagerService implements iManagerService {
     }
 
     @Override
-    public void update(Manager managerToUpdate, int id) throws iManagerService.ManagerNotFoundException {
+    public Manager update(Manager managerToUpdate, int id) throws iManagerService.ManagerNotFoundException {
         Optional<Manager> manager = managerDao.findById(id);
 
         if (manager.isEmpty()) {
@@ -46,6 +46,6 @@ public class ManagerService implements iManagerService {
 
         managerToUpdate.setIdAppUser(manager.get().getIdAppUser());
 
-        managerDao.save(managerToUpdate);
+        return managerDao.save(managerToUpdate);
     }
 }

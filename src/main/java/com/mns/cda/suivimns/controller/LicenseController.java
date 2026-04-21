@@ -55,6 +55,10 @@ public class LicenseController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    /* Champs modifiables :
+     * userCount
+     * expirationDate
+     */
     @PutMapping("/{id}")
     public ResponseEntity<License> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) License licenseToUpdate){
         try {

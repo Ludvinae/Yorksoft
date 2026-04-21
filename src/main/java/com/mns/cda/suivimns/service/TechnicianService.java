@@ -37,7 +37,7 @@ public class TechnicianService implements iTechnicianService {
     }
 
     @Override
-    public void update(Technician technicianToUpdate, int id) throws iTechnicianService.TechnicianNotFoundException {
+    public Technician update(Technician technicianToUpdate, int id) throws iTechnicianService.TechnicianNotFoundException {
         Optional<Technician> technician = technicianDao.findById(id);
 
         if (technician.isEmpty()) {
@@ -46,6 +46,6 @@ public class TechnicianService implements iTechnicianService {
 
         technicianToUpdate.setIdAppUser(technician.get().getIdAppUser());
 
-        technicianDao.save(technicianToUpdate);
+        return technicianDao.save(technicianToUpdate);
     }
 }

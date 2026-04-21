@@ -60,6 +60,11 @@ public class VersionController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    /* Champs modifiables :
+     * versionNumber
+     * publicationDate
+     * versionType
+     */
     @PutMapping("/{id}")
     public ResponseEntity<Version> update(@PathVariable Integer id, @RequestBody @Validated(OnUpdate.class) Version versionToUpdate) {
         try {

@@ -29,7 +29,7 @@ public class MockManagerService implements iManagerService {
     }
 
     @Override
-    public void update(Manager managerToUpdate, int id) throws ManagerNotFoundException {
-
+    public Manager update(Manager managerToUpdate, int id) throws ManagerNotFoundException {
+        return null;
     }
 }

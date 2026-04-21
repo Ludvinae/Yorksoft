@@ -55,11 +55,14 @@ public class DirectorController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    /* Champs modifiables :
+     *
+     */
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Director directorToUpdate) {
+    public ResponseEntity<Director> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Director directorToUpdate) {
         try {
-            directorService.update(directorToUpdate, id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            Director directorSaved = directorService.update(directorToUpdate, id);
+            return new ResponseEntity<>(directorSaved, HttpStatus.OK);
         } catch (iDirectorService.DirectorNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

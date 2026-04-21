@@ -28,7 +28,7 @@ public class MockTechnicianService implements iTechnicianService {
     }
 
     @Override
-    public void update(Technician technicianToUpdate, int id) throws TechnicianNotFoundException {
-
+    public Technician update(Technician technicianToUpdate, int id) throws TechnicianNotFoundException {
+        return null;
     }
 }

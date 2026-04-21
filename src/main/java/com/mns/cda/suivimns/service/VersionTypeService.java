@@ -1,7 +1,9 @@
 package com.mns.cda.suivimns.service;
 
 import com.mns.cda.suivimns.dao.VersionTypeDao;
+import com.mns.cda.suivimns.model.Comment;
 import com.mns.cda.suivimns.model.VersionType;
+import com.mns.cda.suivimns.service.inter.iCommentService;
 import com.mns.cda.suivimns.service.inter.iVersionTypeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -38,14 +40,12 @@ public class VersionTypeService implements iVersionTypeService {
 
     @Override
     public VersionType update(VersionType versionTypeToUpdate, int id) throws iVersionTypeService.VersionTypeNotFoundException {
-        Optional<VersionType> versionType = versionTypeDao.findById(id);
+        VersionType currentType = versionTypeDao.findById(id)
+                .orElseThrow(iVersionTypeService.VersionTypeNotFoundException::new);
 
-        if (versionType.isEmpty()) {
-            throw new iVersionTypeService.VersionTypeNotFoundException();
-        }
+        currentType.setDesignation(versionTypeToUpdate.getDesignation());
+        currentType.setUrgencyMalus(versionTypeToUpdate.getUrgencyMalus());
 
-        versionTypeToUpdate.setIdVersionType(versionType.get().getIdVersionType());
-
-        return versionTypeDao.save(versionTypeToUpdate);
+        return versionTypeDao.save(currentType);
     }
 }

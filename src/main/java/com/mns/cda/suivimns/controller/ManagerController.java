@@ -58,11 +58,14 @@ public class ManagerController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    /* Champs modifiables :
+     *
+     */
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Manager managerToUpdate){
+    public ResponseEntity<Manager> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Manager managerToUpdate){
         try {
-            managerService.update(managerToUpdate, id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            Manager managerSaved = managerService.update(managerToUpdate, id);
+            return new ResponseEntity<>(managerSaved, HttpStatus.OK);
         } catch (iManagerService.ManagerNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

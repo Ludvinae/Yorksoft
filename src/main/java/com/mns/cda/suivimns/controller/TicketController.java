@@ -75,6 +75,11 @@ public class TicketController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    /* Champs modifiables :
+     * title
+     * description
+     * callDuration
+     */
     @PutMapping("/{id}")
     public ResponseEntity<Ticket> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Ticket ticketToUpdate) {
        try {

@@ -29,10 +29,6 @@ public class MockHistoryService implements iHistoryService {
 
     }
 
-    @Override
-    public History update(History historyToUpdate, int id) throws HistoryNotFoundException {
-        return null;
-    }
 
     @Override
     public void updateHistory(Ticket ticket, Integer actorId, String nextStatus) {

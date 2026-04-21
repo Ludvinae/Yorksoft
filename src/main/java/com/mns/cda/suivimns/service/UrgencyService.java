@@ -2,7 +2,9 @@ package com.mns.cda.suivimns.service;
 
 import com.mns.cda.suivimns.dao.UrgencyDao;
 import com.mns.cda.suivimns.model.Urgency;
+import com.mns.cda.suivimns.model.VersionType;
 import com.mns.cda.suivimns.service.inter.iUrgencyService;
+import com.mns.cda.suivimns.service.inter.iVersionTypeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -38,14 +40,13 @@ public class UrgencyService implements iUrgencyService {
 
     @Override
     public Urgency update(Urgency urgencyToUpdate, int id) throws iUrgencyService.UrgencyNotFoundException {
-        Optional<Urgency> urgency = urgencyDao.findById(id);
+        Urgency currentUrgency = urgencyDao.findById(id)
+                .orElseThrow(iUrgencyService.UrgencyNotFoundException::new);
 
-        if (urgency.isEmpty()) {
-            throw new iUrgencyService.UrgencyNotFoundException();
-        }
+        currentUrgency.setDesignation(urgencyToUpdate.getDesignation());
+        currentUrgency.setDescription(urgencyToUpdate.getDescription());
+        currentUrgency.setPriorityFactor(urgencyToUpdate.getPriorityFactor());
 
-        urgencyToUpdate.setIdUrgency(urgency.get().getIdUrgency());
-
-        return urgencyDao.save(urgencyToUpdate);
+        return urgencyDao.save(currentUrgency);
     }
 }

@@ -9,6 +9,7 @@ import com.mns.cda.suivimns.model.keys.ClassificationKey;
 import com.mns.cda.suivimns.service.inter.iClassificationService;
 import com.mns.cda.suivimns.service.inter.iHistoryService;
 import com.mns.cda.suivimns.service.inter.iTicketService;
+import com.mns.cda.suivimns.service.inter.iUrgencyService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -67,15 +68,24 @@ public class TicketService implements iTicketService {
 
     @Override
     public Ticket update(Ticket ticketToUpdate, int id) throws TicketNotFoundException {
-        Optional<Ticket> ticket = ticketDao.findById(id);
+        Ticket currentTicket = ticketDao.findById(id)
+                .orElseThrow(iTicketService.TicketNotFoundException::new);
 
-        if (ticket.isEmpty()) {
-            throw new TicketNotFoundException();
-        }
+        currentTicket.setTitle(ticketToUpdate.getTitle());
+        currentTicket.setDescription(ticketToUpdate.getDescription());
+        currentTicket.setCallDuration(ticketToUpdate.getCallDuration());
 
-        ticketToUpdate.setIdTicket(ticket.get().getIdTicket());
+        return ticketDao.save(currentTicket);
+    }
 
-        return ticketDao.save(ticketToUpdate);
+    @Override
+    public Ticket forceChangePriority(int priority, int id) throws TicketNotFoundException {
+        Ticket currentTicket = ticketDao.findById(id)
+                .orElseThrow(iTicketService.TicketNotFoundException::new);
+
+        currentTicket.setFinalPriority(priority);
+
+        return ticketDao.save(currentTicket);
     }
 
 

@@ -24,6 +24,8 @@ public interface iTicketService {
 
     Ticket update(Ticket ticketToUpdate, int id) throws TicketNotFoundException;
 
+    Ticket forceChangePriority(int priority, int id) throws TicketNotFoundException;
+
     @Transactional
     Ticket createTicket(TicketCreation ticketDto);
 

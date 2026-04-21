@@ -39,7 +39,7 @@ public class MockClientService implements iClientService {
     }
 
     @Override
-    public void update(Client clientToUpdate, int id) throws ClientNotFoundException {
-
+    public Client update(Client clientToUpdate, int id) throws ClientNotFoundException {
+        return null;
     }
 }

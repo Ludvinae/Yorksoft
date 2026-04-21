@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.mns.cda.suivimns.model.Technician;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
+import com.mns.cda.suivimns.service.TechnicianService;
 import com.mns.cda.suivimns.service.inter.iTechnicianService;
 import com.mns.cda.suivimns.view.TechnicianView;
 import lombok.RequiredArgsConstructor;
@@ -58,11 +59,14 @@ public class TechnicianController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    /* Champs modifiables :
+     *
+     */
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Technician technicianToUpdate){
+    public ResponseEntity<Technician> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Technician technicianToUpdate){
         try {
-            technicianService.update(technicianToUpdate, id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            Technician technicianSaved = technicianService.update(technicianToUpdate, id);
+            return new ResponseEntity<>(technicianSaved, HttpStatus.OK);
         } catch (iTechnicianService.TechnicianNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

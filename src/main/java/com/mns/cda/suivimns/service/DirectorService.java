@@ -37,7 +37,7 @@ public class DirectorService implements iDirectorService {
     }
 
     @Override
-    public void update(Director directorToUpdate, int id) throws iDirectorService.DirectorNotFoundException {
+    public Director update(Director directorToUpdate, int id) throws iDirectorService.DirectorNotFoundException {
         Optional<Director> director = directorDao.findById(id);
 
         if (director.isEmpty()) {
@@ -46,6 +46,6 @@ public class DirectorService implements iDirectorService {
 
         directorToUpdate.setIdAppUser(director.get().getIdAppUser());
 
-        directorDao.save(directorToUpdate);
+        return directorDao.save(directorToUpdate);
     }
 }

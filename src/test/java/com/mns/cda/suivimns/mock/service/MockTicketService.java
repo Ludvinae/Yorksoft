@@ -46,6 +46,11 @@ public class MockTicketService implements iTicketService {
     }
 
     @Override
+    public Ticket forceChangePriority(int priority, int id) throws TicketNotFoundException {
+        return null;
+    }
+
+    @Override
     public Ticket createTicket(TicketCreation ticketDto) {
         return null;
     }

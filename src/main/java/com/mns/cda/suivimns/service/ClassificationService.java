@@ -32,7 +32,7 @@ public class ClassificationService implements iClassificationService {
 
     @Override
     public Classification save(Classification classification) {
-
+        classification.setId(null);
         return classificationDao.save(classification);
     }
 

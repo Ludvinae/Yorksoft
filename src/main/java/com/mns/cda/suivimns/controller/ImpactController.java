@@ -56,6 +56,11 @@ public class ImpactController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    /* Champs modifiables :
+     * designation
+     * description
+     * priorityFactor
+     */
     @PutMapping("/{id}")
     public ResponseEntity<Impact> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Impact impactToUpdate) {
         try {

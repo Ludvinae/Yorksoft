@@ -78,6 +78,11 @@ public class SoftwareController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    /* Champs modifiables :
+     * name
+     * description
+     * softwareType
+     */
     @PutMapping("/{id}")
     public ResponseEntity<Software> update(@PathVariable Integer id, @RequestBody @Validated(OnUpdate.class) Software softwareToUpdate) {
         try {

@@ -57,6 +57,10 @@ public class StatusController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    /* Champs modifiables :
+     * designation
+     * displayOrder
+     */
     @PutMapping("/{id}")
     public ResponseEntity<Status> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Status statusToUpdate) {
         try {

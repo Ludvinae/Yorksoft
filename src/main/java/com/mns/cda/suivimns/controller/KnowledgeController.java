@@ -57,6 +57,11 @@ public class KnowledgeController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    /* Champs modifiables :
+     * subject
+     * theme
+     * versionList
+     */
     @PutMapping("/{id}")
     public ResponseEntity<Knowledge> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Knowledge knowledgeToUpdate) {
         try {

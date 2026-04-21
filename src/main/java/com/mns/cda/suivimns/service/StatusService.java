@@ -2,7 +2,9 @@ package com.mns.cda.suivimns.service;
 
 import com.mns.cda.suivimns.dao.StatusDao;
 import com.mns.cda.suivimns.model.Status;
+import com.mns.cda.suivimns.model.Urgency;
 import com.mns.cda.suivimns.service.inter.iStatusService;
+import com.mns.cda.suivimns.service.inter.iUrgencyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -43,14 +45,12 @@ public class StatusService implements iStatusService {
 
     @Override
     public Status update(Status statusToUpdate, int id) throws iStatusService.StatusNotFoundException {
-        Optional<Status> status = statusDao.findById(id);
+        Status currentStatus = statusDao.findById(id)
+                .orElseThrow(iStatusService.StatusNotFoundException::new);
 
-        if (status.isEmpty()) {
-            throw new iStatusService.StatusNotFoundException();
-        }
+        currentStatus.setDesignation(statusToUpdate.getDesignation());
+        currentStatus.setDisplayOrder(statusToUpdate.getDisplayOrder());
 
-        statusToUpdate.setIdStatus(status.get().getIdStatus());
-
-        return statusDao.save(statusToUpdate);
+        return statusDao.save(currentStatus);
     }
 }

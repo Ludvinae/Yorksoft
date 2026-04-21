@@ -53,6 +53,10 @@ public class VersionTypeController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    /* Champs modifiables :
+        * UrgencyMalus
+        * Designation
+     */
     @PutMapping("/{id}")
     public ResponseEntity<VersionType> update(@PathVariable Integer id, @RequestBody @Validated() VersionType typeToUpdate) {
         try {

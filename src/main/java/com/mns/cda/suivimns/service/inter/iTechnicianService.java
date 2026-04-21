@@ -14,7 +14,7 @@ public interface iTechnicianService {
 
     void delete(Technician technician);
 
-    void update(Technician technicianToUpdate, int id) throws TechnicianNotFoundException;
+    Technician update(Technician technicianToUpdate, int id) throws TechnicianNotFoundException;
 
     class TechnicianNotFoundException extends Exception {
     }

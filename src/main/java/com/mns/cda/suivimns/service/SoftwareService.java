@@ -6,7 +6,9 @@ import com.mns.cda.suivimns.dto.SoftwareDto;
 import com.mns.cda.suivimns.model.Client;
 import com.mns.cda.suivimns.model.Software;
 import com.mns.cda.suivimns.model.SoftwareType;
+import com.mns.cda.suivimns.model.Status;
 import com.mns.cda.suivimns.service.inter.iSoftwareService;
+import com.mns.cda.suivimns.service.inter.iStatusService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -45,15 +47,15 @@ public class SoftwareService implements iSoftwareService {
 
     @Override
     public Software update(Software softwareToUpdate, int id) throws iSoftwareService.SoftwareNotFoundException {
-        Optional<Software> software = softwareDao.findById(id);
+        Software currentSoftware = softwareDao.findById(id)
+                .orElseThrow(iSoftwareService.SoftwareNotFoundException::new);
 
-        if (software.isEmpty()) {
-            throw new iSoftwareService.SoftwareNotFoundException();
-        }
+        currentSoftware.setName(softwareToUpdate.getName());
+        currentSoftware.setDescription(softwareToUpdate.getDescription());
 
-        softwareToUpdate.setIdSoftware(software.get().getIdSoftware());
+        currentSoftware.setType(softwareToUpdate.getType());
 
-        return softwareDao.save(softwareToUpdate);
+        return softwareDao.save(currentSoftware);
     }
 
     @Transactional

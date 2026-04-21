@@ -2,7 +2,9 @@ package com.mns.cda.suivimns.service;
 
 import com.mns.cda.suivimns.dao.ThemeDao;
 import com.mns.cda.suivimns.model.Theme;
+import com.mns.cda.suivimns.model.Urgency;
 import com.mns.cda.suivimns.service.inter.iThemeService;
+import com.mns.cda.suivimns.service.inter.iUrgencyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -43,14 +45,12 @@ public class ThemeService implements iThemeService {
 
     @Override
     public Theme update(Theme themeToUpdate, int id) throws iThemeService.ThemeNotFoundException {
-        Optional<Theme> theme = themeDao.findById(id);
+        Theme currentTheme = themeDao.findById(id)
+                .orElseThrow(iThemeService.ThemeNotFoundException::new);
 
-        if (theme.isEmpty()) {
-            throw new iThemeService.ThemeNotFoundException();
-        }
+        currentTheme.setDesignation(themeToUpdate.getDesignation());
+        currentTheme.setDescription(themeToUpdate.getDescription());
 
-        themeToUpdate.setIdTheme(theme.get().getIdTheme());
-
-        return themeDao.save(themeToUpdate);
+        return themeDao.save(currentTheme);
     }
 }

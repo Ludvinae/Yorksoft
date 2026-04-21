@@ -32,13 +32,5 @@ public class MockAssignmentService implements iAssignmentService {
 
     }
 
-    @Override
-    public void delete(Assignment assignment) {
 
-    }
-
-    @Override
-    public Assignment update(Assignment assignmentToUpdate, int id) throws AssignmentNotFoundException {
-        return null;
-    }
 }

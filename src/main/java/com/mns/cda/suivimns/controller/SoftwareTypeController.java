@@ -60,6 +60,9 @@ public class SoftwareTypeController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    /* Champs modifiables :
+     * designation
+     */
     @PutMapping("/{id}")
     public ResponseEntity<SoftwareType> update(@PathVariable Integer id, @RequestBody @Validated(OnUpdate.class) SoftwareType typeToUpdate) {
         try {

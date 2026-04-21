@@ -57,6 +57,10 @@ public class ThemeController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    /* Champs modifiables :
+     * designation
+     * description
+     */
     @PutMapping("/{id}")
     public ResponseEntity<Theme> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Theme themeToUpdate) {
         try {

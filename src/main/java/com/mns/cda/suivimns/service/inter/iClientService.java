@@ -20,7 +20,7 @@ public interface iClientService {
 
     void delete(Client client);
 
-    void update(Client clientToUpdate, int id) throws ClientNotFoundException;
+    Client update(Client clientToUpdate, int id) throws ClientNotFoundException;
 
     class ClientNotFoundException extends Exception {
     }

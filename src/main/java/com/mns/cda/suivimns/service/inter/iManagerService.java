@@ -14,7 +14,7 @@ public interface iManagerService {
 
     void delete(Manager manager);
 
-    void update(Manager managerToUpdate, int id) throws ManagerNotFoundException;
+    Manager update(Manager managerToUpdate, int id) throws ManagerNotFoundException;
 
     class ManagerNotFoundException extends Exception {
     }

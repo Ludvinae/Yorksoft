@@ -2,7 +2,9 @@ package com.mns.cda.suivimns.service;
 
 import com.mns.cda.suivimns.dao.KnowledgeDao;
 import com.mns.cda.suivimns.model.Knowledge;
+import com.mns.cda.suivimns.model.Status;
 import com.mns.cda.suivimns.service.inter.iKnowledgeService;
+import com.mns.cda.suivimns.service.inter.iStatusService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -38,14 +40,14 @@ public class KnowledgeService implements iKnowledgeService {
 
     @Override
     public Knowledge update(Knowledge knowledgeToUpdate, int id) throws iKnowledgeService.KnowledgeNotFoundException {
-        Optional<Knowledge> knowledge = knowledgeDao.findById(id);
+        Knowledge currentKnowledge = knowledgeDao.findById(id)
+                .orElseThrow(iKnowledgeService.KnowledgeNotFoundException::new);
 
-        if (knowledge.isEmpty()) {
-            throw new iKnowledgeService.KnowledgeNotFoundException();
-        }
+        currentKnowledge.setSubject(knowledgeToUpdate.getSubject());
 
-        knowledgeToUpdate.setIdKnowledge(knowledge.get().getIdKnowledge());
+        currentKnowledge.setVersionList(knowledgeToUpdate.getVersionList());
+        currentKnowledge.setTheme(knowledgeToUpdate.getTheme());
 
-        return knowledgeDao.save(knowledgeToUpdate);
+        return knowledgeDao.save(currentKnowledge);
     }
 }

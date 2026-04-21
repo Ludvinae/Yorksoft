@@ -2,7 +2,9 @@ package com.mns.cda.suivimns.service;
 
 import com.mns.cda.suivimns.dao.ArticleDao;
 import com.mns.cda.suivimns.model.Article;
+import com.mns.cda.suivimns.model.License;
 import com.mns.cda.suivimns.service.inter.iArticleService;
+import com.mns.cda.suivimns.service.inter.iLicenseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -42,16 +44,11 @@ public class ArticleService implements iArticleService {
 
     @Override
     public Article update(Article articleToUpdate, int id) throws iArticleService.ArticleNotFoundException {
-        Optional<Article> article = articleDao.findById(id);
+        Article currentArticle = articleDao.findById(id)
+                .orElseThrow(iArticleService.ArticleNotFoundException::new);
 
-        if (article.isEmpty()) {
-            throw new iArticleService.ArticleNotFoundException();
-        }
+        currentArticle.setContent(articleToUpdate.getContent());
 
-        articleToUpdate.setIdArticle(article.get().getIdArticle());
-        articleToUpdate.setCreationDate(null);
-        articleToUpdate.setModificationDate(LocalDateTime.now());
-
-        return articleDao.save(articleToUpdate);
+        return articleDao.save(currentArticle);
     }
 }

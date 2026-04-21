@@ -42,18 +42,6 @@ public class HistoryService implements iHistoryService {
         historyDao.delete(history);
     }
 
-    @Override
-    public void update(History historyToUpdate, int id) throws iHistoryService.HistoryNotFoundException {
-        Optional<History> history = historyDao.findById(id);
-
-        if (history.isEmpty()) {
-            throw new iHistoryService.HistoryNotFoundException();
-        }
-
-        historyToUpdate.setIdHistory(history.get().getIdHistory());
-
-        historyDao.save(historyToUpdate);
-    }
 
     // METHODS
 

@@ -57,6 +57,11 @@ public class UrgencyController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    /* Champs modifiables :
+     * designation
+     * description
+     * priorityFactor
+     */
     @PutMapping("/{id}")
     public ResponseEntity<Urgency> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Urgency urgencyToUpdate) {
         try {

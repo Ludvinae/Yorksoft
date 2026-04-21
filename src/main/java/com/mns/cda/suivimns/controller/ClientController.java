@@ -79,15 +79,18 @@ public class ClientController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    /* Champs modifiables :
+     * importance
+     */
     @Operation(summary = "Mettre à jour un client")
-    @ApiResponses({@ApiResponse(responseCode = "204", description = "Client mis à jour"),
+    @ApiResponses({@ApiResponse(responseCode = "200", description = "Client mis à jour"),
                  @ApiResponse(responseCode = "404", description = "Client non trouvé"),
                  @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Client clientToUpdate){
+    public ResponseEntity<Client> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Client clientToUpdate){
         try {
-            clientService.update(clientToUpdate, id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            Client clientSaved = clientService.update(clientToUpdate, id);
+            return new ResponseEntity<>(clientSaved, HttpStatus.OK);
         } catch (iClientService.ClientNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

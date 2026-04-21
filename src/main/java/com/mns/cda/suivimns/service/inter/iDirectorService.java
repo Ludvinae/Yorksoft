@@ -14,7 +14,7 @@ public interface iDirectorService {
 
     void delete(Director director);
 
-    void update(Director directorToUpdate, int id) throws DirectorNotFoundException;
+    Director update(Director directorToUpdate, int id) throws DirectorNotFoundException;
 
     class DirectorNotFoundException extends Exception {
     }

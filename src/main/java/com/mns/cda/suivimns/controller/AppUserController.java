@@ -33,7 +33,6 @@ public class AppUserController {
     @Operation(summary = "Lister tous les utilisateurs")
     @ApiResponse(responseCode = "200", description = "Liste récupérée avec succès")
     @GetMapping("/list")
-    @JsonView(TicketView.class)
     public List<AppUser> getAll() {
         return appUserService.findAll();
     }
@@ -98,6 +97,12 @@ public class AppUserController {
 
      */
 
+    /* Champs modifiables :
+     * firstName
+     * lastName
+     * email
+     * phoneNumber
+     */
     @Operation(summary = "Mettre à jour un utilisateur")
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Utilisateur mis à jour"),
@@ -116,6 +121,9 @@ public class AppUserController {
         }
     }
 
+    /* Champs modifiables :
+     * password
+     */
     @Operation(summary = "Changer le mot de passe d'un utilisateur")
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Mot de passe mis à jour"),

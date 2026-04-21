@@ -74,7 +74,7 @@ public class AppUserService implements iAppUserService {
                 .orElseThrow(AppUserNotFoundException::new);
 
         // vérifier ancien mot de passe
-        if (Objects.equals(user.getPassword(), dto.oldPassword())) {
+        if (!Objects.equals(user.getPassword(), dto.oldPassword())) {
             throw new BadPasswordException();
         }
 

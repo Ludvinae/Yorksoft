@@ -2,7 +2,9 @@ package com.mns.cda.suivimns.service;
 
 import com.mns.cda.suivimns.dao.LicenseDao;
 import com.mns.cda.suivimns.model.License;
+import com.mns.cda.suivimns.model.Status;
 import com.mns.cda.suivimns.service.inter.iLicenseService;
+import com.mns.cda.suivimns.service.inter.iStatusService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -38,14 +40,12 @@ public class LicenseService implements iLicenseService {
 
     @Override
     public License update(License licenseToUpdate, int id) throws iLicenseService.LicenseNotFoundException {
-        Optional<License> license = licenseDao.findById(id);
+        License currentLicense = licenseDao.findById(id)
+                .orElseThrow(iLicenseService.LicenseNotFoundException::new);
 
-        if (license.isEmpty()) {
-            throw new iLicenseService.LicenseNotFoundException();
-        }
+        currentLicense.setUserCount(licenseToUpdate.getUserCount());
+        currentLicense.setExpirationDate(licenseToUpdate.getExpirationDate());
 
-        licenseToUpdate.setIdLicense(license.get().getIdLicense());
-
-        return licenseDao.save(licenseToUpdate);
+        return licenseDao.save(currentLicense);
     }
 }

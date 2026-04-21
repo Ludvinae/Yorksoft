@@ -28,7 +28,7 @@ public class MockDirectorService implements iDirectorService {
     }
 
     @Override
-    public void update(Director directorToUpdate, int id) throws DirectorNotFoundException {
-
+    public Director update(Director directorToUpdate, int id) throws DirectorNotFoundException {
+        return null;
     }
 }
