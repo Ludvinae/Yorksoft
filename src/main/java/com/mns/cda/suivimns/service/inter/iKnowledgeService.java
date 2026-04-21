@@ -14,7 +14,7 @@ public interface iKnowledgeService {
 
     void delete(Knowledge knowledge);
 
-    void update(Knowledge knowledgeToUpdate, int id) throws KnowledgeNotFoundException;
+    Knowledge update(Knowledge knowledgeToUpdate, int id) throws KnowledgeNotFoundException;
 
     class KnowledgeNotFoundException extends Exception {
     }

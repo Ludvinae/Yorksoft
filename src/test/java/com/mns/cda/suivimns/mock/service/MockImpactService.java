@@ -28,7 +28,7 @@ public class MockImpactService implements iImpactService {
     }
 
     @Override
-    public void update(Impact impactToUpdate, int id) throws ImpactNotFoundException {
-
+    public Impact update(Impact impactToUpdate, int id) throws ImpactNotFoundException {
+        return null;
     }
 }

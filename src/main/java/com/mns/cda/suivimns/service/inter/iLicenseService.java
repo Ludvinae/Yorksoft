@@ -14,7 +14,7 @@ public interface iLicenseService {
 
     void delete(License license);
 
-    void update(License licenseToUpdate, int id) throws LicenseNotFoundException;
+    License update(License licenseToUpdate, int id) throws LicenseNotFoundException;
 
     class LicenseNotFoundException extends Exception {
     }

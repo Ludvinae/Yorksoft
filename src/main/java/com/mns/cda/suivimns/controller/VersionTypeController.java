@@ -1,6 +1,8 @@
 package com.mns.cda.suivimns.controller;
 
+import com.mns.cda.suivimns.model.Version;
 import com.mns.cda.suivimns.model.VersionType;
+import com.mns.cda.suivimns.service.inter.iLicenseService;
 import com.mns.cda.suivimns.service.inter.iVersionTypeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -52,16 +54,12 @@ public class VersionTypeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable Integer id, @RequestBody @Validated() VersionType typeToUpdate) {
-        Optional<VersionType> versionType = versionTypeService.findById(id);
-
-        if (versionType.isEmpty()) {
+    public ResponseEntity<VersionType> update(@PathVariable Integer id, @RequestBody @Validated() VersionType typeToUpdate) {
+        try {
+            VersionType typeSaved = versionTypeService.update(typeToUpdate, id);
+            return new ResponseEntity<>(typeSaved, HttpStatus.OK);
+        } catch (iVersionTypeService.VersionTypeNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
-        typeToUpdate.setIdVersionType(id);
-        versionTypeService.save(typeToUpdate);
-
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

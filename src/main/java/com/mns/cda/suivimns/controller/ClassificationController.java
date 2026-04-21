@@ -60,5 +60,5 @@ public class ClassificationController {
     }
 
 
-    // Pas de methode Delet et Update ici, on ne change pas l'historisation apres les faits
+    // Pas de methode Delete et Update ici, on ne change pas l'historisation apres les faits
 }

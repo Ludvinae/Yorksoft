@@ -14,7 +14,7 @@ public interface iSoftwareTypeService {
 
     void delete(SoftwareType softwareType);
 
-    void update(SoftwareType softwareTypeToUpdate, int id) throws SoftwareTypeNotFoundException;
+    SoftwareType update(SoftwareType softwareTypeToUpdate, int id) throws SoftwareTypeNotFoundException;
 
     class SoftwareTypeNotFoundException extends Exception {
     }

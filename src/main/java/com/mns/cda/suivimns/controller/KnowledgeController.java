@@ -1,8 +1,10 @@
 package com.mns.cda.suivimns.controller;
 
+import com.mns.cda.suivimns.model.Impact;
 import com.mns.cda.suivimns.model.Knowledge;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
+import com.mns.cda.suivimns.service.inter.iImpactService;
 import com.mns.cda.suivimns.service.inter.iKnowledgeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -56,16 +58,12 @@ public class KnowledgeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Knowledge knowledgeToUpdate) {
-        Optional<Knowledge> knowledge = knowledgeService.findById(id);
-
-        if (knowledge.isEmpty()) {
+    public ResponseEntity<Knowledge> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Knowledge knowledgeToUpdate) {
+        try {
+            Knowledge knowledgeSaved = knowledgeService.update(knowledgeToUpdate, id);
+            return new ResponseEntity<>(knowledgeSaved, HttpStatus.OK);
+        } catch (iKnowledgeService.KnowledgeNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
-        knowledgeToUpdate.setIdKnowledge(knowledge.get().getIdKnowledge());
-        knowledgeService.save(knowledgeToUpdate);
-
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

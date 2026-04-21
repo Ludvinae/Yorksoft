@@ -42,7 +42,7 @@ public class ThemeService implements iThemeService {
     }
 
     @Override
-    public void update(Theme themeToUpdate, int id) throws iThemeService.ThemeNotFoundException {
+    public Theme update(Theme themeToUpdate, int id) throws iThemeService.ThemeNotFoundException {
         Optional<Theme> theme = themeDao.findById(id);
 
         if (theme.isEmpty()) {
@@ -51,6 +51,6 @@ public class ThemeService implements iThemeService {
 
         themeToUpdate.setIdTheme(theme.get().getIdTheme());
 
-        themeDao.save(themeToUpdate);
+        return themeDao.save(themeToUpdate);
     }
 }

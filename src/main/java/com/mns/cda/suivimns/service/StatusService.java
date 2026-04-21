@@ -42,7 +42,7 @@ public class StatusService implements iStatusService {
     }
 
     @Override
-    public void update(Status statusToUpdate, int id) throws iStatusService.StatusNotFoundException {
+    public Status update(Status statusToUpdate, int id) throws iStatusService.StatusNotFoundException {
         Optional<Status> status = statusDao.findById(id);
 
         if (status.isEmpty()) {
@@ -51,6 +51,6 @@ public class StatusService implements iStatusService {
 
         statusToUpdate.setIdStatus(status.get().getIdStatus());
 
-        statusDao.save(statusToUpdate);
+        return statusDao.save(statusToUpdate);
     }
 }

@@ -37,7 +37,7 @@ public class SoftwareTypeService implements iSoftwareTypeService {
     }
 
     @Override
-    public void update(SoftwareType softwareTypeToUpdate, int id) throws iSoftwareTypeService.SoftwareTypeNotFoundException {
+    public SoftwareType update(SoftwareType softwareTypeToUpdate, int id) throws iSoftwareTypeService.SoftwareTypeNotFoundException {
         Optional<SoftwareType> softwareType = softwareTypeDao.findById(id);
 
         if (softwareType.isEmpty()) {
@@ -46,6 +46,6 @@ public class SoftwareTypeService implements iSoftwareTypeService {
 
         softwareTypeToUpdate.setIdSoftwareType(softwareType.get().getIdSoftwareType());
 
-        softwareTypeDao.save(softwareTypeToUpdate);
+        return softwareTypeDao.save(softwareTypeToUpdate);
     }
 }

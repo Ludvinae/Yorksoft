@@ -60,7 +60,7 @@ public class AssignmentService implements iAssignmentService {
     }
 
     @Override
-    public void update(Assignment assignmentToUpdate, int id) throws iAssignmentService.AssignmentNotFoundException, AssignmentBadRequestException {
+    public Assignment update(Assignment assignmentToUpdate, int id) throws iAssignmentService.AssignmentNotFoundException, AssignmentBadRequestException {
         Optional<Assignment> assignment = assignmentDao.findById(id);
 
         if (assignment.isEmpty()) {
@@ -76,7 +76,7 @@ public class AssignmentService implements iAssignmentService {
 
         assignmentToUpdate.setIdAssignment(assignment.get().getIdAssignment());
 
-        assignmentDao.save(assignmentToUpdate);
+        return assignmentDao.save(assignmentToUpdate);
 
 
         // Pour remplacer la ligne precedente?

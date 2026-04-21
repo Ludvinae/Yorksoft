@@ -2,8 +2,10 @@ package com.mns.cda.suivimns.service;
 
 import com.mns.cda.suivimns.dao.ClassificationDao;
 import com.mns.cda.suivimns.model.Classification;
+import com.mns.cda.suivimns.model.Comment;
 import com.mns.cda.suivimns.model.Theme;
 import com.mns.cda.suivimns.service.inter.iClassificationService;
+import com.mns.cda.suivimns.service.inter.iCommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -50,4 +52,5 @@ public class ClassificationService implements iClassificationService {
         }
         return classification.get().getTheme();
     }
+
 }

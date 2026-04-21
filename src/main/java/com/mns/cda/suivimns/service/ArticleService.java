@@ -41,7 +41,7 @@ public class ArticleService implements iArticleService {
     }
 
     @Override
-    public void update(Article articleToUpdate, int id) throws iArticleService.ArticleNotFoundException {
+    public Article update(Article articleToUpdate, int id) throws iArticleService.ArticleNotFoundException {
         Optional<Article> article = articleDao.findById(id);
 
         if (article.isEmpty()) {
@@ -52,6 +52,6 @@ public class ArticleService implements iArticleService {
         articleToUpdate.setCreationDate(null);
         articleToUpdate.setModificationDate(LocalDateTime.now());
 
-        articleDao.save(articleToUpdate);
+        return articleDao.save(articleToUpdate);
     }
 }

@@ -33,7 +33,7 @@ public class MockThemeService implements iThemeService {
     }
 
     @Override
-    public void update(Theme themeToUpdate, int id) throws ThemeNotFoundException {
-
+    public Theme update(Theme themeToUpdate, int id) throws ThemeNotFoundException {
+        return null;
     }
 }

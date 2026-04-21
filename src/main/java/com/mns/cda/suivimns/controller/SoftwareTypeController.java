@@ -1,8 +1,10 @@
 package com.mns.cda.suivimns.controller;
 
+import com.mns.cda.suivimns.model.Software;
 import com.mns.cda.suivimns.model.SoftwareType;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
+import com.mns.cda.suivimns.service.inter.iLicenseService;
 import com.mns.cda.suivimns.service.inter.iSoftwareTypeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -59,14 +61,12 @@ public class SoftwareTypeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable Integer id, @RequestBody @Validated(OnUpdate.class) SoftwareType typeToUpdate) {
-        Optional<SoftwareType> softwareType = softwareTypeService.findById(id);
-        if (softwareType.isEmpty()) {
+    public ResponseEntity<SoftwareType> update(@PathVariable Integer id, @RequestBody @Validated(OnUpdate.class) SoftwareType typeToUpdate) {
+        try {
+            SoftwareType softwareTypeSaved = softwareTypeService.update(typeToUpdate, id);
+            return new ResponseEntity<>(softwareTypeSaved, HttpStatus.OK);
+        } catch (iSoftwareTypeService.SoftwareTypeNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        typeToUpdate.setIdSoftwareType(id);
-        softwareTypeService.save(typeToUpdate);
-
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

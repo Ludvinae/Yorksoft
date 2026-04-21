@@ -14,7 +14,7 @@ public interface iImpactService {
 
     void delete(Impact impact);
 
-    void update(Impact impactToUpdate, int id) throws ImpactNotFoundException;
+    Impact update(Impact impactToUpdate, int id) throws ImpactNotFoundException;
 
     class ImpactNotFoundException extends Exception {
     }

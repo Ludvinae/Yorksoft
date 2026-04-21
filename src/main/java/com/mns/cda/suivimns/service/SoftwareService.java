@@ -44,7 +44,7 @@ public class SoftwareService implements iSoftwareService {
     }
 
     @Override
-    public void update(Software softwareToUpdate, int id) throws iSoftwareService.SoftwareNotFoundException {
+    public Software update(Software softwareToUpdate, int id) throws iSoftwareService.SoftwareNotFoundException {
         Optional<Software> software = softwareDao.findById(id);
 
         if (software.isEmpty()) {
@@ -53,7 +53,7 @@ public class SoftwareService implements iSoftwareService {
 
         softwareToUpdate.setIdSoftware(software.get().getIdSoftware());
 
-        softwareDao.save(softwareToUpdate);
+        return softwareDao.save(softwareToUpdate);
     }
 
     @Transactional

@@ -28,7 +28,7 @@ public class MockUrgencyService implements iUrgencyService {
     }
 
     @Override
-    public void update(Urgency urgencyToUpdate, int id) throws UrgencyNotFoundException {
-
+    public Urgency update(Urgency urgencyToUpdate, int id) throws UrgencyNotFoundException {
+        return null;
     }
 }

@@ -41,8 +41,8 @@ public class MockTicketService implements iTicketService {
     }
 
     @Override
-    public void update(Ticket ticketToUpdate, int id) throws TicketNotFoundException {
-
+    public Ticket update(Ticket ticketToUpdate, int id) throws TicketNotFoundException {
+        return null;
     }
 
     @Override

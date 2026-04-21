@@ -28,7 +28,7 @@ public class MockKnowledgeService implements iKnowledgeService {
     }
 
     @Override
-    public void update(Knowledge knowledgeToUpdate, int id) throws KnowledgeNotFoundException {
-
+    public Knowledge update(Knowledge knowledgeToUpdate, int id) throws KnowledgeNotFoundException {
+        return null;
     }
 }

@@ -57,10 +57,10 @@ public class CommentController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Comment commentToUpdate) {
+    public ResponseEntity<Comment> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Comment commentToUpdate) {
         try {
-            commentService.update(commentToUpdate, id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            Comment commentSaved = commentService.update(commentToUpdate, id);
+            return new ResponseEntity<>(commentSaved, HttpStatus.OK);
         } catch (iCommentService.CommentNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

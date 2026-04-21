@@ -37,7 +37,7 @@ public class KnowledgeService implements iKnowledgeService {
     }
 
     @Override
-    public void update(Knowledge knowledgeToUpdate, int id) throws iKnowledgeService.KnowledgeNotFoundException {
+    public Knowledge update(Knowledge knowledgeToUpdate, int id) throws iKnowledgeService.KnowledgeNotFoundException {
         Optional<Knowledge> knowledge = knowledgeDao.findById(id);
 
         if (knowledge.isEmpty()) {
@@ -46,6 +46,6 @@ public class KnowledgeService implements iKnowledgeService {
 
         knowledgeToUpdate.setIdKnowledge(knowledge.get().getIdKnowledge());
 
-        knowledgeDao.save(knowledgeToUpdate);
+        return knowledgeDao.save(knowledgeToUpdate);
     }
 }

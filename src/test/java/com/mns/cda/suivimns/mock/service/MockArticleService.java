@@ -28,7 +28,7 @@ public class MockArticleService implements iArticleService {
     }
 
     @Override
-    public void update(Article articleToUpdate, int id) throws ArticleNotFoundException {
-
+    public Article update(Article articleToUpdate, int id) throws ArticleNotFoundException {
+        return null;
     }
 }

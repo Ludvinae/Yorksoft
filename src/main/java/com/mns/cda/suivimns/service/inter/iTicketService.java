@@ -22,7 +22,7 @@ public interface iTicketService {
 
     void delete(Ticket ticket);
 
-    void update(Ticket ticketToUpdate, int id) throws TicketNotFoundException;
+    Ticket update(Ticket ticketToUpdate, int id) throws TicketNotFoundException;
 
     @Transactional
     Ticket createTicket(TicketCreation ticketDto);

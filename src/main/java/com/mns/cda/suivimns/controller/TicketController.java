@@ -76,10 +76,10 @@ public class TicketController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Ticket ticketToUpdate) {
+    public ResponseEntity<Ticket> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Ticket ticketToUpdate) {
        try {
-           ticketService.update(ticketToUpdate, id);
-           return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+           Ticket ticketSaved = ticketService.update(ticketToUpdate, id);
+           return new ResponseEntity<>(ticketSaved, HttpStatus.OK);
        } catch (iTicketService.TicketNotFoundException e) {
            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
        }

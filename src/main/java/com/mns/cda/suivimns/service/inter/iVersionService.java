@@ -14,7 +14,7 @@ public interface iVersionService {
 
     void delete(Version version);
 
-    void update(Version versionToUpdate, int id) throws VersionNotFoundException;
+    Version update(Version versionToUpdate, int id) throws VersionNotFoundException;
 
     class VersionNotFoundException extends Exception {
     }

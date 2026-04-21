@@ -1,8 +1,10 @@
 package com.mns.cda.suivimns.controller;
 
+import com.mns.cda.suivimns.model.Status;
 import com.mns.cda.suivimns.model.Theme;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
+import com.mns.cda.suivimns.service.inter.iLicenseService;
 import com.mns.cda.suivimns.service.inter.iThemeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -56,16 +58,12 @@ public class ThemeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Theme themeToUpdate) {
-        Optional<Theme> theme = themeService.findById(id);
-
-        if (theme.isEmpty()) {
+    public ResponseEntity<Theme> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Theme themeToUpdate) {
+        try {
+            Theme themeSaved = themeService.update(themeToUpdate, id);
+            return new ResponseEntity<>(themeSaved, HttpStatus.OK);
+        } catch (iThemeService.ThemeNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
-        themeToUpdate.setIdTheme(theme.get().getIdTheme());
-        themeService.save(themeToUpdate);
-
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

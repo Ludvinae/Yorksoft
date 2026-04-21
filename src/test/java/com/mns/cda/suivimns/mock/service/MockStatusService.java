@@ -33,7 +33,7 @@ public class MockStatusService implements iStatusService {
     }
 
     @Override
-    public void update(Status statusToUpdate, int id) throws StatusNotFoundException {
-
+    public Status update(Status statusToUpdate, int id) throws StatusNotFoundException {
+        return null;
     }
 }

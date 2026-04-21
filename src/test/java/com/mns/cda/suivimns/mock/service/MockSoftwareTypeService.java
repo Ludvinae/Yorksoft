@@ -28,7 +28,7 @@ public class MockSoftwareTypeService implements iSoftwareTypeService {
     }
 
     @Override
-    public void update(SoftwareType softwareTypeToUpdate, int id) throws SoftwareTypeNotFoundException {
-
+    public SoftwareType update(SoftwareType softwareTypeToUpdate, int id) throws SoftwareTypeNotFoundException {
+        return null;
     }
 }

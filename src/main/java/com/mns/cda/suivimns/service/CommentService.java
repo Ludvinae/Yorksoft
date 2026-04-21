@@ -46,7 +46,7 @@ public class CommentService implements iCommentService {
         Comment currentComment = commentDao.findById(id)
                 .orElseThrow(iCommentService.CommentNotFoundException::new);
 
-        // Modification des champs qui sont authorisés a changer
+        // Modification des champs qui sont authorisés à changer
         currentComment.setContent(commentToUpdate.getContent());
 
         return commentDao.save(currentComment);

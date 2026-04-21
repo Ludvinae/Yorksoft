@@ -28,7 +28,7 @@ public class MockLicenseService implements iLicenseService {
     }
 
     @Override
-    public void update(License licenseToUpdate, int id) throws LicenseNotFoundException {
-
+    public License update(License licenseToUpdate, int id) throws LicenseNotFoundException {
+        return null;
     }
 }

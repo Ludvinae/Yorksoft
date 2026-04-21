@@ -14,7 +14,7 @@ public interface iUrgencyService {
 
     void delete(Urgency urgency);
 
-    void update(Urgency urgencyToUpdate, int id) throws UrgencyNotFoundException;
+    Urgency update(Urgency urgencyToUpdate, int id) throws UrgencyNotFoundException;
 
     class UrgencyNotFoundException extends Exception {
     }

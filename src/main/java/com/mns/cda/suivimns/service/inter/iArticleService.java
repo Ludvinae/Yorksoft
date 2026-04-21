@@ -14,7 +14,7 @@ public interface iArticleService {
 
     void delete(Article article);
 
-    void update(Article articleToUpdate, int id) throws ArticleNotFoundException;
+    Article update(Article articleToUpdate, int id) throws ArticleNotFoundException;
 
     class ArticleNotFoundException extends Exception {
     }

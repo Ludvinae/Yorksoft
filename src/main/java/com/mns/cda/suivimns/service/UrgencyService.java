@@ -37,7 +37,7 @@ public class UrgencyService implements iUrgencyService {
     }
 
     @Override
-    public void update(Urgency urgencyToUpdate, int id) throws iUrgencyService.UrgencyNotFoundException {
+    public Urgency update(Urgency urgencyToUpdate, int id) throws iUrgencyService.UrgencyNotFoundException {
         Optional<Urgency> urgency = urgencyDao.findById(id);
 
         if (urgency.isEmpty()) {
@@ -46,6 +46,6 @@ public class UrgencyService implements iUrgencyService {
 
         urgencyToUpdate.setIdUrgency(urgency.get().getIdUrgency());
 
-        urgencyDao.save(urgencyToUpdate);
+        return urgencyDao.save(urgencyToUpdate);
     }
 }

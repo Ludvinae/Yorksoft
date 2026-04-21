@@ -17,7 +17,7 @@ public interface iSoftwareService {
 
     void delete(Software software);
 
-    void update(Software softwareToUpdate, int id) throws SoftwareNotFoundException;
+    Software update(Software softwareToUpdate, int id) throws SoftwareNotFoundException;
 
     class SoftwareNotFoundException extends Exception {
     }

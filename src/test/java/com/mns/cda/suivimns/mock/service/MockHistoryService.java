@@ -30,8 +30,8 @@ public class MockHistoryService implements iHistoryService {
     }
 
     @Override
-    public void update(History historyToUpdate, int id) throws HistoryNotFoundException {
-
+    public History update(History historyToUpdate, int id) throws HistoryNotFoundException {
+        return null;
     }
 
     @Override

@@ -82,16 +82,16 @@ public class AssignmentController {
 
     @Operation(summary = "Mettre à jour une affectation")
     @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "Mis à jour"),
+            @ApiResponse(responseCode = "200", description = "Mis à jour"),
             @ApiResponse(responseCode = "404", description = "Non trouvé"),
             @ApiResponse(responseCode = "400", description = "Requête invalide")})
     @PutMapping("/{id}")
     @JsonView(AssignmentView.class)
-    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Valid Assignment assignmentToUpdate){
+    public ResponseEntity<Assignment> update(@PathVariable int id, @RequestBody @Valid Assignment assignmentToUpdate){
 
         try {
-            assignmentService.update(assignmentToUpdate, id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            Assignment assignmentSaved = assignmentService.update(assignmentToUpdate, id);
+            return new ResponseEntity<>(assignmentSaved, HttpStatus.OK);
         } catch (iAssignmentService.AssignmentNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (iAssignmentService.AssignmentBadRequestException e) {

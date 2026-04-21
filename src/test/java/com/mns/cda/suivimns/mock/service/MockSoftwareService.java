@@ -39,7 +39,7 @@ public class MockSoftwareService implements iSoftwareService {
     }
 
     @Override
-    public void update(Software softwareToUpdate, int id) throws SoftwareNotFoundException {
-
+    public Software update(Software softwareToUpdate, int id) throws SoftwareNotFoundException {
+        return null;
     }
 }

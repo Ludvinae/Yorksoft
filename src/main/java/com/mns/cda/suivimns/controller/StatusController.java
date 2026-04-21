@@ -1,8 +1,10 @@
 package com.mns.cda.suivimns.controller;
 
+import com.mns.cda.suivimns.model.SoftwareType;
 import com.mns.cda.suivimns.model.Status;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
+import com.mns.cda.suivimns.service.inter.iLicenseService;
 import com.mns.cda.suivimns.service.inter.iStatusService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -56,16 +58,12 @@ public class StatusController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Status statusToUpdate) {
-        Optional<Status> status = statusService.findById(id);
-
-        if (status.isEmpty()) {
+    public ResponseEntity<Status> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Status statusToUpdate) {
+        try {
+            Status statusSaved = statusService.update(statusToUpdate, id);
+            return new ResponseEntity<>(statusSaved, HttpStatus.OK);
+        } catch (iStatusService.StatusNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
-        statusToUpdate.setIdStatus(status.get().getIdStatus());
-        statusService.save(statusToUpdate);
-
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

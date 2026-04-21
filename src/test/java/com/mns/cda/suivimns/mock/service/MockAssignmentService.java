@@ -38,7 +38,7 @@ public class MockAssignmentService implements iAssignmentService {
     }
 
     @Override
-    public void update(Assignment assignmentToUpdate, int id) throws AssignmentNotFoundException {
-
+    public Assignment update(Assignment assignmentToUpdate, int id) throws AssignmentNotFoundException {
+        return null;
     }
 }

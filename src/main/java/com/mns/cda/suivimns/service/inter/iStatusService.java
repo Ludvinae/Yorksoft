@@ -16,7 +16,7 @@ public interface iStatusService {
 
     void delete(Status status);
 
-    void update(Status statusToUpdate, int id) throws StatusNotFoundException;
+    Status update(Status statusToUpdate, int id) throws StatusNotFoundException;
 
     class StatusNotFoundException extends Exception {
     }

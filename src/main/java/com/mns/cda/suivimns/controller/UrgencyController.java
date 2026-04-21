@@ -1,8 +1,10 @@
 package com.mns.cda.suivimns.controller;
 
+import com.mns.cda.suivimns.model.Theme;
 import com.mns.cda.suivimns.model.Urgency;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
+import com.mns.cda.suivimns.service.inter.iLicenseService;
 import com.mns.cda.suivimns.service.inter.iUrgencyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -56,16 +58,12 @@ public class UrgencyController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Urgency urgencyToUpdate) {
-        Optional<Urgency> urgency = urgencyService.findById(id);
-
-        if (urgency.isEmpty()) {
+    public ResponseEntity<Urgency> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Urgency urgencyToUpdate) {
+        try {
+            Urgency urgencySaved = urgencyService.update(urgencyToUpdate, id);
+            return new ResponseEntity<>(urgencySaved, HttpStatus.OK);
+        } catch (iUrgencyService.UrgencyNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
-        urgencyToUpdate.setIdUrgency(urgency.get().getIdUrgency());
-        urgencyService.save(urgencyToUpdate);
-
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

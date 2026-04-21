@@ -29,7 +29,7 @@ public class MockVersionTypeService implements iVersionTypeService {
     }
 
     @Override
-    public void update(VersionType versionTypeToUpdate, int id) throws VersionTypeNotFoundException {
-
+    public VersionType update(VersionType versionTypeToUpdate, int id) throws VersionTypeNotFoundException {
+        return null;
     }
 }

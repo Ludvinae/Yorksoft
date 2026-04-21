@@ -37,15 +37,14 @@ public class ImpactService implements iImpactService {
     }
 
     @Override
-    public void update(Impact impactToUpdate, int id) throws iImpactService.ImpactNotFoundException {
-        Optional<Impact> impact = impactDao.findById(id);
+    public Impact update(Impact impactToUpdate, int id) throws iImpactService.ImpactNotFoundException {
+        Impact currentImpact = impactDao.findById(id)
+                .orElseThrow(ImpactNotFoundException::new);
 
-        if (impact.isEmpty()) {
-            throw new iImpactService.ImpactNotFoundException();
-        }
+        currentImpact.setDesignation(impactToUpdate.getDesignation());
+        currentImpact.setPriorityFactor(impactToUpdate.getPriorityFactor());
+        currentImpact.setDescription(impactToUpdate.getDescription());
 
-        impactToUpdate.setIdImpact(impact.get().getIdImpact());
-
-        impactDao.save(impactToUpdate);
+        return impactDao.save(currentImpact);
     }
 }

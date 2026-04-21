@@ -1,9 +1,11 @@
 package com.mns.cda.suivimns.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.mns.cda.suivimns.model.Urgency;
 import com.mns.cda.suivimns.model.Version;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
+import com.mns.cda.suivimns.service.inter.iLicenseService;
 import com.mns.cda.suivimns.service.inter.iVersionService;
 import com.mns.cda.suivimns.view.SoftwareView;
 import lombok.RequiredArgsConstructor;
@@ -59,18 +61,12 @@ public class VersionController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable Integer id, @RequestBody @Validated(OnUpdate.class) Version versionToModify) {
-        Optional<Version> version = versionService.findById(id);
-        if (version.isEmpty()) {
+    public ResponseEntity<Version> update(@PathVariable Integer id, @RequestBody @Validated(OnUpdate.class) Version versionToUpdate) {
+        try {
+            Version versionSaved = versionService.update(versionToUpdate, id);
+            return new ResponseEntity<>(versionSaved, HttpStatus.OK);
+        } catch (iVersionService.VersionNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        versionToModify.setIdVersion(id);
-        versionService.save(versionToModify);
-
-        if (versionToModify.getPublicationDate() == null) {
-            versionToModify.setPublicationDate(version.get().getPublicationDate());
-        }
-
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

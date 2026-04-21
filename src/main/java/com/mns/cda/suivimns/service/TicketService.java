@@ -66,7 +66,7 @@ public class TicketService implements iTicketService {
     }
 
     @Override
-    public void update(Ticket ticketToUpdate, int id) throws TicketNotFoundException {
+    public Ticket update(Ticket ticketToUpdate, int id) throws TicketNotFoundException {
         Optional<Ticket> ticket = ticketDao.findById(id);
 
         if (ticket.isEmpty()) {
@@ -75,7 +75,7 @@ public class TicketService implements iTicketService {
 
         ticketToUpdate.setIdTicket(ticket.get().getIdTicket());
 
-        ticketDao.save(ticketToUpdate);
+        return ticketDao.save(ticketToUpdate);
     }
 
 

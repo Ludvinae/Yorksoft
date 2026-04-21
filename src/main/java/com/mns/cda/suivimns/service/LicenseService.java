@@ -37,7 +37,7 @@ public class LicenseService implements iLicenseService {
     }
 
     @Override
-    public void update(License licenseToUpdate, int id) throws iLicenseService.LicenseNotFoundException {
+    public License update(License licenseToUpdate, int id) throws iLicenseService.LicenseNotFoundException {
         Optional<License> license = licenseDao.findById(id);
 
         if (license.isEmpty()) {
@@ -46,6 +46,6 @@ public class LicenseService implements iLicenseService {
 
         licenseToUpdate.setIdLicense(license.get().getIdLicense());
 
-        licenseDao.save(licenseToUpdate);
+        return licenseDao.save(licenseToUpdate);
     }
 }

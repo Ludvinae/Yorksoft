@@ -37,7 +37,7 @@ public class VersionTypeService implements iVersionTypeService {
     }
 
     @Override
-    public void update(VersionType versionTypeToUpdate, int id) throws iVersionTypeService.VersionTypeNotFoundException {
+    public VersionType update(VersionType versionTypeToUpdate, int id) throws iVersionTypeService.VersionTypeNotFoundException {
         Optional<VersionType> versionType = versionTypeDao.findById(id);
 
         if (versionType.isEmpty()) {
@@ -46,6 +46,6 @@ public class VersionTypeService implements iVersionTypeService {
 
         versionTypeToUpdate.setIdVersionType(versionType.get().getIdVersionType());
 
-        versionTypeDao.save(versionTypeToUpdate);
+        return versionTypeDao.save(versionTypeToUpdate);
     }
 }

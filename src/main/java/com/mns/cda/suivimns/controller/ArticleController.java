@@ -78,15 +78,15 @@ public class ArticleController {
 
     @Operation(summary = "Mettre à jour un article")
     @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "Article mis à jour"),
+            @ApiResponse(responseCode = "200", description = "Article mis à jour"),
             @ApiResponse(responseCode = "404", description = "Article non trouvé"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Article articleToUpdate) {
+    public ResponseEntity<Article> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Article articleToUpdate) {
 
         try {
-            articleService.update(articleToUpdate, id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            Article articleSaved = articleService.update(articleToUpdate, id);
+            return new ResponseEntity<>(articleSaved, HttpStatus.OK);
         } catch (iArticleService.ArticleNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

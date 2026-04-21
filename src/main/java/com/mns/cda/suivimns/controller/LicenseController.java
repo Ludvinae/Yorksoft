@@ -56,10 +56,10 @@ public class LicenseController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) License licenseToUpdate){
+    public ResponseEntity<License> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) License licenseToUpdate){
         try {
-            licenseService.update(licenseToUpdate, id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            License licenseSaved = licenseService.update(licenseToUpdate, id);
+            return new ResponseEntity<>(licenseSaved, HttpStatus.OK);
         } catch (iLicenseService.LicenseNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

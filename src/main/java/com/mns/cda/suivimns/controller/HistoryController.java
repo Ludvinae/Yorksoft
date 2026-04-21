@@ -37,6 +37,9 @@ public class HistoryController {
         return new ResponseEntity<>(history.get(), HttpStatus.OK);
     }
 
+    // Pas de route CREATE, ce sont les actions des utilisateurs qui provoquent un changement de statut
+    // et donc créent une nouvelle entrée dans la table History
+    /*
     @PostMapping
     public ResponseEntity<History> create(@RequestBody @Validated(OnCreate.class) History history) {
         History historySaved = historyService.save(history);
@@ -44,28 +47,7 @@ public class HistoryController {
         return new ResponseEntity<>(historySaved, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable int id) {
-        Optional<History> history = historyService.findById(id);
-        if (history.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+     */
 
-        historyService.delete(history.get());
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) History historyToUpdate) {
-        Optional<History> history = historyService.findById(id);
-
-        if (history.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        historyToUpdate.setIdHistory(history.get().getIdHistory());
-        historyService.save(historyToUpdate);
-        
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
+    // Pas de route DELETE et PUT, on ne modifie pas l'historique passé
 }

@@ -16,7 +16,7 @@ public interface iHistoryService {
 
     void delete(History history);
 
-    void update(History historyToUpdate, int id) throws HistoryNotFoundException;
+    History update(History historyToUpdate, int id) throws HistoryNotFoundException;
 
     void updateHistory(Ticket ticket, Integer actorId, String nextStatus);
 

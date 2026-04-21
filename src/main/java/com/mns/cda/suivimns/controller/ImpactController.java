@@ -3,6 +3,7 @@ package com.mns.cda.suivimns.controller;
 import com.mns.cda.suivimns.model.Impact;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
+import com.mns.cda.suivimns.service.inter.iAppUserService;
 import com.mns.cda.suivimns.service.inter.iImpactService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -56,16 +57,12 @@ public class ImpactController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Impact impactToUpdate) {
-        Optional<Impact> impact = impactService.findById(id);
-
-        if (impact.isEmpty()) {
+    public ResponseEntity<Impact> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Impact impactToUpdate) {
+        try {
+            Impact impactSaved = impactService.update(impactToUpdate, id);
+            return new ResponseEntity<>(impactSaved, HttpStatus.OK);
+        } catch (iImpactService.ImpactNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
-        impactToUpdate.setIdImpact(impact.get().getIdImpact());
-        impactService.save(impactToUpdate);
-
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

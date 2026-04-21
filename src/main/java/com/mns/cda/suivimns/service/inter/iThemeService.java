@@ -16,7 +16,7 @@ public interface iThemeService {
 
     void delete(Theme theme);
 
-    void update(Theme themeToUpdate, int id) throws ThemeNotFoundException;
+    Theme update(Theme themeToUpdate, int id) throws ThemeNotFoundException;
 
     class ThemeNotFoundException extends Exception {
     }
