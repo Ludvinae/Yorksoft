@@ -10,7 +10,7 @@ public interface iCommentService {
 
     Optional<Comment> findById(int id);
 
-    void save(Comment comment);
+    Comment save(Comment comment);
 
     void delete(Comment comment);
 

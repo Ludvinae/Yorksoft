@@ -18,8 +18,8 @@ public class MockCommentService implements iCommentService {
     }
 
     @Override
-    public void save(Comment comment) {
-
+    public Comment save(Comment comment) {
+        return null;
     }
 
     @Override

@@ -39,11 +39,9 @@ public class CommentController {
 
     @PostMapping
     public ResponseEntity<Comment> create(@RequestBody @Validated(OnCreate.class) Comment comment) {
-        comment.setIdComment(null);
-        comment.setLastModification(null);
-        commentService.save(comment);
+        Comment commentSaved = commentService.save(comment);
 
-        return new ResponseEntity<>(comment, HttpStatus.CREATED);
+        return new ResponseEntity<>(commentSaved, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")

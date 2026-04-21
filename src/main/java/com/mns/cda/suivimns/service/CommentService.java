@@ -6,6 +6,7 @@ import com.mns.cda.suivimns.service.inter.iCommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,9 +27,11 @@ public class CommentService implements iCommentService {
     }
 
     @Override
-    public void save(Comment comment) {
+    public Comment save(Comment comment) {
         comment.setIdComment(null);
-        commentDao.save(comment);
+        comment.setDateSent(null);
+        comment.setLastModification(null);
+        return commentDao.save(comment);
     }
 
     @Override
