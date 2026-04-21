@@ -46,14 +46,14 @@ public class ThemeController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Theme> delete(@PathVariable int id) {
+    public ResponseEntity<Void> delete(@PathVariable int id) {
         Optional<Theme> theme = iThemeService.findById(id);
         if (theme.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         iThemeService.delete(theme.get());
-        return new ResponseEntity<>(theme.get(), HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}")

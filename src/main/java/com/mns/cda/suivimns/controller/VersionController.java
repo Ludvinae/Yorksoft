@@ -50,14 +50,14 @@ public class VersionController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Version> delete(@PathVariable Integer id) {
+    public ResponseEntity<Void> delete(@PathVariable Integer id) {
 
         Optional<Version> version = iVersionService.findById(id);
         if (version.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         iVersionService.delete(version.get());
-        return new ResponseEntity<>(version.get(), HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}")

@@ -37,10 +37,8 @@ public class AppUserController {
     }
 
     @Operation(summary = "Récupérer un utilisateur par ID")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Utilisateur trouvé"),
-            @ApiResponse(responseCode = "404", description = "Utilisateur non trouvé")
-    })
+    @ApiResponses({@ApiResponse(responseCode = "200", description = "Utilisateur trouvé"),
+                   @ApiResponse(responseCode = "404", description = "Utilisateur non trouvé")})
     @GetMapping("/{id}")
     public ResponseEntity<AppUser> getById(@PathVariable int id) {
 
@@ -52,14 +50,10 @@ public class AppUserController {
         return new ResponseEntity<>(user.get(), HttpStatus.OK);
     }
 
-    @Operation(
-            summary = "Créer un utilisateur",
-            description = "Permet de créer un utilisateur (technicien, manager, directeur ou client)"
-    )
-    @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Utilisateur créé"),
-            @ApiResponse(responseCode = "400", description = "Données invalides")
-    })
+    @Operation(summary = "Créer un utilisateur",
+            description = "Permet de créer un utilisateur (technicien, manager, directeur ou client)")
+    @ApiResponses({@ApiResponse(responseCode = "201", description = "Utilisateur créé"),
+                   @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PostMapping
     public ResponseEntity<AppUser> create(@RequestBody @Validated(OnCreate.class) AppUser user) {
         iAppUserservice.save(user);
@@ -70,8 +64,7 @@ public class AppUserController {
     @Operation(summary = "Supprimer un utilisateur")
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Utilisateur supprimé"),
-            @ApiResponse(responseCode = "404", description = "Utilisateur non trouvé")
-    })
+            @ApiResponse(responseCode = "404", description = "Utilisateur non trouvé")})
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
         Optional<AppUser> user = iAppUserservice.findById(id);
@@ -87,8 +80,7 @@ public class AppUserController {
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Utilisateur mis à jour"),
             @ApiResponse(responseCode = "404", description = "Utilisateur non trouvé"),
-            @ApiResponse(responseCode = "400", description = "Données invalides")
-    })
+            @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PutMapping("/{id}")
     public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) AppUser userToUpdate) throws iAppUserService.AppUserNotFoundException {
         try {

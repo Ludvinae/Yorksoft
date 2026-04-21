@@ -46,14 +46,14 @@ public class StatusController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Status> delete(@PathVariable int id) {
+    public ResponseEntity<Void> delete(@PathVariable int id) {
         Optional<Status> status = iStatusService.findById(id);
         if (status.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         iStatusService.delete(status.get());
-        return new ResponseEntity<>(status.get(), HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}")

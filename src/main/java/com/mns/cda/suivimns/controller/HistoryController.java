@@ -46,14 +46,14 @@ public class HistoryController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<History> delete(@PathVariable int id) {
+    public ResponseEntity<Void> delete(@PathVariable int id) {
         Optional<History> history = iHistoryService.findById(id);
         if (history.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         iHistoryService.delete(history.get());
-        return new ResponseEntity<>(history.get(), HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}")

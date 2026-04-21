@@ -46,14 +46,14 @@ public class UrgencyController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Urgency> delete(@PathVariable int id) {
+    public ResponseEntity<Void> delete(@PathVariable int id) {
         Optional<Urgency> urgency = iUrgencyService.findById(id);
         if (urgency.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         iUrgencyService.delete(urgency.get());
-        return new ResponseEntity<>(urgency.get(), HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}")

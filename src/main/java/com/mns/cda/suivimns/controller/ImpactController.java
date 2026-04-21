@@ -46,14 +46,14 @@ public class ImpactController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Impact> delete(@PathVariable int id) {
+    public ResponseEntity<Void> delete(@PathVariable int id) {
         Optional<Impact> impact = iImpactService.findById(id);
         if (impact.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         iImpactService.delete(impact.get());
-        return new ResponseEntity<>(impact.get(), HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}")

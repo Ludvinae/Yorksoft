@@ -46,14 +46,14 @@ public class KnowledgeController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Knowledge> delete(@PathVariable int id) {
+    public ResponseEntity<Void> delete(@PathVariable int id) {
         Optional<Knowledge> knowledge = iKnowledgeService.findById(id);
         if (knowledge.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         iKnowledgeService.delete(knowledge.get());
-        return new ResponseEntity<>(knowledge.get(), HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}")

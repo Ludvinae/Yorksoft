@@ -44,7 +44,7 @@ public class VersionTypeController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<VersionType> delete(@PathVariable Integer id) {
+    public ResponseEntity<Void> delete(@PathVariable Integer id) {
         Optional<VersionType> versionType = iVersionTypeService.findById(id);
         if (versionType.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

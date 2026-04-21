@@ -47,7 +47,7 @@ public class SoftwareTypeController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<SoftwareType> delete(@PathVariable Integer id) {
+    public ResponseEntity<Void> delete(@PathVariable Integer id) {
 
         Optional<SoftwareType> softwareType = iSoftwareTypeService.findById(id);
 
@@ -56,7 +56,7 @@ public class SoftwareTypeController {
         }
         iSoftwareTypeService.delete(softwareType.get());
 
-        return new ResponseEntity<>(softwareType.get(), HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}")

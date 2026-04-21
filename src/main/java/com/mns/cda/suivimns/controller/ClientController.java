@@ -46,14 +46,14 @@ public class ClientController {
 
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Client> delete(@PathVariable int id) {
+    public ResponseEntity<Void> delete(@PathVariable int id) {
         Optional<Client> client = iClientService.findById(id);
         if (client.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         iClientService.delete(client.get());
-        return new ResponseEntity<>(client.get(), HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}")

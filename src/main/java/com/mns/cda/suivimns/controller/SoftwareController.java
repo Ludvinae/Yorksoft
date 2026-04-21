@@ -66,14 +66,14 @@ public class SoftwareController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Software> delete(@PathVariable Integer id) {
+    public ResponseEntity<Void> delete(@PathVariable Integer id) {
         Optional<Software> software = iSoftwareService.findById(id);
         if (software.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         iSoftwareService.delete(software.get());
-        return new ResponseEntity<>(software.get(), HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}")
