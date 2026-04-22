@@ -79,15 +79,9 @@ public class VersionController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    /* Champs modifiables :
-     * versionNumber
-     * publicationDate
-     * versionType
-     */
     @Operation(
             summary = "Mettre à jour une version",
-            description = "Modifie le numéro de version, la date de publication et le type de version"
-    )
+            description = "Modifie les champs 'versionNumber', 'publicationDate' et 'versionType'")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Version mise à jour"),
             @ApiResponse(responseCode = "404", description = "Version non trouvée"),

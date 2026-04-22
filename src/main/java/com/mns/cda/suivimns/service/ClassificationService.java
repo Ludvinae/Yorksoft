@@ -4,6 +4,7 @@ import com.mns.cda.suivimns.dao.ClassificationDao;
 import com.mns.cda.suivimns.model.Classification;
 import com.mns.cda.suivimns.model.Comment;
 import com.mns.cda.suivimns.model.Theme;
+import com.mns.cda.suivimns.model.keys.ClassificationKey;
 import com.mns.cda.suivimns.service.inter.iClassificationService;
 import com.mns.cda.suivimns.service.inter.iCommentService;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,7 @@ public class ClassificationService implements iClassificationService {
     }
 
     @Override
-    public Optional<Classification> findById(int id) {
+    public Optional<Classification> findById(ClassificationKey id) {
         return classificationDao.findById(id);
     }
 

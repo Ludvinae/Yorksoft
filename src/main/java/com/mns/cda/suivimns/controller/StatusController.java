@@ -80,7 +80,7 @@ public class StatusController {
      */
     @Operation(
             summary = "Mettre à jour un statut",
-            description = "Modifie la désignation et l'ordre d'affichage")
+            description = "Modifie les champs 'designation' et 'displayOrder'")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Statut mis à jour"),
             @ApiResponse(responseCode = "404", description = "Statut non trouvé"),

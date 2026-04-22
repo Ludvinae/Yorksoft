@@ -76,14 +76,9 @@ public class UrgencyController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    /* Champs modifiables :
-     * designation
-     * description
-     * priorityFactor
-     */
     @Operation(
             summary = "Mettre à jour un niveau d'urgence",
-            description = "Modifie la désignation, la description et le facteur de priorité")
+            description = "Modifie les champs 'designation', 'description' et 'priorityFactor'")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Urgence mise à jour"),
             @ApiResponse(responseCode = "404", description = "Urgence non trouvée"),

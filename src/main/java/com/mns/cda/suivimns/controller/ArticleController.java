@@ -76,10 +76,8 @@ public class ArticleController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    /* Champs modifiables :
-     * content
-     */
-    @Operation(summary = "Mettre à jour un article")
+    @Operation(summary = "Mettre à jour un article",
+                description = "Met à jour le champ 'content'")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Article mis à jour"),
             @ApiResponse(responseCode = "404", description = "Article non trouvé"),

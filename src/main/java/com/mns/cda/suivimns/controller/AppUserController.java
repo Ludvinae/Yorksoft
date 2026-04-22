@@ -97,13 +97,8 @@ public class AppUserController {
 
      */
 
-    /* Champs modifiables :
-     * firstName
-     * lastName
-     * email
-     * phoneNumber
-     */
-    @Operation(summary = "Mettre à jour un utilisateur")
+    @Operation(summary = "Mettre à jour un utilisateur",
+                description = "Modifie les champs 'firstName', 'lastName', 'email' et 'phoneNumber'")
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Utilisateur mis à jour"),
             @ApiResponse(responseCode = "404", description = "Utilisateur non trouvé"),
@@ -121,10 +116,9 @@ public class AppUserController {
         }
     }
 
-    /* Champs modifiables :
-     * password
-     */
-    @Operation(summary = "Changer le mot de passe d'un utilisateur")
+    @Operation(summary = "Changer le mot de passe d'un utilisateur",
+                description = "Compare le champ 'oldPassword' avec le mot de passe, " +
+                        "et si identique le remplace avec la valeur du champ 'newPassword'")
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Mot de passe mis à jour"),
             @ApiResponse(responseCode = "404", description = "Utilisateur non trouvé"),

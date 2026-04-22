@@ -2,6 +2,7 @@ package com.mns.cda.suivimns.mock.service;
 
 import com.mns.cda.suivimns.model.Classification;
 import com.mns.cda.suivimns.model.Theme;
+import com.mns.cda.suivimns.model.keys.ClassificationKey;
 import com.mns.cda.suivimns.service.inter.iClassificationService;
 
 import java.util.List;
@@ -14,7 +15,7 @@ public class MockClassificationService implements iClassificationService {
     }
 
     @Override
-    public Optional<Classification> findById(int id) {
+    public Optional<Classification> findById(ClassificationKey id) {
         return Optional.empty();
     }
 

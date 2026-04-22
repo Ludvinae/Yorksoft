@@ -3,6 +3,7 @@ package com.mns.cda.suivimns.controller;
 import com.mns.cda.suivimns.model.Classification;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
+import com.mns.cda.suivimns.model.keys.ClassificationKey;
 import com.mns.cda.suivimns.service.inter.iClassificationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -37,10 +38,11 @@ public class ClassificationController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Classification trouvée"),
             @ApiResponse(responseCode = "404", description = "Non trouvée")})
-    @GetMapping("/{id}")
-    public ResponseEntity<Classification> getById(@PathVariable int id) {
+    @GetMapping("/{idTicket}/{idTheme}")
+    public ResponseEntity<Classification> getById(@PathVariable int idTicket, @PathVariable int idTheme) {
+        ClassificationKey key = new ClassificationKey(idTicket, idTheme);
 
-        Optional<Classification> classification = classificationService.findById(id);
+        Optional<Classification> classification = classificationService.findById(key);
         if (classification.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

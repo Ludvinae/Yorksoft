@@ -5,6 +5,10 @@ import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
 import com.mns.cda.suivimns.service.inter.iAppUserService;
 import com.mns.cda.suivimns.service.inter.iCommentService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,15 +22,22 @@ import java.util.Optional;
 @CrossOrigin
 @RequestMapping("/comment")
 @RequiredArgsConstructor
+@Tag(name="Commentaires", description="Gestion des commentaires attachés à un ticket")
 public class CommentController {
 
     protected final iCommentService commentService;
 
+    @Operation(summary="Récuperer tous les commentaires")
+    @ApiResponse(responseCode = "200", description="Liste récupérée")
     @GetMapping("/list")
     public List<Comment> getAll() {
         return commentService.findAll();
     }
 
+    @Operation(summary="Récupere un commentaire en fonction de son ID")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description="Commentaire récupéré"),
+            @ApiResponse(responseCode = "404", description = "Non trouvé")})
     @GetMapping("/{id}")
     public ResponseEntity<Comment> getById(@PathVariable int id) {
 
@@ -38,6 +49,10 @@ public class CommentController {
         return new ResponseEntity<>(comment.get(), HttpStatus.OK);
     }
 
+    @Operation(summary="Crée un nouveau commentaire")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Crée"),
+            @ApiResponse(responseCode = "400", description = "Erreur validation")})
     @PostMapping
     public ResponseEntity<Comment> create(@RequestBody @Validated(OnCreate.class) Comment comment) {
         Comment commentSaved = commentService.save(comment);
@@ -45,6 +60,10 @@ public class CommentController {
         return new ResponseEntity<>(commentSaved, HttpStatus.CREATED);
     }
 
+    @Operation(summary = "Efface un commentaire")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Commentaire supprimé"),
+            @ApiResponse(responseCode = "404", description = "Commentaire non trouvé")})
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
         Optional<Comment> comment = commentService.findById(id);
@@ -56,9 +75,12 @@ public class CommentController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    /* Champs modifiables :
-     * content
-     */
+    @Operation(summary = "Modifier un commentaire",
+                description = "Met à jour le champ 'content")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Commentaire modifié avec succés"),
+            @ApiResponse(responseCode = "404", description = "Commentaire non trouvé")
+    })
     @PutMapping("/{id}")
     public ResponseEntity<Comment> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Comment commentToUpdate) {
         try {

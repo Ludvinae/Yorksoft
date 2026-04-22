@@ -76,13 +76,9 @@ public class ThemeController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    /* Champs modifiables :
-     * designation
-     * description
-     */
     @Operation(
             summary = "Mettre à jour une thématique",
-            description = "Modifie la désignation et la description")
+            description = "Modifie les champs 'designation' et 'description'")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Thématique mise à jour"),
             @ApiResponse(responseCode = "404", description = "Thématique non trouvée"),

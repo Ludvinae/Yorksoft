@@ -4,6 +4,10 @@ import com.mns.cda.suivimns.model.History;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
 import com.mns.cda.suivimns.service.inter.iHistoryService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,15 +21,22 @@ import java.util.Optional;
 @CrossOrigin
 @RequiredArgsConstructor
 @RequestMapping("/history")
+@Tag(name="Historique", description="Enregistre l'historique des statuts des tickets")
 public class HistoryController {
 
     protected final iHistoryService historyService;
 
+    @Operation(summary = "Récupérer tous les historiques")
+    @ApiResponse(responseCode = "200", description = "Liste des historiques récupérée avec succès")
     @GetMapping("/list")
     public List<History> getAll() {
         return historyService.findAll();
     }
 
+    @Operation(summary = "Récupérer un historique par son ID")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Historique trouvé"),
+            @ApiResponse(responseCode = "404", description = "Historique non trouvé")})
     @GetMapping("/{id}")
     public ResponseEntity<History> getById(@PathVariable int id) {
 
