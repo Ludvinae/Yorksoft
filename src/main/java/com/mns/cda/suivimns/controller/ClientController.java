@@ -79,14 +79,12 @@ public class ClientController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    /* Champs modifiables :
-     * importance
-     */
-    @Operation(summary = "Mettre à jour un client")
+    @Operation(summary = "Mettre à jour un client",
+                description = "Met à jour le champ 'importance'")
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Client mis à jour"),
                  @ApiResponse(responseCode = "404", description = "Client non trouvé"),
                  @ApiResponse(responseCode = "400", description = "Données invalides")})
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<Client> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Client clientToUpdate){
         try {
             Client clientSaved = clientService.update(clientToUpdate, id);

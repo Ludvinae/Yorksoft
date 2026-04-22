@@ -3,6 +3,7 @@ package com.mns.cda.suivimns.mock.service;
 import com.mns.cda.suivimns.dto.TicketCreation;
 import com.mns.cda.suivimns.dto.TicketFullWithLatest;
 import com.mns.cda.suivimns.dto.TicketResponse;
+import com.mns.cda.suivimns.dto.TicketUpdatedDto;
 import com.mns.cda.suivimns.model.Ticket;
 import com.mns.cda.suivimns.service.inter.iTicketService;
 
@@ -11,7 +12,7 @@ import java.util.Optional;
 
 public class MockTicketService implements iTicketService {
     @Override
-    public List<Ticket> findAll() {
+    public List<TicketResponse> findAllDto() {
         return List.of();
     }
 
@@ -41,7 +42,7 @@ public class MockTicketService implements iTicketService {
     }
 
     @Override
-    public Ticket update(Ticket ticketToUpdate, int id) throws TicketNotFoundException {
+    public TicketUpdatedDto update(TicketUpdatedDto ticketToUpdate, int id) throws TicketNotFoundException {
         return null;
     }
 
@@ -58,6 +59,11 @@ public class MockTicketService implements iTicketService {
     @Override
     public void addThemeToTicket(Ticket ticket, String designation) {
 
+    }
+
+    @Override
+    public String getCurrentTheme(Ticket ticket) {
+        return "";
     }
 
     @Override

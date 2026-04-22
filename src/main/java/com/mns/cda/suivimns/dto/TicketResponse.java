@@ -13,7 +13,7 @@ public record TicketResponse(
 
             String versionNumber,
             String versionTypeDesignation,
-            String software,
+            String softwareName,
 
             String clientFirstName,
             String clientLastName,

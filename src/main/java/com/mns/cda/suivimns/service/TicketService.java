@@ -4,6 +4,7 @@ import com.mns.cda.suivimns.dao.*;
 import com.mns.cda.suivimns.dto.TicketCreation;
 import com.mns.cda.suivimns.dto.TicketFullWithLatest;
 import com.mns.cda.suivimns.dto.TicketResponse;
+import com.mns.cda.suivimns.dto.TicketUpdatedDto;
 import com.mns.cda.suivimns.model.*;
 import com.mns.cda.suivimns.model.keys.ClassificationKey;
 import com.mns.cda.suivimns.service.inter.iClassificationService;
@@ -32,8 +33,8 @@ public class TicketService implements iTicketService {
     protected final VersionDao versionDao;
 
     @Override
-    public List<Ticket> findAll() {
-        return ticketDao.findAll();
+    public List<TicketResponse> findAllDto() {
+        return ticketDao.findAllDto();
     }
 
     @Override
@@ -67,15 +68,22 @@ public class TicketService implements iTicketService {
     }
 
     @Override
-    public Ticket update(Ticket ticketToUpdate, int id) throws TicketNotFoundException {
+    public TicketUpdatedDto update(TicketUpdatedDto ticketToUpdate, int id) throws TicketNotFoundException {
         Ticket currentTicket = ticketDao.findById(id)
                 .orElseThrow(iTicketService.TicketNotFoundException::new);
 
-        currentTicket.setTitle(ticketToUpdate.getTitle());
-        currentTicket.setDescription(ticketToUpdate.getDescription());
-        currentTicket.setCallDuration(ticketToUpdate.getCallDuration());
+        currentTicket.setTitle(ticketToUpdate.title());
+        currentTicket.setDescription(ticketToUpdate.description());
+        currentTicket.setCallDuration(ticketToUpdate.callDuration());
 
-        return ticketDao.save(currentTicket);
+        Ticket ticketSaved = ticketDao.save(currentTicket);
+
+        return new TicketUpdatedDto(
+                ticketSaved.getIdTicket(),
+                ticketSaved.getTitle(),
+                ticketSaved.getDescription(),
+                ticketSaved.getFinalPriority(),
+                ticketSaved.getCallDuration());
     }
 
     @Override
@@ -151,6 +159,14 @@ public class TicketService implements iTicketService {
 
         // 3. sauvegarder
         classificationDao.save(classification);
+    }
+
+    @Override
+    public String getCurrentTheme(Ticket ticket) {
+        return ticket.getClassificationList().stream()
+                .max(Comparator.comparing(Classification::getAffectation_date))
+                .map(c -> c.getTheme().getDesignation())
+                .orElse(null);
     }
 
 

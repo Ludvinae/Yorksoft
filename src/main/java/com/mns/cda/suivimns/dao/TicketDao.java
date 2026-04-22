@@ -1,6 +1,7 @@
 package com.mns.cda.suivimns.dao;
 
 import com.mns.cda.suivimns.dto.TicketFullWithLatest;
+import com.mns.cda.suivimns.dto.TicketResponse;
 import com.mns.cda.suivimns.model.Classification;
 import com.mns.cda.suivimns.model.Ticket;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,6 +13,22 @@ import java.util.List;
 
 @Repository
 public interface TicketDao extends JpaRepository<Ticket, Integer> {
+    @Query("SELECT new com.mns.cda.suivimns.dto.TicketResponse(" +
+            "t.idTicket, t.title, t.description, t.modificationDate, " +
+            "t.finalPriority, t.version.versionNumber, t.version.versionType.designation, " +
+            "t.version.software.name, t.client.firstName, t.client.lastName, " +
+            "s.designation, th.designation) " +
+            "FROM Ticket t " +
+            "JOIN t.historyList h " +
+            "JOIN h.status s " +
+            "JOIN t.classificationList c " +
+            "JOIN c.theme th " +
+            "WHERE h.endDate IS NULL " +
+            "AND c.affectation_date = (" +
+            "SELECT MAX(cl2.affectation_date) " +
+            "FROM Classification cl2 " +
+            "WHERE cl2.ticket = t)")
+    List<TicketResponse> findAllDto() ;
 
     @Query("SELECT new com.mns.cda.suivimns.dto.TicketFullWithLatest(" +
                 "t.idTicket, t.title, t.modificationDate, " +
