@@ -16,7 +16,9 @@ public class MockSoftwareService implements iSoftwareService {
 
     @Override
     public List<Software> findAll() {
-        return List.of();
+        return List.of(
+                new Software(1, "TestSoft", "this is exclusively  for testing purpose",
+                        new SoftwareType(11, "mock type"),null));
     }
 
     @Override
@@ -30,6 +32,7 @@ public class MockSoftwareService implements iSoftwareService {
 
     @Override
     public Software save(Software software) {
+
         return null;
     }
 

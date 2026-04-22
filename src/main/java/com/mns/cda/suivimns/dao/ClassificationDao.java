@@ -1,6 +1,7 @@
 package com.mns.cda.suivimns.dao;
 
 import com.mns.cda.suivimns.model.Classification;
+import com.mns.cda.suivimns.model.keys.ClassificationKey;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,4 +20,7 @@ public interface ClassificationDao extends JpaRepository<Classification, Integer
         LIMIT 1
         """)
     Optional<Classification> findLatestByTicket(@Param("idTicket") Integer idTicket);
+
+
+    Optional<Classification> findById(ClassificationKey id);
 }

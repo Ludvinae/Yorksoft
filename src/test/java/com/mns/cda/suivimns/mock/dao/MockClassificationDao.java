@@ -2,6 +2,7 @@ package com.mns.cda.suivimns.mock.dao;
 
 import com.mns.cda.suivimns.dao.ClassificationDao;
 import com.mns.cda.suivimns.model.Classification;
+import com.mns.cda.suivimns.model.keys.ClassificationKey;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -105,6 +106,11 @@ public class MockClassificationDao implements ClassificationDao {
 
     @Override
     public Optional<Classification> findById(Integer integer) {
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<Classification> findById(ClassificationKey integer) {
         return Optional.empty();
     }
 
