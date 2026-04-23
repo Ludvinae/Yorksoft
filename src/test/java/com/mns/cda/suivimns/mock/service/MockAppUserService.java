@@ -31,8 +31,8 @@ public class MockAppUserService implements iAppUserService {
     }
 
     @Override
-    public void update(AppUserDto appUserToUpdate, int id) throws AppUserNotFoundException {
-
+    public AppUser update(AppUserDto appUserToUpdate, int id) throws AppUserNotFoundException {
+        return null;
     }
 
     @Override

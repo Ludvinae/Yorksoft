@@ -40,7 +40,7 @@ public class AppUserService implements iAppUserService {
     }
 
     @Override
-    public void update(AppUserDto dto, int id)
+    public AppUser update(AppUserDto dto, int id)
             throws AppUserNotFoundException {
 
         AppUser user = appUserDao.findById(id)
@@ -63,7 +63,7 @@ public class AppUserService implements iAppUserService {
             user.setPhoneNumber(dto.phoneNumber());
         }
 
-        appUserDao.save(user);
+        return appUserDao.save(user);
     }
 
     @Override

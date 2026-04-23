@@ -3,7 +3,9 @@ package com.mns.cda.suivimns.model.keys;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -11,13 +13,15 @@ import java.util.Objects;
 @Embeddable
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 public class ClassificationKey implements Serializable {
 
     @Column(name = "id_ticket")
-    Integer idTicket;
+    private Integer idTicket;
     
     @Column(name = "id_theme")
-    Integer idTheme;
+    private Integer idTheme;
 
     @Override
     public boolean equals(Object o) {

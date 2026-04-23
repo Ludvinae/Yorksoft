@@ -1,13 +1,10 @@
 package com.mns.cda.suivimns.controller;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import com.mns.cda.suivimns.dto.AppUserDto;
 import com.mns.cda.suivimns.dto.PasswordDto;
 import com.mns.cda.suivimns.model.AppUser;
 import com.mns.cda.suivimns.model.groups.OnCreate;
-import com.mns.cda.suivimns.model.groups.OnUpdate;
 import com.mns.cda.suivimns.service.inter.iAppUserService;
-import com.mns.cda.suivimns.view.TicketView;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -100,15 +97,15 @@ public class AppUserController {
     @Operation(summary = "Mettre à jour un utilisateur",
                 description = "Modifie les champs 'firstName', 'lastName', 'email' et 'phoneNumber'")
     @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "Utilisateur mis à jour"),
+            @ApiResponse(responseCode = "200", description = "Utilisateur mis à jour"),
             @ApiResponse(responseCode = "404", description = "Utilisateur non trouvé"),
             @ApiResponse(responseCode = "400", description = "Email déja utilisé")})
     @PatchMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated AppUserDto dto) {
+    public ResponseEntity<AppUser> update(@PathVariable int id, @RequestBody @Validated AppUserDto dto) {
 
         try {
-            appUserService.update(dto, id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            AppUser user = appUserService.update(dto, id);
+            return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (iAppUserService.AppUserNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (iAppUserService.EmailAlreadyUsedException e) {

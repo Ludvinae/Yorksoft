@@ -1,10 +1,12 @@
 package com.mns.cda.suivimns.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.mns.cda.suivimns.model.Classification;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
 import com.mns.cda.suivimns.model.keys.ClassificationKey;
 import com.mns.cda.suivimns.service.inter.iClassificationService;
+import com.mns.cda.suivimns.view.TicketView;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -30,6 +32,7 @@ public class ClassificationController {
     @Operation(summary = "Récupérer toutes les classifications")
     @ApiResponse(responseCode = "200", description = "Liste récupérée")
     @GetMapping("/list")
+    @JsonView(TicketView.class)
     public List<Classification> getAll() {
         return classificationService.findAll();
     }
@@ -39,6 +42,8 @@ public class ClassificationController {
             @ApiResponse(responseCode = "200", description = "Classification trouvée"),
             @ApiResponse(responseCode = "404", description = "Non trouvée")})
     @GetMapping("/{idTicket}/{idTheme}")
+    @JsonView(TicketView.class)
+
     public ResponseEntity<Classification> getById(@PathVariable int idTicket, @PathVariable int idTheme) {
         ClassificationKey key = new ClassificationKey(idTicket, idTheme);
 

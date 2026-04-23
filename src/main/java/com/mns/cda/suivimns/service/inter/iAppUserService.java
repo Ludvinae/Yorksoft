@@ -16,7 +16,7 @@ public interface iAppUserService {
 
     void delete(AppUser appUser);
 
-    void update(AppUserDto appUserToUpdate, int id) throws AppUserNotFoundException, EmailAlreadyUsedException;
+    AppUser update(AppUserDto appUserToUpdate, int id) throws AppUserNotFoundException, EmailAlreadyUsedException;
 
     void updatePassword(int id, PasswordDto dto) throws AppUserNotFoundException, BadPasswordException;
 
