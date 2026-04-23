@@ -44,10 +44,16 @@ class ClassificationControllerUnitTest {
     void setUp() {
         classification = new Classification();
         classification.setId(new ClassificationKey(1, 2));
-        classification.setTicket(new Ticket());
-        classification.setTheme(new Theme());
 
         // ⚠️ Adapter si @NotNull sur d'autres champs
+        Ticket ticket = new Ticket();
+        ticket.setIdTicket(1);
+        classification.setTicket(ticket);
+
+        Theme theme = new Theme();
+        theme.setIdTheme(2);
+        classification.setTheme(theme);
+
     }
 
     // =========================
@@ -76,8 +82,8 @@ class ClassificationControllerUnitTest {
         mockMvc.perform(get("/classification/1/2"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id.idTicket").value(1))
-                .andExpect(jsonPath("$[0].id.idTheme").value(2));
+                .andExpect(jsonPath("$.id.idTicket").value(1))
+                .andExpect(jsonPath("$.id.idTheme").value(2));
     }
 
     // =========================

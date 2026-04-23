@@ -24,11 +24,9 @@ public class Classification {
 
 
     @EmbeddedId
-    @JsonView(TicketView.class)
     protected ClassificationKey id;
 
     @CreatedDate
-    @JsonView(TicketView.class)
     protected LocalDateTime affectation_date;
 
     @ManyToOne(optional = false)
@@ -40,7 +38,6 @@ public class Classification {
     @ManyToOne(optional = false)
     @MapsId("idTheme")
     @JoinColumn(nullable = false, name = "id_theme")
-    @JsonView(TicketView.class)
     @NotNull
     protected Theme theme;
 

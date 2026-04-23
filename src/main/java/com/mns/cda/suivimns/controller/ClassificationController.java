@@ -32,7 +32,6 @@ public class ClassificationController {
     @Operation(summary = "Récupérer toutes les classifications")
     @ApiResponse(responseCode = "200", description = "Liste récupérée")
     @GetMapping("/list")
-    @JsonView(TicketView.class)
     public List<Classification> getAll() {
         return classificationService.findAll();
     }
@@ -42,8 +41,6 @@ public class ClassificationController {
             @ApiResponse(responseCode = "200", description = "Classification trouvée"),
             @ApiResponse(responseCode = "404", description = "Non trouvée")})
     @GetMapping("/{idTicket}/{idTheme}")
-    @JsonView(TicketView.class)
-
     public ResponseEntity<Classification> getById(@PathVariable int idTicket, @PathVariable int idTheme) {
         ClassificationKey key = new ClassificationKey(idTicket, idTheme);
 
