@@ -28,12 +28,14 @@ public class ClientController {
 
     protected final iClientService clientService;
 
+
     @Operation(summary = "Récupérer tous les clients")
     @ApiResponse(responseCode = "200", description = "Liste récupérée")
     @GetMapping("/list")
     public List<ClientDto> getAll() {
         return clientService.findAll();
     }
+
 
     @Operation(summary = "Récupérer un client par ID")
     @ApiResponses({
@@ -49,6 +51,7 @@ public class ClientController {
 
         return new ResponseEntity<>(client.get(), HttpStatus.OK);
     }
+
 
     @Operation(summary = "Créer un client")
     @ApiResponses({
@@ -78,6 +81,7 @@ public class ClientController {
         clientService.delete(client.get());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
 
     @Operation(summary = "Mettre à jour un client",
                 description = "Met à jour le champ 'importance'")

@@ -1,15 +1,13 @@
 package com.mns.cda.suivimns.controller;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import com.mns.cda.suivimns.dto.TicketCreation;
 import com.mns.cda.suivimns.dto.TicketFullWithLatest;
 import com.mns.cda.suivimns.dto.TicketResponse;
 import com.mns.cda.suivimns.dto.TicketUpdatedDto;
-import com.mns.cda.suivimns.model.*;
+import com.mns.cda.suivimns.model.Ticket;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
 import com.mns.cda.suivimns.service.inter.iTicketService;
-import com.mns.cda.suivimns.view.TicketView;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -41,6 +39,7 @@ public class TicketController {
         return ticketService.findAllDto();
     }
 
+
     @Operation(
             summary = "Lister les tickets avec détails complets",
             description = "Retourne les tickets avec leur historique récent, statut et affectation actuelle")
@@ -50,16 +49,24 @@ public class TicketController {
         return ticketService.getAllTicketFullWithLatest();
     }
 
+
     @Operation(
             summary = "Lister les tickets d’un technicien",
             description = "Retourne les tickets assignés à un technicien avec leur dernier état")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Tickets récupérés"),
             @ApiResponse(responseCode = "404", description = "Technicien non trouvé")})
-    @GetMapping("/technician/{id}")
-    public List<TicketFullWithLatest> getTicketFullWithLatestByTechnician(@PathVariable Integer id) {
-        return ticketService.getTicketFullWithLatestByTechnician(id);
+    @GetMapping("/list/technician/{id}")
+    public ResponseEntity<List<TicketFullWithLatest>> getTicketFullWithLatestByTechnician(@PathVariable Integer id) {
+        List<TicketFullWithLatest> tickets = ticketService.getTicketFullWithLatestByTechnician(id);
+
+        if (tickets.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(tickets, HttpStatus.OK);
     }
+
 
     @Operation(
             summary = "Récupérer un ticket par ID",
@@ -78,6 +85,7 @@ public class TicketController {
         return new ResponseEntity<>(ticketService.responseToDto(ticket.get()), HttpStatus.OK);
     }
 
+
     @Operation(
             summary = "Créer un ticket",
             description = "Crée un nouveau ticket à partir d’une demande client (description, urgence, impact, etc.)")
@@ -91,6 +99,7 @@ public class TicketController {
 
         return new ResponseEntity<>(ticketService.responseToDto(ticket), HttpStatus.CREATED);
     }
+
 
     @Operation(
             summary = "Supprimer un ticket",
@@ -108,6 +117,7 @@ public class TicketController {
         ticketService.delete(ticket.get());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
 
     @Operation(
             summary = "Mettre à jour un ticket",

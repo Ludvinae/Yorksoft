@@ -29,13 +29,14 @@ public class TechnicianController {
 
     protected final iTechnicianService technicianService;
 
+
     @Operation(summary = "Récupère tous les techniciens")
     @ApiResponse(responseCode = "200", description = "Liste récupérée")
     @GetMapping("/list")
-    @JsonView(TechnicianView.class)
     public List<Technician> getAll() {
         return technicianService.findAll();
     }
+
 
     @Operation(summary = "Récupère un technicien en fonction de son ID")
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Technicien récupéré"),
@@ -61,6 +62,7 @@ public class TechnicianController {
 
         return new ResponseEntity<>(technicianSaved, HttpStatus.CREATED);
     }
+
 
     @Operation(summary = "Efface un technicien")
     @ApiResponses({@ApiResponse(responseCode = "201", description = "Technicien crée"),

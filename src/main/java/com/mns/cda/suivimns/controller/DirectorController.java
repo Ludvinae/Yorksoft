@@ -26,12 +26,14 @@ public class DirectorController {
 
     protected final iDirectorService directorService;
 
+
     @Operation(summary = "Récupère tous les directeurs")
     @ApiResponse(responseCode = "200", description = "Liste récupérée")
     @GetMapping("/list")
     public List<Director> getAll() {
         return directorService.findAll();
     }
+
 
     @Operation(summary = "Récupère un directeur en fonction de son ID")
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Directeur récupéré"),
@@ -47,6 +49,7 @@ public class DirectorController {
         return new ResponseEntity<>(director.get(), HttpStatus.OK);
     }
 
+
     @Operation(summary = "Crée un nouveau directeur")
     @ApiResponses({@ApiResponse(responseCode = "201", description = "Directeur crée"),
                     @ApiResponse(responseCode = "400", description = "Données invalides")})
@@ -56,6 +59,7 @@ public class DirectorController {
 
         return new ResponseEntity<>(directorSaved, HttpStatus.CREATED);
     }
+
 
     @Operation(summary = "Efface un directeur")
     @ApiResponses({@ApiResponse(responseCode = "201", description = "Directeur crée"),

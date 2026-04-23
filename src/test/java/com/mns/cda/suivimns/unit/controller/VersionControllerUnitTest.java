@@ -1,0 +1,172 @@
+package com.mns.cda.suivimns.unit.controller;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mns.cda.suivimns.controller.VersionController;
+import com.mns.cda.suivimns.model.Software;
+import com.mns.cda.suivimns.model.Version;
+import com.mns.cda.suivimns.model.Knowledge;
+import com.mns.cda.suivimns.service.inter.iVersionService;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+
+import java.util.List;
+import java.util.Optional;
+
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+@WebMvcTest(controllers = VersionController.class)
+class VersionControllerUnitTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @MockBean
+    private iVersionService versionService;
+
+    @MockBean
+    private org.springframework.data.jpa.mapping.JpaMetamodelMappingContext jpaMetamodelMappingContext;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    private Version version;
+
+    @BeforeEach
+    void setUp() {
+        version = new Version();
+        version.setIdVersion(1);
+        version.setVersionNumber("Test number");
+
+        // ⚠️ Adapter si @NotNull sur d'autres champs
+        Software software = new Software();
+        software.setIdSoftware(1);
+        version.setSoftware(software);
+    }
+
+    // =========================
+    // GET ALL
+    // =========================
+    @Test
+    void shouldReturnAll() throws Exception {
+
+        when(versionService.findAll()).thenReturn(List.of(version));
+
+        mockMvc.perform(get("/version/list"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].idVersion").value(1))
+                .andExpect(jsonPath("$[0].versionNumber").value("Test number"));
+    }
+
+    // =========================
+    // GET BY ID - OK
+    // =========================
+    @Test
+    void shouldReturnById() throws Exception {
+
+        when(versionService.findById(1)).thenReturn(Optional.of(version));
+
+        mockMvc.perform(get("/version/1"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.idVersion").value(1))
+                .andExpect(jsonPath("$.versionNumber").value("Test number"));
+    }
+
+    // =========================
+    // GET BY ID - NOT FOUND
+    // =========================
+    @Test
+    void shouldReturn404WhenNotFound() throws Exception {
+
+        when(versionService.findById(1)).thenReturn(Optional.empty());
+
+        mockMvc.perform(get("/version/1"))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    // =========================
+    // CREATE
+    // =========================
+    @Test
+    void shouldCreate() throws Exception {
+
+        when(versionService.save(any(Version.class))).thenReturn(version);
+
+        mockMvc.perform(post("/version")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(version)))
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.versionNumber").value("Test number"));
+    }
+
+    // =========================
+    // DELETE - OK
+    // =========================
+    @Test
+    void shouldDelete() throws Exception {
+
+        when(versionService.findById(1)).thenReturn(Optional.of(version));
+
+        mockMvc.perform(delete("/version/1"))
+                .andDo(print())
+                .andExpect(status().isNoContent());
+
+        verify(versionService).delete(version);
+    }
+
+    // =========================
+    // DELETE - NOT FOUND
+    // =========================
+    @Test
+    void shouldReturn404WhenDeleteNotFound() throws Exception {
+
+        when(versionService.findById(1)).thenReturn(Optional.empty());
+
+        mockMvc.perform(delete("/version/1"))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    // =========================
+    // UPDATE - OK
+    // =========================
+    @Test
+    void shouldUpdate() throws Exception {
+
+        when(versionService.update(any(Version.class), eq(1))).thenReturn(version);
+
+        mockMvc.perform(put("/version/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(version)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.versionNumber").value("Test number"));
+    }
+
+    // =========================
+    // UPDATE - NOT FOUND
+    // =========================
+    @Test
+    void shouldReturn404WhenUpdateFails() throws Exception {
+
+        when(versionService.update(any(Version.class), eq(1)))
+                .thenThrow(new iVersionService.VersionNotFoundException());
+
+        mockMvc.perform(put("/version/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(version)))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+}

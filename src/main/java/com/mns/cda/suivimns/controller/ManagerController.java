@@ -28,13 +28,14 @@ public class ManagerController {
 
     protected final iManagerService managerService;
 
+
     @Operation(summary = "Récupère tous les managers")
     @ApiResponse(responseCode = "200", description = "Liste récupérée")
     @GetMapping("/list")
-    @JsonView(ManagerView.class)
     public List<Manager> getAll() {
         return managerService.findAll();
     }
+
 
     @Operation(summary = "Récupère un manager en fonction de son ID")
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Manager récupéré"),
@@ -49,6 +50,7 @@ public class ManagerController {
 
         return new ResponseEntity<>(manager.get(), HttpStatus.OK);
     }
+
 
     @Operation(summary = "Crée un manager")
     @ApiResponses({@ApiResponse(responseCode = "201", description = "Manager crée"),

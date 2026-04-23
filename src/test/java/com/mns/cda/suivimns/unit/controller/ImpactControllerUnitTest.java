@@ -42,6 +42,8 @@ class ImpactControllerUnitTest {
     void setUp() {
         impact = new Impact();
         impact.setIdImpact(1);
+        impact.setDesignation("Test designation");
+        impact.setPriorityFactor((byte) 1);
 
         // ⚠️ Adapter si @NotNull sur d'autres champs
 
@@ -59,7 +61,8 @@ class ImpactControllerUnitTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].idImpact").value(1))
-                .andExpect(jsonPath("$[0].content").value("Test content"));
+                .andExpect(jsonPath("$[0].designation").value("Test designation"))
+                .andExpect(jsonPath("$[0].priorityFactor").value(1));
     }
 
     // =========================
@@ -74,7 +77,8 @@ class ImpactControllerUnitTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.idImpact").value(1))
-                .andExpect(jsonPath("$.content").value("Test content"));
+                .andExpect(jsonPath("$.designation").value("Test designation"))
+                .andExpect(jsonPath("$.priorityFactor").value(1));
     }
 
     // =========================
@@ -103,7 +107,8 @@ class ImpactControllerUnitTest {
                         .content(objectMapper.writeValueAsString(impact)))
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.content").value("Test content"));
+                .andExpect(jsonPath("$.designation").value("Test designation"))
+                .andExpect(jsonPath("$.priorityFactor").value(1));
     }
 
     // =========================
@@ -147,7 +152,8 @@ class ImpactControllerUnitTest {
                         .content(objectMapper.writeValueAsString(impact)))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content").value("Test content"));
+                .andExpect(jsonPath("$.designation").value("Test designation"))
+                .andExpect(jsonPath("$.priorityFactor").value(1));
     }
 
     // =========================
