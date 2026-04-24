@@ -54,6 +54,7 @@ public class VersionTypeService implements iVersionTypeService {
         VersionType type = versionTypeDao.findById(id)
                 .orElseThrow(iVersionTypeService.VersionTypeNotFoundException::new);
 
+        //typeMapper.updateEntityFromDto(versionTypeToUpdate, type);
         typeMapper.toEntity(versionTypeToUpdate);
 
         VersionType saved = versionTypeDao.save(type);
