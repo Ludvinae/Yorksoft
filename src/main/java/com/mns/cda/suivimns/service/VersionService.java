@@ -1,6 +1,8 @@
 package com.mns.cda.suivimns.service;
 
 import com.mns.cda.suivimns.dao.VersionDao;
+import com.mns.cda.suivimns.dto.VersionResponseDto;
+import com.mns.cda.suivimns.mapper.VersionMapper;
 import com.mns.cda.suivimns.model.Version;
 import com.mns.cda.suivimns.model.VersionType;
 import com.mns.cda.suivimns.service.inter.iVersionService;
@@ -16,10 +18,11 @@ import java.util.Optional;
 public class VersionService implements iVersionService {
 
     protected final VersionDao versionDao;
+    protected final VersionMapper versionMapper;
 
     @Override
-    public List<Version> findAll() {
-        return versionDao.findAll();
+    public List<VersionResponseDto> findAll() {
+        return versionMapper.toDtoList(versionDao.findAll());
     }
 
     @Override

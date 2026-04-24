@@ -2,9 +2,11 @@ package com.mns.cda.suivimns.unit.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.VersionController;
+import com.mns.cda.suivimns.dto.VersionResponseDto;
 import com.mns.cda.suivimns.model.Software;
 import com.mns.cda.suivimns.model.Version;
 import com.mns.cda.suivimns.model.Knowledge;
+import com.mns.cda.suivimns.model.VersionType;
 import com.mns.cda.suivimns.service.inter.iVersionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,6 +41,7 @@ class VersionControllerUnitTest {
     private ObjectMapper objectMapper;
 
     private Version version;
+    private VersionResponseDto versionResponseDto;
 
     @BeforeEach
     void setUp() {
@@ -49,6 +53,12 @@ class VersionControllerUnitTest {
         Software software = new Software();
         software.setIdSoftware(1);
         version.setSoftware(software);
+
+        //DTO
+        VersionType versionType = new VersionType();
+        versionType.setIdVersionType(1);
+        versionResponseDto = new VersionResponseDto(
+                1, "Test number", LocalDateTime.now(), versionType, 1);
     }
 
     // =========================
@@ -57,7 +67,7 @@ class VersionControllerUnitTest {
     @Test
     void shouldReturnAll() throws Exception {
 
-        when(versionService.findAll()).thenReturn(List.of(version));
+        when(versionService.findAll()).thenReturn(List.of(versionResponseDto));
 
         mockMvc.perform(get("/version/list"))
                 .andDo(print())

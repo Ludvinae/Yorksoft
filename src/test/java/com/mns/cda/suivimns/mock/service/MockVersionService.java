@@ -1,5 +1,6 @@
 package com.mns.cda.suivimns.mock.service;
 
+import com.mns.cda.suivimns.dto.VersionResponseDto;
 import com.mns.cda.suivimns.model.Version;
 import com.mns.cda.suivimns.service.inter.iVersionService;
 
@@ -8,7 +9,7 @@ import java.util.Optional;
 
 public class MockVersionService implements iVersionService {
     @Override
-    public List<Version> findAll() {
+    public List<VersionResponseDto> findAll() {
         return List.of();
     }
 

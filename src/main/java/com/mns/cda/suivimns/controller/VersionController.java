@@ -1,6 +1,7 @@
 package com.mns.cda.suivimns.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.mns.cda.suivimns.dto.VersionResponseDto;
 import com.mns.cda.suivimns.model.Urgency;
 import com.mns.cda.suivimns.model.Version;
 import com.mns.cda.suivimns.model.groups.OnCreate;
@@ -33,8 +34,7 @@ public class VersionController {
     @Operation(summary = "Récupérer toutes les versions")
     @ApiResponse(responseCode = "200", description = "Liste des versions récupérée")
     @GetMapping("/list")
-    @JsonView(SoftwareView.class)
-    public List<Version> findAll() {
+    public List<VersionResponseDto> findAll() {
         return versionService.findAll();
     }
 
