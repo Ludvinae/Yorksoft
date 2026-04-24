@@ -1,16 +1,15 @@
 package com.mns.cda.suivimns.service;
 
 import com.mns.cda.suivimns.dao.*;
-import com.mns.cda.suivimns.dto.TicketCreation;
-import com.mns.cda.suivimns.dto.TicketFullWithLatest;
-import com.mns.cda.suivimns.dto.TicketResponse;
-import com.mns.cda.suivimns.dto.TicketUpdatedDto;
+import com.mns.cda.suivimns.dto.flat.TicketCreation;
+import com.mns.cda.suivimns.dto.flat.TicketFullWithLatest;
+import com.mns.cda.suivimns.dto.flat.TicketResponse;
+import com.mns.cda.suivimns.dto.flat.TicketUpdatedDto;
 import com.mns.cda.suivimns.model.*;
 import com.mns.cda.suivimns.model.keys.ClassificationKey;
 import com.mns.cda.suivimns.service.inter.iClassificationService;
 import com.mns.cda.suivimns.service.inter.iHistoryService;
 import com.mns.cda.suivimns.service.inter.iTicketService;
-import com.mns.cda.suivimns.service.inter.iUrgencyService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

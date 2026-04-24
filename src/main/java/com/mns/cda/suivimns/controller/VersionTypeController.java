@@ -1,5 +1,6 @@
 package com.mns.cda.suivimns.controller;
 
+import com.mns.cda.suivimns.dto.VersionTypeResponseDto;
 import com.mns.cda.suivimns.model.VersionType;
 import com.mns.cda.suivimns.service.inter.iVersionTypeService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,7 +22,7 @@ import java.util.Optional;
 @CrossOrigin
 @RequestMapping("/version-type")
 @RequiredArgsConstructor
-@Tag(name = "VersionType", description = "Gestion des types de version de logiciel")
+@Tag(name = "Type de version", description = "Gestion des types de version de logiciel")
 public class VersionTypeController {
 
     private final iVersionTypeService versionTypeService;
@@ -29,7 +30,7 @@ public class VersionTypeController {
     @Operation(summary = "Récupérer tous les types de version")
     @ApiResponse(responseCode = "200", description = "Liste des types de version récupérée avec succès")
     @GetMapping("/list")
-    public List<VersionType> getAll() {
+    public List<VersionTypeResponseDto> getAll() {
         return versionTypeService.findAll();
     }
 

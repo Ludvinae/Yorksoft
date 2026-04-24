@@ -1,8 +1,8 @@
 package com.mns.cda.suivimns.mock.dao;
 
 import com.mns.cda.suivimns.dao.TicketDao;
-import com.mns.cda.suivimns.dto.TicketFullWithLatest;
-import com.mns.cda.suivimns.dto.TicketResponse;
+import com.mns.cda.suivimns.dto.flat.TicketFullWithLatest;
+import com.mns.cda.suivimns.dto.flat.TicketResponse;
 import com.mns.cda.suivimns.model.Ticket;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;

@@ -23,7 +23,7 @@ import java.util.Optional;
 @CrossOrigin
 @RequestMapping("/assignment")
 @RequiredArgsConstructor
-@Tag(name = "Assignment", description = "Affectation des tickets à un technicien par un manager")
+@Tag(name = "Affectation", description = "Affectation des tickets à un technicien par un manager")
 public class AssignmentController {
 
     protected final iAssignmentService assignmentService;

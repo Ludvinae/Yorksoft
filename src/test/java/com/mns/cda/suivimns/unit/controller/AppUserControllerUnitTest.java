@@ -2,9 +2,8 @@ package com.mns.cda.suivimns.unit.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.AppUserController;
-import com.mns.cda.suivimns.dto.AppUserDto;
+import com.mns.cda.suivimns.dto.flat.AppUserDto;
 import com.mns.cda.suivimns.model.AppUser;
-import com.mns.cda.suivimns.model.Knowledge;
 import com.mns.cda.suivimns.service.inter.iAppUserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

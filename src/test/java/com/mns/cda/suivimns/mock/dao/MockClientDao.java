@@ -1,7 +1,7 @@
 package com.mns.cda.suivimns.mock.dao;
 
 import com.mns.cda.suivimns.dao.ClientDao;
-import com.mns.cda.suivimns.dto.ClientDto;
+import com.mns.cda.suivimns.dto.flat.ClientDto;
 import com.mns.cda.suivimns.model.Client;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;

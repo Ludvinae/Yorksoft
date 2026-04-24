@@ -2,10 +2,10 @@ package com.mns.cda.suivimns.unit.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.TicketController;
-import com.mns.cda.suivimns.dto.TicketCreation;
-import com.mns.cda.suivimns.dto.TicketFullWithLatest;
-import com.mns.cda.suivimns.dto.TicketResponse;
-import com.mns.cda.suivimns.dto.TicketUpdatedDto;
+import com.mns.cda.suivimns.dto.flat.TicketCreation;
+import com.mns.cda.suivimns.dto.flat.TicketFullWithLatest;
+import com.mns.cda.suivimns.dto.flat.TicketResponse;
+import com.mns.cda.suivimns.dto.flat.TicketUpdatedDto;
 import com.mns.cda.suivimns.model.*;
 import com.mns.cda.suivimns.service.inter.iTicketService;
 import org.junit.jupiter.api.BeforeEach;

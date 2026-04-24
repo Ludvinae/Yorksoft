@@ -1,8 +1,7 @@
 package com.mns.cda.suivimns.dao;
 
-import com.mns.cda.suivimns.dto.TicketFullWithLatest;
-import com.mns.cda.suivimns.dto.TicketResponse;
-import com.mns.cda.suivimns.model.Classification;
+import com.mns.cda.suivimns.dto.flat.TicketFullWithLatest;
+import com.mns.cda.suivimns.dto.flat.TicketResponse;
 import com.mns.cda.suivimns.model.Ticket;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -13,7 +12,7 @@ import java.util.List;
 
 @Repository
 public interface TicketDao extends JpaRepository<Ticket, Integer> {
-    @Query("SELECT new com.mns.cda.suivimns.dto.TicketResponse(" +
+    @Query("SELECT new com.mns.cda.suivimns.dto.flat.TicketResponse(" +
             "t.idTicket, t.title, t.description, t.modificationDate, " +
             "t.finalPriority, t.version.versionNumber, t.version.versionType.designation, " +
             "t.version.software.name, t.client.firstName, t.client.lastName, " +
@@ -30,7 +29,7 @@ public interface TicketDao extends JpaRepository<Ticket, Integer> {
             "WHERE cl2.ticket = t)")
     List<TicketResponse> findAllDto() ;
 
-    @Query("SELECT new com.mns.cda.suivimns.dto.TicketFullWithLatest(" +
+    @Query("SELECT new com.mns.cda.suivimns.dto.flat.TicketFullWithLatest(" +
                 "t.idTicket, t.title, t.modificationDate, " +
                 "t.finalPriority, v.versionNumber, vt.designation, " +
                 "s.name, th.designation, st.designation, " +
@@ -54,7 +53,7 @@ public interface TicketDao extends JpaRepository<Ticket, Integer> {
                 "s.name, th.designation, st.designation")
     List<TicketFullWithLatest> returnTicketFullWithLatest();
 
-    @Query("SELECT new com.mns.cda.suivimns.dto.TicketFullWithLatest(" +
+    @Query("SELECT new com.mns.cda.suivimns.dto.flat.TicketFullWithLatest(" +
             "t.idTicket, t.title, t.modificationDate, " +
             "t.finalPriority, v.versionNumber, vt.designation, " +
             "s.name, th.designation, st.designation, " +
@@ -81,7 +80,7 @@ public interface TicketDao extends JpaRepository<Ticket, Integer> {
             "s.name, th.designation, st.designation")
     List<TicketFullWithLatest> returnTicketAttributed(@Param("id") int id);
 
-    @Query("SELECT new com.mns.cda.suivimns.dto.TicketFullWithLatest(" +
+    @Query("SELECT new com.mns.cda.suivimns.dto.flat.TicketFullWithLatest(" +
             "t.idTicket, t.title, t.modificationDate, " +
             "t.finalPriority, v.versionNumber, vt.designation, " +
             "s.name, th.designation, st.designation, " +

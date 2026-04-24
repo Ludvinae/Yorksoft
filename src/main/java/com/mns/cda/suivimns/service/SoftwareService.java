@@ -2,13 +2,9 @@ package com.mns.cda.suivimns.service;
 
 import com.mns.cda.suivimns.dao.SoftwareDao;
 import com.mns.cda.suivimns.dao.SoftwareTypeDao;
-import com.mns.cda.suivimns.dto.SoftwareDto;
-import com.mns.cda.suivimns.model.Client;
+import com.mns.cda.suivimns.dto.flat.SoftwareDto;
 import com.mns.cda.suivimns.model.Software;
-import com.mns.cda.suivimns.model.SoftwareType;
-import com.mns.cda.suivimns.model.Status;
 import com.mns.cda.suivimns.service.inter.iSoftwareService;
-import com.mns.cda.suivimns.service.inter.iStatusService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

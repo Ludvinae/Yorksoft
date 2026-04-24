@@ -23,7 +23,7 @@ import java.util.Optional;
 @CrossOrigin
 @RequestMapping("/theme")
 @RequiredArgsConstructor
-@Tag(name = "Theme", description = "Gestion des thématiques des tickets")
+@Tag(name = "Thématique", description = "Gestion des thématiques des tickets")
 public class ThemeController {
 
     protected final iThemeService themeService;

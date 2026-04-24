@@ -1,6 +1,4 @@
-package com.mns.cda.suivimns.dto;
-
-import com.mns.cda.suivimns.model.Ticket;
+package com.mns.cda.suivimns.dto.flat;
 
 // Remove initialPriority when computing it from urgeny * impact is implemented
 public record TicketCreation(

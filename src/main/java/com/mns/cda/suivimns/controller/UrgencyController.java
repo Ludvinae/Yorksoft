@@ -23,7 +23,7 @@ import java.util.Optional;
 @CrossOrigin
 @RequestMapping("/urgency")
 @RequiredArgsConstructor
-@Tag(name = "Urgency", description = "Gestion des niveaux d'urgence des tickets")
+@Tag(name = "Urgence", description = "Gestion des niveaux d'urgence des tickets")
 public class UrgencyController {
 
     protected final iUrgencyService urgencyService;

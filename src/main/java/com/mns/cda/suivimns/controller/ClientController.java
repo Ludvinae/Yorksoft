@@ -1,7 +1,6 @@
 package com.mns.cda.suivimns.controller;
 
-import com.mns.cda.suivimns.dto.ClientDto;
-import com.mns.cda.suivimns.model.AppUser;
+import com.mns.cda.suivimns.dto.flat.ClientDto;
 import com.mns.cda.suivimns.model.Client;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;

@@ -1,4 +1,4 @@
-package com.mns.cda.suivimns.dto;
+package com.mns.cda.suivimns.dto.flat;
 
 public record AppUserDto(
         String firstName,

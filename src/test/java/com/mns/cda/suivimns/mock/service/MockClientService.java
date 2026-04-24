@@ -1,6 +1,6 @@
 package com.mns.cda.suivimns.mock.service;
 
-import com.mns.cda.suivimns.dto.ClientDto;
+import com.mns.cda.suivimns.dto.flat.ClientDto;
 import com.mns.cda.suivimns.model.Client;
 import com.mns.cda.suivimns.service.inter.iClientService;
 

@@ -21,7 +21,7 @@ import java.util.Optional;
 @CrossOrigin
 @RequestMapping("/status")
 @RequiredArgsConstructor
-@Tag(name = "Status", description = "Gestion des statuts des tickets")
+@Tag(name = "Statut", description = "Gestion des statuts des tickets")
 public class StatusController {
 
     protected final iStatusService statusService;

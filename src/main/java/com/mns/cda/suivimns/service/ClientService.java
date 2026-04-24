@@ -1,11 +1,9 @@
 package com.mns.cda.suivimns.service;
 
 import com.mns.cda.suivimns.dao.ClientDao;
-import com.mns.cda.suivimns.dto.ClientDto;
+import com.mns.cda.suivimns.dto.flat.ClientDto;
 import com.mns.cda.suivimns.model.Client;
-import com.mns.cda.suivimns.model.Status;
 import com.mns.cda.suivimns.service.inter.iClientService;
-import com.mns.cda.suivimns.service.inter.iStatusService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

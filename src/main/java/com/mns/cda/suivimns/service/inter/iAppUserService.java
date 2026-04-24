@@ -1,7 +1,7 @@
 package com.mns.cda.suivimns.service.inter;
 
-import com.mns.cda.suivimns.dto.AppUserDto;
-import com.mns.cda.suivimns.dto.PasswordDto;
+import com.mns.cda.suivimns.dto.flat.AppUserDto;
+import com.mns.cda.suivimns.dto.flat.PasswordDto;
 import com.mns.cda.suivimns.model.AppUser;
 
 import java.util.List;

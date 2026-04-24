@@ -1,12 +1,10 @@
 package com.mns.cda.suivimns.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.mns.cda.suivimns.dto.SoftwareDto;
-import com.mns.cda.suivimns.model.License;
+import com.mns.cda.suivimns.dto.flat.SoftwareDto;
 import com.mns.cda.suivimns.model.Software;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
-import com.mns.cda.suivimns.service.inter.iLicenseService;
 import com.mns.cda.suivimns.service.inter.iSoftwareService;
 import com.mns.cda.suivimns.view.SoftwareVersionListView;
 import com.mns.cda.suivimns.view.SoftwareView;

@@ -1,9 +1,9 @@
 package com.mns.cda.suivimns.service.inter;
 
-import com.mns.cda.suivimns.dto.TicketCreation;
-import com.mns.cda.suivimns.dto.TicketFullWithLatest;
-import com.mns.cda.suivimns.dto.TicketResponse;
-import com.mns.cda.suivimns.dto.TicketUpdatedDto;
+import com.mns.cda.suivimns.dto.flat.TicketCreation;
+import com.mns.cda.suivimns.dto.flat.TicketFullWithLatest;
+import com.mns.cda.suivimns.dto.flat.TicketResponse;
+import com.mns.cda.suivimns.dto.flat.TicketUpdatedDto;
 import com.mns.cda.suivimns.model.Ticket;
 import jakarta.transaction.Transactional;
 

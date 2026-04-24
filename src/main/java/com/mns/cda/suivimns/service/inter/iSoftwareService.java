@@ -1,6 +1,6 @@
 package com.mns.cda.suivimns.service.inter;
 
-import com.mns.cda.suivimns.dto.SoftwareDto;
+import com.mns.cda.suivimns.dto.flat.SoftwareDto;
 import com.mns.cda.suivimns.model.Software;
 
 import java.util.List;

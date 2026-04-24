@@ -1,4 +1,4 @@
-package com.mns.cda.suivimns.dto;
+package com.mns.cda.suivimns.dto.flat;
 
 import com.mns.cda.suivimns.model.SoftwareType;
 import com.mns.cda.suivimns.model.Version;
