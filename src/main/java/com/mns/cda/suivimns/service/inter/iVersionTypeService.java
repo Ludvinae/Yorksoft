@@ -1,21 +1,20 @@
 package com.mns.cda.suivimns.service.inter;
 
+import com.mns.cda.suivimns.dto.VersionTypeCreateDto;
 import com.mns.cda.suivimns.dto.VersionTypeResponseDto;
-import com.mns.cda.suivimns.model.VersionType;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface iVersionTypeService {
     List<VersionTypeResponseDto> findAll();
 
-    Optional<VersionType> findById(int id);
+    VersionTypeResponseDto findById(int id) throws VersionTypeNotFoundException;
 
-    VersionType save(VersionType versionType);
+    VersionTypeResponseDto save(VersionTypeCreateDto versionType);
 
-    void delete(VersionType versionType);
+    void delete(int id) throws iVersionTypeService.VersionTypeNotFoundException;
 
-    VersionType update(VersionType versionTypeToUpdate, int id) throws VersionTypeNotFoundException;
+    VersionTypeResponseDto update(int id, VersionTypeCreateDto versionTypeToUpdate) throws VersionTypeNotFoundException;
 
     class VersionTypeNotFoundException extends Exception {
     }
