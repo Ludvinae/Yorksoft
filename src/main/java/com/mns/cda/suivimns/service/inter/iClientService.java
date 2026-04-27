@@ -1,6 +1,6 @@
 package com.mns.cda.suivimns.service.inter;
 
-import com.mns.cda.suivimns.dto.flat.ClientDto;
+import com.mns.cda.suivimns.dto.flat.ClientDtoFlat;
 import com.mns.cda.suivimns.model.Client;
 
 import java.util.List;
@@ -8,11 +8,11 @@ import java.util.Optional;
 
 public interface iClientService {
 
-    ClientDto toDto(Client client);
+    ClientDtoFlat toDto(Client client);
 
-    List<ClientDto> findAll();
+    List<ClientDtoFlat> findAll();
 
-    Optional<ClientDto> findDtoById(int id);
+    Optional<ClientDtoFlat> findDtoById(int id);
 
     Optional<Client> findById(int id);
 

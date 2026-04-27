@@ -2,10 +2,9 @@ package com.mns.cda.suivimns.unit.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.VersionController;
-import com.mns.cda.suivimns.dto.VersionResponseDto;
+import com.mns.cda.suivimns.dto.VersionDto;
 import com.mns.cda.suivimns.model.Software;
 import com.mns.cda.suivimns.model.Version;
-import com.mns.cda.suivimns.model.Knowledge;
 import com.mns.cda.suivimns.model.VersionType;
 import com.mns.cda.suivimns.service.inter.iVersionService;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,7 +40,7 @@ class VersionControllerUnitTest {
     private ObjectMapper objectMapper;
 
     private Version version;
-    private VersionResponseDto versionResponseDto;
+    private VersionDto versionDto;
 
     @BeforeEach
     void setUp() {
@@ -57,7 +56,7 @@ class VersionControllerUnitTest {
         //DTO
         VersionType versionType = new VersionType();
         versionType.setIdVersionType(1);
-        versionResponseDto = new VersionResponseDto(
+        versionDto = new VersionDto(
                 1, "Test number", LocalDateTime.now(), versionType, 1);
     }
 
@@ -67,7 +66,7 @@ class VersionControllerUnitTest {
     @Test
     void shouldReturnAll() throws Exception {
 
-        when(versionService.findAll()).thenReturn(List.of(versionResponseDto));
+        when(versionService.findAll()).thenReturn(List.of(versionDto));
 
         mockMvc.perform(get("/version/list"))
                 .andDo(print())

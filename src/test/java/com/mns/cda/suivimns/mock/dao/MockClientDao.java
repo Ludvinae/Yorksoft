@@ -1,7 +1,7 @@
 package com.mns.cda.suivimns.mock.dao;
 
 import com.mns.cda.suivimns.dao.ClientDao;
-import com.mns.cda.suivimns.dto.flat.ClientDto;
+import com.mns.cda.suivimns.dto.flat.ClientDtoFlat;
 import com.mns.cda.suivimns.model.Client;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -170,12 +170,12 @@ public class MockClientDao implements ClientDao {
     }
 
     @Override
-    public Optional<ClientDto> getClient(int id) {
+    public Optional<ClientDtoFlat> getClient(int id) {
         return Optional.empty();
     }
 
     @Override
-    public List<ClientDto> getAllClient() {
+    public List<ClientDtoFlat> getAllClient() {
         return List.of();
     }
 

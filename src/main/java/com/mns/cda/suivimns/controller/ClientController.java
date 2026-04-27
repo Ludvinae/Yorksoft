@@ -1,6 +1,6 @@
 package com.mns.cda.suivimns.controller;
 
-import com.mns.cda.suivimns.dto.flat.ClientDto;
+import com.mns.cda.suivimns.dto.flat.ClientDtoFlat;
 import com.mns.cda.suivimns.model.Client;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
@@ -31,7 +31,7 @@ public class ClientController {
     @Operation(summary = "Récupérer tous les clients")
     @ApiResponse(responseCode = "200", description = "Liste récupérée")
     @GetMapping("/list")
-    public List<ClientDto> getAll() {
+    public List<ClientDtoFlat> getAll() {
         return clientService.findAll();
     }
 
@@ -41,9 +41,9 @@ public class ClientController {
             @ApiResponse(responseCode = "200", description = "Client trouvé"),
             @ApiResponse(responseCode = "404", description = "Client non trouvé")})
     @GetMapping("/{id}")
-    public ResponseEntity<ClientDto> getById(@PathVariable int id) {
+    public ResponseEntity<ClientDtoFlat> getById(@PathVariable int id) {
 
-        Optional<ClientDto> client = clientService.findDtoById(id);
+        Optional<ClientDtoFlat> client = clientService.findDtoById(id);
         if (client.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -57,10 +57,10 @@ public class ClientController {
             @ApiResponse(responseCode = "201", description = "Client créé"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PostMapping
-    public ResponseEntity<ClientDto> create(@RequestBody @Validated(OnCreate.class) Client client) {
+    public ResponseEntity<ClientDtoFlat> create(@RequestBody @Validated(OnCreate.class) Client client) {
         Client clientSaved = clientService.save(client);
 
-        ClientDto dto = clientService.toDto(clientSaved);
+        ClientDtoFlat dto = clientService.toDto(clientSaved);
 
         return new ResponseEntity<>(dto, HttpStatus.CREATED);
     }

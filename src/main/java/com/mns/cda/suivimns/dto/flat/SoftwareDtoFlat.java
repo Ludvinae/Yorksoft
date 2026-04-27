@@ -5,7 +5,7 @@ import com.mns.cda.suivimns.model.Version;
 
 import java.util.List;
 
-public record SoftwareDto(
+public record SoftwareDtoFlat(
         String name,
         String description,
         SoftwareType type,

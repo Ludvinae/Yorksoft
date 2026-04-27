@@ -2,9 +2,7 @@ package com.mns.cda.suivimns.unit.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.VersionTypeController;
-import com.mns.cda.suivimns.dto.VersionTypeCreateDto;
-import com.mns.cda.suivimns.dto.VersionTypeResponseDto;
-import com.mns.cda.suivimns.mapper.VersionTypeMapper;
+import com.mns.cda.suivimns.dto.VersionTypeDto;
 import com.mns.cda.suivimns.service.inter.iVersionTypeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,13 +34,13 @@ class VersionTypeControllerUnitTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private VersionTypeResponseDto versionTypeResponseDto;
+    private VersionTypeDto versionTypeResponseDto;
     private VersionTypeCreateDto versionTypeCreateDto;
 
     @BeforeEach
     void setUp() {
         //DTO
-        versionTypeResponseDto = new VersionTypeResponseDto(
+        versionTypeResponseDto = new VersionTypeDto(
                 1, "Test designation", (byte) 1);
 
         versionTypeCreateDto = new VersionTypeCreateDto(

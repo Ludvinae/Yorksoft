@@ -27,7 +27,7 @@ public class Classification {
     protected ClassificationKey id;
 
     @CreatedDate
-    protected LocalDateTime affectation_date;
+    protected LocalDateTime affectationDate;
 
     @ManyToOne(optional = false)
     @MapsId("idTicket")

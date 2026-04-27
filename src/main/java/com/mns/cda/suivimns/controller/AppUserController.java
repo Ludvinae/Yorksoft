@@ -1,6 +1,6 @@
 package com.mns.cda.suivimns.controller;
 
-import com.mns.cda.suivimns.dto.flat.AppUserDto;
+import com.mns.cda.suivimns.dto.flat.AppUserDtoFlat;
 import com.mns.cda.suivimns.dto.flat.PasswordDto;
 import com.mns.cda.suivimns.model.AppUser;
 import com.mns.cda.suivimns.model.groups.OnCreate;
@@ -101,7 +101,7 @@ public class AppUserController {
             @ApiResponse(responseCode = "404", description = "Utilisateur non trouvé"),
             @ApiResponse(responseCode = "400", description = "Email déja utilisé")})
     @PatchMapping("/{id}")
-    public ResponseEntity<AppUser> update(@PathVariable int id, @RequestBody @Validated AppUserDto dto) {
+    public ResponseEntity<AppUser> update(@PathVariable int id, @RequestBody @Validated AppUserDtoFlat dto) {
 
         try {
             AppUser user = appUserService.update(dto, id);

@@ -2,7 +2,7 @@ package com.mns.cda.suivimns.unit.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.ClientController;
-import com.mns.cda.suivimns.dto.flat.ClientDto;
+import com.mns.cda.suivimns.dto.flat.ClientDtoFlat;
 import com.mns.cda.suivimns.model.Client;
 import com.mns.cda.suivimns.service.inter.iClientService;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,7 +37,7 @@ class ClientControllerUnitTest {
     private ObjectMapper objectMapper;
 
     private Client client;
-    private ClientDto clientDto;
+    private ClientDtoFlat clientDto;
 
     @BeforeEach
     void setUp() {
@@ -48,7 +48,7 @@ class ClientControllerUnitTest {
         // ⚠️ Adapter si @NotNull sur d'autres champs
 
         // DTO
-        clientDto = new ClientDto(
+        clientDto = new ClientDtoFlat(
                 1, "Test first name", "Test last name", "Test email",
                 "Test number", (byte) 1);
 

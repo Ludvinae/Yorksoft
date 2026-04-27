@@ -1,7 +1,7 @@
 package com.mns.cda.suivimns.service;
 
 import com.mns.cda.suivimns.dao.ClientDao;
-import com.mns.cda.suivimns.dto.flat.ClientDto;
+import com.mns.cda.suivimns.dto.flat.ClientDtoFlat;
 import com.mns.cda.suivimns.model.Client;
 import com.mns.cda.suivimns.service.inter.iClientService;
 import lombok.RequiredArgsConstructor;
@@ -17,12 +17,12 @@ public class ClientService implements iClientService {
     protected final ClientDao clientDao;
 
     @Override
-    public List<ClientDto> findAll() {
+    public List<ClientDtoFlat> findAll() {
         return clientDao.getAllClient();
     }
 
     @Override
-    public Optional<ClientDto> findDtoById(int id) {
+    public Optional<ClientDtoFlat> findDtoById(int id) {
         return clientDao.getClient(id);
     }
 
@@ -52,8 +52,8 @@ public class ClientService implements iClientService {
         return clientDao.save(currentClient);
     }
 
-    public ClientDto toDto(Client client) {
-        return new ClientDto(
+    public ClientDtoFlat toDto(Client client) {
+        return new ClientDtoFlat(
                 client.getIdAppUser(),
                 client.getFirstName(),
                 client.getLastName(),

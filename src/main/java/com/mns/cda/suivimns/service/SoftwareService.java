@@ -2,7 +2,7 @@ package com.mns.cda.suivimns.service;
 
 import com.mns.cda.suivimns.dao.SoftwareDao;
 import com.mns.cda.suivimns.dao.SoftwareTypeDao;
-import com.mns.cda.suivimns.dto.flat.SoftwareDto;
+import com.mns.cda.suivimns.dto.flat.SoftwareDtoFlat;
 import com.mns.cda.suivimns.model.Software;
 import com.mns.cda.suivimns.service.inter.iSoftwareService;
 import jakarta.transaction.Transactional;
@@ -56,7 +56,7 @@ public class SoftwareService implements iSoftwareService {
 
     @Transactional
     @Override
-    public Software createSoftware(SoftwareDto softwareToCreate) {
+    public Software createSoftware(SoftwareDtoFlat softwareToCreate) {
         Software software = new Software();
         software.setName(softwareToCreate.name());
         software.setDescription(softwareToCreate.description());

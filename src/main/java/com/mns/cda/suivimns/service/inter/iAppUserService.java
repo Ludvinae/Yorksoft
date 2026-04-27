@@ -1,6 +1,6 @@
 package com.mns.cda.suivimns.service.inter;
 
-import com.mns.cda.suivimns.dto.flat.AppUserDto;
+import com.mns.cda.suivimns.dto.flat.AppUserDtoFlat;
 import com.mns.cda.suivimns.dto.flat.PasswordDto;
 import com.mns.cda.suivimns.model.AppUser;
 
@@ -16,7 +16,7 @@ public interface iAppUserService {
 
     void delete(AppUser appUser);
 
-    AppUser update(AppUserDto appUserToUpdate, int id) throws AppUserNotFoundException, EmailAlreadyUsedException;
+    AppUser update(AppUserDtoFlat appUserToUpdate, int id) throws AppUserNotFoundException, EmailAlreadyUsedException;
 
     void updatePassword(int id, PasswordDto dto) throws AppUserNotFoundException, BadPasswordException;
 

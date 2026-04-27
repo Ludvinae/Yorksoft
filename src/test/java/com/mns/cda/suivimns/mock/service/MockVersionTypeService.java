@@ -1,27 +1,24 @@
 package com.mns.cda.suivimns.mock.service;
 
-import com.mns.cda.suivimns.dto.VersionTypeCreateDto;
-import com.mns.cda.suivimns.dto.VersionTypeResponseDto;
-import com.mns.cda.suivimns.model.VersionType;
+import com.mns.cda.suivimns.dto.VersionTypeDto;
 import com.mns.cda.suivimns.service.inter.iVersionTypeService;
 
 import java.util.List;
-import java.util.Optional;
 
 public class MockVersionTypeService implements iVersionTypeService {
 
     @Override
-    public List<VersionTypeResponseDto> findAll() {
+    public List<VersionTypeDto> findAll() {
         return List.of();
     }
 
     @Override
-    public VersionTypeResponseDto findById(int id) {
+    public VersionTypeDto findById(int id) {
         return null;
     }
 
     @Override
-    public VersionTypeResponseDto save(VersionTypeCreateDto versionType) {
+    public VersionTypeDto save(VersionTypeCreateDto versionType) {
         return null;
     }
 
@@ -31,7 +28,7 @@ public class MockVersionTypeService implements iVersionTypeService {
     }
 
     @Override
-    public VersionTypeResponseDto update(int id, VersionTypeCreateDto versionTypeToUpdate) throws VersionTypeNotFoundException {
+    public VersionTypeDto update(int id, VersionTypeCreateDto versionTypeToUpdate) throws VersionTypeNotFoundException {
         return null;
     }
 }

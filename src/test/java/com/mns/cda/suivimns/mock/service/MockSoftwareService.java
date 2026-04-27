@@ -1,6 +1,6 @@
 package com.mns.cda.suivimns.mock.service;
 
-import com.mns.cda.suivimns.dto.flat.SoftwareDto;
+import com.mns.cda.suivimns.dto.flat.SoftwareDtoFlat;
 import com.mns.cda.suivimns.model.Software;
 import com.mns.cda.suivimns.model.SoftwareType;
 import com.mns.cda.suivimns.service.inter.iSoftwareService;
@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public class MockSoftwareService implements iSoftwareService {
     @Override
-    public Software createSoftware(SoftwareDto softwareToCreate) {
+    public Software createSoftware(SoftwareDtoFlat softwareToCreate) {
         return null;
     }
 

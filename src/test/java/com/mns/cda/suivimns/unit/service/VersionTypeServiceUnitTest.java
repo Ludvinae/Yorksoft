@@ -1,8 +1,7 @@
 package com.mns.cda.suivimns.unit.service;
 
 import com.mns.cda.suivimns.dao.VersionTypeDao;
-import com.mns.cda.suivimns.dto.VersionTypeCreateDto;
-import com.mns.cda.suivimns.dto.VersionTypeResponseDto;
+import com.mns.cda.suivimns.dto.VersionTypeDto;
 import com.mns.cda.suivimns.mapper.VersionTypeMapper;
 import com.mns.cda.suivimns.model.VersionType;
 import com.mns.cda.suivimns.service.VersionTypeService;
@@ -37,12 +36,12 @@ public class VersionTypeServiceUnitTest {
     void shouldReturnAll() {
 
         List<VersionType> entities = List.of(new VersionType());
-        List<VersionTypeResponseDto> dtos = List.of(new VersionTypeResponseDto(1, "Test", (byte) 1));
+        List<VersionTypeDto> dtos = List.of(new VersionTypeDto(1, "Test", (byte) 1));
 
         when(versionTypeDao.findAll()).thenReturn(entities);
         when(versionTypeMapper.toDtoList(entities)).thenReturn(dtos);
 
-        List<VersionTypeResponseDto> result = versionTypeService.findAll();
+        List<VersionTypeDto> result = versionTypeService.findAll();
 
         assertEquals(1, result.size());
         verify(versionTypeDao).findAll();
@@ -53,12 +52,12 @@ public class VersionTypeServiceUnitTest {
     void shouldReturnById() throws Exception {
 
         VersionType entity = new VersionType();
-        VersionTypeResponseDto dto = new VersionTypeResponseDto(1, "Test", (byte) 1);
+        VersionTypeDto dto = new VersionTypeDto(1, "Test", (byte) 1);
 
         when(versionTypeDao.findById(1)).thenReturn(Optional.of(entity));
         when(versionTypeMapper.toDto(entity)).thenReturn(dto);
 
-        VersionTypeResponseDto result = versionTypeService.findById(1);
+        VersionTypeDto result = versionTypeService.findById(1);
 
         assertEquals("Test", result.designation());
     }
@@ -78,13 +77,13 @@ public class VersionTypeServiceUnitTest {
         VersionTypeCreateDto createDto = new VersionTypeCreateDto("Test", (byte) 1);
         VersionType entity = new VersionType();
         VersionType saved = new VersionType();
-        VersionTypeResponseDto responseDto = new VersionTypeResponseDto(1, "Test", (byte) 1);
+        VersionTypeDto responseDto = new VersionTypeDto(1, "Test", (byte) 1);
 
         when(versionTypeMapper.toEntity(createDto)).thenReturn(entity);
         when(versionTypeDao.save(entity)).thenReturn(saved);
         when(versionTypeMapper.toDto(saved)).thenReturn(responseDto);
 
-        VersionTypeResponseDto result = versionTypeService.save(createDto);
+        VersionTypeDto result = versionTypeService.save(createDto);
 
         assertEquals(1, result.idVersionType());
         verify(versionTypeDao).save(entity);

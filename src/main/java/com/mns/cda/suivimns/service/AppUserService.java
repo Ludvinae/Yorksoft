@@ -1,7 +1,7 @@
 package com.mns.cda.suivimns.service;
 
 import com.mns.cda.suivimns.dao.AppUserDao;
-import com.mns.cda.suivimns.dto.flat.AppUserDto;
+import com.mns.cda.suivimns.dto.flat.AppUserDtoFlat;
 import com.mns.cda.suivimns.dto.flat.PasswordDto;
 import com.mns.cda.suivimns.model.AppUser;
 import com.mns.cda.suivimns.service.inter.iAppUserService;
@@ -40,7 +40,7 @@ public class AppUserService implements iAppUserService {
     }
 
     @Override
-    public AppUser update(AppUserDto dto, int id)
+    public AppUser update(AppUserDtoFlat dto, int id)
             throws AppUserNotFoundException {
 
         AppUser user = appUserDao.findById(id)

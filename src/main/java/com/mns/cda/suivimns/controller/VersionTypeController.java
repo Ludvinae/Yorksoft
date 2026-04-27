@@ -1,7 +1,7 @@
 package com.mns.cda.suivimns.controller;
 
-import com.mns.cda.suivimns.dto.VersionTypeCreateDto;
-import com.mns.cda.suivimns.dto.VersionTypeResponseDto;
+import com.mns.cda.suivimns.dto.VersionDto;
+import com.mns.cda.suivimns.dto.VersionTypeDto;
 import com.mns.cda.suivimns.service.inter.iVersionTypeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -28,7 +28,7 @@ public class VersionTypeController {
     @Operation(summary = "Récupérer tous les types de version")
     @ApiResponse(responseCode = "200", description = "Liste des types de version récupérée avec succès")
     @GetMapping("/list")
-    public List<VersionTypeResponseDto> getAll() {
+    public List<VersionDto> getAll() {
 
         return versionTypeService.findAll();
     }
@@ -39,7 +39,7 @@ public class VersionTypeController {
             @ApiResponse(responseCode = "200", description = "Type de version trouvé"),
             @ApiResponse(responseCode = "404", description = "Type de version non trouvé")})
     @GetMapping("/{id}")
-    public ResponseEntity<VersionTypeResponseDto> getById(@PathVariable Integer id) {
+    public ResponseEntity<VersionTypeDto> getById(@PathVariable Integer id) {
 
         try {
             return new ResponseEntity<>(versionTypeService.findById(id) , HttpStatus.OK);
@@ -54,7 +54,7 @@ public class VersionTypeController {
             @ApiResponse(responseCode = "201", description = "Type de version créé"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PostMapping
-    public ResponseEntity<VersionTypeResponseDto> create(@RequestBody @Valid VersionTypeCreateDto versionType) {
+    public ResponseEntity<VersionTypeDto> create(@RequestBody @Valid VersionTypeDto versionType) {
 
         return new ResponseEntity<>(versionTypeService.save(versionType), HttpStatus.CREATED);
     }
@@ -85,7 +85,7 @@ public class VersionTypeController {
             @ApiResponse(responseCode = "400", description = "Données invalides")
     })
     @PutMapping("/{id}")
-    public ResponseEntity<VersionTypeResponseDto> update(@PathVariable Integer id, @RequestBody @Valid VersionTypeCreateDto typeToUpdate) {
+    public ResponseEntity<VersionTypeDto> update(@PathVariable Integer id, @RequestBody @Valid VersionTypeDto typeToUpdate) {
         try {
             return new ResponseEntity<>(versionTypeService.update(id, typeToUpdate), HttpStatus.OK);
         } catch (iVersionTypeService.VersionTypeNotFoundException e) {

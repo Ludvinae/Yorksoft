@@ -23,8 +23,8 @@ public interface TicketDao extends JpaRepository<Ticket, Integer> {
             "JOIN t.classificationList c " +
             "JOIN c.theme th " +
             "WHERE h.endDate IS NULL " +
-            "AND c.affectation_date = (" +
-            "SELECT MAX(cl2.affectation_date) " +
+            "AND c.affectationDate = (" +
+            "SELECT MAX(cl2.affectationDate) " +
             "FROM Classification cl2 " +
             "WHERE cl2.ticket = t)")
     List<TicketResponse> findAllDto() ;
@@ -44,8 +44,8 @@ public interface TicketDao extends JpaRepository<Ticket, Integer> {
             "JOIN h.status st " +
             "LEFT JOIN t.commentList cm " +
             "WHERE h.endDate IS NULL " +
-            "AND cl.affectation_date = (" +
-                "SELECT MAX(cl2.affectation_date) " +
+            "AND cl.affectationDate = (" +
+                "SELECT MAX(cl2.affectationDate) " +
                 "FROM Classification cl2 " +
                 "WHERE cl2.ticket = t)" +
             "GROUP BY t.idTicket, t.title, t.modificationDate, " +
@@ -71,8 +71,8 @@ public interface TicketDao extends JpaRepository<Ticket, Integer> {
             "JOIN a.technician tc " +
             "WHERE h.endDate IS NULL " +
             "AND tc.idAppUser = :id " +
-            "AND cl.affectation_date = (" +
-            "SELECT MAX(cl2.affectation_date) " +
+            "AND cl.affectationDate = (" +
+            "SELECT MAX(cl2.affectationDate) " +
             "FROM Classification cl2 " +
             "WHERE cl2.ticket = t)" +
             "GROUP BY t.idTicket, t.title, t.modificationDate, " +
@@ -96,8 +96,8 @@ public interface TicketDao extends JpaRepository<Ticket, Integer> {
             "LEFT JOIN t.commentList cm " +
             "WHERE h.endDate IS NULL " +
             "AND t.finalPriority <= 2 " +
-            "AND cl.affectation_date = (" +
-            "SELECT MAX(cl2.affectation_date) " +
+            "AND cl.affectationDate = (" +
+            "SELECT MAX(cl2.affectationDate) " +
             "FROM Classification cl2 " +
             "WHERE cl2.ticket = t)" +
             "GROUP BY t.idTicket, t.title, t.modificationDate, " +

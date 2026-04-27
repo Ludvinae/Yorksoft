@@ -1,7 +1,7 @@
 package com.mns.cda.suivimns.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.mns.cda.suivimns.dto.flat.SoftwareDto;
+import com.mns.cda.suivimns.dto.flat.SoftwareDtoFlat;
 import com.mns.cda.suivimns.model.Software;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
@@ -41,6 +41,7 @@ public class SoftwareController {
         return softwareService.findAll();
     }
 
+
     @Operation(
             summary = "Récupérer un logiciel par ID",
             description = "Retourne un logiciel spécifique avec ses informations principales")
@@ -58,6 +59,7 @@ public class SoftwareController {
 
         return new ResponseEntity<>(software.get(), HttpStatus.OK);
     }
+
 
     @Operation(
             summary = "Récupérer les versions d’un logiciel",
@@ -77,6 +79,7 @@ public class SoftwareController {
         return new ResponseEntity<>(software.get(), HttpStatus.OK);
     }
 
+
     @Operation(
             summary = "Créer un logiciel",
             description = "Crée un nouveau logiciel à partir d’un DTO")
@@ -84,12 +87,13 @@ public class SoftwareController {
             @ApiResponse(responseCode = "201", description = "Logiciel créé"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PostMapping
-    public ResponseEntity<Software> create(@RequestBody @Validated(OnCreate.class) SoftwareDto software) {
+    public ResponseEntity<Software> create(@RequestBody @Validated(OnCreate.class) SoftwareDtoFlat software) {
 
         Software savedSoftware = softwareService.createSoftware(software);
 
         return new ResponseEntity<>(savedSoftware, HttpStatus.CREATED);
     }
+
 
     @Operation(
             summary = "Supprimer un logiciel",
@@ -107,6 +111,7 @@ public class SoftwareController {
         softwareService.delete(software.get());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
 
     @Operation(
             summary = "Mettre à jour un logiciel",

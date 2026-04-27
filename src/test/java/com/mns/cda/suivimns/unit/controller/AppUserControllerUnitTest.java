@@ -2,7 +2,7 @@ package com.mns.cda.suivimns.unit.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.AppUserController;
-import com.mns.cda.suivimns.dto.flat.AppUserDto;
+import com.mns.cda.suivimns.dto.flat.AppUserDtoFlat;
 import com.mns.cda.suivimns.model.AppUser;
 import com.mns.cda.suivimns.service.inter.iAppUserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -141,9 +141,9 @@ class AppUserControllerUnitTest {
     @Test
     void shouldUpdate() throws Exception {
 
-        AppUserDto userDto = new AppUserDto("Jean", "Valjean", "valjean@test.com", "2222222");
+        AppUserDtoFlat userDto = new AppUserDtoFlat("Jean", "Valjean", "valjean@test.com", "2222222");
 
-        when(appUserService.update(any(AppUserDto.class), eq(1))).thenReturn(appUser);
+        when(appUserService.update(any(AppUserDtoFlat.class), eq(1))).thenReturn(appUser);
 
         mockMvc.perform(patch("/user/1")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -158,9 +158,9 @@ class AppUserControllerUnitTest {
     @Test
     void shouldReturn404WhenUpdateFails() throws Exception {
 
-        AppUserDto userDto = new AppUserDto("Jean", "Valjean", "valjean@test.com", "2222222");
+        AppUserDtoFlat userDto = new AppUserDtoFlat("Jean", "Valjean", "valjean@test.com", "2222222");
 
-        when(appUserService.update(any(AppUserDto.class), eq(1)))
+        when(appUserService.update(any(AppUserDtoFlat.class), eq(1)))
                 .thenThrow(new iAppUserService.AppUserNotFoundException());
 
         mockMvc.perform(patch("/user/1")

@@ -2,7 +2,9 @@ package com.mns.cda.suivimns.dto;
 
 import jakarta.validation.constraints.NotBlank;
 
-public record VersionTypeCreateDto(
+public record ThemeDto(
+        Integer idTheme,
         @NotBlank String designation,
-        Byte UrgencyMalus
-) {}
+        String description
+) {
+}

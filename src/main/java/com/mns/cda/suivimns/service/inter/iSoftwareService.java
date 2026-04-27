@@ -1,13 +1,13 @@
 package com.mns.cda.suivimns.service.inter;
 
-import com.mns.cda.suivimns.dto.flat.SoftwareDto;
+import com.mns.cda.suivimns.dto.flat.SoftwareDtoFlat;
 import com.mns.cda.suivimns.model.Software;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface iSoftwareService {
-    Software createSoftware(SoftwareDto softwareToCreate);
+    Software createSoftware(SoftwareDtoFlat softwareToCreate);
 
     List<Software> findAll();
 

@@ -2,7 +2,7 @@ package com.mns.cda.suivimns.unit.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.SoftwareController;
-import com.mns.cda.suivimns.dto.flat.SoftwareDto;
+import com.mns.cda.suivimns.dto.flat.SoftwareDtoFlat;
 import com.mns.cda.suivimns.model.Software;
 import com.mns.cda.suivimns.service.inter.iSoftwareService;
 import org.junit.jupiter.api.BeforeEach;
@@ -97,9 +97,9 @@ class SoftwareControllerUnitTest {
     @Test
     void shouldCreate() throws Exception {
 
-        SoftwareDto softwareDto = new SoftwareDto("TestSoft","", null, null);
+        SoftwareDtoFlat softwareDto = new SoftwareDtoFlat("TestSoft","", null, null);
 
-        when(softwareService.createSoftware(any(SoftwareDto.class))).thenReturn(software);
+        when(softwareService.createSoftware(any(SoftwareDtoFlat.class))).thenReturn(software);
 
         mockMvc.perform(post("/software")
                         .contentType(MediaType.APPLICATION_JSON)

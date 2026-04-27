@@ -1,8 +1,7 @@
 package com.mns.cda.suivimns.service;
 
 import com.mns.cda.suivimns.dao.VersionTypeDao;
-import com.mns.cda.suivimns.dto.VersionTypeCreateDto;
-import com.mns.cda.suivimns.dto.VersionTypeResponseDto;
+import com.mns.cda.suivimns.dto.VersionTypeDto;
 import com.mns.cda.suivimns.mapper.VersionTypeMapper;
 import com.mns.cda.suivimns.model.VersionType;
 import com.mns.cda.suivimns.service.inter.iVersionTypeService;
@@ -19,12 +18,12 @@ public class VersionTypeService implements iVersionTypeService {
     private final VersionTypeMapper typeMapper;
 
     @Override
-    public List<VersionTypeResponseDto> findAll() {
+    public List<VersionTypeDto> findAll() {
         return typeMapper.toDtoList(versionTypeDao.findAll());
     }
 
     @Override
-    public VersionTypeResponseDto findById(int id) throws iVersionTypeService.VersionTypeNotFoundException{
+    public VersionTypeDto findById(int id) throws iVersionTypeService.VersionTypeNotFoundException{
         VersionType type = versionTypeDao.findById(id)
                 .orElseThrow(VersionTypeNotFoundException::new);
 
@@ -32,7 +31,7 @@ public class VersionTypeService implements iVersionTypeService {
     }
 
     @Override
-    public VersionTypeResponseDto save(VersionTypeCreateDto createDto) {
+    public VersionTypeDto save(VersionTypeCreateDto createDto) {
 
         VersionType type = typeMapper.toEntity(createDto);
         VersionType saved = versionTypeDao.save(type);
@@ -49,7 +48,7 @@ public class VersionTypeService implements iVersionTypeService {
     }
 
     @Override
-    public VersionTypeResponseDto update(int id, VersionTypeCreateDto versionTypeToUpdate) throws iVersionTypeService.VersionTypeNotFoundException {
+    public VersionTypeDto update(int id, VersionTypeCreateDto versionTypeToUpdate) throws iVersionTypeService.VersionTypeNotFoundException {
 
         VersionType type = versionTypeDao.findById(id)
                 .orElseThrow(iVersionTypeService.VersionTypeNotFoundException::new);
