@@ -28,7 +28,7 @@ public class VersionTypeController {
     @Operation(summary = "Récupérer tous les types de version")
     @ApiResponse(responseCode = "200", description = "Liste des types de version récupérée avec succès")
     @GetMapping("/list")
-    public List<VersionDto> getAll() {
+    public List<VersionTypeDto> getAll() {
 
         return versionTypeService.findAll();
     }

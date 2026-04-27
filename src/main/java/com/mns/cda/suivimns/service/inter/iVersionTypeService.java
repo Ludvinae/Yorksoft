@@ -9,11 +9,11 @@ public interface iVersionTypeService {
 
     VersionTypeDto findById(int id) throws VersionTypeNotFoundException;
 
-    VersionTypeDto save(VersionTypeCreateDto versionType);
+    VersionTypeDto save(VersionTypeDto versionType);
 
     void delete(int id) throws iVersionTypeService.VersionTypeNotFoundException;
 
-    VersionTypeDto update(int id, VersionTypeCreateDto versionTypeToUpdate) throws VersionTypeNotFoundException;
+    VersionTypeDto update(int id, VersionTypeDto versionTypeToUpdate) throws VersionTypeNotFoundException;
 
     class VersionTypeNotFoundException extends Exception {
     }

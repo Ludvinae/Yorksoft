@@ -74,7 +74,7 @@ public class VersionTypeServiceUnitTest {
     @Test
     void shouldSave() {
 
-        VersionTypeCreateDto createDto = new VersionTypeCreateDto("Test", (byte) 1);
+        VersionTypeDto createDto = new VersionTypeDto(null,"Test", (byte) 1);
         VersionType entity = new VersionType();
         VersionType saved = new VersionType();
         VersionTypeDto responseDto = new VersionTypeDto(1, "Test", (byte) 1);

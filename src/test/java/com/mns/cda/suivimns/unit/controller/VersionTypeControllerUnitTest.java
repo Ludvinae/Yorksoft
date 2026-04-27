@@ -34,17 +34,14 @@ class VersionTypeControllerUnitTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private VersionTypeDto versionTypeResponseDto;
-    private VersionTypeCreateDto versionTypeCreateDto;
+    private VersionTypeDto versionTypeDto;
 
     @BeforeEach
     void setUp() {
         //DTO
-        versionTypeResponseDto = new VersionTypeDto(
+        versionTypeDto = new VersionTypeDto(
                 1, "Test designation", (byte) 1);
 
-        versionTypeCreateDto = new VersionTypeCreateDto(
-                "Test designation", (byte) 1);
     }
 
     // =========================
@@ -53,7 +50,7 @@ class VersionTypeControllerUnitTest {
     @Test
     void shouldReturn400WhenCreateInvalid() throws Exception {
 
-        VersionTypeCreateDto invalidDto = new VersionTypeCreateDto("", (byte) 1);
+        VersionTypeDto invalidDto = new VersionTypeDto(null,"", (byte) 1);
 
         mockMvc.perform(post("/version-type")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -67,7 +64,7 @@ class VersionTypeControllerUnitTest {
     @Test
     void shouldReturnAll() throws Exception {
 
-        when(versionTypeService.findAll()).thenReturn(List.of(versionTypeResponseDto));
+        when(versionTypeService.findAll()).thenReturn(List.of(versionTypeDto));
 
         mockMvc.perform(get("/version-type/list"))
                 .andDo(print())
@@ -82,7 +79,7 @@ class VersionTypeControllerUnitTest {
     @Test
     void shouldReturnById() throws Exception {
 
-        when(versionTypeService.findById(1)).thenReturn(versionTypeResponseDto);
+        when(versionTypeService.findById(1)).thenReturn(versionTypeDto);
 
         mockMvc.perform(get("/version-type/1"))
                 .andDo(print())
@@ -111,11 +108,11 @@ class VersionTypeControllerUnitTest {
     @Test
     void shouldCreate() throws Exception {
 
-        when(versionTypeService.save(any(VersionTypeCreateDto.class))).thenReturn(versionTypeResponseDto);
+        when(versionTypeService.save(any(VersionTypeDto.class))).thenReturn(versionTypeDto);
 
         mockMvc.perform(post("/version-type")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(versionTypeCreateDto)))
+                        .content(objectMapper.writeValueAsString(versionTypeDto)))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.idVersionType").value(1))
@@ -157,11 +154,11 @@ class VersionTypeControllerUnitTest {
     @Test
     void shouldUpdate() throws Exception {
 
-        when(versionTypeService.update(eq(1), any(VersionTypeCreateDto.class))).thenReturn(versionTypeResponseDto);
+        when(versionTypeService.update(eq(1), any(VersionTypeDto.class))).thenReturn(versionTypeDto);
 
         mockMvc.perform(put("/version-type/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(versionTypeCreateDto)))
+                        .content(objectMapper.writeValueAsString(versionTypeDto)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.designation").value("Test designation"));
@@ -173,12 +170,12 @@ class VersionTypeControllerUnitTest {
     @Test
     void shouldReturn404WhenUpdateFails() throws Exception {
 
-        when(versionTypeService.update(eq(1), any(VersionTypeCreateDto.class)))
+        when(versionTypeService.update(eq(1), any(VersionTypeDto.class)))
                 .thenThrow(new iVersionTypeService.VersionTypeNotFoundException());
 
         mockMvc.perform(put("/version-type/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(versionTypeCreateDto)))
+                        .content(objectMapper.writeValueAsString(versionTypeDto)))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }

@@ -31,9 +31,10 @@ public class VersionTypeService implements iVersionTypeService {
     }
 
     @Override
-    public VersionTypeDto save(VersionTypeCreateDto createDto) {
+    public VersionTypeDto save(VersionTypeDto createDto) {
 
         VersionType type = typeMapper.toEntity(createDto);
+        type.setIdVersionType(null);
         VersionType saved = versionTypeDao.save(type);
 
         return typeMapper.toDto(saved);
@@ -48,7 +49,7 @@ public class VersionTypeService implements iVersionTypeService {
     }
 
     @Override
-    public VersionTypeDto update(int id, VersionTypeCreateDto versionTypeToUpdate) throws iVersionTypeService.VersionTypeNotFoundException {
+    public VersionTypeDto update(int id, VersionTypeDto versionTypeToUpdate) throws iVersionTypeService.VersionTypeNotFoundException {
 
         VersionType type = versionTypeDao.findById(id)
                 .orElseThrow(iVersionTypeService.VersionTypeNotFoundException::new);

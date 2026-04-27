@@ -163,7 +163,7 @@ public class TicketService implements iTicketService {
     @Override
     public String getCurrentTheme(Ticket ticket) {
         return ticket.getClassificationList().stream()
-                .max(Comparator.comparing(Classification::getAffectation_date))
+                .max(Comparator.comparing(Classification::getAffectationDate))
                 .map(c -> c.getTheme().getDesignation())
                 .orElse(null);
     }

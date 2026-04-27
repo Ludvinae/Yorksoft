@@ -18,7 +18,7 @@ public class MockVersionTypeService implements iVersionTypeService {
     }
 
     @Override
-    public VersionTypeDto save(VersionTypeCreateDto versionType) {
+    public VersionTypeDto save(VersionTypeDto versionType) {
         return null;
     }
 
@@ -28,7 +28,7 @@ public class MockVersionTypeService implements iVersionTypeService {
     }
 
     @Override
-    public VersionTypeDto update(int id, VersionTypeCreateDto versionTypeToUpdate) throws VersionTypeNotFoundException {
+    public VersionTypeDto update(int id, VersionTypeDto versionTypeToUpdate) throws VersionTypeNotFoundException {
         return null;
     }
 }
