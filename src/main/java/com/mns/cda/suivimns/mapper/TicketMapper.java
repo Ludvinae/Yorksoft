@@ -174,5 +174,13 @@ public abstract class TicketMapper {
 
     // Method helper pour Update
     @Mapping(target = "idTicket", ignore = true)
+    @Mapping(target = "version", source = "idVersion")
+    @Mapping(target = "client", source = "idClient")
+    @Mapping(target = "impact", source = "idImpact")
+    @Mapping(target = "urgency", source = "idUrgency")
+    @Mapping(target = "historyList", ignore = true)
+    @Mapping(target = "classificationList", ignore = true)
+    @Mapping(target = "commentList", ignore = true)
+    @Mapping(target = "assignmentList", ignore = true)
     public abstract void updateEntityFromDto(TicketDto dto, @MappingTarget Ticket entity);
 }

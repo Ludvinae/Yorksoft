@@ -56,5 +56,7 @@ public abstract class ArticleMapper {
 
     // Method helper pour Update
     @Mapping(target = "idArticle", ignore = true)
+    @Mapping(target = "knowledge", source = "idKnowledge")
+    @Mapping(target = "technician", source = "idAuthor")
     public abstract void updateEntityFromDto(ArticleDto dto, @MappingTarget Article entity);
 }

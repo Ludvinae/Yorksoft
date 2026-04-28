@@ -56,5 +56,7 @@ public abstract class CommentMapper {
 
     // Method helper pour Update
     @Mapping(target = "idComment", ignore = true)
+    @Mapping(target = "ticket", source = "idTicket")
+    @Mapping(target = "author", source = "idAuthor")
     public abstract void updateEntityFromDto(CommentDto dto, @MappingTarget Comment entity);
 }
