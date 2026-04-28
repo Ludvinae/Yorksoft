@@ -29,8 +29,6 @@ public abstract class VersionMapper {
     @Mapping(target = "idSoftware", source = "software")
     public abstract VersionDto toDto(Version version);
 
-    //@Mapping(target = "idVersionType", source = "versionType")
-    //@Mapping(target = "idSoftware", source = "software")
     public abstract List<VersionDto> toDtoList(List<Version> versions);
 
     // Method helper pour ID vers ENTITE

@@ -44,11 +44,11 @@ public class Assignment {
     @JoinColumn(name = "id_manager")
     @JsonView(AssignmentView.class)
     @NotNull
-    protected AppUser manager;
+    protected Manager manager;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_technician")
     @JsonView(AssignmentView.class)
     @NotNull
-    protected AppUser technician;
+    protected Technician technician;
 }

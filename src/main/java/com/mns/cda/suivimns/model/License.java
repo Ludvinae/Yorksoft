@@ -35,10 +35,6 @@ public class License {
 
     protected LocalDate expirationDate;
 
-    @Column(nullable = false)
-    @NotNull
-    protected Integer userCount;
-
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_software", nullable = false)
     @NotNull
@@ -47,9 +43,8 @@ public class License {
     protected Software software;
 
 
-    @ManyToMany
-    @JoinTable(name = "license_clients",
-            joinColumns = @JoinColumn(name = "id_license"),
-            inverseJoinColumns = @JoinColumn(name = "id_client"))
-    protected List<Client> clientList;
+    @ManyToOne
+    @JoinTable(name = "license_clients")
+    @OnDelete(action = OnDeleteAction.SET_NULL)
+    protected Client client;
 }

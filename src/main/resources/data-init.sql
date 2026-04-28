@@ -94,15 +94,12 @@ VALUES ('Service Cloud indisponible', 4);
 INSERT INTO article (creation_date, modification_date, content, id_knowledge, id_technician)
 VALUES ('2024-04-06', null, 'Explication sur la résolution des problemes de sauvegarde sur le Cloud', 1, 6);
 
-INSERT INTO license (id_software, user_count, expiration_date, license_number)
-VALUES ( 1, 1, '2027-12-02', 'azerty123456'),
-       ( 2, 1, '2028-03-03', 'plopplop8511'),
-       ( 2, 100, '2030-10-10', 'plopplop1234'),
-       ( 2, 1, '2027-12-02', 'ploplop2345');
+INSERT INTO license (id_software, expiration_date, license_number)
+VALUES ( 1, '2027-12-02', 'azerty123456'),
+       ( 2, '2028-03-03', 'plopplop8511'),
+       ( 2,  '2030-10-10', 'plopplop1234'),
+       ( 2,  '2027-12-02', 'ploplop2345');
 
-INSERT INTO license_clients (id_license, id_client)
-VALUES (1, 1), (2, 2), (3, 3),
-       (4, 1), (3, 8);
 
 INSERT INTO classification (id_theme, id_ticket, affectation_date)
 VALUES (6, 1, '2026-04-11 09:12:00'),

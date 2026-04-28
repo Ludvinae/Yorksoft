@@ -43,7 +43,6 @@ public class LicenseService implements iLicenseService {
         License currentLicense = licenseDao.findById(id)
                 .orElseThrow(iLicenseService.LicenseNotFoundException::new);
 
-        currentLicense.setUserCount(licenseToUpdate.getUserCount());
         currentLicense.setExpirationDate(licenseToUpdate.getExpirationDate());
 
         return licenseDao.save(currentLicense);
