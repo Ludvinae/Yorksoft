@@ -33,7 +33,6 @@ public class Ticket {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView({EmployeeTicketListView.class, TicketStatusListView.class, TicketView.class})
     protected Integer idTicket;
 
     @Column(nullable = false, length = 63)
@@ -43,67 +42,53 @@ public class Ticket {
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
-    @JsonView(TicketView.class)
     protected LocalDateTime openDate;
 
-    @JsonView(TicketView.class)
     protected LocalDateTime closeDate;
 
-    @JsonView(TicketView.class)
     @LastModifiedDate
     protected LocalDateTime modificationDate;
 
     @Column(nullable = false, columnDefinition = "TEXT")
     @NotBlank(groups = {OnCreate.class})
-    @JsonView(TicketView.class)
     protected String description;
 
-    @JsonView(TicketView.class)
     protected Integer callDuration;
 
     @Column(nullable = false, updatable = false)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY) // Empeche le changement de cette valeur meme avec le setter
-    @JsonView(TicketView.class)
     protected Integer initialPriority;
 
     @Column(nullable = false)
-    @JsonView(TicketView.class)
     protected Integer finalPriority;
 
     @ManyToOne
     @JoinColumn(name = "id_version")
-    @JsonView(TicketView.class)
     protected Version version;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_urgency", nullable = false)
-    @JsonView(TicketView.class)
     @NotNull(groups = {OnCreate.class})
     protected Urgency urgency;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_impact", nullable = false)
-    @JsonView(TicketView.class)
     @NotNull(groups = {OnCreate.class})
     protected Impact impact;
 
     @ManyToOne
     @JoinColumn(name = "id_client")
-    @JsonView(TicketView.class)
     @OnDelete(action = OnDeleteAction.SET_NULL)
     @NotNull(groups = {OnCreate.class})
     protected Client client;
 
     @OneToMany(mappedBy = "ticket")
-    @JsonView({TicketStatusListView.class, TicketView.class})
     protected List<History> historyList;
 
     @OneToMany(mappedBy = "ticket")
-    @JsonView(TicketView.class)
     protected List<Classification> classificationList;
 
     @OneToMany(mappedBy = "ticket")
-    @JsonView(TicketView.class)
     protected List<Comment> commentList;
 
     @OneToMany(mappedBy = "ticket")

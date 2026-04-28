@@ -38,7 +38,6 @@ public class License {
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_software", nullable = false)
     @NotNull
-    @JsonView(ClientSoftwareListView.class)
     @OnDelete(action = OnDeleteAction.CASCADE)
     protected Software software;
 

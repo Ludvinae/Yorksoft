@@ -21,13 +21,11 @@ public class Status {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView(TicketStatusListView.class)
     protected Integer idStatus;
 
     @Column(nullable = false, length = 63, unique = true)
     @NotBlank(groups = {OnCreate.class})
     @Size(min = 3, max = 63)
-    @JsonView(TicketStatusListView.class)
     protected String designation;
 
     protected Byte displayOrder;

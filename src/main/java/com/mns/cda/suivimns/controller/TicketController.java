@@ -30,6 +30,7 @@ public class TicketController {
 
     protected final iTicketService ticketService;
 
+
     @Operation(
             summary = "Lister tous les tickets",
             description = "Retourne la liste des tickets avec leurs informations principales")

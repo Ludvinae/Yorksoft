@@ -1,6 +1,5 @@
 package com.mns.cda.suivimns.controller;
 
-import com.mns.cda.suivimns.dto.VersionDto;
 import com.mns.cda.suivimns.dto.VersionTypeDto;
 import com.mns.cda.suivimns.service.inter.iVersionTypeService;
 import io.swagger.v3.oas.annotations.Operation;

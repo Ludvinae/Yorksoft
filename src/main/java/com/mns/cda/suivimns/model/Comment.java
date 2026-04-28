@@ -31,21 +31,17 @@ public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView(TicketView.class)
     protected Integer idComment;
 
     @Column(nullable = false, columnDefinition = "TEXT")
     @NotBlank(groups = {OnCreate.class,  OnUpdate.class})
-    @JsonView(TicketView.class)
     protected String content;
 
     @CreatedDate
     @Column(updatable = false)
-    @JsonView(TicketView.class)
     protected LocalDateTime dateSent;
 
     @LastModifiedDate
-    @JsonView(TicketView.class)
     protected LocalDateTime lastModification;
 
     @ManyToOne(optional = false)

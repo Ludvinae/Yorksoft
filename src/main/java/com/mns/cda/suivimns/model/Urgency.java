@@ -23,18 +23,15 @@ public class Urgency {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView(TicketView.class)
     protected Integer idUrgency;
 
     @Column(nullable = false, length = 63, unique = true)
     @NotBlank(groups = {OnCreate.class})
     @Size(max = 63)
-    @JsonView(TicketView.class)
     protected String designation;
 
     @Column(nullable = false)
     @NotNull
-    @JsonView(TicketView.class)
     protected Byte priorityFactor;
 
     @Column(columnDefinition = "TEXT")

@@ -26,12 +26,14 @@ public class ArticleController {
 
     protected final iArticleService articleService;
 
+
     @Operation(summary = "Récupérer tous les articles")
     @ApiResponse(responseCode = "200", description = "Liste des articles récupérée avec succès")
     @GetMapping("/list")
     public List<Article> getAll() {
         return articleService.findAll();
     }
+
 
     @Operation(summary = "Récupérer un article par son ID")
     @ApiResponses({
@@ -48,6 +50,7 @@ public class ArticleController {
         return new ResponseEntity<>(article.get(), HttpStatus.OK);
     }
 
+
     @Operation(summary = "Créer un nouvel article")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Article créé"),
@@ -59,6 +62,7 @@ public class ArticleController {
 
         return new ResponseEntity<>(articleSaved, HttpStatus.CREATED);
     }
+
 
     @Operation(summary = "Supprimer un article")
     @ApiResponses({
@@ -75,6 +79,7 @@ public class ArticleController {
         articleService.delete(article.get());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
 
     @Operation(summary = "Mettre à jour un article",
                 description = "Met à jour le champ 'content'")

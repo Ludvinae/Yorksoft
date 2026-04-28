@@ -27,12 +27,14 @@ public class AppUserController {
 
     protected final iAppUserService appUserService;
 
+
     @Operation(summary = "Lister tous les utilisateurs")
     @ApiResponse(responseCode = "200", description = "Liste récupérée avec succès")
     @GetMapping("/list")
     public List<AppUser> getAll() {
         return appUserService.findAll();
     }
+
 
     @Operation(summary = "Récupérer un utilisateur par ID")
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Utilisateur trouvé"),
@@ -48,6 +50,7 @@ public class AppUserController {
         return new ResponseEntity<>(user.get(), HttpStatus.OK);
     }
 
+
     @Operation(summary = "Créer un utilisateur",
             description = "Permet de créer un utilisateur (technicien, manager, directeur ou client)")
     @ApiResponses({@ApiResponse(responseCode = "201", description = "Utilisateur créé"),
@@ -58,6 +61,7 @@ public class AppUserController {
 
         return new ResponseEntity<>(userSaved, HttpStatus.CREATED);
     }
+
 
     @Operation(summary = "Supprimer un utilisateur")
     @ApiResponses({
@@ -112,6 +116,7 @@ public class AppUserController {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
+
 
     @Operation(summary = "Changer le mot de passe d'un utilisateur",
                 description = "Compare le champ 'oldPassword' avec le mot de passe, " +

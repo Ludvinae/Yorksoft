@@ -24,13 +24,11 @@ public class Version {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView({SoftwareVersionListView.class, SoftwareView.class})
     protected Integer idVersion;
 
     @Column(nullable = false, length = 63)
     @NotBlank
     @Size(max = 63)
-    @JsonView({SoftwareVersionListView.class, SoftwareView.class})
     protected String versionNumber;
 
 
@@ -38,7 +36,6 @@ public class Version {
 
     @ManyToOne
     @JoinColumn(name = "id_version_type")
-    @JsonView(SoftwareVersionListView.class)
     protected VersionType versionType;
 
     @ManyToOne(optional = false)

@@ -30,6 +30,7 @@ public class VersionController {
 
     protected final iVersionService versionService;
 
+
     @Operation(summary = "Récupérer toutes les versions")
     @ApiResponse(responseCode = "200", description = "Liste des versions récupérée")
     @GetMapping("/list")
@@ -37,12 +38,12 @@ public class VersionController {
         return versionService.findAll();
     }
 
+
     @Operation(summary = "Récupérer une version par son ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Version trouvée"),
             @ApiResponse(responseCode = "404", description = "Version non trouvée")})
     @GetMapping("/{id}")
-    @JsonView(SoftwareView.class)
     public ResponseEntity<Version> findById(@PathVariable Integer id) {
 
         Optional<Version> version = versionService.findById(id);
@@ -52,6 +53,7 @@ public class VersionController {
         return new ResponseEntity<>(version.get(), HttpStatus.OK);
     }
 
+
     @Operation(summary = "Créer une nouvelle version")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Version créée"),
@@ -60,6 +62,7 @@ public class VersionController {
     public ResponseEntity<VersionDto> create(@RequestBody @Valid VersionDto version) {
         return new ResponseEntity<>(versionService.save(version), HttpStatus.CREATED);
     }
+
 
     @Operation(summary = "Supprimer une version")
     @ApiResponses(value = {
@@ -75,6 +78,7 @@ public class VersionController {
         versionService.delete(version.get());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
 
     @Operation(
             summary = "Mettre à jour une version",

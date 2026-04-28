@@ -28,20 +28,20 @@ public class AssignmentController {
 
     protected final iAssignmentService assignmentService;
 
+
     @Operation(summary = "Récupérer toutes les affectations")
     @ApiResponse(responseCode = "200", description = "Liste récupérée")
     @GetMapping("/list")
-    @JsonView(AssignmentView.class)
     public List<Assignment> getAll() {
         return assignmentService.findAll();
     }
+
 
     @Operation(summary = "Récupérer une affectation par ID")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Assignment trouvé"),
             @ApiResponse(responseCode = "404", description = "Non trouvé")})
     @GetMapping("/{id}")
-    @JsonView(AssignmentView.class)
     public ResponseEntity<Assignment> getById(@PathVariable int id) {
         Optional<Assignment> assignment = assignmentService.findById(id);
         if (assignment.isEmpty()) {
@@ -50,6 +50,7 @@ public class AssignmentController {
 
         return new ResponseEntity<>(assignment.get(), HttpStatus.OK);
     }
+
 
     @Operation(summary = "Affecter un ticket à un technicien")
     @ApiResponses({

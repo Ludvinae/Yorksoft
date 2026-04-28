@@ -29,12 +29,14 @@ public class ClassificationController {
 
     protected final iClassificationService classificationService;
 
+
     @Operation(summary = "Récupérer toutes les classifications")
     @ApiResponse(responseCode = "200", description = "Liste récupérée")
     @GetMapping("/list")
     public List<Classification> getAll() {
         return classificationService.findAll();
     }
+
 
     @Operation(summary = "Récupérer une classification par ID")
     @ApiResponses({
@@ -51,6 +53,7 @@ public class ClassificationController {
 
         return new ResponseEntity<>(classification.get(), HttpStatus.OK);
     }
+
 
     @Operation(summary = "Créer une classification")
     @ApiResponses({

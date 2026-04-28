@@ -28,12 +28,14 @@ public class UrgencyController {
 
     protected final iUrgencyService urgencyService;
 
+
     @Operation(summary = "Récupérer tous les niveaux d'urgence")
     @ApiResponse(responseCode = "200", description = "Liste des urgences récupérée")
     @GetMapping("/list")
     public List<Urgency> getAll() {
         return urgencyService.findAll();
     }
+
 
     @Operation(summary = "Récupérer un niveau d'urgence par son ID")
     @ApiResponses(value = {
@@ -50,6 +52,7 @@ public class UrgencyController {
         return new ResponseEntity<>(urgency.get(), HttpStatus.OK);
     }
 
+
     @Operation(summary = "Créer un niveau d'urgence")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Urgence créée"),
@@ -60,6 +63,7 @@ public class UrgencyController {
 
         return new ResponseEntity<>(urgencySaved, HttpStatus.CREATED);
     }
+
 
     @Operation(summary = "Supprimer un niveau d'urgence")
     @ApiResponses(value = {
@@ -75,6 +79,7 @@ public class UrgencyController {
         urgencyService.delete(urgency.get());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
 
     @Operation(
             summary = "Mettre à jour un niveau d'urgence",

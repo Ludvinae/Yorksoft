@@ -24,7 +24,6 @@ import java.util.List;
 @Entity
 public class Client extends AppUser {
 
-    @JsonView(ClientView.class)
     protected Byte importance;
 
 }

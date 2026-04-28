@@ -27,12 +27,14 @@ public class CommentController {
 
     protected final iCommentService commentService;
 
+
     @Operation(summary="Récuperer tous les commentaires")
     @ApiResponse(responseCode = "200", description="Liste récupérée")
     @GetMapping("/list")
     public List<Comment> getAll() {
         return commentService.findAll();
     }
+
 
     @Operation(summary="Récupere un commentaire en fonction de son ID")
     @ApiResponses({
@@ -49,6 +51,7 @@ public class CommentController {
         return new ResponseEntity<>(comment.get(), HttpStatus.OK);
     }
 
+
     @Operation(summary="Crée un nouveau commentaire")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Crée"),
@@ -59,6 +62,7 @@ public class CommentController {
 
         return new ResponseEntity<>(commentSaved, HttpStatus.CREATED);
     }
+
 
     @Operation(summary = "Efface un commentaire")
     @ApiResponses({
@@ -74,6 +78,7 @@ public class CommentController {
         commentService.delete(comment.get());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
 
     @Operation(summary = "Modifier un commentaire",
                 description = "Met à jour le champ 'content")

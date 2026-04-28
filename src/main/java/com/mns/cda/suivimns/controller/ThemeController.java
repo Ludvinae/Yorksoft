@@ -28,12 +28,14 @@ public class ThemeController {
 
     protected final iThemeService themeService;
 
+
     @Operation(summary = "Récupérer toutes les thématiques")
     @ApiResponse(responseCode = "200", description = "Liste des thématiques récupérée")
     @GetMapping("/list")
     public List<Theme> getAll() {
         return themeService.findAll();
     }
+
 
     @Operation(summary = "Récupérer une thématique par son ID")
     @ApiResponses(value = {
@@ -50,6 +52,7 @@ public class ThemeController {
         return new ResponseEntity<>(theme.get(), HttpStatus.OK);
     }
 
+
     @Operation(summary = "Créer une thématique")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Thématique créée"),
@@ -60,6 +63,7 @@ public class ThemeController {
 
         return new ResponseEntity<>(themeSaved, HttpStatus.CREATED);
     }
+
 
     @Operation(summary = "Supprimer une thématique")
     @ApiResponses(value = {
@@ -75,6 +79,7 @@ public class ThemeController {
         themeService.delete(theme.get());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
 
     @Operation(
             summary = "Mettre à jour une thématique",

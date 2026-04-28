@@ -26,12 +26,14 @@ public class StatusController {
 
     protected final iStatusService statusService;
 
+
     @Operation(summary = "Récupérer tous les statuts")
     @ApiResponse(responseCode = "200", description = "Liste des statuts récupérée")
     @GetMapping("/list")
     public List<Status> getAll() {
         return statusService.findAll();
     }
+
 
     @Operation(summary = "Récupérer un statut par son ID")
     @ApiResponses(value = {
@@ -48,6 +50,7 @@ public class StatusController {
         return new ResponseEntity<>(status.get(), HttpStatus.OK);
     }
 
+
     @Operation(summary = "Créer un statut")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Statut créé"),
@@ -58,6 +61,7 @@ public class StatusController {
 
         return new ResponseEntity<>(statusSaved, HttpStatus.CREATED);
     }
+
 
     @Operation(summary = "Supprimer un statut")
     @ApiResponses(value = {

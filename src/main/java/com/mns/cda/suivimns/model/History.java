@@ -26,7 +26,6 @@ public class History {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView(TicketStatusListView.class)
     protected Integer idHistory;
 
     @CreatedDate
@@ -37,7 +36,6 @@ public class History {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_status", nullable = false)
-    @JsonView(TicketStatusListView.class)
     @NotNull
     protected Status status;
 

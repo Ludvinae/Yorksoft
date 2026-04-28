@@ -28,6 +28,7 @@ public class KnowledgeController {
 
     protected final iKnowledgeService knowledgeService;
 
+
     @Operation(summary = "Récupere toutes les connaissances",
                 description = "Récupere la liste complète de connaissance de la base")
     @ApiResponse(responseCode = "200", description = "Liste récupérée avec succés")
@@ -35,6 +36,7 @@ public class KnowledgeController {
     public List<Knowledge> getAll() {
         return knowledgeService.findAll();
     }
+
 
     @Operation(summary = "Récupére une connaissance en fonction de son ID")
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Connaissance trouvée"),
@@ -50,6 +52,7 @@ public class KnowledgeController {
         return new ResponseEntity<>(knowledge.get(), HttpStatus.OK);
     }
 
+
     @Operation(summary = "Crée une nouvelle connaissance")
     @ApiResponses({@ApiResponse(responseCode = "201", description = "Connaissance crée"),
                     @ApiResponse(responseCode = "400", description = "Données invalides")})
@@ -59,6 +62,7 @@ public class KnowledgeController {
 
         return new ResponseEntity<>(knowledgeSaved, HttpStatus.CREATED);
     }
+
 
     @Operation(summary = "Efface une connaissance selon son ID")
     @ApiResponses({@ApiResponse(responseCode = "204", description = "Connaissance effacée"),
@@ -73,6 +77,7 @@ public class KnowledgeController {
         knowledgeService.delete(knowledge.get());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
 
     @Operation(summary = "Modifie une connaissance en fonction de son ID",
                 description = "Modifie les champs 'subject', 'theme' et 'versionList' d'une connaissance")

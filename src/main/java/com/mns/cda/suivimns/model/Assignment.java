@@ -24,31 +24,25 @@ public class Assignment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView({AssignmentView.class, EmployeeTicketListView.class})
     protected Integer idAssignment;
 
     @CreatedDate
-    @JsonView({AssignmentView.class, EmployeeTicketListView.class})
     protected LocalDateTime assignmentDate;
 
-    @JsonView({AssignmentView.class, EmployeeTicketListView.class})
     protected LocalDateTime endDate;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_ticket", nullable = false)
-    @JsonView({AssignmentView.class, EmployeeTicketListView.class})
     @NotNull
     protected Ticket ticket;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_manager")
-    @JsonView(AssignmentView.class)
     @NotNull
     protected Manager manager;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_technician")
-    @JsonView(AssignmentView.class)
     @NotNull
     protected Technician technician;
 }

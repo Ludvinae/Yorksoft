@@ -27,6 +27,7 @@ public class ImpactController {
 
     protected final iImpactService impactService;
 
+
     @Operation(
             summary = "Récupérer tous les impacts",
             description = "Retourne la liste complète des niveaux d'impact")
@@ -35,6 +36,7 @@ public class ImpactController {
     public List<Impact> getAll() {
         return impactService.findAll();
     }
+
 
     @Operation(
             summary = "Récupérer un impact par ID",
@@ -53,6 +55,7 @@ public class ImpactController {
         return new ResponseEntity<>(impact.get(), HttpStatus.OK);
     }
 
+
     @Operation(
             summary = "Créer un impact",
             description = "Crée un nouveau niveau d'impact")
@@ -65,6 +68,7 @@ public class ImpactController {
 
         return new ResponseEntity<>(impactSaved, HttpStatus.CREATED);
     }
+
 
     @Operation(
             summary = "Supprimer un impact",
@@ -82,6 +86,7 @@ public class ImpactController {
         impactService.delete(impact.get());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
 
     @Operation(
             summary = "Mettre à jour un impact",

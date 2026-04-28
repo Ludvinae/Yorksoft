@@ -26,12 +26,14 @@ public class HistoryController {
 
     protected final iHistoryService historyService;
 
+
     @Operation(summary = "Récupérer tous les historiques")
     @ApiResponse(responseCode = "200", description = "Liste des historiques récupérée avec succès")
     @GetMapping("/list")
     public List<History> getAll() {
         return historyService.findAll();
     }
+
 
     @Operation(summary = "Récupérer un historique par son ID")
     @ApiResponses({

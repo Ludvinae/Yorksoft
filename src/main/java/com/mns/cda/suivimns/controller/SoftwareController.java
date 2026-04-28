@@ -31,12 +31,12 @@ public class SoftwareController {
 
     protected final iSoftwareService softwareService;
 
+
     @Operation(
             summary = "Récupérer tous les logiciels",
             description = "Retourne la liste complète des logiciels")
     @ApiResponse(responseCode = "200", description = "Liste récupérée avec succès")
     @GetMapping("/list")
-    @JsonView(SoftwareView.class)
     public List<Software> getAll() {
         return softwareService.findAll();
     }
@@ -49,7 +49,6 @@ public class SoftwareController {
             @ApiResponse(responseCode = "200", description = "Logiciel trouvé"),
             @ApiResponse(responseCode = "404", description = "Logiciel non trouvé")})
     @GetMapping("/{id}")
-    @JsonView(SoftwareView.class)
     public ResponseEntity<Software> getById(@PathVariable Integer id) {
         Optional<Software> software = softwareService.findById(id);
 
@@ -68,7 +67,6 @@ public class SoftwareController {
             @ApiResponse(responseCode = "200", description = "Versions récupérées"),
             @ApiResponse(responseCode = "404", description = "Logiciel non trouvé")})
     @GetMapping("/{id}/version/list")
-    @JsonView(SoftwareVersionListView.class)
     public ResponseEntity<Software> getSoftwareVersionById(@PathVariable Integer id) {
         Optional<Software> software = softwareService.findById(id);
 

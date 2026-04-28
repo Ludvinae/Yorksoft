@@ -28,6 +28,7 @@ public class SoftwareTypeController {
 
     protected final iSoftwareTypeService softwareTypeService;
 
+
     @Operation(summary = "Récupère tous les types de logiciels",
                 description = "Récupère la liste complète des types de logiciels")
     @ApiResponse(responseCode = "200", description = "Liste récupérée avec succés")
@@ -35,6 +36,7 @@ public class SoftwareTypeController {
     public List<SoftwareType> findAll() {
         return softwareTypeService.findAll();
     }
+
 
     @Operation(
             summary = "Récupérer un type de logiciel par ID",
@@ -53,6 +55,7 @@ public class SoftwareTypeController {
         return new ResponseEntity<>(softwareType.get(), HttpStatus.OK);
     }
 
+
     @Operation(
             summary = "Créer un type de logiciel",
             description = "Crée un nouveau type de logiciel")
@@ -66,6 +69,7 @@ public class SoftwareTypeController {
 
         return new ResponseEntity<>(typeSaved, HttpStatus.CREATED);
     }
+
 
     @Operation(
             summary = "Supprimer un type de logiciel",
@@ -85,6 +89,7 @@ public class SoftwareTypeController {
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
 
     @Operation(
             summary = "Mettre à jour un logiciel",

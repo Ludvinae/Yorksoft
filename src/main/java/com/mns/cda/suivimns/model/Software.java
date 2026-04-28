@@ -27,13 +27,11 @@ public class Software {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView({ClientSoftwareListView.class, SoftwareView.class, SoftwareVersionListView.class})
     protected Integer idSoftware;
 
     @Column(nullable = false, length = 127)
     @NotBlank(groups = {OnCreate.class})
     @Size(max = 127)
-    @JsonView({ClientSoftwareListView.class, SoftwareView.class})
     protected String name;
 
     @Column(columnDefinition = "TEXT")
@@ -42,12 +40,10 @@ public class Software {
 
     @ManyToOne
     @JoinColumn(name = "id_software_type")
-    @JsonView({ClientSoftwareListView.class, SoftwareView.class})
     @OnDelete(action= OnDeleteAction.SET_NULL)
     protected SoftwareType type;
 
     // Doit rester nullable, on crée d'abord un software avant de créer ses versions
     @OneToMany(mappedBy = "software")
-    @JsonView({SoftwareVersionListView.class, SoftwareView.class})
     protected List<Version> versionList;
 }

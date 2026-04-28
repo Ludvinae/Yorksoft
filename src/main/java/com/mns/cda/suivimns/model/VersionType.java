@@ -21,15 +21,12 @@ public class VersionType {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView({SoftwareVersionListView.class, SoftwareView.class})
     protected Integer idVersionType;
 
     @Column(nullable = false, length = 127)
     @NotBlank
     @Size(max = 127)
-    @JsonView({SoftwareVersionListView.class, SoftwareView.class})
     protected String designation;
 
-    @JsonView({SoftwareVersionListView.class})
     protected Byte urgencyMalus;
 }

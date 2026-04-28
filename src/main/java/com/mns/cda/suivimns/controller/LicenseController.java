@@ -26,12 +26,14 @@ public class LicenseController {
 
     protected final iLicenseService licenseService;
 
+
     @Operation(summary = "Récupère toutes les licences")
     @ApiResponse(responseCode = "200", description = "Liste récupérée avec succés")
     @GetMapping("/list")
     public List<License> getAll() {
         return licenseService.findAll();
     }
+
 
     @Operation(summary = "Récupère une licence en fonction de son ID")
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Licence trouvée"),
@@ -47,6 +49,7 @@ public class LicenseController {
         return new ResponseEntity<>(license.get(), HttpStatus.OK);
     }
 
+
     @Operation(summary="Crée une nouvelle licence")
     @ApiResponses({@ApiResponse(responseCode = "201", description = "Licence crée"),
                     @ApiResponse(responseCode = "400", description = "Données non valides")})
@@ -56,6 +59,7 @@ public class LicenseController {
 
         return new ResponseEntity<>(licenseSaved, HttpStatus.CREATED);
     }
+
 
     @Operation(summary = "Efface une licence en fonction de son ID")
     @ApiResponses({@ApiResponse(responseCode = "204", description = "Licence effacée"),
@@ -70,6 +74,7 @@ public class LicenseController {
         licenseService.delete(license.get());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
 
     @Operation(summary = "Modifie une licence en fonction de son ID",
                 description = "Modifie les champs 'userCount' et 'expirationDate'")
