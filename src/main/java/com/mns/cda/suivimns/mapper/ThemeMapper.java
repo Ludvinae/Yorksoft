@@ -2,9 +2,11 @@ package com.mns.cda.suivimns.mapper;
 
 import com.mns.cda.suivimns.dto.ThemeDto;
 import com.mns.cda.suivimns.model.Theme;
+import org.mapstruct.Mapper;
 
 import java.util.List;
 
+@Mapper(componentModel = "spring")
 public interface ThemeMapper {
     ThemeDto toDto(Theme theme);
 

@@ -54,10 +54,8 @@ class VersionControllerUnitTest {
         version.setSoftware(software);
 
         //DTO
-        VersionType versionType = new VersionType();
-        versionType.setIdVersionType(1);
         versionDto = new VersionDto(
-                1, "Test number", LocalDateTime.now(), versionType, 1);
+                1, "Test number", LocalDateTime.now(), 1, 1);
     }
 
     // =========================
@@ -109,7 +107,7 @@ class VersionControllerUnitTest {
     @Test
     void shouldCreate() throws Exception {
 
-        when(versionService.save(any(Version.class))).thenReturn(version);
+        when(versionService.save(any(VersionDto.class))).thenReturn(versionDto);
 
         mockMvc.perform(post("/version")
                         .contentType(MediaType.APPLICATION_JSON)

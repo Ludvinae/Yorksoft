@@ -4,6 +4,7 @@ import com.mns.cda.suivimns.dao.VersionDao;
 import com.mns.cda.suivimns.dto.VersionDto;
 import com.mns.cda.suivimns.mapper.VersionMapper;
 import com.mns.cda.suivimns.model.Version;
+import com.mns.cda.suivimns.model.VersionType;
 import com.mns.cda.suivimns.service.inter.iVersionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,9 +30,12 @@ public class VersionService implements iVersionService {
     }
 
     @Override
-    public Version save(Version version) {
+    public VersionDto save(VersionDto dto) {
+        Version version = versionMapper.toEntity(dto);
         version.setIdVersion(null);
-        return versionDao.save(version);
+        Version saved = versionDao.save(version);
+
+        return versionMapper.toDto(saved);
     }
 
     @Override

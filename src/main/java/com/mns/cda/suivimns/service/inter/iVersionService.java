@@ -11,7 +11,7 @@ public interface iVersionService {
 
     Optional<Version> findById(int id);
 
-    Version save(Version version);
+    VersionDto save(VersionDto version);
 
     void delete(Version version);
 

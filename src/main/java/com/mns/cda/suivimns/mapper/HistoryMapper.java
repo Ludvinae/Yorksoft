@@ -2,9 +2,11 @@ package com.mns.cda.suivimns.mapper;
 
 import com.mns.cda.suivimns.dto.HistoryDto;
 import com.mns.cda.suivimns.model.History;
+import org.mapstruct.Mapper;
 
 import java.util.List;
 
+@Mapper(componentModel = "spring")
 public interface HistoryMapper {
     HistoryDto toDto(History history);
 

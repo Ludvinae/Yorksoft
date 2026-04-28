@@ -22,13 +22,11 @@ public class SoftwareType {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView({SoftwareView.class})
     protected Integer idSoftwareType;
 
     @Column(nullable = false, length = 127)
     @NotBlank
     @Size(min = 3, max = 127)
-    @JsonView({ClientSoftwareListView.class, SoftwareView.class})
     protected String designation;
 
 }

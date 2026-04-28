@@ -8,7 +8,7 @@ public record VersionDto(
         Integer idVersion,
         String versionNumber,
         LocalDateTime publicationDate,
-        VersionType versionType,
+        Integer idVersionType,
         Integer idSoftware
 ) {
 }

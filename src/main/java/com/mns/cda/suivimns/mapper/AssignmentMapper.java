@@ -4,9 +4,11 @@ import com.mns.cda.suivimns.dto.ArticleDto;
 import com.mns.cda.suivimns.dto.AssignmentDto;
 import com.mns.cda.suivimns.model.Article;
 import com.mns.cda.suivimns.model.Assignment;
+import org.mapstruct.Mapper;
 
 import java.util.List;
 
+@Mapper(componentModel = "spring")
 public interface AssignmentMapper {
     AssignmentDto toDto(Assignment assignment);
 

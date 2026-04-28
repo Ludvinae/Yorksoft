@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -56,10 +57,8 @@ public class VersionController {
             @ApiResponse(responseCode = "201", description = "Version créée"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PostMapping
-    public ResponseEntity<Version> create(@RequestBody @Validated(OnCreate.class) Version version) {
-        Version versionSaved = versionService.save(version);
-
-        return new ResponseEntity<>(versionSaved, HttpStatus.CREATED);
+    public ResponseEntity<VersionDto> create(@RequestBody @Valid VersionDto version) {
+        return new ResponseEntity<>(versionService.save(version), HttpStatus.CREATED);
     }
 
     @Operation(summary = "Supprimer une version")

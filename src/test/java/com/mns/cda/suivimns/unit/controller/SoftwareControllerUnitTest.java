@@ -2,6 +2,7 @@ package com.mns.cda.suivimns.unit.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.SoftwareController;
+import com.mns.cda.suivimns.dto.SoftwareDto;
 import com.mns.cda.suivimns.dto.flat.SoftwareDtoFlat;
 import com.mns.cda.suivimns.model.Software;
 import com.mns.cda.suivimns.service.inter.iSoftwareService;
@@ -37,6 +38,7 @@ class SoftwareControllerUnitTest {
     private ObjectMapper objectMapper;
 
     private Software software;
+    private SoftwareDto softwareDto;
 
     @BeforeEach
     void setUp() {
@@ -45,7 +47,9 @@ class SoftwareControllerUnitTest {
         software.setName("TestSoft");
 
         // ⚠️ Adapter si @NotNull sur d'autres champs
-
+        //DTO
+        softwareDto = new SoftwareDto(
+                1, "TestSoft", "", 1);
     }
 
     // =========================
