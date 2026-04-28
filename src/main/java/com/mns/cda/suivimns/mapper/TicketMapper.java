@@ -2,6 +2,7 @@ package com.mns.cda.suivimns.mapper;
 
 import com.mns.cda.suivimns.dao.*;
 import com.mns.cda.suivimns.dto.TicketDto;
+import com.mns.cda.suivimns.dto.VersionDto;
 import com.mns.cda.suivimns.model.*;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
@@ -170,4 +171,8 @@ public abstract class TicketMapper {
                 .map(History::getIdHistory)
                 .toList();
     }
+
+    // Method helper pour Update
+    @Mapping(target = "idTicket", ignore = true)
+    public abstract void updateEntityFromDto(TicketDto dto, @MappingTarget Ticket entity);
 }

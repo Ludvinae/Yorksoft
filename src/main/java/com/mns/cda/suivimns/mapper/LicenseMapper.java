@@ -3,11 +3,14 @@ package com.mns.cda.suivimns.mapper;
 import com.mns.cda.suivimns.dao.ClientDao;
 import com.mns.cda.suivimns.dao.SoftwareDao;
 import com.mns.cda.suivimns.dto.LicenseDto;
+import com.mns.cda.suivimns.dto.VersionDto;
 import com.mns.cda.suivimns.model.Client;
 import com.mns.cda.suivimns.model.License;
 import com.mns.cda.suivimns.model.Software;
+import com.mns.cda.suivimns.model.Version;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -50,5 +53,11 @@ public abstract class LicenseMapper {
     protected Integer mapClientToId(Client client) {
         return client != null ? client.getIdAppUser() : null;
     }
+
+    // Method helper pour Update
+    @Mapping(target = "idLicense", ignore = true)
+    @Mapping(target = "software", source = "idSoftware")
+    @Mapping(target = "client", source = "idClient")
+    public abstract void updateEntityFromDto(LicenseDto dto, @MappingTarget License entity);
 }
 

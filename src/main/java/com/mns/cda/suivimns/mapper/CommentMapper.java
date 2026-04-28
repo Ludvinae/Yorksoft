@@ -3,11 +3,14 @@ package com.mns.cda.suivimns.mapper;
 import com.mns.cda.suivimns.dao.AppUserDao;
 import com.mns.cda.suivimns.dao.TicketDao;
 import com.mns.cda.suivimns.dto.CommentDto;
+import com.mns.cda.suivimns.dto.ManagerDto;
 import com.mns.cda.suivimns.model.AppUser;
 import com.mns.cda.suivimns.model.Comment;
+import com.mns.cda.suivimns.model.Manager;
 import com.mns.cda.suivimns.model.Ticket;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -50,4 +53,8 @@ public abstract class CommentMapper {
     protected Integer mapAppUserToId(AppUser appUser) {
         return appUser != null ? appUser.getIdAppUser() : null;
     }
+
+    // Method helper pour Update
+    @Mapping(target = "idComment", ignore = true)
+    public abstract void updateEntityFromDto(CommentDto dto, @MappingTarget Comment entity);
 }

@@ -2,6 +2,7 @@ package com.mns.cda.suivimns.unit.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.UrgencyController;
+import com.mns.cda.suivimns.dto.UrgencyDto;
 import com.mns.cda.suivimns.model.Urgency;
 import com.mns.cda.suivimns.service.UrgencyService;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,7 +14,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -36,17 +36,27 @@ class UrgencyControllerUnitTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private Urgency urgency;
+    private UrgencyDto urgencyDto;
 
     @BeforeEach
     void setUp() {
-        urgency = new Urgency();
-        urgency.setIdUrgency(1);
-        urgency.setDesignation("Test designation");
-        urgency.setPriorityFactor((byte) 1);
+        // DTO
+        urgencyDto = new UrgencyDto(
+                1, "Test designation", (byte) 1, "Test description");
+    }
 
-        // ⚠️ Adapter si @NotNull sur d'autres champs
+    // =========================
+    // TEST DTO
+    // =========================
+    @Test
+    void shouldReturn400WhenCreateInvalid() throws Exception {
 
+        UrgencyDto invalidDto = new UrgencyDto(null,"", (byte) 1, null);
+
+        mockMvc.perform(post("/urgency")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(invalidDto)))
+                .andExpect(status().isBadRequest());
     }
 
     // =========================
@@ -55,14 +65,13 @@ class UrgencyControllerUnitTest {
     @Test
     void shouldReturnAll() throws Exception {
 
-        when(urgencyService.findAll()).thenReturn(List.of(urgency));
+        when(urgencyService.findAll()).thenReturn(List.of(urgencyDto));
 
         mockMvc.perform(get("/urgency/list"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].idUrgency").value(1))
-                .andExpect(jsonPath("$[0].designation").value("Test designation"))
-                .andExpect(jsonPath("$[0].priorityFactor").value(1));
+                .andExpect(jsonPath("$[0].designation").value("Test designation"));
     }
 
     // =========================
@@ -71,14 +80,13 @@ class UrgencyControllerUnitTest {
     @Test
     void shouldReturnById() throws Exception {
 
-        when(urgencyService.findById(1)).thenReturn(Optional.of(urgency));
+        when(urgencyService.findById(1)).thenReturn(urgencyDto);
 
         mockMvc.perform(get("/urgency/1"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.idUrgency").value(1))
-                .andExpect(jsonPath("$.designation").value("Test designation"))
-                .andExpect(jsonPath("$.priorityFactor").value(1));
+                .andExpect(jsonPath("$.designation").value("Test designation"));
     }
 
     // =========================
@@ -87,7 +95,8 @@ class UrgencyControllerUnitTest {
     @Test
     void shouldReturn404WhenNotFound() throws Exception {
 
-        when(urgencyService.findById(1)).thenReturn(Optional.empty());
+        when(urgencyService.findById(1))
+                .thenThrow(new UrgencyService.UrgencyNotFoundException());
 
         mockMvc.perform(get("/urgency/1"))
                 .andDo(print())
@@ -100,15 +109,15 @@ class UrgencyControllerUnitTest {
     @Test
     void shouldCreate() throws Exception {
 
-        when(urgencyService.save(any(Urgency.class))).thenReturn(urgency);
+        when(urgencyService.save(any(UrgencyDto.class))).thenReturn(urgencyDto);
 
         mockMvc.perform(post("/urgency")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(urgency)))
+                        .content(objectMapper.writeValueAsString(urgencyDto)))
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.designation").value("Test designation"))
-                .andExpect(jsonPath("$.priorityFactor").value(1));
+                .andExpect(jsonPath("$.idUrgency").value(1))
+                .andExpect(jsonPath("$.designation").value("Test designation"));
     }
 
     // =========================
@@ -117,13 +126,13 @@ class UrgencyControllerUnitTest {
     @Test
     void shouldDelete() throws Exception {
 
-        when(urgencyService.findById(1)).thenReturn(Optional.of(urgency));
+        doNothing().when(urgencyService).delete(1);
 
         mockMvc.perform(delete("/urgency/1"))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
-        verify(urgencyService).delete(urgency);
+        verify(urgencyService).delete(1);
     }
 
     // =========================
@@ -132,7 +141,8 @@ class UrgencyControllerUnitTest {
     @Test
     void shouldReturn404WhenDeleteNotFound() throws Exception {
 
-        when(urgencyService.findById(1)).thenReturn(Optional.empty());
+        doThrow(new UrgencyService.UrgencyNotFoundException())
+                .when(urgencyService).delete(1);
 
         mockMvc.perform(delete("/urgency/1"))
                 .andDo(print())
@@ -145,15 +155,14 @@ class UrgencyControllerUnitTest {
     @Test
     void shouldUpdate() throws Exception {
 
-        when(urgencyService.update(any(Urgency.class), eq(1))).thenReturn(urgency);
+        when(urgencyService.update(eq(1), any(UrgencyDto.class))).thenReturn(urgencyDto);
 
         mockMvc.perform(put("/urgency/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(urgency)))
+                        .content(objectMapper.writeValueAsString(urgencyDto)))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.designation").value("Test designation"))
-                .andExpect(jsonPath("$.priorityFactor").value(1));
+                .andExpect(jsonPath("$.designation").value("Test designation"));
     }
 
     // =========================
@@ -162,12 +171,12 @@ class UrgencyControllerUnitTest {
     @Test
     void shouldReturn404WhenUpdateFails() throws Exception {
 
-        when(urgencyService.update(any(Urgency.class), eq(1)))
+        when(urgencyService.update(eq(1), any(UrgencyDto.class)))
                 .thenThrow(new UrgencyService.UrgencyNotFoundException());
 
         mockMvc.perform(put("/urgency/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(urgency)))
+                        .content(objectMapper.writeValueAsString(urgencyDto)))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }

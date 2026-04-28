@@ -1,17 +1,25 @@
 package com.mns.cda.suivimns.mapper;
 
+import com.mns.cda.suivimns.dto.VersionDto;
 import com.mns.cda.suivimns.dto.VersionTypeDto;
+import com.mns.cda.suivimns.model.Version;
 import com.mns.cda.suivimns.model.VersionType;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface VersionTypeMapper {
+public abstract class VersionTypeMapper {
 
-    VersionTypeDto toDto(VersionType type);
+    public abstract VersionTypeDto toDto(VersionType type);
 
-    List<VersionTypeDto> toDtoList(List<VersionType> types);
+    public abstract List<VersionTypeDto> toDtoList(List<VersionType> types);
 
-    VersionType toEntity(VersionTypeDto dto);
+    public abstract VersionType toEntity(VersionTypeDto dto);
+
+    // Method helper pour Update
+    @Mapping(target = "idVersionType", ignore = true)
+    public abstract void updateEntityFromDto(VersionTypeDto dto, @MappingTarget VersionType entity);
 }

@@ -13,8 +13,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class VersionTypeService {
 
-    public static class VersionTypeNotFoundException extends Exception {
-    }
+    // Custom exception
+    public static class VersionTypeNotFoundException extends Exception {}
 
     protected final VersionTypeDao versionTypeDao;
     private final VersionTypeMapper typeMapper;

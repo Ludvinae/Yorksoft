@@ -2,6 +2,7 @@ package com.mns.cda.suivimns.unit.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.KnowledgeController;
+import com.mns.cda.suivimns.dto.KnowledgeDto;
 import com.mns.cda.suivimns.model.Knowledge;
 import com.mns.cda.suivimns.model.Theme;
 import com.mns.cda.suivimns.service.KnowledgeService;
@@ -13,8 +14,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -37,18 +38,34 @@ class KnowledgeControllerUnitTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private Knowledge knowledge;
+    private KnowledgeDto knowledgeDto;
 
     @BeforeEach
     void setUp() {
-        knowledge = new Knowledge();
-        knowledge.setIdKnowledge(1);
-        knowledge.setSubject("Test subject");
+        // DTO
+        List<Integer> versions = new ArrayList<>();
+        versions.add(1);
 
-        // ⚠️ Adapter si @NotNull sur d'autres champs
-        Theme theme = new Theme();
-        theme.setIdTheme(1);
-        knowledge.setTheme(theme);
+        List<Integer> articles = new ArrayList<>();
+        articles.add(1);
+
+        knowledgeDto = new KnowledgeDto(
+                1, "Test subject", 1, versions, articles);
+
+    }
+
+    // =========================
+    // TEST DTO
+    // =========================
+    @Test
+    void shouldReturn400WhenCreateInvalid() throws Exception {
+
+        KnowledgeDto invalidDto = new KnowledgeDto(null,"", null, null, null);
+
+        mockMvc.perform(post("/knowledge")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(invalidDto)))
+                .andExpect(status().isBadRequest());
     }
 
     // =========================
@@ -57,7 +74,7 @@ class KnowledgeControllerUnitTest {
     @Test
     void shouldReturnAll() throws Exception {
 
-        when(knowledgeService.findAll()).thenReturn(List.of(knowledge));
+        when(knowledgeService.findAll()).thenReturn(List.of(knowledgeDto));
 
         mockMvc.perform(get("/knowledge/list"))
                 .andDo(print())
@@ -72,7 +89,7 @@ class KnowledgeControllerUnitTest {
     @Test
     void shouldReturnById() throws Exception {
 
-        when(knowledgeService.findById(1)).thenReturn(Optional.of(knowledge));
+        when(knowledgeService.findById(1)).thenReturn(knowledgeDto);
 
         mockMvc.perform(get("/knowledge/1"))
                 .andDo(print())
@@ -87,7 +104,8 @@ class KnowledgeControllerUnitTest {
     @Test
     void shouldReturn404WhenNotFound() throws Exception {
 
-        when(knowledgeService.findById(1)).thenReturn(Optional.empty());
+        when(knowledgeService.findById(1))
+                .thenThrow(new KnowledgeService.KnowledgeNotFoundException());
 
         mockMvc.perform(get("/knowledge/1"))
                 .andDo(print())
@@ -100,11 +118,11 @@ class KnowledgeControllerUnitTest {
     @Test
     void shouldCreate() throws Exception {
 
-        when(knowledgeService.save(any(Knowledge.class))).thenReturn(knowledge);
+        when(knowledgeService.save(any(KnowledgeDto.class))).thenReturn(knowledgeDto);
 
         mockMvc.perform(post("/knowledge")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(knowledge)))
+                        .content(objectMapper.writeValueAsString(knowledgeDto)))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.subject").value("Test subject"));
@@ -116,13 +134,13 @@ class KnowledgeControllerUnitTest {
     @Test
     void shouldDelete() throws Exception {
 
-        when(knowledgeService.findById(1)).thenReturn(Optional.of(knowledge));
+        doNothing().when(knowledgeService).delete(1);
 
         mockMvc.perform(delete("/knowledge/1"))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
-        verify(knowledgeService).delete(knowledge);
+        verify(knowledgeService).delete(1);
     }
 
     // =========================
@@ -131,7 +149,8 @@ class KnowledgeControllerUnitTest {
     @Test
     void shouldReturn404WhenDeleteNotFound() throws Exception {
 
-        when(knowledgeService.findById(1)).thenReturn(Optional.empty());
+        doThrow(new KnowledgeService.KnowledgeNotFoundException())
+                .when(knowledgeService).delete(1);
 
         mockMvc.perform(delete("/knowledge/1"))
                 .andDo(print())
@@ -144,11 +163,11 @@ class KnowledgeControllerUnitTest {
     @Test
     void shouldUpdate() throws Exception {
 
-        when(knowledgeService.update(any(Knowledge.class), eq(1))).thenReturn(knowledge);
+        when(knowledgeService.update(eq(1), any(KnowledgeDto.class))).thenReturn(knowledgeDto);
 
         mockMvc.perform(put("/knowledge/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(knowledge)))
+                        .content(objectMapper.writeValueAsString(knowledgeDto)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.subject").value("Test subject"));
@@ -160,12 +179,12 @@ class KnowledgeControllerUnitTest {
     @Test
     void shouldReturn404WhenUpdateFails() throws Exception {
 
-        when(knowledgeService.update(any(Knowledge.class), eq(1)))
+        when(knowledgeService.update(eq(1), any(KnowledgeDto.class)))
                 .thenThrow(new KnowledgeService.KnowledgeNotFoundException());
 
         mockMvc.perform(put("/knowledge/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(knowledge)))
+                        .content(objectMapper.writeValueAsString(knowledgeDto)))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }

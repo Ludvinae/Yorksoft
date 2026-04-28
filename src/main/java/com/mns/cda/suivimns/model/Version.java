@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
 
@@ -32,10 +34,13 @@ public class Version {
 
     @ManyToOne
     @JoinColumn(name = "id_version_type")
+    @NotNull
+    @OnDelete(action = OnDeleteAction.CASCADE)
     protected VersionType versionType;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_software", nullable = false)
     @NotNull
+    @OnDelete(action = OnDeleteAction.CASCADE)
     protected Software software;
 }

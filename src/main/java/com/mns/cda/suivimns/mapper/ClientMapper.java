@@ -1,17 +1,25 @@
 package com.mns.cda.suivimns.mapper;
 
 import com.mns.cda.suivimns.dto.ClientDto;
+import com.mns.cda.suivimns.dto.ManagerDto;
 import com.mns.cda.suivimns.model.Client;
+import com.mns.cda.suivimns.model.Manager;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface ClientMapper {
-    ClientDto toDto(Client client);
+public abstract class ClientMapper {
+    public abstract ClientDto toDto(Client client);
 
-    List<ClientDto> toDtoList(List<Client> clientList);
+    public abstract List<ClientDto> toDtoList(List<Client> clientList);
 
-    Client toEntity(ClientDto dto);
+    public abstract Client toEntity(ClientDto dto);
+
+    // Method helper pour Update
+    @Mapping(target = "idAppUser", ignore = true)
+    public abstract void updateEntityFromDto(ClientDto dto, @MappingTarget Client entity);
 }
 

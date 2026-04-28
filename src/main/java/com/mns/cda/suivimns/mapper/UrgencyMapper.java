@@ -1,16 +1,24 @@
 package com.mns.cda.suivimns.mapper;
 
 import com.mns.cda.suivimns.dto.UrgencyDto;
+import com.mns.cda.suivimns.dto.VersionDto;
 import com.mns.cda.suivimns.model.Urgency;
+import com.mns.cda.suivimns.model.Version;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface UrgencyMapper {
-    UrgencyDto toDto(Urgency urgency);
+public abstract class UrgencyMapper {
+    public abstract UrgencyDto toDto(Urgency urgency);
 
-    List<UrgencyDto> toDtoList(List<Urgency> urgencyList);
+    public abstract List<UrgencyDto> toDtoList(List<Urgency> urgencyList);
 
-    Urgency toEntity(UrgencyDto dto);
+    public abstract Urgency toEntity(UrgencyDto dto);
+
+    // Method helper pour Update
+    @Mapping(target = "idUrgency", ignore = true)
+    public abstract void updateEntityFromDto(UrgencyDto dto, @MappingTarget Urgency entity);
 }

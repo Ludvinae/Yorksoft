@@ -1,13 +1,16 @@
 package com.mns.cda.suivimns.controller;
 
+import com.mns.cda.suivimns.dto.UrgencyDto;
 import com.mns.cda.suivimns.model.Urgency;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
 import com.mns.cda.suivimns.service.UrgencyService;
+import com.mns.cda.suivimns.service.VersionTypeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +33,7 @@ public class UrgencyController {
     @Operation(summary = "Récupérer tous les niveaux d'urgence")
     @ApiResponse(responseCode = "200", description = "Liste des urgences récupérée")
     @GetMapping("/list")
-    public List<Urgency> getAll() {
+    public List<UrgencyDto> getAll() {
         return urgencyService.findAll();
     }
 
@@ -40,14 +43,13 @@ public class UrgencyController {
             @ApiResponse(responseCode = "200", description = "Urgence trouvée"),
             @ApiResponse(responseCode = "404", description = "Urgence non trouvée")})
     @GetMapping("/{id}")
-    public ResponseEntity<Urgency> getById(@PathVariable int id) {
+    public ResponseEntity<UrgencyDto> getById(@PathVariable int id) {
 
-        Optional<Urgency> urgency = urgencyService.findById(id);
-        if (urgency.isEmpty()) {
+        try {
+            return new ResponseEntity<>(urgencyService.findById(id) , HttpStatus.OK);
+        } catch (UrgencyService.UrgencyNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
-        return new ResponseEntity<>(urgency.get(), HttpStatus.OK);
     }
 
 
@@ -56,10 +58,8 @@ public class UrgencyController {
             @ApiResponse(responseCode = "201", description = "Urgence créée"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PostMapping
-    public ResponseEntity<Urgency> create(@RequestBody @Validated(OnCreate.class) Urgency urgency) {
-        Urgency urgencySaved = urgencyService.save(urgency);
-
-        return new ResponseEntity<>(urgencySaved, HttpStatus.CREATED);
+    public ResponseEntity<UrgencyDto> create(@RequestBody @Valid UrgencyDto urgency) {
+        return new ResponseEntity<>(urgencyService.save(urgency), HttpStatus.CREATED);
     }
 
 
@@ -69,13 +69,12 @@ public class UrgencyController {
             @ApiResponse(responseCode = "404", description = "Urgence non trouvée")})
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
-        Optional<Urgency> urgency = urgencyService.findById(id);
-        if (urgency.isEmpty()) {
+        try {
+            urgencyService.delete(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (UrgencyService.UrgencyNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
-        urgencyService.delete(urgency.get());
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 
@@ -87,10 +86,9 @@ public class UrgencyController {
             @ApiResponse(responseCode = "404", description = "Urgence non trouvée"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PutMapping("/{id}")
-    public ResponseEntity<Urgency> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Urgency urgencyToUpdate) {
+    public ResponseEntity<UrgencyDto> update(@PathVariable int id, @RequestBody @Valid UrgencyDto urgencyToUpdate) {
         try {
-            Urgency urgencySaved = urgencyService.update(urgencyToUpdate, id);
-            return new ResponseEntity<>(urgencySaved, HttpStatus.OK);
+            return new ResponseEntity<>(urgencyService.update(id, urgencyToUpdate), HttpStatus.OK);
         } catch (UrgencyService.UrgencyNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

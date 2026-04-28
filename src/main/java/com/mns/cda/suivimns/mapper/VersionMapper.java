@@ -8,6 +8,7 @@ import com.mns.cda.suivimns.model.Version;
 import com.mns.cda.suivimns.model.VersionType;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -49,4 +50,10 @@ public abstract class VersionMapper {
     protected Integer mapSoftware(Software software) {
         return software != null ? software.getIdSoftware() : null;
     }
+
+    // Method helper pour Update
+    @Mapping(target = "idVersion", ignore = true)
+    @Mapping(target = "software", source = "idSoftware")
+    @Mapping(target = "versionType", source = "idVersionType")
+    public abstract void updateEntityFromDto(VersionDto dto, @MappingTarget Version entity);
 }

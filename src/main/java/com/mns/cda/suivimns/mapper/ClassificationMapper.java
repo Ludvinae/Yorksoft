@@ -3,7 +3,9 @@ package com.mns.cda.suivimns.mapper;
 import com.mns.cda.suivimns.dao.ThemeDao;
 import com.mns.cda.suivimns.dao.TicketDao;
 import com.mns.cda.suivimns.dto.ClassificationDto;
+import com.mns.cda.suivimns.dto.ManagerDto;
 import com.mns.cda.suivimns.model.Classification;
+import com.mns.cda.suivimns.model.Manager;
 import com.mns.cda.suivimns.model.Theme;
 import com.mns.cda.suivimns.model.Ticket;
 import com.mns.cda.suivimns.model.keys.ClassificationKey;
@@ -67,4 +69,5 @@ public abstract class ClassificationMapper {
     protected Theme mapIdToTheme(Integer id) {
         return themeDao.getReferenceById(id);
     }
+
 }

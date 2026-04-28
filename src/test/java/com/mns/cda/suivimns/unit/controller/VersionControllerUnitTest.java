@@ -3,9 +3,11 @@ package com.mns.cda.suivimns.unit.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.VersionController;
 import com.mns.cda.suivimns.dto.VersionDto;
+import com.mns.cda.suivimns.dto.VersionTypeDto;
 import com.mns.cda.suivimns.model.Software;
 import com.mns.cda.suivimns.model.Version;
 import com.mns.cda.suivimns.service.VersionService;
+import com.mns.cda.suivimns.service.VersionTypeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,23 +41,27 @@ class VersionControllerUnitTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private Version version;
     private VersionDto versionDto;
 
     @BeforeEach
     void setUp() {
-        version = new Version();
-        version.setIdVersion(1);
-        version.setVersionNumber("Test number");
-
-        // ⚠️ Adapter si @NotNull sur d'autres champs
-        Software software = new Software();
-        software.setIdSoftware(1);
-        version.setSoftware(software);
-
         //DTO
         versionDto = new VersionDto(
                 1, "Test number", LocalDateTime.now(), 1, 1);
+    }
+
+    // =========================
+    // TEST DTO
+    // =========================
+    @Test
+    void shouldReturn400WhenCreateInvalid() throws Exception {
+
+        VersionDto invalidDto = new VersionDto(null,"", null, null, null);
+
+        mockMvc.perform(post("/version")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(invalidDto)))
+                .andExpect(status().isBadRequest());
     }
 
     // =========================
@@ -79,7 +85,7 @@ class VersionControllerUnitTest {
     @Test
     void shouldReturnById() throws Exception {
 
-        when(versionService.findById(1)).thenReturn(Optional.of(version));
+        when(versionService.findById(1)).thenReturn(versionDto);
 
         mockMvc.perform(get("/version/1"))
                 .andDo(print())
@@ -94,7 +100,8 @@ class VersionControllerUnitTest {
     @Test
     void shouldReturn404WhenNotFound() throws Exception {
 
-        when(versionService.findById(1)).thenReturn(Optional.empty());
+        when(versionService.findById(1))
+                .thenThrow(new VersionService.VersionNotFoundException());
 
         mockMvc.perform(get("/version/1"))
                 .andDo(print())
@@ -111,7 +118,7 @@ class VersionControllerUnitTest {
 
         mockMvc.perform(post("/version")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(version)))
+                        .content(objectMapper.writeValueAsString(versionDto)))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.versionNumber").value("Test number"));
@@ -123,13 +130,13 @@ class VersionControllerUnitTest {
     @Test
     void shouldDelete() throws Exception {
 
-        when(versionService.findById(1)).thenReturn(Optional.of(version));
+        doNothing().when(versionService).delete(1);
 
         mockMvc.perform(delete("/version/1"))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
-        verify(versionService).delete(version);
+        verify(versionService).delete(1);
     }
 
     // =========================
@@ -138,7 +145,8 @@ class VersionControllerUnitTest {
     @Test
     void shouldReturn404WhenDeleteNotFound() throws Exception {
 
-        when(versionService.findById(1)).thenReturn(Optional.empty());
+        doThrow(new VersionService.VersionNotFoundException())
+                .when(versionService).delete(1);
 
         mockMvc.perform(delete("/version/1"))
                 .andDo(print())
@@ -151,11 +159,11 @@ class VersionControllerUnitTest {
     @Test
     void shouldUpdate() throws Exception {
 
-        when(versionService.update(any(Version.class), eq(1))).thenReturn(version);
+        when(versionService.update(eq(1), any(VersionDto.class))).thenReturn(versionDto);
 
         mockMvc.perform(put("/version/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(version)))
+                        .content(objectMapper.writeValueAsString(versionDto)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.versionNumber").value("Test number"));
@@ -167,12 +175,12 @@ class VersionControllerUnitTest {
     @Test
     void shouldReturn404WhenUpdateFails() throws Exception {
 
-        when(versionService.update(any(Version.class), eq(1)))
+        when(versionService.update(eq(1), any(VersionDto.class)))
                 .thenThrow(new VersionService.VersionNotFoundException());
 
         mockMvc.perform(put("/version/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(version)))
+                        .content(objectMapper.writeValueAsString(versionDto)))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }

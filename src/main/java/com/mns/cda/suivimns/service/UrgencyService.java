@@ -1,6 +1,9 @@
 package com.mns.cda.suivimns.service;
 
 import com.mns.cda.suivimns.dao.UrgencyDao;
+import com.mns.cda.suivimns.dto.UrgencyDto;
+import com.mns.cda.suivimns.mapper.UrgencyMapper;
+import com.mns.cda.suivimns.model.Urgency;
 import com.mns.cda.suivimns.model.Urgency;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,32 +19,40 @@ public class UrgencyService  {
     }
 
     protected final UrgencyDao urgencyDao;
+    protected final UrgencyMapper urgencyMapper;
 
-    public List<Urgency> findAll() {
-        return urgencyDao.findAll();
+    public List<UrgencyDto> findAll() {
+        return urgencyMapper.toDtoList(urgencyDao.findAll());
     }
 
-    public Optional<Urgency> findById(int id) {
-        return urgencyDao.findById(id);
+    public UrgencyDto findById(int id) throws UrgencyNotFoundException {
+        Urgency urgency = urgencyDao.findById(id)
+                .orElseThrow(UrgencyService.UrgencyNotFoundException::new);
+
+        return urgencyMapper.toDto(urgency);
     }
 
-    public Urgency save(Urgency urgency) {
+    public UrgencyDto save(UrgencyDto dto) {
+        Urgency urgency = urgencyMapper.toEntity(dto);
         urgency.setIdUrgency(null);
-        return urgencyDao.save(urgency);
+        Urgency saved = urgencyDao.save(urgency);
+
+        return urgencyMapper.toDto(saved);
     }
 
-    public void delete(Urgency urgency) {
+    public void delete(int id) throws UrgencyNotFoundException {
+        Urgency urgency = urgencyDao.findById(id)
+                .orElseThrow(UrgencyService.UrgencyNotFoundException::new);
+
         urgencyDao.delete(urgency);
     }
 
-    public Urgency update(Urgency urgencyToUpdate, int id) throws UrgencyNotFoundException {
+    public UrgencyDto update(int id, UrgencyDto urgencyToUpdate) throws UrgencyNotFoundException {
         Urgency currentUrgency = urgencyDao.findById(id)
-                .orElseThrow(UrgencyNotFoundException::new);
+                .orElseThrow(UrgencyService.UrgencyNotFoundException::new);
 
-        currentUrgency.setDesignation(urgencyToUpdate.getDesignation());
-        currentUrgency.setDescription(urgencyToUpdate.getDescription());
-        currentUrgency.setPriorityFactor(urgencyToUpdate.getPriorityFactor());
+        urgencyMapper.updateEntityFromDto(urgencyToUpdate, currentUrgency);
 
-        return urgencyDao.save(currentUrgency);
+        return urgencyMapper.toDto(urgencyDao.save(currentUrgency));
     }
 }

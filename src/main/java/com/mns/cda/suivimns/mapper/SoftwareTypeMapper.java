@@ -1,17 +1,25 @@
 package com.mns.cda.suivimns.mapper;
 
 import com.mns.cda.suivimns.dto.SoftwareTypeDto;
+import com.mns.cda.suivimns.dto.VersionDto;
 import com.mns.cda.suivimns.model.SoftwareType;
+import com.mns.cda.suivimns.model.Version;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface SoftwareTypeMapper {
+public abstract class SoftwareTypeMapper {
 
-    SoftwareTypeDto toDto(SoftwareType type);
+    public abstract SoftwareTypeDto toDto(SoftwareType type);
 
-    List<SoftwareTypeDto> toDtoList(List<SoftwareType> types);
+    public abstract List<SoftwareTypeDto> toDtoList(List<SoftwareType> types);
 
-    SoftwareType toEntity(SoftwareTypeDto dto);
+    public abstract SoftwareType toEntity(SoftwareTypeDto dto);
+
+    // Method helper pour Update
+    @Mapping(target = "idSoftwareType", ignore = true)
+    public abstract void updateEntityFromDto(SoftwareTypeDto dto, @MappingTarget SoftwareType entity);
 }

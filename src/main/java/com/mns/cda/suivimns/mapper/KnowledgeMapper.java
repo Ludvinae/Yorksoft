@@ -1,13 +1,18 @@
 package com.mns.cda.suivimns.mapper;
 
+import com.mns.cda.suivimns.dao.ArticleDao;
 import com.mns.cda.suivimns.dao.ThemeDao;
 import com.mns.cda.suivimns.dao.VersionDao;
 import com.mns.cda.suivimns.dto.KnowledgeDto;
+import com.mns.cda.suivimns.dto.VersionDto;
+import com.mns.cda.suivimns.model.Article;
 import com.mns.cda.suivimns.model.Knowledge;
 import com.mns.cda.suivimns.model.Theme;
 import com.mns.cda.suivimns.model.Version;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -21,9 +26,13 @@ public abstract class KnowledgeMapper {
     @Autowired
     protected VersionDao versionDao;
 
+    @Autowired
+    protected ArticleDao articleDao;
+
 
     @Mapping(target = "idTheme", source = "theme")
     @Mapping(target = "versionIds", source = "versionList")
+    @Mapping(target = "articleIds", source = "articleList")
     public abstract KnowledgeDto toDto(Knowledge knowledge);
 
     //@Mapping(target = "idKnowledgeType", source = "knowledgeType")
@@ -31,6 +40,7 @@ public abstract class KnowledgeMapper {
 
     @Mapping(target="theme", source="idTheme")
     @Mapping(target = "versionList", source = "versionIds")
+    @Mapping(target = "articleList", source = "articleIds")
     public abstract Knowledge toEntity(KnowledgeDto dto);
 
 
@@ -44,6 +54,14 @@ public abstract class KnowledgeMapper {
 
         return ids.stream()
                 .map(versionDao::getReferenceById)
+                .toList();
+    }
+
+    protected List<Article> mapIdsToArticles(List<Integer> ids) {
+        if (ids == null) return null;
+
+        return ids.stream()
+                .map(articleDao::getReferenceById)
                 .toList();
     }
 
@@ -61,4 +79,33 @@ public abstract class KnowledgeMapper {
                 .toList();
     }
 
+    protected List<Integer> mapArticlesToIds(List<Article> articles) {
+        if (articles == null) return null;
+
+        return articles.stream()
+                .map(Article::getIdArticle)
+                .toList();
+    }
+
+    // Method helper pour Update
+    @Mapping(target = "idKnowledge", ignore = true)
+    @Mapping(target = "articleList", ignore = true)
+    @Mapping(target = "theme", source = "idTheme")
+    @Mapping(target = "versionList", ignore = true)
+    public abstract void updateEntityFromDto(KnowledgeDto dto, @MappingTarget Knowledge entity);
+
+    // Merge intelligent pour modifier la liste de versions en update
+    @AfterMapping
+    protected void updateVersions(KnowledgeDto dto, @MappingTarget Knowledge entity) {
+        if (dto.versionIds() == null) return;
+
+        List<Version> current = entity.getVersionList();
+
+        List<Version> updated = dto.versionIds().stream()
+                .map(versionDao::getReferenceById)
+                .toList();
+
+        current.clear();
+        current.addAll(updated);
+    }
 }

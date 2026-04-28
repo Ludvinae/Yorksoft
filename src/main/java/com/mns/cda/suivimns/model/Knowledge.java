@@ -39,4 +39,7 @@ public class Knowledge {
             joinColumns = @JoinColumn(name = "id_knowledge"),
             inverseJoinColumns = @JoinColumn(name = "id_version"))
     protected List<Version> versionList;
+
+    @OneToMany(mappedBy = "knowledge")
+    protected List<Article> articleList;
 }

@@ -1,16 +1,24 @@
 package com.mns.cda.suivimns.mapper;
 
 import com.mns.cda.suivimns.dto.DirectorDto;
+import com.mns.cda.suivimns.dto.ManagerDto;
 import com.mns.cda.suivimns.model.Director;
+import com.mns.cda.suivimns.model.Manager;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface DirectorMapper {
-    DirectorDto toDto(Director director);
+public abstract class DirectorMapper {
+    public abstract DirectorDto toDto(Director director);
 
-    List<DirectorDto> toDtoList(List<Director> directorList);
+    public abstract List<DirectorDto> toDtoList(List<Director> directorList);
 
-    Director toEntity(DirectorDto dto);
+    public abstract Director toEntity(DirectorDto dto);
+
+    // Method helper pour Update
+    @Mapping(target = "idAppUser", ignore = true)
+    public abstract void updateEntityFromDto(DirectorDto dto, @MappingTarget Director entity);
 }

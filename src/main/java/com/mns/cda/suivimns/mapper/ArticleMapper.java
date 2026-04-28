@@ -3,11 +3,14 @@ package com.mns.cda.suivimns.mapper;
 import com.mns.cda.suivimns.dao.KnowledgeDao;
 import com.mns.cda.suivimns.dao.TechnicianDao;
 import com.mns.cda.suivimns.dto.ArticleDto;
+import com.mns.cda.suivimns.dto.ManagerDto;
 import com.mns.cda.suivimns.model.Article;
 import com.mns.cda.suivimns.model.Knowledge;
+import com.mns.cda.suivimns.model.Manager;
 import com.mns.cda.suivimns.model.Technician;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -50,4 +53,8 @@ public abstract class ArticleMapper {
     protected Integer mapTechnicianToId(Technician author) {
         return author != null ? author.getIdAppUser() : null;
     }
+
+    // Method helper pour Update
+    @Mapping(target = "idArticle", ignore = true)
+    public abstract void updateEntityFromDto(ArticleDto dto, @MappingTarget Article entity);
 }

@@ -2,10 +2,13 @@ package com.mns.cda.suivimns.mapper;
 
 import com.mns.cda.suivimns.dao.SoftwareTypeDao;
 import com.mns.cda.suivimns.dto.SoftwareDto;
+import com.mns.cda.suivimns.dto.VersionDto;
 import com.mns.cda.suivimns.model.Software;
 import com.mns.cda.suivimns.model.SoftwareType;
+import com.mns.cda.suivimns.model.Version;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -35,4 +38,9 @@ public abstract class SoftwareMapper {
     protected Integer mapSoftwareTypeToId(SoftwareType softwareType) {
         return softwareType != null ? softwareType.getIdSoftwareType() : null;
     }
+
+    // Method helper pour Update
+    @Mapping(target = "idSoftware", ignore = true)
+    @Mapping(target = "type", source = "idSoftwareType")
+    public abstract void updateEntityFromDto(SoftwareDto dto, @MappingTarget Software entity);
 }

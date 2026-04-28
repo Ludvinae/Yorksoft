@@ -1,16 +1,24 @@
 package com.mns.cda.suivimns.mapper;
 
 import com.mns.cda.suivimns.dto.ThemeDto;
+import com.mns.cda.suivimns.dto.VersionDto;
 import com.mns.cda.suivimns.model.Theme;
+import com.mns.cda.suivimns.model.Version;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface ThemeMapper {
-    ThemeDto toDto(Theme theme);
+public abstract class ThemeMapper {
+    public abstract ThemeDto toDto(Theme theme);
 
-    List<ThemeDto> toDtoList(List<Theme> themeList);
+    public abstract List<ThemeDto> toDtoList(List<Theme> themeList);
 
-    Theme toEntity(ThemeDto dto);
+    public abstract Theme toEntity(ThemeDto dto);
+
+    // Method helper pour Update
+    @Mapping(target = "idTheme", ignore = true)
+    public abstract void updateEntityFromDto(ThemeDto dto, @MappingTarget Theme entity);
 }

@@ -4,6 +4,7 @@ import com.mns.cda.suivimns.dto.VersionDto;
 import com.mns.cda.suivimns.model.Version;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
 import com.mns.cda.suivimns.service.VersionService;
+import com.mns.cda.suivimns.service.VersionTypeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -41,13 +42,13 @@ public class VersionController {
             @ApiResponse(responseCode = "200", description = "Version trouvée"),
             @ApiResponse(responseCode = "404", description = "Version non trouvée")})
     @GetMapping("/{id}")
-    public ResponseEntity<Version> findById(@PathVariable Integer id) {
+    public ResponseEntity<VersionDto> findById(@PathVariable Integer id) {
 
-        Optional<Version> version = versionService.findById(id);
-        if (version.isEmpty()) {
+        try {
+            return new ResponseEntity<>(versionService.findById(id) , HttpStatus.OK);
+        } catch (VersionService.VersionNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(version.get(), HttpStatus.OK);
     }
 
 
@@ -68,12 +69,12 @@ public class VersionController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
 
-        Optional<Version> version = versionService.findById(id);
-        if (version.isEmpty()) {
+        try {
+            versionService.delete(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (VersionService.VersionNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        versionService.delete(version.get());
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 
@@ -85,10 +86,9 @@ public class VersionController {
             @ApiResponse(responseCode = "404", description = "Version non trouvée"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PutMapping("/{id}")
-    public ResponseEntity<Version> update(@PathVariable Integer id, @RequestBody @Validated(OnUpdate.class) Version versionToUpdate) {
+    public ResponseEntity<VersionDto> update(@PathVariable Integer id, @RequestBody @Valid VersionDto versionToUpdate) {
         try {
-            Version versionSaved = versionService.update(versionToUpdate, id);
-            return new ResponseEntity<>(versionSaved, HttpStatus.OK);
+            return new ResponseEntity<>(versionService.update(id, versionToUpdate), HttpStatus.OK);
         } catch (VersionService.VersionNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
