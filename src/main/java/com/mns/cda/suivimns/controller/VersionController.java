@@ -1,12 +1,9 @@
 package com.mns.cda.suivimns.controller;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import com.mns.cda.suivimns.dto.VersionDto;
 import com.mns.cda.suivimns.model.Version;
-import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
-import com.mns.cda.suivimns.service.inter.iVersionService;
-import com.mns.cda.suivimns.view.SoftwareView;
+import com.mns.cda.suivimns.service.VersionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -28,7 +25,7 @@ import java.util.Optional;
 @Tag(name = "Version", description = "Gestion des versions de logiciels")
 public class VersionController {
 
-    protected final iVersionService versionService;
+    protected final VersionService versionService;
 
 
     @Operation(summary = "Récupérer toutes les versions")
@@ -92,7 +89,7 @@ public class VersionController {
         try {
             Version versionSaved = versionService.update(versionToUpdate, id);
             return new ResponseEntity<>(versionSaved, HttpStatus.OK);
-        } catch (iVersionService.VersionNotFoundException e) {
+        } catch (VersionService.VersionNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

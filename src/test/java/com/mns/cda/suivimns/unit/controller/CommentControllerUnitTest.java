@@ -3,16 +3,15 @@ package com.mns.cda.suivimns.unit.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.CommentController;
 import com.mns.cda.suivimns.model.Comment;
-import com.mns.cda.suivimns.model.Knowledge;
 import com.mns.cda.suivimns.model.Ticket;
-import com.mns.cda.suivimns.service.inter.iCommentService;
+import com.mns.cda.suivimns.service.CommentService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,7 +19,8 @@ import java.util.Optional;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = CommentController.class)
 class CommentControllerUnitTest {
@@ -29,7 +29,7 @@ class CommentControllerUnitTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private iCommentService commentService;
+    private CommentService commentService;
 
     @MockBean
     private org.springframework.data.jpa.mapping.JpaMetamodelMappingContext jpaMetamodelMappingContext;
@@ -161,7 +161,7 @@ class CommentControllerUnitTest {
     void shouldReturn404WhenUpdateFails() throws Exception {
 
         when(commentService.update(any(Comment.class), eq(1)))
-                .thenThrow(new iCommentService.CommentNotFoundException());
+                .thenThrow(new CommentService.CommentNotFoundException());
 
         mockMvc.perform(put("/comment/1")
                         .contentType(MediaType.APPLICATION_JSON)

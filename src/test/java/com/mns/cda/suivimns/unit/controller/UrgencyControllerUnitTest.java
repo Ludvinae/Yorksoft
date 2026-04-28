@@ -3,15 +3,14 @@ package com.mns.cda.suivimns.unit.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.UrgencyController;
 import com.mns.cda.suivimns.model.Urgency;
-import com.mns.cda.suivimns.model.Knowledge;
-import com.mns.cda.suivimns.service.inter.iUrgencyService;
+import com.mns.cda.suivimns.service.UrgencyService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +18,8 @@ import java.util.Optional;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = UrgencyController.class)
 class UrgencyControllerUnitTest {
@@ -28,7 +28,7 @@ class UrgencyControllerUnitTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private iUrgencyService urgencyService;
+    private UrgencyService urgencyService;
 
     @MockBean
     private org.springframework.data.jpa.mapping.JpaMetamodelMappingContext jpaMetamodelMappingContext;
@@ -163,7 +163,7 @@ class UrgencyControllerUnitTest {
     void shouldReturn404WhenUpdateFails() throws Exception {
 
         when(urgencyService.update(any(Urgency.class), eq(1)))
-                .thenThrow(new iUrgencyService.UrgencyNotFoundException());
+                .thenThrow(new UrgencyService.UrgencyNotFoundException());
 
         mockMvc.perform(put("/urgency/1")
                         .contentType(MediaType.APPLICATION_JSON)

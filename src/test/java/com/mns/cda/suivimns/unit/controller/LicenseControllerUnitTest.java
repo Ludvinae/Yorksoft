@@ -3,16 +3,15 @@ package com.mns.cda.suivimns.unit.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.LicenseController;
 import com.mns.cda.suivimns.model.License;
-import com.mns.cda.suivimns.model.Knowledge;
 import com.mns.cda.suivimns.model.Software;
-import com.mns.cda.suivimns.service.inter.iLicenseService;
+import com.mns.cda.suivimns.service.LicenseService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,7 +19,8 @@ import java.util.Optional;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = LicenseController.class)
 class LicenseControllerUnitTest {
@@ -29,7 +29,7 @@ class LicenseControllerUnitTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private iLicenseService licenseService;
+    private LicenseService licenseService;
 
     @MockBean
     private org.springframework.data.jpa.mapping.JpaMetamodelMappingContext jpaMetamodelMappingContext;
@@ -44,7 +44,6 @@ class LicenseControllerUnitTest {
         license = new License();
         license.setIdLicense(1);
         license.setLicenseNumber("Test number");
-        license.setUserCount(10);
 
         // ⚠️ Adapter si @NotNull sur d'autres champs
         Software software = new Software();
@@ -64,8 +63,7 @@ class LicenseControllerUnitTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].idLicense").value(1))
-                .andExpect(jsonPath("$[0].licenseNumber").value("Test number"))
-                .andExpect(jsonPath("$[0].userCount").value(10));
+                .andExpect(jsonPath("$[0].licenseNumber").value("Test number"));
     }
 
     // =========================
@@ -80,8 +78,7 @@ class LicenseControllerUnitTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.idLicense").value(1))
-                .andExpect(jsonPath("$.licenseNumber").value("Test number"))
-                .andExpect(jsonPath("$.userCount").value(10));
+                .andExpect(jsonPath("$.licenseNumber").value("Test number"));
     }
 
     // =========================
@@ -110,8 +107,7 @@ class LicenseControllerUnitTest {
                         .content(objectMapper.writeValueAsString(license)))
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.licenseNumber").value("Test number"))
-                .andExpect(jsonPath("$.userCount").value(10));
+                .andExpect(jsonPath("$.licenseNumber").value("Test number"));
     }
 
     // =========================
@@ -155,8 +151,7 @@ class LicenseControllerUnitTest {
                         .content(objectMapper.writeValueAsString(license)))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.licenseNumber").value("Test number"))
-                .andExpect(jsonPath("$.userCount").value(10));
+                .andExpect(jsonPath("$.licenseNumber").value("Test number"));
     }
 
     // =========================
@@ -166,7 +161,7 @@ class LicenseControllerUnitTest {
     void shouldReturn404WhenUpdateFails() throws Exception {
 
         when(licenseService.update(any(License.class), eq(1)))
-                .thenThrow(new iLicenseService.LicenseNotFoundException());
+                .thenThrow(new LicenseService.LicenseNotFoundException());
 
         mockMvc.perform(put("/license/1")
                         .contentType(MediaType.APPLICATION_JSON)

@@ -1,6 +1,5 @@
 package com.mns.cda.suivimns.unit.model;
 
-import com.mns.cda.suivimns.model.Director;
 import com.mns.cda.suivimns.model.Manager;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import jakarta.validation.Validation;

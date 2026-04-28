@@ -3,8 +3,7 @@ package com.mns.cda.suivimns.controller;
 import com.mns.cda.suivimns.model.Comment;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
-import com.mns.cda.suivimns.service.inter.iAppUserService;
-import com.mns.cda.suivimns.service.inter.iCommentService;
+import com.mns.cda.suivimns.service.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -25,7 +24,7 @@ import java.util.Optional;
 @Tag(name="Commentaires", description="Gestion des commentaires attachés à un ticket")
 public class CommentController {
 
-    protected final iCommentService commentService;
+    protected final CommentService commentService;
 
 
     @Operation(summary="Récuperer tous les commentaires")
@@ -91,7 +90,7 @@ public class CommentController {
         try {
             Comment commentSaved = commentService.update(commentToUpdate, id);
             return new ResponseEntity<>(commentSaved, HttpStatus.OK);
-        } catch (iCommentService.CommentNotFoundException e) {
+        } catch (CommentService.CommentNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

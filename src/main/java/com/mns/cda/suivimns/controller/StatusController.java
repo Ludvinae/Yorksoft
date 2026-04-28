@@ -3,7 +3,7 @@ package com.mns.cda.suivimns.controller;
 import com.mns.cda.suivimns.model.Status;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
-import com.mns.cda.suivimns.service.inter.iStatusService;
+import com.mns.cda.suivimns.service.StatusService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -24,7 +24,7 @@ import java.util.Optional;
 @Tag(name = "Statut", description = "Gestion des statuts des tickets")
 public class StatusController {
 
-    protected final iStatusService statusService;
+    protected final StatusService statusService;
 
 
     @Operation(summary = "Récupérer tous les statuts")
@@ -94,7 +94,7 @@ public class StatusController {
         try {
             Status statusSaved = statusService.update(statusToUpdate, id);
             return new ResponseEntity<>(statusSaved, HttpStatus.OK);
-        } catch (iStatusService.StatusNotFoundException e) {
+        } catch (StatusService.StatusNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

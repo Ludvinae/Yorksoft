@@ -5,7 +5,6 @@ import com.mns.cda.suivimns.dto.VersionTypeDto;
 import com.mns.cda.suivimns.mapper.VersionTypeMapper;
 import com.mns.cda.suivimns.model.VersionType;
 import com.mns.cda.suivimns.service.VersionTypeService;
-import com.mns.cda.suivimns.service.inter.iVersionTypeService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -67,7 +66,7 @@ public class VersionTypeServiceUnitTest {
 
         when(versionTypeDao.findById(1)).thenReturn(Optional.empty());
 
-        assertThrows(iVersionTypeService.VersionTypeNotFoundException.class,
+        assertThrows(VersionTypeService.VersionTypeNotFoundException.class,
                 () -> versionTypeService.findById(1));
     }
 
@@ -106,7 +105,7 @@ public class VersionTypeServiceUnitTest {
 
         when(versionTypeDao.findById(1)).thenReturn(Optional.empty());
 
-        assertThrows(iVersionTypeService.VersionTypeNotFoundException.class,
+        assertThrows(VersionTypeService.VersionTypeNotFoundException.class,
                 () -> versionTypeService.delete(1));
     }
 

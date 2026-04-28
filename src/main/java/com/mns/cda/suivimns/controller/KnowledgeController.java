@@ -1,11 +1,9 @@
 package com.mns.cda.suivimns.controller;
 
-import com.mns.cda.suivimns.model.Impact;
 import com.mns.cda.suivimns.model.Knowledge;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
-import com.mns.cda.suivimns.service.inter.iImpactService;
-import com.mns.cda.suivimns.service.inter.iKnowledgeService;
+import com.mns.cda.suivimns.service.KnowledgeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -26,7 +24,7 @@ import java.util.Optional;
 @Tag(name="Connaissance", description = "Gère une connaissance sur une thématique et des versions de logiciels")
 public class KnowledgeController {
 
-    protected final iKnowledgeService knowledgeService;
+    protected final KnowledgeService knowledgeService;
 
 
     @Operation(summary = "Récupere toutes les connaissances",
@@ -89,7 +87,7 @@ public class KnowledgeController {
         try {
             Knowledge knowledgeSaved = knowledgeService.update(knowledgeToUpdate, id);
             return new ResponseEntity<>(knowledgeSaved, HttpStatus.OK);
-        } catch (iKnowledgeService.KnowledgeNotFoundException e) {
+        } catch (KnowledgeService.KnowledgeNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

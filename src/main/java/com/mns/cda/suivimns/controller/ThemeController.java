@@ -1,11 +1,9 @@
 package com.mns.cda.suivimns.controller;
 
-import com.mns.cda.suivimns.model.Status;
 import com.mns.cda.suivimns.model.Theme;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
-import com.mns.cda.suivimns.service.inter.iLicenseService;
-import com.mns.cda.suivimns.service.inter.iThemeService;
+import com.mns.cda.suivimns.service.ThemeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -26,7 +24,7 @@ import java.util.Optional;
 @Tag(name = "Thématique", description = "Gestion des thématiques des tickets")
 public class ThemeController {
 
-    protected final iThemeService themeService;
+    protected final ThemeService themeService;
 
 
     @Operation(summary = "Récupérer toutes les thématiques")
@@ -93,7 +91,7 @@ public class ThemeController {
         try {
             Theme themeSaved = themeService.update(themeToUpdate, id);
             return new ResponseEntity<>(themeSaved, HttpStatus.OK);
-        } catch (iThemeService.ThemeNotFoundException e) {
+        } catch (ThemeService.ThemeNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

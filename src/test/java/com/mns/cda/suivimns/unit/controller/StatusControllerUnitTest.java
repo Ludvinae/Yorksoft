@@ -3,15 +3,14 @@ package com.mns.cda.suivimns.unit.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.StatusController;
 import com.mns.cda.suivimns.model.Status;
-import com.mns.cda.suivimns.model.Knowledge;
-import com.mns.cda.suivimns.service.inter.iStatusService;
+import com.mns.cda.suivimns.service.StatusService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +18,8 @@ import java.util.Optional;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = StatusController.class)
 class StatusControllerUnitTest {
@@ -28,7 +28,7 @@ class StatusControllerUnitTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private iStatusService statusService;
+    private StatusService statusService;
 
     @MockBean
     private org.springframework.data.jpa.mapping.JpaMetamodelMappingContext jpaMetamodelMappingContext;
@@ -157,7 +157,7 @@ class StatusControllerUnitTest {
     void shouldReturn404WhenUpdateFails() throws Exception {
 
         when(statusService.update(any(Status.class), eq(1)))
-                .thenThrow(new iStatusService.StatusNotFoundException());
+                .thenThrow(new StatusService.StatusNotFoundException());
 
         mockMvc.perform(put("/status/1")
                         .contentType(MediaType.APPLICATION_JSON)

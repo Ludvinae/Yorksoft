@@ -2,8 +2,7 @@ package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.model.Director;
 import com.mns.cda.suivimns.model.groups.OnCreate;
-import com.mns.cda.suivimns.model.groups.OnUpdate;
-import com.mns.cda.suivimns.service.inter.iDirectorService;
+import com.mns.cda.suivimns.service.DirectorService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -24,7 +23,7 @@ import java.util.Optional;
 @Tag(name="Directeur", description = "Gère les directeurs")
 public class DirectorController {
 
-    protected final iDirectorService directorService;
+    protected final DirectorService directorService;
 
 
     @Operation(summary = "Récupère tous les directeurs")

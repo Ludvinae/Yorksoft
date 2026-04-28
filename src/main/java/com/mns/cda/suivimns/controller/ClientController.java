@@ -4,7 +4,7 @@ import com.mns.cda.suivimns.dto.flat.ClientDtoFlat;
 import com.mns.cda.suivimns.model.Client;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
-import com.mns.cda.suivimns.service.inter.iClientService;
+import com.mns.cda.suivimns.service.ClientService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -25,7 +25,7 @@ import java.util.Optional;
 @Tag(name = "Client", description = "Gestion des clients")
 public class ClientController {
 
-    protected final iClientService clientService;
+    protected final ClientService clientService;
 
 
     @Operation(summary = "Récupérer tous les clients")
@@ -92,7 +92,7 @@ public class ClientController {
         try {
             Client clientSaved = clientService.update(clientToUpdate, id);
             return new ResponseEntity<>(clientSaved, HttpStatus.OK);
-        } catch (iClientService.ClientNotFoundException e) {
+        } catch (ClientService.ClientNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

@@ -6,15 +6,18 @@ import com.mns.cda.suivimns.dto.flat.TicketCreation;
 import com.mns.cda.suivimns.dto.flat.TicketFullWithLatest;
 import com.mns.cda.suivimns.dto.flat.TicketResponse;
 import com.mns.cda.suivimns.dto.flat.TicketUpdatedDto;
-import com.mns.cda.suivimns.model.*;
-import com.mns.cda.suivimns.service.inter.iTicketService;
+import com.mns.cda.suivimns.model.Client;
+import com.mns.cda.suivimns.model.Impact;
+import com.mns.cda.suivimns.model.Ticket;
+import com.mns.cda.suivimns.model.Urgency;
+import com.mns.cda.suivimns.service.TicketService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,7 +26,8 @@ import java.util.Optional;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = TicketController.class)
 class TicketControllerUnitTest {
@@ -32,7 +36,7 @@ class TicketControllerUnitTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private iTicketService ticketService;
+    private TicketService ticketService;
 
     @MockBean
     private org.springframework.data.jpa.mapping.JpaMetamodelMappingContext jpaMetamodelMappingContext;
@@ -245,7 +249,7 @@ class TicketControllerUnitTest {
     void shouldReturn404WhenUpdateFails() throws Exception {
 
         when(ticketService.update(any(TicketUpdatedDto.class), eq(1)))
-                .thenThrow(new iTicketService.TicketNotFoundException());
+                .thenThrow(new TicketService.TicketNotFoundException());
 
         mockMvc.perform(put("/ticket/1")
                         .contentType(MediaType.APPLICATION_JSON)

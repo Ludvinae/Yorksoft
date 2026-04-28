@@ -1,12 +1,13 @@
 package com.mns.cda.suivimns.mapper;
 
 import com.mns.cda.suivimns.dao.ManagerDao;
-import com.mns.cda.suivimns.dao.TicketDao;
 import com.mns.cda.suivimns.dao.TechnicianDao;
+import com.mns.cda.suivimns.dao.TicketDao;
 import com.mns.cda.suivimns.dto.AssignmentDto;
-import com.mns.cda.suivimns.dto.AssignmentDto;
-import com.mns.cda.suivimns.model.*;
 import com.mns.cda.suivimns.model.Assignment;
+import com.mns.cda.suivimns.model.Manager;
+import com.mns.cda.suivimns.model.Technician;
+import com.mns.cda.suivimns.model.Ticket;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;

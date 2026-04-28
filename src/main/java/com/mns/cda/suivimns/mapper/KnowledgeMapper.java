@@ -1,17 +1,15 @@
 package com.mns.cda.suivimns.mapper;
 
-import com.mns.cda.suivimns.dao.AppUserDao;
-import com.mns.cda.suivimns.dao.StatusDao;
 import com.mns.cda.suivimns.dao.ThemeDao;
 import com.mns.cda.suivimns.dao.VersionDao;
 import com.mns.cda.suivimns.dto.KnowledgeDto;
-import com.mns.cda.suivimns.dto.KnowledgeDto;
-import com.mns.cda.suivimns.model.*;
+import com.mns.cda.suivimns.model.Knowledge;
+import com.mns.cda.suivimns.model.Theme;
+import com.mns.cda.suivimns.model.Version;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Mapper(componentModel = "spring")

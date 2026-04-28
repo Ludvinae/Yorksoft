@@ -1,10 +1,12 @@
 package com.mns.cda.suivimns.service;
 
-import com.mns.cda.suivimns.dao.*;
+import com.mns.cda.suivimns.dao.AppUserDao;
 import com.mns.cda.suivimns.dao.HistoryDao;
-import com.mns.cda.suivimns.model.*;
+import com.mns.cda.suivimns.dao.StatusDao;
+import com.mns.cda.suivimns.model.AppUser;
 import com.mns.cda.suivimns.model.History;
-import com.mns.cda.suivimns.service.inter.iHistoryService;
+import com.mns.cda.suivimns.model.Status;
+import com.mns.cda.suivimns.model.Ticket;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,29 +17,29 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class HistoryService implements iHistoryService {
+public class HistoryService {
+
+
+    public static class HistoryNotFoundException extends Exception {
+    }
 
     protected final HistoryDao historyDao;
     protected final StatusDao statusDao;
     protected final AppUserDao appUserDao;
 
-    @Override
     public List<History> findAll() {
         return historyDao.findAll();
     }
 
-    @Override
     public Optional<History> findById(int id) {
         return historyDao.findById(id);
     }
 
-    @Override
     public History save(History history) {
         history.setIdHistory(null);
         return historyDao.save(history);
     }
 
-    @Override
     public void delete(History history) {
         historyDao.delete(history);
     }
@@ -45,7 +47,6 @@ public class HistoryService implements iHistoryService {
 
     // METHODS
 
-    @Override
     public void updateHistory(Ticket ticket, Integer actorId, String nextStatus) {
 
         Status status = statusDao.findByDesignation(nextStatus)
@@ -74,7 +75,6 @@ public class HistoryService implements iHistoryService {
 
     }
 
-    @Override
     public Status getStatus(Integer idTicket) {
         Optional<History> history = historyDao.findLatestByTicket(idTicket);
         if (history.isEmpty()) {

@@ -5,15 +5,14 @@ import com.mns.cda.suivimns.controller.VersionController;
 import com.mns.cda.suivimns.dto.VersionDto;
 import com.mns.cda.suivimns.model.Software;
 import com.mns.cda.suivimns.model.Version;
-import com.mns.cda.suivimns.model.VersionType;
-import com.mns.cda.suivimns.service.inter.iVersionService;
+import com.mns.cda.suivimns.service.VersionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,7 +21,8 @@ import java.util.Optional;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = VersionController.class)
 class VersionControllerUnitTest {
@@ -31,7 +31,7 @@ class VersionControllerUnitTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private iVersionService versionService;
+    private VersionService versionService;
 
     @MockBean
     private org.springframework.data.jpa.mapping.JpaMetamodelMappingContext jpaMetamodelMappingContext;
@@ -168,7 +168,7 @@ class VersionControllerUnitTest {
     void shouldReturn404WhenUpdateFails() throws Exception {
 
         when(versionService.update(any(Version.class), eq(1)))
-                .thenThrow(new iVersionService.VersionNotFoundException());
+                .thenThrow(new VersionService.VersionNotFoundException());
 
         mockMvc.perform(put("/version/1")
                         .contentType(MediaType.APPLICATION_JSON)

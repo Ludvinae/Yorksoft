@@ -1,7 +1,10 @@
 package com.mns.cda.suivimns.unit.model;
 
 import com.mns.cda.suivimns.TestUtils;
-import com.mns.cda.suivimns.model.*;
+import com.mns.cda.suivimns.model.Assignment;
+import com.mns.cda.suivimns.model.Manager;
+import com.mns.cda.suivimns.model.Technician;
+import com.mns.cda.suivimns.model.Ticket;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import org.junit.jupiter.api.Assertions;

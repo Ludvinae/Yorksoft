@@ -7,52 +7,49 @@ import com.mns.cda.suivimns.dto.flat.TicketResponse;
 import com.mns.cda.suivimns.dto.flat.TicketUpdatedDto;
 import com.mns.cda.suivimns.model.*;
 import com.mns.cda.suivimns.model.keys.ClassificationKey;
-import com.mns.cda.suivimns.service.inter.iClassificationService;
-import com.mns.cda.suivimns.service.inter.iHistoryService;
-import com.mns.cda.suivimns.service.inter.iTicketService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class TicketService implements iTicketService {
+public class TicketService  {
+
+    public static class TicketNotFoundException extends Exception {
+    }
 
     protected final TicketDao ticketDao;
     private final ThemeDao themeDao;
-    protected final iHistoryService iHistoryService;
+    protected final HistoryService iHistoryService;
     protected final ClassificationDao classificationDao;
-    protected final iClassificationService iClassificationService;
+    protected final ClassificationService iClassificationService;
     protected final ClientDao clientDao;
     protected final ImpactDao impactDao;
     protected final UrgencyDao urgencyDao;
     protected final VersionDao versionDao;
 
-    @Override
     public List<TicketResponse> findAllDto() {
         return ticketDao.findAllDto();
     }
 
-    @Override
     public Optional<Ticket> findById(int id) {
         return ticketDao.findById(id);
     }
 
 
-    @Override
     public List<TicketFullWithLatest> getAllTicketFullWithLatest() {
         return ticketDao.returnTicketFullWithLatest();
     }
 
-    @Override
     public List<TicketFullWithLatest> getTicketFullWithLatestByTechnician(int id) {
         return ticketDao.returnTicketAttributed(id);
     }
 
-    @Override
     public Ticket save(Ticket ticket) {
         ticket.setIdTicket(null);
         ticket.setFinalPriority(ticket.getInitialPriority());
@@ -61,15 +58,13 @@ public class TicketService implements iTicketService {
         return ticketDao.save(ticket);
     }
 
-    @Override
     public void delete(Ticket ticket) {
         ticketDao.delete(ticket);
     }
 
-    @Override
     public TicketUpdatedDto update(TicketUpdatedDto ticketToUpdate, int id) throws TicketNotFoundException {
         Ticket currentTicket = ticketDao.findById(id)
-                .orElseThrow(iTicketService.TicketNotFoundException::new);
+                .orElseThrow(TicketNotFoundException::new);
 
         currentTicket.setTitle(ticketToUpdate.title());
         currentTicket.setDescription(ticketToUpdate.description());
@@ -85,10 +80,9 @@ public class TicketService implements iTicketService {
                 ticketSaved.getCallDuration());
     }
 
-    @Override
     public Ticket forceChangePriority(int priority, int id) throws TicketNotFoundException {
         Ticket currentTicket = ticketDao.findById(id)
-                .orElseThrow(iTicketService.TicketNotFoundException::new);
+                .orElseThrow(TicketNotFoundException::new);
 
         currentTicket.setFinalPriority(priority);
 
@@ -97,7 +91,6 @@ public class TicketService implements iTicketService {
 
 
     @Transactional
-    @Override
     public Ticket createTicket(TicketCreation ticketDto) {
 
         Ticket ticket = new Ticket();
@@ -141,7 +134,6 @@ public class TicketService implements iTicketService {
 
     // METHODS
 
-    @Override
     public void addThemeToTicket(Ticket ticket, String designation) {
 
         // 1. récupérer la thématique
@@ -160,7 +152,6 @@ public class TicketService implements iTicketService {
         classificationDao.save(classification);
     }
 
-    @Override
     public String getCurrentTheme(Ticket ticket) {
         return ticket.getClassificationList().stream()
                 .max(Comparator.comparing(Classification::getAffectationDate))
@@ -177,7 +168,6 @@ public class TicketService implements iTicketService {
             {3, 2},
             {2, 1}};
 
-    @Override
     public int computePriority(int impact, int urgence, int importance) {
         int finalImpact = Math.min(impact + importance, 4);
         return priorityMatrix[finalImpact - 1][urgence - 1];
@@ -186,7 +176,6 @@ public class TicketService implements iTicketService {
 
     // Mapping
 
-    @Override
     public TicketResponse responseToDto(Ticket ticket) {
         Status status = iHistoryService.getStatus(ticket.getIdTicket());
         Theme theme = iClassificationService.getTheme(ticket.getIdTicket());

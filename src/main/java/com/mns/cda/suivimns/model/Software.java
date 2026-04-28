@@ -3,7 +3,6 @@ package com.mns.cda.suivimns.model;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.view.ClientSoftwareListView;
-import com.mns.cda.suivimns.view.SoftwareVersionListView;
 import com.mns.cda.suivimns.view.SoftwareView;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -14,7 +13,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.hibernate.validator.constraints.Length;
 
 import java.util.List;
 
@@ -44,6 +42,6 @@ public class Software {
     protected SoftwareType type;
 
     // Doit rester nullable, on crée d'abord un software avant de créer ses versions
-    @OneToMany(mappedBy = "software")
-    protected List<Version> versionList;
+    //@OneToMany(mappedBy = "software")
+    //protected List<Version> versionList;
 }

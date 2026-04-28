@@ -1,7 +1,6 @@
 package com.mns.cda.suivimns.unit.model;
 
 import com.mns.cda.suivimns.TestUtils;
-import com.mns.cda.suivimns.model.Classification;
 import com.mns.cda.suivimns.model.History;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;

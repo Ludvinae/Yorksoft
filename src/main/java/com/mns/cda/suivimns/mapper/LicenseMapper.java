@@ -1,11 +1,11 @@
 package com.mns.cda.suivimns.mapper;
 
-import com.mns.cda.suivimns.dao.AppUserDao;
 import com.mns.cda.suivimns.dao.ClientDao;
 import com.mns.cda.suivimns.dao.SoftwareDao;
 import com.mns.cda.suivimns.dto.LicenseDto;
-import com.mns.cda.suivimns.dto.LicenseDto;
-import com.mns.cda.suivimns.model.*;
+import com.mns.cda.suivimns.model.Client;
+import com.mns.cda.suivimns.model.License;
+import com.mns.cda.suivimns.model.Software;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;

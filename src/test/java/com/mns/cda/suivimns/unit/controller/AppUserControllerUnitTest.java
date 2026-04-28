@@ -4,14 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.AppUserController;
 import com.mns.cda.suivimns.dto.flat.AppUserDtoFlat;
 import com.mns.cda.suivimns.model.AppUser;
-import com.mns.cda.suivimns.service.inter.iAppUserService;
+import com.mns.cda.suivimns.service.AppUserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +19,8 @@ import java.util.Optional;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = AppUserController.class)
 class AppUserControllerUnitTest {
@@ -28,7 +29,7 @@ class AppUserControllerUnitTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private iAppUserService appUserService;
+    private AppUserService appUserService;
 
     @MockBean
     private org.springframework.data.jpa.mapping.JpaMetamodelMappingContext jpaMetamodelMappingContext;
@@ -161,7 +162,7 @@ class AppUserControllerUnitTest {
         AppUserDtoFlat userDto = new AppUserDtoFlat("Jean", "Valjean", "valjean@test.com", "2222222");
 
         when(appUserService.update(any(AppUserDtoFlat.class), eq(1)))
-                .thenThrow(new iAppUserService.AppUserNotFoundException());
+                .thenThrow(new AppUserService.AppUserNotFoundException());
 
         mockMvc.perform(patch("/user/1")
                         .contentType(MediaType.APPLICATION_JSON)

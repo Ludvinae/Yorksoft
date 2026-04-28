@@ -1,11 +1,9 @@
 package com.mns.cda.suivimns.controller;
 
-import com.mns.cda.suivimns.model.Theme;
 import com.mns.cda.suivimns.model.Urgency;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
-import com.mns.cda.suivimns.service.inter.iLicenseService;
-import com.mns.cda.suivimns.service.inter.iUrgencyService;
+import com.mns.cda.suivimns.service.UrgencyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -26,7 +24,7 @@ import java.util.Optional;
 @Tag(name = "Urgence", description = "Gestion des niveaux d'urgence des tickets")
 public class UrgencyController {
 
-    protected final iUrgencyService urgencyService;
+    protected final UrgencyService urgencyService;
 
 
     @Operation(summary = "Récupérer tous les niveaux d'urgence")
@@ -93,7 +91,7 @@ public class UrgencyController {
         try {
             Urgency urgencySaved = urgencyService.update(urgencyToUpdate, id);
             return new ResponseEntity<>(urgencySaved, HttpStatus.OK);
-        } catch (iUrgencyService.UrgencyNotFoundException e) {
+        } catch (UrgencyService.UrgencyNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

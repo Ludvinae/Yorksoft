@@ -1,8 +1,6 @@
 package com.mns.cda.suivimns.unit.model;
 
 import com.mns.cda.suivimns.TestUtils;
-import com.mns.cda.suivimns.model.Impact;
-import com.mns.cda.suivimns.model.Urgency;
 import com.mns.cda.suivimns.model.Urgency;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import jakarta.validation.Validation;

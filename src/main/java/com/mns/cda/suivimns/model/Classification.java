@@ -1,8 +1,6 @@
 package com.mns.cda.suivimns.model;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import com.mns.cda.suivimns.model.keys.ClassificationKey;
-import com.mns.cda.suivimns.view.TicketView;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

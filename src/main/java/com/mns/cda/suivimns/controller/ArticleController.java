@@ -3,7 +3,7 @@ package com.mns.cda.suivimns.controller;
 import com.mns.cda.suivimns.model.Article;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
-import com.mns.cda.suivimns.service.inter.iArticleService;
+import com.mns.cda.suivimns.service.ArticleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -24,7 +24,7 @@ import java.util.Optional;
 @Tag(name = "Article", description = "Gestion des articles")
 public class ArticleController {
 
-    protected final iArticleService articleService;
+    protected final ArticleService articleService;
 
 
     @Operation(summary = "Récupérer tous les articles")
@@ -93,7 +93,7 @@ public class ArticleController {
         try {
             Article articleSaved = articleService.update(articleToUpdate, id);
             return new ResponseEntity<>(articleSaved, HttpStatus.OK);
-        } catch (iArticleService.ArticleNotFoundException e) {
+        } catch (ArticleService.ArticleNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

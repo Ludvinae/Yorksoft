@@ -2,7 +2,6 @@ package com.mns.cda.suivimns.service;
 
 import com.mns.cda.suivimns.dao.ManagerDao;
 import com.mns.cda.suivimns.model.Manager;
-import com.mns.cda.suivimns.service.inter.iManagerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,37 +10,35 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class ManagerService implements iManagerService {
+public class ManagerService  {
+
+    public static class ManagerNotFoundException extends Exception {
+    }
 
     protected final ManagerDao managerDao;
 
-    @Override
     public List<Manager> findAll() {
         return managerDao.findAll();
     }
 
-    @Override
     public Optional<Manager> findById(int id) {
         return managerDao.findById(id);
     }
 
-    @Override
     public Manager save(Manager manager) {
         manager.setIdAppUser(null);
         return managerDao.save(manager);
     }
 
-    @Override
     public void delete(Manager manager) {
         managerDao.delete(manager);
     }
 
-    @Override
-    public Manager update(Manager managerToUpdate, int id) throws iManagerService.ManagerNotFoundException {
+    public Manager update(Manager managerToUpdate, int id) throws ManagerNotFoundException {
         Optional<Manager> manager = managerDao.findById(id);
 
         if (manager.isEmpty()) {
-            throw new iManagerService.ManagerNotFoundException();
+            throw new ManagerNotFoundException();
         }
 
         managerToUpdate.setIdAppUser(manager.get().getIdAppUser());

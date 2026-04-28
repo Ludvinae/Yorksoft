@@ -4,7 +4,6 @@ import com.mns.cda.suivimns.dao.AppUserDao;
 import com.mns.cda.suivimns.dto.flat.AppUserDtoFlat;
 import com.mns.cda.suivimns.dto.flat.PasswordDto;
 import com.mns.cda.suivimns.model.AppUser;
-import com.mns.cda.suivimns.service.inter.iAppUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,34 +13,38 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class AppUserService implements iAppUserService {
+public class AppUserService {
+
+    // Classe d'erreur
+    public static class AppUserNotFoundException extends Exception {
+    }
+
+    public static class EmailAlreadyUsedException extends Exception {}
+
+    public static class BadPasswordException extends Exception {}
+
 
     protected final AppUserDao appUserDao;
 
-    @Override
     public List<AppUser> findAll() {
         return appUserDao.findAll();
     }
 
-    @Override
     public Optional<AppUser> findById(int id) {
         return appUserDao.findById(id);
     }
 
-    @Override
     public AppUser save(AppUser appUser) {
         appUser.setIdAppUser(null);
         return appUserDao.save(appUser);
     }
 
-    @Override
     public void delete(AppUser appUser) {
         appUserDao.delete(appUser);
     }
 
-    @Override
     public AppUser update(AppUserDtoFlat dto, int id)
-            throws AppUserNotFoundException {
+            throws AppUserNotFoundException, EmailAlreadyUsedException {
 
         AppUser user = appUserDao.findById(id)
                 .orElseThrow(AppUserNotFoundException::new);
@@ -66,7 +69,6 @@ public class AppUserService implements iAppUserService {
         return appUserDao.save(user);
     }
 
-    @Override
     public void updatePassword(int id, PasswordDto dto)
             throws AppUserNotFoundException, BadPasswordException {
 

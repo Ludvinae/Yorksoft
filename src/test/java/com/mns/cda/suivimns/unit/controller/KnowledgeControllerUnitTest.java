@@ -4,14 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.KnowledgeController;
 import com.mns.cda.suivimns.model.Knowledge;
 import com.mns.cda.suivimns.model.Theme;
-import com.mns.cda.suivimns.service.inter.iKnowledgeService;
+import com.mns.cda.suivimns.service.KnowledgeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +19,8 @@ import java.util.Optional;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = KnowledgeController.class)
 class KnowledgeControllerUnitTest {
@@ -28,7 +29,7 @@ class KnowledgeControllerUnitTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private iKnowledgeService knowledgeService;
+    private KnowledgeService knowledgeService;
 
     @MockBean
     private org.springframework.data.jpa.mapping.JpaMetamodelMappingContext jpaMetamodelMappingContext;
@@ -160,7 +161,7 @@ class KnowledgeControllerUnitTest {
     void shouldReturn404WhenUpdateFails() throws Exception {
 
         when(knowledgeService.update(any(Knowledge.class), eq(1)))
-                .thenThrow(new iKnowledgeService.KnowledgeNotFoundException());
+                .thenThrow(new KnowledgeService.KnowledgeNotFoundException());
 
         mockMvc.perform(put("/knowledge/1")
                         .contentType(MediaType.APPLICATION_JSON)

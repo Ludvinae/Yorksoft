@@ -1,11 +1,8 @@
 package com.mns.cda.suivimns.controller;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import com.mns.cda.suivimns.model.Manager;
 import com.mns.cda.suivimns.model.groups.OnCreate;
-import com.mns.cda.suivimns.model.groups.OnUpdate;
-import com.mns.cda.suivimns.service.inter.iManagerService;
-import com.mns.cda.suivimns.view.ManagerView;
+import com.mns.cda.suivimns.service.ManagerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -26,7 +23,7 @@ import java.util.Optional;
 @Tag(name="Manager", description = "Gère les managers")
 public class ManagerController {
 
-    protected final iManagerService managerService;
+    protected final ManagerService managerService;
 
 
     @Operation(summary = "Récupère tous les managers")

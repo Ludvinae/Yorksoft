@@ -1,8 +1,5 @@
 package com.mns.cda.suivimns.model;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import com.mns.cda.suivimns.view.AssignmentView;
-import com.mns.cda.suivimns.view.EmployeeTicketListView;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

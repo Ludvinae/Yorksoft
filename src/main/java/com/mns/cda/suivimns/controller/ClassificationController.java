@@ -1,12 +1,9 @@
 package com.mns.cda.suivimns.controller;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import com.mns.cda.suivimns.model.Classification;
 import com.mns.cda.suivimns.model.groups.OnCreate;
-import com.mns.cda.suivimns.model.groups.OnUpdate;
 import com.mns.cda.suivimns.model.keys.ClassificationKey;
-import com.mns.cda.suivimns.service.inter.iClassificationService;
-import com.mns.cda.suivimns.view.TicketView;
+import com.mns.cda.suivimns.service.ClassificationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -27,7 +24,7 @@ import java.util.Optional;
 @Tag(name = "Classification", description = "Classification des tickets selon les thématiques")
 public class ClassificationController {
 
-    protected final iClassificationService classificationService;
+    protected final ClassificationService classificationService;
 
 
     @Operation(summary = "Récupérer toutes les classifications")

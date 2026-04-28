@@ -2,8 +2,6 @@ package com.mns.cda.suivimns.unit.model;
 
 import com.mns.cda.suivimns.TestUtils;
 import com.mns.cda.suivimns.model.License;
-import com.mns.cda.suivimns.model.Knowledge;
-import com.mns.cda.suivimns.model.License;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import org.junit.jupiter.api.Assertions;
@@ -45,20 +43,6 @@ public class LicenseUnitTest {
         );
 
         Assertions.assertTrue(constraintExists, "License number must not be blank");
-    }
-
-    @Test
-    public void licenseWithBlankUserCount_shouldNotBeValid() {
-        License license = new License();
-        license.setLicenseNumber("");
-
-        boolean constraintExists = TestUtils.constraintViolationExists(
-                validator.validate(license),
-                "userCount",
-                "NotNull"
-        );
-
-        Assertions.assertTrue(constraintExists, "User count must not be blank");
     }
 
     @Test

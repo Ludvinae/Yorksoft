@@ -1,7 +1,5 @@
 package com.mns.cda.suivimns.dto;
 
-import com.mns.cda.suivimns.model.VersionType;
-
 import java.time.LocalDateTime;
 
 public record VersionDto(

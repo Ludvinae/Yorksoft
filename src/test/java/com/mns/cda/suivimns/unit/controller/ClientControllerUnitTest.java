@@ -4,14 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.ClientController;
 import com.mns.cda.suivimns.dto.flat.ClientDtoFlat;
 import com.mns.cda.suivimns.model.Client;
-import com.mns.cda.suivimns.service.inter.iClientService;
+import com.mns.cda.suivimns.service.ClientService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +19,8 @@ import java.util.Optional;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = ClientController.class)
 class ClientControllerUnitTest {
@@ -28,7 +29,7 @@ class ClientControllerUnitTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private iClientService clientService;
+    private ClientService clientService;
 
     @MockBean
     private org.springframework.data.jpa.mapping.JpaMetamodelMappingContext jpaMetamodelMappingContext;
@@ -161,7 +162,7 @@ class ClientControllerUnitTest {
     void shouldReturn404WhenUpdateFails() throws Exception {
 
         when(clientService.update(any(Client.class), eq(1)))
-                .thenThrow(new iClientService.ClientNotFoundException());
+                .thenThrow(new ClientService.ClientNotFoundException());
 
         mockMvc.perform(patch("/client/1")
                         .contentType(MediaType.APPLICATION_JSON)

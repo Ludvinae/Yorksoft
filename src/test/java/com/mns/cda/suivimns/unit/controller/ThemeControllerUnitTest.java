@@ -3,15 +3,14 @@ package com.mns.cda.suivimns.unit.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.ThemeController;
 import com.mns.cda.suivimns.model.Theme;
-import com.mns.cda.suivimns.model.Knowledge;
-import com.mns.cda.suivimns.service.inter.iThemeService;
+import com.mns.cda.suivimns.service.ThemeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +18,8 @@ import java.util.Optional;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = ThemeController.class)
 class ThemeControllerUnitTest {
@@ -28,7 +28,7 @@ class ThemeControllerUnitTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private iThemeService themeService;
+    private ThemeService themeService;
 
     @MockBean
     private org.springframework.data.jpa.mapping.JpaMetamodelMappingContext jpaMetamodelMappingContext;
@@ -157,7 +157,7 @@ class ThemeControllerUnitTest {
     void shouldReturn404WhenUpdateFails() throws Exception {
 
         when(themeService.update(any(Theme.class), eq(1)))
-                .thenThrow(new iThemeService.ThemeNotFoundException());
+                .thenThrow(new ThemeService.ThemeNotFoundException());
 
         mockMvc.perform(put("/theme/1")
                         .contentType(MediaType.APPLICATION_JSON)

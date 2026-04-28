@@ -7,7 +7,7 @@ import com.mns.cda.suivimns.dto.flat.TicketUpdatedDto;
 import com.mns.cda.suivimns.model.Ticket;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
-import com.mns.cda.suivimns.service.inter.iTicketService;
+import com.mns.cda.suivimns.service.TicketService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -28,7 +28,7 @@ import java.util.Optional;
 @Tag(name = "Ticket", description = "Gestion des tickets de support (création, suivi, affectation, résolution)")
 public class TicketController {
 
-    protected final iTicketService ticketService;
+    protected final TicketService ticketService;
 
 
     @Operation(
@@ -132,7 +132,7 @@ public class TicketController {
        try {
            TicketUpdatedDto ticketSaved = ticketService.update(ticketToUpdate, id);
            return new ResponseEntity<>(ticketSaved, HttpStatus.OK);
-       } catch (iTicketService.TicketNotFoundException e) {
+       } catch (TicketService.TicketNotFoundException e) {
            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
        }
     }

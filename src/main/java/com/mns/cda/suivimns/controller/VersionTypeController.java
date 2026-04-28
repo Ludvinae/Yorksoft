@@ -1,7 +1,7 @@
 package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.VersionTypeDto;
-import com.mns.cda.suivimns.service.inter.iVersionTypeService;
+import com.mns.cda.suivimns.service.VersionTypeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -21,7 +21,7 @@ import java.util.List;
 @Tag(name = "Type de version", description = "Gestion des types de version de logiciel")
 public class VersionTypeController {
 
-    private final iVersionTypeService versionTypeService;
+    private final VersionTypeService versionTypeService;
 
 
     @Operation(summary = "Récupérer tous les types de version")
@@ -42,7 +42,7 @@ public class VersionTypeController {
 
         try {
             return new ResponseEntity<>(versionTypeService.findById(id) , HttpStatus.OK);
-        } catch (iVersionTypeService.VersionTypeNotFoundException e) {
+        } catch (VersionTypeService.VersionTypeNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -70,7 +70,7 @@ public class VersionTypeController {
         try {
             versionTypeService.delete(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (iVersionTypeService.VersionTypeNotFoundException e) {
+        } catch (VersionTypeService.VersionTypeNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -87,7 +87,7 @@ public class VersionTypeController {
     public ResponseEntity<VersionTypeDto> update(@PathVariable Integer id, @RequestBody @Valid VersionTypeDto typeToUpdate) {
         try {
             return new ResponseEntity<>(versionTypeService.update(id, typeToUpdate), HttpStatus.OK);
-        } catch (iVersionTypeService.VersionTypeNotFoundException e) {
+        } catch (VersionTypeService.VersionTypeNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

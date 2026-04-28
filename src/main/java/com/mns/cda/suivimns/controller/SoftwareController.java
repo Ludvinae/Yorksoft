@@ -1,13 +1,10 @@
 package com.mns.cda.suivimns.controller;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import com.mns.cda.suivimns.dto.flat.SoftwareDtoFlat;
 import com.mns.cda.suivimns.model.Software;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
-import com.mns.cda.suivimns.service.inter.iSoftwareService;
-import com.mns.cda.suivimns.view.SoftwareVersionListView;
-import com.mns.cda.suivimns.view.SoftwareView;
+import com.mns.cda.suivimns.service.SoftwareService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -29,7 +26,7 @@ import java.util.Optional;
 public class SoftwareController {
 
 
-    protected final iSoftwareService softwareService;
+    protected final SoftwareService softwareService;
 
 
     @Operation(
@@ -123,7 +120,7 @@ public class SoftwareController {
         try {
             Software softwareSaved = softwareService.update(softwareToUpdate, id);
             return new ResponseEntity<>(softwareSaved, HttpStatus.OK);
-        } catch (iSoftwareService.SoftwareNotFoundException e) {
+        } catch (SoftwareService.SoftwareNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

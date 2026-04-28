@@ -2,7 +2,6 @@ package com.mns.cda.suivimns.service;
 
 import com.mns.cda.suivimns.dao.ImpactDao;
 import com.mns.cda.suivimns.model.Impact;
-import com.mns.cda.suivimns.service.inter.iImpactService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,33 +10,31 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class ImpactService implements iImpactService {
+public class ImpactService  {
+
+    public static class ImpactNotFoundException extends Exception {
+    }
 
     protected final ImpactDao impactDao;
 
-    @Override
     public List<Impact> findAll() {
         return impactDao.findAll();
     }
 
-    @Override
     public Optional<Impact> findById(int id) {
         return impactDao.findById(id);
     }
 
-    @Override
     public Impact save(Impact impact) {
         impact.setIdImpact(null);
         return impactDao.save(impact);
     }
 
-    @Override
     public void delete(Impact impact) {
         impactDao.delete(impact);
     }
 
-    @Override
-    public Impact update(Impact impactToUpdate, int id) throws iImpactService.ImpactNotFoundException {
+    public Impact update(Impact impactToUpdate, int id) throws ImpactNotFoundException {
         Impact currentImpact = impactDao.findById(id)
                 .orElseThrow(ImpactNotFoundException::new);
 

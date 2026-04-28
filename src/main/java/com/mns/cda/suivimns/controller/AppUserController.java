@@ -4,7 +4,7 @@ import com.mns.cda.suivimns.dto.flat.AppUserDtoFlat;
 import com.mns.cda.suivimns.dto.flat.PasswordDto;
 import com.mns.cda.suivimns.model.AppUser;
 import com.mns.cda.suivimns.model.groups.OnCreate;
-import com.mns.cda.suivimns.service.inter.iAppUserService;
+import com.mns.cda.suivimns.service.AppUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -25,7 +25,7 @@ import java.util.Optional;
 @CrossOrigin
 public class AppUserController {
 
-    protected final iAppUserService appUserService;
+    protected final AppUserService appUserService;
 
 
     @Operation(summary = "Lister tous les utilisateurs")
@@ -110,9 +110,10 @@ public class AppUserController {
         try {
             AppUser user = appUserService.update(dto, id);
             return new ResponseEntity<>(user, HttpStatus.OK);
-        } catch (iAppUserService.AppUserNotFoundException e) {
+        } catch (AppUserService.AppUserNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (iAppUserService.EmailAlreadyUsedException e) {
+            // IMPLEMENTER TEST UNICITE EMAIL !!!
+        } catch (AppUserService.EmailAlreadyUsedException e) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
@@ -130,9 +131,9 @@ public class AppUserController {
         try {
             appUserService.updatePassword(id, dto);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (iAppUserService.AppUserNotFoundException e) {
+        } catch (AppUserService.AppUserNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (iAppUserService.BadPasswordException e) {
+        } catch (AppUserService.BadPasswordException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }

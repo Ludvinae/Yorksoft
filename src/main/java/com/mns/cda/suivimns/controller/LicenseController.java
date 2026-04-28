@@ -3,7 +3,7 @@ package com.mns.cda.suivimns.controller;
 import com.mns.cda.suivimns.model.License;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
-import com.mns.cda.suivimns.service.inter.iLicenseService;
+import com.mns.cda.suivimns.service.LicenseService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -24,7 +24,7 @@ import java.util.Optional;
 @Tag(name="Licence", description = "Gère les licenses des clients pour les logiciels")
 public class LicenseController {
 
-    protected final iLicenseService licenseService;
+    protected final LicenseService licenseService;
 
 
     @Operation(summary = "Récupère toutes les licences")
@@ -86,7 +86,7 @@ public class LicenseController {
         try {
             License licenseSaved = licenseService.update(licenseToUpdate, id);
             return new ResponseEntity<>(licenseSaved, HttpStatus.OK);
-        } catch (iLicenseService.LicenseNotFoundException e) {
+        } catch (LicenseService.LicenseNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

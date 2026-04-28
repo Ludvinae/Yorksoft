@@ -3,15 +3,14 @@ package com.mns.cda.suivimns.unit.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.SoftwareTypeController;
 import com.mns.cda.suivimns.model.SoftwareType;
-import com.mns.cda.suivimns.model.Knowledge;
-import com.mns.cda.suivimns.service.inter.iSoftwareTypeService;
+import com.mns.cda.suivimns.service.SoftwareTypeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +18,8 @@ import java.util.Optional;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = SoftwareTypeController.class)
 class SoftwareTypeControllerUnitTest {
@@ -28,7 +28,7 @@ class SoftwareTypeControllerUnitTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private iSoftwareTypeService softwareTypeService;
+    private SoftwareTypeService softwareTypeService;
 
     @MockBean
     private org.springframework.data.jpa.mapping.JpaMetamodelMappingContext jpaMetamodelMappingContext;
@@ -157,7 +157,7 @@ class SoftwareTypeControllerUnitTest {
     void shouldReturn404WhenUpdateFails() throws Exception {
 
         when(softwareTypeService.update(any(SoftwareType.class), eq(1)))
-                .thenThrow(new iSoftwareTypeService.SoftwareTypeNotFoundException());
+                .thenThrow(new SoftwareTypeService.SoftwareTypeNotFoundException());
 
         mockMvc.perform(put("/software-type/1")
                         .contentType(MediaType.APPLICATION_JSON)

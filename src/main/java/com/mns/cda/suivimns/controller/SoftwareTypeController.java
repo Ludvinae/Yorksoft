@@ -1,11 +1,9 @@
 package com.mns.cda.suivimns.controller;
 
-import com.mns.cda.suivimns.model.Software;
 import com.mns.cda.suivimns.model.SoftwareType;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
-import com.mns.cda.suivimns.service.inter.iLicenseService;
-import com.mns.cda.suivimns.service.inter.iSoftwareTypeService;
+import com.mns.cda.suivimns.service.SoftwareTypeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -26,7 +24,7 @@ import java.util.Optional;
 @Tag(name="Type de logiciel", description = "Gestion des types de logiciels")
 public class SoftwareTypeController {
 
-    protected final iSoftwareTypeService softwareTypeService;
+    protected final SoftwareTypeService softwareTypeService;
 
 
     @Operation(summary = "Récupère tous les types de logiciels",
@@ -103,7 +101,7 @@ public class SoftwareTypeController {
         try {
             SoftwareType softwareTypeSaved = softwareTypeService.update(typeToUpdate, id);
             return new ResponseEntity<>(softwareTypeSaved, HttpStatus.OK);
-        } catch (iSoftwareTypeService.SoftwareTypeNotFoundException e) {
+        } catch (SoftwareTypeService.SoftwareTypeNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

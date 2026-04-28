@@ -2,12 +2,7 @@ package com.mns.cda.suivimns.service;
 
 import com.mns.cda.suivimns.dao.AssignmentDao;
 import com.mns.cda.suivimns.model.Assignment;
-import com.mns.cda.suivimns.model.License;
-import com.mns.cda.suivimns.service.inter.iAssignmentService;
-import com.mns.cda.suivimns.service.inter.iLicenseService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -16,36 +11,36 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class AssignmentService implements iAssignmentService {
+public class AssignmentService {
+
+    public static class AssignmentNotFoundException extends Exception {
+    }
+
+    public static class AssignmentBadRequestException extends Exception {
+    }
 
     protected final AssignmentDao assignmentDao;
 
-    @Override
     public List<Assignment> findAll() {
         return assignmentDao.findAll();
     }
 
-    @Override
     public Optional<Assignment> findById(int id) {
         return assignmentDao.findById(id);
     }
 
-    @Override
     public void modify(Assignment assignment, int id) {
         assignment.setIdAssignment(id);
         assignment.setAssignmentDate(assignment.getAssignmentDate());
         assignmentDao.save(assignment);
     }
 
-    @Override
     public Assignment firstSave(Assignment assignment) {
         assignment.setIdAssignment(null);
         assignment.setAssignmentDate(LocalDateTime.now());
         return assignmentDao.save(assignment);
     }
 
-
-    @Override
     public void close(Assignment assignment, int id) {
         assignment.setIdAssignment(id);
         assignment.setAssignmentDate(assignment.getAssignmentDate());

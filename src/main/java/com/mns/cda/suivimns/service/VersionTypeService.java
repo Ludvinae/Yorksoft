@@ -4,7 +4,6 @@ import com.mns.cda.suivimns.dao.VersionTypeDao;
 import com.mns.cda.suivimns.dto.VersionTypeDto;
 import com.mns.cda.suivimns.mapper.VersionTypeMapper;
 import com.mns.cda.suivimns.model.VersionType;
-import com.mns.cda.suivimns.service.inter.iVersionTypeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,25 +11,25 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class VersionTypeService implements iVersionTypeService {
+public class VersionTypeService {
+
+    public static class VersionTypeNotFoundException extends Exception {
+    }
 
     protected final VersionTypeDao versionTypeDao;
     private final VersionTypeMapper typeMapper;
 
-    @Override
     public List<VersionTypeDto> findAll() {
         return typeMapper.toDtoList(versionTypeDao.findAll());
     }
 
-    @Override
-    public VersionTypeDto findById(int id) throws iVersionTypeService.VersionTypeNotFoundException{
+    public VersionTypeDto findById(int id) throws VersionTypeNotFoundException{
         VersionType type = versionTypeDao.findById(id)
                 .orElseThrow(VersionTypeNotFoundException::new);
 
         return typeMapper.toDto(type);
     }
 
-    @Override
     public VersionTypeDto save(VersionTypeDto createDto) {
 
         VersionType type = typeMapper.toEntity(createDto);
@@ -40,22 +39,20 @@ public class VersionTypeService implements iVersionTypeService {
         return typeMapper.toDto(saved);
     }
 
-    @Override
-    public void delete(int id) throws iVersionTypeService.VersionTypeNotFoundException {
+    public void delete(int id) throws VersionTypeNotFoundException {
         VersionType type = versionTypeDao.findById(id)
                 .orElseThrow(VersionTypeNotFoundException::new);
 
         versionTypeDao.delete(type);
     }
 
-    @Override
-    public VersionTypeDto update(int id, VersionTypeDto versionTypeToUpdate) throws iVersionTypeService.VersionTypeNotFoundException {
+    public VersionTypeDto update(int id, VersionTypeDto versionTypeToUpdate) throws VersionTypeNotFoundException {
 
         VersionType type = versionTypeDao.findById(id)
-                .orElseThrow(iVersionTypeService.VersionTypeNotFoundException::new);
+                .orElseThrow(VersionTypeNotFoundException::new);
 
         type.setDesignation(versionTypeToUpdate.designation());
-        type.setUrgencyMalus(versionTypeToUpdate.UrgencyMalus());
+        type.setUrgencyMalus(versionTypeToUpdate.urgencyMalus());
 
         return typeMapper.toDto(versionTypeDao.save(type));
     }
