@@ -2,8 +2,6 @@ package com.mns.cda.suivimns.model;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.mns.cda.suivimns.model.groups.OnCreate;
-import com.mns.cda.suivimns.view.ClientSoftwareListView;
-import com.mns.cda.suivimns.view.SoftwareView;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -33,7 +31,6 @@ public class Software {
     protected String name;
 
     @Column(columnDefinition = "TEXT")
-    @JsonView({ClientSoftwareListView.class, SoftwareView.class})
     protected String description;
 
     @ManyToOne
