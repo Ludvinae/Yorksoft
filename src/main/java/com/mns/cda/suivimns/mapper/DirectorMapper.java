@@ -18,5 +18,6 @@ public abstract class DirectorMapper {
 
     // Method helper pour Update
     @Mapping(target = "idAppUser", ignore = true)
+    @Mapping(target= "password", ignore = true)
     public abstract void updateEntityFromDto(DirectorDto dto, @MappingTarget Director entity);
 }

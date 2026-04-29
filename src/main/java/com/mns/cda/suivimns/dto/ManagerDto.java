@@ -6,7 +6,7 @@ public record ManagerDto(
         Integer idAppUser,
         String firstName,
         String lastName,
-        @Email String email,
+        @Email(message="Courriel invalide") String email,
         String phoneNumber
 ) {
 }

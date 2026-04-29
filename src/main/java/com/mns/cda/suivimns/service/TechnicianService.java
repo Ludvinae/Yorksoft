@@ -1,48 +1,89 @@
 package com.mns.cda.suivimns.service;
 
+import com.mns.cda.suivimns.dao.AppUserDao;
 import com.mns.cda.suivimns.dao.TechnicianDao;
+import com.mns.cda.suivimns.dto.TechnicianDto;
+import com.mns.cda.suivimns.dto.flat.PasswordDto;
+import com.mns.cda.suivimns.mapper.TechnicianMapper;
 import com.mns.cda.suivimns.model.Technician;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
 public class TechnicianService  {
 
+    // Classe d'erreur
     public static class TechnicianNotFoundException extends Exception {
     }
 
+    public static class EmailAlreadyUsedException extends Exception {}
+
+    public static class BadPasswordException extends Exception {}
+
+
     protected final TechnicianDao technicianDao;
+    protected final TechnicianMapper technicianMapper;
+    protected final AppUserDao appUserDao;
 
-    public List<Technician> findAll() {
-        return technicianDao.findAll();
+
+    public List<TechnicianDto> findAll() {
+        return technicianMapper.toDtoList(technicianDao.findAll());
     }
 
-    public Optional<Technician> findById(int id) {
-        return technicianDao.findById(id);
+    public TechnicianDto findById(int id) throws TechnicianService.TechnicianNotFoundException {
+        Technician technician = technicianDao.findById(id)
+                .orElseThrow(TechnicianService.TechnicianNotFoundException::new);
+
+        return technicianMapper.toDto(technician);
     }
 
-    public Technician save(Technician technician) {
+    public TechnicianDto save(TechnicianDto dto) {
+        Technician technician = technicianMapper.toEntity(dto);
         technician.setIdAppUser(null);
-        return technicianDao.save(technician);
+        Technician saved = technicianDao.save(technician);
+
+        return technicianMapper.toDto(saved);
     }
 
-    public void delete(Technician technician) {
+    public void delete(int id) throws TechnicianService.TechnicianNotFoundException {
+        Technician technician = technicianDao.findById(id)
+                .orElseThrow(TechnicianService.TechnicianNotFoundException::new);
+
         technicianDao.delete(technician);
     }
 
-    public Technician update(Technician technicianToUpdate, int id) throws TechnicianNotFoundException {
-        Optional<Technician> technician = technicianDao.findById(id);
+    public TechnicianDto update(int id, TechnicianDto dto)
+            throws TechnicianService.TechnicianNotFoundException, AppUserService.EmailAlreadyUsedException {
 
-        if (technician.isEmpty()) {
-            throw new TechnicianNotFoundException();
+        if (appUserDao.existsByEmail(dto.email())) {
+            throw new AppUserService.EmailAlreadyUsedException();
         }
 
-        technicianToUpdate.setIdAppUser(technician.get().getIdAppUser());
+        Technician currentTechnician = technicianDao.findById(id)
+                .orElseThrow(TechnicianService.TechnicianNotFoundException::new);
 
-        return technicianDao.save(technicianToUpdate);
+        technicianMapper.updateEntityFromDto(dto, currentTechnician);
+
+        return technicianMapper.toDto(technicianDao.save(currentTechnician));
+    }
+
+    public void updatePassword(int id, PasswordDto dto)
+            throws TechnicianService.TechnicianNotFoundException, TechnicianService.BadPasswordException {
+
+        Technician user = technicianDao.findById(id)
+                .orElseThrow(TechnicianService.TechnicianNotFoundException::new);
+
+        // vérifier ancien mot de passe
+        if (!Objects.equals(user.getPassword(), dto.oldPassword())) {
+            throw new TechnicianService.BadPasswordException();
+        }
+
+        user.setPassword(dto.newPassword());
+
+        technicianDao.save(user);
     }
 }

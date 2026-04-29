@@ -1,15 +1,7 @@
 package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.ClientDto;
-import com.mns.cda.suivimns.dto.flat.ClientDtoFlat;
-import com.mns.cda.suivimns.dto.flat.ClientDtoFlat;
 import com.mns.cda.suivimns.dto.flat.PasswordDto;
-import com.mns.cda.suivimns.model.Client;
-import com.mns.cda.suivimns.model.Client;
-import com.mns.cda.suivimns.model.groups.OnCreate;
-import com.mns.cda.suivimns.model.groups.OnUpdate;
-import com.mns.cda.suivimns.service.AppUserService;
-import com.mns.cda.suivimns.service.ClientService;
 import com.mns.cda.suivimns.service.ClientService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -19,7 +11,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -86,15 +77,15 @@ public class ClientController {
             @ApiResponse(responseCode = "404", description = "Client non trouvé"),
             @ApiResponse(responseCode = "400", description = "Email déja utilisé")})
     @PatchMapping("/{id}")
-    public ResponseEntity<Client> update(@PathVariable int id, @RequestBody @Valid ClientDto dto) {
+    public ResponseEntity<ClientDto> update(@PathVariable int id, @RequestBody @Valid ClientDto dto) {
 
         try {
-            Client user = clientService.update(dto, id);
+            ClientDto user = clientService.update(id, dto);
             return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (ClientService.ClientNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             // IMPLEMENTER TEST UNICITE EMAIL !!!
-        } catch (AppUserService.EmailAlreadyUsedException e) {
+        } catch (ClientService.EmailAlreadyUsedException e) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
@@ -114,7 +105,7 @@ public class ClientController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (ClientService.ClientNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (AppUserService.BadPasswordException e) {
+        } catch (ClientService.BadPasswordException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }

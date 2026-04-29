@@ -1,13 +1,7 @@
 package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.ManagerDto;
-import com.mns.cda.suivimns.dto.flat.ManagerDtoFlat;
 import com.mns.cda.suivimns.dto.flat.PasswordDto;
-import com.mns.cda.suivimns.model.Manager;
-import com.mns.cda.suivimns.model.Manager;
-import com.mns.cda.suivimns.model.groups.OnCreate;
-import com.mns.cda.suivimns.service.AppUserService;
-import com.mns.cda.suivimns.service.ManagerService;
 import com.mns.cda.suivimns.service.ManagerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -17,11 +11,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -85,15 +77,15 @@ public class ManagerController {
             @ApiResponse(responseCode = "404", description = "Manager non trouvé"),
             @ApiResponse(responseCode = "400", description = "Email déja utilisé")})
     @PatchMapping("/{id}")
-    public ResponseEntity<Manager> update(@PathVariable int id, @RequestBody @Valid ManagerDto dto) {
+    public ResponseEntity<ManagerDto> update(@PathVariable int id, @RequestBody @Valid ManagerDto dto) {
 
         try {
-            Manager user = managerService.update(dto, id);
+            ManagerDto user = managerService.update(id, dto);
             return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (ManagerService.ManagerNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             // IMPLEMENTER TEST UNICITE EMAIL !!!
-        } catch (AppUserService.EmailAlreadyUsedException e) {
+        } catch (ManagerService.EmailAlreadyUsedException e) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
@@ -113,7 +105,7 @@ public class ManagerController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (ManagerService.ManagerNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (AppUserService.BadPasswordException e) {
+        } catch (ManagerService.BadPasswordException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }

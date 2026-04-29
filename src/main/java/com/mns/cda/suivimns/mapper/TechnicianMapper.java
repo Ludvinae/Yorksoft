@@ -18,5 +18,6 @@ public abstract class TechnicianMapper {
 
     // Method helper pour Update
     @Mapping(target = "idAppUser", ignore = true)
+    @Mapping(target= "password", ignore = true)
     public abstract void updateEntityFromDto(TechnicianDto dto, @MappingTarget Technician entity);
 }

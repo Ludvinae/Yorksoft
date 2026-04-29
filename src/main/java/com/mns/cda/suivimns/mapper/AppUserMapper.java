@@ -10,7 +10,7 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public abstract class AppUserMapper {
-    public abstract AppUser toDto(AppUser user);
+    public abstract AppUserDto toDto(AppUser user);
 
     public abstract List<AppUserDto> toDtoList(List<AppUser> userList);
 
@@ -18,5 +18,6 @@ public abstract class AppUserMapper {
 
     // Method helper pour Update
     @Mapping(target = "idAppUser", ignore = true)
+    @Mapping(target= "password", ignore = true)
     public abstract void updateEntityFromDto(AppUserDto dto, @MappingTarget AppUser entity);
 }

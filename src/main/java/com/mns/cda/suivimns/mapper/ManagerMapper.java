@@ -18,5 +18,6 @@ public abstract class ManagerMapper {
 
     // Method helper pour Update
     @Mapping(target = "idAppUser", ignore = true)
+    @Mapping(target= "password", ignore = true)
     public abstract void updateEntityFromDto(ManagerDto dto, @MappingTarget Manager entity);
 }

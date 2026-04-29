@@ -2,8 +2,6 @@ package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.TechnicianDto;
 import com.mns.cda.suivimns.dto.flat.PasswordDto;
-import com.mns.cda.suivimns.model.Technician;
-import com.mns.cda.suivimns.service.AppUserService;
 import com.mns.cda.suivimns.service.TechnicianService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -80,15 +78,15 @@ public class TechnicianController {
             @ApiResponse(responseCode = "404", description = "Technicien non trouvé"),
             @ApiResponse(responseCode = "400", description = "Email déja utilisé")})
     @PatchMapping("/{id}")
-    public ResponseEntity<Technician> update(@PathVariable int id, @RequestBody @Valid TechnicianDto dto) {
+    public ResponseEntity<TechnicianDto> update(@PathVariable int id, @RequestBody @Valid TechnicianDto dto) {
 
         try {
-            Technician user = technicianService.update(dto, id);
+            TechnicianDto user = technicianService.update(id, dto);
             return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (TechnicianService.TechnicianNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             // IMPLEMENTER TEST UNICITE EMAIL !!!
-        } catch (AppUserService.EmailAlreadyUsedException e) {
+        } catch (TechnicianService.EmailAlreadyUsedException e) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
@@ -108,7 +106,7 @@ public class TechnicianController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (TechnicianService.TechnicianNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (AppUserService.BadPasswordException e) {
+        } catch (TechnicianService.BadPasswordException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }

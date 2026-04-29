@@ -1,13 +1,7 @@
 package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.DirectorDto;
-import com.mns.cda.suivimns.dto.flat.DirectorDtoFlat;
 import com.mns.cda.suivimns.dto.flat.PasswordDto;
-import com.mns.cda.suivimns.model.Director;
-import com.mns.cda.suivimns.model.Director;
-import com.mns.cda.suivimns.model.groups.OnCreate;
-import com.mns.cda.suivimns.service.AppUserService;
-import com.mns.cda.suivimns.service.DirectorService;
 import com.mns.cda.suivimns.service.DirectorService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -17,11 +11,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @CrossOrigin
@@ -86,15 +78,15 @@ public class DirectorController {
             @ApiResponse(responseCode = "404", description = "Directeur non trouvé"),
             @ApiResponse(responseCode = "400", description = "Email déja utilisé")})
     @PatchMapping("/{id}")
-    public ResponseEntity<Director> update(@PathVariable int id, @RequestBody @Valid DirectorDto dto) {
+    public ResponseEntity<DirectorDto> update(@PathVariable int id, @RequestBody @Valid DirectorDto dto) {
 
         try {
-            Director user = directorService.update(dto, id);
+            DirectorDto user = directorService.update(id, dto);
             return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (DirectorService.DirectorNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             // IMPLEMENTER TEST UNICITE EMAIL !!!
-        } catch (AppUserService.EmailAlreadyUsedException e) {
+        } catch (DirectorService.EmailAlreadyUsedException e) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
@@ -114,7 +106,7 @@ public class DirectorController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (DirectorService.DirectorNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (AppUserService.BadPasswordException e) {
+        } catch (DirectorService.BadPasswordException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }

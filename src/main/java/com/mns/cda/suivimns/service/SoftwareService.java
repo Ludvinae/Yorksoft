@@ -1,7 +1,6 @@
 package com.mns.cda.suivimns.service;
 
 import com.mns.cda.suivimns.dao.SoftwareDao;
-import com.mns.cda.suivimns.dao.SoftwareTypeDao;
 import com.mns.cda.suivimns.dto.SoftwareDto;
 import com.mns.cda.suivimns.mapper.SoftwareMapper;
 import com.mns.cda.suivimns.model.Software;

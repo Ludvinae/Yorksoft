@@ -1,67 +1,87 @@
 package com.mns.cda.suivimns.service;
 
+import com.mns.cda.suivimns.dao.AppUserDao;
 import com.mns.cda.suivimns.dao.ClientDao;
-import com.mns.cda.suivimns.dto.flat.ClientDtoFlat;
+import com.mns.cda.suivimns.dto.ClientDto;
+import com.mns.cda.suivimns.dto.flat.PasswordDto;
+import com.mns.cda.suivimns.mapper.ClientMapper;
 import com.mns.cda.suivimns.model.Client;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
 public class ClientService {
 
+    // Classe d'erreur
     public static class ClientNotFoundException extends Exception {
     }
 
+    public static class BadPasswordException extends Exception {}
+
+
     protected final ClientDao clientDao;
+    protected final ClientMapper clientMapper;
+    protected final AppUserDao appUserDao;
 
 
-    public List<ClientDtoFlat> findAll() {
-        return clientDao.getAllClient();
+    public List<ClientDto> findAll() {
+        return clientMapper.toDtoList(clientDao.findAll());
     }
 
+    public ClientDto findById(int id) throws ClientService.ClientNotFoundException {
+        Client client = clientDao.findById(id)
+                .orElseThrow(ClientService.ClientNotFoundException::new);
 
-    public Optional<ClientDtoFlat> findDtoById(int id) {
-        return clientDao.getClient(id);
+        return clientMapper.toDto(client);
     }
 
-
-    public Optional<Client> findById(int id) {
-        return clientDao.findById(id);
-    }
-
-
-    public Client save(Client client) {
+    public ClientDto save(ClientDto dto) {
+        Client client = clientMapper.toEntity(dto);
         client.setIdAppUser(null);
-        return clientDao.save(client);
+        Client saved = clientDao.save(client);
+
+        return clientMapper.toDto(saved);
     }
 
+    public void delete(int id) throws ClientService.ClientNotFoundException {
+        Client client = clientDao.findById(id)
+                .orElseThrow(ClientService.ClientNotFoundException::new);
 
-    public void delete(Client client) {
         clientDao.delete(client);
     }
 
+    public ClientDto update(int id, ClientDto dto)
+            throws ClientService.ClientNotFoundException, AppUserService.EmailAlreadyUsedException {
 
-    public Client update(Client clientToUpdate, int id) throws ClientNotFoundException {
+        if (appUserDao.existsByEmail(dto.email())) {
+            throw new AppUserService.EmailAlreadyUsedException();
+        }
+
         Client currentClient = clientDao.findById(id)
-                .orElseThrow(ClientNotFoundException::new);
+                .orElseThrow(ClientService.ClientNotFoundException::new);
 
-        currentClient.setImportance(clientToUpdate.getImportance());
+        clientMapper.updateEntityFromDto(dto, currentClient);
 
-        return clientDao.save(currentClient);
+        return clientMapper.toDto(clientDao.save(currentClient));
     }
 
-    public ClientDtoFlat toDto(Client client) {
-        return new ClientDtoFlat(
-                client.getIdAppUser(),
-                client.getFirstName(),
-                client.getLastName(),
-                client.getEmail(),
-                client.getPhoneNumber(),
-                client.getImportance()
-        );
+    public void updatePassword(int id, PasswordDto dto)
+            throws ClientService.ClientNotFoundException, ClientService.BadPasswordException {
+
+        Client user = clientDao.findById(id)
+                .orElseThrow(ClientService.ClientNotFoundException::new);
+
+        // vérifier ancien mot de passe
+        if (!Objects.equals(user.getPassword(), dto.oldPassword())) {
+            throw new ClientService.BadPasswordException();
+        }
+
+        user.setPassword(dto.newPassword());
+
+        clientDao.save(user);
     }
 }

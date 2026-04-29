@@ -1,11 +1,7 @@
 package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.AppUserDto;
-import com.mns.cda.suivimns.dto.flat.AppUserDtoFlat;
 import com.mns.cda.suivimns.dto.flat.PasswordDto;
-import com.mns.cda.suivimns.model.AppUser;
-import com.mns.cda.suivimns.model.groups.OnCreate;
-import com.mns.cda.suivimns.service.AppUserService;
 import com.mns.cda.suivimns.service.AppUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -15,11 +11,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @Tag(name = "Utilisateur", description = "Gestion des utilisateurs")
 @RestController
@@ -83,10 +77,10 @@ public class AppUserController {
             @ApiResponse(responseCode = "404", description = "Utilisateur non trouvé"),
             @ApiResponse(responseCode = "400", description = "Email déja utilisé")})
     @PatchMapping("/{id}")
-    public ResponseEntity<AppUser> update(@PathVariable int id, @RequestBody @Valid AppUserDto dto) {
+    public ResponseEntity<AppUserDto> update(@PathVariable int id, @RequestBody @Valid AppUserDto dto) {
 
         try {
-            AppUser user = appUserService.update(dto, id);
+            AppUserDto user = appUserService.update(id, dto);
             return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (AppUserService.AppUserNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

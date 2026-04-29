@@ -1,8 +1,6 @@
 package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.AssignmentDto;
-import com.mns.cda.suivimns.model.Assignment;
-import com.mns.cda.suivimns.service.AssignmentService;
 import com.mns.cda.suivimns.service.AssignmentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -15,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @CrossOrigin

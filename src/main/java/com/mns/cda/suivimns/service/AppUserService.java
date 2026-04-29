@@ -1,15 +1,15 @@
 package com.mns.cda.suivimns.service;
 
 import com.mns.cda.suivimns.dao.AppUserDao;
-import com.mns.cda.suivimns.dto.flat.AppUserDtoFlat;
+import com.mns.cda.suivimns.dto.AppUserDto;
 import com.mns.cda.suivimns.dto.flat.PasswordDto;
+import com.mns.cda.suivimns.mapper.AppUserMapper;
 import com.mns.cda.suivimns.model.AppUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,48 +25,48 @@ public class AppUserService {
 
 
     protected final AppUserDao appUserDao;
+    protected final AppUserMapper appUserMapper;
+    
 
-    public List<AppUser> findAll() {
-        return appUserDao.findAll();
+    public List<AppUserDto> findAll() {
+        return appUserMapper.toDtoList(appUserDao.findAll());
     }
 
-    public Optional<AppUser> findById(int id) {
-        return appUserDao.findById(id);
+    public AppUserDto findById(int id) throws AppUserNotFoundException {
+        AppUser appUser = appUserDao.findById(id)
+                .orElseThrow(AppUserService.AppUserNotFoundException::new);
+
+        return appUserMapper.toDto(appUser);
     }
 
-    public AppUser save(AppUser appUser) {
+    public AppUserDto save(AppUserDto dto) {
+        AppUser appUser = appUserMapper.toEntity(dto);
         appUser.setIdAppUser(null);
-        return appUserDao.save(appUser);
+        AppUser saved = appUserDao.save(appUser);
+
+        return appUserMapper.toDto(saved);
     }
 
-    public void delete(AppUser appUser) {
+    public void delete(int id) throws AppUserNotFoundException {
+        AppUser appUser = appUserDao.findById(id)
+                .orElseThrow(AppUserService.AppUserNotFoundException::new);
+
         appUserDao.delete(appUser);
     }
 
-    public AppUser update(AppUserDtoFlat dto, int id)
+    public AppUserDto update(int id, AppUserDto dto)
             throws AppUserNotFoundException, EmailAlreadyUsedException {
 
-        AppUser user = appUserDao.findById(id)
-                .orElseThrow(AppUserNotFoundException::new);
-
-        if (dto.firstName() != null) {
-            user.setFirstName(dto.firstName());
+        if (appUserDao.existsByEmail(dto.email())) {
+            throw new EmailAlreadyUsedException();
         }
 
-        if (dto.lastName() != null) {
-            user.setLastName(dto.lastName());
-        }
+        AppUser currentAppUser = appUserDao.findById(id)
+                .orElseThrow(AppUserService.AppUserNotFoundException::new);
 
-        if (dto.email() != null) {
-            // 🔥 idéalement vérifier unicité ici
-            user.setEmail(dto.email());
-        }
+        appUserMapper.updateEntityFromDto(dto, currentAppUser);
 
-        if (dto.phoneNumber() != null) {
-            user.setPhoneNumber(dto.phoneNumber());
-        }
-
-        return appUserDao.save(user);
+        return appUserMapper.toDto(appUserDao.save(currentAppUser));
     }
 
     public void updatePassword(int id, PasswordDto dto)
@@ -84,4 +84,5 @@ public class AppUserService {
 
         appUserDao.save(user);
     }
+
 }
