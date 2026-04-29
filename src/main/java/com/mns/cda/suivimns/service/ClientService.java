@@ -17,8 +17,7 @@ import java.util.Objects;
 public class ClientService {
 
     // Classe d'erreur
-    public static class ClientNotFoundException extends Exception {
-    }
+    public static class ClientNotFoundException extends Exception {}
 
     public static class BadPasswordException extends Exception {}
 

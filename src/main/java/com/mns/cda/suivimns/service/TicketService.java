@@ -1,10 +1,12 @@
 package com.mns.cda.suivimns.service;
 
 import com.mns.cda.suivimns.dao.*;
+import com.mns.cda.suivimns.dto.TicketDto;
 import com.mns.cda.suivimns.dto.flat.TicketCreation;
 import com.mns.cda.suivimns.dto.flat.TicketFullWithLatest;
 import com.mns.cda.suivimns.dto.flat.TicketResponse;
 import com.mns.cda.suivimns.dto.flat.TicketUpdatedDto;
+import com.mns.cda.suivimns.mapper.TicketMapper;
 import com.mns.cda.suivimns.model.*;
 import com.mns.cda.suivimns.model.keys.ClassificationKey;
 import jakarta.transaction.Transactional;
@@ -24,6 +26,8 @@ public class TicketService  {
     }
 
     protected final TicketDao ticketDao;
+    protected final TicketMapper ticketMapper;
+
     private final ThemeDao themeDao;
     protected final HistoryService iHistoryService;
     protected final ClassificationDao classificationDao;
@@ -33,12 +37,15 @@ public class TicketService  {
     protected final UrgencyDao urgencyDao;
     protected final VersionDao versionDao;
 
-    public List<TicketResponse> findAllDto() {
-        return ticketDao.findAllDto();
+    public List<TicketDto> findAll() {
+        return ticketMapper.toDtoList(ticketDao.findAll());
     }
 
-    public Optional<Ticket> findById(int id) {
-        return ticketDao.findById(id);
+    public TicketDto findById(int id) throws TicketNotFoundException {
+        Ticket ticket = ticketDao.findById(id)
+                .orElseThrow(TicketService.TicketNotFoundException::new);
+
+        return ticketMapper.toDto(ticket);
     }
 
 
@@ -50,34 +57,31 @@ public class TicketService  {
         return ticketDao.returnTicketAttributed(id);
     }
 
-    public Ticket save(Ticket ticket) {
+    public TicketDto save(TicketDto dto) {
+        Ticket ticket = ticketMapper.toEntity(dto);
         ticket.setIdTicket(null);
         ticket.setFinalPriority(ticket.getInitialPriority());
         ticket.setOpenDate(null);
         ticket.setModificationDate(null);
-        return ticketDao.save(ticket);
+        Ticket saved = ticketDao.save(ticket);
+
+        return ticketMapper.toDto(saved);
     }
 
-    public void delete(Ticket ticket) {
+    public void delete(int id) throws TicketNotFoundException {
+        Ticket ticket = ticketDao.findById(id)
+                .orElseThrow(TicketService.TicketNotFoundException::new);
+
         ticketDao.delete(ticket);
     }
 
-    public TicketUpdatedDto update(TicketUpdatedDto ticketToUpdate, int id) throws TicketNotFoundException {
+    public TicketDto update(int id, TicketDto ticketToUpdate) throws TicketNotFoundException {
         Ticket currentTicket = ticketDao.findById(id)
-                .orElseThrow(TicketNotFoundException::new);
+                .orElseThrow(TicketService.TicketNotFoundException::new);
 
-        currentTicket.setTitle(ticketToUpdate.title());
-        currentTicket.setDescription(ticketToUpdate.description());
-        currentTicket.setCallDuration(ticketToUpdate.callDuration());
+        ticketMapper.updateEntityFromDto(ticketToUpdate, currentTicket);
 
-        Ticket ticketSaved = ticketDao.save(currentTicket);
-
-        return new TicketUpdatedDto(
-                ticketSaved.getIdTicket(),
-                ticketSaved.getTitle(),
-                ticketSaved.getDescription(),
-                ticketSaved.getFinalPriority(),
-                ticketSaved.getCallDuration());
+        return ticketMapper.toDto(ticketDao.save(currentTicket));
     }
 
     public Ticket forceChangePriority(int priority, int id) throws TicketNotFoundException {

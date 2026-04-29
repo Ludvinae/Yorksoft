@@ -1,6 +1,10 @@
 package com.mns.cda.suivimns.service;
 
 import com.mns.cda.suivimns.dao.ThemeDao;
+import com.mns.cda.suivimns.dao.ThemeDao;
+import com.mns.cda.suivimns.dto.ThemeDto;
+import com.mns.cda.suivimns.mapper.ThemeMapper;
+import com.mns.cda.suivimns.model.Theme;
 import com.mns.cda.suivimns.model.Theme;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,35 +20,41 @@ public class ThemeService {
     }
 
     protected final ThemeDao themeDao;
+    protected final ThemeMapper themeMapper;
 
-    public List<Theme> findAll() {
-        return themeDao.findAll();
+    public List<ThemeDto> findAll() {
+        return themeMapper.toDtoList(themeDao.findAll());
     }
 
-    public Optional<Theme> findById(int id) {
-        return themeDao.findById(id);
+    public ThemeDto findById(int id) throws ThemeService.ThemeNotFoundException {
+        Theme theme = themeDao.findById(id)
+                .orElseThrow(ThemeService.ThemeNotFoundException::new);
+
+        return themeMapper.toDto(theme);
     }
 
-    public Optional<Theme> findByDesignation(String designation) {
-        return themeDao.findByDesignation(designation);
-    }
-
-    public Theme save(Theme theme) {
+    public ThemeDto save(ThemeDto dto) {
+        Theme theme = themeMapper.toEntity(dto);
         theme.setIdTheme(null);
-        return themeDao.save(theme);
+        Theme saved = themeDao.save(theme);
+
+        return themeMapper.toDto(saved);
     }
 
-    public void delete(Theme theme) {
+    public void delete(int id) throws ThemeService.ThemeNotFoundException {
+        Theme theme = themeDao.findById(id)
+                .orElseThrow(ThemeService.ThemeNotFoundException::new);
+
         themeDao.delete(theme);
     }
 
-    public Theme update(Theme themeToUpdate, int id) throws ThemeNotFoundException {
+    public ThemeDto update(int id, ThemeDto themeToUpdate) throws ThemeService.ThemeNotFoundException {
+
         Theme currentTheme = themeDao.findById(id)
-                .orElseThrow(ThemeNotFoundException::new);
+                .orElseThrow(ThemeService.ThemeNotFoundException::new);
 
-        currentTheme.setDesignation(themeToUpdate.getDesignation());
-        currentTheme.setDescription(themeToUpdate.getDescription());
+        themeMapper.updateEntityFromDto(themeToUpdate, currentTheme);
 
-        return themeDao.save(currentTheme);
+        return themeMapper.toDto(themeDao.save(currentTheme));
     }
 }

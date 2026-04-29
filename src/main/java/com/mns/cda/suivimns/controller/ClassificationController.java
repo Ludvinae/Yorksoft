@@ -35,17 +35,18 @@ public class ClassificationController {
     @Operation(summary = "Récupére une classification en fonction de son ID")
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Classification trouvée"),
             @ApiResponse(responseCode = "404", description = "Classification non trouvée")})
-    @GetMapping("/{id}")
-    public ResponseEntity<ClassificationDto> getById(@PathVariable int id) {
+    @GetMapping("/{idTicket}/{idTheme}")
+    public ResponseEntity<ClassificationDto> getById(@PathVariable int idTicket, @PathVariable int idTheme) {
 
         try {
-            return new ResponseEntity<>(classificationService.findById(id) , HttpStatus.OK);
+            return new ResponseEntity<>(classificationService.findById(idTicket, idTheme) , HttpStatus.OK);
         } catch (ClassificationService.ClassificationNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
-
+    // Asignation d'une thematique a un ticket fait par le ticket directement ?
+    /*
     @Operation(summary = "Crée une nouvelle classification")
     @ApiResponses({@ApiResponse(responseCode = "201", description = "Classification crée"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
@@ -53,6 +54,8 @@ public class ClassificationController {
     public ResponseEntity<ClassificationDto> create(@RequestBody @Valid ClassificationDto classification) {
         return new ResponseEntity<>(classificationService.save(classification), HttpStatus.CREATED);
     }
+
+     */
 
 
     // Pas de methode Delete et Update ici, on ne change pas l'historisation apres les faits

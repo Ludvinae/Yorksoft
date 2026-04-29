@@ -1,6 +1,9 @@
 package com.mns.cda.suivimns.service;
 
 import com.mns.cda.suivimns.dao.ArticleDao;
+import com.mns.cda.suivimns.dto.ArticleDto;
+import com.mns.cda.suivimns.mapper.ArticleMapper;
+import com.mns.cda.suivimns.model.Article;
 import com.mns.cda.suivimns.model.Article;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,33 +20,41 @@ public class ArticleService {
     }
 
     protected final ArticleDao articleDao;
+    protected final ArticleMapper articleMapper;
 
-    public List<Article> findAll() {
-        return articleDao.findAll();
+    public List<ArticleDto> findAll() {
+        return articleMapper.toDtoList(articleDao.findAll());
     }
 
-    public Optional<Article> findById(int id) {
-        return articleDao.findById(id);
+    public ArticleDto findById(int id) throws ArticleService.ArticleNotFoundException {
+        Article article = articleDao.findById(id)
+                .orElseThrow(ArticleService.ArticleNotFoundException::new);
+
+        return articleMapper.toDto(article);
     }
 
-    public Article save(Article article) {
+    public ArticleDto save(ArticleDto dto) {
+        Article article = articleMapper.toEntity(dto);
         article.setIdArticle(null);
-        article.setModificationDate(null);
-        article.setCreationDate(LocalDateTime.now());
+        Article saved = articleDao.save(article);
 
-        return articleDao.save(article);
+        return articleMapper.toDto(saved);
     }
 
-    public void delete(Article article) {
+    public void delete(int id) throws ArticleService.ArticleNotFoundException {
+        Article article = articleDao.findById(id)
+                .orElseThrow(ArticleService.ArticleNotFoundException::new);
+
         articleDao.delete(article);
     }
 
-    public Article update(Article articleToUpdate, int id) throws ArticleNotFoundException {
+    public ArticleDto update(int id, ArticleDto articleToUpdate) throws ArticleService.ArticleNotFoundException {
+
         Article currentArticle = articleDao.findById(id)
-                .orElseThrow(ArticleNotFoundException::new);
+                .orElseThrow(ArticleService.ArticleNotFoundException::new);
 
-        currentArticle.setContent(articleToUpdate.getContent());
+        articleMapper.updateEntityFromDto(articleToUpdate, currentArticle);
 
-        return articleDao.save(currentArticle);
+        return articleMapper.toDto(articleDao.save(currentArticle));
     }
 }

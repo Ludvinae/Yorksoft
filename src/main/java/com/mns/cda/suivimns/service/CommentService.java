@@ -1,6 +1,10 @@
 package com.mns.cda.suivimns.service;
 
 import com.mns.cda.suivimns.dao.CommentDao;
+import com.mns.cda.suivimns.dao.CommentDao;
+import com.mns.cda.suivimns.dto.CommentDto;
+import com.mns.cda.suivimns.mapper.CommentMapper;
+import com.mns.cda.suivimns.model.Comment;
 import com.mns.cda.suivimns.model.Comment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,36 +21,41 @@ public class CommentService  {
     }
 
     protected final CommentDao commentDao;
+    protected final CommentMapper commentMapper;
 
-
-    public List<Comment> findAll() {
-        return commentDao.findAll();
+    public List<CommentDto> findAll() {
+        return commentMapper.toDtoList(commentDao.findAll());
     }
 
-    public Optional<Comment> findById(int id) {
-        return commentDao.findById(id);
+    public CommentDto findById(int id) throws CommentService.CommentNotFoundException {
+        Comment comment = commentDao.findById(id)
+                .orElseThrow(CommentService.CommentNotFoundException::new);
+
+        return commentMapper.toDto(comment);
     }
 
-    public Comment save(Comment comment) {
+    public CommentDto save(CommentDto dto) {
+        Comment comment = commentMapper.toEntity(dto);
         comment.setIdComment(null);
-        comment.setDateSent(null);
-        comment.setLastModification(null);
-        return commentDao.save(comment);
+        Comment saved = commentDao.save(comment);
+
+        return commentMapper.toDto(saved);
     }
 
+    public void delete(int id) throws CommentService.CommentNotFoundException {
+        Comment comment = commentDao.findById(id)
+                .orElseThrow(CommentService.CommentNotFoundException::new);
 
-    public void delete(Comment comment) {
         commentDao.delete(comment);
     }
 
+    public CommentDto update(int id, CommentDto commentToUpdate) throws CommentService.CommentNotFoundException {
 
-    public Comment update(Comment commentToUpdate, int id) throws CommentNotFoundException {
         Comment currentComment = commentDao.findById(id)
-                .orElseThrow(CommentNotFoundException::new);
+                .orElseThrow(CommentService.CommentNotFoundException::new);
 
-        // Modification des champs qui sont authorisés à changer
-        currentComment.setContent(commentToUpdate.getContent());
+        commentMapper.updateEntityFromDto(commentToUpdate, currentComment);
 
-        return commentDao.save(currentComment);
+        return commentMapper.toDto(commentDao.save(currentComment));
     }
 }

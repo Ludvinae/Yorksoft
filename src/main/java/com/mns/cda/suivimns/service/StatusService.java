@@ -1,6 +1,10 @@
 package com.mns.cda.suivimns.service;
 
 import com.mns.cda.suivimns.dao.StatusDao;
+import com.mns.cda.suivimns.dao.StatusDao;
+import com.mns.cda.suivimns.dto.StatusDto;
+import com.mns.cda.suivimns.mapper.StatusMapper;
+import com.mns.cda.suivimns.model.Status;
 import com.mns.cda.suivimns.model.Status;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,35 +20,41 @@ public class StatusService {
     }
 
     protected final StatusDao statusDao;
+    protected final StatusMapper statusMapper;
 
-    public List<Status> findAll() {
-        return statusDao.findAll();
+    public List<StatusDto> findAll() {
+        return statusMapper.toDtoList(statusDao.findAll());
     }
 
-    public Optional<Status> findById(int id) {
-        return statusDao.findById(id);
+    public StatusDto findById(int id) throws StatusService.StatusNotFoundException {
+        Status status = statusDao.findById(id)
+                .orElseThrow(StatusService.StatusNotFoundException::new);
+
+        return statusMapper.toDto(status);
     }
 
-    public Optional<Status> findByDesignation(String designation) {
-        return statusDao.findByDesignation(designation);
-    }
-
-    public Status save(Status status) {
+    public StatusDto save(StatusDto dto) {
+        Status status = statusMapper.toEntity(dto);
         status.setIdStatus(null);
-        return statusDao.save(status);
+        Status saved = statusDao.save(status);
+
+        return statusMapper.toDto(saved);
     }
 
-    public void delete(Status status) {
+    public void delete(int id) throws StatusService.StatusNotFoundException {
+        Status status = statusDao.findById(id)
+                .orElseThrow(StatusService.StatusNotFoundException::new);
+
         statusDao.delete(status);
     }
 
-    public Status update(Status statusToUpdate, int id) throws StatusNotFoundException {
+    public StatusDto update(int id, StatusDto statusToUpdate) throws StatusService.StatusNotFoundException {
+
         Status currentStatus = statusDao.findById(id)
-                .orElseThrow(StatusNotFoundException::new);
+                .orElseThrow(StatusService.StatusNotFoundException::new);
 
-        currentStatus.setDesignation(statusToUpdate.getDesignation());
-        currentStatus.setDisplayOrder(statusToUpdate.getDisplayOrder());
+        statusMapper.updateEntityFromDto(statusToUpdate, currentStatus);
 
-        return statusDao.save(currentStatus);
+        return statusMapper.toDto(statusDao.save(currentStatus));
     }
 }

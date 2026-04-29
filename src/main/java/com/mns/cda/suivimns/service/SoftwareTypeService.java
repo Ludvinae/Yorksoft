@@ -1,6 +1,10 @@
 package com.mns.cda.suivimns.service;
 
 import com.mns.cda.suivimns.dao.SoftwareTypeDao;
+import com.mns.cda.suivimns.dao.SoftwareTypeDao;
+import com.mns.cda.suivimns.dto.SoftwareTypeDto;
+import com.mns.cda.suivimns.mapper.SoftwareTypeMapper;
+import com.mns.cda.suivimns.model.SoftwareType;
 import com.mns.cda.suivimns.model.SoftwareType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,30 +20,41 @@ public class SoftwareTypeService  {
     }
 
     protected final SoftwareTypeDao softwareTypeDao;
+    protected final SoftwareTypeMapper softwareTypeMapper;
 
-    public List<SoftwareType> findAll() {
-        return softwareTypeDao.findAll();
+    public List<SoftwareTypeDto> findAll() {
+        return softwareTypeMapper.toDtoList(softwareTypeDao.findAll());
     }
 
-    public Optional<SoftwareType> findById(int id) {
-        return softwareTypeDao.findById(id);
+    public SoftwareTypeDto findById(int id) throws SoftwareTypeService.SoftwareTypeNotFoundException {
+        SoftwareType softwareType = softwareTypeDao.findById(id)
+                .orElseThrow(SoftwareTypeService.SoftwareTypeNotFoundException::new);
+
+        return softwareTypeMapper.toDto(softwareType);
     }
 
-    public SoftwareType save(SoftwareType softwareType) {
+    public SoftwareTypeDto save(SoftwareTypeDto dto) {
+        SoftwareType softwareType = softwareTypeMapper.toEntity(dto);
         softwareType.setIdSoftwareType(null);
-        return softwareTypeDao.save(softwareType);
+        SoftwareType saved = softwareTypeDao.save(softwareType);
+
+        return softwareTypeMapper.toDto(saved);
     }
 
-    public void delete(SoftwareType softwareType) {
+    public void delete(int id) throws SoftwareTypeService.SoftwareTypeNotFoundException {
+        SoftwareType softwareType = softwareTypeDao.findById(id)
+                .orElseThrow(SoftwareTypeService.SoftwareTypeNotFoundException::new);
+
         softwareTypeDao.delete(softwareType);
     }
 
-    public SoftwareType update(SoftwareType softwareTypeToUpdate, int id) throws SoftwareTypeNotFoundException {
+    public SoftwareTypeDto update(int id, SoftwareTypeDto softwareTypeToUpdate) throws SoftwareTypeService.SoftwareTypeNotFoundException {
+
         SoftwareType currentSoftwareType = softwareTypeDao.findById(id)
-                .orElseThrow(SoftwareTypeNotFoundException::new);
+                .orElseThrow(SoftwareTypeService.SoftwareTypeNotFoundException::new);
 
-        currentSoftwareType.setDesignation(softwareTypeToUpdate.getDesignation());
+        softwareTypeMapper.updateEntityFromDto(softwareTypeToUpdate, currentSoftwareType);
 
-        return softwareTypeDao.save(currentSoftwareType);
+        return softwareTypeMapper.toDto(softwareTypeDao.save(currentSoftwareType));
     }
 }

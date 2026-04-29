@@ -1,6 +1,10 @@
 package com.mns.cda.suivimns.service;
 
 import com.mns.cda.suivimns.dao.LicenseDao;
+import com.mns.cda.suivimns.dao.LicenseDao;
+import com.mns.cda.suivimns.dto.LicenseDto;
+import com.mns.cda.suivimns.mapper.LicenseMapper;
+import com.mns.cda.suivimns.model.License;
 import com.mns.cda.suivimns.model.License;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,30 +20,41 @@ public class LicenseService  {
     }
 
     protected final LicenseDao licenseDao;
+    protected final LicenseMapper licenseMapper;
 
-    public List<License> findAll() {
-        return licenseDao.findAll();
+    public List<LicenseDto> findAll() {
+        return licenseMapper.toDtoList(licenseDao.findAll());
     }
 
-    public Optional<License> findById(int id) {
-        return licenseDao.findById(id);
+    public LicenseDto findById(int id) throws LicenseService.LicenseNotFoundException {
+        License license = licenseDao.findById(id)
+                .orElseThrow(LicenseService.LicenseNotFoundException::new);
+
+        return licenseMapper.toDto(license);
     }
 
-    public License save(License license) {
+    public LicenseDto save(LicenseDto dto) {
+        License license = licenseMapper.toEntity(dto);
         license.setIdLicense(null);
-        return licenseDao.save(license);
+        License saved = licenseDao.save(license);
+
+        return licenseMapper.toDto(saved);
     }
 
-    public void delete(License license) {
+    public void delete(int id) throws LicenseService.LicenseNotFoundException {
+        License license = licenseDao.findById(id)
+                .orElseThrow(LicenseService.LicenseNotFoundException::new);
+
         licenseDao.delete(license);
     }
 
-    public License update(License licenseToUpdate, int id) throws LicenseNotFoundException {
+    public LicenseDto update(int id, LicenseDto licenseToUpdate) throws LicenseService.LicenseNotFoundException {
+
         License currentLicense = licenseDao.findById(id)
-                .orElseThrow(LicenseNotFoundException::new);
+                .orElseThrow(LicenseService.LicenseNotFoundException::new);
 
-        currentLicense.setExpirationDate(licenseToUpdate.getExpirationDate());
+        licenseMapper.updateEntityFromDto(licenseToUpdate, currentLicense);
 
-        return licenseDao.save(currentLicense);
+        return licenseMapper.toDto(licenseDao.save(currentLicense));
     }
 }

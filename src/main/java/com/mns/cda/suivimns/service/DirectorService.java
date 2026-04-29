@@ -18,8 +18,7 @@ public class DirectorService  {
 
 
     // Classe d'erreur
-    public static class DirectorNotFoundException extends Exception {
-    }
+    public static class DirectorNotFoundException extends Exception {}
 
     public static class BadPasswordException extends Exception {}
 

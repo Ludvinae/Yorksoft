@@ -1,6 +1,9 @@
 package com.mns.cda.suivimns.service;
 
 import com.mns.cda.suivimns.dao.AssignmentDao;
+import com.mns.cda.suivimns.dto.AssignmentDto;
+import com.mns.cda.suivimns.mapper.AssignmentMapper;
+import com.mns.cda.suivimns.model.Assignment;
 import com.mns.cda.suivimns.model.Assignment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,35 +23,26 @@ public class AssignmentService {
     }
 
     protected final AssignmentDao assignmentDao;
+    protected final AssignmentMapper assignmentMapper;
 
-    public List<Assignment> findAll() {
-        return assignmentDao.findAll();
+    public List<AssignmentDto> findAll() {
+        return assignmentMapper.toDtoList(assignmentDao.findAll());
     }
 
-    public Optional<Assignment> findById(int id) {
-        return assignmentDao.findById(id);
+    public AssignmentDto findById(int id) throws AssignmentService.AssignmentNotFoundException {
+        Assignment assignment = assignmentDao.findById(id)
+                .orElseThrow(AssignmentService.AssignmentNotFoundException::new);
+
+        return assignmentMapper.toDto(assignment);
     }
 
-    public void modify(Assignment assignment, int id) {
-        assignment.setIdAssignment(id);
-        assignment.setAssignmentDate(assignment.getAssignmentDate());
-        assignmentDao.save(assignment);
-    }
-
-    public Assignment firstSave(Assignment assignment) {
+    public AssignmentDto save(AssignmentDto dto) {
+        Assignment assignment = assignmentMapper.toEntity(dto);
         assignment.setIdAssignment(null);
-        assignment.setAssignmentDate(LocalDateTime.now());
-        return assignmentDao.save(assignment);
+        Assignment saved = assignmentDao.save(assignment);
+
+        return assignmentMapper.toDto(saved);
     }
 
-    public void close(Assignment assignment, int id) {
-        assignment.setIdAssignment(id);
-        assignment.setAssignmentDate(assignment.getAssignmentDate());
-        assignment.setTicket(assignment.getTicket());
-        assignment.setManager(assignment.getManager());
-        assignment.setTechnician(assignment.getTechnician());
-        assignment.setEndDate(LocalDateTime.now());
-        assignmentDao.save(assignment);
-    }
 
 }

@@ -3,10 +3,10 @@ package com.mns.cda.suivimns.service;
 import com.mns.cda.suivimns.dao.AppUserDao;
 import com.mns.cda.suivimns.dao.HistoryDao;
 import com.mns.cda.suivimns.dao.StatusDao;
-import com.mns.cda.suivimns.model.AppUser;
-import com.mns.cda.suivimns.model.History;
-import com.mns.cda.suivimns.model.Status;
-import com.mns.cda.suivimns.model.Ticket;
+import com.mns.cda.suivimns.dao.HistoryDao;
+import com.mns.cda.suivimns.dto.HistoryDto;
+import com.mns.cda.suivimns.mapper.HistoryMapper;
+import com.mns.cda.suivimns.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,22 +26,17 @@ public class HistoryService {
     protected final HistoryDao historyDao;
     protected final StatusDao statusDao;
     protected final AppUserDao appUserDao;
+    protected final HistoryMapper historyMapper;
 
-    public List<History> findAll() {
-        return historyDao.findAll();
+    public List<HistoryDto> findAll() {
+        return historyMapper.toDtoList(historyDao.findAll());
     }
 
-    public Optional<History> findById(int id) {
-        return historyDao.findById(id);
-    }
+    public HistoryDto findById(int id) throws HistoryService.HistoryNotFoundException {
+        History history = historyDao.findById(id)
+                .orElseThrow(HistoryService.HistoryNotFoundException::new);
 
-    public History save(History history) {
-        history.setIdHistory(null);
-        return historyDao.save(history);
-    }
-
-    public void delete(History history) {
-        historyDao.delete(history);
+        return historyMapper.toDto(history);
     }
 
 

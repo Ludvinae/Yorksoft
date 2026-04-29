@@ -1,6 +1,10 @@
 package com.mns.cda.suivimns.service;
 
 import com.mns.cda.suivimns.dao.ImpactDao;
+import com.mns.cda.suivimns.dao.ImpactDao;
+import com.mns.cda.suivimns.dto.ImpactDto;
+import com.mns.cda.suivimns.mapper.ImpactMapper;
+import com.mns.cda.suivimns.model.Impact;
 import com.mns.cda.suivimns.model.Impact;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,32 +20,41 @@ public class ImpactService  {
     }
 
     protected final ImpactDao impactDao;
+    protected final ImpactMapper impactMapper;
 
-    public List<Impact> findAll() {
-        return impactDao.findAll();
+    public List<ImpactDto> findAll() {
+        return impactMapper.toDtoList(impactDao.findAll());
     }
 
-    public Optional<Impact> findById(int id) {
-        return impactDao.findById(id);
+    public ImpactDto findById(int id) throws ImpactService.ImpactNotFoundException {
+        Impact impact = impactDao.findById(id)
+                .orElseThrow(ImpactService.ImpactNotFoundException::new);
+
+        return impactMapper.toDto(impact);
     }
 
-    public Impact save(Impact impact) {
+    public ImpactDto save(ImpactDto dto) {
+        Impact impact = impactMapper.toEntity(dto);
         impact.setIdImpact(null);
-        return impactDao.save(impact);
+        Impact saved = impactDao.save(impact);
+
+        return impactMapper.toDto(saved);
     }
 
-    public void delete(Impact impact) {
+    public void delete(int id) throws ImpactService.ImpactNotFoundException {
+        Impact impact = impactDao.findById(id)
+                .orElseThrow(ImpactService.ImpactNotFoundException::new);
+
         impactDao.delete(impact);
     }
 
-    public Impact update(Impact impactToUpdate, int id) throws ImpactNotFoundException {
+    public ImpactDto update(int id, ImpactDto impactToUpdate) throws ImpactService.ImpactNotFoundException {
+
         Impact currentImpact = impactDao.findById(id)
-                .orElseThrow(ImpactNotFoundException::new);
+                .orElseThrow(ImpactService.ImpactNotFoundException::new);
 
-        currentImpact.setDesignation(impactToUpdate.getDesignation());
-        currentImpact.setPriorityFactor(impactToUpdate.getPriorityFactor());
-        currentImpact.setDescription(impactToUpdate.getDescription());
+        impactMapper.updateEntityFromDto(impactToUpdate, currentImpact);
 
-        return impactDao.save(currentImpact);
+        return impactMapper.toDto(impactDao.save(currentImpact));
     }
 }
