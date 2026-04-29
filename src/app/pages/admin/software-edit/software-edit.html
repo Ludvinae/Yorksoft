@@ -1,0 +1,37 @@
+<form [formGroup]="form" (ngSubmit)="onCreate()" >
+  <fieldset class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
+    <legend class="fieldset-legend">Creation de logiciel</legend>
+
+    <label class="label">Nom</label>
+    <input type="text" class="input" placeholder="Nom du logiciel" formControlName="name"/>
+
+    @if (form.get('name')?.hasError('required')) {
+      <span class="form-error">Le nom est obligatoire</span>
+    } @else if (form.get('name')?.hasError('maxlength')) {
+      <span class="form-error">Le nom doit comporter un maximum de 127 caracteres</span>
+    }
+
+    <label class="label">Description</label>
+    <textarea class="textarea h-24" placeholder="Description du logiciel" formControlName="description"></textarea>
+
+
+    <span class="label">Type de logiciel</span>
+    <select class="select" formControlName="idSoftwareType">
+      <option [ngValue]="null" disabled>Type de logiciel</option>
+
+      @for (softwareType of listSoftwareType(); track softwareType.idSoftwareType) {
+        <option [ngValue]="softwareType.idSoftwareType">
+          {{ softwareType.designation }}
+        </option>
+      }
+    </select>
+
+
+    <div >
+      <button type="button" class="btn btn-outline btn-xs sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl m3" routerLink="/" >Annuler</button>
+      <button type="submit" class="btn btn-primary btn-xs sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl m3">{{ softwareId() ? 'Modifier' : 'Créer' }}</button>
+    </div>
+
+
+  </fieldset>
+</form>

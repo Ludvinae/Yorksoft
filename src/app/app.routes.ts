@@ -7,6 +7,7 @@ import { Knowledge } from './pages/knowledge/knowledge';
 import { Settings } from './pages/settings/settings';
 import { NewTicket } from './pages/new-ticket/new-ticket';
 import { Dashboard } from './pages/dashboard/dashboard';
+import {SoftwareEdit} from './pages/admin/software-edit/software-edit';
 
 export const routes: Routes = [
   {
@@ -27,7 +28,7 @@ export const routes: Routes = [
   {
     path: 'new-ticket',
     component: NewTicket,
-    title: 'Nouveau ticket'
+    title: 'Nouveau ticket',
   },
   {
     path: 'clients',
@@ -43,6 +44,21 @@ export const routes: Routes = [
     path: 'settings',
     component: Settings,
     title: 'Réglages',
+  },
+  {
+    path: 'admin/software/create',
+    component: SoftwareEdit,
+    title: "Création d'un nouveau logiciel",
+  },
+  {
+    path: 'admin/software/update/:id',
+    component: SoftwareEdit,
+    title: "Modification du logiciel",
+  },
+  {
+    path: 'admin/software/:id',
+    component: SoftwareEdit,
+    title: "Détail du logiciel",
   },
   {
     path: '**',

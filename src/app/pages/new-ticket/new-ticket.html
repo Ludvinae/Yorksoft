@@ -3,7 +3,7 @@
     <span class="label">Logiciels</span>
     <select class="select">
       <option disabled selected>Choisir le logiciel</option>
-      @for (software of softwareSignal(); track software.idSoftware) {
+      @for (software of softwareSignal(); track $index) {
         <option>{{ software.name }}</option>
       }
     </select>

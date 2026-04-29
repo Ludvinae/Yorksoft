@@ -16,6 +16,6 @@ export class NewTicket {
   softwareService = inject(SoftwareService);
   //selectMapper = inject(SelectMapService)
 
-  softwareSignal = toSignal(this.softwareService.getSoftware(), { initialValue: [] });
+  softwareSignal = toSignal(this.softwareService.getAll(), { initialValue: [] });
 
 }
