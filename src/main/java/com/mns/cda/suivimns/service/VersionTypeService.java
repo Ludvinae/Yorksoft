@@ -34,6 +34,9 @@ public class VersionTypeService {
 
         VersionType type = typeMapper.toEntity(createDto);
         type.setIdVersionType(null);
+        if (type.getUrgencyMalus() == null) {
+            type.setUrgencyMalus((byte) 0);
+        }
         VersionType saved = versionTypeDao.save(type);
 
         return typeMapper.toDto(saved);

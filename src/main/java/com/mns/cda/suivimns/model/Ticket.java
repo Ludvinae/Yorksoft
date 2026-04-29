@@ -52,7 +52,7 @@ public class Ticket {
     protected Integer callDuration;
 
     @Column(nullable = false, updatable = false)
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY) // Empeche le changement de cette valeur meme avec le setter
+    //@JsonProperty(access = JsonProperty.Access.READ_ONLY) // Empeche le changement de cette valeur meme avec le setter
     protected Integer initialPriority;
 
     @Column(nullable = false)

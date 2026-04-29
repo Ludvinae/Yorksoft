@@ -58,14 +58,27 @@ public class TicketService  {
     }
 
     public TicketDto save(TicketDto dto) {
+
         Ticket ticket = ticketMapper.toEntity(dto);
+
+        int priority = getInitialPriorityCalcul(ticket);
+
         ticket.setIdTicket(null);
-        ticket.setFinalPriority(ticket.getInitialPriority());
+        ticket.setInitialPriority(priority);
+        ticket.setFinalPriority(priority);
         ticket.setOpenDate(null);
         ticket.setModificationDate(null);
-        Ticket saved = ticketDao.save(ticket);
+        ticket.setCloseDate(null);
 
-        return ticketMapper.toDto(saved);
+        Ticket ticketSaved = ticketDao.save(ticket);
+
+        // En attendant l'authentification
+        AppUser userBidon = new AppUser();
+        userBidon.setIdAppUser(1);
+
+        iHistoryService.updateHistory(ticketSaved, userBidon.getIdAppUser(), "Nouveau");
+
+        return ticketMapper.toDto(ticketSaved);
     }
 
     public void delete(int id) throws TicketNotFoundException {
@@ -115,7 +128,8 @@ public class TicketService  {
                 .orElseThrow(() -> new RuntimeException("Version introuvable"));
 
         // Automatic priority calcul
-        int priority = computePriority(impact.getPriorityFactor(), urgency.getPriorityFactor(), client.getImportance());
+        int priority = computePriority(impact.getPriorityFactor(), urgency.getPriorityFactor(),
+                client.getImportance(), version.getVersionType().getUrgencyMalus());
         ticket.setInitialPriority(priority);
         ticket.setFinalPriority(priority);
 
@@ -165,21 +179,30 @@ public class TicketService  {
 
 
     // Priorité
-
     private static final int[][] priorityMatrix =
             {{5, 4},
             {4, 3},
             {3, 2},
             {2, 1}};
 
-    public int computePriority(int impact, int urgence, int importance) {
+    public int computePriority(int impact, int urgency, int importance, int malus) {
         int finalImpact = Math.min(impact + importance, 4);
-        return priorityMatrix[finalImpact - 1][urgence - 1];
+        int finalUrgency = Math.max(urgency - malus, 1);
+        return priorityMatrix[finalImpact - 1][finalUrgency - 1];
+    }
+
+    private int getInitialPriorityCalcul(Ticket ticket) {
+        int impact = ticket.getImpact().getPriorityFactor();
+        int urgency = ticket.getUrgency().getPriorityFactor();
+        int importance = ticket.getClient().getImportance();
+        int malus = ticket.getVersion().getVersionType().getUrgencyMalus();
+
+        System.out.println(impact + " / " + urgency + " / " + importance + " / " + malus);
+        return computePriority(impact, urgency, importance, malus);
     }
 
 
     // Mapping
-
     public TicketResponse responseToDto(Ticket ticket) {
         Status status = iHistoryService.getStatus(ticket.getIdTicket());
         Theme theme = iClassificationService.getTheme(ticket.getIdTicket());
@@ -198,6 +221,4 @@ public class TicketService  {
                 status.getDesignation(),
                 theme.getDesignation());
     }
-
-
 }

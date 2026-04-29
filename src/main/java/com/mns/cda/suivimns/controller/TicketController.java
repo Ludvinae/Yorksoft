@@ -61,6 +61,22 @@ public class TicketController {
         return new ResponseEntity<>(ticketService.save(ticket), HttpStatus.CREATED);
     }
 
+/*
+    @Operation(
+            summary = "Créer un ticket",
+            description = "Crée un nouveau ticket à partir d’une demande client (description, urgence, impact, etc.)")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Ticket créé"),
+            @ApiResponse(responseCode = "400", description = "Données invalides")})
+    @PostMapping
+    public ResponseEntity<TicketResponse> create(@RequestBody @Valid TicketCreation ticketCreated) {
+
+        Ticket ticket = ticketService.createTicket(ticketCreated);
+
+        return new ResponseEntity<>(ticketService.responseToDto(ticket), HttpStatus.CREATED);
+    }
+
+ */
 
     @Operation(summary = "Efface une ticket selon son ID")
     @ApiResponses({@ApiResponse(responseCode = "204", description = "Ticket effacée"),
@@ -121,19 +137,6 @@ public class TicketController {
 
 
 
-    @Operation(
-            summary = "Créer un ticket",
-            description = "Crée un nouveau ticket à partir d’une demande client (description, urgence, impact, etc.)")
-    @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Ticket créé"),
-            @ApiResponse(responseCode = "400", description = "Données invalides")})
-    @PostMapping
-    public ResponseEntity<TicketResponse> create(@RequestBody @Validated(OnCreate.class) TicketCreation ticketCreated) {
-
-        Ticket ticket = ticketService.createTicket(ticketCreated);
-
-        return new ResponseEntity<>(ticketService.responseToDto(ticket), HttpStatus.CREATED);
-    }
 
 
 }

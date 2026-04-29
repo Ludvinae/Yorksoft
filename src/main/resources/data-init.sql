@@ -7,11 +7,11 @@ INSERT INTO software (name, description, id_software_type)
 VALUES ('Pexel', 'Le meilleur tableur du marché !', 1),
        ('Wise', 'Manager de paie accessible et performant', 3);
 
-INSERT INTO version_type (designation)
-VALUES ('Release'),
-       ('Release Candidate'),
-       ('Beta'),
-       ('Snapshot');
+INSERT INTO version_type (designation, urgency_malus)
+VALUES ('Release', 0),
+       ('Release Candidate', 0),
+       ('Beta', 1),
+       ('Snapshot', 1);
 
 INSERT INTO version (version_number, publication_date, id_version_type, id_software)
 VALUES ('1.0', '2011-11-11 14:30:00', 1, 1),
