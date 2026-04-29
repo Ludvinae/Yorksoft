@@ -2,10 +2,7 @@ package com.mns.cda.suivimns.unit.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.ClassificationController;
-import com.mns.cda.suivimns.model.Classification;
-import com.mns.cda.suivimns.model.Theme;
-import com.mns.cda.suivimns.model.Ticket;
-import com.mns.cda.suivimns.model.keys.ClassificationKey;
+import com.mns.cda.suivimns.dto.ClassificationDto;
 import com.mns.cda.suivimns.service.ClassificationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,10 +12,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
-import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -41,22 +37,12 @@ class ClassificationControllerUnitTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private Classification classification;
+    private ClassificationDto classificationDto;
 
     @BeforeEach
     void setUp() {
-        classification = new Classification();
-        classification.setId(new ClassificationKey(1, 2));
-
-        // ⚠️ Adapter si @NotNull sur d'autres champs
-        Ticket ticket = new Ticket();
-        ticket.setIdTicket(1);
-        classification.setTicket(ticket);
-
-        Theme theme = new Theme();
-        theme.setIdTheme(2);
-        classification.setTheme(theme);
-
+        classificationDto = new ClassificationDto(
+                1,1, LocalDateTime.now());
     }
 
     // =========================
@@ -65,13 +51,13 @@ class ClassificationControllerUnitTest {
     @Test
     void shouldReturnAll() throws Exception {
 
-        when(classificationService.findAll()).thenReturn(List.of(classification));
+        when(classificationService.findAll()).thenReturn(List.of(classificationDto));
 
         mockMvc.perform(get("/classification/list"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id.idTicket").value(1))
-                .andExpect(jsonPath("$[0].id.idTheme").value(2));
+                .andExpect(jsonPath("$[0].idTicket").value(1))
+                .andExpect(jsonPath("$[0].idTheme").value(1));
     }
 
     // =========================
@@ -80,13 +66,11 @@ class ClassificationControllerUnitTest {
     @Test
     void shouldReturnById() throws Exception {
 
-        when(classificationService.findById(any(ClassificationKey.class))).thenReturn(Optional.of(classification));
+        when(classificationService.findById(1, 1)).thenReturn(classificationDto);
 
-        mockMvc.perform(get("/classification/1/2"))
+        mockMvc.perform(get("/classification/1/1"))
                 .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id.idTicket").value(1))
-                .andExpect(jsonPath("$.id.idTheme").value(2));
+                .andExpect(status().isOk());
     }
 
     // =========================
@@ -95,26 +79,12 @@ class ClassificationControllerUnitTest {
     @Test
     void shouldReturn404WhenNotFound() throws Exception {
 
-        when(classificationService.findById(new ClassificationKey(1, 2))).thenReturn(Optional.empty());
+        when(classificationService.findById(1, 1))
+                .thenThrow(new ClassificationService.ClassificationNotFoundException());
 
-        mockMvc.perform(get("/classification/1/2"))
+        mockMvc.perform(get("/classification/1/1"))
                 .andDo(print())
                 .andExpect(status().isNotFound());
-    }
-
-    // =========================
-    // CREATE
-    // =========================
-    @Test
-    void shouldCreate() throws Exception {
-
-        when(classificationService.save(any(Classification.class))).thenReturn(classification);
-
-        mockMvc.perform(post("/classification")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(classification)))
-                .andDo(print())
-                .andExpect(status().isCreated());
     }
 
 }

@@ -2,7 +2,7 @@ package com.mns.cda.suivimns.unit.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.SoftwareTypeController;
-import com.mns.cda.suivimns.model.SoftwareType;
+import com.mns.cda.suivimns.dto.SoftwareTypeDto;
 import com.mns.cda.suivimns.service.SoftwareTypeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -36,15 +35,27 @@ class SoftwareTypeControllerUnitTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private SoftwareType softwareType;
+    private SoftwareTypeDto softwareTypeDto;
 
     @BeforeEach
     void setUp() {
-        softwareType = new SoftwareType();
-        softwareType.setIdSoftwareType(1);
-        softwareType.setDesignation("Test designation");
+        // DTO
+        softwareTypeDto = new SoftwareTypeDto(
+                1, "Test designation");
+    }
 
-        // ⚠️ Adapter si @NotNull sur d'autres champs
+    // =========================
+    // TEST DTO
+    // =========================
+    @Test
+    void shouldReturn400WhenCreateInvalid() throws Exception {
+
+        SoftwareTypeDto invalidDto = new SoftwareTypeDto(null,"");
+
+        mockMvc.perform(post("/software-type")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(invalidDto)))
+                .andExpect(status().isBadRequest());
     }
 
     // =========================
@@ -53,7 +64,7 @@ class SoftwareTypeControllerUnitTest {
     @Test
     void shouldReturnAll() throws Exception {
 
-        when(softwareTypeService.findAll()).thenReturn(List.of(softwareType));
+        when(softwareTypeService.findAll()).thenReturn(List.of(softwareTypeDto));
 
         mockMvc.perform(get("/software-type/list"))
                 .andDo(print())
@@ -68,7 +79,7 @@ class SoftwareTypeControllerUnitTest {
     @Test
     void shouldReturnById() throws Exception {
 
-        when(softwareTypeService.findById(1)).thenReturn(Optional.of(softwareType));
+        when(softwareTypeService.findById(1)).thenReturn(softwareTypeDto);
 
         mockMvc.perform(get("/software-type/1"))
                 .andDo(print())
@@ -83,7 +94,8 @@ class SoftwareTypeControllerUnitTest {
     @Test
     void shouldReturn404WhenNotFound() throws Exception {
 
-        when(softwareTypeService.findById(1)).thenReturn(Optional.empty());
+        when(softwareTypeService.findById(1))
+                .thenThrow(new SoftwareTypeService.SoftwareTypeNotFoundException());
 
         mockMvc.perform(get("/software-type/1"))
                 .andDo(print())
@@ -96,13 +108,14 @@ class SoftwareTypeControllerUnitTest {
     @Test
     void shouldCreate() throws Exception {
 
-        when(softwareTypeService.save(any(SoftwareType.class))).thenReturn(softwareType);
+        when(softwareTypeService.save(any(SoftwareTypeDto.class))).thenReturn(softwareTypeDto);
 
         mockMvc.perform(post("/software-type")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(softwareType)))
+                        .content(objectMapper.writeValueAsString(softwareTypeDto)))
                 .andDo(print())
                 .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.idSoftwareType").value(1))
                 .andExpect(jsonPath("$.designation").value("Test designation"));
     }
 
@@ -112,13 +125,13 @@ class SoftwareTypeControllerUnitTest {
     @Test
     void shouldDelete() throws Exception {
 
-        when(softwareTypeService.findById(1)).thenReturn(Optional.of(softwareType));
+        doNothing().when(softwareTypeService).delete(1);
 
         mockMvc.perform(delete("/software-type/1"))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
-        verify(softwareTypeService).delete(softwareType);
+        verify(softwareTypeService).delete(1);
     }
 
     // =========================
@@ -127,7 +140,8 @@ class SoftwareTypeControllerUnitTest {
     @Test
     void shouldReturn404WhenDeleteNotFound() throws Exception {
 
-        when(softwareTypeService.findById(1)).thenReturn(Optional.empty());
+        doThrow(new SoftwareTypeService.SoftwareTypeNotFoundException())
+                .when(softwareTypeService).delete(1);
 
         mockMvc.perform(delete("/software-type/1"))
                 .andDo(print())
@@ -140,11 +154,11 @@ class SoftwareTypeControllerUnitTest {
     @Test
     void shouldUpdate() throws Exception {
 
-        when(softwareTypeService.update(any(SoftwareType.class), eq(1))).thenReturn(softwareType);
+        when(softwareTypeService.update(eq(1), any(SoftwareTypeDto.class))).thenReturn(softwareTypeDto);
 
         mockMvc.perform(put("/software-type/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(softwareType)))
+                        .content(objectMapper.writeValueAsString(softwareTypeDto)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.designation").value("Test designation"));
@@ -156,12 +170,12 @@ class SoftwareTypeControllerUnitTest {
     @Test
     void shouldReturn404WhenUpdateFails() throws Exception {
 
-        when(softwareTypeService.update(any(SoftwareType.class), eq(1)))
+        when(softwareTypeService.update(eq(1), any(SoftwareTypeDto.class)))
                 .thenThrow(new SoftwareTypeService.SoftwareTypeNotFoundException());
 
         mockMvc.perform(put("/software-type/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(softwareType)))
+                        .content(objectMapper.writeValueAsString(softwareTypeDto)))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }

@@ -2,8 +2,7 @@ package com.mns.cda.suivimns.unit.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.AppUserController;
-import com.mns.cda.suivimns.dto.flat.AppUserDtoFlat;
-import com.mns.cda.suivimns.model.AppUser;
+import com.mns.cda.suivimns.dto.AppUserDto;
 import com.mns.cda.suivimns.service.AppUserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,7 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -37,16 +35,28 @@ class AppUserControllerUnitTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private AppUser appUser;
+    private AppUserDto appUserDto;
 
     @BeforeEach
     void setUp() {
-        appUser = new AppUser();
-        appUser.setIdAppUser(1);
-        appUser.setPassword("password");
+        // DTO
+        appUserDto = new AppUserDto(
+                1, "Test firstName", "Test lastName",
+                "Test@email.com", "Test phoneNumber");
+    }
 
-        // ⚠️ Adapter si @NotNull sur d'autres champs
+    // =========================
+    // TEST DTO
+    // =========================
+    @Test
+    void shouldReturn400WhenCreateInvalid() throws Exception {
 
+        AppUserDto invalidDto = new AppUserDto(null,"", null, "wrong email format",null);
+
+        mockMvc.perform(post("/user")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(invalidDto)))
+                .andExpect(status().isBadRequest());
     }
 
     // =========================
@@ -55,13 +65,13 @@ class AppUserControllerUnitTest {
     @Test
     void shouldReturnAll() throws Exception {
 
-        when(appUserService.findAll()).thenReturn(List.of(appUser));
+        when(appUserService.findAll()).thenReturn(List.of(appUserDto));
 
         mockMvc.perform(get("/user/list"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].idAppUser").value(1))
-                .andExpect(jsonPath("$[0].password").value("password"));
+                .andExpect(jsonPath("$[0].email").value("Test@email.com"));
     }
 
     // =========================
@@ -70,13 +80,13 @@ class AppUserControllerUnitTest {
     @Test
     void shouldReturnById() throws Exception {
 
-        when(appUserService.findById(1)).thenReturn(Optional.of(appUser));
+        when(appUserService.findById(1)).thenReturn(appUserDto);
 
         mockMvc.perform(get("/user/1"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.idAppUser").value(1))
-                .andExpect(jsonPath("$.password").value("password"));
+                .andExpect(jsonPath("$.email").value("Test@email.com"));
     }
 
     // =========================
@@ -85,7 +95,8 @@ class AppUserControllerUnitTest {
     @Test
     void shouldReturn404WhenNotFound() throws Exception {
 
-        when(appUserService.findById(1)).thenReturn(Optional.empty());
+        when(appUserService.findById(1))
+                .thenThrow(new AppUserService.AppUserNotFoundException());
 
         mockMvc.perform(get("/user/1"))
                 .andDo(print())
@@ -98,14 +109,15 @@ class AppUserControllerUnitTest {
     @Test
     void shouldCreate() throws Exception {
 
-        when(appUserService.save(any(AppUser.class))).thenReturn(appUser);
+        when(appUserService.save(any(AppUserDto.class))).thenReturn(appUserDto);
 
         mockMvc.perform(post("/user")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(appUser)))
+                        .content(objectMapper.writeValueAsString(appUserDto)))
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.password").value("password"));
+                .andExpect(jsonPath("$.idAppUser").value(1))
+                .andExpect(jsonPath("$.email").value("Test@email.com"));
     }
 
     // =========================
@@ -114,13 +126,13 @@ class AppUserControllerUnitTest {
     @Test
     void shouldDelete() throws Exception {
 
-        when(appUserService.findById(1)).thenReturn(Optional.of(appUser));
+        doNothing().when(appUserService).delete(1);
 
         mockMvc.perform(delete("/user/1"))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
-        verify(appUserService).delete(appUser);
+        verify(appUserService).delete(1);
     }
 
     // =========================
@@ -129,7 +141,8 @@ class AppUserControllerUnitTest {
     @Test
     void shouldReturn404WhenDeleteNotFound() throws Exception {
 
-        when(appUserService.findById(1)).thenReturn(Optional.empty());
+        doThrow(new AppUserService.AppUserNotFoundException())
+                .when(appUserService).delete(1);
 
         mockMvc.perform(delete("/user/1"))
                 .andDo(print())
@@ -142,15 +155,14 @@ class AppUserControllerUnitTest {
     @Test
     void shouldUpdate() throws Exception {
 
-        AppUserDtoFlat userDto = new AppUserDtoFlat("Jean", "Valjean", "valjean@test.com", "2222222");
-
-        when(appUserService.update(any(AppUserDtoFlat.class), eq(1))).thenReturn(appUser);
+        when(appUserService.update(eq(1), any(AppUserDto.class))).thenReturn(appUserDto);
 
         mockMvc.perform(patch("/user/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(userDto)))
+                        .content(objectMapper.writeValueAsString(appUserDto)))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.email").value("Test@email.com"));
     }
 
     // =========================
@@ -159,14 +171,12 @@ class AppUserControllerUnitTest {
     @Test
     void shouldReturn404WhenUpdateFails() throws Exception {
 
-        AppUserDtoFlat userDto = new AppUserDtoFlat("Jean", "Valjean", "valjean@test.com", "2222222");
-
-        when(appUserService.update(any(AppUserDtoFlat.class), eq(1)))
+        when(appUserService.update(eq(1), any(AppUserDto.class)))
                 .thenThrow(new AppUserService.AppUserNotFoundException());
 
         mockMvc.perform(patch("/user/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(userDto)))
+                        .content(objectMapper.writeValueAsString(appUserDto)))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }

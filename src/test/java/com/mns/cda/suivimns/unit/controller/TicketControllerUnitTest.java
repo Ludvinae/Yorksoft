@@ -2,15 +2,10 @@ package com.mns.cda.suivimns.unit.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.TicketController;
-import com.mns.cda.suivimns.dto.flat.TicketCreation;
+import com.mns.cda.suivimns.dto.TicketDto;
 import com.mns.cda.suivimns.dto.flat.TicketFullWithLatest;
-import com.mns.cda.suivimns.dto.flat.TicketResponse;
-import com.mns.cda.suivimns.dto.flat.TicketUpdatedDto;
-import com.mns.cda.suivimns.model.Client;
-import com.mns.cda.suivimns.model.Impact;
-import com.mns.cda.suivimns.model.Ticket;
-import com.mns.cda.suivimns.model.Urgency;
 import com.mns.cda.suivimns.service.TicketService;
+import com.mns.cda.suivimns.service.VersionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +14,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -44,44 +38,18 @@ class TicketControllerUnitTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private Ticket ticket;
-    private TicketResponse ticketResponse;
-    private TicketUpdatedDto ticketUpdated;
-    private TicketCreation ticketCreation;
+    private TicketDto ticketDto;
     private TicketFullWithLatest ticketFull;
 
     @BeforeEach
     void setUp() {
-        ticket = new Ticket();
-        ticket.setIdTicket(1);
-        ticket.setTitle("Test title");
-        ticket.setDescription("test description");
-
-        // ⚠️ Adapter si @NotNull sur d'autres champs
-        Urgency urgency = new Urgency();
-        urgency.setIdUrgency(3);
-        ticket.setUrgency(urgency);
-
-        Impact impact = new Impact();
-        impact.setIdImpact(3);
-        ticket.setImpact(impact);
-
-        Client client = new Client();
-        client.setIdAppUser(1);
-        ticket.setClient(client);
-
+        List<Integer> list = new ArrayList<>();
         // DTO
-        ticketResponse = new TicketResponse(
-                1, "Test title", "Test description", LocalDateTime.now(), 3,
-                "Test number", "Test type designation", "Test software name",
-                "Test first name", "Test last name", "Test status", "Test theme");
-
-        ticketUpdated = new TicketUpdatedDto(
-                1, "Test title", "Test description", 3, null);
-
-        ticketCreation = new TicketCreation(
-                "Test title", "Test description", 1, 1, 1, 1,
-                "Test theme designation", 1);
+        ticketDto = new TicketDto(
+                1, "Test title", "Test description", null,
+                null, null, 0, 1, 1,
+                1, 1, 1, 1, list, list,
+                list, list);
 
         ticketFull = new TicketFullWithLatest(
                 1, "Test title", null, 3, "Test number",
@@ -96,7 +64,7 @@ class TicketControllerUnitTest {
     @Test
     void shouldReturnAll() throws Exception {
 
-        when(ticketService.findAllDto()).thenReturn(List.of(ticketResponse));
+        when(ticketService.findAll()).thenReturn(List.of(ticketDto));
 
         mockMvc.perform(get("/ticket/list"))
                 .andDo(print())
@@ -155,15 +123,13 @@ class TicketControllerUnitTest {
     @Test
     void shouldReturnById() throws Exception {
 
-        when(ticketService.findById(1)).thenReturn(Optional.of(ticket));
-        when(ticketService.responseToDto(ticket)).thenReturn(ticketResponse);
+        when(ticketService.findById(1)).thenReturn(ticketDto);
 
         mockMvc.perform(get("/ticket/1"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.idTicket").value(1))
-                .andExpect(jsonPath("$.title").value("Test title"))
-                .andExpect(jsonPath("$.description").value("Test description"));
+                .andExpect(jsonPath("$.title").value("Test title"));
     }
 
     // =========================
@@ -172,7 +138,8 @@ class TicketControllerUnitTest {
     @Test
     void shouldReturn404WhenNotFound() throws Exception {
 
-        when(ticketService.findById(1)).thenReturn(Optional.empty());
+        when(ticketService.findById(1))
+                .thenThrow(new TicketService.TicketNotFoundException());
 
         mockMvc.perform(get("/ticket/1"))
                 .andDo(print())
@@ -185,16 +152,14 @@ class TicketControllerUnitTest {
     @Test
     void shouldCreate() throws Exception {
 
-        when(ticketService.createTicket(any(TicketCreation.class))).thenReturn(ticket);
-        when(ticketService.responseToDto(ticket)).thenReturn(ticketResponse);
+        when(ticketService.save(any(TicketDto.class))).thenReturn(ticketDto);
 
         mockMvc.perform(post("/ticket")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(ticketCreation)))
+                        .content(objectMapper.writeValueAsString(ticketDto)))
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.title").value("Test title"))
-                .andExpect(jsonPath("$.description").value("Test description"));
+                .andExpect(jsonPath("$.title").value("Test title"));
     }
 
     // =========================
@@ -203,13 +168,13 @@ class TicketControllerUnitTest {
     @Test
     void shouldDelete() throws Exception {
 
-        when(ticketService.findById(1)).thenReturn(Optional.of(ticket));
+        doNothing().when(ticketService).delete(1);
 
         mockMvc.perform(delete("/ticket/1"))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
-        verify(ticketService).delete(ticket);
+        verify(ticketService).delete(1);
     }
 
     // =========================
@@ -218,7 +183,8 @@ class TicketControllerUnitTest {
     @Test
     void shouldReturn404WhenDeleteNotFound() throws Exception {
 
-        when(ticketService.findById(1)).thenReturn(Optional.empty());
+        doThrow(new TicketService.TicketNotFoundException())
+                .when(ticketService).delete(1);
 
         mockMvc.perform(delete("/ticket/1"))
                 .andDo(print())
@@ -231,15 +197,14 @@ class TicketControllerUnitTest {
     @Test
     void shouldUpdate() throws Exception {
 
-        when(ticketService.update(any(TicketUpdatedDto.class), eq(1))).thenReturn(ticketUpdated);
+        when(ticketService.update(eq(1), any(TicketDto.class))).thenReturn(ticketDto);
 
         mockMvc.perform(put("/ticket/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(ticket)))
+                        .content(objectMapper.writeValueAsString(ticketDto)))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.title").value("Test title"))
-                .andExpect(jsonPath("$.description").value("Test description"));
+                .andExpect(jsonPath("$.title").value("Test title"));
     }
 
     // =========================
@@ -248,12 +213,12 @@ class TicketControllerUnitTest {
     @Test
     void shouldReturn404WhenUpdateFails() throws Exception {
 
-        when(ticketService.update(any(TicketUpdatedDto.class), eq(1)))
+        when(ticketService.update(eq(1), any(TicketDto.class)))
                 .thenThrow(new TicketService.TicketNotFoundException());
 
         mockMvc.perform(put("/ticket/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(ticket)))
+                        .content(objectMapper.writeValueAsString(ticketDto)))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }

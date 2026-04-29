@@ -2,8 +2,7 @@ package com.mns.cda.suivimns.unit.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.LicenseController;
-import com.mns.cda.suivimns.model.License;
-import com.mns.cda.suivimns.model.Software;
+import com.mns.cda.suivimns.dto.LicenseDto;
 import com.mns.cda.suivimns.service.LicenseService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,8 +12,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -37,18 +36,27 @@ class LicenseControllerUnitTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private License license;
+    private LicenseDto licenseDto;
 
     @BeforeEach
     void setUp() {
-        license = new License();
-        license.setIdLicense(1);
-        license.setLicenseNumber("Test number");
+        // DTO
+        licenseDto = new LicenseDto(
+                1, "Test number", LocalDate.now(), 1, 1);
+    }
 
-        // ⚠️ Adapter si @NotNull sur d'autres champs
-        Software software = new Software();
-        software.setIdSoftware(1);
-        license.setSoftware(software);
+    // =========================
+    // TEST DTO
+    // =========================
+    @Test
+    void shouldReturn400WhenCreateInvalid() throws Exception {
+
+        LicenseDto invalidDto = new LicenseDto(null,"", null, null, null);
+
+        mockMvc.perform(post("/license")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(invalidDto)))
+                .andExpect(status().isBadRequest());
     }
 
     // =========================
@@ -57,7 +65,7 @@ class LicenseControllerUnitTest {
     @Test
     void shouldReturnAll() throws Exception {
 
-        when(licenseService.findAll()).thenReturn(List.of(license));
+        when(licenseService.findAll()).thenReturn(List.of(licenseDto));
 
         mockMvc.perform(get("/license/list"))
                 .andDo(print())
@@ -72,7 +80,7 @@ class LicenseControllerUnitTest {
     @Test
     void shouldReturnById() throws Exception {
 
-        when(licenseService.findById(1)).thenReturn(Optional.of(license));
+        when(licenseService.findById(1)).thenReturn(licenseDto);
 
         mockMvc.perform(get("/license/1"))
                 .andDo(print())
@@ -87,7 +95,8 @@ class LicenseControllerUnitTest {
     @Test
     void shouldReturn404WhenNotFound() throws Exception {
 
-        when(licenseService.findById(1)).thenReturn(Optional.empty());
+        when(licenseService.findById(1))
+                .thenThrow(new LicenseService.LicenseNotFoundException());
 
         mockMvc.perform(get("/license/1"))
                 .andDo(print())
@@ -100,13 +109,14 @@ class LicenseControllerUnitTest {
     @Test
     void shouldCreate() throws Exception {
 
-        when(licenseService.save(any(License.class))).thenReturn(license);
+        when(licenseService.save(any(LicenseDto.class))).thenReturn(licenseDto);
 
         mockMvc.perform(post("/license")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(license)))
+                        .content(objectMapper.writeValueAsString(licenseDto)))
                 .andDo(print())
                 .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.idLicense").value(1))
                 .andExpect(jsonPath("$.licenseNumber").value("Test number"));
     }
 
@@ -116,13 +126,13 @@ class LicenseControllerUnitTest {
     @Test
     void shouldDelete() throws Exception {
 
-        when(licenseService.findById(1)).thenReturn(Optional.of(license));
+        doNothing().when(licenseService).delete(1);
 
         mockMvc.perform(delete("/license/1"))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
-        verify(licenseService).delete(license);
+        verify(licenseService).delete(1);
     }
 
     // =========================
@@ -131,7 +141,8 @@ class LicenseControllerUnitTest {
     @Test
     void shouldReturn404WhenDeleteNotFound() throws Exception {
 
-        when(licenseService.findById(1)).thenReturn(Optional.empty());
+        doThrow(new LicenseService.LicenseNotFoundException())
+                .when(licenseService).delete(1);
 
         mockMvc.perform(delete("/license/1"))
                 .andDo(print())
@@ -144,11 +155,11 @@ class LicenseControllerUnitTest {
     @Test
     void shouldUpdate() throws Exception {
 
-        when(licenseService.update(any(License.class), eq(1))).thenReturn(license);
+        when(licenseService.update(eq(1), any(LicenseDto.class))).thenReturn(licenseDto);
 
         mockMvc.perform(put("/license/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(license)))
+                        .content(objectMapper.writeValueAsString(licenseDto)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.licenseNumber").value("Test number"));
@@ -160,12 +171,12 @@ class LicenseControllerUnitTest {
     @Test
     void shouldReturn404WhenUpdateFails() throws Exception {
 
-        when(licenseService.update(any(License.class), eq(1)))
+        when(licenseService.update(eq(1), any(LicenseDto.class)))
                 .thenThrow(new LicenseService.LicenseNotFoundException());
 
         mockMvc.perform(put("/license/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(license)))
+                        .content(objectMapper.writeValueAsString(licenseDto)))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }

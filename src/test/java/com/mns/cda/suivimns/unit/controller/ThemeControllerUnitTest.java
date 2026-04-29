@@ -2,7 +2,7 @@ package com.mns.cda.suivimns.unit.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.ThemeController;
-import com.mns.cda.suivimns.model.Theme;
+import com.mns.cda.suivimns.dto.ThemeDto;
 import com.mns.cda.suivimns.service.ThemeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -36,15 +35,26 @@ class ThemeControllerUnitTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private Theme theme;
+    private ThemeDto themeDto;
 
     @BeforeEach
     void setUp() {
-        theme = new Theme();
-        theme.setIdTheme(1);
-        theme.setDesignation("Test designation");
+        themeDto = new ThemeDto(
+                1, "Test designation", "Test description");
+    }
 
-        // ⚠️ Adapter si @NotNull sur d'autres champs
+    // =========================
+    // TEST DTO
+    // =========================
+    @Test
+    void shouldReturn400WhenCreateInvalid() throws Exception {
+
+        ThemeDto invalidDto = new ThemeDto(null,"", null);
+
+        mockMvc.perform(post("/theme")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(invalidDto)))
+                .andExpect(status().isBadRequest());
     }
 
     // =========================
@@ -53,7 +63,7 @@ class ThemeControllerUnitTest {
     @Test
     void shouldReturnAll() throws Exception {
 
-        when(themeService.findAll()).thenReturn(List.of(theme));
+        when(themeService.findAll()).thenReturn(List.of(themeDto));
 
         mockMvc.perform(get("/theme/list"))
                 .andDo(print())
@@ -68,7 +78,7 @@ class ThemeControllerUnitTest {
     @Test
     void shouldReturnById() throws Exception {
 
-        when(themeService.findById(1)).thenReturn(Optional.of(theme));
+        when(themeService.findById(1)).thenReturn(themeDto);
 
         mockMvc.perform(get("/theme/1"))
                 .andDo(print())
@@ -83,7 +93,8 @@ class ThemeControllerUnitTest {
     @Test
     void shouldReturn404WhenNotFound() throws Exception {
 
-        when(themeService.findById(1)).thenReturn(Optional.empty());
+        when(themeService.findById(1))
+                .thenThrow(new ThemeService.ThemeNotFoundException());
 
         mockMvc.perform(get("/theme/1"))
                 .andDo(print())
@@ -96,11 +107,11 @@ class ThemeControllerUnitTest {
     @Test
     void shouldCreate() throws Exception {
 
-        when(themeService.save(any(Theme.class))).thenReturn(theme);
+        when(themeService.save(any(ThemeDto.class))).thenReturn(themeDto);
 
         mockMvc.perform(post("/theme")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(theme)))
+                        .content(objectMapper.writeValueAsString(themeDto)))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.designation").value("Test designation"));
@@ -112,13 +123,13 @@ class ThemeControllerUnitTest {
     @Test
     void shouldDelete() throws Exception {
 
-        when(themeService.findById(1)).thenReturn(Optional.of(theme));
+        doNothing().when(themeService).delete(1);
 
         mockMvc.perform(delete("/theme/1"))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
-        verify(themeService).delete(theme);
+        verify(themeService).delete(1);
     }
 
     // =========================
@@ -127,7 +138,8 @@ class ThemeControllerUnitTest {
     @Test
     void shouldReturn404WhenDeleteNotFound() throws Exception {
 
-        when(themeService.findById(1)).thenReturn(Optional.empty());
+        doThrow(new ThemeService.ThemeNotFoundException())
+                .when(themeService).delete(1);
 
         mockMvc.perform(delete("/theme/1"))
                 .andDo(print())
@@ -140,11 +152,11 @@ class ThemeControllerUnitTest {
     @Test
     void shouldUpdate() throws Exception {
 
-        when(themeService.update(any(Theme.class), eq(1))).thenReturn(theme);
+        when(themeService.update(eq(1), any(ThemeDto.class))).thenReturn(themeDto);
 
         mockMvc.perform(put("/theme/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(theme)))
+                        .content(objectMapper.writeValueAsString(themeDto)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.designation").value("Test designation"));
@@ -156,12 +168,12 @@ class ThemeControllerUnitTest {
     @Test
     void shouldReturn404WhenUpdateFails() throws Exception {
 
-        when(themeService.update(any(Theme.class), eq(1)))
+        when(themeService.update(eq(1), any(ThemeDto.class)))
                 .thenThrow(new ThemeService.ThemeNotFoundException());
 
         mockMvc.perform(put("/theme/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(theme)))
+                        .content(objectMapper.writeValueAsString(themeDto)))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }

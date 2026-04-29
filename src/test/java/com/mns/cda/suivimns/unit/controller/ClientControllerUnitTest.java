@@ -2,8 +2,7 @@ package com.mns.cda.suivimns.unit.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.ClientController;
-import com.mns.cda.suivimns.dto.flat.ClientDtoFlat;
-import com.mns.cda.suivimns.model.Client;
+import com.mns.cda.suivimns.dto.ClientDto;
 import com.mns.cda.suivimns.service.ClientService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,7 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -37,22 +35,28 @@ class ClientControllerUnitTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private Client client;
-    private ClientDtoFlat clientDto;
+    private ClientDto clientDto;
 
     @BeforeEach
     void setUp() {
-        client = new Client();
-        client.setIdAppUser(1);
-        client.setPassword("Test password");
-
-        // ⚠️ Adapter si @NotNull sur d'autres champs
-
         // DTO
-        clientDto = new ClientDtoFlat(
-                1, "Test first name", "Test last name", "Test email",
-                "Test number", (byte) 1);
+        clientDto = new ClientDto(
+                1, "Test firstName", "Test lastName",
+                "Test@email.com", "Test phoneNumber", (byte) 1);
+    }
 
+    // =========================
+    // TEST DTO
+    // =========================
+    @Test
+    void shouldReturn400WhenCreateInvalid() throws Exception {
+
+        ClientDto invalidDto = new ClientDto(null,"", null, "wrong email format",null, null);
+
+        mockMvc.perform(post("/client")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(invalidDto)))
+                .andExpect(status().isBadRequest());
     }
 
     // =========================
@@ -66,7 +70,8 @@ class ClientControllerUnitTest {
         mockMvc.perform(get("/client/list"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].idAppUser").value(1));
+                .andExpect(jsonPath("$[0].idAppUser").value(1))
+                .andExpect(jsonPath("$[0].email").value("Test@email.com"));
     }
 
     // =========================
@@ -75,12 +80,13 @@ class ClientControllerUnitTest {
     @Test
     void shouldReturnById() throws Exception {
 
-        when(clientService.findDtoById(1)).thenReturn(Optional.of(clientDto));
+        when(clientService.findById(1)).thenReturn(clientDto);
 
         mockMvc.perform(get("/client/1"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.idAppUser").value(1));
+                .andExpect(jsonPath("$.idAppUser").value(1))
+                .andExpect(jsonPath("$.email").value("Test@email.com"));
     }
 
     // =========================
@@ -89,7 +95,8 @@ class ClientControllerUnitTest {
     @Test
     void shouldReturn404WhenNotFound() throws Exception {
 
-        when(clientService.findDtoById(10)).thenReturn(Optional.empty());
+        when(clientService.findById(1))
+                .thenThrow(new ClientService.ClientNotFoundException());
 
         mockMvc.perform(get("/client/1"))
                 .andDo(print())
@@ -102,14 +109,15 @@ class ClientControllerUnitTest {
     @Test
     void shouldCreate() throws Exception {
 
-        when(clientService.save(any(Client.class))).thenReturn(client);
-        when(clientService.toDto(client)).thenReturn(clientDto);
+        when(clientService.save(any(ClientDto.class))).thenReturn(clientDto);
 
         mockMvc.perform(post("/client")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(client)))
+                        .content(objectMapper.writeValueAsString(clientDto)))
                 .andDo(print())
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.idAppUser").value(1))
+                .andExpect(jsonPath("$.email").value("Test@email.com"));
     }
 
     // =========================
@@ -118,13 +126,13 @@ class ClientControllerUnitTest {
     @Test
     void shouldDelete() throws Exception {
 
-        when(clientService.findById(1)).thenReturn(Optional.of(client));
+        doNothing().when(clientService).delete(1);
 
         mockMvc.perform(delete("/client/1"))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
-        verify(clientService).delete(client);
+        verify(clientService).delete(1);
     }
 
     // =========================
@@ -133,7 +141,8 @@ class ClientControllerUnitTest {
     @Test
     void shouldReturn404WhenDeleteNotFound() throws Exception {
 
-        when(clientService.findById(1)).thenReturn(Optional.empty());
+        doThrow(new ClientService.ClientNotFoundException())
+                .when(clientService).delete(1);
 
         mockMvc.perform(delete("/client/1"))
                 .andDo(print())
@@ -146,13 +155,14 @@ class ClientControllerUnitTest {
     @Test
     void shouldUpdate() throws Exception {
 
-        when(clientService.update(any(Client.class), eq(1))).thenReturn(client);
+        when(clientService.update(eq(1), any(ClientDto.class))).thenReturn(clientDto);
 
         mockMvc.perform(patch("/client/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(client)))
+                        .content(objectMapper.writeValueAsString(clientDto)))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.email").value("Test@email.com"));
     }
 
     // =========================
@@ -161,12 +171,12 @@ class ClientControllerUnitTest {
     @Test
     void shouldReturn404WhenUpdateFails() throws Exception {
 
-        when(clientService.update(any(Client.class), eq(1)))
+        when(clientService.update(eq(1), any(ClientDto.class)))
                 .thenThrow(new ClientService.ClientNotFoundException());
 
         mockMvc.perform(patch("/client/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(client)))
+                        .content(objectMapper.writeValueAsString(clientDto)))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }

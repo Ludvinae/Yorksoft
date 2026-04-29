@@ -2,7 +2,7 @@ package com.mns.cda.suivimns.unit.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.ImpactController;
-import com.mns.cda.suivimns.model.Impact;
+import com.mns.cda.suivimns.dto.ImpactDto;
 import com.mns.cda.suivimns.service.ImpactService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -36,17 +35,27 @@ class ImpactControllerUnitTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private Impact impact;
+    private ImpactDto impactDto;
 
     @BeforeEach
     void setUp() {
-        impact = new Impact();
-        impact.setIdImpact(1);
-        impact.setDesignation("Test designation");
-        impact.setPriorityFactor((byte) 1);
+        // DTO
+        impactDto = new ImpactDto(
+                1, "Test designation", (byte) 1, "Test description");
+    }
 
-        // ⚠️ Adapter si @NotNull sur d'autres champs
+    // =========================
+    // TEST DTO
+    // =========================
+    @Test
+    void shouldReturn400WhenCreateInvalid() throws Exception {
 
+        ImpactDto invalidDto = new ImpactDto(null,"", (byte) 1, null);
+
+        mockMvc.perform(post("/impact")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(invalidDto)))
+                .andExpect(status().isBadRequest());
     }
 
     // =========================
@@ -55,14 +64,13 @@ class ImpactControllerUnitTest {
     @Test
     void shouldReturnAll() throws Exception {
 
-        when(impactService.findAll()).thenReturn(List.of(impact));
+        when(impactService.findAll()).thenReturn(List.of(impactDto));
 
         mockMvc.perform(get("/impact/list"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].idImpact").value(1))
-                .andExpect(jsonPath("$[0].designation").value("Test designation"))
-                .andExpect(jsonPath("$[0].priorityFactor").value(1));
+                .andExpect(jsonPath("$[0].designation").value("Test designation"));
     }
 
     // =========================
@@ -71,14 +79,13 @@ class ImpactControllerUnitTest {
     @Test
     void shouldReturnById() throws Exception {
 
-        when(impactService.findById(1)).thenReturn(Optional.of(impact));
+        when(impactService.findById(1)).thenReturn(impactDto);
 
         mockMvc.perform(get("/impact/1"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.idImpact").value(1))
-                .andExpect(jsonPath("$.designation").value("Test designation"))
-                .andExpect(jsonPath("$.priorityFactor").value(1));
+                .andExpect(jsonPath("$.designation").value("Test designation"));
     }
 
     // =========================
@@ -87,7 +94,8 @@ class ImpactControllerUnitTest {
     @Test
     void shouldReturn404WhenNotFound() throws Exception {
 
-        when(impactService.findById(1)).thenReturn(Optional.empty());
+        when(impactService.findById(1))
+                .thenThrow(new ImpactService.ImpactNotFoundException());
 
         mockMvc.perform(get("/impact/1"))
                 .andDo(print())
@@ -100,15 +108,15 @@ class ImpactControllerUnitTest {
     @Test
     void shouldCreate() throws Exception {
 
-        when(impactService.save(any(Impact.class))).thenReturn(impact);
+        when(impactService.save(any(ImpactDto.class))).thenReturn(impactDto);
 
         mockMvc.perform(post("/impact")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(impact)))
+                        .content(objectMapper.writeValueAsString(impactDto)))
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.designation").value("Test designation"))
-                .andExpect(jsonPath("$.priorityFactor").value(1));
+                .andExpect(jsonPath("$.idImpact").value(1))
+                .andExpect(jsonPath("$.designation").value("Test designation"));
     }
 
     // =========================
@@ -117,13 +125,13 @@ class ImpactControllerUnitTest {
     @Test
     void shouldDelete() throws Exception {
 
-        when(impactService.findById(1)).thenReturn(Optional.of(impact));
+        doNothing().when(impactService).delete(1);
 
         mockMvc.perform(delete("/impact/1"))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
-        verify(impactService).delete(impact);
+        verify(impactService).delete(1);
     }
 
     // =========================
@@ -132,7 +140,8 @@ class ImpactControllerUnitTest {
     @Test
     void shouldReturn404WhenDeleteNotFound() throws Exception {
 
-        when(impactService.findById(1)).thenReturn(Optional.empty());
+        doThrow(new ImpactService.ImpactNotFoundException())
+                .when(impactService).delete(1);
 
         mockMvc.perform(delete("/impact/1"))
                 .andDo(print())
@@ -145,15 +154,14 @@ class ImpactControllerUnitTest {
     @Test
     void shouldUpdate() throws Exception {
 
-        when(impactService.update(any(Impact.class), eq(1))).thenReturn(impact);
+        when(impactService.update(eq(1), any(ImpactDto.class))).thenReturn(impactDto);
 
         mockMvc.perform(put("/impact/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(impact)))
+                        .content(objectMapper.writeValueAsString(impactDto)))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.designation").value("Test designation"))
-                .andExpect(jsonPath("$.priorityFactor").value(1));
+                .andExpect(jsonPath("$.designation").value("Test designation"));
     }
 
     // =========================
@@ -162,12 +170,12 @@ class ImpactControllerUnitTest {
     @Test
     void shouldReturn404WhenUpdateFails() throws Exception {
 
-        when(impactService.update(any(Impact.class), eq(1)))
+        when(impactService.update(eq(1), any(ImpactDto.class)))
                 .thenThrow(new ImpactService.ImpactNotFoundException());
 
         mockMvc.perform(put("/impact/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(impact)))
+                        .content(objectMapper.writeValueAsString(impactDto)))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }

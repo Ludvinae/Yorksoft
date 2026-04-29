@@ -2,7 +2,7 @@ package com.mns.cda.suivimns.unit.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.StatusController;
-import com.mns.cda.suivimns.model.Status;
+import com.mns.cda.suivimns.dto.StatusDto;
 import com.mns.cda.suivimns.service.StatusService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -36,15 +35,26 @@ class StatusControllerUnitTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private Status status;
+    private StatusDto statusDto;
 
     @BeforeEach
     void setUp() {
-        status = new Status();
-        status.setIdStatus(1);
-        status.setDesignation("Test designation");
+        statusDto = new StatusDto(
+                1, "Test designation", (byte) 1);
+    }
 
-        // ⚠️ Adapter si @NotNull sur d'autres champs
+    // =========================
+    // TEST DTO
+    // =========================
+    @Test
+    void shouldReturn400WhenCreateInvalid() throws Exception {
+
+        StatusDto invalidDto = new StatusDto(null,"", null);
+
+        mockMvc.perform(post("/status")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(invalidDto)))
+                .andExpect(status().isBadRequest());
     }
 
     // =========================
@@ -53,7 +63,7 @@ class StatusControllerUnitTest {
     @Test
     void shouldReturnAll() throws Exception {
 
-        when(statusService.findAll()).thenReturn(List.of(status));
+        when(statusService.findAll()).thenReturn(List.of(statusDto));
 
         mockMvc.perform(get("/status/list"))
                 .andDo(print())
@@ -68,7 +78,7 @@ class StatusControllerUnitTest {
     @Test
     void shouldReturnById() throws Exception {
 
-        when(statusService.findById(1)).thenReturn(Optional.of(status));
+        when(statusService.findById(1)).thenReturn(statusDto);
 
         mockMvc.perform(get("/status/1"))
                 .andDo(print())
@@ -83,7 +93,8 @@ class StatusControllerUnitTest {
     @Test
     void shouldReturn404WhenNotFound() throws Exception {
 
-        when(statusService.findById(1)).thenReturn(Optional.empty());
+        when(statusService.findById(1))
+                .thenThrow(new StatusService.StatusNotFoundException());
 
         mockMvc.perform(get("/status/1"))
                 .andDo(print())
@@ -96,11 +107,11 @@ class StatusControllerUnitTest {
     @Test
     void shouldCreate() throws Exception {
 
-        when(statusService.save(any(Status.class))).thenReturn(status);
+        when(statusService.save(any(StatusDto.class))).thenReturn(statusDto);
 
         mockMvc.perform(post("/status")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(status)))
+                        .content(objectMapper.writeValueAsString(statusDto)))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.designation").value("Test designation"));
@@ -112,13 +123,13 @@ class StatusControllerUnitTest {
     @Test
     void shouldDelete() throws Exception {
 
-        when(statusService.findById(1)).thenReturn(Optional.of(status));
+        doNothing().when(statusService).delete(1);
 
         mockMvc.perform(delete("/status/1"))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
-        verify(statusService).delete(status);
+        verify(statusService).delete(1);
     }
 
     // =========================
@@ -127,7 +138,8 @@ class StatusControllerUnitTest {
     @Test
     void shouldReturn404WhenDeleteNotFound() throws Exception {
 
-        when(statusService.findById(1)).thenReturn(Optional.empty());
+        doThrow(new StatusService.StatusNotFoundException())
+                .when(statusService).delete(1);
 
         mockMvc.perform(delete("/status/1"))
                 .andDo(print())
@@ -140,11 +152,11 @@ class StatusControllerUnitTest {
     @Test
     void shouldUpdate() throws Exception {
 
-        when(statusService.update(any(Status.class), eq(1))).thenReturn(status);
+        when(statusService.update(eq(1), any(StatusDto.class))).thenReturn(statusDto);
 
         mockMvc.perform(put("/status/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(status)))
+                        .content(objectMapper.writeValueAsString(statusDto)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.designation").value("Test designation"));
@@ -156,12 +168,12 @@ class StatusControllerUnitTest {
     @Test
     void shouldReturn404WhenUpdateFails() throws Exception {
 
-        when(statusService.update(any(Status.class), eq(1)))
+        when(statusService.update(eq(1), any(StatusDto.class)))
                 .thenThrow(new StatusService.StatusNotFoundException());
 
         mockMvc.perform(put("/status/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(status)))
+                        .content(objectMapper.writeValueAsString(statusDto)))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }

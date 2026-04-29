@@ -2,7 +2,7 @@ package com.mns.cda.suivimns.unit.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.TechnicianController;
-import com.mns.cda.suivimns.model.Technician;
+import com.mns.cda.suivimns.dto.TechnicianDto;
 import com.mns.cda.suivimns.service.TechnicianService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -36,16 +35,28 @@ class TechnicianControllerUnitTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private Technician technician;
+    private TechnicianDto technicianDto;
 
     @BeforeEach
     void setUp() {
-        technician = new Technician();
-        technician.setIdAppUser(1);
-        technician.setPassword("Test password");
+        // DTO
+        technicianDto = new TechnicianDto(
+                1, "Test firstName", "Test lastName",
+                "Test@email.com", "Test phoneNumber", (byte) 1);
+    }
 
-        // ⚠️ Adapter si @NotNull sur d'autres champs
+    // =========================
+    // TEST DTO
+    // =========================
+    @Test
+    void shouldReturn400WhenCreateInvalid() throws Exception {
 
+        TechnicianDto invalidDto = new TechnicianDto(null,"", null, "wrong email format",null, null);
+
+        mockMvc.perform(post("/technician")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(invalidDto)))
+                .andExpect(status().isBadRequest());
     }
 
     // =========================
@@ -54,12 +65,13 @@ class TechnicianControllerUnitTest {
     @Test
     void shouldReturnAll() throws Exception {
 
-        when(technicianService.findAll()).thenReturn(List.of(technician));
+        when(technicianService.findAll()).thenReturn(List.of(technicianDto));
 
         mockMvc.perform(get("/technician/list"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].idAppUser").value(1));
+                .andExpect(jsonPath("$[0].idAppUser").value(1))
+                .andExpect(jsonPath("$[0].email").value("Test@email.com"));
     }
 
     // =========================
@@ -68,12 +80,13 @@ class TechnicianControllerUnitTest {
     @Test
     void shouldReturnById() throws Exception {
 
-        when(technicianService.findById(1)).thenReturn(Optional.of(technician));
+        when(technicianService.findById(1)).thenReturn(technicianDto);
 
         mockMvc.perform(get("/technician/1"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.idAppUser").value(1));
+                .andExpect(jsonPath("$.idAppUser").value(1))
+                .andExpect(jsonPath("$.email").value("Test@email.com"));
     }
 
     // =========================
@@ -82,7 +95,8 @@ class TechnicianControllerUnitTest {
     @Test
     void shouldReturn404WhenNotFound() throws Exception {
 
-        when(technicianService.findById(10)).thenReturn(Optional.empty());
+        when(technicianService.findById(1))
+                .thenThrow(new TechnicianService.TechnicianNotFoundException());
 
         mockMvc.perform(get("/technician/1"))
                 .andDo(print())
@@ -95,13 +109,15 @@ class TechnicianControllerUnitTest {
     @Test
     void shouldCreate() throws Exception {
 
-        when(technicianService.save(any(Technician.class))).thenReturn(technician);
+        when(technicianService.save(any(TechnicianDto.class))).thenReturn(technicianDto);
 
         mockMvc.perform(post("/technician")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(technician)))
+                        .content(objectMapper.writeValueAsString(technicianDto)))
                 .andDo(print())
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.idAppUser").value(1))
+                .andExpect(jsonPath("$.email").value("Test@email.com"));
     }
 
     // =========================
@@ -110,13 +126,13 @@ class TechnicianControllerUnitTest {
     @Test
     void shouldDelete() throws Exception {
 
-        when(technicianService.findById(1)).thenReturn(Optional.of(technician));
+        doNothing().when(technicianService).delete(1);
 
         mockMvc.perform(delete("/technician/1"))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
-        verify(technicianService).delete(technician);
+        verify(technicianService).delete(1);
     }
 
     // =========================
@@ -125,9 +141,42 @@ class TechnicianControllerUnitTest {
     @Test
     void shouldReturn404WhenDeleteNotFound() throws Exception {
 
-        when(technicianService.findById(1)).thenReturn(Optional.empty());
+        doThrow(new TechnicianService.TechnicianNotFoundException())
+                .when(technicianService).delete(1);
 
         mockMvc.perform(delete("/technician/1"))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    // =========================
+    // UPDATE - OK
+    // =========================
+    @Test
+    void shouldUpdate() throws Exception {
+
+        when(technicianService.update(eq(1), any(TechnicianDto.class))).thenReturn(technicianDto);
+
+        mockMvc.perform(patch("/technician/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(technicianDto)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.email").value("Test@email.com"));
+    }
+
+    // =========================
+    // UPDATE - NOT FOUND
+    // =========================
+    @Test
+    void shouldReturn404WhenUpdateFails() throws Exception {
+
+        when(technicianService.update(eq(1), any(TechnicianDto.class)))
+                .thenThrow(new TechnicianService.TechnicianNotFoundException());
+
+        mockMvc.perform(patch("/technician/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(technicianDto)))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }

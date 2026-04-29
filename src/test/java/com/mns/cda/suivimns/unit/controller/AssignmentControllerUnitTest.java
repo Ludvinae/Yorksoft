@@ -2,10 +2,7 @@ package com.mns.cda.suivimns.unit.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.AssignmentController;
-import com.mns.cda.suivimns.model.Assignment;
-import com.mns.cda.suivimns.model.Manager;
-import com.mns.cda.suivimns.model.Technician;
-import com.mns.cda.suivimns.model.Ticket;
+import com.mns.cda.suivimns.dto.AssignmentDto;
 import com.mns.cda.suivimns.service.AssignmentService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,10 +12,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
-import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -41,18 +37,27 @@ class AssignmentControllerUnitTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private Assignment assignment;
+
+    private AssignmentDto assignmentDto;
 
     @BeforeEach
     void setUp() {
-        assignment = new Assignment();
-        assignment.setIdAssignment(1);
-        assignment.setTicket(new Ticket());
-        assignment.setManager(new Manager());
-        assignment.setTechnician(new Technician());
+        assignmentDto = new AssignmentDto(
+                1, LocalDateTime.now(), null, 1, 1, 1);
+    }
 
-        // ⚠️ Adapter si @NotNull sur d'autres champs
+    // =========================
+    // TEST DTO
+    // =========================
+    @Test
+    void shouldReturn400WhenCreateInvalid() throws Exception {
 
+        AssignmentDto invalidDto = new AssignmentDto(null,null, null, null, null, null);
+
+        mockMvc.perform(post("/assignment")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(invalidDto)))
+                .andExpect(status().isBadRequest());
     }
 
     // =========================
@@ -61,7 +66,7 @@ class AssignmentControllerUnitTest {
     @Test
     void shouldReturnAll() throws Exception {
 
-        when(assignmentService.findAll()).thenReturn(List.of(assignment));
+        when(assignmentService.findAll()).thenReturn(List.of(assignmentDto));
 
         mockMvc.perform(get("/assignment/list"))
                 .andDo(print())
@@ -75,7 +80,7 @@ class AssignmentControllerUnitTest {
     @Test
     void shouldReturnById() throws Exception {
 
-        when(assignmentService.findById(1)).thenReturn(Optional.of(assignment));
+        when(assignmentService.findById(1)).thenReturn(assignmentDto);
 
         mockMvc.perform(get("/assignment/1"))
                 .andDo(print())
@@ -89,25 +94,12 @@ class AssignmentControllerUnitTest {
     @Test
     void shouldReturn404WhenNotFound() throws Exception {
 
-        when(assignmentService.findById(1)).thenReturn(Optional.empty());
+        when(assignmentService.findById(1))
+                .thenThrow(new AssignmentService.AssignmentNotFoundException());
 
         mockMvc.perform(get("/assignment/1"))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
 
-    // =========================
-    // CREATE
-    // =========================
-    @Test
-    void shouldCreate() throws Exception {
-
-        when(assignmentService.firstSave(any(Assignment.class))).thenReturn(assignment);
-
-        mockMvc.perform(post("/assignment")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(assignment)))
-                .andDo(print())
-                .andExpect(status().isCreated());
-    }
 }

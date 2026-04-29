@@ -2,7 +2,7 @@ package com.mns.cda.suivimns.unit.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.DirectorController;
-import com.mns.cda.suivimns.model.Director;
+import com.mns.cda.suivimns.dto.DirectorDto;
 import com.mns.cda.suivimns.service.DirectorService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -36,16 +35,28 @@ class DirectorControllerUnitTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private Director director;
+    private DirectorDto directorDto;
 
     @BeforeEach
     void setUp() {
-        director = new Director();
-        director.setIdAppUser(1);
-        director.setPassword("Test password");
+        // DTO
+        directorDto = new DirectorDto(
+                1, "Test firstName", "Test lastName",
+                "Test@email.com", "Test phoneNumber");
+    }
 
-        // ⚠️ Adapter si @NotNull sur d'autres champs
+    // =========================
+    // TEST DTO
+    // =========================
+    @Test
+    void shouldReturn400WhenCreateInvalid() throws Exception {
 
+        DirectorDto invalidDto = new DirectorDto(null,"", null,"wrong email format", null);
+
+        mockMvc.perform(post("/director")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(invalidDto)))
+                .andExpect(status().isBadRequest());
     }
 
     // =========================
@@ -54,12 +65,13 @@ class DirectorControllerUnitTest {
     @Test
     void shouldReturnAll() throws Exception {
 
-        when(directorService.findAll()).thenReturn(List.of(director));
+        when(directorService.findAll()).thenReturn(List.of(directorDto));
 
         mockMvc.perform(get("/director/list"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].idAppUser").value(1));
+                .andExpect(jsonPath("$[0].idAppUser").value(1))
+                .andExpect(jsonPath("$[0].email").value("Test@email.com"));
     }
 
     // =========================
@@ -68,12 +80,13 @@ class DirectorControllerUnitTest {
     @Test
     void shouldReturnById() throws Exception {
 
-        when(directorService.findById(1)).thenReturn(Optional.of(director));
+        when(directorService.findById(1)).thenReturn(directorDto);
 
         mockMvc.perform(get("/director/1"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.idAppUser").value(1));
+                .andExpect(jsonPath("$.idAppUser").value(1))
+                .andExpect(jsonPath("$.email").value("Test@email.com"));
     }
 
     // =========================
@@ -82,7 +95,8 @@ class DirectorControllerUnitTest {
     @Test
     void shouldReturn404WhenNotFound() throws Exception {
 
-        when(directorService.findById(10)).thenReturn(Optional.empty());
+        when(directorService.findById(1))
+                .thenThrow(new DirectorService.DirectorNotFoundException());
 
         mockMvc.perform(get("/director/1"))
                 .andDo(print())
@@ -95,13 +109,15 @@ class DirectorControllerUnitTest {
     @Test
     void shouldCreate() throws Exception {
 
-        when(directorService.save(any(Director.class))).thenReturn(director);
+        when(directorService.save(any(DirectorDto.class))).thenReturn(directorDto);
 
         mockMvc.perform(post("/director")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(director)))
+                        .content(objectMapper.writeValueAsString(directorDto)))
                 .andDo(print())
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.idAppUser").value(1))
+                .andExpect(jsonPath("$.email").value("Test@email.com"));
     }
 
     // =========================
@@ -110,13 +126,13 @@ class DirectorControllerUnitTest {
     @Test
     void shouldDelete() throws Exception {
 
-        when(directorService.findById(1)).thenReturn(Optional.of(director));
+        doNothing().when(directorService).delete(1);
 
         mockMvc.perform(delete("/director/1"))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
-        verify(directorService).delete(director);
+        verify(directorService).delete(1);
     }
 
     // =========================
@@ -125,11 +141,43 @@ class DirectorControllerUnitTest {
     @Test
     void shouldReturn404WhenDeleteNotFound() throws Exception {
 
-        when(directorService.findById(1)).thenReturn(Optional.empty());
+        doThrow(new DirectorService.DirectorNotFoundException())
+                .when(directorService).delete(1);
 
         mockMvc.perform(delete("/director/1"))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
 
+    // =========================
+    // UPDATE - OK
+    // =========================
+    @Test
+    void shouldUpdate() throws Exception {
+
+        when(directorService.update(eq(1), any(DirectorDto.class))).thenReturn(directorDto);
+
+        mockMvc.perform(patch("/director/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(directorDto)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.email").value("Test@email.com"));
+    }
+
+    // =========================
+    // UPDATE - NOT FOUND
+    // =========================
+    @Test
+    void shouldReturn404WhenUpdateFails() throws Exception {
+
+        when(directorService.update(eq(1), any(DirectorDto.class)))
+                .thenThrow(new DirectorService.DirectorNotFoundException());
+
+        mockMvc.perform(patch("/director/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(directorDto)))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
 }
