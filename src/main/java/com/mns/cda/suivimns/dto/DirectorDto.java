@@ -1,10 +1,12 @@
 package com.mns.cda.suivimns.dto;
 
+import jakarta.validation.constraints.Email;
+
 public record DirectorDto(
         Integer idAppUser,
         String firstName,
         String lastName,
-        String email,
+        @Email String email,
         String phoneNumber
 ) {
 }

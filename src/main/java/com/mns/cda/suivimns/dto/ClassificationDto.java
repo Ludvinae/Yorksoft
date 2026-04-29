@@ -1,10 +1,12 @@
 package com.mns.cda.suivimns.dto;
 
+import jakarta.validation.constraints.NotNull;
+
 import java.time.LocalDateTime;
 
 public record ClassificationDto(
-        Integer idTicket,
-        Integer idTheme,
+        @NotNull Integer idTicket,
+        @NotNull Integer idTheme,
         LocalDateTime affectationDate
 ) {
 }

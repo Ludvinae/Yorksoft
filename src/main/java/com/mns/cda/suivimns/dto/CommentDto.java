@@ -1,6 +1,7 @@
 package com.mns.cda.suivimns.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 
@@ -9,7 +10,7 @@ public record CommentDto(
         @NotBlank String content,
         LocalDateTime dateSent,
         LocalDateTime lastModification,
-        Integer idTicket,
+        @NotNull Integer idTicket,
         Integer idAuthor
 ) {
 }
