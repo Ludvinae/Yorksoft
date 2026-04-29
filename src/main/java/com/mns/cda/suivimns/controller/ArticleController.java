@@ -1,13 +1,16 @@
 package com.mns.cda.suivimns.controller;
 
+import com.mns.cda.suivimns.dto.ArticleDto;
 import com.mns.cda.suivimns.model.Article;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
+import com.mns.cda.suivimns.service.ArticleService;
 import com.mns.cda.suivimns.service.ArticleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,72 +30,61 @@ public class ArticleController {
     protected final ArticleService articleService;
 
 
-    @Operation(summary = "Récupérer tous les articles")
-    @ApiResponse(responseCode = "200", description = "Liste des articles récupérée avec succès")
+    @Operation(summary = "Récupere toutes les articles",
+            description = "Récupere la liste complète de article de la base")
+    @ApiResponse(responseCode = "200", description = "Liste récupérée avec succés")
     @GetMapping("/list")
-    public List<Article> getAll() {
+    public List<ArticleDto> getAll() {
         return articleService.findAll();
     }
 
 
-    @Operation(summary = "Récupérer un article par son ID")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Article trouvé"),
-            @ApiResponse(responseCode = "404", description = "Article non trouvé")})
+    @Operation(summary = "Récupére une article en fonction de son ID")
+    @ApiResponses({@ApiResponse(responseCode = "200", description = "Article trouvée"),
+            @ApiResponse(responseCode = "404", description = "Article non trouvée")})
     @GetMapping("/{id}")
-    public ResponseEntity<Article> getById(@PathVariable int id) {
-        Optional<Article> article = articleService.findById(id);
-
-        if (article.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        return new ResponseEntity<>(article.get(), HttpStatus.OK);
-    }
-
-
-    @Operation(summary = "Créer un nouvel article")
-    @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Article créé"),
-            @ApiResponse(responseCode = "400", description = "Données invalides")})
-    @PostMapping
-    public ResponseEntity<Article> create(@RequestBody @Validated(OnCreate.class) Article article) {
-
-        Article articleSaved = articleService.save(article);
-
-        return new ResponseEntity<>(articleSaved, HttpStatus.CREATED);
-    }
-
-
-    @Operation(summary = "Supprimer un article")
-    @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "Article supprimé"),
-            @ApiResponse(responseCode = "404", description = "Article non trouvé")})
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable int id) {
-        Optional<Article> article = articleService.findById(id);
-
-        if (article.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        articleService.delete(article.get());
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-
-    @Operation(summary = "Mettre à jour un article",
-                description = "Met à jour le champ 'content'")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Article mis à jour"),
-            @ApiResponse(responseCode = "404", description = "Article non trouvé"),
-            @ApiResponse(responseCode = "400", description = "Données invalides")})
-    @PutMapping("/{id}")
-    public ResponseEntity<Article> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Article articleToUpdate) {
+    public ResponseEntity<ArticleDto> getById(@PathVariable int id) {
 
         try {
-            Article articleSaved = articleService.update(articleToUpdate, id);
-            return new ResponseEntity<>(articleSaved, HttpStatus.OK);
+            return new ResponseEntity<>(articleService.findById(id) , HttpStatus.OK);
+        } catch (ArticleService.ArticleNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+    @Operation(summary = "Crée une nouvelle article")
+    @ApiResponses({@ApiResponse(responseCode = "201", description = "Article crée"),
+            @ApiResponse(responseCode = "400", description = "Données invalides")})
+    @PostMapping
+    public ResponseEntity<ArticleDto> create(@RequestBody @Valid ArticleDto article) {
+        return new ResponseEntity<>(articleService.save(article), HttpStatus.CREATED);
+    }
+
+
+    @Operation(summary = "Efface une article selon son ID")
+    @ApiResponses({@ApiResponse(responseCode = "204", description = "Article effacée"),
+            @ApiResponse(responseCode = "404", description = "Article non trouvée")})
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable int id) {
+        try {
+            articleService.delete(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (ArticleService.ArticleNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+    @Operation(summary = "Modifie une article en fonction de son ID",
+            description = "Modifie les champs 'subject', 'theme' et 'articleList' d'une article")
+    @ApiResponses({@ApiResponse(responseCode = "200", description = "Article modifiée avec succés"),
+            @ApiResponse(responseCode = "404", description = "Article non trouvée"),
+            @ApiResponse(responseCode = "400", description = "Données invalides")})
+    @PutMapping("/{id}")
+    public ResponseEntity<ArticleDto> update(@PathVariable int id, @RequestBody @Valid ArticleDto articleToUpdate) {
+        try {
+            return new ResponseEntity<>(articleService.update(id, articleToUpdate), HttpStatus.OK);
         } catch (ArticleService.ArticleNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

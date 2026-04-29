@@ -1,14 +1,17 @@
 package com.mns.cda.suivimns.controller;
 
+import com.mns.cda.suivimns.dto.AppUserDto;
 import com.mns.cda.suivimns.dto.flat.AppUserDtoFlat;
 import com.mns.cda.suivimns.dto.flat.PasswordDto;
 import com.mns.cda.suivimns.model.AppUser;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.service.AppUserService;
+import com.mns.cda.suivimns.service.AppUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,76 +30,51 @@ public class AppUserController {
 
     protected final AppUserService appUserService;
 
-
-    @Operation(summary = "Lister tous les utilisateurs")
-    @ApiResponse(responseCode = "200", description = "Liste récupérée avec succès")
+    @Operation(summary = "Récupere toutes les utilisateurs",
+            description = "Récupere la liste complète de utilisateur de la base")
+    @ApiResponse(responseCode = "200", description = "Liste récupérée avec succés")
     @GetMapping("/list")
-    public List<AppUser> getAll() {
+    public List<AppUserDto> getAll() {
         return appUserService.findAll();
     }
 
 
-    @Operation(summary = "Récupérer un utilisateur par ID")
-    @ApiResponses({@ApiResponse(responseCode = "200", description = "Utilisateur trouvé"),
-                   @ApiResponse(responseCode = "404", description = "Utilisateur non trouvé")})
+    @Operation(summary = "Récupére une utilisateur en fonction de son ID")
+    @ApiResponses({@ApiResponse(responseCode = "200", description = "Utilisateur trouvée"),
+            @ApiResponse(responseCode = "404", description = "Utilisateur non trouvée")})
     @GetMapping("/{id}")
-    public ResponseEntity<AppUser> getById(@PathVariable int id) {
+    public ResponseEntity<AppUserDto> getById(@PathVariable int id) {
 
-        Optional<AppUser> user = appUserService.findById(id);
-        if (user.isEmpty()) {
+        try {
+            return new ResponseEntity<>(appUserService.findById(id) , HttpStatus.OK);
+        } catch (AppUserService.AppUserNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
-        return new ResponseEntity<>(user.get(), HttpStatus.OK);
     }
 
 
-    @Operation(summary = "Créer un utilisateur",
-            description = "Permet de créer un utilisateur (technicien, manager, directeur ou client)")
-    @ApiResponses({@ApiResponse(responseCode = "201", description = "Utilisateur créé"),
-                   @ApiResponse(responseCode = "400", description = "Données invalides")})
+    @Operation(summary = "Crée une nouvelle utilisateur")
+    @ApiResponses({@ApiResponse(responseCode = "201", description = "Utilisateur crée"),
+            @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PostMapping
-    public ResponseEntity<AppUser> create(@RequestBody @Validated(OnCreate.class) AppUser user) {
-        AppUser userSaved = appUserService.save(user);
-
-        return new ResponseEntity<>(userSaved, HttpStatus.CREATED);
+    public ResponseEntity<AppUserDto> create(@RequestBody @Valid AppUserDto appUser) {
+        return new ResponseEntity<>(appUserService.save(appUser), HttpStatus.CREATED);
     }
 
 
-    @Operation(summary = "Supprimer un utilisateur")
-    @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "Utilisateur supprimé"),
-            @ApiResponse(responseCode = "404", description = "Utilisateur non trouvé")})
+    @Operation(summary = "Efface une utilisateur selon son ID")
+    @ApiResponses({@ApiResponse(responseCode = "204", description = "Utilisateur effacée"),
+            @ApiResponse(responseCode = "404", description = "Utilisateur non trouvée")})
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
-        Optional<AppUser> user = appUserService.findById(id);
-        if (user.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        appUserService.delete(user.get());
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    /*
-    @Operation(summary = "Mettre à jour un utilisateur")
-    @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "Utilisateur mis à jour"),
-            @ApiResponse(responseCode = "404", description = "Utilisateur non trouvé"),
-            @ApiResponse(responseCode = "400", description = "Données invalides")})
-    @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) AppUser userToUpdate) {
         try {
-            appUserService.update(userToUpdate, id);
+            appUserService.delete(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (iAppUserService.AppUserNotFoundException e) {
+        } catch (AppUserService.AppUserNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (iAppUserService.EmailAlreadyUsedException e) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
-
-     */
+    
 
     @Operation(summary = "Mettre à jour un utilisateur",
                 description = "Modifie les champs 'firstName', 'lastName', 'email' et 'phoneNumber'")
@@ -105,7 +83,7 @@ public class AppUserController {
             @ApiResponse(responseCode = "404", description = "Utilisateur non trouvé"),
             @ApiResponse(responseCode = "400", description = "Email déja utilisé")})
     @PatchMapping("/{id}")
-    public ResponseEntity<AppUser> update(@PathVariable int id, @RequestBody @Validated AppUserDtoFlat dto) {
+    public ResponseEntity<AppUser> update(@PathVariable int id, @RequestBody @Valid AppUserDto dto) {
 
         try {
             AppUser user = appUserService.update(dto, id);

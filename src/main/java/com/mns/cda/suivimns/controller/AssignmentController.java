@@ -1,6 +1,8 @@
 package com.mns.cda.suivimns.controller;
 
+import com.mns.cda.suivimns.dto.AssignmentDto;
 import com.mns.cda.suivimns.model.Assignment;
+import com.mns.cda.suivimns.service.AssignmentService;
 import com.mns.cda.suivimns.service.AssignmentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -24,41 +26,35 @@ public class AssignmentController {
 
     protected final AssignmentService assignmentService;
 
-
-    @Operation(summary = "Récupérer toutes les affectations")
-    @ApiResponse(responseCode = "200", description = "Liste récupérée")
+    @Operation(summary = "Récupere toutes les attributions",
+            description = "Récupere la liste complète de attribution de la base")
+    @ApiResponse(responseCode = "200", description = "Liste récupérée avec succés")
     @GetMapping("/list")
-    public List<Assignment> getAll() {
+    public List<AssignmentDto> getAll() {
         return assignmentService.findAll();
     }
 
 
-    @Operation(summary = "Récupérer une affectation par ID")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Assignment trouvé"),
-            @ApiResponse(responseCode = "404", description = "Non trouvé")})
+    @Operation(summary = "Récupére une attribution en fonction de son ID")
+    @ApiResponses({@ApiResponse(responseCode = "200", description = "Attribution trouvée"),
+            @ApiResponse(responseCode = "404", description = "Attribution non trouvée")})
     @GetMapping("/{id}")
-    public ResponseEntity<Assignment> getById(@PathVariable int id) {
-        Optional<Assignment> assignment = assignmentService.findById(id);
-        if (assignment.isEmpty()) {
+    public ResponseEntity<AssignmentDto> getById(@PathVariable int id) {
+
+        try {
+            return new ResponseEntity<>(assignmentService.findById(id) , HttpStatus.OK);
+        } catch (AssignmentService.AssignmentNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
-        return new ResponseEntity<>(assignment.get(), HttpStatus.OK);
     }
 
 
-    @Operation(summary = "Affecter un ticket à un technicien")
-    @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Créé"),
-            @ApiResponse(responseCode = "400", description = "Erreur validation")})
+    @Operation(summary = "Crée une nouvelle attribution")
+    @ApiResponses({@ApiResponse(responseCode = "201", description = "Attribution crée"),
+            @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PostMapping
-    public ResponseEntity<Assignment> create(@RequestBody @Valid Assignment assignment) {
-
-        Assignment assignmentSaved = assignmentService.firstSave(assignment);
-
-        return new ResponseEntity<>(assignmentSaved, HttpStatus.CREATED);
-
+    public ResponseEntity<AssignmentDto> create(@RequestBody @Valid AssignmentDto assignment) {
+        return new ResponseEntity<>(assignmentService.save(assignment), HttpStatus.CREATED);
     }
 
 

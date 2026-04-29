@@ -1,13 +1,16 @@
 package com.mns.cda.suivimns.controller;
 
+import com.mns.cda.suivimns.dto.ThemeDto;
 import com.mns.cda.suivimns.model.Theme;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
+import com.mns.cda.suivimns.service.ThemeService;
 import com.mns.cda.suivimns.service.ThemeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,72 +28,61 @@ import java.util.Optional;
 public class ThemeController {
 
     protected final ThemeService themeService;
-
-
-    @Operation(summary = "Récupérer toutes les thématiques")
-    @ApiResponse(responseCode = "200", description = "Liste des thématiques récupérée")
+    @Operation(summary = "Récupere toutes les thématiques",
+            description = "Récupere la liste complète de thématique de la base")
+    @ApiResponse(responseCode = "200", description = "Liste récupérée avec succés")
     @GetMapping("/list")
-    public List<Theme> getAll() {
+    public List<ThemeDto> getAll() {
         return themeService.findAll();
     }
 
 
-    @Operation(summary = "Récupérer une thématique par son ID")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Thématique trouvée"),
+    @Operation(summary = "Récupére une thématique en fonction de son ID")
+    @ApiResponses({@ApiResponse(responseCode = "200", description = "Thématique trouvée"),
             @ApiResponse(responseCode = "404", description = "Thématique non trouvée")})
     @GetMapping("/{id}")
-    public ResponseEntity<Theme> getById(@PathVariable int id) {
+    public ResponseEntity<ThemeDto> getById(@PathVariable int id) {
 
-        Optional<Theme> theme = themeService.findById(id);
-        if (theme.isEmpty()) {
+        try {
+            return new ResponseEntity<>(themeService.findById(id) , HttpStatus.OK);
+        } catch (ThemeService.ThemeNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
-        return new ResponseEntity<>(theme.get(), HttpStatus.OK);
     }
 
 
-    @Operation(summary = "Créer une thématique")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Thématique créée"),
+    @Operation(summary = "Crée une nouvelle thématique")
+    @ApiResponses({@ApiResponse(responseCode = "201", description = "Thématique crée"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PostMapping
-    public ResponseEntity<Theme> create(@RequestBody @Validated(OnCreate.class) Theme theme) {
-        Theme themeSaved = themeService.save(theme);
-
-        return new ResponseEntity<>(themeSaved, HttpStatus.CREATED);
+    public ResponseEntity<ThemeDto> create(@RequestBody @Valid ThemeDto theme) {
+        return new ResponseEntity<>(themeService.save(theme), HttpStatus.CREATED);
     }
 
 
-    @Operation(summary = "Supprimer une thématique")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Thématique supprimée"),
+    @Operation(summary = "Efface une thématique selon son ID")
+    @ApiResponses({@ApiResponse(responseCode = "204", description = "Thématique effacée"),
             @ApiResponse(responseCode = "404", description = "Thématique non trouvée")})
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
-        Optional<Theme> theme = themeService.findById(id);
-        if (theme.isEmpty()) {
+        try {
+            themeService.delete(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (ThemeService.ThemeNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
-        themeService.delete(theme.get());
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 
-    @Operation(
-            summary = "Mettre à jour une thématique",
-            description = "Modifie les champs 'designation' et 'description'")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Thématique mise à jour"),
+    @Operation(summary = "Modifie une thématique en fonction de son ID",
+            description = "Modifie les champs 'subject', 'theme' et 'themeList' d'une thématique")
+    @ApiResponses({@ApiResponse(responseCode = "200", description = "Thématique modifiée avec succés"),
             @ApiResponse(responseCode = "404", description = "Thématique non trouvée"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PutMapping("/{id}")
-    public ResponseEntity<Theme> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Theme themeToUpdate) {
+    public ResponseEntity<ThemeDto> update(@PathVariable int id, @RequestBody @Valid ThemeDto themeToUpdate) {
         try {
-            Theme themeSaved = themeService.update(themeToUpdate, id);
-            return new ResponseEntity<>(themeSaved, HttpStatus.OK);
+            return new ResponseEntity<>(themeService.update(id, themeToUpdate), HttpStatus.OK);
         } catch (ThemeService.ThemeNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

@@ -1,13 +1,16 @@
 package com.mns.cda.suivimns.controller;
 
+import com.mns.cda.suivimns.dto.StatusDto;
 import com.mns.cda.suivimns.model.Status;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
+import com.mns.cda.suivimns.service.StatusService;
 import com.mns.cda.suivimns.service.StatusService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,74 +29,61 @@ public class StatusController {
 
     protected final StatusService statusService;
 
-
-    @Operation(summary = "Récupérer tous les statuts")
-    @ApiResponse(responseCode = "200", description = "Liste des statuts récupérée")
+    @Operation(summary = "Récupere toutes les statuts",
+            description = "Récupere la liste complète de statut de la base")
+    @ApiResponse(responseCode = "200", description = "Liste récupérée avec succés")
     @GetMapping("/list")
-    public List<Status> getAll() {
+    public List<StatusDto> getAll() {
         return statusService.findAll();
     }
 
 
-    @Operation(summary = "Récupérer un statut par son ID")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Statut trouvé"),
-            @ApiResponse(responseCode = "404", description = "Statut non trouvé")})
+    @Operation(summary = "Récupére une statut en fonction de son ID")
+    @ApiResponses({@ApiResponse(responseCode = "200", description = "Statut trouvée"),
+            @ApiResponse(responseCode = "404", description = "Statut non trouvée")})
     @GetMapping("/{id}")
-    public ResponseEntity<Status> getById(@PathVariable int id) {
+    public ResponseEntity<StatusDto> getById(@PathVariable int id) {
 
-        Optional<Status> status = statusService.findById(id);
-        if (status.isEmpty()) {
+        try {
+            return new ResponseEntity<>(statusService.findById(id) , HttpStatus.OK);
+        } catch (StatusService.StatusNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
-        return new ResponseEntity<>(status.get(), HttpStatus.OK);
     }
 
 
-    @Operation(summary = "Créer un statut")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Statut créé"),
+    @Operation(summary = "Crée une nouvelle statut")
+    @ApiResponses({@ApiResponse(responseCode = "201", description = "Statut crée"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PostMapping
-    public ResponseEntity<Status> create(@RequestBody @Validated(OnCreate.class) Status status) {
-        Status statusSaved = statusService.save(status);
-
-        return new ResponseEntity<>(statusSaved, HttpStatus.CREATED);
+    public ResponseEntity<StatusDto> create(@RequestBody @Valid StatusDto status) {
+        return new ResponseEntity<>(statusService.save(status), HttpStatus.CREATED);
     }
 
 
-    @Operation(summary = "Supprimer un statut")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Statut supprimé"),
-            @ApiResponse(responseCode = "404", description = "Statut non trouvé")})
+    @Operation(summary = "Efface une statut selon son ID")
+    @ApiResponses({@ApiResponse(responseCode = "204", description = "Statut effacée"),
+            @ApiResponse(responseCode = "404", description = "Statut non trouvée")})
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
-        Optional<Status> status = statusService.findById(id);
-        if (status.isEmpty()) {
+        try {
+            statusService.delete(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (StatusService.StatusNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
-        statusService.delete(status.get());
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    /* Champs modifiables :
-     * designation
-     * displayOrder
-     */
-    @Operation(
-            summary = "Mettre à jour un statut",
-            description = "Modifie les champs 'designation' et 'displayOrder'")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Statut mis à jour"),
-            @ApiResponse(responseCode = "404", description = "Statut non trouvé"),
+
+    @Operation(summary = "Modifie une statut en fonction de son ID",
+            description = "Modifie les champs 'subject', 'theme' et 'statusList' d'une statut")
+    @ApiResponses({@ApiResponse(responseCode = "200", description = "Statut modifiée avec succés"),
+            @ApiResponse(responseCode = "404", description = "Statut non trouvée"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PutMapping("/{id}")
-    public ResponseEntity<Status> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Status statusToUpdate) {
+    public ResponseEntity<StatusDto> update(@PathVariable int id, @RequestBody @Valid StatusDto statusToUpdate) {
         try {
-            Status statusSaved = statusService.update(statusToUpdate, id);
-            return new ResponseEntity<>(statusSaved, HttpStatus.OK);
+            return new ResponseEntity<>(statusService.update(id, statusToUpdate), HttpStatus.OK);
         } catch (StatusService.StatusNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

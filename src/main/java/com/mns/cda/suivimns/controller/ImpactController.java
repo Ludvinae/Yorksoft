@@ -1,13 +1,16 @@
 package com.mns.cda.suivimns.controller;
 
+import com.mns.cda.suivimns.dto.ImpactDto;
 import com.mns.cda.suivimns.model.Impact;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
+import com.mns.cda.suivimns.service.ImpactService;
 import com.mns.cda.suivimns.service.ImpactService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,80 +28,61 @@ import java.util.Optional;
 public class ImpactController {
 
     protected final ImpactService impactService;
-
-
-    @Operation(
-            summary = "Récupérer tous les impacts",
-            description = "Retourne la liste complète des niveaux d'impact")
-    @ApiResponse(responseCode = "200", description = "Liste récupérée avec succès")
+    @Operation(summary = "Récupere toutes les impacts",
+            description = "Récupere la liste complète de impact de la base")
+    @ApiResponse(responseCode = "200", description = "Liste récupérée avec succés")
     @GetMapping("/list")
-    public List<Impact> getAll() {
+    public List<ImpactDto> getAll() {
         return impactService.findAll();
     }
 
 
-    @Operation(
-            summary = "Récupérer un impact par ID",
-            description = "Retourne un niveau d'impact à partir de son identifiant")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Impact trouvé"),
-            @ApiResponse(responseCode = "404", description = "Impact non trouvé")})
+    @Operation(summary = "Récupére une impact en fonction de son ID")
+    @ApiResponses({@ApiResponse(responseCode = "200", description = "Impact trouvée"),
+            @ApiResponse(responseCode = "404", description = "Impact non trouvée")})
     @GetMapping("/{id}")
-    public ResponseEntity<Impact> getById(@PathVariable int id) {
+    public ResponseEntity<ImpactDto> getById(@PathVariable int id) {
 
-        Optional<Impact> impact = impactService.findById(id);
-        if (impact.isEmpty()) {
+        try {
+            return new ResponseEntity<>(impactService.findById(id) , HttpStatus.OK);
+        } catch (ImpactService.ImpactNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
-        return new ResponseEntity<>(impact.get(), HttpStatus.OK);
     }
 
 
-    @Operation(
-            summary = "Créer un impact",
-            description = "Crée un nouveau niveau d'impact")
-    @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Impact créé avec succès"),
+    @Operation(summary = "Crée une nouvelle impact")
+    @ApiResponses({@ApiResponse(responseCode = "201", description = "Impact crée"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PostMapping
-    public ResponseEntity<Impact> create(@RequestBody @Validated(OnCreate.class) Impact impact) {
-        Impact impactSaved = impactService.save(impact);
-
-        return new ResponseEntity<>(impactSaved, HttpStatus.CREATED);
+    public ResponseEntity<ImpactDto> create(@RequestBody @Valid ImpactDto impact) {
+        return new ResponseEntity<>(impactService.save(impact), HttpStatus.CREATED);
     }
 
 
-    @Operation(
-            summary = "Supprimer un impact",
-            description = "Supprime un niveau d'impact à partir de son identifiant")
-    @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "Impact supprimé"),
-            @ApiResponse(responseCode = "404", description = "Impact non trouvé")})
+    @Operation(summary = "Efface une impact selon son ID")
+    @ApiResponses({@ApiResponse(responseCode = "204", description = "Impact effacée"),
+            @ApiResponse(responseCode = "404", description = "Impact non trouvée")})
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
-        Optional<Impact> impact = impactService.findById(id);
-        if (impact.isEmpty()) {
+        try {
+            impactService.delete(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (ImpactService.ImpactNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
-        impactService.delete(impact.get());
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 
-    @Operation(
-            summary = "Mettre à jour un impact",
-            description = "Met à jour les informations d’un impact existant ('designation', 'description', 'priorityFactor')")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Impact mis à jour"),
-            @ApiResponse(responseCode = "404", description = "Impact non trouvé"),
+    @Operation(summary = "Modifie une impact en fonction de son ID",
+            description = "Modifie les champs 'subject', 'theme' et 'impactList' d'une impact")
+    @ApiResponses({@ApiResponse(responseCode = "200", description = "Impact modifiée avec succés"),
+            @ApiResponse(responseCode = "404", description = "Impact non trouvée"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PutMapping("/{id}")
-    public ResponseEntity<Impact> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Impact impactToUpdate) {
+    public ResponseEntity<ImpactDto> update(@PathVariable int id, @RequestBody @Valid ImpactDto impactToUpdate) {
         try {
-            Impact impactSaved = impactService.update(impactToUpdate, id);
-            return new ResponseEntity<>(impactSaved, HttpStatus.OK);
+            return new ResponseEntity<>(impactService.update(id, impactToUpdate), HttpStatus.OK);
         } catch (ImpactService.ImpactNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

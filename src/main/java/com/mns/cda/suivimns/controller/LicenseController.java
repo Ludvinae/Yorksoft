@@ -1,13 +1,16 @@
 package com.mns.cda.suivimns.controller;
 
+import com.mns.cda.suivimns.dto.LicenseDto;
 import com.mns.cda.suivimns.model.License;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
+import com.mns.cda.suivimns.service.LicenseService;
 import com.mns.cda.suivimns.service.LicenseService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,67 +28,61 @@ import java.util.Optional;
 public class LicenseController {
 
     protected final LicenseService licenseService;
-
-
-    @Operation(summary = "Récupère toutes les licences")
+    @Operation(summary = "Récupere toutes les licences",
+            description = "Récupere la liste complète de licence de la base")
     @ApiResponse(responseCode = "200", description = "Liste récupérée avec succés")
     @GetMapping("/list")
-    public List<License> getAll() {
+    public List<LicenseDto> getAll() {
         return licenseService.findAll();
     }
 
 
-    @Operation(summary = "Récupère une licence en fonction de son ID")
+    @Operation(summary = "Récupére une licence en fonction de son ID")
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Licence trouvée"),
-                    @ApiResponse(responseCode = "404", description = "Licence non trouvée")})
+            @ApiResponse(responseCode = "404", description = "Licence non trouvée")})
     @GetMapping("/{id}")
-    public ResponseEntity<License> getById(@PathVariable int id) {
+    public ResponseEntity<LicenseDto> getById(@PathVariable int id) {
 
-        Optional<License> license = licenseService.findById(id);
-        if (license.isEmpty()) {
+        try {
+            return new ResponseEntity<>(licenseService.findById(id) , HttpStatus.OK);
+        } catch (LicenseService.LicenseNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
-        return new ResponseEntity<>(license.get(), HttpStatus.OK);
     }
 
 
-    @Operation(summary="Crée une nouvelle licence")
+    @Operation(summary = "Crée une nouvelle licence")
     @ApiResponses({@ApiResponse(responseCode = "201", description = "Licence crée"),
-                    @ApiResponse(responseCode = "400", description = "Données non valides")})
+            @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PostMapping
-    public ResponseEntity<License> create(@RequestBody @Validated(OnCreate.class) License license) {
-        License licenseSaved = licenseService.save(license);
-
-        return new ResponseEntity<>(licenseSaved, HttpStatus.CREATED);
+    public ResponseEntity<LicenseDto> create(@RequestBody @Valid LicenseDto license) {
+        return new ResponseEntity<>(licenseService.save(license), HttpStatus.CREATED);
     }
 
 
-    @Operation(summary = "Efface une licence en fonction de son ID")
+    @Operation(summary = "Efface une licence selon son ID")
     @ApiResponses({@ApiResponse(responseCode = "204", description = "Licence effacée"),
-                    @ApiResponse(responseCode = "404", description = "Licence introuvable")})
+            @ApiResponse(responseCode = "404", description = "Licence non trouvée")})
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
-        Optional<License> license = licenseService.findById(id);
-        if (license.isEmpty()) {
+        try {
+            licenseService.delete(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (LicenseService.LicenseNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
-        licenseService.delete(license.get());
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 
     @Operation(summary = "Modifie une licence en fonction de son ID",
-                description = "Modifie les champs 'userCount' et 'expirationDate'")
-    @ApiResponses({@ApiResponse(responseCode = "200", description = "licence mis à jour"),
-                    @ApiResponse(responseCode = "404", description = "Licence non trouvé"),
-                    @ApiResponse(responseCode = "400", description = "Données invalides")})
+            description = "Modifie les champs 'subject', 'theme' et 'licenseList' d'une licence")
+    @ApiResponses({@ApiResponse(responseCode = "200", description = "Licence modifiée avec succés"),
+            @ApiResponse(responseCode = "404", description = "Licence non trouvée"),
+            @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PutMapping("/{id}")
-    public ResponseEntity<License> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) License licenseToUpdate){
+    public ResponseEntity<LicenseDto> update(@PathVariable int id, @RequestBody @Valid LicenseDto licenseToUpdate) {
         try {
-            License licenseSaved = licenseService.update(licenseToUpdate, id);
-            return new ResponseEntity<>(licenseSaved, HttpStatus.OK);
+            return new ResponseEntity<>(licenseService.update(id, licenseToUpdate), HttpStatus.OK);
         } catch (LicenseService.LicenseNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

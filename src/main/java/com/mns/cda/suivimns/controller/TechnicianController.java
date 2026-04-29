@@ -1,20 +1,21 @@
 package com.mns.cda.suivimns.controller;
 
+import com.mns.cda.suivimns.dto.TechnicianDto;
+import com.mns.cda.suivimns.dto.flat.PasswordDto;
 import com.mns.cda.suivimns.model.Technician;
-import com.mns.cda.suivimns.model.groups.OnCreate;
+import com.mns.cda.suivimns.service.AppUserService;
 import com.mns.cda.suivimns.service.TechnicianService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,65 +27,89 @@ public class TechnicianController {
     protected final TechnicianService technicianService;
 
 
-    @Operation(summary = "Récupère tous les techniciens")
-    @ApiResponse(responseCode = "200", description = "Liste récupérée")
+    @Operation(summary = "Récupere toutes les techniciens",
+            description = "Récupere la liste complète de technicien de la base")
+    @ApiResponse(responseCode = "200", description = "Liste récupérée avec succés")
     @GetMapping("/list")
-    public List<Technician> getAll() {
+    public List<TechnicianDto> getAll() {
         return technicianService.findAll();
     }
 
 
-    @Operation(summary = "Récupère un technicien en fonction de son ID")
-    @ApiResponses({@ApiResponse(responseCode = "200", description = "Technicien récupéré"),
-            @ApiResponse(responseCode = "404", description = "Non trouvé")})
+    @Operation(summary = "Récupére une technicien en fonction de son ID")
+    @ApiResponses({@ApiResponse(responseCode = "200", description = "Technicien trouvée"),
+            @ApiResponse(responseCode = "404", description = "Technicien non trouvée")})
     @GetMapping("/{id}")
-    public ResponseEntity<Technician> getById(@PathVariable int id) {
+    public ResponseEntity<TechnicianDto> getById(@PathVariable int id) {
 
-        Optional<Technician> technician = technicianService.findById(id);
-        if (technician.isEmpty()) {
+        try {
+            return new ResponseEntity<>(technicianService.findById(id) , HttpStatus.OK);
+        } catch (TechnicianService.TechnicianNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
-        return new ResponseEntity<>(technician.get(), HttpStatus.OK);
     }
 
 
-    @Operation(summary = "Crée un nouveau technicien")
+    @Operation(summary = "Crée une nouvelle technicien")
     @ApiResponses({@ApiResponse(responseCode = "201", description = "Technicien crée"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PostMapping
-    public ResponseEntity<Technician> create(@RequestBody @Validated(OnCreate.class) Technician technician) {
-        Technician technicianSaved = technicianService.save(technician);
-
-        return new ResponseEntity<>(technicianSaved, HttpStatus.CREATED);
+    public ResponseEntity<TechnicianDto> create(@RequestBody @Valid TechnicianDto technician) {
+        return new ResponseEntity<>(technicianService.save(technician), HttpStatus.CREATED);
     }
 
 
-    @Operation(summary = "Efface un technicien")
-    @ApiResponses({@ApiResponse(responseCode = "201", description = "Technicien crée"),
-            @ApiResponse(responseCode = "404", description = "Non trouvé")})
+    @Operation(summary = "Efface une technicien selon son ID")
+    @ApiResponses({@ApiResponse(responseCode = "204", description = "Technicien effacée"),
+            @ApiResponse(responseCode = "404", description = "Technicien non trouvée")})
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
-        Optional<Technician> technician = technicianService.findById(id);
-        if (technician.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        technicianService.delete(technician.get());
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-
-    /*
-    @PutMapping("/{id}")
-    public ResponseEntity<Technician> update(@PathVariable int id, @RequestBody @Validated(OnUpdate.class) Technician technicianToUpdate){
         try {
-            Technician technicianSaved = technicianService.update(technicianToUpdate, id);
-            return new ResponseEntity<>(technicianSaved, HttpStatus.OK);
-        } catch (iTechnicianService.TechnicianNotFoundException e) {
+            technicianService.delete(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (TechnicianService.TechnicianNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
-     */
+
+    @Operation(summary = "Mettre à jour un technicien",
+            description = "Modifie les champs 'firstName', 'lastName', 'email' et 'phoneNumber'")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Technicien mis à jour"),
+            @ApiResponse(responseCode = "404", description = "Technicien non trouvé"),
+            @ApiResponse(responseCode = "400", description = "Email déja utilisé")})
+    @PatchMapping("/{id}")
+    public ResponseEntity<Technician> update(@PathVariable int id, @RequestBody @Valid TechnicianDto dto) {
+
+        try {
+            Technician user = technicianService.update(dto, id);
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        } catch (TechnicianService.TechnicianNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            // IMPLEMENTER TEST UNICITE EMAIL !!!
+        } catch (AppUserService.EmailAlreadyUsedException e) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+    }
+
+
+    @Operation(summary = "Changer le mot de passe d'un technicien",
+            description = "Compare le champ 'oldPassword' avec le mot de passe, " +
+                    "et si identique le remplace avec la valeur du champ 'newPassword'")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Mot de passe mis à jour"),
+            @ApiResponse(responseCode = "404", description = "Technicien non trouvé"),
+            @ApiResponse(responseCode = "400", description = "Données invalides")})
+    @PatchMapping("/{id}/password")
+    public ResponseEntity<Void> patch(@PathVariable int id, @RequestBody PasswordDto dto) {
+        try {
+            technicianService.updatePassword(id, dto);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (TechnicianService.TechnicianNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (AppUserService.BadPasswordException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 }

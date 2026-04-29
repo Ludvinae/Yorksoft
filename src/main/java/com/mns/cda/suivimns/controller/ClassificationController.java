@@ -1,13 +1,16 @@
 package com.mns.cda.suivimns.controller;
 
+import com.mns.cda.suivimns.dto.ClassificationDto;
 import com.mns.cda.suivimns.model.Classification;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.keys.ClassificationKey;
+import com.mns.cda.suivimns.service.ClassificationService;
 import com.mns.cda.suivimns.service.ClassificationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,41 +29,35 @@ public class ClassificationController {
 
     protected final ClassificationService classificationService;
 
-
-    @Operation(summary = "Récupérer toutes les classifications")
-    @ApiResponse(responseCode = "200", description = "Liste récupérée")
+    @Operation(summary = "Récupere toutes les classifications",
+            description = "Récupere la liste complète de classification de la base")
+    @ApiResponse(responseCode = "200", description = "Liste récupérée avec succés")
     @GetMapping("/list")
-    public List<Classification> getAll() {
+    public List<ClassificationDto> getAll() {
         return classificationService.findAll();
     }
 
 
-    @Operation(summary = "Récupérer une classification par ID")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Classification trouvée"),
-            @ApiResponse(responseCode = "404", description = "Non trouvée")})
-    @GetMapping("/{idTicket}/{idTheme}")
-    public ResponseEntity<Classification> getById(@PathVariable int idTicket, @PathVariable int idTheme) {
-        ClassificationKey key = new ClassificationKey(idTicket, idTheme);
+    @Operation(summary = "Récupére une classification en fonction de son ID")
+    @ApiResponses({@ApiResponse(responseCode = "200", description = "Classification trouvée"),
+            @ApiResponse(responseCode = "404", description = "Classification non trouvée")})
+    @GetMapping("/{id}")
+    public ResponseEntity<ClassificationDto> getById(@PathVariable int id) {
 
-        Optional<Classification> classification = classificationService.findById(key);
-        if (classification.isEmpty()) {
+        try {
+            return new ResponseEntity<>(classificationService.findById(id) , HttpStatus.OK);
+        } catch (ClassificationService.ClassificationNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
-        return new ResponseEntity<>(classification.get(), HttpStatus.OK);
     }
 
 
-    @Operation(summary = "Créer une classification")
-    @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Créée"),
+    @Operation(summary = "Crée une nouvelle classification")
+    @ApiResponses({@ApiResponse(responseCode = "201", description = "Classification crée"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PostMapping
-    public ResponseEntity<Classification> create(@RequestBody @Validated(OnCreate.class) Classification classification) {
-        Classification classificationSaved = classificationService.save(classification);
-
-        return new ResponseEntity<>(classificationSaved, HttpStatus.CREATED);
+    public ResponseEntity<ClassificationDto> create(@RequestBody @Valid ClassificationDto classification) {
+        return new ResponseEntity<>(classificationService.save(classification), HttpStatus.CREATED);
     }
 
 
