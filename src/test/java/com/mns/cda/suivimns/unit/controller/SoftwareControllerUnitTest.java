@@ -3,8 +3,6 @@ package com.mns.cda.suivimns.unit.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.SoftwareController;
 import com.mns.cda.suivimns.dto.SoftwareDto;
-import com.mns.cda.suivimns.dto.flat.SoftwareDtoFlat;
-import com.mns.cda.suivimns.model.Software;
 import com.mns.cda.suivimns.service.SoftwareService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,7 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -38,19 +35,27 @@ class SoftwareControllerUnitTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private Software software;
     private SoftwareDto softwareDto;
 
     @BeforeEach
     void setUp() {
-        software = new Software();
-        software.setIdSoftware(1);
-        software.setName("TestSoft");
-
-        // ⚠️ Adapter si @NotNull sur d'autres champs
         //DTO
         softwareDto = new SoftwareDto(
-                1, "TestSoft", "", 1);
+                1, "Test software", "", 1);
+    }
+
+    // =========================
+    // TEST DTO
+    // =========================
+    @Test
+    void shouldReturn400WhenCreateInvalid() throws Exception {
+
+        SoftwareDto invalidDto = new SoftwareDto(null,"", null, null);
+
+        mockMvc.perform(post("/software")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(invalidDto)))
+                .andExpect(status().isBadRequest());
     }
 
     // =========================
@@ -59,13 +64,13 @@ class SoftwareControllerUnitTest {
     @Test
     void shouldReturnAll() throws Exception {
 
-        when(softwareService.findAll()).thenReturn(List.of(software));
+        when(softwareService.findAll()).thenReturn(List.of(softwareDto));
 
         mockMvc.perform(get("/software/list"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].idSoftware").value(1))
-                .andExpect(jsonPath("$[0].name").value("TestSoft"));
+                .andExpect(jsonPath("$[0].name").value("Test software"));
     }
 
     // =========================
@@ -74,13 +79,13 @@ class SoftwareControllerUnitTest {
     @Test
     void shouldReturnById() throws Exception {
 
-        when(softwareService.findById(1)).thenReturn(Optional.of(software));
+        when(softwareService.findById(1)).thenReturn(softwareDto);
 
         mockMvc.perform(get("/software/1"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.idSoftware").value(1))
-                .andExpect(jsonPath("$.name").value("TestSoft"));
+                .andExpect(jsonPath("$.name").value("Test software"));
     }
 
     // =========================
@@ -89,7 +94,8 @@ class SoftwareControllerUnitTest {
     @Test
     void shouldReturn404WhenNotFound() throws Exception {
 
-        when(softwareService.findById(1)).thenReturn(Optional.empty());
+        when(softwareService.findById(1))
+                .thenThrow(new SoftwareService.SoftwareNotFoundException());
 
         mockMvc.perform(get("/software/1"))
                 .andDo(print())
@@ -102,16 +108,14 @@ class SoftwareControllerUnitTest {
     @Test
     void shouldCreate() throws Exception {
 
-        SoftwareDtoFlat softwareDto = new SoftwareDtoFlat("TestSoft","", null, null);
-
-        when(softwareService.createSoftware(any(SoftwareDtoFlat.class))).thenReturn(software);
+        when(softwareService.save(any(SoftwareDto.class))).thenReturn(softwareDto);
 
         mockMvc.perform(post("/software")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(softwareDto)))
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.name").value("TestSoft"));
+                .andExpect(jsonPath("$.name").value("Test software"));
     }
 
     // =========================
@@ -120,13 +124,13 @@ class SoftwareControllerUnitTest {
     @Test
     void shouldDelete() throws Exception {
 
-        when(softwareService.findById(1)).thenReturn(Optional.of(software));
+        doNothing().when(softwareService).delete(1);
 
         mockMvc.perform(delete("/software/1"))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
-        verify(softwareService).delete(software);
+        verify(softwareService).delete(1);
     }
 
     // =========================
@@ -135,7 +139,8 @@ class SoftwareControllerUnitTest {
     @Test
     void shouldReturn404WhenDeleteNotFound() throws Exception {
 
-        when(softwareService.findById(1)).thenReturn(Optional.empty());
+        doThrow(new SoftwareService.SoftwareNotFoundException())
+                .when(softwareService).delete(1);
 
         mockMvc.perform(delete("/software/1"))
                 .andDo(print())
@@ -148,14 +153,14 @@ class SoftwareControllerUnitTest {
     @Test
     void shouldUpdate() throws Exception {
 
-        when(softwareService.update(any(Software.class), eq(1))).thenReturn(software);
+        when(softwareService.update(eq(1), any(SoftwareDto.class))).thenReturn(softwareDto);
 
         mockMvc.perform(put("/software/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(software)))
+                        .content(objectMapper.writeValueAsString(softwareDto)))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("TestSoft"));
+                .andExpect(jsonPath("$.name").value("Test software"));
     }
 
     // =========================
@@ -164,12 +169,12 @@ class SoftwareControllerUnitTest {
     @Test
     void shouldReturn404WhenUpdateFails() throws Exception {
 
-        when(softwareService.update(any(Software.class), eq(1)))
+        when(softwareService.update(eq(1), any(SoftwareDto.class)))
                 .thenThrow(new SoftwareService.SoftwareNotFoundException());
 
         mockMvc.perform(put("/software/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(software)))
+                        .content(objectMapper.writeValueAsString(softwareDto)))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }

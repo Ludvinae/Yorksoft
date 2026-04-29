@@ -3,11 +3,7 @@ package com.mns.cda.suivimns.unit.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.VersionController;
 import com.mns.cda.suivimns.dto.VersionDto;
-import com.mns.cda.suivimns.dto.VersionTypeDto;
-import com.mns.cda.suivimns.model.Software;
-import com.mns.cda.suivimns.model.Version;
 import com.mns.cda.suivimns.service.VersionService;
-import com.mns.cda.suivimns.service.VersionTypeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +14,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;

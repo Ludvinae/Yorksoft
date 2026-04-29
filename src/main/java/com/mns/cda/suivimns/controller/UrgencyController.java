@@ -1,11 +1,9 @@
 package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.UrgencyDto;
-import com.mns.cda.suivimns.model.Urgency;
-import com.mns.cda.suivimns.model.groups.OnCreate;
-import com.mns.cda.suivimns.model.groups.OnUpdate;
+import com.mns.cda.suivimns.dto.UrgencyDto;
 import com.mns.cda.suivimns.service.UrgencyService;
-import com.mns.cda.suivimns.service.VersionTypeService;
+import com.mns.cda.suivimns.service.UrgencyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -14,11 +12,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @CrossOrigin
@@ -30,20 +26,20 @@ public class UrgencyController {
     protected final UrgencyService urgencyService;
 
 
-    @Operation(summary = "Récupérer tous les niveaux d'urgence")
+    @Operation(summary = "Récupérer toutes les urgences")
     @ApiResponse(responseCode = "200", description = "Liste des urgences récupérée")
     @GetMapping("/list")
-    public List<UrgencyDto> getAll() {
+    public List<UrgencyDto> findAll() {
         return urgencyService.findAll();
     }
 
 
-    @Operation(summary = "Récupérer un niveau d'urgence par son ID")
+    @Operation(summary = "Récupérer une urgence par son ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Urgence trouvée"),
             @ApiResponse(responseCode = "404", description = "Urgence non trouvée")})
     @GetMapping("/{id}")
-    public ResponseEntity<UrgencyDto> getById(@PathVariable int id) {
+    public ResponseEntity<UrgencyDto> findById(@PathVariable Integer id) {
 
         try {
             return new ResponseEntity<>(urgencyService.findById(id) , HttpStatus.OK);
@@ -53,7 +49,7 @@ public class UrgencyController {
     }
 
 
-    @Operation(summary = "Créer un niveau d'urgence")
+    @Operation(summary = "Créer une nouvelle urgence")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Urgence créée"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
@@ -63,12 +59,13 @@ public class UrgencyController {
     }
 
 
-    @Operation(summary = "Supprimer un niveau d'urgence")
+    @Operation(summary = "Supprimer une urgence")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Urgence supprimée"),
             @ApiResponse(responseCode = "404", description = "Urgence non trouvée")})
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable int id) {
+    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+
         try {
             urgencyService.delete(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -79,14 +76,13 @@ public class UrgencyController {
 
 
     @Operation(
-            summary = "Mettre à jour un niveau d'urgence",
-            description = "Modifie les champs 'designation', 'description' et 'priorityFactor'")
+            summary = "Mettre à jour une urgence")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Urgence mise à jour"),
             @ApiResponse(responseCode = "404", description = "Urgence non trouvée"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PutMapping("/{id}")
-    public ResponseEntity<UrgencyDto> update(@PathVariable int id, @RequestBody @Valid UrgencyDto urgencyToUpdate) {
+    public ResponseEntity<UrgencyDto> update(@PathVariable Integer id, @RequestBody @Valid UrgencyDto urgencyToUpdate) {
         try {
             return new ResponseEntity<>(urgencyService.update(id, urgencyToUpdate), HttpStatus.OK);
         } catch (UrgencyService.UrgencyNotFoundException e) {

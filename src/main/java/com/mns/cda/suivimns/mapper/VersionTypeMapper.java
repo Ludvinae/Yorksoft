@@ -1,8 +1,6 @@
 package com.mns.cda.suivimns.mapper;
 
-import com.mns.cda.suivimns.dto.VersionDto;
 import com.mns.cda.suivimns.dto.VersionTypeDto;
-import com.mns.cda.suivimns.model.Version;
 import com.mns.cda.suivimns.model.VersionType;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

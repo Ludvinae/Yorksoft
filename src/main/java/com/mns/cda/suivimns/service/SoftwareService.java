@@ -2,14 +2,13 @@ package com.mns.cda.suivimns.service;
 
 import com.mns.cda.suivimns.dao.SoftwareDao;
 import com.mns.cda.suivimns.dao.SoftwareTypeDao;
-import com.mns.cda.suivimns.dto.flat.SoftwareDtoFlat;
+import com.mns.cda.suivimns.dto.SoftwareDto;
+import com.mns.cda.suivimns.mapper.SoftwareMapper;
 import com.mns.cda.suivimns.model.Software;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,47 +18,41 @@ public class SoftwareService {
     }
 
     protected final SoftwareDao softwareDao;
-    protected final SoftwareTypeDao softwareTypeDao;
+    protected final SoftwareMapper softwareMapper;
 
-    public List<Software> findAll() {
-        return softwareDao.findAll();
+    public List<SoftwareDto> findAll() {
+        return softwareMapper.toDtoList(softwareDao.findAll());
     }
 
-    public Optional<Software> findById(int id) {
-        return softwareDao.findById(id);
+    public SoftwareDto findById(int id) throws SoftwareService.SoftwareNotFoundException {
+        Software software = softwareDao.findById(id)
+                .orElseThrow(SoftwareService.SoftwareNotFoundException::new);
+
+        return softwareMapper.toDto(software);
     }
 
-    public Software save(Software software) {
-
+    public SoftwareDto save(SoftwareDto dto) {
+        Software software = softwareMapper.toEntity(dto);
         software.setIdSoftware(null);
-        return softwareDao.save(software);
+        Software saved = softwareDao.save(software);
+
+        return softwareMapper.toDto(saved);
     }
 
-    public void delete(Software software) {
+    public void delete(int id) throws SoftwareService.SoftwareNotFoundException {
+        Software software = softwareDao.findById(id)
+                .orElseThrow(SoftwareService.SoftwareNotFoundException::new);
+
         softwareDao.delete(software);
     }
 
-    public Software update(Software softwareToUpdate, int id) throws SoftwareNotFoundException {
+    public SoftwareDto update(int id, SoftwareDto softwareToUpdate) throws SoftwareService.SoftwareNotFoundException {
+
         Software currentSoftware = softwareDao.findById(id)
-                .orElseThrow(SoftwareNotFoundException::new);
+                .orElseThrow(SoftwareService.SoftwareNotFoundException::new);
 
-        currentSoftware.setName(softwareToUpdate.getName());
-        currentSoftware.setDescription(softwareToUpdate.getDescription());
+        softwareMapper.updateEntityFromDto(softwareToUpdate, currentSoftware);
 
-        currentSoftware.setType(softwareToUpdate.getType());
-
-        return softwareDao.save(currentSoftware);
-    }
-
-    @Transactional
-    public Software createSoftware(SoftwareDtoFlat softwareToCreate) {
-        Software software = new Software();
-        software.setName(softwareToCreate.name());
-        software.setDescription(softwareToCreate.description());
-
-        software.setType(softwareToCreate.type());
-        //software.setVersionList(softwareToCreate.versionList());
-
-        return softwareDao.save(software);
+        return softwareMapper.toDto(softwareDao.save(currentSoftware));
     }
 }

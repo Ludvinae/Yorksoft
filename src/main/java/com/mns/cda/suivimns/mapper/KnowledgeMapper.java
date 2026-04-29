@@ -4,7 +4,6 @@ import com.mns.cda.suivimns.dao.ArticleDao;
 import com.mns.cda.suivimns.dao.ThemeDao;
 import com.mns.cda.suivimns.dao.VersionDao;
 import com.mns.cda.suivimns.dto.KnowledgeDto;
-import com.mns.cda.suivimns.dto.VersionDto;
 import com.mns.cda.suivimns.model.Article;
 import com.mns.cda.suivimns.model.Knowledge;
 import com.mns.cda.suivimns.model.Theme;

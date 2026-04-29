@@ -1,16 +1,13 @@
 package com.mns.cda.suivimns.service;
 
 import com.mns.cda.suivimns.dao.VersionDao;
-import com.mns.cda.suivimns.dao.VersionTypeDao;
 import com.mns.cda.suivimns.dto.VersionDto;
 import com.mns.cda.suivimns.mapper.VersionMapper;
 import com.mns.cda.suivimns.model.Version;
-import com.mns.cda.suivimns.model.VersionType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

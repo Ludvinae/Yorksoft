@@ -4,12 +4,10 @@ import com.mns.cda.suivimns.dao.UrgencyDao;
 import com.mns.cda.suivimns.dto.UrgencyDto;
 import com.mns.cda.suivimns.mapper.UrgencyMapper;
 import com.mns.cda.suivimns.model.Urgency;
-import com.mns.cda.suivimns.model.Urgency;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +23,7 @@ public class UrgencyService  {
         return urgencyMapper.toDtoList(urgencyDao.findAll());
     }
 
-    public UrgencyDto findById(int id) throws UrgencyNotFoundException {
+    public UrgencyDto findById(int id) throws UrgencyService.UrgencyNotFoundException {
         Urgency urgency = urgencyDao.findById(id)
                 .orElseThrow(UrgencyService.UrgencyNotFoundException::new);
 
@@ -40,14 +38,15 @@ public class UrgencyService  {
         return urgencyMapper.toDto(saved);
     }
 
-    public void delete(int id) throws UrgencyNotFoundException {
+    public void delete(int id) throws UrgencyService.UrgencyNotFoundException {
         Urgency urgency = urgencyDao.findById(id)
                 .orElseThrow(UrgencyService.UrgencyNotFoundException::new);
 
         urgencyDao.delete(urgency);
     }
 
-    public UrgencyDto update(int id, UrgencyDto urgencyToUpdate) throws UrgencyNotFoundException {
+    public UrgencyDto update(int id, UrgencyDto urgencyToUpdate) throws UrgencyService.UrgencyNotFoundException {
+
         Urgency currentUrgency = urgencyDao.findById(id)
                 .orElseThrow(UrgencyService.UrgencyNotFoundException::new);
 

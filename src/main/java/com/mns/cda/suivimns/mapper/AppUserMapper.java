@@ -1,9 +1,7 @@
 package com.mns.cda.suivimns.mapper;
 
 import com.mns.cda.suivimns.dto.AppUserDto;
-import com.mns.cda.suivimns.dto.ManagerDto;
 import com.mns.cda.suivimns.model.AppUser;
-import com.mns.cda.suivimns.model.Manager;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;

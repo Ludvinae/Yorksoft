@@ -1,10 +1,7 @@
 package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.VersionDto;
-import com.mns.cda.suivimns.model.Version;
-import com.mns.cda.suivimns.model.groups.OnUpdate;
 import com.mns.cda.suivimns.service.VersionService;
-import com.mns.cda.suivimns.service.VersionTypeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -13,11 +10,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @CrossOrigin
@@ -43,7 +38,6 @@ public class VersionController {
             @ApiResponse(responseCode = "404", description = "Version non trouvée")})
     @GetMapping("/{id}")
     public ResponseEntity<VersionDto> findById(@PathVariable Integer id) {
-
         try {
             return new ResponseEntity<>(versionService.findById(id) , HttpStatus.OK);
         } catch (VersionService.VersionNotFoundException e) {
@@ -68,7 +62,6 @@ public class VersionController {
             @ApiResponse(responseCode = "404", description = "Version non trouvée")})
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
-
         try {
             versionService.delete(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -80,7 +73,7 @@ public class VersionController {
 
     @Operation(
             summary = "Mettre à jour une version",
-            description = "Modifie les champs 'versionNumber', 'publicationDate' et 'versionType'")
+            description = "Modifie les champs 'designation', 'description' et 'priorityFactor'")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Version mise à jour"),
             @ApiResponse(responseCode = "404", description = "Version non trouvée"),

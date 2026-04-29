@@ -2,15 +2,12 @@ package com.mns.cda.suivimns.service;
 
 import com.mns.cda.suivimns.dao.KnowledgeDao;
 import com.mns.cda.suivimns.dto.KnowledgeDto;
-import com.mns.cda.suivimns.dto.KnowledgeDto;
 import com.mns.cda.suivimns.mapper.KnowledgeMapper;
-import com.mns.cda.suivimns.model.Knowledge;
 import com.mns.cda.suivimns.model.Knowledge;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

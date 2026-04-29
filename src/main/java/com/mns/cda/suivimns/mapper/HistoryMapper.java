@@ -4,11 +4,12 @@ import com.mns.cda.suivimns.dao.AppUserDao;
 import com.mns.cda.suivimns.dao.StatusDao;
 import com.mns.cda.suivimns.dao.TicketDao;
 import com.mns.cda.suivimns.dto.HistoryDto;
-import com.mns.cda.suivimns.dto.ManagerDto;
-import com.mns.cda.suivimns.model.*;
+import com.mns.cda.suivimns.model.AppUser;
+import com.mns.cda.suivimns.model.History;
+import com.mns.cda.suivimns.model.Status;
+import com.mns.cda.suivimns.model.Ticket;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;

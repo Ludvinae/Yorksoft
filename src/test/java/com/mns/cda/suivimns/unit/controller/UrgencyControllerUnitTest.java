@@ -3,7 +3,6 @@ package com.mns.cda.suivimns.unit.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.UrgencyController;
 import com.mns.cda.suivimns.dto.UrgencyDto;
-import com.mns.cda.suivimns.model.Urgency;
 import com.mns.cda.suivimns.service.UrgencyService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
