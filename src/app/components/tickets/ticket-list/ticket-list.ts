@@ -1,8 +1,7 @@
 import { Component, inject, Input } from '@angular/core';
 import { TicketService } from '../../../services/ticket-service';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { map } from 'rxjs';
+
 import { TicketVueMobile } from '../ticket-vue-mobile/ticket-vue-mobile';
 import { Table } from '../ticket-vue-desktop/table';
 import { BreakpointSwitch } from '../../../services/breakpoint-switch';
@@ -22,7 +21,7 @@ import { BreakpointSwitch } from '../../../services/breakpoint-switch';
 export class TicketList {
   private ticketService = inject(TicketService);
   private breakpointObserver = inject(BreakpointSwitch);
-  
+
 
   ticketsFull = toSignal(this.ticketService.getTicketsFull(), { initialValue: [] });
 

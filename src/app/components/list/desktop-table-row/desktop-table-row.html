@@ -1,0 +1,10 @@
+<tr>
+  @for (col of columns; track col.label) {
+    <td>{{ item[col.field] }}</td>
+  }
+
+  <td>
+    <button (click)="onDetail()">👁️</button>
+    <button (click)="onEdit()">✏️</button>
+  </td>
+</tr>

@@ -1,4 +1,3 @@
-import { Subject } from 'rxjs';
 
 type Knowledge = {
   idKnowledge: number;

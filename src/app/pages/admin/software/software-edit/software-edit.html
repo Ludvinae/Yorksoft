@@ -15,21 +15,18 @@
     <textarea class="textarea h-24" placeholder="Description du logiciel" formControlName="description"></textarea>
 
 
-    <span class="label">Type de logiciel</span>
+    <span class="label">Type</span>
     <select class="select" formControlName="idSoftwareType">
-      <option [ngValue]="null" disabled>Type de logiciel</option>
-
+      <option disabled [ngValue]="null">Type de logiciel</option>
       @for (softwareType of listSoftwareType(); track softwareType.idSoftwareType) {
-        <option [ngValue]="softwareType.idSoftwareType">
-          {{ softwareType.designation }}
-        </option>
+        <option [value]="softwareType.idSoftwareType">{{ softwareType.designation }}</option>
       }
     </select>
 
 
     <div >
-      <button type="button" class="btn btn-outline btn-xs sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl m3" routerLink="/" >Annuler</button>
-      <button type="submit" class="btn btn-primary btn-xs sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl m3">{{ softwareId() ? 'Modifier' : 'Créer' }}</button>
+      <button type="button" class="btn btn-secondary mx-3" routerLink="/admin/software" >Annuler</button>
+      <button type="submit" class="btn btn-primary mx-3">{{ softwareEdit() ? 'Modifier' : 'Créer' }}</button>
     </div>
 
 

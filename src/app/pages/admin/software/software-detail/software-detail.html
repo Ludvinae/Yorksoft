@@ -1,0 +1,17 @@
+
+@if (softwareSignal()) {
+  <h2>{{ softwareSignal()!.name }}</h2>
+  <h3>{{ softwareSignal()!.idSoftware }}</h3>
+  <p>{{ softwareSignal()!.description }}</p>
+  <p>Type de logiciel: {{ typeSignal()!.designation }}</p>
+
+  <button clas="btn btn-secondary" routerLink="/admin/software">Retour</button>
+
+} @else {
+
+  <span class="loading loading-ring loading-xl"></span>
+  <span class="loading loading-ring loading-xl"></span>
+  <span class="loading loading-ring loading-xl"></span>
+}
+
+

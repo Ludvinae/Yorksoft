@@ -55,6 +55,19 @@
     }
   </a>
 
+  <!-- ADMIN -->
+  <a
+    routerLink="/admin"
+    routerLinkActive="text-primary-content"
+    class="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-base-300 transition relative"
+  >
+    <span>ADMIN</span>
+
+    @if (isActive('/admin')) {
+      <span class="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-primary rounded-l"></span>
+    }
+  </a>
+
   <!-- REGLAGES -->
   <a
     routerLink="/settings"

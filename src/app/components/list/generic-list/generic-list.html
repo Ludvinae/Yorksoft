@@ -1,0 +1,6 @@
+
+@if (isMobile() {
+  <app-mobile-card [data]="data" [columns]="columns"></app-mobile-card>
+} @else {
+  <app-desktop-table [data]="data" [columns]="columns"></app-desktop-table>
+}

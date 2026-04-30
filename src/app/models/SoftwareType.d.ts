@@ -1,4 +1,4 @@
-type SoftwareTypeDto = {
+type SoftwareType = {
   idSoftwareType : number;
   designation: string;
 };

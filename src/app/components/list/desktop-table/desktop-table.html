@@ -1,0 +1,19 @@
+<table>
+  <thead>
+  <tr>
+    @for (col of columns; track col.label) {
+      <th>{{ col.label }}</th>
+    }
+    <th>Actions</th>
+  </tr>
+  </thead>
+
+  <tbody>
+    @for (item of data; track item) {
+      <app-desktop-table-row
+        [item]="item"
+        [columns]="columns">
+      </app-desktop-table-row>
+    }
+  </tbody>
+</table>

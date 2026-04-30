@@ -1,0 +1,12 @@
+<div>
+  <ul class="menu">
+    @for (item of items; track item.link) {
+      <li>
+        <app-admin-menu-button
+          [label]="item.label"
+          [link]="item.link">
+        </app-admin-menu-button>
+      </li>
+    }
+  </ul>
+</div>

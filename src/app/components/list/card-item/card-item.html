@@ -1,0 +1,13 @@
+<div class="card">
+  @for (col of columns; track col.label) {
+    <p>
+      <strong>{{ col.label }} :</strong>
+      {{ item[col.field] }}
+    </p>
+  }
+
+  <div>
+    <button>👁️</button>
+    <button>✏️</button>
+  </div>
+</div>

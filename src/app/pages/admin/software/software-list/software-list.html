@@ -1,0 +1,39 @@
+<h2>Liste des logiciels</h2>
+<div class="inline">
+  <button class="btn btn-primary mx-3" routerLink="/admin/software/create">Créer</button>
+  <button class="btn btn-secondary mx-3" routerLink="/admin">Retour</button>
+</div>
+<div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
+  <table class="table">
+    <thead>
+    <tr>
+      <th>Nom</th>
+      <th>Description</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+
+    <tbody>
+      @for (software of softwareList(); track software.idSoftware) {
+        <tr class="hover:bg-base-300">
+          <td>{{ software.name }}</td>
+          <td>{{ software.description }}</td>
+
+          <td>
+            <button class="btn btn-sm btn-info mx-3" [routerLink]="['/admin/software', software.idSoftware]">
+              Détails
+            </button>
+
+            <button class="btn btn-sm btn-neutral mx-3" [routerLink]="['/admin/software/update', software.idSoftware,]">
+              Modification
+            </button>
+
+            <button class="btn btn-sm btn-secondary mx-3" (click)="delete(software.idSoftware)">
+              Effacer
+            </button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
