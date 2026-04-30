@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { SoftwareService } from '../../../services/software-service';
+import { SoftwareService } from '../../../services/api/software-service';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({

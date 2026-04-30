@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { SoftwareService } from '../../../../services/software-service';
+import { SoftwareService } from '../../../../services/api/software-service';
 import { RouterLink } from '@angular/router';
 
 @Component({

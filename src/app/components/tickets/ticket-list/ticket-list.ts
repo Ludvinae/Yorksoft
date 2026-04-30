@@ -1,5 +1,5 @@
 import { Component, inject, Input } from '@angular/core';
-import { TicketService } from '../../../services/ticket-service';
+import { TicketService } from '../../../services/api/ticket-service';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 import { TicketVueMobile } from '../ticket-vue-mobile/ticket-vue-mobile';

@@ -2,7 +2,7 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { SoftwareService } from '../../../../services/software-service';
+import { SoftwareService } from '../../../../services/api/software-service';
 
 @Component({
   selector: 'app-software-edit',

@@ -8,6 +8,8 @@ import { Observable } from 'rxjs';
 /**
  * Appelle l'API pour récuperer les informations sur les tickets,
  * pour les transmettre sous forme d'observable
+ *
+ * !!! A adapter au nouveau template !!!
  */
 export class TicketService {
   private http = inject(HttpClient);

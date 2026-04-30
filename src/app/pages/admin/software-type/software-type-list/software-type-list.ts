@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { GenericList } from '../../../../components/list/generic-list/generic-list';
-import { SoftwareTypeService } from '../../../../services/software-type-service';
+import { SoftwareTypeService } from '../../../../services/api/software-type-service';
 import { Title } from '../../../../components/list/title/title';
 
 @Component({

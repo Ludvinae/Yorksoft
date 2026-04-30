@@ -1,6 +1,6 @@
 import { Component, inject, Input, OnInit, signal, WritableSignal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { SoftwareTypeService } from '../../../../services/software-type-service';
+import { SoftwareTypeService } from '../../../../services/api/software-type-service';
 import { DetailPage } from '../../../../components/detail-page/detail-page';
 
 @Component({
