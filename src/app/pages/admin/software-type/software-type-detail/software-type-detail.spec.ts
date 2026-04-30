@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DesktopTableHeader } from './desktop-table-header';
+import { SoftwareTypeDetail } from './software-type-detail';
 
-describe('DesktopTableHeader', () => {
-  let component: DesktopTableHeader;
-  let fixture: ComponentFixture<DesktopTableHeader>;
+describe('SoftwareTypeDetail', () => {
+  let component: SoftwareTypeDetail;
+  let fixture: ComponentFixture<SoftwareTypeDetail>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DesktopTableHeader],
+      imports: [SoftwareTypeDetail],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(DesktopTableHeader);
+    fixture = TestBed.createComponent(SoftwareTypeDetail);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

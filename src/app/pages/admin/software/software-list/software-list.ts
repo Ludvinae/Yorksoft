@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { SoftwareService } from '../../../../services/software-service';
 import { RouterLink } from '@angular/router';
 
@@ -8,7 +8,7 @@ import { RouterLink } from '@angular/router';
   templateUrl: './software-list.html',
   styleUrl: './software-list.css',
 })
-export class SoftwareList {
+export class SoftwareList implements OnInit {
   softwareService = inject(SoftwareService);
 
   softwareList = this.softwareService.softwareList;

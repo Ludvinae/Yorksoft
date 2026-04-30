@@ -1,21 +1,27 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output, TemplateRef } from '@angular/core';
 import { BreakpointSwitch } from '../../../services/breakpoint-switch';
 import { DesktopTable } from '../desktop-table/desktop-table';
+import { MobileCardList } from '../mobile-card-list/mobile-card-list';
 
-type ColumnConfig<T> = {
-  label: string;
-  field: keyof T;
-}
 
 @Component({
   selector: 'app-generic-list',
-  imports: [DesktopTable],
+  imports: [DesktopTable, MobileCardList],
   templateUrl: './generic-list.html',
   styleUrl: './generic-list.css',
 })
 export class GenericList<T> {
-  @Input() data!: T[];
-  @Input() columns!: ColumnConfig<T>[];
+  private displayService = inject(BreakpointSwitch);
 
-  isMobile = inject(BreakpointSwitch).isMobile; // ton service
+  @Input({ required: true }) data!: T[];
+  @Input({ required: true }) columns!: ColumnConfig<T>[];
+  @Input({ required: true }) itemTemplate!: TemplateRef<any>;
+  @Input({ required: true }) idField!: keyof T;
+
+  // pour générer les liens automatiquement
+  @Input({ required: true }) baseRoute!: string;
+
+  @Output() deleteItem = new EventEmitter<number>();
+
+  isMobile = this.displayService.isMobile;
 }

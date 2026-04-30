@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MobileCard } from './mobile-card';
+import { MobileCardList } from './mobile-card-list';
 
-describe('MobileCard', () => {
-  let component: MobileCard;
-  let fixture: ComponentFixture<MobileCard>;
+describe('MobileCardList', () => {
+  let component: MobileCardList;
+  let fixture: ComponentFixture<MobileCardList>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MobileCard],
+      imports: [MobileCardList],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(MobileCard);
+    fixture = TestBed.createComponent(MobileCardList);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

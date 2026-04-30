@@ -1,0 +1,14 @@
+<app-title title="Type de logiciels" route="software-type"></app-title>
+
+<app-generic-list
+  [data]="softwareTypeList()"
+  [columns]="[{ label: 'Libellé', field: 'designation' }]"
+  [baseRoute]="'/admin/software-type'"
+  [idField]="'idSoftwareType'"
+  [itemTemplate]="softwareTypeCard"
+  (deleteItem)="onDelete($event)">
+</app-generic-list>
+
+<ng-template #softwareTypeCard let-softwareType>
+  <h3 class="font-bold text-lg">{{ softwareType.designation }}</h3>
+</ng-template>

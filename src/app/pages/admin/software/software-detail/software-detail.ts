@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
@@ -8,7 +8,7 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './software-detail.html',
   styleUrl: './software-detail.css',
 })
-export class SoftwareDetail {
+export class SoftwareDetail implements OnInit {
   route = inject(ActivatedRoute);
   httpClient = inject(HttpClient);
   softwareSignal = signal<Software | null>(null);
