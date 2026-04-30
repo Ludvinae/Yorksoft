@@ -10,7 +10,7 @@
 
   <tbody>
     @for (item of data; track item) {
-      <tr>
+      <tr class="hover:bg-base-300">
         @for (col of columns; track col.label) {
           <td>{{ getValue(item, col.field) }}</td>
         }
