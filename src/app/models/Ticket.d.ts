@@ -1,14 +1,14 @@
 type Ticket = {
-  id: number;
-  title: string;
-  description: string;
-  openDate: Date;
-  closeDate: Date;
-  modificationDate: Date;
-  callDuration: number;
-  initialPriority: number;
-  finalPriority: number;
-  idVersion: number;
+  idTicket: number;
+  title: string; // 3 <= size <= 63
+  description: string; // 1 <= size
+  openDate: Date | null;
+  closeDate: Date | null;
+  modificationDate: Date | null;
+  callDuration: number | null;
+  initialPriority: number | null;
+  finalPriority: number | null;
+  idVersion: number | null;
   idClient: number;
   idImpact: number;
   idUrgency: number;

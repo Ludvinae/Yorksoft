@@ -1,7 +1,7 @@
 type Assignment = {
-  idAssignment: string;
-  assignementDate: Date;
-  endDate: Date;
+  idAssignment: number;
+  assignmentDate: Date | null;
+  endDate: Date | null;
   idTicket: number;
   idManager: number;
   idTechnician: number;

@@ -1,5 +1,5 @@
 type Classification = {
   idTicket : number;
   idTheme: number;
-  affectationDate: Date;
+  affectationDate: Date | null;
 }

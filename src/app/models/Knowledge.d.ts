@@ -1,7 +1,7 @@
 
 type Knowledge = {
   idKnowledge: number;
-  subject: string;
+  subject: string; // 1 <= size <= 255
   idTheme: number;
   versionIds: number[];
   articleIds: number[];

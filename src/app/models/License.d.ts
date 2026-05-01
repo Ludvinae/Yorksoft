@@ -1,7 +1,7 @@
 type License = {
   idLicense: number;
-  licenseNumber: string;
-  expirationDate: Date;
+  licenseNumber: string; // 1 <= size <= 127
+  expirationDate: Date | null;
   idSoftware: number;
-  idClient: number;
+  idClient: number | null;
 }

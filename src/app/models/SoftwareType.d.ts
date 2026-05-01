@@ -1,5 +1,5 @@
 type SoftwareType = {
   idSoftwareType : number;
-  designation: string;
+  designation: string; // 3 <= size <= 127
 };
 

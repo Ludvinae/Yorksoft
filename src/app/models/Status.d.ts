@@ -1,5 +1,5 @@
 type Status = {
-  id: number;
-  designation: string;
-  displayOrder: number;
+  idStatus: number;
+  designation: string; // 3 <= size <= 63
+  displayOrder: number | null;
 }

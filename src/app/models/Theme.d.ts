@@ -1,5 +1,5 @@
 type Theme = {
-  id: number;
-  designation: string;
-  priorityFactor: number;
+  idTheme: number;
+  designation: string; // 3 <= size <= 127
+  description: string | null;
 }

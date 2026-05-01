@@ -1,8 +1,8 @@
 type Comment = {
   idComment: number;
-  content: string;
-  dateSent: Date;
-  lastModification: Date;
+  content: string; // 1 <= size
+  dateSent: Date | null;
+  lastModification: Date | null;
   idTicket: number;
-  idAuthor: number;
+  idAuthor: number | null;
 }

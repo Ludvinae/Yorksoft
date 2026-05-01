@@ -1,6 +1,6 @@
 type Urgency = {
-  id: number;
-  designation: string;
+  idUrgency: number;
+  designation: string; // 1 <= size <= 63
   priorityFactor: number;
-  description: string;
+  description: string | null;
 }
