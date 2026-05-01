@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { DatePipe } from '@angular/common';
 
 @Component({
@@ -13,5 +13,4 @@ export class HeaderMobile {
   @Output() toggleMenu = new EventEmitter<void>();
 
   @Input() isOpen = false;
-
 }

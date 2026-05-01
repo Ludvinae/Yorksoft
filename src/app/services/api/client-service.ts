@@ -24,9 +24,7 @@ export class ClientService {
   }
 
   create(client: Client) {
-    return this.http
-      .post(`${this.apiUrl}`, client)
-      .pipe(tap(() => this.getAll().subscribe()));
+    return this.http.post(`${this.apiUrl}`, client).pipe(tap(() => this.getAll().subscribe()));
   }
 
   update(client: Client, id: number) {

@@ -28,8 +28,6 @@ export class TicketService {
   }
 
   getTickets(tab: string): Observable<TicketFullLatest[]> {
-
     return this.http.get<TicketFullLatest[]>(`${this.apiUrl}/list-` + tab);
   }
-
 }

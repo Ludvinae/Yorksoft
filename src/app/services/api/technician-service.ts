@@ -24,9 +24,7 @@ export class TechnicianService {
   }
 
   create(technician: Technician) {
-    return this.http
-      .post(`${this.apiUrl}`, technician)
-      .pipe(tap(() => this.getAll().subscribe()));
+    return this.http.post(`${this.apiUrl}`, technician).pipe(tap(() => this.getAll().subscribe()));
   }
 
   update(technician: Technician, id: number) {

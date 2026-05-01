@@ -24,9 +24,7 @@ export class StatusService {
   }
 
   create(status: Status) {
-    return this.http
-      .post(`${this.apiUrl}`, status)
-      .pipe(tap(() => this.getAll().subscribe()));
+    return this.http.post(`${this.apiUrl}`, status).pipe(tap(() => this.getAll().subscribe()));
   }
 
   update(status: Status, id: number) {

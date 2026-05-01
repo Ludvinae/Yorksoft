@@ -66,7 +66,7 @@ export class SoftwareEdit implements OnInit {
             next: (newSoftware) => {
               alert('Le logiciel a bien été modifié');
               // Naviguer vers l'accueil
-              this.router.navigateByUrl("/admin/software");
+              this.router.navigateByUrl('/admin/software');
             },
             error: this.onError,
           });

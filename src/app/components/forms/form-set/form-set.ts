@@ -1,6 +1,4 @@
-import { Component, inject } from '@angular/core';
-import { SoftwareService } from '../../../services/api/software-service';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-form-set',

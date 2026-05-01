@@ -24,9 +24,7 @@ export class ImpactService {
   }
 
   create(impact: Impact) {
-    return this.http
-      .post(`${this.apiUrl}`, impact)
-      .pipe(tap(() => this.getAll().subscribe()));
+    return this.http.post(`${this.apiUrl}`, impact).pipe(tap(() => this.getAll().subscribe()));
   }
 
   update(impact: Impact, id: number) {

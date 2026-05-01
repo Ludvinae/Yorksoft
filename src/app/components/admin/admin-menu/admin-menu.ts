@@ -2,10 +2,9 @@ import { Component, Input } from '@angular/core';
 import { AdminMenuButton } from '../admin-menu-button/admin-menu-button';
 
 export type AdminMenuItems = {
-  label : string;
+  label: string;
   link: string;
-}
-
+};
 
 @Component({
   selector: 'app-admin-menu',

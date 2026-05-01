@@ -8,9 +8,8 @@ import { RouterLink } from '@angular/router';
   styleUrl: './title.css',
 })
 export class Title {
-
   @Input() title!: string;
   @Input() route!: string;
 
-  createRoute: string = "/admin" + this.route + "/create";
+  createRoute: string = '/admin' + this.route + '/create';
 }

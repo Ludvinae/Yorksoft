@@ -3,7 +3,6 @@ import { BreakpointSwitch } from '../../../services/breakpoint-switch';
 import { DesktopTable } from '../desktop-table/desktop-table';
 import { MobileCardList } from '../mobile-card-list/mobile-card-list';
 
-
 @Component({
   selector: 'app-generic-list',
   imports: [DesktopTable, MobileCardList],

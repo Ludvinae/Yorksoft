@@ -24,9 +24,7 @@ export class UrgencyService {
   }
 
   create(urgency: Urgency) {
-    return this.http
-      .post(`${this.apiUrl}`, urgency)
-      .pipe(tap(() => this.getAll().subscribe()));
+    return this.http.post(`${this.apiUrl}`, urgency).pipe(tap(() => this.getAll().subscribe()));
   }
 
   update(urgency: Urgency, id: number) {

@@ -24,9 +24,7 @@ export class LicenseService {
   }
 
   create(license: License) {
-    return this.http
-      .post(`${this.apiUrl}`, license)
-      .pipe(tap(() => this.getAll().subscribe()));
+    return this.http.post(`${this.apiUrl}`, license).pipe(tap(() => this.getAll().subscribe()));
   }
 
   update(license: License, id: number) {

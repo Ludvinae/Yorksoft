@@ -28,16 +28,18 @@ export class SoftwareService {
   }
 
   update(software: Software, id: number) {
-    return this.http.put(`${this.apiUrl}/${id}`, software)
-      .pipe(tap((result) => {
+    return this.http.put(`${this.apiUrl}/${id}`, software).pipe(
+      tap((result) => {
         this.getAll().subscribe();
-      }));
+      }),
+    );
   }
 
   delete(id: number) {
-    return this.http.delete(`${this.apiUrl}/${id}`)
-      .pipe(tap((result) => {
+    return this.http.delete(`${this.apiUrl}/${id}`).pipe(
+      tap((result) => {
         this.getAll().subscribe();
-      }));
+      }),
+    );
   }
 }

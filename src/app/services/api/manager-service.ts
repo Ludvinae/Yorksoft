@@ -24,9 +24,7 @@ export class ManagerService {
   }
 
   create(manager: Manager) {
-    return this.http
-      .post(`${this.apiUrl}`, manager)
-      .pipe(tap(() => this.getAll().subscribe()));
+    return this.http.post(`${this.apiUrl}`, manager).pipe(tap(() => this.getAll().subscribe()));
   }
 
   update(manager: Manager, id: number) {

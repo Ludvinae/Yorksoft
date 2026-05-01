@@ -7,7 +7,7 @@ import { Knowledge } from './pages/knowledge/knowledge';
 import { Settings } from './pages/settings/settings';
 import { NewTicket } from './pages/new-ticket/new-ticket';
 import { Dashboard } from './pages/dashboard/dashboard';
-import {SoftwareEdit} from './pages/admin/software/software-edit/software-edit';
+import { SoftwareEdit } from './pages/admin/software/software-edit/software-edit';
 import { Admin } from './pages/admin/admin/admin';
 import { SoftwareDetail } from './pages/admin/software/software-detail/software-detail';
 import { SoftwareList } from './pages/admin/software/software-list/software-list';

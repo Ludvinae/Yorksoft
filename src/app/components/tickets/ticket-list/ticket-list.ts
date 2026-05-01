@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { TicketService } from '../../../services/api/ticket-service';
 import { toSignal } from '@angular/core/rxjs-interop';
 
@@ -22,8 +22,7 @@ export class TicketList {
   private ticketService = inject(TicketService);
   private breakpointObserver = inject(BreakpointSwitch);
 
-
   ticketsFull = toSignal(this.ticketService.getTicketsFull(), { initialValue: [] });
 
-  isMobile = this.breakpointObserver.isMobile
+  isMobile = this.breakpointObserver.isMobile;
 }

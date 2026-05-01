@@ -24,8 +24,7 @@ export class VersionService {
   }
 
   create(version: Version) {
-    return this.http.post(`${this.apiUrl}`, version)
-      .pipe(tap(() => this.getAll().subscribe()));
+    return this.http.post(`${this.apiUrl}`, version).pipe(tap(() => this.getAll().subscribe()));
   }
 
   update(version: Version, id: number) {

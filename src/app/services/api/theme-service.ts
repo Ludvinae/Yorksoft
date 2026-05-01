@@ -24,9 +24,7 @@ export class ThemeService {
   }
 
   create(theme: Theme) {
-    return this.http
-      .post(`${this.apiUrl}`, theme)
-      .pipe(tap(() => this.getAll().subscribe()));
+    return this.http.post(`${this.apiUrl}`, theme).pipe(tap(() => this.getAll().subscribe()));
   }
 
   update(theme: Theme, id: number) {

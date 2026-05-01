@@ -1,6 +1,5 @@
-import { Component, inject, OnInit } from '@angular/core';
-import {TicketList} from '../../components/tickets/ticket-list/ticket-list';
-import { Auth } from '../../services/auth';
+import { Component, inject } from '@angular/core';
+import { TicketList } from '../../components/tickets/ticket-list/ticket-list';
 import { Tab } from '../../components/title-bar/tab/tab';
 import { BreakpointSwitch } from '../../services/breakpoint-switch';
 import { TitleBar } from '../../components/title-bar/title-bar/title-bar';
