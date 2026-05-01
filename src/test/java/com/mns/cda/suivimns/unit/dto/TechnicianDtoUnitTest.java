@@ -1,6 +1,7 @@
 package com.mns.cda.suivimns.unit.dto;
 
 import com.mns.cda.suivimns.TestUtils;
+import com.mns.cda.suivimns.dto.AppUserDto;
 import com.mns.cda.suivimns.dto.TechnicianDto;
 import com.mns.cda.suivimns.dto.TechnicianDto;
 import com.mns.cda.suivimns.dto.ThemeDto;
@@ -54,6 +55,19 @@ public class TechnicianDtoUnitTest {
     }
 
     // ---------- email ----------
+
+    @Test
+    public void technicianWithBlankEmail_shouldNotBeValid() {
+        TechnicianDto user = new TechnicianDto(1, "Test first name", "Test last name",
+                "", "Test phone number", (byte) 1);
+
+        boolean constraintExists = TestUtils.constraintViolationExists(
+                validator.validate(user),
+                "email",
+                "NotBlank"
+        );
+        Assertions.assertTrue(constraintExists, "Email address must not be blank");
+    }
 
     @Test
     public void technicianWithInvalidEmail_shouldNotBeValid() {

@@ -1,6 +1,7 @@
 package com.mns.cda.suivimns.unit.dto;
 
 import com.mns.cda.suivimns.TestUtils;
+import com.mns.cda.suivimns.dto.AppUserDto;
 import com.mns.cda.suivimns.dto.DirectorDto;
 import com.mns.cda.suivimns.model.Director;
 import com.mns.cda.suivimns.model.groups.OnCreate;
@@ -55,6 +56,19 @@ public class DirectorDtoUnitTest {
     }
 
     // ---------- email ----------
+
+    @Test
+    public void directorWithBlankEmail_shouldNotBeValid() {
+        DirectorDto user = new DirectorDto(1, "Test first name", "Test last name",
+                "", "Test phone number");
+
+        boolean constraintExists = TestUtils.constraintViolationExists(
+                validator.validate(user),
+                "email",
+                "NotBlank"
+        );
+        Assertions.assertTrue(constraintExists, "Email address must not be blank");
+    }
 
     @Test
     public void directorWithInvalidEmail_shouldNotBeValid() {

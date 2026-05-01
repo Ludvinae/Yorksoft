@@ -57,6 +57,19 @@ public class AppUserDtoUnitTest {
     // ---------- email ----------
 
     @Test
+    public void appUserWithBlankEmail_shouldNotBeValid() {
+        AppUserDto user = new AppUserDto(1, "Test first name", "Test last name",
+                "", "Test phone number");
+
+        boolean constraintExists = TestUtils.constraintViolationExists(
+                validator.validate(user),
+                "email",
+                "NotBlank"
+        );
+        Assertions.assertTrue(constraintExists, "Email address must not be blank");
+    }
+
+    @Test
     public void appUserWithInvalidEmail_shouldNotBeValid() {
         AppUserDto user = new AppUserDto(1, "Test first name", "Test last name",
                 "Test", "Test phone number");

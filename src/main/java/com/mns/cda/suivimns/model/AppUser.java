@@ -28,7 +28,7 @@ public class AppUser {
     @Column(length = 127)
     protected String lastName;
 
-    @Column(length = 127, unique = true)
+    @Column(length = 127, unique = true, nullable = false)
     protected String email;
 
     @Column(length = 31)
