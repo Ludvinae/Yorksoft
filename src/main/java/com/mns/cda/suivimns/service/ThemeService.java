@@ -1,16 +1,13 @@
 package com.mns.cda.suivimns.service;
 
 import com.mns.cda.suivimns.dao.ThemeDao;
-import com.mns.cda.suivimns.dao.ThemeDao;
 import com.mns.cda.suivimns.dto.ThemeDto;
 import com.mns.cda.suivimns.mapper.ThemeMapper;
-import com.mns.cda.suivimns.model.Theme;
 import com.mns.cda.suivimns.model.Theme;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

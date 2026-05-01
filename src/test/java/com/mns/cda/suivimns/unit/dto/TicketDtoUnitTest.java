@@ -2,8 +2,6 @@ package com.mns.cda.suivimns.unit.dto;
 
 import com.mns.cda.suivimns.TestUtils;
 import com.mns.cda.suivimns.dto.TicketDto;
-import com.mns.cda.suivimns.dto.VersionDto;
-import com.mns.cda.suivimns.model.Ticket;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;

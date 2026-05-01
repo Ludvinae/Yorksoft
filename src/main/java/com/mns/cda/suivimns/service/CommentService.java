@@ -1,16 +1,13 @@
 package com.mns.cda.suivimns.service;
 
 import com.mns.cda.suivimns.dao.CommentDao;
-import com.mns.cda.suivimns.dao.CommentDao;
 import com.mns.cda.suivimns.dto.CommentDto;
 import com.mns.cda.suivimns.mapper.CommentMapper;
-import com.mns.cda.suivimns.model.Comment;
 import com.mns.cda.suivimns.model.Comment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

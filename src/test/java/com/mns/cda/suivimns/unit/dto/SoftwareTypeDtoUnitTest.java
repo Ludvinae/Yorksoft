@@ -2,8 +2,6 @@ package com.mns.cda.suivimns.unit.dto;
 
 import com.mns.cda.suivimns.TestUtils;
 import com.mns.cda.suivimns.dto.SoftwareTypeDto;
-import com.mns.cda.suivimns.dto.ThemeDto;
-import com.mns.cda.suivimns.model.SoftwareType;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import org.junit.jupiter.api.Assertions;

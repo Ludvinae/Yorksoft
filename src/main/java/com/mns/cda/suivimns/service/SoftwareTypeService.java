@@ -1,16 +1,13 @@
 package com.mns.cda.suivimns.service;
 
 import com.mns.cda.suivimns.dao.SoftwareTypeDao;
-import com.mns.cda.suivimns.dao.SoftwareTypeDao;
 import com.mns.cda.suivimns.dto.SoftwareTypeDto;
 import com.mns.cda.suivimns.mapper.SoftwareTypeMapper;
-import com.mns.cda.suivimns.model.SoftwareType;
 import com.mns.cda.suivimns.model.SoftwareType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

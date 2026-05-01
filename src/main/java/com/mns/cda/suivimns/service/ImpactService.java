@@ -1,16 +1,13 @@
 package com.mns.cda.suivimns.service;
 
 import com.mns.cda.suivimns.dao.ImpactDao;
-import com.mns.cda.suivimns.dao.ImpactDao;
 import com.mns.cda.suivimns.dto.ImpactDto;
 import com.mns.cda.suivimns.mapper.ImpactMapper;
-import com.mns.cda.suivimns.model.Impact;
 import com.mns.cda.suivimns.model.Impact;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

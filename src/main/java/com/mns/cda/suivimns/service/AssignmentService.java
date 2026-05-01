@@ -4,13 +4,10 @@ import com.mns.cda.suivimns.dao.AssignmentDao;
 import com.mns.cda.suivimns.dto.AssignmentDto;
 import com.mns.cda.suivimns.mapper.AssignmentMapper;
 import com.mns.cda.suivimns.model.Assignment;
-import com.mns.cda.suivimns.model.Assignment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

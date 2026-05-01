@@ -1,16 +1,13 @@
 package com.mns.cda.suivimns.service;
 
 import com.mns.cda.suivimns.dao.StatusDao;
-import com.mns.cda.suivimns.dao.StatusDao;
 import com.mns.cda.suivimns.dto.StatusDto;
 import com.mns.cda.suivimns.mapper.StatusMapper;
-import com.mns.cda.suivimns.model.Status;
 import com.mns.cda.suivimns.model.Status;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

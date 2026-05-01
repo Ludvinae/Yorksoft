@@ -4,13 +4,10 @@ import com.mns.cda.suivimns.dao.ArticleDao;
 import com.mns.cda.suivimns.dto.ArticleDto;
 import com.mns.cda.suivimns.mapper.ArticleMapper;
 import com.mns.cda.suivimns.model.Article;
-import com.mns.cda.suivimns.model.Article;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

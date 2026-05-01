@@ -2,10 +2,6 @@ package com.mns.cda.suivimns.unit.dto;
 
 import com.mns.cda.suivimns.TestUtils;
 import com.mns.cda.suivimns.dto.ArticleDto;
-import com.mns.cda.suivimns.dto.AssignmentDto;
-import com.mns.cda.suivimns.model.Article;
-import com.mns.cda.suivimns.model.groups.OnCreate;
-import com.mns.cda.suivimns.model.groups.OnUpdate;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import org.junit.jupiter.api.Assertions;

@@ -1,12 +1,7 @@
 package com.mns.cda.suivimns.unit.dto;
 
 import com.mns.cda.suivimns.TestUtils;
-import com.mns.cda.suivimns.dto.AppUserDto;
 import com.mns.cda.suivimns.dto.TechnicianDto;
-import com.mns.cda.suivimns.dto.TechnicianDto;
-import com.mns.cda.suivimns.dto.ThemeDto;
-import com.mns.cda.suivimns.model.Technician;
-import com.mns.cda.suivimns.model.groups.OnCreate;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import org.junit.jupiter.api.Assertions;

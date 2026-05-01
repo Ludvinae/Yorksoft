@@ -3,10 +3,12 @@ package com.mns.cda.suivimns.service;
 import com.mns.cda.suivimns.dao.AppUserDao;
 import com.mns.cda.suivimns.dao.HistoryDao;
 import com.mns.cda.suivimns.dao.StatusDao;
-import com.mns.cda.suivimns.dao.HistoryDao;
 import com.mns.cda.suivimns.dto.HistoryDto;
 import com.mns.cda.suivimns.mapper.HistoryMapper;
-import com.mns.cda.suivimns.model.*;
+import com.mns.cda.suivimns.model.AppUser;
+import com.mns.cda.suivimns.model.History;
+import com.mns.cda.suivimns.model.Status;
+import com.mns.cda.suivimns.model.Ticket;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -5,7 +5,6 @@ import com.mns.cda.suivimns.controller.TicketController;
 import com.mns.cda.suivimns.dto.TicketDto;
 import com.mns.cda.suivimns.dto.flat.TicketFullWithLatest;
 import com.mns.cda.suivimns.service.TicketService;
-import com.mns.cda.suivimns.service.VersionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

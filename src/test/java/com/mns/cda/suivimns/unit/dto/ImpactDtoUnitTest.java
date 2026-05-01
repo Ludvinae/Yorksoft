@@ -2,17 +2,11 @@ package com.mns.cda.suivimns.unit.dto;
 
 import com.mns.cda.suivimns.TestUtils;
 import com.mns.cda.suivimns.dto.ImpactDto;
-import com.mns.cda.suivimns.dto.KnowledgeDto;
-import com.mns.cda.suivimns.model.Impact;
-import com.mns.cda.suivimns.model.groups.OnCreate;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ImpactDtoUnitTest {
 
