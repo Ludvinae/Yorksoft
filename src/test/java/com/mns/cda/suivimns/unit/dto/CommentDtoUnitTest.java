@@ -1,6 +1,8 @@
-package com.mns.cda.suivimns.unit.model;
+package com.mns.cda.suivimns.unit.dto;
 
 import com.mns.cda.suivimns.TestUtils;
+import com.mns.cda.suivimns.dto.CommentDto;
+import com.mns.cda.suivimns.dto.StatusDto;
 import com.mns.cda.suivimns.model.Comment;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
@@ -10,7 +12,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-public class CommentUnitTest {
+import java.time.LocalDateTime;
+
+public class CommentDtoUnitTest {
 
     protected static Validator validator;
 
@@ -19,46 +23,46 @@ public class CommentUnitTest {
         validator = Validation.buildDefaultValidatorFactory().getValidator();
     }
 
-    @Test
-    public void commentWithBlankUpdatedContent_shouldNotBeValid() {
-        Comment comment = new Comment();
-        comment.setContent("");
-
-        boolean constraintExists = TestUtils.constraintViolationExists(
-                validator.validate(comment, OnUpdate.class),
-                "content",
-                "NotBlank"
-        );
-
-        Assertions.assertTrue(constraintExists, "Content should not be blank");
-    }
 
     @Test
-    public void commentWithBlankCreatedContent_shouldNotBeValid() {
-        Comment comment = new Comment();
-        comment.setContent("");
-
-        boolean constraintExists = TestUtils.constraintViolationExists(
-                validator.validate(comment, OnCreate.class),
-                "content",
-                "NotBlank"
-        );
-
-        Assertions.assertTrue(constraintExists, "Content should not be blank");
-    }
-
-    @Test
-    public void validCommentWithBlankTicket_shouldNotBeValid() {
-        Comment comment = new Comment();
-        comment.setTicket(null);
+    public void commentWithBlankContent_shouldNotBeValid() {
+        CommentDto comment = new CommentDto(1, "", LocalDateTime.now(),
+                LocalDateTime.now(), 1, 1);
 
         boolean constraintExists = TestUtils.constraintViolationExists(
                 validator.validate(comment),
-                "ticket",
+                "content",
+                "NotBlank"
+        );
+
+        Assertions.assertTrue(constraintExists, "Content should not be blank");
+    }
+
+    @Test
+    public void validCommentWithNullTicket_shouldNotBeValid() {
+        CommentDto comment = new CommentDto(1, "Test content", LocalDateTime.now(),
+                LocalDateTime.now(), null, 1);
+
+        boolean constraintExists = TestUtils.constraintViolationExists(
+                validator.validate(comment),
+                "idTicket",
                 "NotNull"
         );
 
         Assertions.assertTrue(constraintExists, "Comment should have a ticket associated");
+    }
+
+    // ---------- valid case ----------
+
+    @Test
+    public void commentWithValidData_shouldBeValid() {
+        CommentDto comment = new CommentDto(1, "Test content", LocalDateTime.now(),
+                LocalDateTime.now(), 1, 1);
+
+        Assertions.assertTrue(
+                validator.validate(comment).isEmpty(),
+                "CommentDto should be valid"
+        );
     }
 
 }

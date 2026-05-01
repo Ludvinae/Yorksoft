@@ -25,8 +25,6 @@ public class Version {
     protected Integer idVersion;
 
     @Column(nullable = false, length = 63)
-    @NotBlank
-    @Size(max = 63)
     protected String versionNumber;
 
 
@@ -34,13 +32,11 @@ public class Version {
 
     @ManyToOne
     @JoinColumn(name = "id_version_type")
-    @NotNull
     @OnDelete(action = OnDeleteAction.CASCADE)
     protected VersionType versionType;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_software", nullable = false)
-    @NotNull
     @OnDelete(action = OnDeleteAction.CASCADE)
     protected Software software;
 }

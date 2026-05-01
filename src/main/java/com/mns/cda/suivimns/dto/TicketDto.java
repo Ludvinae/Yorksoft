@@ -1,14 +1,16 @@
 package com.mns.cda.suivimns.dto;
 
+import com.mns.cda.suivimns.model.groups.OnCreate;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 public record TicketDto(
         Integer idTicket,
-        @NotBlank String title,
+        @NotBlank @Size(max = 63) String title,
         @NotBlank String description,
         LocalDateTime openDate,
         LocalDateTime closeDate,
@@ -17,9 +19,9 @@ public record TicketDto(
         Integer initialPriority,
         Integer finalPriority,
         Integer idVersion,
-        @NotNull Integer idClient,
-        @NotNull Integer idImpact,
-        @NotNull Integer idUrgency,
+        @NotNull(groups = {OnCreate.class}) Integer idClient,
+        @NotNull(groups = {OnCreate.class}) Integer idImpact,
+        @NotNull(groups = {OnCreate.class}) Integer idUrgency,
         List<Integer> commentIds,
         List<Integer> assignmentIds,
         List<Integer> themeIds,

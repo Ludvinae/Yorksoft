@@ -21,8 +21,6 @@ public class Theme {
     protected Integer idTheme;
 
     @Column(nullable = false, length = 127, unique = true)
-    @NotBlank(groups = {OnCreate.class})
-    @Size(min = 3, max = 127)
     protected String designation;
 
     @Column(columnDefinition = "TEXT")

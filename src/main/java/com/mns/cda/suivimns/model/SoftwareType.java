@@ -20,8 +20,6 @@ public class SoftwareType {
     protected Integer idSoftwareType;
 
     @Column(nullable = false, length = 127)
-    @NotBlank
-    @Size(min = 3, max = 127)
     protected String designation;
 
 }

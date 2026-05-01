@@ -1,6 +1,8 @@
-package com.mns.cda.suivimns.unit.model;
+package com.mns.cda.suivimns.unit.dto;
 
 import com.mns.cda.suivimns.TestUtils;
+import com.mns.cda.suivimns.dto.ClassificationDto;
+import com.mns.cda.suivimns.dto.CommentDto;
 import com.mns.cda.suivimns.model.Classification;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -8,7 +10,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-public class ClassificationUnitTest {
+import java.time.LocalDateTime;
+
+public class ClassificationDtoUnitTest {
     protected static Validator validator;
 
     @BeforeAll
@@ -17,13 +21,12 @@ public class ClassificationUnitTest {
     }
 
     @Test
-    public void validClassificationWithBlankTicket_shouldNotBeValid() {
-        Classification classification = new Classification();
-        classification.setTicket(null);
+    public void validClassificationWithNullTicket_shouldNotBeValid() {
+        ClassificationDto classification = new ClassificationDto(null, 1, LocalDateTime.now());
 
         boolean constraintExists = TestUtils.constraintViolationExists(
                 validator.validate(classification),
-                "ticket",
+                "idTicket",
                 "NotNull"
         );
 
@@ -31,17 +34,27 @@ public class ClassificationUnitTest {
     }
 
     @Test
-    public void validClassificationWithBlankTheme_shouldNotBeValid() {
-        Classification classification = new Classification();
-        classification.setTheme(null);
+    public void validClassificationWithNullTheme_shouldNotBeValid() {
+        ClassificationDto classification = new ClassificationDto(1, null, LocalDateTime.now());
 
         boolean constraintExists = TestUtils.constraintViolationExists(
                 validator.validate(classification),
-                "theme",
+                "idTheme",
                 "NotNull"
         );
 
         Assertions.assertTrue(constraintExists, "Classification should have a theme associated");
     }
 
+    // ---------- valid case ----------
+
+    @Test
+    public void classificationWithValidData_shouldBeValid() {
+        ClassificationDto classification = new ClassificationDto(1, 1, LocalDateTime.now());
+
+        Assertions.assertTrue(
+                validator.validate(classification).isEmpty(),
+                "Classification should be valid"
+        );
+    }
 }

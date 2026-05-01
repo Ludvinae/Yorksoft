@@ -22,12 +22,9 @@ public class Urgency {
     protected Integer idUrgency;
 
     @Column(nullable = false, length = 63, unique = true)
-    @NotBlank(groups = {OnCreate.class})
-    @Size(max = 63)
     protected String designation;
 
     @Column(nullable = false)
-    @NotNull
     protected Byte priorityFactor;
 
     @Column(columnDefinition = "TEXT")

@@ -32,8 +32,6 @@ public class Ticket {
     protected Integer idTicket;
 
     @Column(nullable = false, length = 63)
-    @NotBlank
-    @Size(max = 63)
     protected String title;
 
     @CreatedDate
@@ -46,13 +44,11 @@ public class Ticket {
     protected LocalDateTime modificationDate;
 
     @Column(nullable = false, columnDefinition = "TEXT")
-    @NotBlank(groups = {OnCreate.class})
     protected String description;
 
     protected Integer callDuration;
 
     @Column(nullable = false, updatable = false)
-    //@JsonProperty(access = JsonProperty.Access.READ_ONLY) // Empeche le changement de cette valeur meme avec le setter
     protected Integer initialPriority;
 
     @Column(nullable = false)
@@ -60,22 +56,22 @@ public class Ticket {
 
     @ManyToOne
     @JoinColumn(name = "id_version")
+    @OnDelete(action= OnDeleteAction.SET_NULL)
     protected Version version;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "id_urgency", nullable = false)
-    @NotNull(groups = {OnCreate.class})
+    @ManyToOne
+    @JoinColumn(name = "id_urgency")
+    @OnDelete(action= OnDeleteAction.SET_NULL)
     protected Urgency urgency;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "id_impact", nullable = false)
-    @NotNull(groups = {OnCreate.class})
+    @ManyToOne
+    @JoinColumn(name = "id_impact")
+    @OnDelete(action= OnDeleteAction.SET_NULL)
     protected Impact impact;
 
     @ManyToOne
     @JoinColumn(name = "id_client")
     @OnDelete(action = OnDeleteAction.SET_NULL)
-    @NotNull(groups = {OnCreate.class})
     protected Client client;
 
     @OneToMany(mappedBy = "ticket")

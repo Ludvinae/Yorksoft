@@ -1,6 +1,8 @@
-package com.mns.cda.suivimns.unit.model;
+package com.mns.cda.suivimns.unit.dto;
 
 import com.mns.cda.suivimns.TestUtils;
+import com.mns.cda.suivimns.dto.VersionDto;
+import com.mns.cda.suivimns.dto.VersionTypeDto;
 import com.mns.cda.suivimns.model.Version;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -8,7 +10,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-public class VersionUnitTest {
+import java.time.LocalDateTime;
+
+public class VersionDtoUnitTest {
 
     protected static Validator validator;
 
@@ -20,9 +24,8 @@ public class VersionUnitTest {
 
     @Test
     public void validVersionWithBlankNumber_shouldBeInvalid() {
+        VersionDto version = new VersionDto(1, "", LocalDateTime.now(), 1, 1);
 
-        Version version = new Version();
-        version.setVersionNumber("");
 
         boolean constraintExists = TestUtils.constraintViolationExists(
                 validator.validate(version),
@@ -35,8 +38,8 @@ public class VersionUnitTest {
 
     @Test
     public void validVersionWithTooLongNumber_shouldBeInvalid() {
-        Version version = new Version();
-        version.setVersionNumber("a".repeat(64));
+        String versionNumber = "a".repeat(64);
+        VersionDto version = new VersionDto(1, versionNumber, LocalDateTime.now(), 1, 1);
 
         boolean constraintExists = TestUtils.constraintViolationExists(
                 validator.validate(version),
@@ -49,16 +52,40 @@ public class VersionUnitTest {
 
     @Test
     public void versionWithNullSoftware_shouldNotBeValid() {
-        Version version = new Version();
-        version.setSoftware(null);
+        VersionDto version = new VersionDto(1, "Test number", LocalDateTime.now(), 1, null);
 
         boolean constraintExists = TestUtils.constraintViolationExists(
                 validator.validate(version),
-                "software",
+                "idSoftware",
                 "NotNull"
         );
 
         Assertions.assertTrue(constraintExists, "Version must be associated with a software");
+    }
+
+    @Test
+    public void versionWithNullVersionType_shouldNotBeValid() {
+        VersionDto version = new VersionDto(1, "Test number", LocalDateTime.now(), null, 1);
+
+        boolean constraintExists = TestUtils.constraintViolationExists(
+                validator.validate(version),
+                "idVersionType",
+                "NotNull"
+        );
+
+        Assertions.assertTrue(constraintExists, "Version must be associated with a version type");
+    }
+
+    // ---------- valid case ----------
+
+    @Test
+    public void versionWithValidData_shouldBeValid() {
+        VersionDto type = new VersionDto(1, "Test number", LocalDateTime.now(), 1, 1);
+
+        Assertions.assertTrue(
+                validator.validate(type).isEmpty(),
+                "VersionDto should be valid"
+        );
     }
 
 }

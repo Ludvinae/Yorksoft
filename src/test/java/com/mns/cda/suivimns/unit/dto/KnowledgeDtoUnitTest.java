@@ -1,6 +1,8 @@
-package com.mns.cda.suivimns.unit.model;
+package com.mns.cda.suivimns.unit.dto;
 
 import com.mns.cda.suivimns.TestUtils;
+import com.mns.cda.suivimns.dto.KnowledgeDto;
+import com.mns.cda.suivimns.dto.ThemeDto;
 import com.mns.cda.suivimns.model.Knowledge;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import com.mns.cda.suivimns.model.groups.OnUpdate;
@@ -10,7 +12,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-public class KnowledgeUnitTest {
+import java.util.ArrayList;
+import java.util.List;
+
+public class KnowledgeDtoUnitTest {
 
     protected static Validator validator;
 
@@ -19,27 +24,14 @@ public class KnowledgeUnitTest {
         validator = Validation.buildDefaultValidatorFactory().getValidator();
     }
 
-    @Test
-    public void KnowledgeWithBlankCreatedSubject_shouldNotBeValid() {
-        Knowledge knowledge = new Knowledge();
-        knowledge.setSubject("");
-
-        boolean constraintExists = TestUtils.constraintViolationExists(
-                validator.validate(knowledge, OnCreate.class),
-                "subject",
-                "NotBlank"
-        );
-
-        Assertions.assertTrue(constraintExists, "Subject should not be blank");
-    }
 
     @Test
-    public void KnowledgeWithBlankupdatedSubject_shouldNotBeValid() {
-        Knowledge knowledge = new Knowledge();
-        knowledge.setSubject("");
+    public void KnowledgeWithBlankSubject_shouldNotBeValid() {
+        List<Integer> list = new ArrayList<>();
+        KnowledgeDto knowledge = new KnowledgeDto(1, "", 1, list, list);
 
         boolean constraintExists = TestUtils.constraintViolationExists(
-                validator.validate(knowledge, OnUpdate.class),
+                validator.validate(knowledge),
                 "subject",
                 "NotBlank"
         );
@@ -49,8 +41,9 @@ public class KnowledgeUnitTest {
 
     @Test
     public void knowledgeWithTooLongSubject_shouldNotBeValid() {
-        Knowledge knowledge = new Knowledge();
-        knowledge.setSubject("a".repeat(256) + "@test.com");
+        String subject = "a".repeat(256);
+        List<Integer> list = new ArrayList<>();
+        KnowledgeDto knowledge = new KnowledgeDto(1, subject, 1, list, list);
 
         boolean constraintExists = TestUtils.constraintViolationExists(
                 validator.validate(knowledge),
@@ -63,15 +56,28 @@ public class KnowledgeUnitTest {
 
     @Test
     public void validKnowledgeWithBlankTheme_shouldNotBeValid() {
-        Knowledge knowledge = new Knowledge();
-        knowledge.setTheme(null);
+        List<Integer> list = new ArrayList<>();
+        KnowledgeDto knowledge = new KnowledgeDto(1, "Test subject", null, list, list);
 
         boolean constraintExists = TestUtils.constraintViolationExists(
                 validator.validate(knowledge),
-                "theme",
+                "idTheme",
                 "NotNull"
         );
 
         Assertions.assertTrue(constraintExists, "Knowledge should have a theme associated");
+    }
+
+    // ---------- valid case ----------
+
+    @Test
+    public void knowledgeWithValidData_shouldBeValid() {
+        List<Integer> list = new ArrayList<>();
+        KnowledgeDto knowledge = new KnowledgeDto(1, "Test subject", 1, list, list);
+
+        Assertions.assertTrue(
+                validator.validate(knowledge).isEmpty(),
+                "KnowledgeDto should be valid"
+        );
     }
 }

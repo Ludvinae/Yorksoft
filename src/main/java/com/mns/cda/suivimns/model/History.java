@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -31,15 +33,16 @@ public class History {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_status", nullable = false)
-    @NotNull
+    @OnDelete(action= OnDeleteAction.CASCADE)
     protected Status status;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_ticket", nullable = false)
-    @NotNull
+    @OnDelete(action= OnDeleteAction.CASCADE)
     protected Ticket ticket;
 
     @ManyToOne
     @JoinColumn(name = "id_app_user")
+    @OnDelete(action= OnDeleteAction.SET_NULL)
     protected AppUser actor;
 }

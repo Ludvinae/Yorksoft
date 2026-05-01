@@ -1,6 +1,8 @@
-package com.mns.cda.suivimns.unit.model;
+package com.mns.cda.suivimns.unit.dto;
 
 import com.mns.cda.suivimns.TestUtils;
+import com.mns.cda.suivimns.dto.UrgencyDto;
+import com.mns.cda.suivimns.dto.VersionDto;
 import com.mns.cda.suivimns.model.Urgency;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import jakarta.validation.Validation;
@@ -9,7 +11,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-public class UrgencyUnitTest {
+import java.time.LocalDateTime;
+
+public class UrgencyDtoUnitTest {
 
     protected static Validator validator;
 
@@ -20,11 +24,10 @@ public class UrgencyUnitTest {
 
     @Test
     public void urgencyWithBlankCreatedDesignation_shouldNotBeValid() {
-        Urgency urgency = new Urgency();
-        urgency.setDesignation("");
+        UrgencyDto urgency = new UrgencyDto(1, "", (byte) 1, "Test description");
 
         boolean constraintExists = TestUtils.constraintViolationExists(
-                validator.validate(urgency, OnCreate.class),
+                validator.validate(urgency),
                 "designation",
                 "NotBlank"
         );
@@ -33,9 +36,10 @@ public class UrgencyUnitTest {
     }
 
     @Test
-    public void urgencyWithToolongDesignation_shouldNotBeValid() {
-        Urgency urgency = new Urgency();
-        urgency.setDesignation("a".repeat(70));
+    public void urgencyWithTooLongDesignation_shouldNotBeValid() {
+
+        String designation = "a".repeat(70);
+        UrgencyDto urgency = new UrgencyDto(1, designation, (byte) 1, "Test description");
 
         boolean constraintExists = TestUtils.constraintViolationExists(
                 validator.validate(urgency),
@@ -48,8 +52,7 @@ public class UrgencyUnitTest {
 
     @Test
     public void urgencyWithNullPriorityFactor_shouldNotBeValid() {
-        Urgency urgency = new Urgency();
-        urgency.setPriorityFactor(null);
+        UrgencyDto urgency = new UrgencyDto(1, "Test designation", null, "Test description");
 
         boolean constraintExists = TestUtils.constraintViolationExists(
                 validator.validate(urgency),
@@ -58,6 +61,18 @@ public class UrgencyUnitTest {
         );
 
         Assertions.assertTrue(constraintExists, "Urgency Priority factor must not be blank");
+    }
+
+    // ---------- valid case ----------
+
+    @Test
+    public void urgencyWithValidData_shouldBeValid() {
+        UrgencyDto urgency = new UrgencyDto(1, "Test designation", (byte) 1, "Test description");
+
+        Assertions.assertTrue(
+                validator.validate(urgency).isEmpty(),
+                "UrgencyDto should be valid"
+        );
     }
 }
 

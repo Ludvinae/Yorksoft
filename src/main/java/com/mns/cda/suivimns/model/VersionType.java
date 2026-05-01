@@ -20,8 +20,6 @@ public class VersionType {
     protected Integer idVersionType;
 
     @Column(nullable = false, length = 127)
-    @NotBlank
-    @Size(max = 127)
     protected String designation;
 
     protected Byte urgencyMalus;

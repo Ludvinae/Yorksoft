@@ -38,13 +38,11 @@ public class Article {
 
 
     @Column(nullable = false, columnDefinition = "TEXT")
-    @NotBlank(groups = {OnCreate.class, OnUpdate.class})
     protected String content;
 
     @ManyToOne(optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_knowledge", nullable = false)
-    @NotNull
     protected Knowledge knowledge;
 
     @ManyToOne

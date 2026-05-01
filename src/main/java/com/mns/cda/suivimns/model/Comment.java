@@ -30,7 +30,6 @@ public class Comment {
     protected Integer idComment;
 
     @Column(nullable = false, columnDefinition = "TEXT")
-    @NotBlank(groups = {OnCreate.class,  OnUpdate.class})
     protected String content;
 
     @CreatedDate
@@ -43,7 +42,6 @@ public class Comment {
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_ticket", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @NotNull
     protected Ticket ticket;
 
     @ManyToOne(optional = false)

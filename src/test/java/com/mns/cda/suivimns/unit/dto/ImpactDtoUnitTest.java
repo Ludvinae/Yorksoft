@@ -1,6 +1,8 @@
-package com.mns.cda.suivimns.unit.model;
+package com.mns.cda.suivimns.unit.dto;
 
 import com.mns.cda.suivimns.TestUtils;
+import com.mns.cda.suivimns.dto.ImpactDto;
+import com.mns.cda.suivimns.dto.KnowledgeDto;
 import com.mns.cda.suivimns.model.Impact;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import jakarta.validation.Validation;
@@ -9,7 +11,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-public class ImpactUnitTest {
+import java.util.ArrayList;
+import java.util.List;
+
+public class ImpactDtoUnitTest {
 
     protected static Validator validator;
 
@@ -19,12 +24,11 @@ public class ImpactUnitTest {
     }
 
     @Test
-    public void impactWithBlankCreatedDesignation_shouldNotBeValid() {
-        Impact impact = new Impact();
-        impact.setDesignation("");
+    public void impactWithBlankDesignation_shouldNotBeValid() {
+        ImpactDto impact = new ImpactDto(1, "", (byte) 1, "Test description");
 
         boolean constraintExists = TestUtils.constraintViolationExists(
-                validator.validate(impact, OnCreate.class),
+                validator.validate(impact),
                 "designation",
                 "NotBlank"
         );
@@ -34,8 +38,8 @@ public class ImpactUnitTest {
 
     @Test
     public void impactWithToolongDesignation_shouldNotBeValid() {
-        Impact impact = new Impact();
-        impact.setDesignation("a".repeat(70));
+        String designation = "a".repeat(70);
+        ImpactDto impact = new ImpactDto(1, designation, (byte) 1, "Test description");
 
         boolean constraintExists = TestUtils.constraintViolationExists(
                 validator.validate(impact),
@@ -47,9 +51,8 @@ public class ImpactUnitTest {
     }
 
     @Test
-    public void validImpactWithBlankPriorityFactor_shouldNotBeValid() {
-        Impact impact = new Impact();
-        impact.setPriorityFactor(null);
+    public void validImpactWithNullPriorityFactor_shouldNotBeValid() {
+        ImpactDto impact = new ImpactDto(1, "Test designation", null, "Test description");
 
         boolean constraintExists = TestUtils.constraintViolationExists(
                 validator.validate(impact),
@@ -58,5 +61,17 @@ public class ImpactUnitTest {
         );
 
         Assertions.assertTrue(constraintExists, "Impact priorityFactor should not be blank");
+    }
+
+    // ---------- valid case ----------
+
+    @Test
+    public void impactWithValidData_shouldBeValid() {
+        ImpactDto impact = new ImpactDto(1, "Test designation", (byte) 1, "Test description");
+
+        Assertions.assertTrue(
+                validator.validate(impact).isEmpty(),
+                "ImpactDto should be valid"
+        );
     }
 }

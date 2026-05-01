@@ -10,6 +10,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.List;
 
@@ -25,19 +27,18 @@ public class Knowledge {
     protected Integer idKnowledge;
 
     @Column(nullable = false)
-    @NotBlank(groups = {OnCreate.class, OnUpdate.class})
-    @Size(max = 255)
     protected String subject;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_theme", nullable = false)
-    @NotNull
+    @OnDelete(action= OnDeleteAction.CASCADE)
     protected Theme theme;
 
     @ManyToMany
     @JoinTable(name = "knowledge_versions",
             joinColumns = @JoinColumn(name = "id_knowledge"),
             inverseJoinColumns = @JoinColumn(name = "id_version"))
+    @OnDelete(action= OnDeleteAction.SET_NULL)
     protected List<Version> versionList;
 
     @OneToMany(mappedBy = "knowledge")

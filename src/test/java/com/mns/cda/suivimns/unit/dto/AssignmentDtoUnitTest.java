@@ -1,6 +1,8 @@
-package com.mns.cda.suivimns.unit.model;
+package com.mns.cda.suivimns.unit.dto;
 
 import com.mns.cda.suivimns.TestUtils;
+import com.mns.cda.suivimns.dto.AssignmentDto;
+import com.mns.cda.suivimns.dto.ClassificationDto;
 import com.mns.cda.suivimns.model.Assignment;
 import com.mns.cda.suivimns.model.Manager;
 import com.mns.cda.suivimns.model.Technician;
@@ -13,7 +15,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 
-public class AssignmentUnitTest {
+public class AssignmentDtoUnitTest {
 
     protected static Validator validator;
 
@@ -22,29 +24,15 @@ public class AssignmentUnitTest {
         validator = Validation.buildDefaultValidatorFactory().getValidator();
     }
 
-    @Test
-    public void assignmentWithAllFieldsFilled_shouldBeValid() {
-        Assignment assignment = new Assignment();
-
-        assignment.setAssignmentDate(LocalDateTime.now());
-        assignment.setEndDate(LocalDateTime.now());
-        assignment.setTicket(new Ticket());
-        assignment.setManager(new Manager());
-        assignment.setTechnician(new Technician());
-
-        boolean hasViolation = !validator.validate(assignment).isEmpty();
-
-        Assertions.assertFalse(hasViolation, "Assignment should always be valid");
-    }
 
     @Test
-    public void validAssignmentWithBlankTicket_shouldNotBeValid() {
-        Assignment assignment = new Assignment();
-        assignment.setTicket(null);
+    public void validAssignmentWithNullTicket_shouldNotBeValid() {
+        AssignmentDto assignment = new AssignmentDto(1, LocalDateTime.now(), null,
+                null, 1, 1);
 
         boolean constraintExists = TestUtils.constraintViolationExists(
                 validator.validate(assignment),
-                "ticket",
+                "idTicket",
                 "NotNull"
         );
 
@@ -52,13 +40,13 @@ public class AssignmentUnitTest {
     }
 
     @Test
-    public void validAssignmentWithBlankManager_shouldNotBeValid() {
-        Assignment assignment = new Assignment();
-        assignment.setManager(null);
+    public void validAssignmentWithNullManager_shouldNotBeValid() {
+        AssignmentDto assignment = new AssignmentDto(1, LocalDateTime.now(), null,
+                1, null, 1);
 
         boolean constraintExists = TestUtils.constraintViolationExists(
                 validator.validate(assignment),
-                "manager",
+                "idManager",
                 "NotNull"
         );
 
@@ -66,16 +54,29 @@ public class AssignmentUnitTest {
     }
 
     @Test
-    public void validAssignmentWithBlankTechnician_shouldNotBeValid() {
-        Assignment assignment = new Assignment();
-        assignment.setTechnician(null);
+    public void validAssignmentWithNullTechnician_shouldNotBeValid() {
+        AssignmentDto assignment = new AssignmentDto(1, LocalDateTime.now(), null,
+                1, 1, null);
 
         boolean constraintExists = TestUtils.constraintViolationExists(
                 validator.validate(assignment),
-                "technician",
+                "idTechnician",
                 "NotNull"
         );
 
         Assertions.assertTrue(constraintExists, "Assignment should have a technician associated");
+    }
+
+    // ---------- valid case ----------
+
+    @Test
+    public void assignmentWithValidData_shouldBeValid() {
+        AssignmentDto assignment = new AssignmentDto(1, LocalDateTime.now(), null,
+                1, 1, 1);
+
+        Assertions.assertTrue(
+                validator.validate(assignment).isEmpty(),
+                "AssignmentDto should be valid"
+        );
     }
 }

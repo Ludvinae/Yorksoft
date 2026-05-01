@@ -21,8 +21,6 @@ public class Status {
     protected Integer idStatus;
 
     @Column(nullable = false, length = 63, unique = true)
-    @NotBlank(groups = {OnCreate.class})
-    @Size(min = 3, max = 63)
     protected String designation;
 
     protected Byte displayOrder;

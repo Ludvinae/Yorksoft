@@ -1,6 +1,8 @@
-package com.mns.cda.suivimns.unit.model;
+package com.mns.cda.suivimns.unit.dto;
 
 import com.mns.cda.suivimns.TestUtils;
+import com.mns.cda.suivimns.dto.LicenseDto;
+import com.mns.cda.suivimns.dto.SoftwareDto;
 import com.mns.cda.suivimns.model.License;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -8,7 +10,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-public class LicenseUnitTest {
+import java.time.LocalDate;
+
+public class LicenseDtoUnitTest {
 
     protected static Validator validator;
 
@@ -19,8 +23,8 @@ public class LicenseUnitTest {
 
     @Test
     public void licenseWithTooLongNumber_shouldNotBeValid() {
-        License license = new License();
-        license.setLicenseNumber("a".repeat(128));
+        String number = "a".repeat(128);
+        LicenseDto license = new LicenseDto(1, number, LocalDate.now(), 1, 1);
 
         boolean constraintExists = TestUtils.constraintViolationExists(
                 validator.validate(license),
@@ -33,8 +37,7 @@ public class LicenseUnitTest {
 
     @Test
     public void licenseWithBlankNumber_shouldNotBeValid() {
-        License license = new License();
-        license.setLicenseNumber("");
+        LicenseDto license = new LicenseDto(1, "", LocalDate.now(), 1, 1);
 
         boolean constraintExists = TestUtils.constraintViolationExists(
                 validator.validate(license),
@@ -47,15 +50,26 @@ public class LicenseUnitTest {
 
     @Test
     public void validLicenseWithBlankSoftware_shouldNotBeValid() {
-        License license = new License();
-        license.setSoftware(null);
+        LicenseDto license = new LicenseDto(1, "Test number", LocalDate.now(), null, 1);
 
         boolean constraintExists = TestUtils.constraintViolationExists(
                 validator.validate(license),
-                "software",
+                "idSoftware",
                 "NotNull"
         );
 
         Assertions.assertTrue(constraintExists, "License should have a software associated");
+    }
+
+    // ---------- valid case ----------
+
+    @Test
+    public void themeWithValidData_shouldBeValid() {
+        LicenseDto license = new LicenseDto(1, "Test number", LocalDate.now(), 1, 1);
+
+        Assertions.assertTrue(
+                validator.validate(license).isEmpty(),
+                "LicenseDto should be valid"
+        );
     }
 }

@@ -1,6 +1,8 @@
-package com.mns.cda.suivimns.unit.model;
+package com.mns.cda.suivimns.unit.dto;
 
 import com.mns.cda.suivimns.TestUtils;
+import com.mns.cda.suivimns.dto.ThemeDto;
+import com.mns.cda.suivimns.dto.UrgencyDto;
 import com.mns.cda.suivimns.model.Theme;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import jakarta.validation.Validation;
@@ -9,7 +11,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-public class ThemeUnitTest {
+public class ThemeDtoUnitTest {
 
     protected static Validator validator;
 
@@ -19,12 +21,11 @@ public class ThemeUnitTest {
     }
 
     @Test
-    public void themeWithBlankCreatedDesignation_shouldNotBeValid() {
-        Theme theme = new Theme();
-        theme.setDesignation("");
+    public void themeWithBlankDesignation_shouldNotBeValid() {
+        ThemeDto theme = new ThemeDto(1, "", "Test description");
 
         boolean constraintExists = TestUtils.constraintViolationExists(
-                validator.validate(theme, OnCreate.class),
+                validator.validate(theme),
                 "designation",
                 "NotBlank"
         );
@@ -34,8 +35,7 @@ public class ThemeUnitTest {
 
     @Test
     public void themeWithTooShortDesignation_shouldNotBeValid() {
-        Theme theme = new Theme();
-        theme.setDesignation("a");
+        ThemeDto theme = new ThemeDto(1, "T", "Test description");
 
         boolean constraintExists = TestUtils.constraintViolationExists(
                 validator.validate(theme),
@@ -48,8 +48,8 @@ public class ThemeUnitTest {
 
     @Test
     public void themeWithTooLongDesignation_shouldNotBeValid() {
-        Theme theme = new Theme();
-        theme.setDesignation("a".repeat(128));
+        String designation = "a".repeat(128);
+        ThemeDto theme = new ThemeDto(1, designation, "Test description");
 
         boolean constraintExists = TestUtils.constraintViolationExists(
                 validator.validate(theme),
@@ -58,5 +58,17 @@ public class ThemeUnitTest {
         );
 
         Assertions.assertTrue(constraintExists, "Designation must be at most 127 characters long");
+    }
+
+    // ---------- valid case ----------
+
+    @Test
+    public void themeWithValidData_shouldBeValid() {
+        ThemeDto theme = new ThemeDto(1, "Test designation", "Test description");
+
+        Assertions.assertTrue(
+                validator.validate(theme).isEmpty(),
+                "ThemeDto should be valid"
+        );
     }
 }

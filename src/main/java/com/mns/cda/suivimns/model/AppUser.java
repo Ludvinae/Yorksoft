@@ -23,25 +23,18 @@ public class AppUser {
     protected Integer idAppUser;
 
     @Column(length = 127)
-    @Size(max = 127)
     protected String firstName;
 
     @Column(length = 127)
-    @Size(max = 127)
     protected String lastName;
 
     @Column(length = 127, unique = true)
-    @Email(groups = {OnCreate.class})
-    @Size(max = 127)
     protected String email;
 
     @Column(length = 31)
-    @Size(max = 31)
     protected String phoneNumber;
 
     @Column(nullable = false, length = 127)
-    @NotBlank(groups = {OnCreate.class})
-    @Size(max = 127)
     protected String password;
 
 }

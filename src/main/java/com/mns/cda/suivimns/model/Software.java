@@ -23,8 +23,6 @@ public class Software {
     protected Integer idSoftware;
 
     @Column(nullable = false, length = 127)
-    @NotBlank(groups = {OnCreate.class})
-    @Size(max = 127)
     protected String name;
 
     @Column(columnDefinition = "TEXT")

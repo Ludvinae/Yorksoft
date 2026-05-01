@@ -25,15 +25,12 @@ public class License {
     protected Integer idLicense;
 
     @Column(nullable = false, unique = true, length = 127)
-    @NotBlank
-    @Size(max = 127)
     protected String licenseNumber;
 
     protected LocalDate expirationDate;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_software", nullable = false)
-    @NotNull
     @OnDelete(action = OnDeleteAction.CASCADE)
     protected Software software;
 

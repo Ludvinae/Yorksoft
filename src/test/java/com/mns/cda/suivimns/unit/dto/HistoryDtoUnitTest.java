@@ -1,6 +1,8 @@
-package com.mns.cda.suivimns.unit.model;
+package com.mns.cda.suivimns.unit.dto;
 
 import com.mns.cda.suivimns.TestUtils;
+import com.mns.cda.suivimns.dto.HistoryDto;
+import com.mns.cda.suivimns.dto.ImpactDto;
 import com.mns.cda.suivimns.model.History;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -8,7 +10,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-public class HistoryUnitTest {
+import java.time.LocalDateTime;
+
+public class HistoryDtoUnitTest {
 
     protected static Validator validator;
 
@@ -18,13 +22,12 @@ public class HistoryUnitTest {
     }
 
     @Test
-    public void validHistoryWithBlankTicket_shouldNotBeValid() {
-        History history = new History();
-        history.setTicket(null);
+    public void validHistoryWithNullTicket_shouldNotBeValid() {
+        HistoryDto history = new HistoryDto(1, LocalDateTime.now(), null,null, 1, 1);
 
         boolean constraintExists = TestUtils.constraintViolationExists(
                 validator.validate(history),
-                "ticket",
+                "idTicket",
                 "NotNull"
         );
 
@@ -32,16 +35,27 @@ public class HistoryUnitTest {
     }
 
     @Test
-    public void validHistoryWithBlankStatus_shouldNotBeValid() {
-        History history = new History();
-        history.setStatus(null);
+    public void validHistoryWithNullStatus_shouldNotBeValid() {
+        HistoryDto history = new HistoryDto(1, LocalDateTime.now(), null,1, null, 1);
 
         boolean constraintExists = TestUtils.constraintViolationExists(
                 validator.validate(history),
-                "status",
+                "idStatus",
                 "NotNull"
         );
 
         Assertions.assertTrue(constraintExists, "History should have a status associated");
+    }
+
+    // ---------- valid case ----------
+
+    @Test
+    public void historyWithValidData_shouldBeValid() {
+        HistoryDto history = new HistoryDto(1, LocalDateTime.now(), null,1, 1, 1);
+
+        Assertions.assertTrue(
+                validator.validate(history).isEmpty(),
+                "HistoryDto should be valid"
+        );
     }
 }

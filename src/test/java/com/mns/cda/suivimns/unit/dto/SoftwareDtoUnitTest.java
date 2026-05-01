@@ -1,6 +1,8 @@
-package com.mns.cda.suivimns.unit.model;
+package com.mns.cda.suivimns.unit.dto;
 
 import com.mns.cda.suivimns.TestUtils;
+import com.mns.cda.suivimns.dto.SoftwareDto;
+import com.mns.cda.suivimns.dto.ThemeDto;
 import com.mns.cda.suivimns.model.Software;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import jakarta.validation.Validation;
@@ -10,7 +12,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 
-public class SoftwareUnitTest {
+public class SoftwareDtoUnitTest {
 
     protected static Validator validator;
 
@@ -21,11 +23,10 @@ public class SoftwareUnitTest {
 
     @Test
     public void validSoftwareWithBlankName_shouldNotBeValid() {
-        Software software = new Software();
-        software.setName("");
+        SoftwareDto software = new SoftwareDto(1, "", "Test description", 1);
 
         boolean constraintExists = TestUtils.constraintViolationExists(
-                validator.validate(software, OnCreate.class),
+                validator.validate(software),
                 "name",
                 "NotBlank"
         );
@@ -35,10 +36,8 @@ public class SoftwareUnitTest {
 
     @Test
     public void validSoftwareWithTooLongName_shouldNotBeValid() {
-        Software software = new Software();
-        software.setName("lkdjsqkdjsqlkjdlksqjdlksqjdlksqjdlkjzoijdiqjdlkslkqcnkjsqnckjqnkzokdoapzkdpoakdpozakd" +
-                "sqlkjdlksqjdksqjdlksqjdlkqjsdlksqjcjnwjcbnxwvcnb<vciuzahzoiud_iuydiuzayuidyzaiudhzaoidj_çç998" +
-                "içç_u_udoijiazjdzajdksqndjsqnkjbsqdkjsqdjqhdikozakdmlkqdlsq,ckxw,cnwxncbzdqdsdqdsqdqsdsdsqdoàoà");
+        String name = "a".repeat(128);
+        SoftwareDto software = new SoftwareDto(1, name, "Test description", 1);
 
         boolean constraintExists = TestUtils.constraintViolationExists(
                 validator.validate(software),
@@ -47,6 +46,18 @@ public class SoftwareUnitTest {
         );
 
         Assertions.assertTrue(constraintExists, "Software name should be at maximum 127 characters long");
+    }
+
+    // ---------- valid case ----------
+
+    @Test
+    public void themeWithValidData_shouldBeValid() {
+        SoftwareDto software = new SoftwareDto(1, "Test name", "Test description", 1);
+
+        Assertions.assertTrue(
+                validator.validate(software).isEmpty(),
+                "SoftwareDto should be valid"
+        );
     }
 
 }

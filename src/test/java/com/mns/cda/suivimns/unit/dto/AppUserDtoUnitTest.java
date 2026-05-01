@@ -1,6 +1,8 @@
-package com.mns.cda.suivimns.unit.model;
+package com.mns.cda.suivimns.unit.dto;
 
 import com.mns.cda.suivimns.TestUtils;
+import com.mns.cda.suivimns.dto.AppUserDto;
+import com.mns.cda.suivimns.dto.TechnicianDto;
 import com.mns.cda.suivimns.model.AppUser;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import jakarta.validation.Validation;
@@ -9,7 +11,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-public class AppUserUnitTest {
+public class AppUserDtoUnitTest {
 
     protected static Validator validator;
 
@@ -22,11 +24,12 @@ public class AppUserUnitTest {
 
     @Test
     public void appUserWithTooLongFirstName_shouldNotBeValid() {
-        AppUser appUser = new AppUser();
-        appUser.setFirstName("a".repeat(128));
+        String firstName = "a".repeat(128);
+        AppUserDto user = new AppUserDto(1, firstName, "Test last name",
+                "Test@test.com", "Test phone number");
 
         boolean constraintExists = TestUtils.constraintViolationExists(
-                validator.validate(appUser),
+                validator.validate(user),
                 "firstName",
                 "Size"
         );
@@ -38,11 +41,12 @@ public class AppUserUnitTest {
 
     @Test
     public void appUserWithTooLongLastName_shouldNotBeValid() {
-        AppUser appUser = new AppUser();
-        appUser.setLastName("a".repeat(128));
+        String lastName = "a".repeat(128);
+        AppUserDto user = new AppUserDto(1, "Test first name", lastName,
+                "Test@test.com", "Test phone number");
 
         boolean constraintExists = TestUtils.constraintViolationExists(
-                validator.validate(appUser),
+                validator.validate(user),
                 "lastName",
                 "Size"
         );
@@ -54,11 +58,11 @@ public class AppUserUnitTest {
 
     @Test
     public void appUserWithInvalidEmail_shouldNotBeValid() {
-        AppUser appUser = new AppUser();
-        appUser.setEmail("invalid-email");
+        AppUserDto user = new AppUserDto(1, "Test first name", "Test last name",
+                "Test", "Test phone number");
 
         boolean constraintExists = TestUtils.constraintViolationExists(
-                validator.validate(appUser, OnCreate.class),
+                validator.validate(user),
                 "email",
                 "Email"
         );
@@ -68,11 +72,12 @@ public class AppUserUnitTest {
 
     @Test
     public void appUserWithTooLongEmail_shouldNotBeValid() {
-        AppUser appUser = new AppUser();
-        appUser.setEmail("a".repeat(128) + "@test.com");
+        String email = "a".repeat(128) + "@test.com";
+        AppUserDto user = new AppUserDto(1, "Test first name", "Test last name",
+                email, "Test phone number");
 
         boolean constraintExists = TestUtils.constraintViolationExists(
-                validator.validate(appUser),
+                validator.validate(user),
                 "email",
                 "Size"
         );
@@ -84,11 +89,12 @@ public class AppUserUnitTest {
 
     @Test
     public void appUserWithTooLongPhoneNumber_shouldNotBeValid() {
-        AppUser appUser = new AppUser();
-        appUser.setPhoneNumber("1".repeat(32));
+        String phone = "1".repeat(32);
+        AppUserDto user = new AppUserDto(1, "Test first name", "Test last name",
+                "Test@test.com", phone);
 
         boolean constraintExists = TestUtils.constraintViolationExists(
-                validator.validate(appUser),
+                validator.validate(user),
                 "phoneNumber",
                 "Size"
         );
@@ -96,49 +102,17 @@ public class AppUserUnitTest {
         Assertions.assertTrue(constraintExists, "Phone number must be <= 31 characters");
     }
 
-    // ---------- password ----------
-
-    @Test
-    public void appUserWithBlankPassword_shouldNotBeValid() {
-        AppUser appUser = new AppUser();
-        appUser.setPassword("");
-
-        boolean constraintExists = TestUtils.constraintViolationExists(
-                validator.validate(appUser, OnCreate.class),
-                "password",
-                "NotBlank"
-        );
-
-        Assertions.assertTrue(constraintExists, "Password must not be blank");
-    }
-
-    @Test
-    public void appUserWithTooLongPassword_shouldNotBeValid() {
-        AppUser appUser = new AppUser();
-        appUser.setPassword("a".repeat(128));
-
-        boolean constraintExists = TestUtils.constraintViolationExists(
-                validator.validate(appUser),
-                "password",
-                "Size"
-        );
-
-        Assertions.assertTrue(constraintExists, "Password must be <= 127 characters");
-    }
 
     // ---------- valid case ----------
 
     @Test
     public void appUserWithValidData_shouldBeValid() {
-        AppUser appUser = new AppUser();
-        appUser.setFirstName("John");
-        appUser.setLastName("Doe");
-        appUser.setEmail("john.doe@test.com");
-        appUser.setPhoneNumber("0123456789");
-        appUser.setPassword("securePassword");
+        AppUserDto user = new AppUserDto(1, "Test first name", "Test last name",
+                "Test@test.com", "Test phone number");
 
-        boolean hasViolation = !validator.validate(appUser).isEmpty();
-
-        Assertions.assertFalse(hasViolation, "AppUser should be valid");
+        Assertions.assertTrue(
+                validator.validate(user).isEmpty(),
+                "AppUserDto should be valid"
+        );
     }
 }
