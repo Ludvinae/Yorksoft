@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -11,5 +11,7 @@ export class Title {
   @Input() title!: string;
   @Input() route!: string;
 
-  createRoute: string = '/admin' + this.route + '/create';
+  get createRoute(): string {
+    return `/admin/${this.route}/create`;
+  }
 }

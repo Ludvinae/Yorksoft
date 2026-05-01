@@ -23,7 +23,7 @@ export class SoftwareEdit implements OnInit {
 
   form = this.formBuilder.nonNullable.group({
     name: ['', [Validators.required, Validators.maxLength(127)]],
-    description: ['', []],
+    description: [''],
     idSoftwareType: [null as number | null],
   });
 
@@ -41,7 +41,8 @@ export class SoftwareEdit implements OnInit {
           alert('ID non valide'); // peut etre remplacer par un message, ou une redirection vers une page 404
         } else {
           this.softwareService.get(id).subscribe((software) => {
-            this.form.patchValue(software);
+            const s = this.form.getRawValue();
+            this.form.patchValue(s);
             this.softwareEdit.set(software);
           });
         }

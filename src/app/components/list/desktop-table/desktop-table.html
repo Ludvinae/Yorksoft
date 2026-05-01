@@ -16,15 +16,15 @@
         }
 
         <td>
-          <button class="btn btn-sm" [routerLink]="[baseRoute, getId(item)]">
+          <button type="button" class="btn btn-sm" [routerLink]="[baseRoute, getId(item)]">
             👁️
           </button>
 
-          <button class="btn btn-sm" [routerLink]="[baseRoute, 'update', getId(item)]">
+          <button type="button" class="btn btn-sm" [routerLink]="[baseRoute, 'update', getId(item)]">
             ✏️
           </button>
 
-          <button class="btn btn-sm" (click)="delete(getId(item))">
+          <button type="button" class="btn btn-sm" (click)="delete(getId(item))">
             ❌
           </button>
         </td>

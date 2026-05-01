@@ -1,1 +1,19 @@
-<p>software-type-edit works!</p>
+
+<app-generic-form-page
+  [title]="softwareTypeEdit() ? 'Modifier le type de logiciel' : 'Créer le type de logiciel'"
+  [loading]="loading()"
+  [error]="error()"
+  [submitLabel]="softwareTypeEdit() ? 'Modifier' : 'Créer'"
+  (submitForm)="onSubmit()"
+  [formGroup]="form"
+>
+
+  <!-- champs -->
+  <label class="label">Libellé</label>
+  <input class="input" formControlName="designation" />
+
+  @if (form.get('designation')?.hasError('required')) {
+    <span class="text-error">Obligatoire</span>
+  }
+
+</app-generic-form-page>
