@@ -1,9 +1,14 @@
-<div class="p-4">
 
-  <!-- titre -->
-  @if (title) {
-    <h1 class="text-3xl mb-4">{{ title }}</h1>
-  }
+<!-- titre -->
+@if (title) {
+  <h1 class="text-3xl mb-4">{{ title }}</h1>
+}
+
+<fieldset class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
+
+  <legend class="fieldset-legend">{{ routeId }}</legend>
+
+
 
   <!-- loading -->
   @if (loading) {
@@ -31,12 +36,19 @@
           {{ submitLabel }}
         </button>
 
-        <button type="button" class="btn" routerLink="../../">
+        @if (isEditMode) {
+          <button type="button" class="btn" routerLink="../../">
+            Annuler
+          </button>
+        } @else {
+        <button type="button" class="btn" routerLink="../">
           Annuler
         </button>
+        }
+
       </div>
 
     </form>
   }
 
-</div>
+</fieldset>

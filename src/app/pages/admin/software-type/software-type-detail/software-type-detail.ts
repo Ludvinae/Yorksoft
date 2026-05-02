@@ -18,9 +18,13 @@ export class SoftwareTypeDetail implements OnInit {
   error = signal<string | undefined>(undefined);
   label = signal<string | undefined>(undefined);
 
+  updateRoute: string | undefined = undefined;
+
   ngOnInit() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     this.label.set('Type de logiciel #' + id);
+
+    this.updateRoute = `/admin/software-type/update/${id}`;
 
     this.service.get(id).subscribe({
       next: (s) => {

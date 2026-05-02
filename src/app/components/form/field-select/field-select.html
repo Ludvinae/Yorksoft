@@ -1,0 +1,20 @@
+
+<fieldset class="fieldset">
+  <legend class="fieldset-legend">{{ labelKey }}</legend>
+
+  <select class="select" [formControl]="control" [disabled]="options.length === 0">
+    <option [ngValue]="null" disabled>
+      {{ placeholder }}
+    </option>
+
+    @for (option of options; track getValue(option)) {
+      <option [value]="getValue(option)">
+        {{ getLabel(option) }}
+      </option>
+    }
+  </select>
+
+  @if (errorMessage) {
+    <span class="form-error">{{ errorMessage }}</span>
+  }
+</fieldset>

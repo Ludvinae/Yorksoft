@@ -3,10 +3,11 @@ import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angu
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { SoftwareService } from '../../../../services/api/software-service';
+import { FieldText } from '../../../../components/form/field-text/field-text';
 
 @Component({
   selector: 'app-software-edit',
-  imports: [FormsModule, ReactiveFormsModule, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, RouterLink, FieldText],
   templateUrl: './software-edit.html',
   styleUrl: './software-edit.css',
 })
@@ -20,6 +21,7 @@ export class SoftwareEdit implements OnInit {
   //softwareId = signal<number | null>(null);
   listSoftwareType = signal<SoftwareType[]>([]);
   softwareEdit = signal<Software | null>(null);
+  errorMessage = signal<string | null>(null);
 
   form = this.formBuilder.nonNullable.group({
     name: ['', [Validators.required, Validators.maxLength(127)]],
@@ -93,4 +95,12 @@ export class SoftwareEdit implements OnInit {
       alert('Une erreur est survenue');
     }
   };
+
+  OnCompletion() {
+    if (this.form.get('name')?.hasError('required')) {
+      this.errorMessage.set('Le nom est obligatoire');
+    } else if (this.form.get('name')?.hasError('maxlength')) {
+      this.errorMessage.set('Le nom doit comporter un maximum de 127 caracteres');
+    }
+  }
 }

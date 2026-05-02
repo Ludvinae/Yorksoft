@@ -21,6 +21,10 @@
           [routerLink]="[baseRoute, 'update', getId(item)]">
           ✏️
         </button>
+
+        <button type="button" class="btn btn-sm" (click)="delete(getId(item))">
+          ❌
+        </button>
       </div>
 
     </div>

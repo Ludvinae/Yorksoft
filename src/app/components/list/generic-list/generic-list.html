@@ -3,7 +3,8 @@
     [data]="data"
     [itemTemplate]="itemTemplate"
     [baseRoute]="baseRoute"
-    [idField]="idField">
+    [idField]="idField"
+    (deleteItem)="deleteItem.emit($event)">
   </app-mobile-card-list>
 } @else {
   <app-desktop-table

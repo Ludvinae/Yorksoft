@@ -1,1 +1,0 @@
-<input type="text" placeholder="Type here" class="input" />

@@ -5,6 +5,7 @@
     <label class="label">Nom</label>
     <input type="text" class="input" placeholder="Nom du logiciel" formControlName="name"/>
 
+
     @if (form.get('name')?.hasError('required')) {
       <span class="form-error">Le nom est obligatoire</span>
     } @else if (form.get('name')?.hasError('maxlength')) {

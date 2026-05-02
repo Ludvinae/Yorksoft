@@ -1,4 +1,4 @@
-import { Component, Input, TemplateRef } from '@angular/core';
+import { Component, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
@@ -15,7 +15,15 @@ export class MobileCardList<T> {
   // Adapte le champ ID avec le nom correspondant
   @Input({ required: true }) idField!: keyof T;
 
+  @Output() deleteItem = new EventEmitter<number>();
+
   getId(item: T): any {
     return (item as any)[this.idField];
+  }
+
+  delete(id: number) {
+    if (confirm('Supprimer ?')) {
+      this.deleteItem.emit(id);
+    }
   }
 }

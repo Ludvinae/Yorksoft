@@ -1,41 +1,62 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { ActivatedRoute } from '@angular/router';
+import { SoftwareService } from '../../../../services/api/software-service';
+import { SoftwareTypeService } from '../../../../services/api/software-type-service';
+import { DetailPage } from '../../../../components/detail-page/detail-page';
+import { RouteBuilderService } from '../../../../services/route-builder-service';
+import { switchMap, tap } from 'rxjs';
 
 @Component({
   selector: 'app-software-detail',
-  imports: [RouterLink],
+  imports: [DetailPage],
   templateUrl: './software-detail.html',
   styleUrl: './software-detail.css',
 })
 export class SoftwareDetail implements OnInit {
   route = inject(ActivatedRoute);
-  httpClient = inject(HttpClient);
-  softwareSignal = signal<Software | null>(null);
-  typeSignal = signal<SoftwareType | null>(null);
+  softwareService = inject(SoftwareService);
+  softwareTypeService = inject(SoftwareTypeService);
+  routeBuilder = inject(RouteBuilderService);
+
+  software = signal<Software | null>(null);
+  loading = signal(true);
+  error = signal<string | undefined>(undefined);
+  label = signal<string | undefined>(undefined);
+  softwareType = signal<SoftwareType | null>(null);
+
+
+  updateRoute: string | undefined = undefined;
 
   ngOnInit() {
-    this.route.params.subscribe((params) => {
-      const id = +params['id'];
+    const id = Number(this.route.snapshot.paramMap.get('id'));
+    this.label.set('Logiciel #' + id);
 
-      if (Number.isNaN(id)) {
-        alert('id non valide');
-      } else {
-        this.httpClient
-          .get<Software>(`http://localhost:8080/software/` + id)
-          .subscribe((software) => {
-            this.softwareSignal.set(software);
-          });
-        if (this.softwareSignal()?.idSoftwareType) {
-          this.httpClient
-            .get<SoftwareType>(
-              `http://localhost:8080/software-type/` + this.softwareSignal()!.idSoftwareType,
-            )
-            .subscribe((type) => {
-              this.typeSignal.set(type);
-            });
-        }
-      }
+    this.updateRoute = this.routeBuilder.getUpdateRoute(id, 'software');
+
+    this.softwareService
+      .get(id)
+      .pipe(
+        tap((s) => {
+          this.software.set(s);
+        }),
+        switchMap((s) => {
+          if (s.idSoftwareType == null) {
+            throw new Error('Type de logiciel manquant');
+          }
+          return this.softwareTypeService.get(s.idSoftwareType)
+        }),
+      )
+      .subscribe({
+        next: (type) => {
+          this.softwareType.set(type);
+          this.loading.set(false);
+        },
+        error: () => {
+          this.loading.set(false);
+          this.error.set('Impossible de charger les détails.');
+        },
     });
+
+
   }
 }

@@ -6,14 +6,18 @@
   [submitLabel]="softwareTypeEdit() ? 'Modifier' : 'Créer'"
   (submitForm)="onSubmit()"
   [formGroup]="form"
+  [routeId] = "routeId()"
+  [isEditMode]="isEditMode()"
 >
 
   <!-- champs -->
-  <label class="label">Libellé</label>
-  <input class="input" formControlName="designation" />
 
-  @if (form.get('designation')?.hasError('required')) {
-    <span class="text-error">Obligatoire</span>
-  }
+  <app-field-text labelKey="Nom du type de logiciel" placeholder="Nom du type"
+                  [control]="form.controls.designation"
+                  [errorMessages]="{
+    required: 'Le nom est obligatoire',
+    maxlength: 'Max 127 caractères',
+    minlength: 'Minimum 3 caractères'}">
+  </app-field-text>
 
 </app-generic-form-page>

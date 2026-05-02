@@ -14,7 +14,8 @@ export class GenericFormPage {
   @Input() error?: string;
   @Input() submitLabel = 'Valider';
   @Input() formGroup!: FormGroup;
-
+  @Input() routeId!: string;
+  @Input() isEditMode!: boolean;
 
   @Output() submitForm = new EventEmitter<void>();
 
