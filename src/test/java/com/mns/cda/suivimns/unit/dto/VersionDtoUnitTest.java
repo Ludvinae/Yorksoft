@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class VersionDtoUnitTest {
@@ -22,7 +23,7 @@ public class VersionDtoUnitTest {
 
     @Test
     public void validVersionWithBlankNumber_shouldBeInvalid() {
-        VersionDto version = new VersionDto(1, "", LocalDateTime.now(), 1, 1);
+        VersionDto version = new VersionDto(1, "", LocalDate.now(), 1, 1);
 
 
         boolean constraintExists = TestUtils.constraintViolationExists(
@@ -37,7 +38,7 @@ public class VersionDtoUnitTest {
     @Test
     public void validVersionWithTooLongNumber_shouldBeInvalid() {
         String versionNumber = "a".repeat(64);
-        VersionDto version = new VersionDto(1, versionNumber, LocalDateTime.now(), 1, 1);
+        VersionDto version = new VersionDto(1, versionNumber, LocalDate.now(), 1, 1);
 
         boolean constraintExists = TestUtils.constraintViolationExists(
                 validator.validate(version),
@@ -50,7 +51,7 @@ public class VersionDtoUnitTest {
 
     @Test
     public void versionWithNullSoftware_shouldNotBeValid() {
-        VersionDto version = new VersionDto(1, "Test number", LocalDateTime.now(), 1, null);
+        VersionDto version = new VersionDto(1, "Test number", LocalDate.now(), 1, null);
 
         boolean constraintExists = TestUtils.constraintViolationExists(
                 validator.validate(version),
@@ -63,7 +64,7 @@ public class VersionDtoUnitTest {
 
     @Test
     public void versionWithNullVersionType_shouldNotBeValid() {
-        VersionDto version = new VersionDto(1, "Test number", LocalDateTime.now(), null, 1);
+        VersionDto version = new VersionDto(1, "Test number", LocalDate.now(), null, 1);
 
         boolean constraintExists = TestUtils.constraintViolationExists(
                 validator.validate(version),
@@ -78,7 +79,7 @@ public class VersionDtoUnitTest {
 
     @Test
     public void versionWithValidData_shouldBeValid() {
-        VersionDto type = new VersionDto(1, "Test number", LocalDateTime.now(), 1, 1);
+        VersionDto type = new VersionDto(1, "Test number", LocalDate.now(), 1, 1);
 
         Assertions.assertTrue(
                 validator.validate(type).isEmpty(),

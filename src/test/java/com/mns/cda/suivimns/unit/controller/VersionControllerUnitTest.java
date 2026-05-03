@@ -12,7 +12,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
@@ -42,7 +42,7 @@ class VersionControllerUnitTest {
     void setUp() {
         //DTO
         versionDto = new VersionDto(
-                1, "Test number", LocalDateTime.now(), 1, 1);
+                1, "Test number", LocalDate.now(), 1, 1);
     }
 
     // =========================

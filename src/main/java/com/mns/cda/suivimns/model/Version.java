@@ -8,7 +8,7 @@ import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -25,7 +25,7 @@ public class Version {
     protected String versionNumber;
 
 
-    protected LocalDateTime publicationDate;
+    protected LocalDate publicationDate;
 
     @ManyToOne
     @JoinColumn(name = "id_version_type")
