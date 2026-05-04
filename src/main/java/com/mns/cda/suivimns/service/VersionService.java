@@ -24,8 +24,8 @@ public class VersionService  {
         return versionMapper.toDtoList(versionDao.findAll());
     }
 
-    public List<VersionListDto> findAllDto() {
-        return versionDao.findAllDto();
+    public List<VersionListDto> findAllDetail() {
+        return versionDao.findAllDetail();
     }
 
     public VersionDto findById(int id) throws VersionNotFoundException {
