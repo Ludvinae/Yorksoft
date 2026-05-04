@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {GenericList} from "../../../../components/list/generic-list/generic-list";
 import {Title} from "../../../../components/list/title/title";
 import { VersionTypeService } from '../../../../services/api/version-type-service';
@@ -9,7 +9,7 @@ import { VersionTypeService } from '../../../../services/api/version-type-servic
   templateUrl: './version-type-list.html',
   styleUrl: './version-type-list.css',
 })
-export class VersionTypeList {
+export class VersionTypeList implements OnInit {
   versionTypeService = inject(VersionTypeService);
 
   versionTypeList = this.versionTypeService.versionTypeList;

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {GenericList} from "../../../../components/list/generic-list/generic-list";
 import {Title} from "../../../../components/list/title/title";
 import { ThemeService } from '../../../../services/api/theme-service';
@@ -9,7 +9,7 @@ import { ThemeService } from '../../../../services/api/theme-service';
   templateUrl: './theme-list.html',
   styleUrl: './theme-list.css',
 })
-export class ThemeList {
+export class ThemeList implements OnInit {
   themeService = inject(ThemeService);
 
   themeList = this.themeService.themeList;

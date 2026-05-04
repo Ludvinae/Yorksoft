@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {GenericList} from "../../../../components/list/generic-list/generic-list";
 import {Title} from "../../../../components/list/title/title";
 import { ImpactService } from '../../../../services/api/impact-service';
@@ -9,7 +9,7 @@ import { ImpactService } from '../../../../services/api/impact-service';
   templateUrl: './impact-list.html',
   styleUrl: './impact-list.css',
 })
-export class ImpactList {
+export class ImpactList implements OnInit {
   impactService = inject(ImpactService);
 
   impactList = this.impactService.impactList;

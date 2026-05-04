@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {GenericList} from "../../../../components/list/generic-list/generic-list";
 import {Title} from "../../../../components/list/title/title";
 import { UrgencyService } from '../../../../services/api/urgency-service';
@@ -9,7 +9,7 @@ import { UrgencyService } from '../../../../services/api/urgency-service';
   templateUrl: './urgency-list.html',
   styleUrl: './urgency-list.css',
 })
-export class UrgencyList {
+export class UrgencyList implements OnInit {
   urgencyService = inject(UrgencyService);
 
   urgencyList = this.urgencyService.urgencyList;

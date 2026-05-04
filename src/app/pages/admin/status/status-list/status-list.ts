@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {GenericList} from "../../../../components/list/generic-list/generic-list";
 import {Title} from "../../../../components/list/title/title";
 import { StatusService } from '../../../../services/api/status-service';
@@ -9,7 +9,7 @@ import { StatusService } from '../../../../services/api/status-service';
   templateUrl: './status-list.html',
   styleUrl: './status-list.css',
 })
-export class StatusList {
+export class StatusList implements OnInit {
   statusService = inject(StatusService);
 
   statusList = this.statusService.statusList;
