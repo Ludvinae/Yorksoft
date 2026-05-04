@@ -1,40 +1,17 @@
-<h2>Liste des logiciels</h2>
-<div class="inline">
-  <button class="btn btn-primary mx-3" routerLink="/admin/software/create">Créer</button>
-  <button class="btn btn-secondary mx-3" routerLink="/admin">Retour</button>
-</div>
+<app-title title="Logiciels" route="software"></app-title>
 
-<div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
-  <table class="table">
-    <thead>
-    <tr>
-      <th>Nom</th>
-      <th>Description</th>
-      <th>Actions</th>
-    </tr>
-    </thead>
+<app-generic-list
+  [data]="softwareList()"
+  [columns]="[{ label: 'Nom', field: 'name' },
+              {label: 'Description', field: 'description'},
+              {label: 'Type de logiciel', field: 'softwareTypeDesignation'}]"
+  [baseRoute]="'/admin/software'"
+  [idField]="'idSoftware'"
+  [itemTemplate]="softwareCard"
+  (deleteItem)="onDelete($event)">
+</app-generic-list>
 
-    <tbody>
-      @for (software of softwareList(); track software.idSoftware) {
-        <tr class="hover:bg-base-300">
-          <td>{{ software.name }}</td>
-          <td>{{ software.description }}</td>
-
-          <td>
-            <button class="btn btn-sm btn-info mx-3" [routerLink]="['/admin/software', software.idSoftware]">
-              Détails
-            </button>
-
-            <button class="btn btn-sm btn-neutral mx-3" [routerLink]="['/admin/software/update', software.idSoftware,]">
-              Modification
-            </button>
-
-            <button class="btn btn-sm btn-secondary mx-3" (click)="delete(software.idSoftware)">
-              Effacer
-            </button>
-          </td>
-        </tr>
-      }
-    </tbody>
-  </table>
-</div>
+<ng-template #softwareCard let-software >
+  <h3 class="font-bold text-lg">{{ software.name }} ({{ software.softwareTypeDesignation }})</h3>
+  <p>{{ software.description }}</p>
+</ng-template>

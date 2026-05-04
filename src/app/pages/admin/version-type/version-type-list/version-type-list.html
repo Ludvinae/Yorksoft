@@ -1,1 +1,16 @@
-<p>version-type-list works!</p>
+<app-title title="Type de versions de logiciels" route="version-type"></app-title>
+
+<app-generic-list
+  [data]="versionTypeList()"
+  [columns]="[{ label: 'Libellé', field: 'designation' },
+              {label: 'Malus sur l\'urgence', field: 'urgencyMalus'}]"
+  [baseRoute]="'/admin/version-type'"
+  [idField]="'idVersionType'"
+  [itemTemplate]="versionTypeCard"
+  (deleteItem)="onDelete($event)">
+</app-generic-list>
+
+<ng-template #versionTypeCard let-versionType >
+  <h3 class="font-bold text-lg">{{ versionType.designation }} (Malus d'urgence : {{ versionType.urgencyMalus }})</h3>
+
+</ng-template>

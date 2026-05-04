@@ -1,25 +1,30 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { SoftwareService } from '../../../../services/api/software-service';
-import { RouterLink } from '@angular/router';
+import {GenericList} from '../../../../components/list/generic-list/generic-list';
+import {Title} from '../../../../components/list/title/title';
 
 @Component({
   selector: 'app-software-list',
-  imports: [RouterLink],
+  imports: [GenericList, Title],
   templateUrl: './software-list.html',
   styleUrl: './software-list.css',
 })
 export class SoftwareList implements OnInit {
   softwareService = inject(SoftwareService);
 
-  softwareList = this.softwareService.softwareList;
+  softwareList = this.softwareService.softwareListDetail;
 
   ngOnInit() {
-    this.softwareService.getAll().subscribe();
+    this.softwareService.getAllDetail().subscribe();
   }
 
-  delete(id: number) {
-    if (confirm('Supprimer ?')) {
-      this.softwareService.delete(id).subscribe();
-    }
+  onDelete(id: number) {
+    this.softwareService.delete(id).subscribe({
+      next: () => {
+        alert('Supprimé');
+        this.softwareService.getAllDetail().subscribe();
+      },
+      error: () => alert('Erreur'),
+    });
   }
 }

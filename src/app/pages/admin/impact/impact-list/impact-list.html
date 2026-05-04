@@ -1,1 +1,17 @@
-<p>impact-list works!</p>
+<app-title title="Impacts des dysfonctionnements" route="impact"></app-title>
+
+<app-generic-list
+  [data]="impactList()"
+  [columns]="[{ label: 'Libellé', field: 'designation' },
+              {label: 'Description', field: 'description'},
+              {label: 'Facteur de priorité', field: 'priorityFactor'}]"
+  [baseRoute]="'/admin/impact'"
+  [idField]="'idImpact'"
+  [itemTemplate]="impactCard"
+  (deleteItem)="onDelete($event)">
+</app-generic-list>
+
+<ng-template #impactCard let-impact >
+  <h3 class="font-bold text-lg">{{ impact.designation }} (Priorité : {{ impact.priorityFactor }})</h3>
+  <p>{{ impact.description }}</p>
+</ng-template>

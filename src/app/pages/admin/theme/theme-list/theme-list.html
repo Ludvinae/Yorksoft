@@ -1,2 +1,16 @@
-<h2>Attention!</h2>
-<p>Supprimer une thématique va supprimer toutes les connaissances et articles associés !</p>
+<app-title title="Thématiques de classification" route="theme"></app-title>
+
+<app-generic-list
+  [data]="themeList()"
+  [columns]="[{ label: 'Libellé', field: 'designation' },
+              {label: 'Description', field: 'description'}]"
+  [baseRoute]="'/admin/theme'"
+  [idField]="'idTheme'"
+  [itemTemplate]="themeCard"
+  (deleteItem)="onDelete($event)">
+</app-generic-list>
+
+<ng-template #themeCard let-theme >
+  <h3 class="font-bold text-lg">{{ theme.designation }}</h3>
+  <p>{{ theme.description }}</p>
+</ng-template>

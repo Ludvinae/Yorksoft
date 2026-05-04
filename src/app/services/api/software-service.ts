@@ -10,6 +10,7 @@ export class SoftwareService {
   private apiUrl = 'http://localhost:8080/software';
 
   readonly softwareList = signal<Software[]>([]);
+  readonly softwareListDetail = signal<SoftwareListDetail[]>([]);
 
   get(id: number) {
     return this.http.get<Software>(`${this.apiUrl}/${id}`);
@@ -19,6 +20,14 @@ export class SoftwareService {
     return this.http.get<Software[]>(`${this.apiUrl}/list`).pipe(
       tap((softwareList) => {
         this.softwareList.set(softwareList);
+      }),
+    );
+  }
+
+  getAllDetail() {
+    return this.http.get<SoftwareListDetail[]>(`${this.apiUrl}/list/detail`).pipe(
+      tap((softwareList) => {
+        this.softwareListDetail.set(softwareList);
       }),
     );
   }
