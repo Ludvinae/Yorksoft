@@ -1,5 +1,11 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { GenericFormPage } from '../../../../components/form/generic-form-page/generic-form-page';
 import { ActivatedRoute, Router } from '@angular/router';
 import { VersionService } from '../../../../services/api/version-service';
@@ -8,6 +14,7 @@ import { SoftwareService } from '../../../../services/api/software-service';
 import { FieldText } from '../../../../components/form/field-text/field-text';
 import { validDate } from '../../../../validators/validDate';
 import { FieldSelect } from '../../../../components/form/field-select/field-select';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-version-edit',
@@ -23,11 +30,15 @@ export class VersionEdit implements OnInit {
   softwareService = inject(SoftwareService);
   versionTypeService = inject(VersionTypeService);
 
-  form = this.formBuilder.nonNullable.group({
-    versionNumber: ['', [Validators.required, Validators.maxLength(127)]],
-    publicationDate: ['' as string, [Validators.required, validDate]],
-    idVersionType: [0, Validators.required],
-    idSoftware: [0, Validators.required],
+  form: FormGroup<VersionForm> = this.formBuilder.nonNullable.group({
+    versionNumber: this.formBuilder.nonNullable.control('', {
+      validators: [Validators.required, Validators.maxLength(127)],
+    }),
+    publicationDate: this.formBuilder.nonNullable.control('', {
+      validators: [Validators.required, validDate],
+    }),
+    idVersionType: this.formBuilder.nonNullable.control(0, { validators: [Validators.required] }),
+    idSoftware: this.formBuilder.nonNullable.control(0, { validators: [Validators.required] }),
   });
 
   versionEdit = signal<Version | null>(null);
@@ -35,20 +46,12 @@ export class VersionEdit implements OnInit {
   error = signal<string | undefined>(undefined);
   routeId = signal<string>('Nouvelle version de logiciel');
 
-  listSoftware = signal<Software[]>([]);
-  listVersionType = signal<VersionType[]>([]);
+  listSoftware = toSignal(this.softwareService.getAll(), { initialValue: [] });
+  listVersionType = toSignal(this.versionTypeService.getAll(), { initialValue: [] });
 
   isEditMode = signal(false);
 
   ngOnInit() {
-    // Chargement des listes pour les champs select
-    this.softwareService.getAll().subscribe((software) => {
-      this.listSoftware.set(software);
-    });
-
-    this.versionTypeService.getAll().subscribe((type) => {
-      this.listVersionType.set(type);
-    });
 
     // Récupération de l'id
     const id = this.route.snapshot.paramMap.get('id');
@@ -96,7 +99,7 @@ export class VersionEdit implements OnInit {
     this.error.set(undefined);
     this.loading.set(true);
 
-    const value = this.form.getRawValue();
+    const value: VersionForm = this.form.getRawValue();
 
     if (value.idVersionType == null || value.idSoftware == null) {
       this.error.set('Champs obligatoires manquants');
