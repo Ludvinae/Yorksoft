@@ -1,6 +1,7 @@
 package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.VersionDto;
+import com.mns.cda.suivimns.dto.flat.VersionListDto;
 import com.mns.cda.suivimns.service.VersionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -29,6 +30,14 @@ public class VersionController {
     @GetMapping("/list")
     public List<VersionDto> findAll() {
         return versionService.findAll();
+    }
+
+
+    @Operation(summary = "Récupérer toutes les versions")
+    @ApiResponse(responseCode = "200", description = "Liste des versions récupérée")
+    @GetMapping("/list")
+    public List<VersionListDto> findAllDto() {
+        return versionService.findAllDto();
     }
 
 
