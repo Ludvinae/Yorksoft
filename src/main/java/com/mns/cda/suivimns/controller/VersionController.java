@@ -33,9 +33,9 @@ public class VersionController {
     }
 
 
-    @Operation(summary = "Récupérer toutes les versions")
+    @Operation(summary = "Récupérer toutes les versions avec les informations de type de version et de logiciel")
     @ApiResponse(responseCode = "200", description = "Liste des versions récupérée")
-    @GetMapping("/list")
+    @GetMapping("/list/detail")
     public List<VersionListDto> findAllDto() {
         return versionService.findAllDto();
     }

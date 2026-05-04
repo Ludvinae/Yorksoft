@@ -16,8 +16,8 @@ public interface VersionDao extends JpaRepository<Version, Integer> {
                 v.idVersion, v.versionNumber, t.designation,
                 s.name, v.publicationDate)
                 FROM Version v
-                JOIN VersionType t
-                JOIN Software s
+                JOIN v.versionType t
+                JOIN v.software s
             """)
     List<VersionListDto> findAllDto();
 }
