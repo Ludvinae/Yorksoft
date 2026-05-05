@@ -4,11 +4,10 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ActivatedRoute, Router } from '@angular/router';
 import { FieldText } from '../../../../components/form/field-text/field-text';
 import { SoftwareTypeFormService } from '../../../../services/form-service/software-type-form-service';
-import { FieldSelect } from '../../../../components/form/field-select/field-select';
 
 @Component({
   selector: 'app-software-type-edit',
-  imports: [GenericFormPage, ReactiveFormsModule, FieldText, FieldSelect],
+  imports: [GenericFormPage, ReactiveFormsModule, FieldText],
   templateUrl: './software-type-edit.html',
   styleUrl: './software-type-edit.css',
 })

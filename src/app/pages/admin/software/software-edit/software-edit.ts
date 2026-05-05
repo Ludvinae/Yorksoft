@@ -6,7 +6,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FieldText } from '../../../../components/form/field-text/field-text';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { SoftwareFormService } from '../../../../services/form-service/software-form-service';
@@ -16,7 +16,7 @@ import { GenericFormPage } from '../../../../components/form/generic-form-page/g
 
 @Component({
   selector: 'app-software-edit',
-  imports: [FormsModule, ReactiveFormsModule, RouterLink, FieldText, FieldSelect, GenericFormPage],
+  imports: [FormsModule, ReactiveFormsModule, FieldText, FieldSelect, GenericFormPage],
   templateUrl: './software-edit.html',
   styleUrl: './software-edit.css',
 })

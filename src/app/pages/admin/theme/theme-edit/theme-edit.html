@@ -1,14 +1,12 @@
 <app-generic-form-page
-  [title]="themeEdit() ? 'Modifier une thématique de dysfonctionnement' :
-  'Créer une thématique de dysfcontionnement '"
+  [title]="themeEdit() ? 'Modifier une thématique de dysfonctionnement' : 'Créer une thématique de dysfcontionnement '"
   [loading]="loading()"
   [error]="error()"
   [submitLabel]="themeEdit() ? 'Modifier' : 'Créer'"
   (submitForm)="onSubmit()"
   [formGroup]="form"
   [routeId] = "routeId()"
-  [isEditMode] = "isEditMode()"
->
+  [isEditMode] = "isEditMode()">
 
   <!-- champs -->
 

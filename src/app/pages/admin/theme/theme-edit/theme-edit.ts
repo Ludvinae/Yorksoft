@@ -1,22 +1,20 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ThemeFormService } from '../../../../services/form-service/theme-form-service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FieldSelect } from '../../../../components/form/field-select/field-select';
 import { FieldText } from '../../../../components/form/field-text/field-text';
 import { GenericFormPage } from '../../../../components/form/generic-form-page/generic-form-page';
 
 @Component({
   selector: 'app-theme-edit',
   imports: [
-    FieldSelect,
     FieldText,
     GenericFormPage
   ],
   templateUrl: './theme-edit.html',
   styleUrl: './theme-edit.css',
 })
-export class ThemeEdit {
+export class ThemeEdit implements OnInit {
   formBuilder = inject(FormBuilder);
   themeFormService = inject(ThemeFormService);
   router = inject(Router);
@@ -26,7 +24,7 @@ export class ThemeEdit {
     designation: this.formBuilder.nonNullable.control('', {
       validators: [Validators.required, Validators.maxLength(127), Validators.minLength(3)],
     }),
-    description: this.formBuilder.nonNullable.control('', {
+    description: this.formBuilder.control('', {
       validators: [],
     }),
   });

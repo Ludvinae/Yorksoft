@@ -2,10 +2,15 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ImpactFormService } from '../../../../services/form-service/impact-form-service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FieldText } from '../../../../components/form/field-text/field-text';
+import { GenericFormPage } from '../../../../components/form/generic-form-page/generic-form-page';
 
 @Component({
   selector: 'app-impact-edit',
-  imports: [],
+  imports: [
+    FieldText,
+    GenericFormPage
+  ],
   templateUrl: './impact-edit.html',
   styleUrl: './impact-edit.css',
 })
