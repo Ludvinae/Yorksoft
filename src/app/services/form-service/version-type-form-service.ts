@@ -1,7 +1,5 @@
 import { inject, Injectable } from '@angular/core';
 import { VersionTypeService } from '../api/version-type-service';
-import { VersionTypeForm } from '../../models/form-group/VersionTypeForm';
-import { ɵFormGroupRawValue, ɵTypedOrUntyped } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root',
@@ -13,17 +11,14 @@ export class VersionTypeFormService {
     return this.versionTypeService.get(id);
   }
 
-  mapToForm(type: VersionType) {
+  mapToForm(version: VersionType) {
     return {
-      designation: type.designation,
-      urgencyMalus: type.urgencyMalus,
+      designation: version.designation,
+      urgencyMalus: version.urgencyMalus,
     };
   }
 
-  mapToDto(
-    formValue: ɵTypedOrUntyped<VersionTypeForm, ɵFormGroupRawValue<VersionTypeForm>, any>,
-    existing?: VersionType | undefined,
-  ): VersionType {
+  mapToDto(formValue: VersionTypeForm, existing?: VersionType): VersionType {
     return {
       ...formValue,
       idVersionType: existing?.idVersionType ?? 0,
@@ -34,9 +29,5 @@ export class VersionTypeFormService {
     return isEdit
       ? this.versionTypeService.update(dto, dto.idVersionType)
       : this.versionTypeService.create(dto);
-  }
-
-  private formatDate(date: string | Date): string {
-    return new Date(date).toISOString().split('T')[0];
   }
 }

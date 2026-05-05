@@ -1,9 +1,16 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { SoftwareService } from '../../../../services/api/software-service';
 import { FieldText } from '../../../../components/form/field-text/field-text';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { SoftwareFormService } from '../../../../services/form-service/software-form-service';
+import { SoftwareTypeService } from '../../../../services/api/software-type-service';
 
 @Component({
   selector: 'app-software-edit',
@@ -13,94 +20,63 @@ import { FieldText } from '../../../../components/form/field-text/field-text';
 })
 export class SoftwareEdit implements OnInit {
   formBuilder = inject(FormBuilder);
-  httpClient = inject(HttpClient);
-  route = inject(ActivatedRoute);
-  softwareService = inject(SoftwareService);
+  softwareFormService = inject(SoftwareFormService);
   router = inject(Router);
+  route = inject(ActivatedRoute);
+  softwareTypeService = inject(SoftwareTypeService);
 
-  //softwareId = signal<number | null>(null);
-  listSoftwareType = signal<SoftwareType[]>([]);
-  softwareEdit = signal<Software | null>(null);
-  errorMessage = signal<string | null>(null);
-
-  form = this.formBuilder.nonNullable.group({
-    name: ['', [Validators.required, Validators.maxLength(127)]],
-    description: [''],
-    idSoftwareType: [null as number | null],
+  form: FormGroup<SoftwareForm> = this.formBuilder.nonNullable.group({
+    name: this.formBuilder.nonNullable.control('', {
+      validators: [Validators.required, Validators.maxLength(127), Validators.minLength(1)],
+    }),
+    description: this.formBuilder.nonNullable.control("", {
+      validators: [],
+    }),
+    idSoftwareType: this.formBuilder.nonNullable.control(0, {
+      validators: [] }),
   });
 
+  softwareEdit = signal<Software | undefined>(undefined);
+  loading = signal(false);
+  error = signal<string | undefined>(undefined);
+  routeId = signal<string>('Nouveau logiciel');
+
+  listSoftwareType = toSignal(this.softwareTypeService.getAll(), { initialValue: [] });
+
+  isEditMode = signal(false);
+
   ngOnInit() {
-    this.httpClient
-      .get<SoftwareType[]>('http://localhost:8080/software-type/list')
-      .subscribe((listSoftwareType) => this.listSoftwareType.set(listSoftwareType));
+    const id = this.route.snapshot.paramMap.get('id');
+    if (!id) return;
 
-    this.route.params.subscribe((param) => {
-      // Si on est en edition
-      if (param['id'] != undefined) {
-        const id = +param['id'];
+    this.loading.set(true);
 
-        if (Number.isNaN(id)) {
-          alert('ID non valide'); // peut etre remplacer par un message, ou une redirection vers une page 404
-        } else {
-          this.softwareService.get(id).subscribe((software) => {
-            const s = this.form.getRawValue();
-            this.form.patchValue(s);
-            this.softwareEdit.set(software);
-          });
-        }
-      }
+    this.softwareFormService.load(Number(id)).subscribe({
+      next: (software) => {
+        this.isEditMode.set(true);
+        this.softwareEdit.set(software);
+        this.form.patchValue(this.softwareFormService.mapToForm(software));
+        this.loading.set(false);
+      },
+      error: () => {
+        this.loading.set(false);
+        this.error.set('Erreur');
+      },
     });
   }
 
-  onCreate() {
-    if (this.form.valid) {
-      // const value = this.form.value;
-      //
-      // const software: Software = {
-      //   ...value,
-      //   idSoftware: this.softwareEdit()?.idSoftware ?? 0,
-      //   idSoftwareType: value.idSoftwareType!
-      // }
-      // SI on est en edition
-      if (this.softwareEdit()) {
-        this.softwareService
-          .update(this.form.value as Software, this.softwareEdit()!.idSoftware)
-          .subscribe({
-            next: (newSoftware) => {
-              alert('Le logiciel a bien été modifié');
-              // Naviguer vers l'accueil
-              this.router.navigateByUrl('/admin/software');
-            },
-            error: this.onError,
-          });
-      }
-      //Si on est en création
-      else {
-        this.softwareService.create(this.form.value as Software).subscribe({
-          next: (newSoftware) => {
-            alert('Le logiciel a bien été crée');
-            // Vider le formulaire
-            this.form.reset();
-          },
-          error: this.onError,
-        });
-      }
-    }
-  }
+  onSubmit() {
+    const dto = this.softwareFormService.mapToDto(this.form.getRawValue(), this.softwareEdit());
 
-  onError = (reponse: Response) => {
-    if (reponse.status === 409) {
-      alert('Le logiciel existe déja');
-    } else {
-      alert('Une erreur est survenue');
-    }
-  };
-
-  OnCompletion() {
-    if (this.form.get('name')?.hasError('required')) {
-      this.errorMessage.set('Le nom est obligatoire');
-    } else if (this.form.get('name')?.hasError('maxlength')) {
-      this.errorMessage.set('Le nom doit comporter un maximum de 127 caracteres');
-    }
+    this.softwareFormService.save(dto, this.isEditMode()).subscribe({
+      next: () => {
+        this.loading.set(false);
+        this.router.navigateByUrl('/admin/software');
+      },
+      error: () => {
+        this.loading.set(false);
+        this.error.set('Une erreur est survenue');
+      },
+    });
   }
 }

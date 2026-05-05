@@ -8,14 +8,13 @@ import {
 } from '@angular/forms';
 import { GenericFormPage } from '../../../../components/form/generic-form-page/generic-form-page';
 import { ActivatedRoute, Router } from '@angular/router';
-import { VersionService } from '../../../../services/api/version-service';
 import { VersionTypeService } from '../../../../services/api/version-type-service';
 import { SoftwareService } from '../../../../services/api/software-service';
 import { FieldText } from '../../../../components/form/field-text/field-text';
 import { validDate } from '../../../../validators/validDate';
 import { FieldSelect } from '../../../../components/form/field-select/field-select';
 import { toSignal } from '@angular/core/rxjs-interop';
-import {VersionFormService} from '../../../../services/facade/versionFormService';
+import { VersionFormService } from '../../../../services/form-service/version-form-service';
 
 @Component({
   selector: 'app-version-edit',
