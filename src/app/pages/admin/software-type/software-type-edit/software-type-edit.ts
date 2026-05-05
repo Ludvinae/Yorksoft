@@ -2,13 +2,13 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { GenericFormPage } from '../../../../components/form/generic-form-page/generic-form-page';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { validDate } from '../../../../validators/validDate';
 import { FieldText } from '../../../../components/form/field-text/field-text';
 import { SoftwareTypeFormService } from '../../../../services/form-service/software-type-form-service';
+import { FieldSelect } from '../../../../components/form/field-select/field-select';
 
 @Component({
   selector: 'app-software-type-edit',
-  imports: [GenericFormPage, ReactiveFormsModule, FieldText],
+  imports: [GenericFormPage, ReactiveFormsModule, FieldText, FieldSelect],
   templateUrl: './software-type-edit.html',
   styleUrl: './software-type-edit.css',
 })
@@ -28,7 +28,6 @@ export class SoftwareTypeEdit implements OnInit {
   loading = signal(false);
   error = signal<string | undefined>(undefined);
   routeId = signal<string>('Nouveau type de logiciel');
-
 
   isEditMode = signal(false);
 
@@ -53,7 +52,10 @@ export class SoftwareTypeEdit implements OnInit {
   }
 
   onSubmit() {
-    const dto = this.softwareTypeFormService.mapToDto(this.form.getRawValue(), this.softwareTypeEdit());
+    const dto = this.softwareTypeFormService.mapToDto(
+      this.form.getRawValue(),
+      this.softwareTypeEdit(),
+    );
 
     this.softwareTypeFormService.save(dto, this.isEditMode()).subscribe({
       next: () => {

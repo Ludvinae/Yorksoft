@@ -1,1 +1,29 @@
-<p>theme-edit works!</p>
+<app-generic-form-page
+  [title]="themeEdit() ? 'Modifier une thématique de dysfonctionnement' :
+  'Créer une thématique de dysfcontionnement '"
+  [loading]="loading()"
+  [error]="error()"
+  [submitLabel]="themeEdit() ? 'Modifier' : 'Créer'"
+  (submitForm)="onSubmit()"
+  [formGroup]="form"
+  [routeId] = "routeId()"
+  [isEditMode] = "isEditMode()"
+>
+
+  <!-- champs -->
+
+  <app-field-text labelKey="Libellé" placeholder="Dysfonctionnement"
+                  [control]="form.controls.designation"
+                  [errorMessages]="{
+    required: 'Le libellé est obligatoire',
+    maxlength: 'Max 127 caractères',
+    minlength: 'Min 3 caractères'}">
+  </app-field-text>
+
+  <app-field-text labelKey="Description" placeholder="Description de la thématique"
+                  [control]="form.controls.description"
+                  [errorMessages]="{}">
+  </app-field-text>
+
+
+</app-generic-form-page>

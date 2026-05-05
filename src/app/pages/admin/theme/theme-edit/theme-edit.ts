@@ -2,10 +2,17 @@ import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ThemeFormService } from '../../../../services/form-service/theme-form-service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FieldSelect } from '../../../../components/form/field-select/field-select';
+import { FieldText } from '../../../../components/form/field-text/field-text';
+import { GenericFormPage } from '../../../../components/form/generic-form-page/generic-form-page';
 
 @Component({
   selector: 'app-theme-edit',
-  imports: [],
+  imports: [
+    FieldSelect,
+    FieldText,
+    GenericFormPage
+  ],
   templateUrl: './theme-edit.html',
   styleUrl: './theme-edit.css',
 })

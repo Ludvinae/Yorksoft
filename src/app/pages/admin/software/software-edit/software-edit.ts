@@ -11,10 +11,12 @@ import { FieldText } from '../../../../components/form/field-text/field-text';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { SoftwareFormService } from '../../../../services/form-service/software-form-service';
 import { SoftwareTypeService } from '../../../../services/api/software-type-service';
+import { FieldSelect } from '../../../../components/form/field-select/field-select';
+import { GenericFormPage } from '../../../../components/form/generic-form-page/generic-form-page';
 
 @Component({
   selector: 'app-software-edit',
-  imports: [FormsModule, ReactiveFormsModule, RouterLink, FieldText],
+  imports: [FormsModule, ReactiveFormsModule, RouterLink, FieldText, FieldSelect, GenericFormPage],
   templateUrl: './software-edit.html',
   styleUrl: './software-edit.css',
 })
@@ -29,11 +31,12 @@ export class SoftwareEdit implements OnInit {
     name: this.formBuilder.nonNullable.control('', {
       validators: [Validators.required, Validators.maxLength(127), Validators.minLength(1)],
     }),
-    description: this.formBuilder.nonNullable.control("", {
+    description: this.formBuilder.nonNullable.control('', {
       validators: [],
     }),
     idSoftwareType: this.formBuilder.nonNullable.control(0, {
-      validators: [] }),
+      validators: [],
+    }),
   });
 
   softwareEdit = signal<Software | undefined>(undefined);

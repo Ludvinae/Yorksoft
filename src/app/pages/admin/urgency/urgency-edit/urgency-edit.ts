@@ -2,11 +2,17 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UrgencyFormService } from '../../../../services/form-service/urgency-form-service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { FieldSelect } from '../../../../components/form/field-select/field-select';
+import { FieldText } from '../../../../components/form/field-text/field-text';
+import { GenericFormPage } from '../../../../components/form/generic-form-page/generic-form-page';
 
 @Component({
   selector: 'app-urgency-edit',
-  imports: [],
+  imports: [
+    FieldSelect,
+    FieldText,
+    GenericFormPage
+  ],
   templateUrl: './urgency-edit.html',
   styleUrl: './urgency-edit.css',
 })

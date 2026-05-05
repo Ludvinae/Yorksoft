@@ -1,3 +1,44 @@
+<app-generic-form-page
+  [title]="softwareEdit() ? 'Modifier le logiciel' : 'Créer le logiciel'"
+  [loading]="loading()"
+  [error]="error()"
+  [submitLabel]="softwareEdit() ? 'Modifier' : 'Créer'"
+  (submitForm)="onSubmit()"
+  [formGroup]="form"
+  [routeId] = "routeId()"
+  [isEditMode] = "isEditMode()"
+>
+
+  <!-- champs -->
+
+  <app-field-text labelKey="Nom du logiciel" placeholder="Nom"
+                  [control]="form.controls.name"
+                  [errorMessages]="{
+    required: 'Le nom est obligatoire',
+    maxlength: 'Max 127 caractères',
+    minlenght: 'Min 1 caractère'}">
+  </app-field-text>
+
+  <app-field-select
+    labelKey="Type de logiciel"
+    [control]="form.controls.idSoftwareType"
+    [options]="listSoftwareType()"
+    valueField="idSoftwareType"
+    labelField="designation"
+    placeholder="Choisir un type"
+    [errorMessages]="{
+    required: 'Le type est obligatoire'
+  }"/>
+
+  <app-field-text labelKey="Description du logiciel"
+                  [control]="form.controls.description"
+                  [errorMessages]="{}">
+  </app-field-text>
+
+</app-generic-form-page>
+
+
+<!--
 <form [formGroup]="form" (ngSubmit)="onCreate()" >
   <fieldset class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
     <legend class="fieldset-legend">Creation de logiciel</legend>
@@ -33,3 +74,4 @@
 
   </fieldset>
 </form>
+-->

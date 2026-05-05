@@ -3,10 +3,13 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { StatusFormService } from '../../../../services/form-service/status-form-service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SoftwareService } from '../../../../services/api/software-service';
+import { FieldText } from '../../../../components/form/field-text/field-text';
+import { FieldSelect } from '../../../../components/form/field-select/field-select';
+import { GenericFormPage } from '../../../../components/form/generic-form-page/generic-form-page';
 
 @Component({
   selector: 'app-status-edit',
-  imports: [],
+  imports: [FieldText, FieldSelect, GenericFormPage],
   templateUrl: './status-edit.html',
   styleUrl: './status-edit.css',
 })

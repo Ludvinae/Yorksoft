@@ -1,1 +1,26 @@
-<p>status-edit works!</p>
+<app-generic-form-page
+  [title]="statusEdit() ? 'Modifier un statut de ticket' : 'Créer un statut de ticket'"
+  [loading]="loading()"
+  [error]="error()"
+  [submitLabel]="statusEdit() ? 'Modifier' : 'Créer'"
+  (submitForm)="onSubmit()"
+  [formGroup]="form"
+  [routeId] = "routeId()"
+  [isEditMode] = "isEditMode()">
+
+  <!-- champs -->
+
+  <app-field-text labelKey="Libellé" placeholder="En cours"
+                  [control]="form.controls.designation"
+                  [errorMessages]="{
+    required: 'Le numéro est obligatoire',
+    maxlength: 'Max 127 caractères',
+    minlength: 'Min 3 caractères'}">
+  </app-field-text>
+
+  <app-field-text labelKey="Order d'affichage" placeholder="1"
+                  [control]="form.controls.displayOrder"
+                  [errorMessages]="{}">
+  </app-field-text>
+
+</app-generic-form-page>
