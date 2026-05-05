@@ -1,8 +1,8 @@
 <app-generic-form-page
-  [title]="versionEdit() ? 'Modifier la version de logiciel' : 'Créer la version de logiciel'"
+  [title]="versionTypeEdit() ? 'Modifier le type de version de logiciel' : 'Créer le type de version de logiciel'"
   [loading]="loading()"
   [error]="error()"
-  [submitLabel]="versionEdit() ? 'Modifier' : 'Créer'"
+  [submitLabel]="versionTypeEdit() ? 'Modifier' : 'Créer'"
   (submitForm)="onSubmit()"
   [formGroup]="form"
   [routeId] = "routeId()"
@@ -11,42 +11,18 @@
 
   <!-- champs -->
 
-  <app-field-text labelKey="Numéro de version" placeholder="1.0.0"
-                  [control]="form.controls.versionNumber"
+  <app-field-text labelKey="Libellé" placeholder="Release"
+                  [control]="form.controls.designation"
                   [errorMessages]="{
-    required: 'Le numéro est obligatoire',
+    required: 'Le libellé est obligatoire',
+    minlength: 'Min 1 caractère',
     maxlength: 'Max 127 caractères'}">
   </app-field-text>
 
-  <app-field-select
-    labelKey="Type de version"
-    [control]="form.controls.idVersionType"
-    [options]="listVersionType()"
-    valueField="idVersionType"
-    labelField="designation"
-    placeholder="Choisir un type"
-    [errorMessages]="{
-    required: 'Le type est obligatoire'
-  }"
-  />
-
-  <app-field-select
-    labelKey="Logiciel"
-    [control]="form.controls.idSoftware"
-    [options]="listSoftware()"
-    valueField="idSoftware"
-    labelField="name"
-    placeholder="Choisir un logiciel"
-    [errorMessages]="{
-    required: 'Le logiciel est obligatoire'
-  }"
-  />
-
-  <app-field-text type="date" labelKey="Date de publication"
-                  [control]="form.controls.publicationDate"
+  <app-field-text labelKey="Malus sur l'urgence"
+                  [control]="form.controls.urgencyMalus"
                   [errorMessages]="{
-    required: 'Entrez une date',
-    validDate: 'Le format de la date est invalide'}">
+    required: 'Entrez unu valeur d\'urgence'}">
   </app-field-text>
 
 </app-generic-form-page>

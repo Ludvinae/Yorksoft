@@ -15,6 +15,7 @@ import { FieldText } from '../../../../components/form/field-text/field-text';
 import { validDate } from '../../../../validators/validDate';
 import { FieldSelect } from '../../../../components/form/field-select/field-select';
 import { toSignal } from '@angular/core/rxjs-interop';
+import {VersionFormService} from '../../../../services/facade/versionFormService';
 
 @Component({
   selector: 'app-version-edit',
@@ -24,7 +25,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 })
 export class VersionEdit implements OnInit {
   formBuilder = inject(FormBuilder);
-  versionService = inject(VersionService);
+  versionFormService = inject(VersionFormService);
   router = inject(Router);
   route = inject(ActivatedRoute);
   softwareService = inject(SoftwareService);
@@ -41,7 +42,7 @@ export class VersionEdit implements OnInit {
     idSoftware: this.formBuilder.nonNullable.control(0, { validators: [Validators.required] }),
   });
 
-  versionEdit = signal<Version | null>(null);
+  versionEdit = signal<Version | undefined>(undefined);
   loading = signal(false);
   error = signal<string | undefined>(undefined);
   routeId = signal<string>('Nouvelle version de logiciel');
@@ -52,72 +53,32 @@ export class VersionEdit implements OnInit {
   isEditMode = signal(false);
 
   ngOnInit() {
-
-    // Récupération de l'id
     const id = this.route.snapshot.paramMap.get('id');
-
     if (!id) return;
 
-    //Gestion du mode edition
-    this.routeId.set('Version #' + id);
-
-    const numericId = Number(id);
-
-    if (Number.isNaN(numericId)) {
-      this.error.set('ID invalide');
-      return;
-    }
-
-    this.error.set(undefined);
     this.loading.set(true);
 
-    this.versionService.get(numericId).subscribe({
+    this.versionFormService.load(Number(id)).subscribe({
       next: (version) => {
         this.isEditMode.set(true);
         this.versionEdit.set(version);
-
-        // Remplissage du formulaire
-        this.form.patchValue({
-          versionNumber: version.versionNumber,
-          publicationDate: this.formatDate(version.publicationDate),
-          idVersionType: version.idVersionType,
-          idSoftware: version.idSoftware,
-        });
-
+        this.form.patchValue(this.versionFormService.mapToForm(version));
         this.loading.set(false);
       },
       error: () => {
         this.loading.set(false);
-        this.error.set('Erreur lors du chargement');
+        this.error.set('Erreur');
       },
     });
   }
 
   onSubmit() {
-    if (this.form.invalid) return;
+    const dto = this.versionFormService.mapToDto(
+      this.form.getRawValue(),
+      this.versionEdit()
+    );
 
-    this.error.set(undefined);
-    this.loading.set(true);
-
-    const value: VersionForm = this.form.getRawValue();
-
-    if (value.idVersionType == null || value.idSoftware == null) {
-      this.error.set('Champs obligatoires manquants');
-      this.loading.set(false);
-      return;
-    }
-
-    const type: Version = {
-      ...value,
-      idVersion: this.versionEdit()?.idVersion ?? 0,
-      publicationDate: new Date(value.publicationDate),
-    };
-
-    const request = this.isEditMode()
-      ? this.versionService.update(type, type.idVersion)
-      : this.versionService.create(type);
-
-    request.subscribe({
+    this.versionFormService.save(dto, this.isEditMode()).subscribe({
       next: () => {
         this.loading.set(false);
         this.router.navigateByUrl('/admin/version');
@@ -127,10 +88,5 @@ export class VersionEdit implements OnInit {
         this.error.set('Une erreur est survenue');
       },
     });
-  }
-
-  formatDate(date: string | Date): string {
-    const d = new Date(date);
-    return d.toISOString().split('T')[0]; // YYYY-MM-DD
   }
 }
