@@ -5,9 +5,11 @@ import com.mns.cda.suivimns.dto.TicketDto;
 import com.mns.cda.suivimns.dto.flat.TicketCreation;
 import com.mns.cda.suivimns.dto.flat.TicketFullWithLatest;
 import com.mns.cda.suivimns.dto.flat.TicketResponse;
+import com.mns.cda.suivimns.enumerate.Priority;
 import com.mns.cda.suivimns.mapper.TicketMapper;
 import com.mns.cda.suivimns.model.*;
 import com.mns.cda.suivimns.model.keys.ClassificationKey;
+import com.mns.cda.suivimns.service.business.TicketPriorityService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,7 @@ public class TicketService  {
 
     protected final TicketDao ticketDao;
     protected final TicketMapper ticketMapper;
+    protected final TicketPriorityService priorityService;
 
     private final ThemeDao themeDao;
     protected final HistoryService iHistoryService;
@@ -59,11 +62,9 @@ public class TicketService  {
 
         Ticket ticket = ticketMapper.toEntity(dto);
 
-        int priority = getInitialPriorityCalcul(ticket);
+        priorityService.initializePriority(ticket);
 
         ticket.setIdTicket(null);
-        ticket.setInitialPriority(priority);
-        ticket.setFinalPriority(priority);
         ticket.setOpenDate(null);
         ticket.setModificationDate(null);
         ticket.setCloseDate(null);
@@ -99,7 +100,7 @@ public class TicketService  {
         Ticket currentTicket = ticketDao.findById(id)
                 .orElseThrow(TicketNotFoundException::new);
 
-        currentTicket.setFinalPriority(priority);
+        priorityService.recalculateCurrentPriority(currentTicket);
 
         return ticketDao.save(currentTicket);
     }
@@ -126,10 +127,7 @@ public class TicketService  {
                 .orElseThrow(() -> new RuntimeException("Version introuvable"));
 
         // Automatic priority calcul
-        int priority = computePriority(impact.getPriorityFactor(), urgency.getPriorityFactor(),
-                client.getImportance(), version.getVersionType().getUrgencyMalus());
-        ticket.setInitialPriority(priority);
-        ticket.setFinalPriority(priority);
+        priorityService.initializePriority(ticket);
 
         ticket.setClient(client);
         ticket.setImpact(impact);
@@ -210,7 +208,7 @@ public class TicketService  {
                 ticket.getTitle(),
                 ticket.getDescription(),
                 ticket.getModificationDate(),
-                ticket.getFinalPriority(),
+                ticket.getCurrentPriority(),
                 ticket.getVersion().getVersionNumber(),
                 ticket.getVersion().getVersionType().getDesignation(),
                 ticket.getVersion().getSoftware().getName(),

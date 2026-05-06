@@ -1,5 +1,6 @@
 package com.mns.cda.suivimns.model;
 
+import com.mns.cda.suivimns.enumerate.Priority;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -43,11 +44,13 @@ public class Ticket {
 
     protected Integer callDuration;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, updatable = false)
-    protected Integer initialPriority;
+    protected Priority initialPriority;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    protected Integer finalPriority;
+    protected Priority currentPriority;
 
     @ManyToOne
     @JoinColumn(name = "id_version")

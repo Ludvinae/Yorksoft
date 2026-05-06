@@ -1,12 +1,14 @@
 package com.mns.cda.suivimns.dto.flat;
 
+import com.mns.cda.suivimns.enumerate.Priority;
+
 import java.time.LocalDateTime;
 
 public record TicketFullWithLatest(
     int id,
     String title,
     LocalDateTime modificationDate,
-    Integer finalPriority,
+    Priority currentPriority,
     String versionNumber,
     String versionTypeDesignation,
     String softwareName,

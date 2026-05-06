@@ -14,7 +14,7 @@ import java.util.List;
 public interface TicketDao extends JpaRepository<Ticket, Integer> {
     @Query("SELECT new com.mns.cda.suivimns.dto.flat.TicketResponse(" +
             "t.idTicket, t.title, t.description, t.modificationDate, " +
-            "t.finalPriority, t.version.versionNumber, t.version.versionType.designation, " +
+            "t.currentPriority, t.version.versionNumber, t.version.versionType.designation, " +
             "t.version.software.name, t.client.firstName, t.client.lastName, " +
             "s.designation, th.designation) " +
             "FROM Ticket t " +
@@ -31,7 +31,7 @@ public interface TicketDao extends JpaRepository<Ticket, Integer> {
 
     @Query("SELECT new com.mns.cda.suivimns.dto.flat.TicketFullWithLatest(" +
                 "t.idTicket, t.title, t.modificationDate, " +
-                "t.finalPriority, v.versionNumber, vt.designation, " +
+                "t.currentPriority, v.versionNumber, vt.designation, " +
                 "s.name, th.designation, st.designation, " +
                 "COUNT(DISTINCT cm.idComment) AS commentCount) " +
             "FROM Ticket t " +
@@ -49,13 +49,13 @@ public interface TicketDao extends JpaRepository<Ticket, Integer> {
                 "FROM Classification cl2 " +
                 "WHERE cl2.ticket = t)" +
             "GROUP BY t.idTicket, t.title, t.modificationDate, " +
-                "t.finalPriority, v.versionNumber, vt.designation, " +
+                "t.currentPriority, v.versionNumber, vt.designation, " +
                 "s.name, th.designation, st.designation")
     List<TicketFullWithLatest> returnTicketFullWithLatest();
 
     @Query("SELECT new com.mns.cda.suivimns.dto.flat.TicketFullWithLatest(" +
             "t.idTicket, t.title, t.modificationDate, " +
-            "t.finalPriority, v.versionNumber, vt.designation, " +
+            "t.currentPriority, v.versionNumber, vt.designation, " +
             "s.name, th.designation, st.designation, " +
             "COUNT(DISTINCT cm.idComment) AS commentCount) " +
             "FROM Ticket t " +
@@ -76,13 +76,13 @@ public interface TicketDao extends JpaRepository<Ticket, Integer> {
             "FROM Classification cl2 " +
             "WHERE cl2.ticket = t)" +
             "GROUP BY t.idTicket, t.title, t.modificationDate, " +
-            "t.finalPriority, v.versionNumber, vt.designation, " +
+            "t.currentPriority, v.versionNumber, vt.designation, " +
             "s.name, th.designation, st.designation")
     List<TicketFullWithLatest> returnTicketAttributed(@Param("id") int id);
 
     @Query("SELECT new com.mns.cda.suivimns.dto.flat.TicketFullWithLatest(" +
             "t.idTicket, t.title, t.modificationDate, " +
-            "t.finalPriority, v.versionNumber, vt.designation, " +
+            "t.currentPriority, v.versionNumber, vt.designation, " +
             "s.name, th.designation, st.designation, " +
             "COUNT(DISTINCT cm.idComment) AS commentCount) " +
             "FROM Ticket t " +
@@ -95,13 +95,13 @@ public interface TicketDao extends JpaRepository<Ticket, Integer> {
             "JOIN h.status st " +
             "LEFT JOIN t.commentList cm " +
             "WHERE h.endDate IS NULL " +
-            "AND t.finalPriority <= 2 " +
+            "AND t.currentPriority = 'VERY_HIGH' " +
             "AND cl.affectationDate = (" +
             "SELECT MAX(cl2.affectationDate) " +
             "FROM Classification cl2 " +
             "WHERE cl2.ticket = t)" +
             "GROUP BY t.idTicket, t.title, t.modificationDate, " +
-            "t.finalPriority, v.versionNumber, vt.designation, " +
+            "t.currentPriority, v.versionNumber, vt.designation, " +
             "s.name, th.designation, st.designation ")
     List<TicketFullWithLatest> returnPriorityTicketFullWithLatest();
 

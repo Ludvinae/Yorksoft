@@ -1,5 +1,7 @@
 package com.mns.cda.suivimns.dto.flat;
 
+import com.mns.cda.suivimns.enumerate.Priority;
+
 import java.time.LocalDateTime;
 
 public record TicketResponse(
@@ -9,7 +11,7 @@ public record TicketResponse(
 
             LocalDateTime modificationDate,
 
-            int finalPriority,
+            Priority currentPriority,
 
             String versionNumber,
             String versionTypeDesignation,
