@@ -2,6 +2,7 @@ package com.mns.cda.suivimns.service;
 
 import com.mns.cda.suivimns.dao.SoftwareDao;
 import com.mns.cda.suivimns.dto.SoftwareDto;
+import com.mns.cda.suivimns.dto.flat.SoftwareDetailDto;
 import com.mns.cda.suivimns.mapper.SoftwareMapper;
 import com.mns.cda.suivimns.model.Software;
 import lombok.RequiredArgsConstructor;
@@ -23,11 +24,19 @@ public class SoftwareService {
         return softwareMapper.toDtoList(softwareDao.findAll());
     }
 
+    public List<SoftwareDetailDto> findAllDetail() {
+        return softwareDao.findAllDetail();
+    }
+
     public SoftwareDto findById(int id) throws SoftwareService.SoftwareNotFoundException {
         Software software = softwareDao.findById(id)
                 .orElseThrow(SoftwareService.SoftwareNotFoundException::new);
 
         return softwareMapper.toDto(software);
+    }
+
+    public SoftwareDetailDto findByIdDetail(int id) throws SoftwareService.SoftwareNotFoundException {
+        return softwareDao.findByIdDetail(id);
     }
 
     public SoftwareDto save(SoftwareDto dto) {

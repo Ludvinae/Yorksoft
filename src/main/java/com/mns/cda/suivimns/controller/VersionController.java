@@ -1,7 +1,7 @@
 package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.VersionDto;
-import com.mns.cda.suivimns.dto.flat.VersionListDto;
+import com.mns.cda.suivimns.dto.flat.VersionDetailDto;
 import com.mns.cda.suivimns.service.VersionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -36,7 +36,7 @@ public class VersionController {
     @Operation(summary = "Récupérer toutes les versions avec les informations de type de version et de logiciel")
     @ApiResponse(responseCode = "200", description = "Liste des versions récupérée")
     @GetMapping("/list/detail")
-    public List<VersionListDto> findAllDetail() {
+    public List<VersionDetailDto> findAllDetail() {
         return versionService.findAllDetail();
     }
 
@@ -49,6 +49,19 @@ public class VersionController {
     public ResponseEntity<VersionDto> findById(@PathVariable Integer id) {
         try {
             return new ResponseEntity<>(versionService.findById(id) , HttpStatus.OK);
+        } catch (VersionService.VersionNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @Operation(summary = "Récupérer une version par son ID avec les données des entités liées")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Version trouvée"),
+            @ApiResponse(responseCode = "404", description = "Version non trouvée")})
+    @GetMapping("/{id}/detail")
+    public ResponseEntity<VersionDetailDto> findByIdDetail(@PathVariable Integer id) {
+        try {
+            return new ResponseEntity<>(versionService.findByIdDetail(id) , HttpStatus.OK);
         } catch (VersionService.VersionNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

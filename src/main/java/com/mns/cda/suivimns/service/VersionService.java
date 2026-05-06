@@ -2,7 +2,7 @@ package com.mns.cda.suivimns.service;
 
 import com.mns.cda.suivimns.dao.VersionDao;
 import com.mns.cda.suivimns.dto.VersionDto;
-import com.mns.cda.suivimns.dto.flat.VersionListDto;
+import com.mns.cda.suivimns.dto.flat.VersionDetailDto;
 import com.mns.cda.suivimns.mapper.VersionMapper;
 import com.mns.cda.suivimns.model.Version;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ public class VersionService  {
         return versionMapper.toDtoList(versionDao.findAll());
     }
 
-    public List<VersionListDto> findAllDetail() {
+    public List<VersionDetailDto> findAllDetail() {
         return versionDao.findAllDetail();
     }
 
@@ -33,6 +33,10 @@ public class VersionService  {
                 .orElseThrow(VersionService.VersionNotFoundException::new);
 
         return versionMapper.toDto(version);
+    }
+
+    public VersionDetailDto findByIdDetail(int id) throws VersionNotFoundException {
+        return versionDao.findByIdDetail(id);
     }
 
     public VersionDto save(VersionDto dto) {

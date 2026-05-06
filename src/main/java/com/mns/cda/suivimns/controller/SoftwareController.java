@@ -1,6 +1,7 @@
 package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.SoftwareDto;
+import com.mns.cda.suivimns.dto.flat.SoftwareDetailDto;
 import com.mns.cda.suivimns.service.SoftwareService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -32,6 +33,13 @@ public class SoftwareController {
         return softwareService.findAll();
     }
 
+    @Operation(summary = "Récupérer toutes les logiciels avec les details sur le type de logiciel")
+    @ApiResponse(responseCode = "200", description = "Liste des logiciels récupérée")
+    @GetMapping("/list/detail")
+    public List<SoftwareDetailDto> findAllDetail() {
+        return softwareService.findAllDetail();
+    }
+
 
     @Operation(summary = "Récupérer un logiciel par son ID")
     @ApiResponses(value = {
@@ -42,6 +50,20 @@ public class SoftwareController {
 
         try {
             return new ResponseEntity<>(softwareService.findById(id) , HttpStatus.OK);
+        } catch (SoftwareService.SoftwareNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @Operation(summary = "Récupérer les details d'un logiciel par son ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Logiciel trouvée"),
+            @ApiResponse(responseCode = "404", description = "Logiciel non trouvée")})
+    @GetMapping("/{id}/detail")
+    public ResponseEntity<SoftwareDetailDto> findByIdDetail(@PathVariable Integer id) {
+
+        try {
+            return new ResponseEntity<>(softwareService.findByIdDetail(id) , HttpStatus.OK);
         } catch (SoftwareService.SoftwareNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
