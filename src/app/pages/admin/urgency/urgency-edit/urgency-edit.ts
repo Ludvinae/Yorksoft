@@ -24,7 +24,7 @@ export class UrgencyEdit implements OnInit {
     designation: this.formBuilder.nonNullable.control('', {
       validators: [Validators.required, Validators.maxLength(63), Validators.minLength(1)],
     }),
-    priorityFactor: this.formBuilder.nonNullable.control(0, {
+    priorityFactor: this.formBuilder.control(null, {
       validators: [Validators.required],
     }),
     description: this.formBuilder.nonNullable.control("", {

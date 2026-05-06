@@ -21,7 +21,7 @@ export class VersionTypeEdit implements OnInit {
     designation: this.formBuilder.nonNullable.control('', {
       validators: [Validators.required, Validators.maxLength(127), Validators.minLength(1)],
     }),
-    urgencyMalus: this.formBuilder.nonNullable.control(0, {
+    urgencyMalus: this.formBuilder.control(null, {
       validators: [Validators.required],
     }),
   });

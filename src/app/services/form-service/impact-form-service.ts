@@ -14,7 +14,7 @@ export class ImpactFormService {
   mapToForm(impact: Impact) {
     return {
       designation: impact.designation ?? "",
-      priorityFactor: impact.priorityFactor ?? 0,
+      priorityFactor: impact.priorityFactor,
       description: impact.description ?? "",
     };
   }

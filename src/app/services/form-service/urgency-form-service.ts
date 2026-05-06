@@ -14,6 +14,7 @@ export class UrgencyFormService {
   mapToForm(urgency: Urgency) {
     return {
       designation: urgency.designation ?? "",
+      priorityFactor: urgency.priorityFactor,
       description: urgency.description ?? "",
     };
   }
