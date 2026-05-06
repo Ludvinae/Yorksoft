@@ -174,29 +174,6 @@ public class TicketService  {
     }
 
 
-    // Priorité
-    private static final int[][] priorityMatrix =
-            {{5, 4},
-            {4, 3},
-            {3, 2},
-            {2, 1}};
-
-    public int computePriority(int impact, int urgency, int importance, int malus) {
-        int finalImpact = Math.min(impact + importance, 4);
-        int finalUrgency = Math.max(urgency - malus, 1);
-        return priorityMatrix[finalImpact - 1][finalUrgency - 1];
-    }
-
-    private int getInitialPriorityCalcul(Ticket ticket) {
-        int impact = ticket.getImpact().getPriorityFactor();
-        int urgency = ticket.getUrgency().getPriorityFactor();
-        int importance = ticket.getClient().getImportance();
-        int malus = ticket.getVersion().getVersionType().getUrgencyMalus();
-
-        System.out.println(impact + " / " + urgency + " / " + importance + " / " + malus);
-        return computePriority(impact, urgency, importance, malus);
-    }
-
 
     // Mapping
     public TicketResponse responseToDto(Ticket ticket) {

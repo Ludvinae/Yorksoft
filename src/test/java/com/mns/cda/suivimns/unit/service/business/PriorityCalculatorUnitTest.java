@@ -3,18 +3,13 @@ package com.mns.cda.suivimns.unit.service.business;
 import com.mns.cda.suivimns.enumerate.Priority;
 import com.mns.cda.suivimns.service.business.PriorityCalculator;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@ExtendWith(MockitoExtension.class)
 public class PriorityCalculatorUnitTest {
 
 
-    @InjectMocks
-    private PriorityCalculator calculator;
+    private final PriorityCalculator calculator = new PriorityCalculator();
 
     @Test
     void lowImpactLowUrgency_shouldReturnVeryLowPriority() {
@@ -66,7 +61,7 @@ public class PriorityCalculatorUnitTest {
     }
 
     @Test
-    void highImpactLowurgencyWithMalus_shouldReturnHighPriority() {
+    void highImpactLowUrgencyWithMalus_shouldReturnHighPriority() {
         Priority result = calculator.computePriority(4, 2, 1, 1);
 
         assertEquals(Priority.HIGH, result);
@@ -84,6 +79,20 @@ public class PriorityCalculatorUnitTest {
         Priority result = calculator.computePriority(4, 2, 3, 0);
 
         assertEquals(Priority.VERY_HIGH, result);
+    }
+
+    @Test
+    void impactShouldBeCappedAtMax() {
+        Priority result = calculator.computePriority(4, 2, 3, 0);
+
+        assertEquals(Priority.VERY_HIGH, result);
+    }
+
+    @Test
+    void urgencyShouldNotGoBelowMinimum() {
+        Priority result = calculator.computePriority(1, 1, 0, 5);
+
+        assertEquals(Priority.VERY_LOW, result);
     }
 
 }

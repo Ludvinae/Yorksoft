@@ -2,6 +2,7 @@ package com.mns.cda.suivimns.config;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -30,5 +31,10 @@ public class GlobalExceptionInterceptor {
     @ResponseStatus(HttpStatus.CONFLICT)
     public Map<String, String> constraintViolationDatabase(DataIntegrityViolationException ex) {
         return Map.of("Erreur", "Erreur de contrainte");
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<String> handleIllegalState(IllegalStateException ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage());
     }
 }
