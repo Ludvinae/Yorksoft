@@ -10,10 +10,14 @@ export class VersionService {
   private apiUrl = 'http://localhost:8080/version';
 
   readonly versionList = signal<Version[]>([]);
-  readonly versionListDto = signal<VersionListDetail[]>([]);
+  readonly versionDetail = signal<VersionDetailDto[]>([]);
 
   get(id: number) {
     return this.http.get<Version>(`${this.apiUrl}/${id}`);
+  }
+
+  getDetail(id: number) {
+    return this.http.get<VersionDetailDto>(`${this.apiUrl}/${id}/detail`);
   }
 
   getAll() {
@@ -25,9 +29,9 @@ export class VersionService {
   }
 
   getAllDto() {
-    return this.http.get<VersionListDetail[]>(`${this.apiUrl}/list/detail`).pipe(
+    return this.http.get<VersionDetailDto[]>(`${this.apiUrl}/list/detail`).pipe(
       tap((versionList) => {
-        this.versionListDto.set(versionList);
+        this.versionDetail.set(versionList);
       }),
     );
   }

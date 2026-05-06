@@ -15,14 +15,12 @@ import { switchMap, tap } from 'rxjs';
 export class SoftwareDetail implements OnInit {
   route = inject(ActivatedRoute);
   softwareService = inject(SoftwareService);
-  softwareTypeService = inject(SoftwareTypeService);
   routeBuilder = inject(RouteBuilderService);
 
-  software = signal<Software | null>(null);
+  software = signal<SoftwareDetailDto | null>(null);
   loading = signal(true);
   error = signal<string | undefined>(undefined);
   label = signal<string | undefined>(undefined);
-  softwareType = signal<SoftwareType | null>(null);
 
 
   updateRoute: string | undefined = undefined;
@@ -34,21 +32,14 @@ export class SoftwareDetail implements OnInit {
     this.updateRoute = this.routeBuilder.getUpdateRoute(id, 'software');
 
     this.softwareService
-      .get(id)
+      .getDetail(id)
       .pipe(
         tap((s) => {
           this.software.set(s);
         }),
-        switchMap((s) => {
-          if (s.idSoftwareType == null) {
-            throw new Error('Type de logiciel manquant');
-          }
-          return this.softwareTypeService.get(s.idSoftwareType)
-        }),
       )
       .subscribe({
-        next: (type) => {
-          this.softwareType.set(type);
+        next: () => {
           this.loading.set(false);
         },
         error: () => {

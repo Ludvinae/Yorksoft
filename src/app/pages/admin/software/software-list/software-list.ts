@@ -12,7 +12,7 @@ import {Title} from '../../../../components/list/title/title';
 export class SoftwareList implements OnInit {
   softwareService = inject(SoftwareService);
 
-  softwareList = this.softwareService.softwareListDetail;
+  softwareList = this.softwareService.softwareDetail;
 
   ngOnInit() {
     this.softwareService.getAllDetail().subscribe();

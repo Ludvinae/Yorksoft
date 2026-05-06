@@ -12,7 +12,7 @@ import { VersionService } from '../../../../services/api/version-service';
 export class VersionList implements OnInit {
   versionService = inject(VersionService);
 
-  versionList = this.versionService.versionListDto;
+  versionList = this.versionService.versionDetail;
 
   ngOnInit() {
     this.versionService.getAllDto().subscribe();

@@ -1,6 +1,7 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs';
+import { SoftwareDetail } from '../../pages/admin/software/software-detail/software-detail';
 
 @Injectable({
   providedIn: 'root',
@@ -10,10 +11,14 @@ export class SoftwareService {
   private apiUrl = 'http://localhost:8080/software';
 
   readonly softwareList = signal<Software[]>([]);
-  readonly softwareListDetail = signal<SoftwareListDetail[]>([]);
+  readonly softwareDetail = signal<SoftwareDetailDto[]>([]);
 
   get(id: number) {
     return this.http.get<Software>(`${this.apiUrl}/${id}`);
+  }
+
+  getDetail(id: number) {
+    return this.http.get<SoftwareDetailDto>(`${this.apiUrl}/${id}/detail`);
   }
 
   getAll() {
@@ -25,9 +30,9 @@ export class SoftwareService {
   }
 
   getAllDetail() {
-    return this.http.get<SoftwareListDetail[]>(`${this.apiUrl}/list/detail`).pipe(
+    return this.http.get<SoftwareDetailDto[]>(`${this.apiUrl}/list/detail`).pipe(
       tap((softwareList) => {
-        this.softwareListDetail.set(softwareList);
+        this.softwareDetail.set(softwareList);
       }),
     );
   }

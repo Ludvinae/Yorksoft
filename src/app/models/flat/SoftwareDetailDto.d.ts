@@ -1,4 +1,4 @@
-type SoftwareListDetail = {
+type SoftwareDetailDto = {
   idSoftware: number;
   name: string;
   description: string;

@@ -1,4 +1,4 @@
-type VersionListDetail = {
+type VersionDetailDto = {
   idVersion: number;
   versionNumber: string;
   versionTypeDesignation: string;
