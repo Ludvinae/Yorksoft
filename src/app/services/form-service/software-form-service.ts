@@ -13,9 +13,9 @@ export class SoftwareFormService {
 
   mapToForm(software: Software) {
     return {
-      name: software.name,
-      description: software.description,
-      idSoftwareType: software.idSoftwareType,
+      name: software.name ?? "",
+      description: software.description ?? "",
+      idSoftwareType: software.idSoftwareType ?? 0,
     };
   }
 

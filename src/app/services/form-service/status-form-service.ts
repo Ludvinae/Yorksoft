@@ -13,8 +13,8 @@ export class StatusFormService {
 
   mapToForm(status: Status) {
     return {
-      designation: status.designation,
-      displayOrder: status.displayOrder,
+      designation: status.designation ?? "",
+      displayOrder: status.displayOrder ?? 0,
     };
   }
 

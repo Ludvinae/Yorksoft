@@ -13,8 +13,8 @@ export class UrgencyFormService {
 
   mapToForm(urgency: Urgency) {
     return {
-      designation: urgency.designation,
-      description: urgency.description,
+      designation: urgency.designation ?? "",
+      description: urgency.description ?? "",
     };
   }
 
