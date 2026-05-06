@@ -13,8 +13,8 @@ export class ThemeFormService {
 
   mapToForm(theme: Theme) {
     return {
-      designation: theme.description,
-      description: theme.description,
+      designation: theme.designation ?? "",
+      description: theme.description ?? "",
     };
   }
 

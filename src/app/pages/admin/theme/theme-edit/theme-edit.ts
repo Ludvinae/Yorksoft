@@ -24,7 +24,7 @@ export class ThemeEdit implements OnInit {
     designation: this.formBuilder.nonNullable.control('', {
       validators: [Validators.required, Validators.maxLength(127), Validators.minLength(3)],
     }),
-    description: this.formBuilder.control('', {
+    description: this.formBuilder.nonNullable.control('', {
       validators: [],
     }),
   });
