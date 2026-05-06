@@ -47,7 +47,5 @@ export class SoftwareDetail implements OnInit {
           this.error.set('Impossible de charger les détails.');
         },
     });
-
-
   }
 }

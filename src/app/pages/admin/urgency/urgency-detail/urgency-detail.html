@@ -1,1 +1,20 @@
-<p>urgency-detail works!</p>
+
+@if (urgency()) {
+  <app-detail-page [loading]="loading()" [error]="error()" [title]="label()"
+                   [updateRoute]="updateRoute">
+
+    <h2 class="text-2xl font-bold">{{ urgency()?.designation }}</h2>
+    <h3>Facteur de priorité : {{ urgency()?.priorityFactor }}</h3>
+    <p>{{ urgency()?.description }}</p>
+
+  </app-detail-page>
+
+} @else {
+  <span class="loading loading-ring loading-xl"></span>
+  <span class="loading loading-ring loading-xl"></span>
+  <span class="loading loading-ring loading-xl"></span>
+}
+
+
+
+
