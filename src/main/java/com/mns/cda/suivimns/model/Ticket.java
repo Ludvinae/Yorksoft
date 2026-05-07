@@ -1,6 +1,6 @@
 package com.mns.cda.suivimns.model;
 
-import com.mns.cda.suivimns.enumerate.Priority;
+import com.mns.cda.suivimns.enumerate.PriorityEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -46,11 +46,11 @@ public class Ticket {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, updatable = false)
-    protected Priority initialPriority;
+    protected PriorityEnum initialPriority;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    protected Priority currentPriority;
+    protected PriorityEnum currentPriority;
 
     @ManyToOne
     @JoinColumn(name = "id_version")

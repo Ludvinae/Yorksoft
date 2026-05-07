@@ -1,20 +1,14 @@
 package com.mns.cda.suivimns.unit.service.business;
 
-import com.mns.cda.suivimns.enumerate.Priority;
+import com.mns.cda.suivimns.enumerate.PriorityEnum;
 import com.mns.cda.suivimns.model.*;
 import com.mns.cda.suivimns.service.business.PriorityCalculator;
 import com.mns.cda.suivimns.service.business.TicketPriorityService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
@@ -78,19 +72,19 @@ public class TicketPriorityServiceUnitTest {
         Ticket ticket = mockTicket();
 
         when(calculator.computePriority(2, 1, 1, 0))
-                .thenReturn(Priority.MEDIUM);
+                .thenReturn(PriorityEnum.MEDIUM);
 
         service.initializePriority(ticket);
 
-        verify(ticket).setInitialPriority(Priority.MEDIUM);
-        verify(ticket).setCurrentPriority(Priority.MEDIUM);
+        verify(ticket).setInitialPriority(PriorityEnum.MEDIUM);
+        verify(ticket).setCurrentPriority(PriorityEnum.MEDIUM);
     }
 
     @Test
     void initializePriority_shouldThrowException_ifAlreadyInitialized() {
         Ticket ticket = mock(Ticket.class);
 
-        when(ticket.getInitialPriority()).thenReturn(Priority.LOW);
+        when(ticket.getInitialPriority()).thenReturn(PriorityEnum.LOW);
 
         assertThrows(IllegalStateException.class, () ->
                 service.initializePriority(ticket)
@@ -103,11 +97,11 @@ public class TicketPriorityServiceUnitTest {
         Ticket ticket = mockTicket();
 
         when(calculator.computePriority(2, 1, 1, 0))
-                .thenReturn(Priority.HIGH);
+                .thenReturn(PriorityEnum.HIGH);
 
         service.recalculateCurrentPriority(ticket);
 
-        verify(ticket).setCurrentPriority(Priority.HIGH);
+        verify(ticket).setCurrentPriority(PriorityEnum.HIGH);
         verify(ticket, never()).setInitialPriority(any());
     }
 

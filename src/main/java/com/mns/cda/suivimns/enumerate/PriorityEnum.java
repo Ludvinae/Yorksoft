@@ -1,6 +1,6 @@
 package com.mns.cda.suivimns.enumerate;
 
-public enum Priority {
+public enum PriorityEnum {
     VERY_LOW,
     LOW,
     MEDIUM,

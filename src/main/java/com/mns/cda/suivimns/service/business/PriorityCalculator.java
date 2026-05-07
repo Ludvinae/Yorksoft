@@ -1,22 +1,22 @@
 package com.mns.cda.suivimns.service.business;
 
-import com.mns.cda.suivimns.enumerate.Priority;
+import com.mns.cda.suivimns.enumerate.PriorityEnum;
 import org.springframework.stereotype.Component;
 
 @Component
 public class PriorityCalculator {
 
-    public Priority computePriority(int impact, int urgency, int importance, int malus) {
+    public PriorityEnum computePriority(int impact, int urgency, int importance, int malus) {
         return priorityMatrix
                 [adjustImpact(impact, importance)]
                 [adjustUrgency(urgency, malus)];
     }
 
-    private static final Priority[][] priorityMatrix =
-            {{Priority.VERY_LOW, Priority.LOW},
-                    {Priority.LOW, Priority.MEDIUM},
-                    {Priority.MEDIUM, Priority.HIGH},
-                    {Priority.HIGH, Priority.VERY_HIGH}};
+    private static final PriorityEnum[][] priorityMatrix =
+            {{PriorityEnum.VERY_LOW, PriorityEnum.LOW},
+            {PriorityEnum.LOW, PriorityEnum.MEDIUM},
+            {PriorityEnum.MEDIUM, PriorityEnum.HIGH},
+            {PriorityEnum.HIGH, PriorityEnum.VERY_HIGH}};
 
     /**
      * Ajuste l'impact en fonction de l'importance du client - 1

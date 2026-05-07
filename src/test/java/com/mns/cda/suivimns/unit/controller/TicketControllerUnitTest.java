@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.TicketController;
 import com.mns.cda.suivimns.dto.TicketDto;
 import com.mns.cda.suivimns.dto.flat.TicketFullWithLatest;
-import com.mns.cda.suivimns.enumerate.Priority;
+import com.mns.cda.suivimns.enumerate.PriorityEnum;
 import com.mns.cda.suivimns.service.TicketService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -47,12 +47,12 @@ class TicketControllerUnitTest {
         // DTO
         ticketDto = new TicketDto(
                 1, "Test title", "Test description", null,
-                null, null, 0, Priority.VERY_HIGH, Priority.VERY_HIGH,
+                null, null, 0, PriorityEnum.VERY_HIGH, PriorityEnum.VERY_HIGH,
                 1, 1, 1, 1, list, list,
                 list, list);
 
         ticketFull = new TicketFullWithLatest(
-                1, "Test title", null, Priority.MEDIUM, "Test number",
+                1, "Test title", null, PriorityEnum.MEDIUM, "Test number",
                 "Test type designation", "Test software name",
                 "Test theme designation", "Test status designation", 2);
 
