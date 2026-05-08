@@ -4,6 +4,7 @@ import com.mns.cda.suivimns.dao.AppUserDao;
 import com.mns.cda.suivimns.dao.HistoryDao;
 import com.mns.cda.suivimns.dao.StatusDao;
 import com.mns.cda.suivimns.dto.HistoryDto;
+import com.mns.cda.suivimns.enumerate.StatusEnum;
 import com.mns.cda.suivimns.mapper.HistoryMapper;
 import com.mns.cda.suivimns.model.AppUser;
 import com.mns.cda.suivimns.model.History;
@@ -43,6 +44,18 @@ public class HistoryService {
 
 
     // METHODS
+    public void addHistory(Ticket ticket, AppUser user, StatusEnum newStatus)
+            throws StatusService.StatusNotFoundException {
+
+        History history = new History();
+
+        history.setTicket(ticket);
+        history.setActor(user);
+        history.setStatus(statusDao.findByCode(newStatus)
+                .orElseThrow(StatusService.StatusNotFoundException::new));
+
+        historyDao.save(history);
+    }
 
     public void updateHistory(Ticket ticket, Integer actorId, String nextStatus) {
 

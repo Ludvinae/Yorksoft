@@ -14,6 +14,8 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class StatusTransition {
 
+    public static class IllegalStatusTransitionException extends RuntimeException {}
+
     public boolean canTransition(StatusEnum current, StatusEnum next) {
         return switch (current) {
 

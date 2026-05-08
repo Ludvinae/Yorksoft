@@ -1,41 +1,74 @@
 package com.mns.cda.suivimns.service.business;
 
 import com.mns.cda.suivimns.dao.HistoryDao;
+import com.mns.cda.suivimns.enumerate.StatusEnum;
 import com.mns.cda.suivimns.model.AppUser;
 import com.mns.cda.suivimns.model.History;
 import com.mns.cda.suivimns.model.Status;
 import com.mns.cda.suivimns.model.Ticket;
+import com.mns.cda.suivimns.service.HistoryService;
+import com.mns.cda.suivimns.service.StatusService;
 import com.mns.cda.suivimns.service.TicketService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
 public class TicketStatusService {
 
     private final HistoryDao historyDao;
+    private final StatusTransition transition;
+    private final HistoryService historyService;
 
-    public Status getCurrentStatus(int idTicket) throws TicketService.TicketNotFoundException {
-        History currentHistory = historyDao.findLatestByTicket(idTicket)
+    public StatusEnum getCurrentStatus(Ticket ticket) {
+        return ticket.getStatus();
+    }
+
+    private void closeCurrentHistory(Ticket ticket)
+            throws TicketService.TicketNotFoundException {
+
+        History currentHistory = historyDao.findLatestByTicket(ticket.getIdTicket())
                 .orElseThrow(TicketService.TicketNotFoundException::new);
 
-        return currentHistory.getStatus();
+        currentHistory.setEndDate(LocalDateTime.now());
     }
 
-    public void markPreviousHistoryAsEnded(Ticket ticket) {
-        // temp
-        History previousHistory = ticket.getHistoryList().get(1);
+    @Transactional
+    public void initializeStatus(Ticket ticket, AppUser user) throws StatusService.StatusNotFoundException {
+
+        // Verifier que le ticket n'a pas déja un statut
+        if (ticket.getStatus() != null) {
+            throw new IllegalStateException("Ticket already initialized");
+        }
+
+        ticket.setStatus(StatusEnum.OPEN);
+        historyService.addHistory(ticket, user, StatusEnum.OPEN);
     }
 
-    public void initializeStatus(Ticket ticket) {}
-
+    @Transactional
     public void changeStatus(
             Ticket ticket,
-            Status newStatus,
+            StatusEnum newStatus,
             AppUser user
-    ) {}
+    ) throws StatusTransition.IllegalStatusTransitionException,
+            StatusService.StatusNotFoundException,
+            TicketService.TicketNotFoundException {
 
+        StatusEnum currentStatus = ticket.getStatus();
+        if (!transition.canTransition(currentStatus, newStatus)) {
+            throw new StatusTransition.IllegalStatusTransitionException();
+        }
 
+        // Ajoute la date de fin sur le status actuel
+        closeCurrentHistory(ticket);
+
+        // ajout d'une entrée dans l'historique
+        historyService.addHistory(ticket, user, newStatus);
+
+        // Met à jour le ticket avec le nouveau statut
+        ticket.setStatus(newStatus);
+    }
 }
