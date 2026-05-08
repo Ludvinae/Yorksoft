@@ -20,10 +20,10 @@ public class StatusTransition {
             case "Ouvert" -> StatusEnum.OPEN;
             case "Clos" -> StatusEnum.CLOSED;
             case "En cours" -> StatusEnum.IN_PROGRESS;
-            case "En attente client" -> StatusEnum.IN_PROGRESS;
-            case "En attente tier" -> StatusEnum.IN_PROGRESS;
-            case "Résolu" -> StatusEnum.IN_PROGRESS;
-            case "Attribué" -> StatusEnum.IN_PROGRESS;
+            case "En attente client" -> StatusEnum.WAITING_CLIENT;
+            case "En attente tier" -> StatusEnum.WAITING_THIRD_PARTY;
+            case "Résolu" -> StatusEnum.SOLVED;
+            case "Attribué" -> StatusEnum.ASSIGNED;
             case "Rejected" -> StatusEnum.REJECTED;
             default -> throw new IllegalStatusTransitionException();
         };

@@ -17,8 +17,11 @@ public class Status {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Integer idStatus;
 
-    @Column(nullable = false, length = 63, unique = true)
+    @Column(nullable = false, length = 63)
     protected String designation;
+
+    @Column(nullable = false, length = 31, unique = true)
+    protected String code;
 
     protected Byte displayOrder;
 }

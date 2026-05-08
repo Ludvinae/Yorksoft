@@ -40,7 +40,7 @@ class StatusControllerUnitTest {
     @BeforeEach
     void setUp() {
         statusDto = new StatusDto(
-                1, "Test designation", (byte) 1);
+                1, "Test designation","OPEN", (byte) 1);
     }
 
     // =========================
@@ -49,7 +49,7 @@ class StatusControllerUnitTest {
     @Test
     void shouldReturn400WhenCreateInvalid() throws Exception {
 
-        StatusDto invalidDto = new StatusDto(null,"", null);
+        StatusDto invalidDto = new StatusDto(null,"","", null);
 
         mockMvc.perform(post("/status")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -69,7 +69,8 @@ class StatusControllerUnitTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].idStatus").value(1))
-                .andExpect(jsonPath("$[0].designation").value("Test designation"));
+                .andExpect(jsonPath("$[0].designation").value("Test designation"))
+                .andExpect(jsonPath("$[0].code").value("OPEN"));
     }
 
     // =========================
@@ -84,7 +85,8 @@ class StatusControllerUnitTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.idStatus").value(1))
-                .andExpect(jsonPath("$.designation").value("Test designation"));
+                .andExpect(jsonPath("$.designation").value("Test designation"))
+                .andExpect(jsonPath("$.code").value("OPEN"));
     }
 
     // =========================
@@ -114,7 +116,8 @@ class StatusControllerUnitTest {
                         .content(objectMapper.writeValueAsString(statusDto)))
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.designation").value("Test designation"));
+                .andExpect(jsonPath("$.designation").value("Test designation"))
+                .andExpect(jsonPath("$.code").value("OPEN"));
     }
 
     // =========================
@@ -159,7 +162,8 @@ class StatusControllerUnitTest {
                         .content(objectMapper.writeValueAsString(statusDto)))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.designation").value("Test designation"));
+                .andExpect(jsonPath("$.designation").value("Test designation"))
+                .andExpect(jsonPath("$.code").value("OPEN"));
     }
 
     // =========================
