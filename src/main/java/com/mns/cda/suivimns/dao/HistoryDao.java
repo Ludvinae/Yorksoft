@@ -12,8 +12,6 @@ import java.util.Optional;
 @Repository
 public interface HistoryDao extends JpaRepository<History, Integer> {
 
-    boolean existsByTicket(Integer idTicket);
-
     @Query("""
         SELECT h FROM History h
         WHERE h.ticket.idTicket = :idTicket
