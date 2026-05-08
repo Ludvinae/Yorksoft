@@ -19,7 +19,10 @@ export class StatusEdit implements OnInit {
 
   form: FormGroup<StatusForm> = this.formBuilder.nonNullable.group({
     designation: this.formBuilder.nonNullable.control('', {
-      validators: [Validators.required, Validators.maxLength(127), Validators.minLength(3)],
+      validators: [Validators.required, Validators.maxLength(63), Validators.minLength(3)],
+    }),
+    code: this.formBuilder.nonNullable.control('', {
+      validators: [Validators.required, Validators.maxLength(31), Validators.minLength(3)],
     }),
     displayOrder: this.formBuilder.nonNullable.control(0, {
       validators: [],

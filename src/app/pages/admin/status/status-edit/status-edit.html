@@ -14,7 +14,15 @@
                   [control]="form.controls.designation"
                   [errorMessages]="{
     required: 'Le numéro est obligatoire',
-    maxlength: 'Max 127 caractères',
+    maxlength: 'Max 63 caractères',
+    minlength: 'Min 3 caractères'}">
+  </app-field-text>
+
+  <app-field-text labelKey="Code" placeholder="IN_PROGRESS"
+                  [control]="form.controls.code"
+                  [errorMessages]="{
+    required: 'Le code est obligatoire',
+    maxlength: 'Max 31 caractères',
     minlength: 'Min 3 caractères'}">
   </app-field-text>
 

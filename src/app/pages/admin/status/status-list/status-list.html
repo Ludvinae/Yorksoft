@@ -3,7 +3,8 @@
 <app-generic-list
   [data]="statusList()"
   [columns]="[{ label: 'Libellé', field: 'designation' },
-              {label: 'Ordre d\'affichage', field: 'displayOrder'}]"
+              { label: 'Code', field: 'code'},
+              { label: 'Ordre d\'affichage', field: 'displayOrder'}]"
   [baseRoute]="'/admin/status'"
   [idField]="'idStatus'"
   [itemTemplate]="statusCard"
@@ -11,6 +12,7 @@
 </app-generic-list>
 
 <ng-template #statusCard let-status >
-  <h3 class="font-bold text-lg">{{ status.designation }} ({{ status.displayOrder }})</h3>
+  <h3 class="font-bold text-lg">{{ status.designation }} ({{ status.code }})</h3>
+  <p>Ordre d'affichage : {{ status.displayOrder }}</p>
 
 </ng-template>
