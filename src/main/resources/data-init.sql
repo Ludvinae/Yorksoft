@@ -40,13 +40,13 @@ VALUES (7);
 INSERT INTO client (id_app_user, importance)
 VALUES (1, 0), (2, 0), (3, 2), (8, 0);
 
-INSERT INTO status (display_order, designation)
-VALUES (1, 'Nouveau'),
-       (2, 'Attribué'),
-       (3, 'En cours'),
-       (4, 'En attente'),
-       (5, 'Résolu'),
-       (6, 'Clos');
+INSERT INTO status (display_order, designation, code)
+VALUES (1, 'Nouveau', 'OPEN'),
+       (2, 'Attribué', 'ASSIGNED'),
+       (3, 'En cours', 'IN_PROGRESS'),
+       (4, 'En attente', 'WAITING_CLIENT'),
+       (5, 'Résolu', 'SOLVED'),
+       (6, 'Clos', 'CLOSED');
 
 
 INSERT INTO urgency (priority_factor, designation, description)

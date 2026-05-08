@@ -1,6 +1,7 @@
 package com.mns.cda.suivimns.service.business;
 
 import com.mns.cda.suivimns.dao.HistoryDao;
+import com.mns.cda.suivimns.model.AppUser;
 import com.mns.cda.suivimns.model.History;
 import com.mns.cda.suivimns.model.Status;
 import com.mns.cda.suivimns.model.Ticket;
@@ -27,4 +28,14 @@ public class TicketStatusService {
         // temp
         History previousHistory = ticket.getHistoryList().get(1);
     }
+
+    public void initializeStatus(Ticket ticket) {}
+
+    public void changeStatus(
+            Ticket ticket,
+            Status newStatus,
+            AppUser user
+    ) {}
+
+
 }
