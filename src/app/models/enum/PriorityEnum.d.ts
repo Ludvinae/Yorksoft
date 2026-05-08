@@ -1,7 +1,7 @@
 enum PriorityEnum {
-  P1 = 'P1',
-  P2 = 'P2',
-  P3 = 'P3',
-  P4 = 'P4',
-  P5 = 'P5'
+  VERY_LOW = 'VERY_LOW',
+  LOW = 'LOW',
+  MEDIUM = 'MEDIUM',
+  HIGH = 'HIGH',
+  VERY_HIGH = 'VERY_HIGH',
 }
