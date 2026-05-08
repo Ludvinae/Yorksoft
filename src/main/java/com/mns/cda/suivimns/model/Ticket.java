@@ -1,6 +1,7 @@
 package com.mns.cda.suivimns.model;
 
 import com.mns.cda.suivimns.enumerate.PriorityEnum;
+import com.mns.cda.suivimns.enumerate.StatusEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -44,6 +45,7 @@ public class Ticket {
 
     protected Integer callDuration;
 
+    // Champs calculés
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, updatable = false)
     protected PriorityEnum initialPriority;
@@ -52,6 +54,11 @@ public class Ticket {
     @Column(nullable = false)
     protected PriorityEnum currentPriority;
 
+    @Enumerated(EnumType.STRING)
+    @Column
+    protected StatusEnum status;
+
+    // Jointures
     @ManyToOne
     @JoinColumn(name = "id_version")
     @OnDelete(action= OnDeleteAction.SET_NULL)
@@ -72,6 +79,10 @@ public class Ticket {
     @OnDelete(action = OnDeleteAction.SET_NULL)
     protected Client client;
 
+
+
+
+    // Review later to see if it's still relevant
     @OneToMany(mappedBy = "ticket")
     protected List<History> historyList;
 
