@@ -21,8 +21,8 @@ export class StatusEdit implements OnInit {
     designation: this.formBuilder.nonNullable.control('', {
       validators: [Validators.required, Validators.maxLength(63), Validators.minLength(3)],
     }),
-    code: this.formBuilder.nonNullable.control('', {
-      validators: [Validators.required, Validators.maxLength(31), Validators.minLength(3)],
+    code: this.formBuilder.nonNullable.control(null, {
+      validators: [Validators.required],
     }),
     displayOrder: this.formBuilder.nonNullable.control(0, {
       validators: [],
