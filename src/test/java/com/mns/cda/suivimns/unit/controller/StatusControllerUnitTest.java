@@ -3,6 +3,7 @@ package com.mns.cda.suivimns.unit.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.StatusController;
 import com.mns.cda.suivimns.dto.StatusDto;
+import com.mns.cda.suivimns.enumerate.StatusEnum;
 import com.mns.cda.suivimns.service.StatusService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,7 +41,7 @@ class StatusControllerUnitTest {
     @BeforeEach
     void setUp() {
         statusDto = new StatusDto(
-                1, "Test designation","OPEN", (byte) 1);
+                1, "Test designation", StatusEnum.OPEN, (byte) 1);
     }
 
     // =========================
@@ -49,7 +50,7 @@ class StatusControllerUnitTest {
     @Test
     void shouldReturn400WhenCreateInvalid() throws Exception {
 
-        StatusDto invalidDto = new StatusDto(null,"","", null);
+        StatusDto invalidDto = new StatusDto(null,"",null, null);
 
         mockMvc.perform(post("/status")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -70,7 +71,7 @@ class StatusControllerUnitTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].idStatus").value(1))
                 .andExpect(jsonPath("$[0].designation").value("Test designation"))
-                .andExpect(jsonPath("$[0].code").value("OPEN"));
+                .andExpect(jsonPath("$[0].code").value(StatusEnum.OPEN.name()));
     }
 
     // =========================
@@ -86,7 +87,7 @@ class StatusControllerUnitTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.idStatus").value(1))
                 .andExpect(jsonPath("$.designation").value("Test designation"))
-                .andExpect(jsonPath("$.code").value("OPEN"));
+                .andExpect(jsonPath("$.code").value(StatusEnum.OPEN.name()));
     }
 
     // =========================
@@ -117,7 +118,7 @@ class StatusControllerUnitTest {
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.designation").value("Test designation"))
-                .andExpect(jsonPath("$.code").value("OPEN"));
+                .andExpect(jsonPath("$.code").value(StatusEnum.OPEN.name()));
     }
 
     // =========================
@@ -163,7 +164,7 @@ class StatusControllerUnitTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.designation").value("Test designation"))
-                .andExpect(jsonPath("$.code").value("OPEN"));
+                .andExpect(jsonPath("$.code").value(StatusEnum.OPEN.name()));
     }
 
     // =========================

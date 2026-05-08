@@ -1,5 +1,6 @@
 package com.mns.cda.suivimns.model;
 
+import com.mns.cda.suivimns.enumerate.StatusEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,8 +21,9 @@ public class Status {
     @Column(nullable = false, length = 63)
     protected String designation;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 31, unique = true)
-    protected String code;
+    protected StatusEnum code;
 
     protected Byte displayOrder;
 }

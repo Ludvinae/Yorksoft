@@ -1,5 +1,6 @@
 package com.mns.cda.suivimns.dao;
 
+import com.mns.cda.suivimns.enumerate.StatusEnum;
 import com.mns.cda.suivimns.model.Status;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -10,4 +11,6 @@ import java.util.Optional;
 public interface StatusDao extends JpaRepository<Status, Integer> {
 
     Optional<Status> findByDesignation(String designation);
+
+    Optional<Status> findByCode(StatusEnum code);
 }
