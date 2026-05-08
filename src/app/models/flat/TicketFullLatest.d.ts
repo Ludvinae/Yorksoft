@@ -2,7 +2,7 @@ type TicketFullLatest = {
   id: number;
   title: string;
   modificationDate: Date;
-  finalPriority: number;
+  finalPriority: PriorityEnum;
   versionNumber: string;
   versionTypeDesignation: string;
   softwareName: string;
