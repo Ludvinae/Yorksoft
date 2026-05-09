@@ -1,4 +1,4 @@
-enum StatusEnum {
+export enum StatusEnum {
   OPEN = 'OPEN',
   ASSIGNED = 'ASSIGNED',
   IN_PROGRESS = 'IN_PROGRESS',

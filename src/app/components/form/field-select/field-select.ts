@@ -18,6 +18,16 @@ export class FieldSelect {
   @Input() placeholder: string = 'Choisir...';
   @Input() errorMessages: Record<string, string> = {};
 
+  ngOnChanges() {
+    if (!this.control) return;
+
+    if (this.options.length === 0) {
+      this.control.disable({ emitEvent: false });
+    } else {
+      this.control.enable({ emitEvent: false });
+    }
+  }
+
   get errorMessage(): string | null {
     if (!this.control.errors || !this.control.touched) return null;
 

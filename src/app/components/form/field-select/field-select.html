@@ -2,15 +2,16 @@
 <fieldset class="fieldset">
   <legend class="fieldset-legend">{{ labelKey }}</legend>
 
-  <select class="select" [formControl]="control" [disabled]="options.length === 0">
+  <select class="select" [formControl]="control">
     <option [ngValue]="null" disabled>
       {{ placeholder }}
     </option>
-
-    @for (option of options; track getValue(option)) {
-      <option [value]="getValue(option)">
-        {{ getLabel(option) }}
-      </option>
+    @if (options) {
+      @for (option of options; track getValue(option)) {
+        <option [ngValue]="getValue(option)">
+          {{ getLabel(option) }}
+        </option>
+      }
     }
   </select>
 

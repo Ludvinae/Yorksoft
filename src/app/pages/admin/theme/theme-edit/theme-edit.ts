@@ -4,13 +4,12 @@ import { ThemeFormService } from '../../../../services/form-service/theme-form-s
 import { ActivatedRoute, Router } from '@angular/router';
 import { FieldText } from '../../../../components/form/field-text/field-text';
 import { GenericFormPage } from '../../../../components/form/generic-form-page/generic-form-page';
+import { FieldSelect } from '../../../../components/form/field-select/field-select';
+import { ThemeEnum } from '../../../../models/enum/ThemeEnum';
 
 @Component({
   selector: 'app-theme-edit',
-  imports: [
-    FieldText,
-    GenericFormPage
-  ],
+  imports: [FieldText, GenericFormPage, FieldSelect],
   templateUrl: './theme-edit.html',
   styleUrl: './theme-edit.css',
 })
@@ -24,6 +23,9 @@ export class ThemeEdit implements OnInit {
     designation: this.formBuilder.nonNullable.control('', {
       validators: [Validators.required, Validators.maxLength(127), Validators.minLength(3)],
     }),
+    code: this.formBuilder.control<ThemeEnum | null>(null, {
+      validators: [Validators.required],
+    }),
     description: this.formBuilder.nonNullable.control('', {
       validators: [],
     }),
@@ -35,6 +37,11 @@ export class ThemeEdit implements OnInit {
   routeId = signal<string>('Nouvelle thématique de dysfonctionnement');
 
   isEditMode = signal(false);
+
+  themeOptions = Object.values(ThemeEnum).map((value) => ({
+    code: value,
+    label: value,
+  }));
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');

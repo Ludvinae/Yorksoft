@@ -10,13 +10,23 @@
 
   <!-- champs -->
 
-  <app-field-text labelKey="Libellé" placeholder="Dysfonctionnement"
+  <app-field-text labelKey="Libellé" placeholder="Erreur de manipulation"
                   [control]="form.controls.designation"
                   [errorMessages]="{
     required: 'Le libellé est obligatoire',
     maxlength: 'Max 127 caractères',
     minlength: 'Min 3 caractères'}">
   </app-field-text>
+
+  <app-field-select
+    labelKey="Code de dysfonctionnement"
+    [control]="form.controls.code"
+    [options]="themeOptions"
+    valueField="code"
+    labelField="label"
+    placeholder="Choisir un code"
+    [errorMessages]="{
+    required: 'Le code est obligatoire'}"/>
 
   <app-field-text labelKey="Description" placeholder="Description de la thématique"
                   [control]="form.controls.description"

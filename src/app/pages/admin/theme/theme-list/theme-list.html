@@ -3,7 +3,8 @@
 <app-generic-list
   [data]="themeList()"
   [columns]="[{ label: 'Libellé', field: 'designation' },
-              {label: 'Description', field: 'description'}]"
+              { label: 'Code', field: 'code' },
+              { label: 'Description', field: 'description'}]"
   [baseRoute]="'/admin/theme'"
   [idField]="'idTheme'"
   [itemTemplate]="themeCard"
@@ -11,6 +12,6 @@
 </app-generic-list>
 
 <ng-template #themeCard let-theme >
-  <h3 class="font-bold text-lg">{{ theme.designation }}</h3>
+  <h3 class="font-bold text-lg">{{ theme.designation }} ({{ theme.code }})</h3>
   <p>{{ theme.description }}</p>
 </ng-template>

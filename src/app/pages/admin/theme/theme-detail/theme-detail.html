@@ -3,7 +3,7 @@
   <app-detail-page [loading]="loading()" [error]="error()" [title]="label()"
                    [updateRoute]="updateRoute">
 
-    <h2 class="text-2xl font-bold">{{ theme()?.designation }}</h2>
+    <h2 class="text-2xl font-bold">{{ theme()?.designation }} ({{ theme()?.code }})</h2>
     <p>{{ theme()?.description }}</p>
 
   </app-detail-page>
