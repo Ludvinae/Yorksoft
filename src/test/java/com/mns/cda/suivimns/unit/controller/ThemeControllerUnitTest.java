@@ -3,6 +3,8 @@ package com.mns.cda.suivimns.unit.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.ThemeController;
 import com.mns.cda.suivimns.dto.ThemeDto;
+import com.mns.cda.suivimns.enumerate.StatusEnum;
+import com.mns.cda.suivimns.enumerate.ThemeEnum;
 import com.mns.cda.suivimns.service.ThemeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,7 +42,7 @@ class ThemeControllerUnitTest {
     @BeforeEach
     void setUp() {
         themeDto = new ThemeDto(
-                1, "Test designation", "Test description");
+                1, "Test designation", ThemeEnum.BUG, "Test description");
     }
 
     // =========================
@@ -49,7 +51,7 @@ class ThemeControllerUnitTest {
     @Test
     void shouldReturn400WhenCreateInvalid() throws Exception {
 
-        ThemeDto invalidDto = new ThemeDto(null,"", null);
+        ThemeDto invalidDto = new ThemeDto(null,"", ThemeEnum.BUG, null);
 
         mockMvc.perform(post("/theme")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -69,7 +71,8 @@ class ThemeControllerUnitTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].idTheme").value(1))
-                .andExpect(jsonPath("$[0].designation").value("Test designation"));
+                .andExpect(jsonPath("$[0].designation").value("Test designation"))
+                .andExpect(jsonPath("$[0].code").value(ThemeEnum.BUG.name()));
     }
 
     // =========================
@@ -84,7 +87,8 @@ class ThemeControllerUnitTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.idTheme").value(1))
-                .andExpect(jsonPath("$.designation").value("Test designation"));
+                .andExpect(jsonPath("$.designation").value("Test designation"))
+                .andExpect(jsonPath("$.code").value(ThemeEnum.BUG.name()));
     }
 
     // =========================
@@ -114,7 +118,8 @@ class ThemeControllerUnitTest {
                         .content(objectMapper.writeValueAsString(themeDto)))
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.designation").value("Test designation"));
+                .andExpect(jsonPath("$.designation").value("Test designation"))
+                .andExpect(jsonPath("$.code").value(ThemeEnum.BUG.name()));
     }
 
     // =========================
@@ -159,7 +164,8 @@ class ThemeControllerUnitTest {
                         .content(objectMapper.writeValueAsString(themeDto)))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.designation").value("Test designation"));
+                .andExpect(jsonPath("$.designation").value("Test designation"))
+                .andExpect(jsonPath("$.code").value(ThemeEnum.BUG.name()));
     }
 
     // =========================

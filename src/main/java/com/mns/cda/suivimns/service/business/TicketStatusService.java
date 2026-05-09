@@ -24,7 +24,7 @@ public class TicketStatusService {
     private final HistoryService historyService;
 
     public StatusEnum getCurrentStatus(Ticket ticket) {
-        return ticket.getStatus();
+        return ticket.getCurrentStatus();
     }
 
     private void closeCurrentHistory(Ticket ticket)
@@ -40,11 +40,11 @@ public class TicketStatusService {
     public void initializeStatus(Ticket ticket, AppUser user) throws StatusService.StatusNotFoundException {
 
         // Verifier que le ticket n'a pas déja un statut
-        if (ticket.getStatus() != null) {
+        if (ticket.getCurrentStatus() != null) {
             throw new IllegalStateException("Ticket already initialized");
         }
 
-        ticket.setStatus(StatusEnum.OPEN);
+        ticket.setCurrentStatus(StatusEnum.OPEN);
         historyService.addHistory(ticket, user, StatusEnum.OPEN);
     }
 
@@ -57,7 +57,7 @@ public class TicketStatusService {
             StatusService.StatusNotFoundException,
             TicketService.TicketNotFoundException {
 
-        StatusEnum currentStatus = ticket.getStatus();
+        StatusEnum currentStatus = ticket.getCurrentStatus();
         if (!transition.canTransition(currentStatus, newStatus)) {
             throw new StatusTransition.IllegalStatusTransitionException();
         }
@@ -69,6 +69,6 @@ public class TicketStatusService {
         historyService.addHistory(ticket, user, newStatus);
 
         // Met à jour le ticket avec le nouveau statut
-        ticket.setStatus(newStatus);
+        ticket.setCurrentStatus(newStatus);
     }
 }

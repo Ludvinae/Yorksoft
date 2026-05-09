@@ -9,6 +9,7 @@ import com.mns.cda.suivimns.mapper.TicketMapper;
 import com.mns.cda.suivimns.model.*;
 import com.mns.cda.suivimns.model.keys.ClassificationKey;
 import com.mns.cda.suivimns.service.business.TicketPriorityService;
+import com.mns.cda.suivimns.service.business.TicketStatusService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,7 @@ public class TicketService  {
     protected final TicketDao ticketDao;
     protected final TicketMapper ticketMapper;
     protected final TicketPriorityService priorityService;
+    protected final TicketStatusService statusService;
 
     private final ThemeDao themeDao;
     protected final HistoryService iHistoryService;
@@ -57,7 +59,7 @@ public class TicketService  {
         return ticketDao.returnTicketAttributed(id);
     }
 
-    public TicketDto save(TicketDto dto) {
+    public TicketDto save(TicketDto dto) throws StatusService.StatusNotFoundException {
 
         Ticket ticket = ticketMapper.toEntity(dto);
 
@@ -74,7 +76,7 @@ public class TicketService  {
         AppUser userBidon = new AppUser();
         userBidon.setIdAppUser(1);
 
-        iHistoryService.updateHistory(ticketSaved, userBidon.getIdAppUser(), "Nouveau");
+        statusService.initializeStatus(ticketSaved, userBidon);
 
         return ticketMapper.toDto(ticketSaved);
     }
@@ -106,7 +108,7 @@ public class TicketService  {
 
 
     @Transactional
-    public Ticket createTicket(TicketCreation ticketDto) {
+    public Ticket createTicket(TicketCreation ticketDto) throws StatusService.StatusNotFoundException {
 
         Ticket ticket = new Ticket();
         ticket.setTitle(ticketDto.title());
@@ -139,7 +141,7 @@ public class TicketService  {
         AppUser userBidon = new AppUser();
         userBidon.setIdAppUser(1);
 
-        iHistoryService.updateHistory(savedTicket, userBidon.getIdAppUser(), "Nouveau");
+        statusService.initializeStatus(savedTicket, userBidon);
         addThemeToTicket(savedTicket, ticketDto.themeDesignation());
 
         return savedTicket;
@@ -174,23 +176,5 @@ public class TicketService  {
 
 
 
-    // Mapping
-    public TicketResponse responseToDto(Ticket ticket) {
-        Status status = iHistoryService.getStatus(ticket.getIdTicket());
-        Theme theme = iClassificationService.getTheme(ticket.getIdTicket());
 
-        return new TicketResponse(
-                ticket.getIdTicket(),
-                ticket.getTitle(),
-                ticket.getDescription(),
-                ticket.getModificationDate(),
-                ticket.getCurrentPriority(),
-                ticket.getVersion().getVersionNumber(),
-                ticket.getVersion().getVersionType().getDesignation(),
-                ticket.getVersion().getSoftware().getName(),
-                ticket.getClient().getFirstName(),
-                ticket.getClient().getLastName(),
-                status.getDesignation(),
-                theme.getDesignation());
-    }
 }

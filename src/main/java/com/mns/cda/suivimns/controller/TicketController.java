@@ -2,6 +2,7 @@ package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.TicketDto;
 import com.mns.cda.suivimns.dto.flat.TicketFullWithLatest;
+import com.mns.cda.suivimns.service.StatusService;
 import com.mns.cda.suivimns.service.TicketService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -53,7 +54,12 @@ public class TicketController {
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PostMapping
     public ResponseEntity<TicketDto> create(@RequestBody @Valid TicketDto ticket) {
-        return new ResponseEntity<>(ticketService.save(ticket), HttpStatus.CREATED);
+        try {
+            return new ResponseEntity<>(ticketService.save(ticket), HttpStatus.CREATED);
+        } catch (StatusService.StatusNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
     }
 
 /*

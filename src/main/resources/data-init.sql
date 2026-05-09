@@ -59,15 +59,14 @@ VALUES (1, 'Bas', 'Une seule personne concernée'),
        (3, 'Elevé', 'Un département'),
        (4, 'Critique', 'Toute l''entreprise');
 
-INSERT INTO theme (designation, description)
-VALUES ('Erreur de manipulation', ''),
-       ( 'Erreur système', ''),
-       ( 'Problème réseau', ''),
-       ( 'Temps de réponse', ''),
-       ( 'Dysfonctionnement', ''),
-       ( 'Bug', ''),
-       ( 'Erreur de paramétrage', ''),
-       ('Autres cas', '');
+INSERT INTO theme (designation, code, description)
+VALUES ('Erreur de manipulation', 'HANDLING_ERROR', ''),
+       ( 'Erreur système', 'SYSTEM_ERROR', ''),
+       ( 'Problème réseau', 'NETWORK_ISSUE', ''),
+       ( 'Temps de réponse', 'RESPONSE_TIME', ''),
+       ( 'Bug', 'BUG', ''),
+       ( 'Erreur de paramétrage', 'CONFIGURATION_ERROR', ''),
+       ('Autres cas', 'OTHER_ISSUE', '');
 
 INSERT INTO ticket (title, open_date, call_duration, current_priority, initial_priority, close_date, modification_date,
                     description, id_client, id_urgency, id_impact, id_version, status)

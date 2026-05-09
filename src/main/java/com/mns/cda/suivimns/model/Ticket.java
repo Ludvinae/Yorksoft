@@ -2,6 +2,7 @@ package com.mns.cda.suivimns.model;
 
 import com.mns.cda.suivimns.enumerate.PriorityEnum;
 import com.mns.cda.suivimns.enumerate.StatusEnum;
+import com.mns.cda.suivimns.enumerate.ThemeEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -56,7 +57,11 @@ public class Ticket {
 
     @Enumerated(EnumType.STRING)
     @Column
-    protected StatusEnum status;
+    protected StatusEnum currentStatus;
+
+    @Enumerated(EnumType.STRING)
+    @Column
+    protected ThemeEnum currentTheme;
 
     // Jointures
     @ManyToOne

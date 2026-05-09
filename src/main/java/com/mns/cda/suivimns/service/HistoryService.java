@@ -85,12 +85,4 @@ public class HistoryService {
 
     }
 
-    public Status getStatus(Integer idTicket) {
-        Optional<History> history = historyDao.findLatestByTicket(idTicket);
-        if (history.isEmpty()) {
-            System.out.println("History not found");
-            return null;
-        }
-        return history.get().getStatus();
-    }
 }
