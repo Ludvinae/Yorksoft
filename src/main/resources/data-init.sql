@@ -69,7 +69,7 @@ VALUES ('Erreur de manipulation', 'HANDLING_ERROR', ''),
        ('Autres cas', 'OTHER_ISSUE', '');
 
 INSERT INTO ticket (title, open_date, call_duration, current_priority, initial_priority, close_date, modification_date,
-                    description, id_client, id_urgency, id_impact, id_version, status)
+                    description, id_client, id_urgency, id_impact, id_version, current_status)
 VALUES ('Ca marche pas', NOW(), null, 'VERY_LOW', 'LOW', null, NOW(), 'Ca marche pas', 1, 1, 1, 2, 'WAITING_CLIENT'),
        ('Indisponibilité du service de sauvegarde en ligne', NOW(), 1035, 'MEDIUM', 'MEDIUM', null, NOW(), 'Impossible d''acceder au dossiers sur le cloud dans le gestionnaire de projets.', 3, 2, 2, 3, 'OPEN');
 
@@ -93,17 +93,17 @@ VALUES ('Service Cloud indisponible', 4);
 INSERT INTO article (creation_date, modification_date, content, id_knowledge, id_technician)
 VALUES ('2024-04-06', null, 'Explication sur la résolution des problemes de sauvegarde sur le Cloud', 1, 6);
 
-INSERT INTO license (id_software, expiration_date, license_number)
-VALUES ( 1, '2027-12-02', 'azerty123456'),
-       ( 2, '2028-03-03', 'plopplop8511'),
-       ( 2,  '2030-10-10', 'plopplop1234'),
-       ( 2,  '2027-12-02', 'ploplop2345');
+INSERT INTO license (id_software, expiration_date, license_number, id_app_user)
+VALUES ( 1, '2027-12-02', 'azerty123456', 3),
+       ( 2, '2028-03-03', 'plopplop8511', 1),
+       ( 2,  '2030-10-10', 'plopplop1234', 2),
+       ( 2,  '2027-12-02', 'ploplop2345', 8);
 
 
 INSERT INTO classification (id_theme, id_ticket, affectation_date)
-VALUES (6, 1, '2026-04-11 09:12:00'),
+VALUES (5, 1, '2026-04-11 09:12:00'),
        (3, 2, now()),
-       (8, 1, now());
+       (7, 1, now());
 
 
 INSERT INTO knowledge_versions (id_version, id_knowledge)

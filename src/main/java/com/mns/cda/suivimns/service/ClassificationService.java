@@ -29,10 +29,9 @@ public class ClassificationService {
         return classificationMapper.toDtoList(classificationDao.findAll());
     }
 
-    public ClassificationDto findById(int idTicket, int idTheme) throws ClassificationService.ClassificationNotFoundException {
-        ClassificationKey key = new ClassificationKey(idTicket, idTheme);
+    public ClassificationDto findById(int idClassification) throws ClassificationService.ClassificationNotFoundException {
 
-        Classification classification = classificationDao.findById(key)
+        Classification classification = classificationDao.findById(idClassification)
                 .orElseThrow(ClassificationNotFoundException::new);
 
         return classificationMapper.toDto(classification);

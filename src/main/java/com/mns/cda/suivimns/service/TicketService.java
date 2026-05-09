@@ -156,12 +156,9 @@ public class TicketService  {
                 .orElseThrow(() -> new RuntimeException("Thématique introuvable"));
 
         // 2. créer la classification
-        ClassificationKey key = new ClassificationKey(
-                ticket.getIdTicket(),
-                theme.getIdTheme()
-        );
-
-        Classification classification = new Classification(key, LocalDateTime.now(), ticket, theme);
+        Classification classification = new Classification();
+        classification.setTicket(ticket);
+        classification.setTheme(theme);
 
         // 3. sauvegarder
         classificationDao.save(classification);

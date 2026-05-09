@@ -20,7 +20,7 @@ public class ClassificationDtoUnitTest {
 
     @Test
     public void validClassificationWithNullTicket_shouldNotBeValid() {
-        ClassificationDto classification = new ClassificationDto(null, 1, LocalDateTime.now());
+        ClassificationDto classification = new ClassificationDto(1, null, 1, LocalDateTime.now());
 
         boolean constraintExists = TestUtils.constraintViolationExists(
                 validator.validate(classification),
@@ -33,7 +33,7 @@ public class ClassificationDtoUnitTest {
 
     @Test
     public void validClassificationWithNullTheme_shouldNotBeValid() {
-        ClassificationDto classification = new ClassificationDto(1, null, LocalDateTime.now());
+        ClassificationDto classification = new ClassificationDto(1, 1, null, LocalDateTime.now());
 
         boolean constraintExists = TestUtils.constraintViolationExists(
                 validator.validate(classification),
@@ -48,7 +48,7 @@ public class ClassificationDtoUnitTest {
 
     @Test
     public void classificationWithValidData_shouldBeValid() {
-        ClassificationDto classification = new ClassificationDto(1, 1, LocalDateTime.now());
+        ClassificationDto classification = new ClassificationDto(1, 1, 1, LocalDateTime.now());
 
         Assertions.assertTrue(
                 validator.validate(classification).isEmpty(),

@@ -22,20 +22,19 @@ import java.time.LocalDateTime;
 public class Classification {
 
 
-    @EmbeddedId
-    protected ClassificationKey id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    protected Integer idClassification;
 
     @CreatedDate
     protected LocalDateTime affectationDate;
 
     @ManyToOne(optional = false)
-    @MapsId("idTicket")
     @JoinColumn(nullable = false, name = "id_ticket")
     @OnDelete(action= OnDeleteAction.CASCADE)
     protected Ticket ticket;
 
     @ManyToOne(optional = false)
-    @MapsId("idTheme")
     @JoinColumn(nullable = false, name = "id_theme")
     @OnDelete(action= OnDeleteAction.CASCADE)
     protected Theme theme;

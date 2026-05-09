@@ -21,5 +21,5 @@ public interface ClassificationDao extends JpaRepository<Classification, Integer
     Optional<Classification> findLatestByTicket(@Param("idTicket") Integer idTicket);
 
 
-    Optional<Classification> findById(ClassificationKey id);
+    Optional<Classification> findByIdClassification(Integer id);
 }

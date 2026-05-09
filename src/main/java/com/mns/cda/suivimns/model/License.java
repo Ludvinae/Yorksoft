@@ -33,7 +33,7 @@ public class License {
 
 
     @ManyToOne
-    @JoinTable(name = "license_clients")
+    @JoinColumn(name = "id_app_user")
     @OnDelete(action = OnDeleteAction.SET_NULL)
     protected Client client;
 }

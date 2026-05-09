@@ -34,11 +34,11 @@ public class ClassificationController {
     @Operation(summary = "Récupére une classification en fonction de son ID")
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Classification trouvée"),
             @ApiResponse(responseCode = "404", description = "Classification non trouvée")})
-    @GetMapping("/{idTicket}/{idTheme}")
-    public ResponseEntity<ClassificationDto> getById(@PathVariable int idTicket, @PathVariable int idTheme) {
+    @GetMapping("/{idClassification}")
+    public ResponseEntity<ClassificationDto> getById(@PathVariable int idClassification) {
 
         try {
-            return new ResponseEntity<>(classificationService.findById(idTicket, idTheme) , HttpStatus.OK);
+            return new ResponseEntity<>(classificationService.findById(idClassification) , HttpStatus.OK);
         } catch (ClassificationService.ClassificationNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

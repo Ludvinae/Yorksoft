@@ -40,7 +40,7 @@ class ClassificationControllerUnitTest {
     @BeforeEach
     void setUp() {
         classificationDto = new ClassificationDto(
-                1,1, LocalDateTime.now());
+              1, 1,1, LocalDateTime.now());
     }
 
     // =========================
@@ -64,9 +64,9 @@ class ClassificationControllerUnitTest {
     @Test
     void shouldReturnById() throws Exception {
 
-        when(classificationService.findById(1, 1)).thenReturn(classificationDto);
+        when(classificationService.findById(1)).thenReturn(classificationDto);
 
-        mockMvc.perform(get("/classification/1/1"))
+        mockMvc.perform(get("/classification/1"))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -77,10 +77,10 @@ class ClassificationControllerUnitTest {
     @Test
     void shouldReturn404WhenNotFound() throws Exception {
 
-        when(classificationService.findById(1, 1))
+        when(classificationService.findById(1))
                 .thenThrow(new ClassificationService.ClassificationNotFoundException());
 
-        mockMvc.perform(get("/classification/1/1"))
+        mockMvc.perform(get("/classification/1"))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
