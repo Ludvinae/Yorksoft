@@ -4,10 +4,13 @@ import { StatusFormService } from '../../../../services/form-service/status-form
 import { ActivatedRoute, Router } from '@angular/router';
 import { FieldText } from '../../../../components/form/field-text/field-text';
 import { GenericFormPage } from '../../../../components/form/generic-form-page/generic-form-page';
+import { ThemeEnum } from '../../../../models/enum/ThemeEnum';
+import { StatusEnum } from '../../../../models/enum/StatusEnum';
+import { FieldSelect } from '../../../../components/form/field-select/field-select';
 
 @Component({
   selector: 'app-status-edit',
-  imports: [FieldText, GenericFormPage],
+  imports: [FieldText, GenericFormPage, FieldSelect],
   templateUrl: './status-edit.html',
   styleUrl: './status-edit.css',
 })
@@ -35,6 +38,11 @@ export class StatusEdit implements OnInit {
   routeId = signal<string>('Nouveau statut de ticket');
 
   isEditMode = signal(false);
+
+  statusOptions = Object.values(StatusEnum).map((value) => ({
+    code: value,
+    label: value,
+  }));
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');

@@ -18,11 +18,15 @@
     minlength: 'Min 3 caractères'}">
   </app-field-text>
 
-  <app-field-text labelKey="Code" placeholder="IN_PROGRESS"
-                  [control]="form.controls.code"
-                  [errorMessages]="{
-    required: 'Le code est obligatoire'}">
-  </app-field-text>
+  <app-field-select
+    labelKey="Code de statut"
+    [control]="form.controls.code"
+    [options]="statusOptions"
+    valueField="code"
+    labelField="label"
+    placeholder="Choisir un code"
+    [errorMessages]="{
+    required: 'Le code est obligatoire'}"/>
 
   <app-field-text labelKey="Order d'affichage" placeholder="1"
                   [control]="form.controls.displayOrder"
