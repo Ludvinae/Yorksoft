@@ -5,6 +5,7 @@ import com.mns.cda.suivimns.controller.TicketController;
 import com.mns.cda.suivimns.dto.TicketDto;
 import com.mns.cda.suivimns.dto.flat.TicketFullWithLatest;
 import com.mns.cda.suivimns.enumerate.PriorityEnum;
+import com.mns.cda.suivimns.enumerate.ThemeEnum;
 import com.mns.cda.suivimns.service.TicketService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -48,7 +49,7 @@ class TicketControllerUnitTest {
         ticketDto = new TicketDto(
                 1, "Test title", "Test description", null,
                 null, null, 0, PriorityEnum.VERY_HIGH, PriorityEnum.VERY_HIGH,
-                1, 1, 1, 1, list, list,
+                ThemeEnum.BUG, 1, 1, 1, 1, list, list,
                 list, list);
 
         ticketFull = new TicketFullWithLatest(
