@@ -13,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ThemeService {
 
-    public static class ThemeNotFoundException extends Exception {
+    public static class ThemeNotFoundException extends RuntimeException {
     }
 
     protected final ThemeDao themeDao;

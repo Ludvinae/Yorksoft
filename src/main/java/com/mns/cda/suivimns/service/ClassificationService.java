@@ -17,7 +17,7 @@ import java.util.Optional;
 public class ClassificationService {
 
 
-    public static class ClassificationNotFoundException extends Exception {
+    public static class ClassificationNotFoundException extends RuntimeException {
     }
 
     // NEED REWORKING TO ACCOUNT FOR ID FOR BOTH LINKED TABLES

@@ -2,12 +2,15 @@ package com.mns.cda.suivimns.service;
 
 import com.mns.cda.suivimns.dao.*;
 import com.mns.cda.suivimns.dto.TicketDto;
+import com.mns.cda.suivimns.dto.flat.TicketAssignmentDto;
 import com.mns.cda.suivimns.dto.flat.TicketCreation;
 import com.mns.cda.suivimns.dto.flat.TicketFullWithLatest;
 import com.mns.cda.suivimns.dto.flat.TicketResponse;
 import com.mns.cda.suivimns.mapper.TicketMapper;
 import com.mns.cda.suivimns.model.*;
 import com.mns.cda.suivimns.model.keys.ClassificationKey;
+import com.mns.cda.suivimns.service.business.StatusTransition;
+import com.mns.cda.suivimns.service.business.TicketAssignmentService;
 import com.mns.cda.suivimns.service.business.TicketPriorityService;
 import com.mns.cda.suivimns.service.business.TicketStatusService;
 import jakarta.transaction.Transactional;
@@ -22,22 +25,23 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TicketService  {
 
-    public static class TicketNotFoundException extends Exception {
+    public static class TicketNotFoundException extends RuntimeException {
     }
 
-    protected final TicketDao ticketDao;
     protected final TicketMapper ticketMapper;
     protected final TicketPriorityService priorityService;
     protected final TicketStatusService statusService;
+    protected final TicketAssignmentService  assignmentService;
 
+    protected final TicketDao ticketDao;
     private final ThemeDao themeDao;
-    protected final HistoryService iHistoryService;
     protected final ClassificationDao classificationDao;
-    protected final ClassificationService iClassificationService;
     protected final ClientDao clientDao;
     protected final ImpactDao impactDao;
     protected final UrgencyDao urgencyDao;
     protected final VersionDao versionDao;
+    protected final ManagerDao managerDao;
+    protected final TechnicianDao technicianDao;
 
     public List<TicketDto> findAll() {
         return ticketMapper.toDtoList(ticketDao.findAll());
@@ -172,6 +176,28 @@ public class TicketService  {
     }
 
 
+    /**
+     * Gère l'assignation d'un ticket
+     * Verifie que le ticket puisse transitionner vers le statut 'ASSIGNED'
+     * Met à jour le ticket avec le technicien et le manager actuel
+     * @param idTicket
+     * @param assignmentDto
+     * @return
+     */
+    public TicketDto assignTicket(Integer idTicket, TicketAssignmentDto assignmentDto) {
 
+        // Récupère le ticket par l'id
+        Ticket ticket = ticketDao.findById(idTicket)
+                .orElseThrow(TicketService.TicketNotFoundException::new);
 
+        // Récupère le technicien et le manager
+        Manager manager = managerDao.findById(assignmentDto.idManager())
+                .orElseThrow(ManagerService.ManagerNotFoundException::new);
+        Technician technician = technicianDao.findById(assignmentDto.idTechnician())
+                .orElseThrow(TechnicianService.TechnicianNotFoundException::new);
+
+        Ticket ticketAssigned = assignmentService.assignTicket(ticket, manager, technician);
+
+        return ticketMapper.toDto(ticketAssigned);
+    }
 }

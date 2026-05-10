@@ -13,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StatusService {
 
-    public static class StatusNotFoundException extends Exception {
+    public static class StatusNotFoundException extends RuntimeException {
     }
 
     protected final StatusDao statusDao;

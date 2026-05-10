@@ -14,7 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SoftwareService {
 
-    public static class SoftwareNotFoundException extends Exception {
+    public static class SoftwareNotFoundException extends RuntimeException {
     }
 
     protected final SoftwareDao softwareDao;

@@ -13,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ImpactService  {
 
-    public static class ImpactNotFoundException extends Exception {
+    public static class ImpactNotFoundException extends RuntimeException {
     }
 
     protected final ImpactDao impactDao;

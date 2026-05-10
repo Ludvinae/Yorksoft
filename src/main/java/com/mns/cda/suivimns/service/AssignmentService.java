@@ -13,10 +13,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AssignmentService {
 
-    public static class AssignmentNotFoundException extends Exception {
+    public static class AssignmentNotFoundException extends RuntimeException {
     }
 
-    public static class AssignmentBadRequestException extends Exception {
+    public static class AssignmentConflictException extends RuntimeException {
     }
 
     protected final AssignmentDao assignmentDao;

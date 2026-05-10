@@ -23,15 +23,18 @@ public class TicketStatusService {
     private final StatusTransition transition;
     private final HistoryService historyService;
 
+    public static class MissingCurrentHistoryException extends RuntimeException {
+    }
+
     public StatusEnum getCurrentStatus(Ticket ticket) {
         return ticket.getCurrentStatus();
     }
 
     private void closeCurrentHistory(Ticket ticket)
-            throws TicketService.TicketNotFoundException {
+            throws MissingCurrentHistoryException {
 
         History currentHistory = historyDao.findLatestByTicket(ticket.getIdTicket())
-                .orElseThrow(TicketService.TicketNotFoundException::new);
+                .orElseThrow(MissingCurrentHistoryException::new);
 
         currentHistory.setEndDate(LocalDateTime.now());
     }
@@ -55,7 +58,7 @@ public class TicketStatusService {
             AppUser user
     ) throws StatusTransition.IllegalStatusTransitionException,
             StatusService.StatusNotFoundException,
-            TicketService.TicketNotFoundException {
+            MissingCurrentHistoryException {
 
         StatusEnum currentStatus = ticket.getCurrentStatus();
         if (!transition.canTransition(currentStatus, newStatus)) {

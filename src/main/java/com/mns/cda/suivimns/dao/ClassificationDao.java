@@ -15,7 +15,7 @@ public interface ClassificationDao extends JpaRepository<Classification, Integer
     @Query("""
         SELECT c FROM Classification c
         WHERE c.ticket.idTicket = :idTicket
-        ORDER BY c.affectationDate DESC 
+        ORDER BY c.affectationDate DESC
         LIMIT 1
         """)
     Optional<Classification> findLatestByTicket(@Param("idTicket") Integer idTicket);

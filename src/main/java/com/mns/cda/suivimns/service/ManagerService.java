@@ -17,7 +17,7 @@ import java.util.Objects;
 public class ManagerService  {
 
     // Classe d'erreur
-    public static class ManagerNotFoundException extends Exception {}
+    public static class ManagerNotFoundException extends AppUserService.AppUserNotFoundException {}
 
     public static class BadPasswordException extends Exception {}
 

@@ -13,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UrgencyService  {
 
-    public static class UrgencyNotFoundException extends Exception {
+    public static class UrgencyNotFoundException extends RuntimeException {
     }
 
     protected final UrgencyDao urgencyDao;

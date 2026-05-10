@@ -63,6 +63,14 @@ public class Ticket {
     @Column
     protected ThemeEnum currentTheme;
 
+    @ManyToOne()
+    @JoinColumn(name = "current_technician")
+    protected Technician currentTechnician;
+
+    @ManyToOne()
+    @JoinColumn(name = "current_manager")
+    protected Manager currentManager;
+
     // Jointures
     @ManyToOne
     @JoinColumn(name = "id_version")

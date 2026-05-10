@@ -14,7 +14,7 @@ import java.util.List;
 public class CommentService  {
 
 
-    public static class CommentNotFoundException extends Exception {
+    public static class CommentNotFoundException extends RuntimeException {
     }
 
     protected final CommentDao commentDao;

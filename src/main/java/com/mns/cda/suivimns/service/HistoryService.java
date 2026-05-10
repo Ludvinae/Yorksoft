@@ -23,7 +23,7 @@ import java.util.Optional;
 public class HistoryService {
 
 
-    public static class HistoryNotFoundException extends Exception {
+    public static class HistoryNotFoundException extends RuntimeException {
     }
 
     protected final HistoryDao historyDao;

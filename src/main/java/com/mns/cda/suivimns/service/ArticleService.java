@@ -13,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ArticleService {
 
-    public static class ArticleNotFoundException extends Exception {
+    public static class ArticleNotFoundException extends RuntimeException {
     }
 
     protected final ArticleDao articleDao;

@@ -14,7 +14,7 @@ import java.util.List;
 public class VersionTypeService {
 
     // Custom exception
-    public static class VersionTypeNotFoundException extends Exception {}
+    public static class VersionTypeNotFoundException extends RuntimeException {}
 
     protected final VersionTypeDao versionTypeDao;
     private final VersionTypeMapper typeMapper;

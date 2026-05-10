@@ -1,5 +1,11 @@
 package com.mns.cda.suivimns.config;
 
+import com.mns.cda.suivimns.dto.config.ErrorResponseDto;
+import com.mns.cda.suivimns.service.AppUserService;
+import com.mns.cda.suivimns.service.AssignmentService;
+import com.mns.cda.suivimns.service.TicketService;
+import com.mns.cda.suivimns.service.business.StatusTransition;
+import com.mns.cda.suivimns.service.business.TicketStatusService;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,24 +23,84 @@ public class GlobalExceptionInterceptor {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, String> constraintViolationInterceptor(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
+    public ErrorResponseDto constraintViolationInterceptor(MethodArgumentNotValidException ex) {
+        StringBuilder message = new StringBuilder();
 
         for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
-            errors.put(fieldError.getField(), fieldError.getDefaultMessage());
+            message.append(fieldError.getField())
+                    .append(": ")
+                    .append(fieldError.getDefaultMessage())
+                    .append(" | ");
         }
 
-        return errors;
+        return new ErrorResponseDto(
+                400, "BAD_REQUEST", message.toString()
+        );
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public Map<String, String> constraintViolationDatabase(DataIntegrityViolationException ex) {
-        return Map.of("Erreur", "Erreur de contrainte");
+    public ErrorResponseDto constraintViolationDatabase(DataIntegrityViolationException ex) {
+        return new ErrorResponseDto(
+                409, "CONFLICT", "Erreur de contrainte");
     }
 
     @ExceptionHandler(IllegalStateException.class)
     public ResponseEntity<String> handleIllegalState(IllegalStateException ex) {
         return ResponseEntity.badRequest().body(ex.getMessage());
+    }
+
+    @ExceptionHandler(TicketService.TicketNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponseDto handleTicketNotFound(
+            TicketService.TicketNotFoundException ex
+    ) {
+        return new ErrorResponseDto(
+                404,"TICKET_NOT_FOUND", "Ticket introuvable"
+        );
+    }
+
+    @ExceptionHandler(StatusTransition.IllegalStatusTransitionException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponseDto handleIllegalTransition(
+            StatusTransition.IllegalStatusTransitionException ex
+    ) {
+        return new ErrorResponseDto(
+                400,"BAD_STATUS_REQUEST", "Transition de statut invalide"
+        );
+    }
+
+    @ExceptionHandler(TicketStatusService.MissingCurrentHistoryException.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public ErrorResponseDto handleMissingCurrentHistory(
+            TicketStatusService.MissingCurrentHistoryException ex
+    ) {
+        return new ErrorResponseDto(
+                422,"UNPROCESSABLE_HISTORY", "Historique courant introuvable"
+        );
+    }
+
+    @ExceptionHandler(AppUserService.AppUserNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponseDto handleAppUserNotFound(
+            AppUserService.AppUserNotFoundException ex
+    ) {
+        return new ErrorResponseDto(
+                404,
+                "USER_NOT_FOUND",
+                "L'utilisateur n'existe pas"
+        );
+    }
+
+    @ExceptionHandler(AssignmentService.AssignmentConflictException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorResponseDto handleTechnicianAlreadyAssigned(
+            AssignmentService.AssignmentConflictException ex
+    ) {
+        return new ErrorResponseDto(
+                409,
+                "ASSIGNMENT_CONFLICT",
+                "Le technicien est déja attribué"
+        );
     }
 }

@@ -17,7 +17,7 @@ import java.util.Objects;
 public class TechnicianService  {
 
     // Classe d'erreur
-    public static class TechnicianNotFoundException extends Exception {}
+    public static class TechnicianNotFoundException extends AppUserService.AppUserNotFoundException {}
 
     public static class BadPasswordException extends Exception {}
 

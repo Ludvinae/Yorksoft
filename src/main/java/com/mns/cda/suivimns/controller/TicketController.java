@@ -1,9 +1,9 @@
 package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.TicketDto;
+import com.mns.cda.suivimns.dto.flat.TicketAssignmentDto;
 import com.mns.cda.suivimns.dto.flat.TicketFullWithLatest;
-import com.mns.cda.suivimns.service.StatusService;
-import com.mns.cda.suivimns.service.TicketService;
+import com.mns.cda.suivimns.service.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -49,7 +49,7 @@ public class TicketController {
     }
 
 
-    @Operation(summary = "Crée une nouvelle ticket")
+    @Operation(summary = "Crée un nouveau ticket")
     @ApiResponses({@ApiResponse(responseCode = "201", description = "Ticket crée"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PostMapping
@@ -59,7 +59,6 @@ public class TicketController {
         } catch (StatusService.StatusNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
     }
 
 /*
@@ -107,7 +106,7 @@ public class TicketController {
         }
     }
     
-    /// ////////
+    // /////////
 
     @Operation(
             summary = "Lister les tickets avec détails complets",
@@ -137,6 +136,17 @@ public class TicketController {
     }
 
 
+    //
+
+    @Operation(summary = "Assigne un ticket à un technicien par un manager")
+    @ApiResponses({@ApiResponse(responseCode = "200", description = "Ticket attribué"),
+            @ApiResponse(responseCode = "400", description = "Données invalides"),
+            @ApiResponse(responseCode = "404", description = "Ressource inexistante"),
+            @ApiResponse(responseCode = "409", description = "Ticket déja attribué à ce technicien")})
+    @PostMapping("/{id}/assign")
+    public ResponseEntity<TicketDto> assign(@PathVariable Integer id, @RequestBody @Valid TicketAssignmentDto assignment) {
+        return new ResponseEntity<>(ticketService.assignTicket(id, assignment), HttpStatus.OK);
+    }
 
 
 

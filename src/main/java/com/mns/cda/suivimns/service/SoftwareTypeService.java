@@ -13,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SoftwareTypeService  {
 
-    public static class SoftwareTypeNotFoundException extends Exception {
+    public static class SoftwareTypeNotFoundException extends RuntimeException {
     }
 
     protected final SoftwareTypeDao softwareTypeDao;

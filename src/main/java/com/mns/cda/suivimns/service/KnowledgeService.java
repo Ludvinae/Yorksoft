@@ -13,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class KnowledgeService  {
 
-    public static class KnowledgeNotFoundException extends Exception {
+    public static class KnowledgeNotFoundException extends RuntimeException {
     }
 
     protected final KnowledgeDao knowledgeDao;

@@ -16,7 +16,7 @@ import java.util.Objects;
 public class AppUserService {
 
     // Classe d'erreur
-    public static class AppUserNotFoundException extends Exception {
+    public static class AppUserNotFoundException extends RuntimeException {
     }
 
     public static class EmailAlreadyUsedException extends Exception {}

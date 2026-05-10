@@ -13,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class LicenseService  {
 
-    public static class LicenseNotFoundException extends Exception {
+    public static class LicenseNotFoundException extends RuntimeException {
     }
 
     protected final LicenseDao licenseDao;
