@@ -1,3 +1,5 @@
+import { ThemeEnum } from './enum/ThemeEnum';
+
 type Ticket = {
   idTicket: number;
   title: string; // 3 <= size <= 63
@@ -8,6 +10,7 @@ type Ticket = {
   callDuration: number | null;
   initialPriority: PriorityEnum;
   finalPriority: PriorityEnum;
+  currentTheme: ThemeEnum;
   idVersion: number | null;
   idClient: number;
   idImpact: number;
