@@ -9,10 +9,7 @@ import com.mns.cda.suivimns.dto.flat.TicketResponse;
 import com.mns.cda.suivimns.mapper.TicketMapper;
 import com.mns.cda.suivimns.model.*;
 import com.mns.cda.suivimns.model.keys.ClassificationKey;
-import com.mns.cda.suivimns.service.business.StatusTransition;
-import com.mns.cda.suivimns.service.business.TicketAssignmentService;
-import com.mns.cda.suivimns.service.business.TicketPriorityService;
-import com.mns.cda.suivimns.service.business.TicketStatusService;
+import com.mns.cda.suivimns.service.business.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,6 +29,7 @@ public class TicketService  {
     protected final TicketPriorityService priorityService;
     protected final TicketStatusService statusService;
     protected final TicketAssignmentService  assignmentService;
+    protected final TicketClassificationService classificationService;
 
     protected final TicketDao ticketDao;
     private final ThemeDao themeDao;
@@ -81,6 +79,7 @@ public class TicketService  {
         userBidon.setIdAppUser(1);
 
         statusService.initializeStatus(ticketSaved, userBidon);
+        classificationService.classify(ticketSaved, dto.theme());
 
         return ticketMapper.toDto(ticketSaved);
     }

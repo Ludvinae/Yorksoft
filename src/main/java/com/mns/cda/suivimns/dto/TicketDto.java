@@ -1,6 +1,8 @@
 package com.mns.cda.suivimns.dto;
 
 import com.mns.cda.suivimns.enumerate.PriorityEnum;
+import com.mns.cda.suivimns.enumerate.ThemeEnum;
+import com.mns.cda.suivimns.model.Theme;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -19,6 +21,7 @@ public record TicketDto(
         Integer callDuration,
         PriorityEnum initialPriority,
         PriorityEnum currentPriority,
+        ThemeEnum theme,
         Integer idVersion,
         @NotNull(groups = {OnCreate.class}) Integer idClient,
         @NotNull(groups = {OnCreate.class}) Integer idImpact,

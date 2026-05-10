@@ -1,9 +1,12 @@
 package com.mns.cda.suivimns.service.business;
 
 import com.mns.cda.suivimns.dao.ClassificationDao;
+import com.mns.cda.suivimns.dao.ThemeDao;
+import com.mns.cda.suivimns.enumerate.ThemeEnum;
 import com.mns.cda.suivimns.model.Classification;
 import com.mns.cda.suivimns.model.Theme;
 import com.mns.cda.suivimns.model.Ticket;
+import com.mns.cda.suivimns.service.ThemeService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,8 +20,12 @@ import org.springframework.stereotype.Service;
 public class TicketClassificationService {
 
     private final ClassificationDao classificationDao;
+    private final ThemeDao themeDao;
 
-    public void classify(Ticket ticket, Theme theme) {
+    public void classify(Ticket ticket, ThemeEnum themeEnum) {
+
+        Theme theme = themeDao.findByCode(themeEnum)
+                .orElseThrow(ThemeService.ThemeNotFoundException::new);
 
         if (theme.getCode().equals(ticket.getCurrentTheme())) {
             return;
