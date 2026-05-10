@@ -18,4 +18,7 @@ public interface AssignmentDao extends JpaRepository<Assignment, Integer> {
         AND a.endDate IS null
         """)
     Optional<Assignment> findLatestByTicket(@Param("idTicket") Integer idTicket);
+
+    // Equivalent a la query findLatestByTicket
+    Optional<Assignment> findByTicketIdTicketAndEndDateIsNull(Integer idTicket);
 }

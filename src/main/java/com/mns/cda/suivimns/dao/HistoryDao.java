@@ -18,4 +18,7 @@ public interface HistoryDao extends JpaRepository<History, Integer> {
         AND h.endDate IS null
         """)
     Optional<History> findLatestByTicket(@Param("idTicket") Integer idTicket);
+
+    // Equivalent a la query findLatestByTicket
+    Optional<History> findByTicketIdTicketAndEndDateIsNull(Integer idTicket);
 }
