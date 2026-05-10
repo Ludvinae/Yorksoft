@@ -79,7 +79,7 @@ public class TicketService  {
         userBidon.setIdAppUser(1);
 
         statusService.initializeStatus(ticketSaved, userBidon);
-        classificationService.classify(ticketSaved, dto.theme());
+        classificationService.classify(ticketSaved, dto.currentTheme());
 
         return ticketMapper.toDto(ticketSaved);
     }

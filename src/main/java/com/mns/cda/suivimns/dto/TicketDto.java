@@ -21,7 +21,7 @@ public record TicketDto(
         Integer callDuration,
         PriorityEnum initialPriority,
         PriorityEnum currentPriority,
-        ThemeEnum theme,
+        ThemeEnum currentTheme,
         Integer idVersion,
         @NotNull(groups = {OnCreate.class}) Integer idClient,
         @NotNull(groups = {OnCreate.class}) Integer idImpact,
