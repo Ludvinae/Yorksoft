@@ -12,7 +12,6 @@ import com.mns.cda.suivimns.service.workflow.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
@@ -34,7 +33,7 @@ public class TicketService  {
     protected final TicketProgressService progressService;
     protected final TicketSolvedService solvedService;
     protected final TicketWaitService waitingService;
-    protected final ActiveTime activeTime;
+    protected final ActiveTimeService activeTime;
 
     protected final TicketDao ticketDao;
     private final ThemeDao themeDao;
