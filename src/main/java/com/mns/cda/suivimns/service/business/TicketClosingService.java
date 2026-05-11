@@ -2,7 +2,6 @@ package com.mns.cda.suivimns.service.business;
 
 import com.mns.cda.suivimns.enumerate.StatusEnum;
 import com.mns.cda.suivimns.model.AppUser;
-import com.mns.cda.suivimns.model.Assignment;
 import com.mns.cda.suivimns.model.Ticket;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -20,13 +19,13 @@ public class TicketClosingService {
     private final StatusTransition transition;
     private final TicketStatusService statusService;
 
-    public boolean isEditable(Ticket ticket) {
-        return (ticket.getCurrentStatus() != StatusEnum.CLOSED);
+    public static boolean isNotEditable(Ticket ticket) {
+        return (ticket.getCurrentStatus() == StatusEnum.CLOSED);
     }
 
     @Transactional
     public Ticket closeTicket(Ticket ticket, AppUser user, String closingReason) {
-        if (ticket.getCurrentStatus() == StatusEnum.CLOSED) {
+        if (isNotEditable(ticket)) {
             throw new TicketAlreadyClosedException();
         }
 

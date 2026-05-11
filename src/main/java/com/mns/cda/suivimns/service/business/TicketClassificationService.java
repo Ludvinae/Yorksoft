@@ -11,6 +11,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import static com.mns.cda.suivimns.service.business.TicketClosingService.isNotEditable;
+
 /**
  * Service used when changing the theme of a Ticket
  */
@@ -23,6 +25,10 @@ public class TicketClassificationService {
     private final ThemeDao themeDao;
 
     public void classify(Ticket ticket, ThemeEnum themeEnum) {
+
+        if (isNotEditable(ticket)) {
+            throw new TicketClosingService.TicketNotEditableException();
+        }
 
         Theme theme = themeDao.findByCode(themeEnum)
                 .orElseThrow(ThemeService.ThemeNotFoundException::new);

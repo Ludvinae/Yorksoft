@@ -5,15 +5,14 @@ import com.mns.cda.suivimns.dto.TicketDto;
 import com.mns.cda.suivimns.dto.flat.*;
 import com.mns.cda.suivimns.mapper.TicketMapper;
 import com.mns.cda.suivimns.model.*;
-import com.mns.cda.suivimns.model.keys.ClassificationKey;
 import com.mns.cda.suivimns.service.business.*;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
+
+import static com.mns.cda.suivimns.service.business.TicketClosingService.isNotEditable;
 
 @Service
 @RequiredArgsConstructor
@@ -86,9 +85,14 @@ public class TicketService  {
         ticketDao.delete(ticket);
     }
 
-    public TicketDto update(int id, TicketDto ticketToUpdate) throws TicketNotFoundException {
+    public TicketDto update(int id, TicketDto ticketToUpdate)
+            throws TicketNotFoundException {
         Ticket currentTicket = ticketDao.findById(id)
                 .orElseThrow(TicketService.TicketNotFoundException::new);
+
+        if (isNotEditable(currentTicket)) {
+            throw new TicketClosingService.TicketNotEditableException();
+        }
 
         ticketMapper.updateEntityFromDto(ticketToUpdate, currentTicket);
 

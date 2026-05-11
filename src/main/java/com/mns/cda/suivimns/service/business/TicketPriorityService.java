@@ -5,13 +5,20 @@ import com.mns.cda.suivimns.model.Ticket;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import static com.mns.cda.suivimns.service.business.TicketClosingService.isNotEditable;
+
 @Service
 @RequiredArgsConstructor
 public class TicketPriorityService {
 
     private final PriorityCalculator calculator;
+    private final TicketClosingService closingService;
 
     public void recalculateCurrentPriority(Ticket ticket) {
+        if (isNotEditable(ticket)) {
+            throw new TicketClosingService.TicketNotEditableException();
+        }
+
         ticket.setCurrentPriority(compute(ticket));
     }
 
