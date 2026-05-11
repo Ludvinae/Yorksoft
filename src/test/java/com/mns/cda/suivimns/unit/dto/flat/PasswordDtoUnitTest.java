@@ -1,4 +1,4 @@
-package com.mns.cda.suivimns.unit.dto;
+package com.mns.cda.suivimns.unit.dto.flat;
 
 import com.mns.cda.suivimns.TestUtils;
 import com.mns.cda.suivimns.dto.flat.PasswordDto;
