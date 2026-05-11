@@ -27,20 +27,13 @@ public class TicketProgressService {
             throw new UnauthorizedTechnicianException();
         }
 
-        if (canTransition(ticket.getCurrentStatus(), StatusEnum.IN_PROGRESS)) {
-            throw new StatusTransition.IllegalStatusTransitionException();
-        }
-
         return statusService.changeStatus(ticket, StatusEnum.IN_PROGRESS, technician, statusReason);
     }
 
+    @Transactional
     public Ticket resumeTicket(Ticket ticket, AppUser user, String statusReason) {
         if (ticket.getCurrentTechnician() == null) {
             throw new UnauthorizedTechnicianException();
-        }
-
-        if (canTransition(ticket.getCurrentStatus(), StatusEnum.IN_PROGRESS)) {
-            throw new StatusTransition.IllegalStatusTransitionException();
         }
 
         return statusService.changeStatus(ticket, StatusEnum.IN_PROGRESS, user, statusReason);

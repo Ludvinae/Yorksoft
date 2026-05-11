@@ -27,7 +27,7 @@ public class StatusTransition {
                             StatusEnum.SOLVED, StatusEnum.REJECTED, StatusEnum.ASSIGNED).contains(next);
 
             case WAITING_CLIENT, WAITING_THIRD_PARTY ->
-                    Set.of(StatusEnum.IN_PROGRESS, StatusEnum.SOLVED).contains(next);
+                    Set.of(StatusEnum.IN_PROGRESS).contains(next);
 
             case SOLVED ->
                     Set.of(StatusEnum.CLOSED, StatusEnum.IN_PROGRESS).contains(next);

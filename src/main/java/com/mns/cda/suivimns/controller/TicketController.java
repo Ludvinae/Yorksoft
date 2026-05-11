@@ -36,7 +36,7 @@ public class TicketController {
 
 
     @GetMapping("/{id}/active-time")
-    public Integer getActiveTimeInSeconds(@PathVariable Integer id) {
+    public Long getActiveTimeInSeconds(@PathVariable Integer id) {
         return ticketService.getActiveTimeInSeconds(id);
     }
 
@@ -185,7 +185,7 @@ public class TicketController {
             @PathVariable Integer id,
             @RequestBody TicketProgressDto dto
     ) {
-        return ticketService.takeTicketInCharge(id, dto);
+        return ticketService.resumeTicket(id, dto);
     }
 
 

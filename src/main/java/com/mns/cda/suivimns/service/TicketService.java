@@ -12,6 +12,7 @@ import com.mns.cda.suivimns.service.workflow.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
@@ -238,7 +239,13 @@ public class TicketService  {
         return ticketMapper.toDto(ticketChanged);
     }
 
-    public Integer getActiveTimeInSeconds(Integer idTicket) {
-        return activeTime.getActiveTimeInSeconds(idTicket);
+    public Long getActiveTimeInSeconds(Integer idTicket) {
+        List<StatusEnum> statuses = List.of(
+                StatusEnum.OPEN,
+                StatusEnum.ASSIGNED,
+                StatusEnum.IN_PROGRESS
+        );
+
+        return activeTime.getActiveTimeInSeconds(idTicket, statuses);
     }
 }

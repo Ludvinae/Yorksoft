@@ -69,9 +69,16 @@ VALUES ('Erreur de manipulation', 'HANDLING_ERROR', ''),
        ('Autres cas', 'OTHER_ISSUE', '');
 
 INSERT INTO ticket (title, open_date, call_duration, current_priority, initial_priority, close_date, modification_date,
-                    description, id_client, id_urgency, id_impact, id_version, current_status)
-VALUES ('Ca marche pas', NOW(), null, 'VERY_LOW', 'LOW', null, NOW(), 'Ca marche pas', 1, 1, 1, 2, 'WAITING_CLIENT'),
-       ('Indisponibilité du service de sauvegarde en ligne', NOW(), 1035, 'MEDIUM', 'MEDIUM', null, NOW(), 'Impossible d''acceder au dossiers sur le cloud dans le gestionnaire de projets.', 3, 2, 2, 3, 'OPEN');
+                    description, id_client, id_urgency, id_impact, id_version, current_status, current_theme,
+                    id_current_manager, id_current_technician)
+VALUES ('Ca marche pas', NOW(), null, 'VERY_LOW', 'LOW', null, NOW(),
+        'Ca marche pas', 1, 1, 1, 2, 'WAITING_CLIENT', 'OTHER_ISSUE',
+        4, 5),
+       ('Indisponibilité du service de sauvegarde en ligne', NOW(), 1035, 'MEDIUM',
+        'MEDIUM', null, NOW(),
+        'Impossible d''acceder au dossiers sur le cloud dans le gestionnaire de projets.', 3, 2,
+        2, 3, 'OPEN', 'NETWORK_ISSUE', 4, 5);
+
 
 INSERT INTO history (id_status, id_ticket, id_app_user, start_date, end_date)
 VALUES (1, 1, 1, '2026-04-11 09:12:00', '2026-04-11 09:27:00'),

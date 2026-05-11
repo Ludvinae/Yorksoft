@@ -1,5 +1,6 @@
 package com.mns.cda.suivimns.dao;
 
+import com.mns.cda.suivimns.enumerate.StatusEnum;
 import com.mns.cda.suivimns.model.History;
 import com.mns.cda.suivimns.model.Ticket;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -29,11 +30,7 @@ public interface HistoryDao extends JpaRepository<History, Integer> {
             SELECT h
             FROM History h
             WHERE h.ticket.idTicket = :idTicket
-            AND h.status.code != 'WAITING_CLIENT'
-            AND h.status.code != 'WAITING_THIRD_PARTY'
-            AND h.status.code != 'CLOSEDT'
-            AND h.status.code != 'SOLVED'
-            AND h.status.code != 'REJECTED'
+            AND h.status.code IN :statuses
     """)
-    List<History> findAllActiveByIdTicket(@Param("idTicket") Integer idTicket);
+    List<History> findAllActiveByIdTicket(@Param("idTicket") Integer idTicket, @Param("statuses") List<StatusEnum> statuses);
 }
