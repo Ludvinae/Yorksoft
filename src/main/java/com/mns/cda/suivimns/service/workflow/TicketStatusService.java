@@ -13,8 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
-import static com.mns.cda.suivimns.service.workflow.StatusTransition.canTransition;
-
 @Service
 @RequiredArgsConstructor
 public class TicketStatusService {
@@ -63,7 +61,7 @@ public class TicketStatusService {
             MissingCurrentHistoryException {
 
         StatusEnum currentStatus = ticket.getCurrentStatus();
-        if (!canTransition(currentStatus, newStatus)) {
+        if (!transition.canTransition(currentStatus, newStatus)) {
             throw new StatusTransition.IllegalStatusTransitionException();
         }
 

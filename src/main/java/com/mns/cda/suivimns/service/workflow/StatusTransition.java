@@ -13,7 +13,7 @@ public class StatusTransition {
 
     public static class IllegalStatusTransitionException extends RuntimeException {}
 
-    public static boolean canTransition(StatusEnum current, StatusEnum next) {
+    public boolean canTransition(StatusEnum current, StatusEnum next) {
         return switch (current) {
 
             case OPEN ->

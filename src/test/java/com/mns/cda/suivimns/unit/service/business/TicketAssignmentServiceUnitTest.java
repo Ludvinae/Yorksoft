@@ -53,6 +53,7 @@ public class TicketAssignmentServiceUnitTest {
         manager = new Manager();
 
         technician = new Technician();
+        technician.setIdAppUser(5);
     }
 
     // =========================================================
@@ -67,10 +68,20 @@ public class TicketAssignmentServiceUnitTest {
                 StatusEnum.ASSIGNED
         )).thenReturn(true);
 
+        when(ticketStatusService.changeStatus(
+                ticket,
+                StatusEnum.ASSIGNED,
+                manager,
+                "Test reason"
+        )).thenReturn(ticket);
+
+        Technician newTechnician = new Technician();
+        newTechnician.setIdAppUser(9);
+
         Ticket result = service.assignTicket(
                 ticket,
                 manager,
-                technician,
+                newTechnician,
                 "Test reason"
         );
 
@@ -83,7 +94,7 @@ public class TicketAssignmentServiceUnitTest {
 
         assertEquals(ticket, savedAssignment.getTicket());
         assertEquals(manager, savedAssignment.getManager());
-        assertEquals(technician, savedAssignment.getTechnician());
+        assertEquals(newTechnician, savedAssignment.getTechnician());
 
         verify(ticketStatusService).changeStatus(
                 ticket,
@@ -92,7 +103,7 @@ public class TicketAssignmentServiceUnitTest {
                 "Test reason"
         );
 
-        assertEquals(technician, ticket.getCurrentTechnician());
+        assertEquals(newTechnician, ticket.getCurrentTechnician());
         assertEquals(manager, ticket.getCurrentManager());
 
         assertEquals(ticket, result);
@@ -133,6 +144,7 @@ public class TicketAssignmentServiceUnitTest {
                 StatusEnum.ASSIGNED
         )).thenReturn(true);
 
+
         assertThrows(
                 AssignmentService.AssignmentConflictException.class,
                 () -> service.assignTicket(
@@ -161,6 +173,13 @@ public class TicketAssignmentServiceUnitTest {
                 StatusEnum.ASSIGNED
         )).thenReturn(true);
 
+        when(ticketStatusService.changeStatus(
+                ticket,
+                StatusEnum.ASSIGNED,
+                manager,
+                "Test reason"
+        )).thenReturn(ticket);
+
         when(assignmentDao.findLatestByTicket(1))
                 .thenReturn(Optional.of(existingAssignment));
 
@@ -187,6 +206,13 @@ public class TicketAssignmentServiceUnitTest {
                 StatusEnum.ASSIGNED
         )).thenReturn(true);
 
+        when(ticketStatusService.changeStatus(
+                ticket,
+                StatusEnum.ASSIGNED,
+                manager,
+                "Test reason"
+        )).thenReturn(ticket);
+
         when(assignmentDao.findLatestByTicket(1))
                 .thenReturn(Optional.empty());
 
@@ -210,6 +236,13 @@ public class TicketAssignmentServiceUnitTest {
                 StatusEnum.ASSIGNED
         )).thenReturn(true);
 
+        when(ticketStatusService.changeStatus(
+                ticket,
+                StatusEnum.ASSIGNED,
+                manager,
+                "Test reason"
+        )).thenReturn(ticket);
+
         service.assignTicket(
                 ticket,
                 manager,
@@ -228,6 +261,13 @@ public class TicketAssignmentServiceUnitTest {
                 StatusEnum.OPEN,
                 StatusEnum.ASSIGNED
         )).thenReturn(true);
+
+        when(ticketStatusService.changeStatus(
+                ticket,
+                StatusEnum.ASSIGNED,
+                manager,
+                "Test reason"
+        )).thenReturn(ticket);
 
         service.assignTicket(
                 ticket,

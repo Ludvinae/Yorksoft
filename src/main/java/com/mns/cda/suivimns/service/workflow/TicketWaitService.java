@@ -6,8 +6,6 @@ import com.mns.cda.suivimns.model.Ticket;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import static com.mns.cda.suivimns.service.workflow.StatusTransition.canTransition;
-
 @Service
 @RequiredArgsConstructor
 public class TicketWaitService {
@@ -20,10 +18,6 @@ public class TicketWaitService {
 
         if (assignedTechnician == null || !assignedTechnician.equals(technician)) {
             throw new TicketProgressService.UnauthorizedTechnicianException();
-        }
-
-        if (canTransition(ticket.getCurrentStatus(), status)) {
-            throw new StatusTransition.IllegalStatusTransitionException();
         }
 
         return statusService.changeStatus(ticket, status, technician, reason);

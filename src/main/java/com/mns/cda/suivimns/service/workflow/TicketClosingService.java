@@ -9,8 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
-import static com.mns.cda.suivimns.service.workflow.StatusTransition.canTransition;
-
 @Service
 @RequiredArgsConstructor
 public class TicketClosingService {
@@ -18,7 +16,6 @@ public class TicketClosingService {
     public static class TicketNotEditableException extends RuntimeException {}
     public static class TicketAlreadyClosedException extends RuntimeException {}
 
-    private final StatusTransition transition;
     private final TicketStatusService statusService;
 
     public static boolean isNotEditable(Ticket ticket) {
@@ -29,10 +26,6 @@ public class TicketClosingService {
     public Ticket closeTicket(Ticket ticket, AppUser user, String closingReason) {
         if (isNotEditable(ticket)) {
             throw new TicketAlreadyClosedException();
-        }
-
-        if (!canTransition(ticket.getCurrentStatus(), StatusEnum.CLOSED)) {
-            throw new StatusTransition.IllegalStatusTransitionException();
         }
 
         Ticket ticketChanged = statusService.changeStatus(ticket, StatusEnum.CLOSED, user, closingReason);

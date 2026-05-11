@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -37,7 +38,9 @@ public class TicketAssignmentService {
         }
 
         // Verifier que le ticket n'est pas déja attribué à ce technicien
-        if (technician == ticket.getCurrentTechnician()) {
+        Integer currentTechnicianId = (ticket.getCurrentTechnician() != null
+                ? ticket.getCurrentTechnician().getIdAppUser() : null);
+        if (Objects.equals(technician.getIdAppUser(), currentTechnicianId)) {
             throw new AssignmentService.AssignmentConflictException();
         }
 
