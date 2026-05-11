@@ -1,11 +1,8 @@
 package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.TicketDto;
-import com.mns.cda.suivimns.dto.workflow.TicketAssignmentDto;
-import com.mns.cda.suivimns.dto.workflow.TicketClosingDto;
+import com.mns.cda.suivimns.dto.workflow.*;
 import com.mns.cda.suivimns.dto.flat.TicketFullWithLatest;
-import com.mns.cda.suivimns.dto.workflow.TicketProgressDto;
-import com.mns.cda.suivimns.dto.workflow.TicketSolvedDto;
 import com.mns.cda.suivimns.service.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -197,5 +194,21 @@ public class TicketController {
     ) {
 
         return ticketService.solveTicket(id, dto);
+    }
+
+
+    @Operation(summary = "Met le ticket en attente")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Ticket mis en attente"),
+            @ApiResponse(responseCode = "404", description = "Ticket ou technicien introuvable"),
+            @ApiResponse(responseCode = "409", description = "Transition interdite")
+    })
+    @PostMapping("/{id}/wait")
+    public TicketDto setWaitingStatus(
+            @PathVariable Integer id,
+            @RequestBody @Valid TicketWaitDto dto
+    ) {
+
+        return ticketService.setWaitingStatus(id, dto);
     }
 }

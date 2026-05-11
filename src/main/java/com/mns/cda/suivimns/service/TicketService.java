@@ -3,10 +3,8 @@ package com.mns.cda.suivimns.service;
 import com.mns.cda.suivimns.dao.*;
 import com.mns.cda.suivimns.dto.TicketDto;
 import com.mns.cda.suivimns.dto.flat.*;
-import com.mns.cda.suivimns.dto.workflow.TicketAssignmentDto;
-import com.mns.cda.suivimns.dto.workflow.TicketClosingDto;
-import com.mns.cda.suivimns.dto.workflow.TicketProgressDto;
-import com.mns.cda.suivimns.dto.workflow.TicketSolvedDto;
+import com.mns.cda.suivimns.dto.workflow.*;
+import com.mns.cda.suivimns.enumerate.StatusEnum;
 import com.mns.cda.suivimns.mapper.TicketMapper;
 import com.mns.cda.suivimns.model.*;
 import com.mns.cda.suivimns.service.business.*;
@@ -34,6 +32,7 @@ public class TicketService  {
     protected final TicketClosingService closingService;
     protected final TicketProgressService progressService;
     protected final TicketSolvedService solvedService;
+    protected final TicketWaitService waitingService;
 
     protected final TicketDao ticketDao;
     private final ThemeDao themeDao;
@@ -204,6 +203,25 @@ public class TicketService  {
                 .orElseThrow(TechnicianService.TechnicianNotFoundException::new);
 
         Ticket ticketChanged = solvedService.proposeSolution(ticket, technician, dto.statusReason());
+
+        return ticketMapper.toDto(ticketChanged);
+    }
+
+    public TicketDto setWaitingStatus(Integer idTicket, TicketWaitDto dto) {
+
+        // Récupère le ticket par l'id
+        Ticket ticket = ticketDao.findById(idTicket)
+                .orElseThrow(TicketService.TicketNotFoundException::new);
+
+        Technician technician = technicianDao.findById(dto.idTechnician())
+                .orElseThrow(TechnicianService.TechnicianNotFoundException::new);
+
+        if (dto.waitingStatus() != StatusEnum.WAITING_CLIENT
+            && dto.waitingStatus() != StatusEnum.WAITING_THIRD_PARTY) {
+            throw new IllegalArgumentException("Invalid waiting status");
+        }
+
+        Ticket ticketChanged = waitingService.setWaitingStatus(ticket, technician, dto.statusReason(), dto.waitingStatus());
 
         return ticketMapper.toDto(ticketChanged);
     }
