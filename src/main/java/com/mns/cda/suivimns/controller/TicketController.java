@@ -181,6 +181,21 @@ public class TicketController {
     }
 
 
+    @Operation(summary = "Reprends la prise en charge d'un ticket")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Ticket repris en charge"),
+            @ApiResponse(responseCode = "404", description = "Ticket ou technicien introuvable"),
+            @ApiResponse(responseCode = "409", description = "Transition interdite")
+    })
+    @PostMapping("/{id}/start-progress")
+    public TicketDto resumeProgress(
+            @PathVariable Integer id,
+            @RequestBody TicketProgressDto dto
+    ) {
+        return ticketService.takeTicketInCharge(id, dto);
+    }
+
+
     @Operation(summary = "Propose une solution pour le ticket")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Solution proposée"),

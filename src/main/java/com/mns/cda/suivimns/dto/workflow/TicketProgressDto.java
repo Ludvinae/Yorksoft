@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record TicketProgressDto(
-        @NotNull Integer idTechnician,
+        @NotNull Integer idAppUser,
         @Size(max=255) String statusReason
 ) {
 }

@@ -1,6 +1,7 @@
 package com.mns.cda.suivimns.service.workflow;
 
 import com.mns.cda.suivimns.enumerate.StatusEnum;
+import com.mns.cda.suivimns.model.AppUser;
 import com.mns.cda.suivimns.model.Technician;
 import com.mns.cda.suivimns.model.Ticket;
 import jakarta.transaction.Transactional;
@@ -31,5 +32,17 @@ public class TicketProgressService {
         }
 
         return statusService.changeStatus(ticket, StatusEnum.IN_PROGRESS, technician, statusReason);
+    }
+
+    public Ticket resumeTicket(Ticket ticket, AppUser user, String statusReason) {
+        if (ticket.getCurrentTechnician() == null) {
+            throw new UnauthorizedTechnicianException();
+        }
+
+        if (canTransition(ticket.getCurrentStatus(), StatusEnum.IN_PROGRESS)) {
+            throw new StatusTransition.IllegalStatusTransitionException();
+        }
+
+        return statusService.changeStatus(ticket, StatusEnum.IN_PROGRESS, user, statusReason);
     }
 }

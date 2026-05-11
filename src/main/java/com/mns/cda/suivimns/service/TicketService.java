@@ -186,10 +186,21 @@ public class TicketService  {
         Ticket ticket = ticketDao.findById(idTicket)
                 .orElseThrow(TicketService.TicketNotFoundException::new);
 
-        Technician technician = technicianDao.findById(dto.idTechnician())
+        Technician technician = technicianDao.findById(dto.idAppUser())
                 .orElseThrow(TechnicianService.TechnicianNotFoundException::new);
 
         Ticket ticketChanged = progressService.takeTicketInCharge(ticket, technician, dto.statusReason());
+        return ticketMapper.toDto(ticketChanged);
+    }
+
+    public TicketDto resumeTicket(Integer idTicket, TicketProgressDto dto) {
+        Ticket ticket = ticketDao.findById(idTicket)
+                .orElseThrow(TicketService.TicketNotFoundException::new);
+
+        AppUser user = appUserDao.findById(dto.idAppUser())
+                .orElseThrow(AppUserService.AppUserNotFoundException::new);
+
+        Ticket ticketChanged = progressService.resumeTicket(ticket, user, dto.statusReason());
         return ticketMapper.toDto(ticketChanged);
     }
 
