@@ -5,6 +5,7 @@ import com.mns.cda.suivimns.dto.workflow.TicketAssignmentDto;
 import com.mns.cda.suivimns.dto.workflow.TicketClosingDto;
 import com.mns.cda.suivimns.dto.flat.TicketFullWithLatest;
 import com.mns.cda.suivimns.dto.workflow.TicketProgressDto;
+import com.mns.cda.suivimns.dto.workflow.TicketSolvedDto;
 import com.mns.cda.suivimns.service.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -180,5 +181,21 @@ public class TicketController {
             @RequestBody TicketProgressDto dto
     ) {
         return ticketService.takeTicketInCharge(id, dto);
+    }
+
+
+    @Operation(summary = "Propose une solution pour le ticket")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Solution proposée"),
+            @ApiResponse(responseCode = "404", description = "Ticket ou technicien introuvable"),
+            @ApiResponse(responseCode = "409", description = "Transition interdite")
+    })
+    @PostMapping("/{id}/solve")
+    public TicketDto solveTicket(
+            @PathVariable Integer id,
+            @RequestBody @Valid TicketSolvedDto dto
+    ) {
+
+        return ticketService.solveTicket(id, dto);
     }
 }

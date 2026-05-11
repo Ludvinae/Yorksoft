@@ -6,13 +6,11 @@ import com.mns.cda.suivimns.dto.flat.*;
 import com.mns.cda.suivimns.dto.workflow.TicketAssignmentDto;
 import com.mns.cda.suivimns.dto.workflow.TicketClosingDto;
 import com.mns.cda.suivimns.dto.workflow.TicketProgressDto;
+import com.mns.cda.suivimns.dto.workflow.TicketSolvedDto;
 import com.mns.cda.suivimns.mapper.TicketMapper;
 import com.mns.cda.suivimns.model.*;
 import com.mns.cda.suivimns.service.business.*;
-import com.mns.cda.suivimns.service.workflow.TicketAssignmentService;
-import com.mns.cda.suivimns.service.workflow.TicketClosingService;
-import com.mns.cda.suivimns.service.workflow.TicketProgressService;
-import com.mns.cda.suivimns.service.workflow.TicketStatusService;
+import com.mns.cda.suivimns.service.workflow.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +33,7 @@ public class TicketService  {
     protected final TicketClassificationService classificationService;
     protected final TicketClosingService closingService;
     protected final TicketProgressService progressService;
+    protected final TicketSolvedService solvedService;
 
     protected final TicketDao ticketDao;
     private final ThemeDao themeDao;
@@ -192,6 +191,20 @@ public class TicketService  {
                 .orElseThrow(TechnicianService.TechnicianNotFoundException::new);
 
         Ticket ticketChanged = progressService.takeTicketInCharge(ticket, technician, dto.statusReason());
+        return ticketMapper.toDto(ticketChanged);
+    }
+
+    public TicketDto solveTicket(Integer idTicket, TicketSolvedDto dto) {
+
+        // Récupère le ticket par l'id
+        Ticket ticket = ticketDao.findById(idTicket)
+                .orElseThrow(TicketService.TicketNotFoundException::new);
+
+        Technician technician = technicianDao.findById(dto.idTechnician())
+                .orElseThrow(TechnicianService.TechnicianNotFoundException::new);
+
+        Ticket ticketChanged = solvedService.proposeSolution(ticket, technician, dto.statusReason());
+
         return ticketMapper.toDto(ticketChanged);
     }
 }
