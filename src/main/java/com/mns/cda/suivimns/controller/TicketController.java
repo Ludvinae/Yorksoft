@@ -2,6 +2,7 @@ package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.TicketDto;
 import com.mns.cda.suivimns.dto.flat.TicketAssignmentDto;
+import com.mns.cda.suivimns.dto.flat.TicketClosingDto;
 import com.mns.cda.suivimns.dto.flat.TicketFullWithLatest;
 import com.mns.cda.suivimns.service.*;
 import io.swagger.v3.oas.annotations.Operation;
@@ -144,10 +145,24 @@ public class TicketController {
             @ApiResponse(responseCode = "404", description = "Ressource inexistante"),
             @ApiResponse(responseCode = "409", description = "Ticket déja attribué à ce technicien")})
     @PostMapping("/{id}/assign")
-    public ResponseEntity<TicketDto> assign(@PathVariable Integer id, @RequestBody @Valid TicketAssignmentDto assignment) {
+    public ResponseEntity<TicketDto> assign(@PathVariable Integer id,
+                                            @RequestBody @Valid TicketAssignmentDto assignment) {
         return new ResponseEntity<>(ticketService.assignTicket(id, assignment), HttpStatus.OK);
     }
 
 
+    @Operation(summary = "Clôture un ticket")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Ticket clôturé"),
+            @ApiResponse(responseCode = "404", description = "Ticket ou utilisateur introuvable"),
+            @ApiResponse(responseCode = "409", description = "Transition interdite")
+    })
+    @PostMapping("/{id}/close")
+    public TicketDto closeTicket(
+            @PathVariable Integer id,
+            @RequestBody TicketClosingDto ticketClosingDto
+            ) {
 
+        return ticketService.closeTicket(id, ticketClosingDto);
+    }
 }

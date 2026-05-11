@@ -2,10 +2,7 @@ package com.mns.cda.suivimns.service;
 
 import com.mns.cda.suivimns.dao.*;
 import com.mns.cda.suivimns.dto.TicketDto;
-import com.mns.cda.suivimns.dto.flat.TicketAssignmentDto;
-import com.mns.cda.suivimns.dto.flat.TicketCreation;
-import com.mns.cda.suivimns.dto.flat.TicketFullWithLatest;
-import com.mns.cda.suivimns.dto.flat.TicketResponse;
+import com.mns.cda.suivimns.dto.flat.*;
 import com.mns.cda.suivimns.mapper.TicketMapper;
 import com.mns.cda.suivimns.model.*;
 import com.mns.cda.suivimns.model.keys.ClassificationKey;
@@ -30,16 +27,14 @@ public class TicketService  {
     protected final TicketStatusService statusService;
     protected final TicketAssignmentService  assignmentService;
     protected final TicketClassificationService classificationService;
+    protected final TicketClosingService closingService;
 
     protected final TicketDao ticketDao;
     private final ThemeDao themeDao;
     protected final ClassificationDao classificationDao;
-    protected final ClientDao clientDao;
-    protected final ImpactDao impactDao;
-    protected final UrgencyDao urgencyDao;
-    protected final VersionDao versionDao;
     protected final ManagerDao managerDao;
     protected final TechnicianDao technicianDao;
+    protected final AppUserDao appUserDao;
 
     public List<TicketDto> findAll() {
         return ticketMapper.toDtoList(ticketDao.findAll());
@@ -159,5 +154,18 @@ public class TicketService  {
         Ticket ticketAssigned = assignmentService.assignTicket(ticket, manager, technician, assignmentDto.statusReason());
 
         return ticketMapper.toDto(ticketAssigned);
+    }
+
+    public TicketDto closeTicket(Integer idTicket, TicketClosingDto dto) {
+        // Récupère le ticket par l'id
+        Ticket ticket = ticketDao.findById(idTicket)
+                .orElseThrow(TicketService.TicketNotFoundException::new);
+
+        AppUser user = appUserDao.findById(dto.idAppUser())
+                .orElseThrow(AppUserService.AppUserNotFoundException::new);
+
+        Ticket ticketClosed = closingService.closeTicket(ticket, user, dto.closingReason());
+
+        return  ticketMapper.toDto(ticketClosed);
     }
 }
