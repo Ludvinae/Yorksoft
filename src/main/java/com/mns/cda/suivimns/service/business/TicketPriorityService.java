@@ -2,10 +2,11 @@ package com.mns.cda.suivimns.service.business;
 
 import com.mns.cda.suivimns.enumerate.PriorityEnum;
 import com.mns.cda.suivimns.model.Ticket;
+import com.mns.cda.suivimns.service.workflow.TicketClosingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import static com.mns.cda.suivimns.service.business.TicketClosingService.isNotEditable;
+import static com.mns.cda.suivimns.service.workflow.TicketClosingService.isNotEditable;
 
 @Service
 @RequiredArgsConstructor

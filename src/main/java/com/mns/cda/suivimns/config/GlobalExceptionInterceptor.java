@@ -4,8 +4,8 @@ import com.mns.cda.suivimns.dto.config.ErrorResponseDto;
 import com.mns.cda.suivimns.service.AppUserService;
 import com.mns.cda.suivimns.service.AssignmentService;
 import com.mns.cda.suivimns.service.TicketService;
-import com.mns.cda.suivimns.service.business.StatusTransition;
-import com.mns.cda.suivimns.service.business.TicketStatusService;
+import com.mns.cda.suivimns.service.workflow.StatusTransition;
+import com.mns.cda.suivimns.service.workflow.TicketStatusService;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,9 +14,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionInterceptor {

@@ -1,4 +1,4 @@
-package com.mns.cda.suivimns.service.business;
+package com.mns.cda.suivimns.service.workflow;
 
 import com.mns.cda.suivimns.enumerate.StatusEnum;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,7 @@ public class StatusTransition {
 
     public static class IllegalStatusTransitionException extends RuntimeException {}
 
-    public boolean canTransition(StatusEnum current, StatusEnum next) {
+    public static boolean canTransition(StatusEnum current, StatusEnum next) {
         return switch (current) {
 
             case OPEN ->

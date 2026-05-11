@@ -1,7 +1,7 @@
 package com.mns.cda.suivimns.unit.service.business;
 
 import com.mns.cda.suivimns.enumerate.StatusEnum;
-import com.mns.cda.suivimns.service.business.StatusTransition;
+import com.mns.cda.suivimns.service.workflow.StatusTransition;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;

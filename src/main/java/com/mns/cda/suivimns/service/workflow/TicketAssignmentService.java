@@ -1,9 +1,6 @@
-package com.mns.cda.suivimns.service.business;
+package com.mns.cda.suivimns.service.workflow;
 
 import com.mns.cda.suivimns.dao.AssignmentDao;
-import com.mns.cda.suivimns.dao.ManagerDao;
-import com.mns.cda.suivimns.dao.TechnicianDao;
-import com.mns.cda.suivimns.dao.TicketDao;
 import com.mns.cda.suivimns.enumerate.StatusEnum;
 import com.mns.cda.suivimns.model.Assignment;
 import com.mns.cda.suivimns.model.Manager;
@@ -48,20 +45,20 @@ public class TicketAssignmentService {
         closeCurrentAssignment(ticket.getIdTicket());
 
         // Changer l'état du ticket
-        ticketStatusService.changeStatus(ticket, StatusEnum.ASSIGNED, manager, statusReason);
+        Ticket ticketChanged = ticketStatusService.changeStatus(ticket, StatusEnum.ASSIGNED, manager, statusReason);
 
         // Créer la nouvelle affectation
         Assignment assignment = new Assignment();
-        assignment.setTicket(ticket);
+        assignment.setTicket(ticketChanged);
         assignment.setTechnician(technician);
         assignment.setManager(manager);
 
         assignmentDao.save(assignment);
 
         // Mettre à jour le ticket avec le technicien assigné, et le manager ayant crée l'affectation
-        ticket.setCurrentTechnician(technician);
-        ticket.setCurrentManager(manager);
+        ticketChanged.setCurrentTechnician(technician);
+        ticketChanged.setCurrentManager(manager);
 
-        return ticket;
+        return ticketChanged;
     }
 }

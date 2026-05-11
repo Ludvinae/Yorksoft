@@ -5,7 +5,7 @@ import com.mns.cda.suivimns.controller.StatusController;
 import com.mns.cda.suivimns.dto.StatusDto;
 import com.mns.cda.suivimns.enumerate.StatusEnum;
 import com.mns.cda.suivimns.service.StatusService;
-import com.mns.cda.suivimns.service.business.StatusTransition;
+import com.mns.cda.suivimns.service.workflow.StatusTransition;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

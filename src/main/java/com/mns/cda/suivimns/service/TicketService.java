@@ -3,16 +3,23 @@ package com.mns.cda.suivimns.service;
 import com.mns.cda.suivimns.dao.*;
 import com.mns.cda.suivimns.dto.TicketDto;
 import com.mns.cda.suivimns.dto.flat.*;
+import com.mns.cda.suivimns.dto.workflow.TicketAssignmentDto;
+import com.mns.cda.suivimns.dto.workflow.TicketClosingDto;
+import com.mns.cda.suivimns.dto.workflow.TicketProgressDto;
 import com.mns.cda.suivimns.mapper.TicketMapper;
 import com.mns.cda.suivimns.model.*;
 import com.mns.cda.suivimns.service.business.*;
+import com.mns.cda.suivimns.service.workflow.TicketAssignmentService;
+import com.mns.cda.suivimns.service.workflow.TicketClosingService;
+import com.mns.cda.suivimns.service.workflow.TicketProgressService;
+import com.mns.cda.suivimns.service.workflow.TicketStatusService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
 
-import static com.mns.cda.suivimns.service.business.TicketClosingService.isNotEditable;
+import static com.mns.cda.suivimns.service.workflow.TicketClosingService.isNotEditable;
 
 @Service
 @RequiredArgsConstructor
@@ -24,9 +31,10 @@ public class TicketService  {
     protected final TicketMapper ticketMapper;
     protected final TicketPriorityService priorityService;
     protected final TicketStatusService statusService;
-    protected final TicketAssignmentService  assignmentService;
+    protected final TicketAssignmentService assignmentService;
     protected final TicketClassificationService classificationService;
     protected final TicketClosingService closingService;
+    protected final TicketProgressService progressService;
 
     protected final TicketDao ticketDao;
     private final ThemeDao themeDao;
@@ -171,5 +179,19 @@ public class TicketService  {
         Ticket ticketClosed = closingService.closeTicket(ticket, user, dto.closingReason());
 
         return  ticketMapper.toDto(ticketClosed);
+    }
+
+
+    public TicketDto takeTicketInCharge(Integer idTicket, TicketProgressDto dto) {
+
+        // Récupère le ticket par l'id
+        Ticket ticket = ticketDao.findById(idTicket)
+                .orElseThrow(TicketService.TicketNotFoundException::new);
+
+        Technician technician = technicianDao.findById(dto.idTechnician())
+                .orElseThrow(TechnicianService.TechnicianNotFoundException::new);
+
+        Ticket ticketChanged = progressService.takeTicketInCharge(ticket, technician, dto.statusReason());
+        return ticketMapper.toDto(ticketChanged);
     }
 }

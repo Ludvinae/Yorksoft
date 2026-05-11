@@ -1,6 +1,6 @@
 package com.mns.cda.suivimns.unit.dto.flat;
 
-import com.mns.cda.suivimns.dto.flat.TicketAssignmentDto;
+import com.mns.cda.suivimns.dto.workflow.TicketAssignmentDto;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;

@@ -1,9 +1,10 @@
 package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.TicketDto;
-import com.mns.cda.suivimns.dto.flat.TicketAssignmentDto;
-import com.mns.cda.suivimns.dto.flat.TicketClosingDto;
+import com.mns.cda.suivimns.dto.workflow.TicketAssignmentDto;
+import com.mns.cda.suivimns.dto.workflow.TicketClosingDto;
 import com.mns.cda.suivimns.dto.flat.TicketFullWithLatest;
+import com.mns.cda.suivimns.dto.workflow.TicketProgressDto;
 import com.mns.cda.suivimns.service.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -164,5 +165,20 @@ public class TicketController {
             ) {
 
         return ticketService.closeTicket(id, ticketClosingDto);
+    }
+
+
+    @Operation(summary = "Prends en charge un ticket")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Ticket pris en charge"),
+            @ApiResponse(responseCode = "404", description = "Ticket ou technicien introuvable"),
+            @ApiResponse(responseCode = "409", description = "Transition interdite")
+    })
+    @PostMapping("/{id}/start-progress")
+    public TicketDto startProgress(
+            @PathVariable Integer id,
+            @RequestBody TicketProgressDto dto
+    ) {
+        return ticketService.takeTicketInCharge(id, dto);
     }
 }

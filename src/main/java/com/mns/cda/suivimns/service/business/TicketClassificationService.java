@@ -7,11 +7,12 @@ import com.mns.cda.suivimns.model.Classification;
 import com.mns.cda.suivimns.model.Theme;
 import com.mns.cda.suivimns.model.Ticket;
 import com.mns.cda.suivimns.service.ThemeService;
+import com.mns.cda.suivimns.service.workflow.TicketClosingService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import static com.mns.cda.suivimns.service.business.TicketClosingService.isNotEditable;
+import static com.mns.cda.suivimns.service.workflow.TicketClosingService.isNotEditable;
 
 /**
  * Service used when changing the theme of a Ticket

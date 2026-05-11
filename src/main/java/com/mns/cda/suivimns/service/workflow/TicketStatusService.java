@@ -1,19 +1,19 @@
-package com.mns.cda.suivimns.service.business;
+package com.mns.cda.suivimns.service.workflow;
 
 import com.mns.cda.suivimns.dao.HistoryDao;
 import com.mns.cda.suivimns.enumerate.StatusEnum;
 import com.mns.cda.suivimns.model.AppUser;
 import com.mns.cda.suivimns.model.History;
-import com.mns.cda.suivimns.model.Status;
 import com.mns.cda.suivimns.model.Ticket;
 import com.mns.cda.suivimns.service.HistoryService;
 import com.mns.cda.suivimns.service.StatusService;
-import com.mns.cda.suivimns.service.TicketService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+
+import static com.mns.cda.suivimns.service.workflow.StatusTransition.canTransition;
 
 @Service
 @RequiredArgsConstructor
@@ -53,7 +53,7 @@ public class TicketStatusService {
     }
 
     @Transactional
-    public void changeStatus(
+    public Ticket changeStatus(
             Ticket ticket,
             StatusEnum newStatus,
             AppUser user,
@@ -63,7 +63,7 @@ public class TicketStatusService {
             MissingCurrentHistoryException {
 
         StatusEnum currentStatus = ticket.getCurrentStatus();
-        if (!transition.canTransition(currentStatus, newStatus)) {
+        if (!canTransition(currentStatus, newStatus)) {
             throw new StatusTransition.IllegalStatusTransitionException();
         }
 
@@ -75,5 +75,7 @@ public class TicketStatusService {
 
         // Met à jour le ticket avec le nouveau statut
         ticket.setCurrentStatus(newStatus);
+
+        return ticket;
     }
 }

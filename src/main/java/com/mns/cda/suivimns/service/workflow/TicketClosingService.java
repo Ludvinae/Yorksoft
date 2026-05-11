@@ -1,4 +1,4 @@
-package com.mns.cda.suivimns.service.business;
+package com.mns.cda.suivimns.service.workflow;
 
 import com.mns.cda.suivimns.enumerate.StatusEnum;
 import com.mns.cda.suivimns.model.AppUser;
@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+
+import static com.mns.cda.suivimns.service.workflow.StatusTransition.canTransition;
 
 @Service
 @RequiredArgsConstructor
@@ -29,13 +31,13 @@ public class TicketClosingService {
             throw new TicketAlreadyClosedException();
         }
 
-        if (!transition.canTransition(ticket.getCurrentStatus(), StatusEnum.CLOSED)) {
+        if (!canTransition(ticket.getCurrentStatus(), StatusEnum.CLOSED)) {
             throw new StatusTransition.IllegalStatusTransitionException();
         }
 
-        statusService.changeStatus(ticket, StatusEnum.CLOSED, user, closingReason);
-        ticket.setCloseDate(LocalDateTime.now());
+        Ticket ticketChanged = statusService.changeStatus(ticket, StatusEnum.CLOSED, user, closingReason);
+        ticketChanged.setCloseDate(LocalDateTime.now());
 
-        return ticket;
+        return ticketChanged;
     }
 }
