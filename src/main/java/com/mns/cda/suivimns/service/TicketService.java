@@ -33,6 +33,7 @@ public class TicketService  {
     protected final TicketProgressService progressService;
     protected final TicketSolvedService solvedService;
     protected final TicketWaitService waitingService;
+    protected final ActiveTime activeTime;
 
     protected final TicketDao ticketDao;
     private final ThemeDao themeDao;
@@ -235,5 +236,9 @@ public class TicketService  {
         Ticket ticketChanged = waitingService.setWaitingStatus(ticket, technician, dto.statusReason(), dto.waitingStatus());
 
         return ticketMapper.toDto(ticketChanged);
+    }
+
+    public Integer getActiveTimeInSeconds(Integer idTicket) {
+        return activeTime.getActiveTimeInSeconds(idTicket);
     }
 }

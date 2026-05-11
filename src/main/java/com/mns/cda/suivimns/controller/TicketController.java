@@ -35,6 +35,12 @@ public class TicketController {
     }
 
 
+    @GetMapping("/{id}/active-time")
+    public Integer getActiveTimeInSeconds(@PathVariable Integer id) {
+        return ticketService.getActiveTimeInSeconds(id);
+    }
+
+
     @Operation(summary = "Récupére une ticket en fonction de son ID")
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Ticket trouvée"),
             @ApiResponse(responseCode = "404", description = "Ticket non trouvée")})
@@ -92,20 +98,7 @@ public class TicketController {
     }
 
 
-    @Operation(summary = "Modifie une ticket en fonction de son ID",
-            description = "Modifie les champs 'subject', 'theme' et 'ticketList' d'une ticket")
-    @ApiResponses({@ApiResponse(responseCode = "200", description = "Ticket modifiée avec succés"),
-            @ApiResponse(responseCode = "404", description = "Ticket non trouvée"),
-            @ApiResponse(responseCode = "400", description = "Données invalides")})
-    @PutMapping("/{id}")
-    public ResponseEntity<TicketDto> update(@PathVariable int id, @RequestBody @Valid TicketDto ticketToUpdate) {
-        try {
-            return new ResponseEntity<>(ticketService.update(id, ticketToUpdate), HttpStatus.OK);
-        } catch (TicketService.TicketNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-    
+
     // /////////
 
     @Operation(
@@ -187,7 +180,7 @@ public class TicketController {
             @ApiResponse(responseCode = "404", description = "Ticket ou technicien introuvable"),
             @ApiResponse(responseCode = "409", description = "Transition interdite")
     })
-    @PostMapping("/{id}/start-progress")
+    @PostMapping("/{id}/resume-progress")
     public TicketDto resumeProgress(
             @PathVariable Integer id,
             @RequestBody TicketProgressDto dto
@@ -226,4 +219,20 @@ public class TicketController {
 
         return ticketService.setWaitingStatus(id, dto);
     }
+
+
+    @Operation(summary = "Modifie une ticket en fonction de son ID",
+            description = "Modifie les champs 'subject', 'theme' et 'ticketList' d'une ticket")
+    @ApiResponses({@ApiResponse(responseCode = "200", description = "Ticket modifiée avec succés"),
+            @ApiResponse(responseCode = "404", description = "Ticket non trouvée"),
+            @ApiResponse(responseCode = "400", description = "Données invalides")})
+    @PutMapping("/{id}")
+    public ResponseEntity<TicketDto> update(@PathVariable int id, @RequestBody @Valid TicketDto ticketToUpdate) {
+        try {
+            return new ResponseEntity<>(ticketService.update(id, ticketToUpdate), HttpStatus.OK);
+        } catch (TicketService.TicketNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
 }

@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -21,4 +22,18 @@ public interface HistoryDao extends JpaRepository<History, Integer> {
 
     // Equivalent a la query findLatestByTicket
     Optional<History> findByTicketIdTicketAndEndDateIsNull(Integer idTicket);
+
+    List<History> findAllByTicketIdTicket(Integer idTicket);
+
+    @Query("""
+            SELECT h
+            FROM History h
+            WHERE h.ticket.idTicket = :idTicket
+            AND h.status.code != 'WAITING_CLIENT'
+            AND h.status.code != 'WAITING_THIRD_PARTY'
+            AND h.status.code != 'CLOSEDT'
+            AND h.status.code != 'SOLVED'
+            AND h.status.code != 'REJECTED'
+    """)
+    List<History> findAllActiveByIdTicket(@Param("idTicket") Integer idTicket);
 }
