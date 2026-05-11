@@ -40,7 +40,8 @@ public class TicketStatusService {
     }
 
     @Transactional
-    public void initializeStatus(Ticket ticket, AppUser user) throws StatusService.StatusNotFoundException {
+    public void initializeStatus(Ticket ticket, AppUser user)
+            throws StatusService.StatusNotFoundException {
 
         // Verifier que le ticket n'a pas déja un statut
         if (ticket.getCurrentStatus() != null) {
@@ -48,14 +49,15 @@ public class TicketStatusService {
         }
 
         ticket.setCurrentStatus(StatusEnum.OPEN);
-        historyService.addHistory(ticket, user, StatusEnum.OPEN);
+        historyService.addHistory(ticket, user, StatusEnum.OPEN, null);
     }
 
     @Transactional
     public void changeStatus(
             Ticket ticket,
             StatusEnum newStatus,
-            AppUser user
+            AppUser user,
+            String statusReason
     ) throws StatusTransition.IllegalStatusTransitionException,
             StatusService.StatusNotFoundException,
             MissingCurrentHistoryException {
@@ -69,7 +71,7 @@ public class TicketStatusService {
         closeCurrentHistory(ticket);
 
         // ajout d'une entrée dans l'historique
-        historyService.addHistory(ticket, user, newStatus);
+        historyService.addHistory(ticket, user, newStatus, statusReason);
 
         // Met à jour le ticket avec le nouveau statut
         ticket.setCurrentStatus(newStatus);

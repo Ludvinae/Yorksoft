@@ -40,7 +40,7 @@ class HistoryControllerUnitTest {
     @BeforeEach
     void setUp() {
         historyDto = new HistoryDto(
-                1, LocalDateTime.now(), null, 1, 1, 1);
+                1, LocalDateTime.now(), null, "Test reason", 1, 1, 1);
     }
 
     // =========================

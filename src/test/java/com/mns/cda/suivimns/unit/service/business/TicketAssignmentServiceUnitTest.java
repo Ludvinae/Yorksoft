@@ -70,7 +70,8 @@ public class TicketAssignmentServiceUnitTest {
         Ticket result = service.assignTicket(
                 ticket,
                 manager,
-                technician
+                technician,
+                "Test reason"
         );
 
         ArgumentCaptor<Assignment> captor =
@@ -87,7 +88,8 @@ public class TicketAssignmentServiceUnitTest {
         verify(ticketStatusService).changeStatus(
                 ticket,
                 StatusEnum.ASSIGNED,
-                manager
+                manager,
+                "Test reason"
         );
 
         assertEquals(technician, ticket.getCurrentTechnician());
@@ -109,12 +111,13 @@ public class TicketAssignmentServiceUnitTest {
                 () -> service.assignTicket(
                         ticket,
                         manager,
-                        technician
+                        technician,
+                        "Test reason"
                 )
         );
 
         verify(ticketStatusService, never())
-                .changeStatus(any(), any(), any());
+                .changeStatus(any(), any(), any(), any());
 
         verify(assignmentDao, never())
                 .save(any());
@@ -135,12 +138,13 @@ public class TicketAssignmentServiceUnitTest {
                 () -> service.assignTicket(
                         ticket,
                         manager,
-                        technician
+                        technician,
+                        "Test reason"
                 )
         );
 
         verify(ticketStatusService, never())
-                .changeStatus(any(), any(), any());
+                .changeStatus(any(), any(), any(), any());
 
         verify(assignmentDao, never())
                 .save(any());
@@ -163,7 +167,8 @@ public class TicketAssignmentServiceUnitTest {
         service.assignTicket(
                 ticket,
                 manager,
-                technician
+                technician,
+                "Test reason"
         );
 
         assertNotNull(existingAssignment.getEndDate());
@@ -189,7 +194,8 @@ public class TicketAssignmentServiceUnitTest {
                 service.assignTicket(
                         ticket,
                         manager,
-                        technician
+                        technician,
+                        "Test reason"
                 )
         );
 
@@ -207,7 +213,8 @@ public class TicketAssignmentServiceUnitTest {
         service.assignTicket(
                 ticket,
                 manager,
-                technician
+                technician,
+                "Test reason"
         );
 
         verify(assignmentDao, times(1))
@@ -225,7 +232,8 @@ public class TicketAssignmentServiceUnitTest {
         service.assignTicket(
                 ticket,
                 manager,
-                technician
+                technician,
+                "Test reason"
         );
 
         assertEquals(technician, ticket.getCurrentTechnician());

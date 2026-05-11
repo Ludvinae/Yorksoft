@@ -76,7 +76,8 @@ public class TicketStatusServiceUnitTest {
         verify(historyService).addHistory(
                 ticket,
                 user,
-                StatusEnum.OPEN
+                StatusEnum.OPEN,
+                null
         );
     }
 
@@ -90,7 +91,7 @@ public class TicketStatusServiceUnitTest {
                 () -> service.initializeStatus(ticket, user)
         );
 
-        verify(historyService, never()).addHistory(any(), any(), any());
+        verify(historyService, never()).addHistory(any(), any(), any(), any());
     }
 
     // =========================================================
@@ -113,7 +114,8 @@ public class TicketStatusServiceUnitTest {
         service.changeStatus(
                 ticket,
                 StatusEnum.ASSIGNED,
-                user
+                user,
+                "Test reason"
         );
 
         assertEquals(StatusEnum.ASSIGNED, ticket.getCurrentStatus());
@@ -123,7 +125,8 @@ public class TicketStatusServiceUnitTest {
         verify(historyService).addHistory(
                 ticket,
                 user,
-                StatusEnum.ASSIGNED
+                StatusEnum.ASSIGNED,
+                "Test reason"
         );
     }
 
@@ -140,12 +143,13 @@ public class TicketStatusServiceUnitTest {
                 () -> service.changeStatus(
                         ticket,
                         StatusEnum.CLOSED,
-                        user
+                        user,
+                        "Test reason"
                 )
         );
 
         verify(historyDao, never()).findLatestByTicket(any());
-        verify(historyService, never()).addHistory(any(), any(), any());
+        verify(historyService, never()).addHistory(any(), any(), any(), any());
     }
 
     @Test
@@ -164,11 +168,12 @@ public class TicketStatusServiceUnitTest {
                 () -> service.changeStatus(
                         ticket,
                         StatusEnum.ASSIGNED,
-                        user
+                        user,
+                        "Test reason"
                 )
         );
 
-        verify(historyService, never()).addHistory(any(), any(), any());
+        verify(historyService, never()).addHistory(any(), any(), any(), any());
     }
 
     // =========================================================
@@ -192,7 +197,8 @@ public class TicketStatusServiceUnitTest {
         service.changeStatus(
                 ticket,
                 StatusEnum.ASSIGNED,
-                user
+                user,
+                "Test reason"
         );
 
         assertNotNull(history.getEndDate());

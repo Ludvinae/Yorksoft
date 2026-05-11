@@ -110,45 +110,6 @@ public class TicketService  {
     }
 
 
-    @Transactional
-    public Ticket createTicket(TicketCreation ticketDto) throws StatusService.StatusNotFoundException {
-
-        Ticket ticket = new Ticket();
-        ticket.setTitle(ticketDto.title());
-        ticket.setDescription(ticketDto.description());
-
-        // Retrieve relations
-        Client client = clientDao.findById(ticketDto.idClient())
-                .orElseThrow(() -> new RuntimeException("Client introuvable"));
-
-        Impact impact = impactDao.findById(ticketDto.idImpact())
-                .orElseThrow(() -> new RuntimeException("Impact introuvable"));
-
-        Urgency urgency = urgencyDao.findById(ticketDto.idUrgency())
-                .orElseThrow(() -> new RuntimeException("Urgence introuvable"));
-
-        Version version = versionDao.findById(ticketDto.idVersion())
-                .orElseThrow(() -> new RuntimeException("Version introuvable"));
-
-        // Automatic priority calcul
-        priorityService.initializePriority(ticket);
-
-        ticket.setClient(client);
-        ticket.setImpact(impact);
-        ticket.setUrgency(urgency);
-        ticket.setVersion(version);
-
-        Ticket savedTicket = ticketDao.save(ticket);
-
-        // En attendant l'authentification
-        AppUser userBidon = new AppUser();
-        userBidon.setIdAppUser(1);
-
-        statusService.initializeStatus(savedTicket, userBidon);
-        addThemeToTicket(savedTicket, ticketDto.themeDesignation());
-
-        return savedTicket;
-    }
 
     // METHODS
 
@@ -195,7 +156,7 @@ public class TicketService  {
         Technician technician = technicianDao.findById(assignmentDto.idTechnician())
                 .orElseThrow(TechnicianService.TechnicianNotFoundException::new);
 
-        Ticket ticketAssigned = assignmentService.assignTicket(ticket, manager, technician);
+        Ticket ticketAssigned = assignmentService.assignTicket(ticket, manager, technician, assignmentDto.statusReason());
 
         return ticketMapper.toDto(ticketAssigned);
     }

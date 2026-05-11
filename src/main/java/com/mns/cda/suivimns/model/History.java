@@ -30,6 +30,8 @@ public class History {
 
     protected LocalDateTime endDate;
 
+    protected String statusReason;
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_status", nullable = false)
     @OnDelete(action= OnDeleteAction.CASCADE)

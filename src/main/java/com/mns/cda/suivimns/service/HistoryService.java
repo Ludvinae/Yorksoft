@@ -44,13 +44,14 @@ public class HistoryService {
 
 
     // METHODS
-    public void addHistory(Ticket ticket, AppUser user, StatusEnum newStatus)
+    public void addHistory(Ticket ticket, AppUser user, StatusEnum newStatus, String reason)
             throws StatusService.StatusNotFoundException {
 
         History history = new History();
 
         history.setTicket(ticket);
         history.setActor(user);
+        history.setStatusReason(reason);
         history.setStatus(statusDao.findByCode(newStatus)
                 .orElseThrow(StatusService.StatusNotFoundException::new));
 
@@ -80,7 +81,7 @@ public class HistoryService {
         Optional<History> previousHistory = historyDao.findLatestByTicket(ticket.getIdTicket());
         previousHistory.ifPresent(history -> history.setEndDate(LocalDateTime.now()));
 
-        History history = new History(null, LocalDateTime.now(), null, status, ticket, actor);
+        History history = new History(null, LocalDateTime.now(), null, null, status, ticket, actor);
         historyDao.save(history);
 
     }

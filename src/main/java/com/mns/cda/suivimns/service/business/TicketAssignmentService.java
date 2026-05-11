@@ -31,7 +31,8 @@ public class TicketAssignmentService {
     }
 
     @Transactional
-    public Ticket assignTicket(Ticket ticket, Manager manager, Technician technician) {
+    public Ticket assignTicket(Ticket ticket, Manager manager,
+                               Technician technician, String statusReason) {
 
         // Verifier que le ticket puisse transitionner vers le status 'ASSIGNED'
         if (!transition.canTransition(ticket.getCurrentStatus(), StatusEnum.ASSIGNED)) {
@@ -47,7 +48,7 @@ public class TicketAssignmentService {
         closeCurrentAssignment(ticket.getIdTicket());
 
         // Changer l'état du ticket
-        ticketStatusService.changeStatus(ticket, StatusEnum.ASSIGNED, manager);
+        ticketStatusService.changeStatus(ticket, StatusEnum.ASSIGNED, manager, statusReason);
 
         // Créer la nouvelle affectation
         Assignment assignment = new Assignment();
