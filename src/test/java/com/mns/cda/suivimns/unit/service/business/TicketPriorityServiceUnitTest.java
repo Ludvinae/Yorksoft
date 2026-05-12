@@ -9,7 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -68,15 +68,40 @@ public class TicketPriorityServiceUnitTest {
     @Test
     void initializePriority_shouldSetInitialAndCurrentPriority() {
 
-        Ticket ticket = mockTicket();
+        Ticket ticket = new Ticket();
+
+        Impact impact = new Impact();
+        impact.setIdImpact(1);
+        impact.setPriorityFactor((byte) 2);
+
+        Urgency urgency = new Urgency();
+        urgency.setIdUrgency(1);
+        urgency.setPriorityFactor((byte) 1);
+
+        Client client  = new Client();
+        client.setIdAppUser(1);
+        client.setImportance((byte) 1);
+
+        VersionType versionType = new VersionType();
+        versionType.setIdVersionType(1);
+        versionType.setUrgencyMalus((byte) 0);
+
+        Version version = new Version();
+        version.setIdVersion(1);
+        version.setVersionType(versionType);
+
+        ticket.setImpact(impact);
+        ticket.setUrgency(urgency);
+        ticket.setClient(client);
+        ticket.setVersion(version);
 
         when(calculator.computePriority(2, 1, 1, 0))
                 .thenReturn(48);
 
         service.initializePriority(ticket);
 
-        verify(ticket).setInitialPriority(48);
-        verify(ticket).setCurrentPriority(48);
+        assertEquals(48, (int) ticket.getInitialPriority());
+        assertEquals(48, (int) ticket.getCurrentPriority());
     }
 
     @Test

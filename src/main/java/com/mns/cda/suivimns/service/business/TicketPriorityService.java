@@ -22,6 +22,7 @@ public class TicketPriorityService {
     }
 
     public void initializePriority(Ticket ticket) {
+
         if (ticket.getInitialPriority() != null) {
             throw new IllegalStateException("Priority already initialized");
         }
