@@ -1,52 +1,47 @@
 package com.mns.cda.suivimns.service.business;
 
-import com.mns.cda.suivimns.enumerate.PriorityEnum;
 import org.springframework.stereotype.Component;
 
 @Component
 public class PriorityCalculator {
 
-    public PriorityEnum computePriority(int impact, int urgency, int importance, int malus) {
-        return priorityMatrix
-                [adjustImpact(impact, importance)]
-                [adjustUrgency(urgency, malus)];
+    public Integer computePriority(int impact, int urgency, int importance, int malus) {
+        return calcul(adjustImpact(impact, importance),adjustUrgency(urgency, malus));
     }
 
-    private static final PriorityEnum[][] priorityMatrix =
-            {{PriorityEnum.VERY_LOW, PriorityEnum.LOW},
-            {PriorityEnum.LOW, PriorityEnum.MEDIUM},
-            {PriorityEnum.MEDIUM, PriorityEnum.HIGH},
-            {PriorityEnum.HIGH, PriorityEnum.VERY_HIGH}};
+    private Integer calcul(double adjustedImpact, double adjustedUrgency) {
+        return (int) ((adjustedImpact * 70) + (adjustedUrgency * 30));
+    }
+
+
 
     /**
-     * Ajuste l'impact en fonction de l'importance du client - 1
-     * Toujours compris entre 0 (impact bas) et 3 (impact max)
-     * Prends en compte l'ajustement pour l'index de la matrice
+     * Ajuste l'impact en fonction de l'importance du client
+     * Toujours compris entre 0 (impact bas) et 4 (impact max)
      * @param impact
      * @param importance
      * @return
      */
-    private int adjustImpact(int impact, int importance) {
+    private double adjustImpact(int impact, int importance) {
         int adjusted = impact + importance - 1;
 
-        adjusted = Math.max(1, Math.min(adjusted, 4));
+        adjusted = Math.max(0, Math.min(adjusted, 4));
 
-        return adjusted - 1;
+        return adjusted / 4.0;
     }
 
     /**
      * Ajuste l'urgence en fonction du type de version du logiciel concerné
-     * Toujours compris entre 0 (urgence faible) et 1 (urgence élevée)
-     * Prends en compte l'ajustement pour l'index de la matrice
+     * Toujours compris entre 0 (urgence faible) et 2 (urgence critique)
      * @param urgency
      * @param malus
      * @return
      */
-    private int adjustUrgency(int urgency, int malus) {
+    private double adjustUrgency(int urgency, int malus) {
         int adjusted = urgency - malus;
 
-        adjusted = Math.max(1, Math.min(adjusted, 2));
+        adjusted = Math.max(0, Math.min(adjusted, 3));
 
-        return adjusted - 1;
+        return adjusted / 3.0;
     }
 }

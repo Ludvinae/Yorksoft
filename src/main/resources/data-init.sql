@@ -50,14 +50,15 @@ VALUES (1, 'Nouveau', 'OPEN'),
 
 
 INSERT INTO urgency (priority_factor, designation, description)
-VALUES (1, 'Basse', 'Solution de contournement disponible'),
-       (2, 'Haute', 'Pas de solution de contournement');
+VALUES (0, 'Basse', 'Solution de contournement disponible'),
+       (1, 'Haute', 'Pas de solution de contournement'),
+       (2, 'Critique', 'Faille de sécurité');
 
 INSERT INTO impact (priority_factor, designation, description)
-VALUES (1, 'Bas', 'Une seule personne concernée'),
-       (2, 'Moyen', 'Une équipe'),
-       (3, 'Elevé', 'Un département'),
-       (4, 'Critique', 'Toute l''entreprise');
+VALUES (0, 'Bas', 'Une seule personne concernée'),
+       (1, 'Moyen', 'Une équipe'),
+       (2, 'Elevé', 'Un département'),
+       (3, 'Critique', 'Toute l''entreprise');
 
 INSERT INTO theme (designation, code, description)
 VALUES ('Erreur de manipulation', 'HANDLING_ERROR', ''),
@@ -71,11 +72,11 @@ VALUES ('Erreur de manipulation', 'HANDLING_ERROR', ''),
 INSERT INTO ticket (title, open_date, call_duration, current_priority, initial_priority, close_date, modification_date,
                     description, id_client, id_urgency, id_impact, id_version, current_status, current_theme,
                     id_current_manager, id_current_technician)
-VALUES ('Ca marche pas', NOW(), null, 'VERY_LOW', 'LOW', null, NOW(),
+VALUES ('Ca marche pas', NOW(), null, 10, 10, null, NOW(),
         'Ca marche pas', 1, 1, 1, 2, 'WAITING_CLIENT', 'OTHER_ISSUE',
         4, 5),
-       ('Indisponibilité du service de sauvegarde en ligne', NOW(), 1035, 'MEDIUM',
-        'MEDIUM', null, NOW(),
+       ('Indisponibilité du service de sauvegarde en ligne', NOW(), 1035, 50,
+        50, null, NOW(),
         'Impossible d''acceder au dossiers sur le cloud dans le gestionnaire de projets.', 3, 2,
         2, 3, 'OPEN', 'NETWORK_ISSUE', 4, 5);
 

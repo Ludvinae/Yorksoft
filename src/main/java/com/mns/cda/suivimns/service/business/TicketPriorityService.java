@@ -1,6 +1,5 @@
 package com.mns.cda.suivimns.service.business;
 
-import com.mns.cda.suivimns.enumerate.PriorityEnum;
 import com.mns.cda.suivimns.model.Ticket;
 import com.mns.cda.suivimns.service.workflow.TicketClosingService;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +12,6 @@ import static com.mns.cda.suivimns.service.workflow.TicketClosingService.isNotEd
 public class TicketPriorityService {
 
     private final PriorityCalculator calculator;
-    private final TicketClosingService closingService;
 
     public void recalculateCurrentPriority(Ticket ticket) {
         if (isNotEditable(ticket)) {
@@ -28,12 +26,12 @@ public class TicketPriorityService {
             throw new IllegalStateException("Priority already initialized");
         }
 
-        PriorityEnum priority = compute(ticket);
+        Integer priority = compute(ticket);
         ticket.setCurrentPriority(priority);
         ticket.setInitialPriority(priority);
     }
 
-    private PriorityEnum compute(Ticket ticket) {
+    private Integer compute(Ticket ticket) {
         return calculator.computePriority(
                 ticket.getImpact().getPriorityFactor(),
                 ticket.getUrgency().getPriorityFactor(),
@@ -41,4 +39,5 @@ public class TicketPriorityService {
                 ticket.getVersion().getVersionType().getUrgencyMalus()
         );
     }
+
 }

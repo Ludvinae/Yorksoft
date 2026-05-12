@@ -5,7 +5,6 @@ import com.mns.cda.suivimns.controller.TicketController;
 import com.mns.cda.suivimns.dto.entity.TicketDto;
 import com.mns.cda.suivimns.dto.flat.TicketFullWithLatest;
 import com.mns.cda.suivimns.dto.workflow.TicketCreationDto;
-import com.mns.cda.suivimns.enumerate.PriorityEnum;
 import com.mns.cda.suivimns.enumerate.ThemeEnum;
 import com.mns.cda.suivimns.service.entity.TicketService;
 import org.junit.jupiter.api.BeforeEach;
@@ -49,12 +48,12 @@ class TicketControllerUnitTest {
         // DTO
         ticketDto = new TicketDto(
                 1, "Test title", "Test description", null,
-                null, null, 0, PriorityEnum.VERY_HIGH, PriorityEnum.VERY_HIGH,
+                null, null, 0, 85, 85,
                 ThemeEnum.BUG, 1, 1, 1, 1, list, list,
                 list, list);
 
         ticketFull = new TicketFullWithLatest(
-                1, "Test title", null, PriorityEnum.MEDIUM, "Test number",
+                1, "Test title", null, 50, "Test number",
                 "Test type designation", "Test software name",
                 "Test theme designation", "Test status designation", 2);
 

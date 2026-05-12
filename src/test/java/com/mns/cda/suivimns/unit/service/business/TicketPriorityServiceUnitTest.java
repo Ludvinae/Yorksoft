@@ -1,6 +1,5 @@
 package com.mns.cda.suivimns.unit.service.business;
 
-import com.mns.cda.suivimns.enumerate.PriorityEnum;
 import com.mns.cda.suivimns.model.*;
 import com.mns.cda.suivimns.service.business.PriorityCalculator;
 import com.mns.cda.suivimns.service.business.TicketPriorityService;
@@ -72,19 +71,19 @@ public class TicketPriorityServiceUnitTest {
         Ticket ticket = mockTicket();
 
         when(calculator.computePriority(2, 1, 1, 0))
-                .thenReturn(PriorityEnum.MEDIUM);
+                .thenReturn(48);
 
         service.initializePriority(ticket);
 
-        verify(ticket).setInitialPriority(PriorityEnum.MEDIUM);
-        verify(ticket).setCurrentPriority(PriorityEnum.MEDIUM);
+        verify(ticket).setInitialPriority(48);
+        verify(ticket).setCurrentPriority(48);
     }
 
     @Test
     void initializePriority_shouldThrowException_ifAlreadyInitialized() {
         Ticket ticket = mock(Ticket.class);
 
-        when(ticket.getInitialPriority()).thenReturn(PriorityEnum.LOW);
+        when(ticket.getInitialPriority()).thenReturn(25);
 
         assertThrows(IllegalStateException.class, () ->
                 service.initializePriority(ticket)
@@ -97,11 +96,11 @@ public class TicketPriorityServiceUnitTest {
         Ticket ticket = mockTicket();
 
         when(calculator.computePriority(2, 1, 1, 0))
-                .thenReturn(PriorityEnum.HIGH);
+                .thenReturn(70);
 
         service.recalculateCurrentPriority(ticket);
 
-        verify(ticket).setCurrentPriority(PriorityEnum.HIGH);
+        verify(ticket).setCurrentPriority(70);
         verify(ticket, never()).setInitialPriority(any());
     }
 

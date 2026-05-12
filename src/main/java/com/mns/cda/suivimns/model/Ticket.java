@@ -1,6 +1,5 @@
 package com.mns.cda.suivimns.model;
 
-import com.mns.cda.suivimns.enumerate.PriorityEnum;
 import com.mns.cda.suivimns.enumerate.StatusEnum;
 import com.mns.cda.suivimns.enumerate.ThemeEnum;
 import jakarta.persistence.*;
@@ -47,13 +46,11 @@ public class Ticket {
     protected Integer callDuration;
 
     // Champs calculés
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false, updatable = false)
-    protected PriorityEnum initialPriority;
+    protected Integer initialPriority;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    protected PriorityEnum currentPriority;
+    protected Integer currentPriority;
 
     @Enumerated(EnumType.STRING)
     @Column
