@@ -6,22 +6,22 @@ import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.OffsetDateTime;
+import java.util.Set;
 
 public class TicketSpecification {
 
-    public static Specification<Ticket> hasStatus(StatusEnum status) {
+    public static Specification<Ticket> hasStatuses(Set<StatusEnum> statuses) {
         return (root, query, cb) ->
-                status == null
+                statuses == null
                         ? null
-                        : cb.equal(root.get("currentStatus"), status);
+                        : root.get("currentStatus").in(statuses);
     }
 
-    public static Specification<Ticket> hasNotStatus(StatusEnum statusExcluded) {
+    public static Specification<Ticket> hasNotStatuses(Set<StatusEnum> statusesExcluded) {
         return (root, query, cb) ->
-                statusExcluded == null
+                statusesExcluded == null
                         ? null
-                        : cb.notEqual(root.get("currentStatus"), statusExcluded);
+                        : cb.not(root.get("currentStatus").in(statusesExcluded));
     }
 
     public static Specification<Ticket> hasClient(Integer clientId) {

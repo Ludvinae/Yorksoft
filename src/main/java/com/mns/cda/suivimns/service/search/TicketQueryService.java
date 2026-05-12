@@ -22,8 +22,8 @@ public class TicketQueryService {
 
     public Page<TicketListDto> search(TicketSearchCriteria criteria, Pageable pageable) {
         Specification<Ticket> spec = Specification
-                .where(TicketSpecification.hasStatus(criteria.status()))
-                .and(TicketSpecification.hasNotStatus(criteria.statusExcluded()))
+                .where(TicketSpecification.hasStatuses(criteria.statuses()))
+                .and(TicketSpecification.hasNotStatuses(criteria.statusesExcluded()))
                 .and(TicketSpecification.hasClient(criteria.clientId()))
                 .and(TicketSpecification.hasSoftware(criteria.softwareId()))
                 .and(TicketSpecification.containsKeyword(criteria.keyword()))

@@ -3,6 +3,7 @@ package com.mns.cda.suivimns.dto.search;
 import com.mns.cda.suivimns.enumerate.StatusEnum;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 
 public record TicketSearchCriteria(
@@ -10,8 +11,8 @@ public record TicketSearchCriteria(
         Integer clientId,
         Integer versionId,
         Integer softwareId,
-        StatusEnum status,
-        StatusEnum statusExcluded,
+        Set<StatusEnum> statuses,
+        Set<StatusEnum> statusesExcluded,
         Integer technicianId,
         LocalDate createdAfter,
         LocalDate createdBefore,
