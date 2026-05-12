@@ -11,6 +11,7 @@ public record TicketSearchCriteria(
         Integer versionId,
         Integer softwareId,
         StatusEnum status,
+        StatusEnum statusExcluded,
         Integer technicianId,
         LocalDate createdAfter,
         LocalDate createdBefore,

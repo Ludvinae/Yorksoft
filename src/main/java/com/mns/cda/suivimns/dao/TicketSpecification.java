@@ -17,6 +17,13 @@ public class TicketSpecification {
                         : cb.equal(root.get("currentStatus"), status);
     }
 
+    public static Specification<Ticket> hasNotStatus(StatusEnum statusExcluded) {
+        return (root, query, cb) ->
+                statusExcluded == null
+                        ? null
+                        : cb.notEqual(root.get("currentStatus"), statusExcluded);
+    }
+
     public static Specification<Ticket> hasClient(Integer clientId) {
         return (root, query, cb) ->
                 clientId == null

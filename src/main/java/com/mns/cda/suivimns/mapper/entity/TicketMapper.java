@@ -3,6 +3,7 @@ package com.mns.cda.suivimns.mapper.entity;
 import com.mns.cda.suivimns.dao.*;
 import com.mns.cda.suivimns.dto.entity.TicketDto;
 import com.mns.cda.suivimns.dto.search.TicketListDto;
+import com.mns.cda.suivimns.dto.workflow.TicketCreationDto;
 import com.mns.cda.suivimns.model.*;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
@@ -62,6 +63,14 @@ public abstract class TicketMapper {
     @Mapping(target = "classificationList", ignore = true)
     @Mapping(target = "historyList", source = "historyIds")
     public abstract Ticket toEntity(TicketDto dto);
+
+
+    //Ticket creation
+    @Mapping(target = "version", source = "idVersion")
+    @Mapping(target = "client", source = "idClient")
+    @Mapping(target = "impact", source = "idImpact")
+    @Mapping(target = "urgency", source = "idUrgency")
+    public abstract Ticket creationToEntity(TicketCreationDto dto);
 
 
     // Pagination and filters

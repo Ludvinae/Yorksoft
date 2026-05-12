@@ -5,6 +5,7 @@ import com.mns.cda.suivimns.dto.entity.TicketDto;
 import com.mns.cda.suivimns.dto.flat.*;
 import com.mns.cda.suivimns.dto.workflow.*;
 import com.mns.cda.suivimns.enumerate.StatusEnum;
+import com.mns.cda.suivimns.enumerate.ThemeEnum;
 import com.mns.cda.suivimns.mapper.entity.TicketMapper;
 import com.mns.cda.suivimns.model.*;
 import com.mns.cda.suivimns.service.business.*;
@@ -62,25 +63,21 @@ public class TicketService  {
         return ticketDao.returnTicketAttributed(id);
     }
 
-    public TicketDto save(TicketDto dto) throws StatusService.StatusNotFoundException {
+    public TicketDto save(TicketCreationDto dto) throws StatusService.StatusNotFoundException {
 
-        Ticket ticket = ticketMapper.toEntity(dto);
+        Ticket ticket = ticketMapper.creationToEntity(dto);
 
         priorityService.initializePriority(ticket);
 
-        ticket.setIdTicket(null);
-        ticket.setOpenDate(null);
-        ticket.setModificationDate(null);
-        ticket.setCloseDate(null);
-
         Ticket ticketSaved = ticketDao.save(ticket);
 
-        // En attendant l'authentification
-        AppUser userBidon = new AppUser();
-        userBidon.setIdAppUser(1);
+        AppUser creator = appUserDao.findById(dto.idCreator())
+            .orElseThrow(AppUserService.AppUserNotFoundException::new);
 
-        statusService.initializeStatus(ticketSaved, userBidon);
-        classificationService.classify(ticketSaved, dto.currentTheme());
+        statusService.initializeStatus(ticketSaved, creator);
+
+        ThemeEnum theme = ThemeEnum.valueOf(dto.themeDesignation().toUpperCase());
+        classificationService.classify(ticketSaved, theme);
 
         return ticketMapper.toDto(ticketSaved);
     }

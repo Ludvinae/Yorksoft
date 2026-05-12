@@ -77,7 +77,7 @@ public class TicketController {
     @ApiResponses({@ApiResponse(responseCode = "201", description = "Ticket crée"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PostMapping
-    public ResponseEntity<TicketDto> create(@RequestBody @Valid TicketDto ticket) {
+    public ResponseEntity<TicketDto> create(@RequestBody @Valid TicketCreationDto ticket) {
         try {
             return new ResponseEntity<>(ticketService.save(ticket), HttpStatus.CREATED);
         } catch (StatusService.StatusNotFoundException e) {
