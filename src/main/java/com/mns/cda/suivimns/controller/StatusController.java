@@ -1,8 +1,8 @@
 package com.mns.cda.suivimns.controller;
 
-import com.mns.cda.suivimns.dto.StatusDto;
+import com.mns.cda.suivimns.dto.entity.StatusDto;
 import com.mns.cda.suivimns.enumerate.StatusEnum;
-import com.mns.cda.suivimns.service.StatusService;
+import com.mns.cda.suivimns.service.entity.StatusService;
 import com.mns.cda.suivimns.service.workflow.StatusTransition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

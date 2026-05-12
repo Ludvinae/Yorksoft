@@ -1,7 +1,7 @@
 package com.mns.cda.suivimns.controller;
 
-import com.mns.cda.suivimns.dto.ThemeDto;
-import com.mns.cda.suivimns.service.ThemeService;
+import com.mns.cda.suivimns.dto.entity.ThemeDto;
+import com.mns.cda.suivimns.service.entity.ThemeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

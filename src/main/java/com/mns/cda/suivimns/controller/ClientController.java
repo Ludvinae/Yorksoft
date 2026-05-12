@@ -1,9 +1,9 @@
 package com.mns.cda.suivimns.controller;
 
-import com.mns.cda.suivimns.dto.ClientDto;
+import com.mns.cda.suivimns.dto.entity.ClientDto;
 import com.mns.cda.suivimns.dto.flat.PasswordDto;
-import com.mns.cda.suivimns.service.AppUserService;
-import com.mns.cda.suivimns.service.ClientService;
+import com.mns.cda.suivimns.service.entity.AppUserService;
+import com.mns.cda.suivimns.service.entity.ClientService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

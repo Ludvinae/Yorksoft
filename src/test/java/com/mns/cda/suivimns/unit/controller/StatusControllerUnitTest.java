@@ -2,9 +2,9 @@ package com.mns.cda.suivimns.unit.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.StatusController;
-import com.mns.cda.suivimns.dto.StatusDto;
+import com.mns.cda.suivimns.dto.entity.StatusDto;
 import com.mns.cda.suivimns.enumerate.StatusEnum;
-import com.mns.cda.suivimns.service.StatusService;
+import com.mns.cda.suivimns.service.entity.StatusService;
 import com.mns.cda.suivimns.service.workflow.StatusTransition;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

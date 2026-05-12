@@ -1,8 +1,8 @@
 package com.mns.cda.suivimns.controller;
 
-import com.mns.cda.suivimns.dto.SoftwareDto;
+import com.mns.cda.suivimns.dto.entity.SoftwareDto;
 import com.mns.cda.suivimns.dto.flat.SoftwareDetailDto;
-import com.mns.cda.suivimns.service.SoftwareService;
+import com.mns.cda.suivimns.service.entity.SoftwareService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

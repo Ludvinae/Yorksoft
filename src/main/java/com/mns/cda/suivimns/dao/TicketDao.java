@@ -4,6 +4,7 @@ import com.mns.cda.suivimns.dto.flat.TicketFullWithLatest;
 import com.mns.cda.suivimns.dto.flat.TicketResponse;
 import com.mns.cda.suivimns.model.Ticket;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -11,7 +12,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface TicketDao extends JpaRepository<Ticket, Integer> {
+public interface TicketDao extends JpaRepository<Ticket, Integer>, JpaSpecificationExecutor<Ticket> {
+
     @Query("SELECT new com.mns.cda.suivimns.dto.flat.TicketResponse(" +
             "t.idTicket, t.title, t.description, t.modificationDate, " +
             "t.currentPriority, t.version.versionNumber, t.version.versionType.designation, " +

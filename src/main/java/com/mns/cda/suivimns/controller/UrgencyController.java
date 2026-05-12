@@ -1,7 +1,7 @@
 package com.mns.cda.suivimns.controller;
 
-import com.mns.cda.suivimns.dto.UrgencyDto;
-import com.mns.cda.suivimns.service.UrgencyService;
+import com.mns.cda.suivimns.dto.entity.UrgencyDto;
+import com.mns.cda.suivimns.service.entity.UrgencyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

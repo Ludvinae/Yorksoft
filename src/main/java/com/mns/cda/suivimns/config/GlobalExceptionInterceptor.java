@@ -1,9 +1,9 @@
 package com.mns.cda.suivimns.config;
 
 import com.mns.cda.suivimns.dto.config.ErrorResponseDto;
-import com.mns.cda.suivimns.service.AppUserService;
-import com.mns.cda.suivimns.service.AssignmentService;
-import com.mns.cda.suivimns.service.TicketService;
+import com.mns.cda.suivimns.service.entity.AppUserService;
+import com.mns.cda.suivimns.service.entity.AssignmentService;
+import com.mns.cda.suivimns.service.entity.TicketService;
 import com.mns.cda.suivimns.service.workflow.StatusTransition;
 import com.mns.cda.suivimns.service.workflow.TicketStatusService;
 import org.springframework.dao.DataIntegrityViolationException;

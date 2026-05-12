@@ -2,7 +2,7 @@ package com.mns.cda.suivimns.dao;
 
 import com.mns.cda.suivimns.dto.flat.VersionDetailDto;
 import com.mns.cda.suivimns.model.Version;
-import com.mns.cda.suivimns.service.VersionService;
+import com.mns.cda.suivimns.service.entity.VersionService;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

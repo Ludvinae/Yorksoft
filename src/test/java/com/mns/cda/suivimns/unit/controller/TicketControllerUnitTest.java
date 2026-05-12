@@ -2,11 +2,11 @@ package com.mns.cda.suivimns.unit.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.TicketController;
-import com.mns.cda.suivimns.dto.TicketDto;
+import com.mns.cda.suivimns.dto.entity.TicketDto;
 import com.mns.cda.suivimns.dto.flat.TicketFullWithLatest;
 import com.mns.cda.suivimns.enumerate.PriorityEnum;
 import com.mns.cda.suivimns.enumerate.ThemeEnum;
-import com.mns.cda.suivimns.service.TicketService;
+import com.mns.cda.suivimns.service.entity.TicketService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

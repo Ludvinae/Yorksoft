@@ -5,7 +5,7 @@ import com.mns.cda.suivimns.enumerate.StatusEnum;
 import com.mns.cda.suivimns.model.AppUser;
 import com.mns.cda.suivimns.model.History;
 import com.mns.cda.suivimns.model.Ticket;
-import com.mns.cda.suivimns.service.HistoryService;
+import com.mns.cda.suivimns.service.entity.HistoryService;
 import com.mns.cda.suivimns.service.workflow.StatusTransition;
 import com.mns.cda.suivimns.service.workflow.TicketStatusService;
 import org.junit.jupiter.api.BeforeEach;

@@ -3,7 +3,7 @@ package com.mns.cda.suivimns.mapper.enumerate;
 import com.mns.cda.suivimns.dao.StatusDao;
 import com.mns.cda.suivimns.enumerate.StatusEnum;
 import com.mns.cda.suivimns.model.Status;
-import com.mns.cda.suivimns.service.StatusService;
+import com.mns.cda.suivimns.service.entity.StatusService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

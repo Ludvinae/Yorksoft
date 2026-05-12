@@ -6,7 +6,7 @@ import com.mns.cda.suivimns.enumerate.ThemeEnum;
 import com.mns.cda.suivimns.model.Classification;
 import com.mns.cda.suivimns.model.Theme;
 import com.mns.cda.suivimns.model.Ticket;
-import com.mns.cda.suivimns.service.ThemeService;
+import com.mns.cda.suivimns.service.entity.ThemeService;
 import com.mns.cda.suivimns.service.workflow.TicketClosingService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

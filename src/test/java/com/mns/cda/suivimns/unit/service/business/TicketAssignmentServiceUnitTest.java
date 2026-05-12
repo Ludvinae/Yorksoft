@@ -6,7 +6,7 @@ import com.mns.cda.suivimns.model.Assignment;
 import com.mns.cda.suivimns.model.Manager;
 import com.mns.cda.suivimns.model.Technician;
 import com.mns.cda.suivimns.model.Ticket;
-import com.mns.cda.suivimns.service.AssignmentService;
+import com.mns.cda.suivimns.service.entity.AssignmentService;
 import com.mns.cda.suivimns.service.workflow.StatusTransition;
 import com.mns.cda.suivimns.service.workflow.TicketAssignmentService;
 import com.mns.cda.suivimns.service.workflow.TicketStatusService;

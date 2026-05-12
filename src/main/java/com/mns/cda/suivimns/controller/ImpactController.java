@@ -1,7 +1,7 @@
 package com.mns.cda.suivimns.controller;
 
-import com.mns.cda.suivimns.dto.ImpactDto;
-import com.mns.cda.suivimns.service.ImpactService;
+import com.mns.cda.suivimns.dto.entity.ImpactDto;
+import com.mns.cda.suivimns.service.entity.ImpactService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

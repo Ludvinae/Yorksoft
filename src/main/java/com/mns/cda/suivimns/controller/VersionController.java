@@ -1,8 +1,8 @@
 package com.mns.cda.suivimns.controller;
 
-import com.mns.cda.suivimns.dto.VersionDto;
+import com.mns.cda.suivimns.dto.entity.VersionDto;
 import com.mns.cda.suivimns.dto.flat.VersionDetailDto;
-import com.mns.cda.suivimns.service.VersionService;
+import com.mns.cda.suivimns.service.entity.VersionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

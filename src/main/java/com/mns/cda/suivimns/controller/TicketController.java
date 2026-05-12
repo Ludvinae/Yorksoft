@@ -1,15 +1,22 @@
 package com.mns.cda.suivimns.controller;
 
-import com.mns.cda.suivimns.dto.TicketDto;
+import com.mns.cda.suivimns.dto.entity.TicketDto;
+import com.mns.cda.suivimns.dto.search.TicketListDto;
+import com.mns.cda.suivimns.dto.search.TicketSearchCriteria;
 import com.mns.cda.suivimns.dto.workflow.*;
 import com.mns.cda.suivimns.dto.flat.TicketFullWithLatest;
-import com.mns.cda.suivimns.service.*;
+import com.mns.cda.suivimns.service.entity.StatusService;
+import com.mns.cda.suivimns.service.entity.TicketService;
+import com.mns.cda.suivimns.service.search.TicketQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +31,7 @@ import java.util.List;
 public class TicketController {
 
     protected final TicketService ticketService;
+    protected final TicketQueryService queryService;
 
 
     @Operation(summary = "Récupere toutes les tickets",
@@ -32,6 +40,16 @@ public class TicketController {
     @GetMapping("/list")
     public List<TicketDto> getAll() {
         return ticketService.findAll();
+    }
+
+
+    @GetMapping("/test")
+    public Page<TicketListDto> search(
+            TicketSearchCriteria criteria,
+            @PageableDefault(size = 20)
+            Pageable pageable
+    ) {
+        return queryService.search(criteria, pageable);
     }
 
 

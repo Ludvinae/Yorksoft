@@ -2,8 +2,8 @@ package com.mns.cda.suivimns.unit.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.ClientController;
-import com.mns.cda.suivimns.dto.ClientDto;
-import com.mns.cda.suivimns.service.ClientService;
+import com.mns.cda.suivimns.dto.entity.ClientDto;
+import com.mns.cda.suivimns.service.entity.ClientService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

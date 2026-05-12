@@ -6,7 +6,7 @@ import com.mns.cda.suivimns.model.Assignment;
 import com.mns.cda.suivimns.model.Manager;
 import com.mns.cda.suivimns.model.Technician;
 import com.mns.cda.suivimns.model.Ticket;
-import com.mns.cda.suivimns.service.AssignmentService;
+import com.mns.cda.suivimns.service.entity.AssignmentService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

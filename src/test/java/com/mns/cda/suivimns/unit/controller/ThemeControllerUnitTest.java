@@ -2,10 +2,9 @@ package com.mns.cda.suivimns.unit.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.ThemeController;
-import com.mns.cda.suivimns.dto.ThemeDto;
-import com.mns.cda.suivimns.enumerate.StatusEnum;
+import com.mns.cda.suivimns.dto.entity.ThemeDto;
 import com.mns.cda.suivimns.enumerate.ThemeEnum;
-import com.mns.cda.suivimns.service.ThemeService;
+import com.mns.cda.suivimns.service.entity.ThemeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

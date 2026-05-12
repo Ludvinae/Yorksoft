@@ -1,7 +1,7 @@
 package com.mns.cda.suivimns.controller;
 
-import com.mns.cda.suivimns.dto.ArticleDto;
-import com.mns.cda.suivimns.service.ArticleService;
+import com.mns.cda.suivimns.dto.entity.ArticleDto;
+import com.mns.cda.suivimns.service.entity.ArticleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

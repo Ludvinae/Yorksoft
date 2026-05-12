@@ -1,7 +1,7 @@
 package com.mns.cda.suivimns.controller;
 
-import com.mns.cda.suivimns.dto.LicenseDto;
-import com.mns.cda.suivimns.service.LicenseService;
+import com.mns.cda.suivimns.dto.entity.LicenseDto;
+import com.mns.cda.suivimns.service.entity.LicenseService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
