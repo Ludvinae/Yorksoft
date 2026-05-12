@@ -33,8 +33,6 @@ import java.util.List;
 public class TicketController {
 
     protected final TicketService ticketService;
-    protected final TicketQueryService queryService;
-
 
     @Operation(summary = "Récupère toutes les tickets",
             description = "Récupère la liste complète de ticket de la base")
@@ -52,7 +50,7 @@ public class TicketController {
             Pageable pageable
     ) {
         try {
-            return new ResponseEntity<>(queryService.search(criteria, pageable) , HttpStatus.OK);
+            return new ResponseEntity<>(ticketService.search(criteria, pageable) , HttpStatus.OK);
         } catch (TicketQueryService.InvalidSortCriteriaException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

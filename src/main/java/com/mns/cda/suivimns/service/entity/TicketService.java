@@ -3,14 +3,19 @@ package com.mns.cda.suivimns.service.entity;
 import com.mns.cda.suivimns.dao.*;
 import com.mns.cda.suivimns.dto.entity.TicketDto;
 import com.mns.cda.suivimns.dto.flat.*;
+import com.mns.cda.suivimns.dto.search.TicketListDto;
+import com.mns.cda.suivimns.dto.search.TicketSearchCriteria;
 import com.mns.cda.suivimns.dto.workflow.*;
 import com.mns.cda.suivimns.enumerate.StatusEnum;
 import com.mns.cda.suivimns.enumerate.ThemeEnum;
 import com.mns.cda.suivimns.mapper.entity.TicketMapper;
 import com.mns.cda.suivimns.model.*;
 import com.mns.cda.suivimns.service.business.*;
+import com.mns.cda.suivimns.service.search.TicketQueryService;
 import com.mns.cda.suivimns.service.workflow.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -36,6 +41,7 @@ public class TicketService  {
     protected final TicketSolvedService solvedService;
     protected final TicketWaitService waitingService;
     protected final ActiveTimeService activeTime;
+    protected final TicketQueryService queryService;
 
     protected final TicketDao ticketDao;
     private final ThemeDao themeDao;
@@ -246,5 +252,9 @@ public class TicketService  {
         );
 
         return activeTime.getActiveTimeInSeconds(idTicket, statuses);
+    }
+
+    public Page<TicketListDto> search(TicketSearchCriteria criteria, Pageable pageable) {
+        return queryService.search(criteria, pageable);
     }
 }

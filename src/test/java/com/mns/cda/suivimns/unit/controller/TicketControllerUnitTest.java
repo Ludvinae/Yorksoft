@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.TicketController;
 import com.mns.cda.suivimns.dto.entity.TicketDto;
 import com.mns.cda.suivimns.dto.flat.TicketFullWithLatest;
+import com.mns.cda.suivimns.dto.workflow.TicketCreationDto;
 import com.mns.cda.suivimns.enumerate.PriorityEnum;
 import com.mns.cda.suivimns.enumerate.ThemeEnum;
 import com.mns.cda.suivimns.service.entity.TicketService;
@@ -153,7 +154,7 @@ class TicketControllerUnitTest {
     @Test
     void shouldCreate() throws Exception {
 
-        when(ticketService.save(any(TicketDto.class))).thenReturn(ticketDto);
+        when(ticketService.save(any(TicketCreationDto.class))).thenReturn(ticketDto);
 
         mockMvc.perform(post("/ticket")
                         .contentType(MediaType.APPLICATION_JSON)
