@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 
 import static com.mns.cda.suivimns.service.workflow.TicketClosingService.isNotEditable;
 
@@ -42,6 +43,8 @@ public class TicketService  {
     protected final ManagerDao managerDao;
     protected final TechnicianDao technicianDao;
     protected final AppUserDao appUserDao;
+
+
 
     public List<TicketDto> findAll() {
         return ticketMapper.toDtoList(ticketDao.findAll());

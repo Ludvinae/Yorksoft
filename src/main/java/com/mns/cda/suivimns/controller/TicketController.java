@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -35,9 +36,9 @@ public class TicketController {
     protected final TicketQueryService queryService;
 
 
-    @Operation(summary = "Récupere toutes les tickets",
-            description = "Récupere la liste complète de ticket de la base")
-    @ApiResponse(responseCode = "200", description = "Liste récupérée avec succés")
+    @Operation(summary = "Récupère toutes les tickets",
+            description = "Récupère la liste complète de ticket de la base")
+    @ApiResponse(responseCode = "200", description = "Liste récupérée avec succès")
     @GetMapping("/list")
     public List<TicketDto> getAll() {
         return ticketService.findAll();
@@ -45,12 +46,16 @@ public class TicketController {
 
 
     @GetMapping("/test")
-    public Page<TicketListDto> search(
+    public ResponseEntity<Page<TicketListDto>> search(
             TicketSearchCriteria criteria,
-            @PageableDefault(size = 20, sort = "creationDate", direction = Sort.Direction.DESC)
+            @PageableDefault(size = 20, sort = "openDate", direction = Sort.Direction.DESC)
             Pageable pageable
     ) {
-        return queryService.search(criteria, pageable);
+        try {
+            return new ResponseEntity<>(queryService.search(criteria, pageable) , HttpStatus.OK);
+        } catch (TicketQueryService.InvalidSortCriteriaException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
 

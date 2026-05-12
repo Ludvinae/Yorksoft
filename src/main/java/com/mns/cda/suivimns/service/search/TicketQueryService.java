@@ -7,20 +7,30 @@ import com.mns.cda.suivimns.dto.search.TicketSearchCriteria;
 import com.mns.cda.suivimns.mapper.entity.TicketMapper;
 import com.mns.cda.suivimns.model.Ticket;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+
+import java.util.Set;
 
 
 @Service
 @RequiredArgsConstructor
 public class TicketQueryService {
 
+    public static class InvalidSortCriteriaException extends RuntimeException {}
+
     private final TicketDao ticketDao;
     private final TicketMapper ticketMapper;
 
-    public Page<TicketListDto> search(TicketSearchCriteria criteria, Pageable pageable) {
+    public Page<TicketListDto> search(TicketSearchCriteria criteria, Pageable pageable)
+            throws InvalidSortCriteriaException {
+
+        validateSort(pageable);
+
         Specification<Ticket> spec = Specification
                 .where(TicketSpecification.hasStatuses(criteria.statuses()))
                 .and(TicketSpecification.hasNotStatuses(criteria.statusesExcluded()))
@@ -34,4 +44,19 @@ public class TicketQueryService {
                 .findAll(spec, pageable)
                 .map(ticketMapper::toListDto);
     }
+
+    private void validateSort(Pageable pageable) throws InvalidSortCriteriaException {
+        for (Sort.Order order : pageable.getSort()) {
+            if (!ALLOWED_SORTS.contains(order.getProperty())) {
+                throw new InvalidSortCriteriaException();
+            }
+        }
+    }
+
+    private static final Set<String> ALLOWED_SORTS = Set.of(
+            "openDate",
+            "currentStatus",
+            "currentTechnician",
+            "title"
+    );
 }
