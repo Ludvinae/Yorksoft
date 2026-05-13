@@ -14,6 +14,8 @@ public record TicketListDto(
     StatusEnum currentStatus,
     ThemeEnum currentTheme,
     Integer idClient,
-    Integer idTechnician
-
+    Integer idTechnician,
+    Integer idManager,
+    Integer currentPriority,
+    Integer callDuration
 ) {}

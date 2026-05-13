@@ -1,13 +1,12 @@
 package com.mns.cda.suivimns.service.search;
 
 import com.mns.cda.suivimns.dao.TicketDao;
-import com.mns.cda.suivimns.dao.TicketSpecification;
+import com.mns.cda.suivimns.dao.search.TicketSpecification;
 import com.mns.cda.suivimns.dto.search.TicketListDto;
 import com.mns.cda.suivimns.dto.search.TicketSearchCriteria;
 import com.mns.cda.suivimns.mapper.entity.TicketMapper;
 import com.mns.cda.suivimns.model.Ticket;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -35,10 +34,17 @@ public class TicketQueryService {
                 .where(TicketSpecification.hasStatuses(criteria.statuses()))
                 .and(TicketSpecification.hasNotStatuses(criteria.statusesExcluded()))
                 .and(TicketSpecification.hasClient(criteria.clientId()))
+                .and(TicketSpecification.hasVersion(criteria.versionId()))
                 .and(TicketSpecification.hasSoftware(criteria.softwareId()))
                 .and(TicketSpecification.containsKeyword(criteria.keyword()))
                 .and(TicketSpecification.openedAfter(criteria.createdAfter()))
-                .and(TicketSpecification.openedBefore(criteria.createdBefore()));
+                .and(TicketSpecification.openedBefore(criteria.createdBefore()))
+                .and(TicketSpecification.closedAfter(criteria.closedAfter()))
+                .and(TicketSpecification.closedBefore(criteria.closedBefore()))
+                .and(TicketSpecification.priorityEquals(criteria.priorityEquals()))
+                .and(TicketSpecification.priorityGreaterThan(criteria.priorityGreaterThan()))
+                .and(TicketSpecification.priorityLessThan(criteria.priorityLessThan()));
+
 
         return ticketDao
                 .findAll(spec, pageable)
@@ -55,8 +61,11 @@ public class TicketQueryService {
 
     private static final Set<String> ALLOWED_SORTS = Set.of(
             "openDate",
+            "closeDate",
+            "currentPriority",
             "currentStatus",
             "currentTechnician",
+            "currentTheme",
             "title"
     );
 }

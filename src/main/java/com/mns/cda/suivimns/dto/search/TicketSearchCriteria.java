@@ -14,10 +14,14 @@ public record TicketSearchCriteria(
         Integer softwareId,
         Set<StatusEnum> statuses,
         Set<StatusEnum> statusesExcluded,
+        Integer priorityGreaterThan,
+        Integer priorityLessThan,
+        Integer priorityEquals,
         Integer technicianId,
         LocalDate createdAfter,
         LocalDate createdBefore,
-        Boolean unassigned
-
+        Boolean unassigned,
+        LocalDate closedAfter,
+        LocalDate closedBefore
 ) {
 }
