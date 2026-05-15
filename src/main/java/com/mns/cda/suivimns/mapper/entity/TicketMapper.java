@@ -74,8 +74,8 @@ public abstract class TicketMapper {
 
 
     // Pagination and filters
-    @Mapping(source="client.idAppUser", target="idClient")
-    @Mapping(source="currentTechnician.idAppUser", target="idTechnician")
+    @Mapping(source="client.firstName", target="clientFirstName")
+    @Mapping(source="client.lastName", target="clientLastName")
     public abstract TicketListDto toListDto(Ticket ticket);
 
 

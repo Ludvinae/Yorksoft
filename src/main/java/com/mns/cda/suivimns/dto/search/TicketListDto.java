@@ -11,11 +11,10 @@ public record TicketListDto(
     LocalDateTime openDate,
     LocalDateTime modificationDate,
     LocalDateTime endDate,
+    Integer callDuration,
+    Integer currentPriority,
     StatusEnum currentStatus,
     ThemeEnum currentTheme,
-    Integer idClient,
-    Integer idTechnician,
-    Integer idManager,
-    Integer currentPriority,
-    Integer callDuration
+    String clientFirstName,
+    String clientLastName
 ) {}
