@@ -17,14 +17,14 @@
 
   <!-- TICKETS -->
   <a
-    routerLink="/tickets"
+    routerLink="/ticket"
     routerLinkActive="text-primary-content"
     class="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-base-300 transition relative"
   >
     <span>TICKETS</span>
 
     <!-- Indicator (barre droite) -->
-    @if (isActive('/tickets')) {
+    @if (isActive('/ticket')) {
       <span class="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-primary rounded-l"></span>
     }
   </a>

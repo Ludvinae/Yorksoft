@@ -1,11 +1,9 @@
 import { Routes } from '@angular/router';
 import { Login } from './pages/login/login';
 import { NotFound } from './pages/not-found/not-found';
-import { Tickets } from './pages/tickets/tickets';
 import { Clients } from './pages/clients/clients';
 import { Knowledge } from './pages/knowledge/knowledge';
 import { Settings } from './pages/settings/settings';
-import { NewTicket } from './pages/new-ticket/new-ticket';
 import { Dashboard } from './pages/dashboard/dashboard';
 import { SoftwareEdit } from './pages/admin/software/software-edit/software-edit';
 import { Admin } from './pages/admin/admin/admin';
@@ -32,6 +30,9 @@ import { VersionDetail } from './pages/admin/version/version-detail/version-deta
 import { VersionTypeList } from './pages/admin/version-type/version-type-list/version-type-list';
 import { VersionTypeEdit } from './pages/admin/version-type/version-type-edit/version-type-edit';
 import { VersionTypeDetail } from './pages/admin/version-type/version-type-detail/version-type-detail';
+import { TicketList } from './pages/ticket/ticket-list/ticket-list';
+import { TicketEdit } from './pages/ticket/ticket-edit/ticket-edit';
+import { TicketDetail } from './pages/ticket/ticket-detail/ticket-detail';
 
 export const routes: Routes = [
   {
@@ -45,14 +46,24 @@ export const routes: Routes = [
     title: 'Tableau de bord',
   },
   {
-    path: 'tickets',
-    component: Tickets,
+    path: 'ticket',
+    component: TicketList,
     title: 'Tickets',
   },
   {
-    path: 'new-ticket',
-    component: NewTicket,
+    path: 'ticket/create',
+    component: TicketEdit,
     title: 'Nouveau ticket',
+  },
+  {
+    path: 'ticket/update/:id',
+    component: TicketEdit,
+    title: 'Modification de ticket',
+  },
+  {
+    path: 'ticket/:id',
+    component: TicketDetail,
+    title: 'Details du ticket',
   },
   {
     path: 'clients',

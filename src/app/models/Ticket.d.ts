@@ -8,8 +8,8 @@ type Ticket = {
   closeDate: Date | null;
   modificationDate: Date | null;
   callDuration: number | null;
-  initialPriority: PriorityEnum;
-  finalPriority: PriorityEnum;
+  initialPriority: number;
+  finalPriority: number;
   currentTheme: ThemeEnum;
   idVersion: number | null;
   idClient: number;

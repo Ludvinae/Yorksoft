@@ -1,6 +1,8 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { tap } from 'rxjs';
+import { Ticket } from '../../models/Ticket';
+import { Page } from '../../models/page/Page';
 
 @Injectable({
   providedIn: 'root',
@@ -15,19 +17,51 @@ export class TicketService {
   private http = inject(HttpClient);
   private apiUrl = 'http://localhost:8080/ticket';
 
-  getTicketsFull(): Observable<TicketFullLatest[]> {
-    return this.http.get<TicketFullLatest[]>(`${this.apiUrl}/list/full`);
+  readonly ticketList = signal<Ticket[]>([]);
+  readonly ticketDetail = signal<TicketListDto[]>([]);
+
+  get(id: number) {
+    return this.http.get<Ticket>(`${this.apiUrl}/${id}`);
   }
 
-  getTicketsPriority(): Observable<TicketFullLatest[]> {
-    return this.http.get<TicketFullLatest[]>(`${this.apiUrl}/list/priority`);
+  getDetail(id: number) {
+    return this.http.get<TicketListDto>(`${this.apiUrl}/${id}/detail`);
   }
 
-  getTicketsAssigned(): Observable<TicketFullLatest[]> {
-    return this.http.get<TicketFullLatest[]>(`${this.apiUrl}/list/assigned`);
+  getAll() {
+    return this.http.get<Ticket[]>(`${this.apiUrl}/list`).pipe(
+      tap((ticketList) => {
+        this.ticketList.set(ticketList);
+      }),
+    );
   }
 
-  getTickets(tab: string): Observable<TicketFullLatest[]> {
-    return this.http.get<TicketFullLatest[]>(`${this.apiUrl}/list-` + tab);
+  getAllDto() {
+    return this.http.get<Page<TicketListDto>>(`${this.apiUrl}/test`).pipe(
+      tap((page) => {
+        this.ticketDetail.set(page.content);
+      }),
+    );
   }
+
+  create(ticket: Ticket) {
+    return this.http.post(`${this.apiUrl}`, ticket).pipe(tap(() => this.getAll().subscribe()));
+  }
+
+  update(ticket: Ticket, id: number) {
+    return this.http.put(`${this.apiUrl}/${id}`, ticket).pipe(
+      tap((result) => {
+        this.getAll().subscribe();
+      }),
+    );
+  }
+
+  delete(id: number) {
+    return this.http.delete(`${this.apiUrl}/${id}`).pipe(
+      tap((result) => {
+        this.getAll().subscribe();
+      }),
+    );
+  }
+
 }

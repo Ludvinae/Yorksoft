@@ -1,0 +1,36 @@
+<app-generic-form-page
+  [title]="ticketEdit() ? 'Modifier la ticket' : 'Créer la ticket'"
+  [loading]="loading()"
+  [error]="error()"
+  [submitLabel]="ticketEdit() ? 'Modifier' : 'Créer'"
+  (submitForm)="onSubmit()"
+  [formGroup]="form"
+  [routeId] = "routeId()"
+  [isEditMode] = "isEditMode()"
+>
+
+  <!-- champs -->
+
+  <app-field-text labelKey="Titre du ticket" placeholder="Dysfonctionnement de la fonctionnalité"
+                  [control]="form.controls.title"
+                  [errorMessages]="{
+    required: 'Le numéro est obligatoire',
+    minLength: 'Min 3 caractères',
+    maxlength: 'Max 63 caractères'}">
+  </app-field-text>
+
+
+  <app-field-select
+    labelKey="Logiciel"
+    [control]="form.controls.idVersion"
+    [options]="listVersion()"
+    valueField="idSoftware"
+    labelField="name"
+    placeholder="Choisir un logiciel"
+    [errorMessages]="{
+    required: 'Le logiciel est obligatoire'
+  }"
+  />
+
+
+</app-generic-form-page>

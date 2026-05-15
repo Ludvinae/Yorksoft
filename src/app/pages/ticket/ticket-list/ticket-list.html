@@ -1,0 +1,22 @@
+<app-title title="Tickets de logiciels" route="ticket"></app-title>
+
+<app-generic-list
+  [data]="ticketList()"
+  [columns]="[{ label: 'Titre du ticket', field: 'title' },
+              {label: 'Description du dysfonctionnement', field: 'description'},
+              { label: 'Thématique', field: 'currentTheme'},
+              {label: 'Dernière modification', field: 'modificationDate'},
+              {label: 'Statut', field: 'currentStatus'},
+              { label: 'Priorité', field: 'currentPriority'}]"
+  [baseRoute]="'/ticket'"
+  [idField]="'idTicket'"
+  [itemTemplate]="ticketCard"
+  (deleteItem)="onDelete($event)">
+</app-generic-list>
+
+<ng-template #ticketCard let-ticket >
+  <h3 class="font-bold text-lg">{{ ticket.title }} {{ ticket.currentStatus }}</h3>
+  <H4>{{ ticket.currentTheme }}</H4>
+  <p class="text-sm">Date de modification : {{ ticket.modificationDate }}</p>
+
+</ng-template>

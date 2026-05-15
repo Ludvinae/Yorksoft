@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
+import { VersionFormService } from './version-form-service';
 
-import { VersionFormService } from './versionFormService';
 
 describe('VersionFacade', () => {
   let service: VersionFormService;
