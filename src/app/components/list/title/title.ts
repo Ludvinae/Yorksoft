@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -12,6 +12,6 @@ export class Title {
   @Input() route!: string;
 
   get createRoute(): string {
-    return `/admin/${this.route}/create`;
+    return  this.route == 'ticket' ? `/${this.route}/create` :`/admin/${this.route}/create`;
   }
 }
