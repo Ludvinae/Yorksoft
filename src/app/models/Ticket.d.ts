@@ -1,4 +1,3 @@
-import { ThemeEnum } from './enum/ThemeEnum';
 
 type Ticket = {
   idTicket: number;
@@ -9,9 +8,9 @@ type Ticket = {
   modificationDate: Date | null;
   callDuration: number | null;
   initialPriority: number;
-  finalPriority: number;
+  currentPriority: number;
   currentTheme: ThemeEnum;
-  idVersion: number | null;
+  idVersion: number;
   idClient: number;
   idImpact: number;
   idUrgency: number;

@@ -1,5 +1,5 @@
 <app-generic-form-page
-  [title]="ticketEdit() ? 'Modifier le ticket' : 'OUvrir un ticket'"
+  [title]="ticketEdit() ? 'Modifier le ticket' : 'Ouvrir un ticket'"
   [loading]="loading()"
   [error]="error()"
   [submitLabel]="ticketEdit() ? 'Modifier' : 'Créer'"
@@ -24,11 +24,11 @@
     labelKey="Logiciel"
     [control]="form.controls.idVersion"
     [options]="listVersion()"
-    valueField="idSoftware"
-    labelField="name"
-    placeholder="Choisir un logiciel"
+    valueField="idVersion"
+    labelField="designation"
+    placeholder="Choisir une version"
     [errorMessages]="{
-    required: 'Le logiciel est obligatoire'
+    required: 'La version est obligatoire'
   }"
   />
 
