@@ -61,6 +61,7 @@ public class TicketQueryService {
 
     private static final Set<String> ALLOWED_SORTS = Set.of(
             "openDate",
+            "modificationDate",
             "closeDate",
             "currentPriority",
             "currentStatus",

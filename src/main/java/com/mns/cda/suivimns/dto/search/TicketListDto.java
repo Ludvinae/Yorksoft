@@ -16,5 +16,10 @@ public record TicketListDto(
     StatusEnum currentStatus,
     ThemeEnum currentTheme,
     String clientFirstName,
-    String clientLastName
+    String clientLastName,
+    String softwareName,
+    String versionNumber,
+    String versionTypeDesignation,
+    Integer idTechnician,
+    Integer idManager
 ) {}
