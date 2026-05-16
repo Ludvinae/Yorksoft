@@ -1,7 +1,8 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { tap } from 'rxjs';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable, tap } from 'rxjs';
 import { Page } from '../../models/page/Page';
+import { TicketSearchCriteria } from '../../models/page/TicketSearchCriteria';
 
 @Injectable({
   providedIn: 'root',
@@ -40,6 +41,45 @@ export class TicketService {
       tap((page) => {
         this.ticketDetail.set(page.content);
       }),
+    );
+  }
+
+  getTickets(
+    criteria: TicketSearchCriteria,
+    page: number,
+    size: number,
+    sort: string
+  ): Observable<Page<TicketListDto>> {
+
+    let params = new HttpParams()
+      .set('page', page)
+      .set('size', size)
+      .set('sort', sort);
+
+    if (criteria.search) {
+      params = params.set(
+        'search',
+        criteria.search
+      );
+    }
+
+    if (criteria.assigned) {
+      params = params.set(
+        'assigned',
+        criteria.assigned
+      );
+    }
+
+    if (criteria.priorityOnly) {
+      params = params.set(
+        'priorityOnly',
+        criteria.priorityOnly
+      );
+    }
+
+    return this.http.get<Page<TicketListDto>>(
+      `${this.apiUrl}/test`,
+      { params }
     );
   }
 

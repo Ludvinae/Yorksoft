@@ -1,12 +1,14 @@
-<app-title title="Tickets de logiciels" route="ticket"></app-title>
+<app-title title="Tickets" route="ticket"></app-title>
 
 <app-generic-list
   [data]="ticketList()"
   [columns]="[{ label: 'Titre du ticket', field: 'title' },
-              {label: 'Description du dysfonctionnement', field: 'description'},
               { label: 'Thématique', field: 'currentTheme'},
-              {label: 'Dernière modification', field: 'modificationDate'},
-              {label: 'Statut', field: 'currentStatus'},
+              { label: 'Dernière modification', field: 'modificationDate'},
+              { label: 'Logiciel', field: 'softwareName'},
+              { label: 'Version', field: 'versionNumber'},
+              { label: 'Type de version', field: 'versionTypeDesignation'},
+              { label: 'Statut', field: 'currentStatus'},
               { label: 'Priorité', field: 'currentPriority'}]"
   [baseRoute]="'/ticket'"
   [idField]="'idTicket'"
@@ -15,8 +17,15 @@
 </app-generic-list>
 
 <ng-template #ticketCard let-ticket >
-  <h3 class="font-bold text-lg">{{ ticket.title }} {{ ticket.currentStatus }}</h3>
-  <H4>{{ ticket.currentTheme }}</H4>
-  <p class="text-sm">Date de modification : {{ ticket.modificationDate }}</p>
-
+  <div>
+    <span>{{ ticket.currentStatus }} {{ ticket.currentPriority }}</span>
+    <span>{{ ticket.modificationDate }}</span>
+  </div>
+  <div>
+    <h3 class="font-bold text-lg">{{ ticket.title }}</h3>
+  </div>
+  <div>
+    <span>{{ ticket.softwareName }} {{ ticket.versionNumber}} {{ ticket.versionTypeDesignation }}</span>
+    <span>{{ ticket.currentTheme }}</span>
+  </div>
 </ng-template>
