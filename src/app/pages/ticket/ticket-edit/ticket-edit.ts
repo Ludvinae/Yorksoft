@@ -2,12 +2,10 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TicketFormService } from '../../../services/form-service/ticket-form-service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SoftwareService } from '../../../services/api/software-service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FieldSelect } from '../../../components/form/field-select/field-select';
 import { FieldText } from '../../../components/form/field-text/field-text';
 import { GenericFormPage } from '../../../components/form/generic-form-page/generic-form-page';
-import {Ticket} from '../../../models/Ticket';
 import { VersionService } from '../../../services/api/version-service';
 import { list } from 'postcss';
 

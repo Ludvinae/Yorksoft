@@ -12,4 +12,9 @@ type TicketListDto = {
   currentTheme: ThemeEnum;
   clientFirstName: string;
   clientLastName: string;
+  softwareName: string;
+  versionNumber: string;
+  versionTypeDesignation: string;
+  idTechnician: number;
+  idManager: number;
 };

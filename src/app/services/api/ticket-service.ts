@@ -1,7 +1,6 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs';
-import { Ticket } from '../../models/Ticket';
 import { Page } from '../../models/page/Page';
 
 @Injectable({
