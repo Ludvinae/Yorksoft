@@ -45,7 +45,7 @@ export class TicketService {
   }
 
   getTickets(
-    criteria: TicketSearchCriteria,
+    filters: any,
     page: number,
     size: number,
     sort: string
@@ -56,24 +56,27 @@ export class TicketService {
       .set('size', size)
       .set('sort', sort);
 
-    if (criteria.search) {
+    if (filters.search?.trim()) {
+
       params = params.set(
         'search',
-        criteria.search
+        filters.search
       );
     }
 
-    if (criteria.assigned) {
+    if (filters.assigned) {
+
       params = params.set(
         'assigned',
-        criteria.assigned
+        true
       );
     }
 
-    if (criteria.priorityOnly) {
+    if (filters.priorityOnly) {
+
       params = params.set(
         'priorityOnly',
-        criteria.priorityOnly
+        true
       );
     }
 

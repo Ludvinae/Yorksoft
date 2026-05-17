@@ -1,4 +1,4 @@
-<app-title title="Tickets" route="ticket"></app-title>
+<app-title-bar (paramsChange)="onClick($event)"></app-title-bar>
 
 <app-generic-list
   [data]="ticketList()"

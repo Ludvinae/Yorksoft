@@ -12,11 +12,15 @@ import { TicketService } from '../../../services/api/ticket-service';
 export class ListDesktop implements OnInit {
   tickets: TicketListDto[] = [];
 
+  filters = {
+    search: '',
+    assigned: false,
+    priorityOnly: false,
+  };
+
   loading = false;
 
   search = '';
-
-  filter: 'all' | 'assigned' | 'priority' = 'all';
 
   page = 0;
 
@@ -39,47 +43,36 @@ export class ListDesktop implements OnInit {
   }
 
   loadTickets(): void {
-    this.loading = true;
-
     this.ticketService
-      .getTickets(
-        {
-          search: this.search,
-
-          assigned: this.filter === 'assigned',
-
-          priorityOnly: this.filter === 'priority',
-        },
-
-        this.page,
-
-        this.pageSize,
-
-        `${this.sortField},${this.sortDirection}`,
-      )
+      .getTickets(this.filters, this.page, this.pageSize, `${this.sortField},${this.sortDirection}`)
       .subscribe({
         next: (response) => {
           this.tickets = response.content;
 
-          this.totalElements = response.totalElements;
-
           this.totalPages = response.totalPages;
 
-          this.page = response.number;
-
-          this.loading = false;
+          this.totalElements = response.totalElements;
         },
 
         error: (err) => {
           console.error(err);
-
-          this.loading = false;
         },
       });
   }
 
   setFilter(filter: 'all' | 'assigned' | 'priority'): void {
-    this.filter = filter;
+    this.filters.assigned = false;
+    this.filters.priorityOnly = false;
+
+    switch (filter) {
+      case 'assigned':
+        this.filters.assigned = true;
+        break;
+
+      case 'priority':
+        this.filters.priorityOnly = true;
+        break;
+    }
 
     this.page = 0;
 
@@ -114,11 +107,6 @@ export class ListDesktop implements OnInit {
     }
   }
 
-  onSearch(): void {
-    this.page = 0;
-
-    this.loadTickets();
-  }
 
   searchWithDelay(): void {
     clearTimeout(this.searchTimeout);

@@ -38,7 +38,7 @@
           type="text"
           class="grow"
           placeholder="Rechercher un ticket..."
-          [(ngModel)]="search"
+          [(ngModel)]="filters.search"
           (input)="searchWithDelay()"
         />
 
@@ -61,22 +61,25 @@
       <!-- Filters -->
       <button
         class="btn"
-        [class.btn-neutral]="filter === 'all'"
+        [class.btn-neutral]="!filters.assigned && !filters.priorityOnly"
         (click)="setFilter('all')">
+
         Tous
       </button>
 
       <button
         class="btn"
-        [class.btn-neutral]="filter === 'assigned'"
+        [class.btn-neutral]="filters.assigned"
         (click)="setFilter('assigned')">
+
         Attribués
       </button>
 
       <button
         class="btn"
-        [class.btn-neutral]="filter === 'priority'"
+        [class.btn-neutral]="filters.priorityOnly"
         (click)="setFilter('priority')">
+
         Prioritaires
       </button>
 

@@ -33,6 +33,7 @@ import { VersionTypeDetail } from './pages/admin/version-type/version-type-detai
 import { TicketList } from './pages/ticket/ticket-list/ticket-list';
 import { TicketEdit } from './pages/ticket/ticket-edit/ticket-edit';
 import { TicketDetail } from './pages/ticket/ticket-detail/ticket-detail';
+import { ListDesktop } from './components/ticket/list-desktop/list-desktop';
 
 export const routes: Routes = [
   {
