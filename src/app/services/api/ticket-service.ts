@@ -45,43 +45,45 @@ export class TicketService {
   }
 
   getTickets(
-    filters: any,
+    filters: TicketSearchCriteria,
     page: number,
     size: number,
     sort: string
-  ): Observable<Page<TicketListDto>> {
+  ) {
 
     let params = new HttpParams()
       .set('page', page)
       .set('size', size)
       .set('sort', sort);
 
-    if (filters.search?.trim()) {
+    Object.entries(filters).forEach(([key, value]) => {
 
-      params = params.set(
-        'search',
-        filters.search
-      );
-    }
+      if (
+        value !== null &&
+        value !== undefined &&
+        value !== ''
+      ) {
 
-    if (filters.assigned) {
+        // tableau
+        if (Array.isArray(value)) {
 
-      params = params.set(
-        'assigned',
-        true
-      );
-    }
+          value.forEach(v => {
 
-    if (filters.priorityOnly) {
+            params = params.append(key, v);
+          });
 
-      params = params.set(
-        'priorityOnly',
-        true
-      );
-    }
+        } else {
+
+          params = params.set(
+            key,
+            value.toString()
+          );
+        }
+      }
+    });
 
     return this.http.get<Page<TicketListDto>>(
-      `${this.apiUrl}/test`,
+      this.apiUrl,
       { params }
     );
   }

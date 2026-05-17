@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Output, signal } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TicketSearchCriteria } from '../../../models/page/TicketSearchCriteria';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-title-bar',
@@ -8,34 +10,30 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
   styleUrl: './title-bar.css',
 })
 export class TitleBar {
-  @Output() paramsChange = new EventEmitter<string>();
+  @Output() paramsChange = new EventEmitter<TicketSearchCriteria>();
 
   params = '';
   search = '';
 
-  filters = {
-    assigned: false,
-    priority: false,
-  };
+  filters: TicketSearchCriteria = {};
 
   onInput(): void {
-    this.paramsChange.emit(this.params);
+    this.paramsChange.emit(this.filters);
   }
 
   setFilter(filter: 'all' | 'assigned' | 'priority'): void {
-    this.filters.assigned = false;
-    this.filters.priority = false;
+    this.filters = {};
 
     switch (filter) {
       case 'assigned':
         this.params = '?status=assigned';
-        this.filters.assigned = true;
+        this.filters.statuses = ['ASSIGNED'];
         this.onInput();
         break;
 
       case 'priority':
         this.params = '?priorityGreaterThan=65';
-        this.filters.priority = true;
+        this.filters.priorityGreaterThan = 65;
         this.onInput();
         break;
 

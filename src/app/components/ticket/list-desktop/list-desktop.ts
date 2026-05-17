@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DatePipe, NgClass } from '@angular/common';
 import { TicketService } from '../../../services/api/ticket-service';
+import { TicketSearchCriteria } from '../../../models/page/TicketSearchCriteria';
 
 @Component({
   selector: 'app-list-desktop',
@@ -12,10 +13,10 @@ import { TicketService } from '../../../services/api/ticket-service';
 export class ListDesktop implements OnInit {
   tickets: TicketListDto[] = [];
 
-  filters = {
-    search: '',
-    assigned: false,
-    priorityOnly: false,
+  filters: TicketSearchCriteria = {
+    keyword: '',
+    statuses: ['ASSIGNED'],
+    priorityGreaterThan: 65,
   };
 
   loading = false;
@@ -61,18 +62,8 @@ export class ListDesktop implements OnInit {
   }
 
   setFilter(filter: 'all' | 'assigned' | 'priority'): void {
-    this.filters.assigned = false;
-    this.filters.priorityOnly = false;
 
-    switch (filter) {
-      case 'assigned':
-        this.filters.assigned = true;
-        break;
 
-      case 'priority':
-        this.filters.priorityOnly = true;
-        break;
-    }
 
     this.page = 0;
 
