@@ -38,7 +38,7 @@
           type="text"
           class="grow"
           placeholder="Rechercher un ticket..."
-          [(ngModel)]="filters.search"
+          [(ngModel)]="search"
           (input)="searchWithDelay()"
         />
 
@@ -61,7 +61,7 @@
       <!-- Filters -->
       <button
         class="btn"
-        [class.btn-neutral]="!filters.assigned && !filters.priorityOnly"
+        [class.btn-neutral]=""
         (click)="setFilter('all')">
 
         Tous
@@ -69,7 +69,7 @@
 
       <button
         class="btn"
-        [class.btn-neutral]="filters.assigned"
+        [class.btn-neutral]=""
         (click)="setFilter('assigned')">
 
         Attribués
@@ -77,7 +77,7 @@
 
       <button
         class="btn"
-        [class.btn-neutral]="filters.priorityOnly"
+        [class.btn-neutral]=""
         (click)="setFilter('priority')">
 
         Prioritaires

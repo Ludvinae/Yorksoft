@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Output, signal } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TicketSearchCriteria } from '../../../models/page/TicketSearchCriteria';
-import { filter } from 'rxjs';
+import { TicketStoreService } from '../../../services/ticket-store-service';
 
 @Component({
   selector: 'app-title-bar',
@@ -10,37 +10,42 @@ import { filter } from 'rxjs';
   styleUrl: './title-bar.css',
 })
 export class TitleBar {
-  @Output() paramsChange = new EventEmitter<TicketSearchCriteria>();
+  buttonState = 'all';
 
-  params = '';
-  search = '';
+  search = "";
+  private searchTimeout : any;
 
   filters: TicketSearchCriteria = {};
 
-  onInput(): void {
-    this.paramsChange.emit(this.filters);
-  }
+  constructor(public store: TicketStoreService) {}
 
   setFilter(filter: 'all' | 'assigned' | 'priority'): void {
     this.filters = {};
 
     switch (filter) {
       case 'assigned':
-        this.params = '?status=assigned';
-        this.filters.statuses = ['ASSIGNED'];
-        this.onInput();
+        this.store.updateFilters({statuses : ['ASSIGNED']})
+        this.buttonState = 'assigned';
         break;
 
       case 'priority':
-        this.params = '?priorityGreaterThan=65';
-        this.filters.priorityGreaterThan = 65;
-        this.onInput();
+        this.store.updateFilters({priorityGreaterThan: 65})
+        this.buttonState = 'priority';
         break;
 
       case 'all':
-        this.params = '';
-        this.onInput();
+        this.store.loadTickets();
+        this.buttonState = 'all';
         break;
     }
+  }
+
+  onSearch(value: string): void {
+
+    this.search = value;
+    clearTimeout(this.searchTimeout);
+    this.searchTimeout = setTimeout(() => {
+      this.store.updateFilters({keyword: value})
+    }, 300);
   }
 }

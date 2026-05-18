@@ -1,8 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { GenericList } from '../../../components/list/generic-list/generic-list';
-import { Title } from '../../../components/list/title/title';
 import { TicketService } from '../../../services/api/ticket-service';
 import { TitleBar } from '../../../components/title-bar/title-bar/title-bar';
+import { TicketStoreService } from '../../../services/ticket-store-service';
 
 @Component({
   selector: 'app-ticket-list',
@@ -12,26 +12,23 @@ import { TitleBar } from '../../../components/title-bar/title-bar/title-bar';
 })
 export class TicketList implements OnInit {
   ticketService = inject(TicketService);
+  storeService = inject(TicketStoreService);
 
-  ticketList = this.ticketService.ticketDetail;
+  ticketList = this.storeService.tickets;
 
-  params = ""
 
   ngOnInit() {
-    this.ticketService.getAllDto().subscribe();
+    this.storeService.loadTickets()
   }
 
   onDelete(id: number) {
     this.ticketService.delete(id).subscribe({
       next: () => {
         alert('Supprimé');
-        this.ticketService.getAllDto().subscribe();
+        this.storeService.loadTickets();
       },
       error: () => alert('Erreur'),
     });
   }
 
-  onClick(value: string) {
-    this.params = value;
-  }
 }

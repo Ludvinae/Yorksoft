@@ -31,7 +31,8 @@
       type="text"
       class="grow"
       placeholder="Rechercher un ticket..."
-      [(ngModel)]="search"
+      [ngModel]="search"
+      (ngModelChange)="onSearch($event)"
     />
 
     <svg xmlns="http://www.w3.org/2000/svg"
@@ -53,7 +54,7 @@
   <!-- Filters -->
   <button
     class="btn"
-    [class.btn-neutral]="!filters.assigned && !filters.priority"
+    [class.btn-neutral]="buttonState == 'all'"
     (click)="setFilter('all')">
 
     Tous
@@ -61,7 +62,7 @@
 
   <button
     class="btn"
-    [class.btn-neutral]="filters.assigned"
+    [class.btn-neutral]="buttonState == 'assigned'"
     (click)="setFilter('assigned')">
 
     Attribués
@@ -69,7 +70,7 @@
 
   <button
     class="btn"
-    [class.btn-neutral]="filters.priority"
+    [class.btn-neutral]="buttonState == 'priority'"
     (click)="setFilter('priority')">
 
     Prioritaires

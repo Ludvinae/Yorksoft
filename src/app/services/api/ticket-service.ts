@@ -1,6 +1,6 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
+import { tap } from 'rxjs';
 import { Page } from '../../models/page/Page';
 import { TicketSearchCriteria } from '../../models/page/TicketSearchCriteria';
 
@@ -83,7 +83,7 @@ export class TicketService {
     });
 
     return this.http.get<Page<TicketListDto>>(
-      this.apiUrl,
+      'http://localhost:8080/ticket/test',
       { params }
     );
   }
