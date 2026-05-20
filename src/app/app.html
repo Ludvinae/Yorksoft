@@ -1,3 +1,4 @@
+@if (displayNav()) {
 
   @if (isMobile()) {
 
@@ -52,4 +53,9 @@
     </div>
 
   }
-
+} @else {
+  <!-- CONTENT -->
+  <div class="flex-1 overflow-auto">
+    <router-outlet></router-outlet>
+  </div>
+}

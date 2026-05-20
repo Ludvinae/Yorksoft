@@ -43,6 +43,7 @@ export class TitleBar {
     }
   }
 
+  // Fonction de recherche sur le titre, avec debounce 300ms
   onSearch(value: string): void {
 
     this.search = value;
