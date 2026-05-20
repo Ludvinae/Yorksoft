@@ -72,20 +72,35 @@ VALUES ('Erreur de manipulation', 'HANDLING_ERROR', ''),
 INSERT INTO ticket (title, open_date, call_duration, current_priority, initial_priority, close_date, modification_date,
                     description, id_client, id_urgency, id_impact, id_version, current_status, current_theme,
                     id_current_manager, id_current_technician)
-VALUES ('Ca marche pas', NOW(), null, 10, 10, null, NOW(),
+VALUES  ('Ca marche pas', NOW(), null, 10, 10, null, NOW(),
         'Ca marche pas', 1, 1, 1, 2, 'WAITING_CLIENT', 'OTHER_ISSUE',
         4, 5),
-       ('Indisponibilité du service de sauvegarde en ligne', NOW(), 1035, 50,
-        50, null, NOW(),
+       ('Indisponibilité du service de sauvegarde en ligne', NOW(), 1035, 70,
+        70, null, NOW(),
         'Impossible d''acceder au dossiers sur le cloud dans le gestionnaire de projets.', 3, 2,
-        2, 3, 'OPEN', 'NETWORK_ISSUE', 4, 5);
+        2, 3, 'OPEN', 'NETWORK_ISSUE', 4, 5),
+        ('Pas de menu', '2026-03-11 14:51:08', 352, 37,
+         37, '2026-03-11 16:16:42', '2026-03-11 16:16:42',
+         'Impossible d''acceder au items du menu', 1, 2,
+         1, 2, 'CLOSED', 'HANDLING_ERROR', 4, 6),
+       ('Pas de menu apparant', '2026-05-05 08:23:08', 352, 50,
+        50, null, '2026-05-05 10:16:42',
+        'Impossible d''acceder au items du menu', 3, 2,
+        3, 2, 'ASSIGNED', 'HANDLING_ERROR', 4, 5);
 
 
 INSERT INTO history (id_status, id_ticket, id_app_user, start_date, end_date)
 VALUES (1, 1, 1, '2026-04-11 09:12:00', '2026-04-11 09:27:00'),
        (1, 2, 3, '2026-04-11 11:31:00', null),
        (2, 1, 1, '2026-04-11 09:27:00', '2026-04-11 10:13:00'),
-       (4, 1, 3, '2026-04-11 10:13:00', null);
+       (4, 1, 3, '2026-04-11 10:13:00', null),
+       (1, 3, 5, '2026-03-11 14:51:08', '2026-03-11 15:08:08'),
+       (1, 3, 4, '2026-03-11 15:08:08', '2026-03-11 15:26:33'),
+       (3, 3, 6, '2026-03-11 15:26:33', '2026-03-11 15:45:33'),
+       (5, 3, 6, '2026-03-11 15:45:33', '2026-03-11 16:16:42'),
+       (6, 3, 1, '2026-03-11 16:16:42', null),
+       (1, 4, 5, '2026-05-05 08:23:08', '2026-05-05 10:16:42'),
+       (2, 4, 4, '2026-05-05 10:16:42', null);
 
 INSERT INTO comment (date_sent, last_modification, content, id_ticket, id_app_user)
 VALUES (NOW(), null, 'Bonjour, pourriez vous préciser la nature de votre problème ?', 1, 5);

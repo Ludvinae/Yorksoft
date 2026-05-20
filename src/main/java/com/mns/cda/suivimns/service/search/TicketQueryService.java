@@ -67,6 +67,8 @@ public class TicketQueryService {
             "currentStatus",
             "currentTechnician",
             "currentTheme",
-            "title"
+            "title",
+            "version.software.name",
+            "version.versionNumber"
     );
 }
