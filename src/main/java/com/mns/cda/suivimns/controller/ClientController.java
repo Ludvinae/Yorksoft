@@ -48,6 +48,7 @@ public class ClientController {
     }
 
 
+    /* Replaced by route in Auth controller
     @Operation(summary = "Crée une nouvelle client")
     @ApiResponses({@ApiResponse(responseCode = "201", description = "Client crée"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
@@ -55,6 +56,8 @@ public class ClientController {
     public ResponseEntity<ClientDto> create(@RequestBody @Valid ClientDto client) {
         return new ResponseEntity<>(clientService.save(client), HttpStatus.CREATED);
     }
+
+     */
 
 
     @Operation(summary = "Efface une client selon son ID")

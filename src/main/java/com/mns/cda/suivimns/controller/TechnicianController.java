@@ -48,7 +48,7 @@ public class TechnicianController {
         }
     }
 
-
+    /* Replaced by route in Auth controller
     @Operation(summary = "Crée une nouvelle technicien")
     @ApiResponses({@ApiResponse(responseCode = "201", description = "Technicien crée"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
@@ -56,6 +56,8 @@ public class TechnicianController {
     public ResponseEntity<TechnicianDto> create(@RequestBody @Valid TechnicianDto technician) {
         return new ResponseEntity<>(technicianService.save(technician), HttpStatus.CREATED);
     }
+
+     */
 
 
     @Operation(summary = "Efface une technicien selon son ID")

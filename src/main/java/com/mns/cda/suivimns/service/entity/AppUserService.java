@@ -6,6 +6,7 @@ import com.mns.cda.suivimns.dto.flat.PasswordDto;
 import com.mns.cda.suivimns.mapper.entity.AppUserMapper;
 import com.mns.cda.suivimns.model.AppUser;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,7 +27,7 @@ public class AppUserService {
 
     protected final AppUserDao appUserDao;
     protected final AppUserMapper appUserMapper;
-    
+    protected final PasswordEncoder encoder;
 
     public List<AppUserDto> findAll() {
         return appUserMapper.toDtoList(appUserDao.findAll());
@@ -42,9 +43,19 @@ public class AppUserService {
     public AppUserDto save(AppUserDto dto) {
         AppUser appUser = appUserMapper.toEntity(dto);
         appUser.setIdAppUser(null);
+
         AppUser saved = appUserDao.save(appUser);
 
         return appUserMapper.toDto(saved);
+    }
+
+    public void insert(AppUser appUser) {
+        appUser.setIdAppUser(null);
+
+        // Encodage du password avant de l'inserer en base de données
+        appUser.setPassword(encoder.encode(appUser.getPassword()));
+
+        appUserDao.save(appUser);
     }
 
     public void delete(int id) throws AppUserNotFoundException {

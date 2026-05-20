@@ -47,7 +47,7 @@ public class ManagerController {
         }
     }
 
-
+    /* Replaced by route in Auth controller
     @Operation(summary = "Crée une nouvelle manager")
     @ApiResponses({@ApiResponse(responseCode = "201", description = "Manager crée"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
@@ -55,6 +55,8 @@ public class ManagerController {
     public ResponseEntity<ManagerDto> create(@RequestBody @Valid ManagerDto manager) {
         return new ResponseEntity<>(managerService.save(manager), HttpStatus.CREATED);
     }
+
+     */
 
 
     @Operation(summary = "Efface une manager selon son ID")

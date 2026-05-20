@@ -48,7 +48,7 @@ public class DirectorController {
         }
     }
 
-
+    /* Replaced by route in Auth controller
     @Operation(summary = "Crée une nouvelle directeur")
     @ApiResponses({@ApiResponse(responseCode = "201", description = "Directeur crée"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
@@ -56,6 +56,8 @@ public class DirectorController {
     public ResponseEntity<DirectorDto> create(@RequestBody @Valid DirectorDto director) {
         return new ResponseEntity<>(directorService.save(director), HttpStatus.CREATED);
     }
+
+     */
 
 
     @Operation(summary = "Efface une directeur selon son ID")

@@ -5,8 +5,10 @@ import com.mns.cda.suivimns.dao.DirectorDao;
 import com.mns.cda.suivimns.dto.entity.DirectorDto;
 import com.mns.cda.suivimns.dto.flat.PasswordDto;
 import com.mns.cda.suivimns.mapper.entity.DirectorMapper;
+import com.mns.cda.suivimns.model.Client;
 import com.mns.cda.suivimns.model.Director;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,7 +28,7 @@ public class DirectorService  {
     protected final DirectorDao directorDao;
     protected final DirectorMapper directorMapper;
     protected final AppUserDao appUserDao;
-
+    protected final PasswordEncoder encoder;
 
     public List<DirectorDto> findAll() {
         return directorMapper.toDtoList(directorDao.findAll());
@@ -45,6 +47,15 @@ public class DirectorService  {
         Director saved = directorDao.save(director);
 
         return directorMapper.toDto(saved);
+    }
+
+    public void insert(Director director) {
+        director.setIdAppUser(null);
+
+        // Encodage du password avant de l'inserer en base de données
+        director.setPassword(encoder.encode(director.getPassword()));
+
+        appUserDao.save(director);
     }
 
     public void delete(int id) throws DirectorService.DirectorNotFoundException {

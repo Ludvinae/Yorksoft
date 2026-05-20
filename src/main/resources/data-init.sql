@@ -19,14 +19,14 @@ VALUES ('1.0', '2011-11-11 14:30:00', 1, 1),
        ('0.6.3', '2026-01-01 22:00:00', 3, 2);
 
 INSERT INTO app_user (phone_number, email, first_name, last_name, password)
-VALUES ( '06 84 54 56 11', 'barbara.dupont99@gmail.com', 'Barbara', 'Dupont', 'WeshAlors99'),
-       ( '07 44 12 33 13', 'bdupont@hotmail.com', 'Barbara', 'Dupont', 'TangoNocturne'),
-       ( '', 'kevin@creditmutuel.fr', 'Kevin', 'Martin', 'kékédu57'),
-       ('03 55 65 45 25', 'jeanvaljean@yorksoft.fr', 'Jean', 'Valjean', 'kGz4579c!AF5'),
-       ('03 55 65 78 99', 'sandraschmidt@yorksoft.fr', 'Sandra', 'Schmidt', 'sqqZ7A!784mK'),
-       ('03 55 65 77 11', 'damienmuller@yorksoft.fr', 'Damien', 'Muller', '78!dsQAE75Vcv'),
-       ('03 55 65 00 01', 'patrickthierry', 'Patrick', 'Thierry', 'kjiZ!51sd3Z' ),
-       ('', 'jeanclaude@creditmutuel.fr', 'Jean-Claude', 'Convenant', 'fjJH45pM2');
+VALUES ( '06 84 54 56 11', 'barbara.dupont99@gmail.com', 'Barbara', 'Dupont', '$2a$10$V98VMxgV7myKHPE7eu7n3.GO8EUiqZGK/3ISjSriOFklF2Uvftx8u'),
+       ( '07 44 12 33 13', 'bdupont@hotmail.com', 'Barbara', 'Dupont', '$2a$10$V98VMxgV7myKHPE7eu7n3.GO8EUiqZGK/3ISjSriOFklF2Uvftx8u'),
+       ( '', 'kevin@creditmutuel.fr', 'Kevin', 'Martin', '$2a$10$V98VMxgV7myKHPE7eu7n3.GO8EUiqZGK/3ISjSriOFklF2Uvftx8u'),
+       ('03 55 65 45 25', 'jeanvaljean@yorksoft.fr', 'Jean', 'Valjean', '$2a$10$V98VMxgV7myKHPE7eu7n3.GO8EUiqZGK/3ISjSriOFklF2Uvftx8u'),
+       ('03 55 65 78 99', 'sandraschmidt@yorksoft.fr', 'Sandra', 'Schmidt', '$2a$10$V98VMxgV7myKHPE7eu7n3.GO8EUiqZGK/3ISjSriOFklF2Uvftx8u'),
+       ('03 55 65 77 11', 'damienmuller@yorksoft.fr', 'Damien', 'Muller', '$2a$10$V98VMxgV7myKHPE7eu7n3.GO8EUiqZGK/3ISjSriOFklF2Uvftx8u'),
+       ('03 55 65 00 01', 'patrickthierry@yorksoft.fr', 'Patrick', 'Thierry', '$2a$10$V98VMxgV7myKHPE7eu7n3.GO8EUiqZGK/3ISjSriOFklF2Uvftx8u' ),
+       ('', 'jeanclaude@creditmutuel.fr', 'Jean-Claude', 'Convenant', '$2a$10$V98VMxgV7myKHPE7eu7n3.GO8EUiqZGK/3ISjSriOFklF2Uvftx8u');
 
 INSERT INTO manager (id_app_user)
 VALUES (4);
