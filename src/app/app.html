@@ -1,4 +1,3 @@
-@if (isAuthenticated()) {
 
   @if (isMobile()) {
 
@@ -54,11 +53,3 @@
 
   }
 
-} @else {
-
-  <!-- 🔐 LOGIN -->
-  <div class="h-screen">
-    <router-outlet></router-outlet>
-  </div>
-
-}

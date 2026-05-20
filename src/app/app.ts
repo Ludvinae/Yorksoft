@@ -18,12 +18,10 @@ import { NavMobile } from './components/nav/nav-mobile/nav-mobile';
   styleUrl: './app.css',
 })
 export class App {
-  private auth = inject(Auth);
   private breakpoint = inject(BreakpointSwitch);
 
   protected readonly title = signal('Suivi-MNS-Frontend');
 
-  isAuthenticated = this.auth.isAuthenticated;
 
   isMobile = this.breakpoint.isMobile;
 

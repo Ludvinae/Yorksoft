@@ -34,6 +34,11 @@ import { TicketList } from './pages/ticket/ticket-list/ticket-list';
 import { TicketEdit } from './pages/ticket/ticket-edit/ticket-edit';
 import { TicketDetail } from './pages/ticket/ticket-detail/ticket-detail';
 import { ListDesktop } from './components/ticket/list-desktop/list-desktop';
+import { Forbidden } from './pages/forbidden/forbidden';
+import { adminGuard } from './guards/admin-guard';
+import { managerGuard } from './guards/manager-guard';
+import { directorGuard } from './guards/director-guard';
+import { technicianGuard } from './guards/technician-guard';
 
 export const routes: Routes = [
   {
@@ -50,39 +55,47 @@ export const routes: Routes = [
     path: 'ticket',
     component: TicketList,
     title: 'Tickets',
+    canActivate: [technicianGuard, adminGuard, managerGuard, directorGuard, adminGuard],
   },
   {
     path: 'ticket/create',
     component: TicketEdit,
     title: 'Nouveau ticket',
+    canActivate: [technicianGuard, adminGuard, managerGuard, directorGuard, adminGuard],
   },
   {
     path: 'ticket/update/:id',
     component: TicketEdit,
     title: 'Modification de ticket',
+    canActivate: [technicianGuard, adminGuard, managerGuard, directorGuard, adminGuard],
   },
   {
     path: 'ticket/:id',
     component: TicketDetail,
     title: 'Details du ticket',
+    canActivate: [technicianGuard, adminGuard, managerGuard, directorGuard, adminGuard],
   },
   {
     path: 'clients',
     component: Clients,
     title: 'Clients',
+    canActivate: [technicianGuard, adminGuard, managerGuard, directorGuard, adminGuard],
   },
   {
     path: 'knowledge',
     component: Knowledge,
     title: 'Base de connaissance',
+    canActivate: [technicianGuard, adminGuard, managerGuard, directorGuard, adminGuard],
   },
   {
     path: 'settings',
     component: Settings,
     title: 'Réglages',
+    canActivate: [technicianGuard, adminGuard, managerGuard, directorGuard, adminGuard],
   },
   {
     path: 'admin',
+    canActivate: [adminGuard],
     children: [
       { path: '', component: Admin },
       { path: 'software', component: SoftwareList },
@@ -120,8 +133,13 @@ export const routes: Routes = [
     ],
   },
   {
+    path: 'forbidden',
+    component: Forbidden,
+    title: 'Accés interdit',
+  },
+  {
     path: '**',
     component: NotFound,
-    title: 'Not Found',
+    title: 'Page indisponible',
   },
 ];
