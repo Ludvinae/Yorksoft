@@ -36,6 +36,11 @@ export class TicketStoreService {
     this.loadTickets();
   }
 
+  resetFilters(): void {
+
+    this.filters.set({});
+  }
+
   setPage(page: number): void {
     this.page.set(page);
 

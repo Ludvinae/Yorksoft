@@ -24,17 +24,20 @@ export class TitleBar {
 
     switch (filter) {
       case 'assigned':
-        this.store.updateFilters({statuses : ['ASSIGNED']})
+        this.store.resetFilters();
+        this.store.updateFilters({ statuses: ['ASSIGNED'] });
         this.buttonState = 'assigned';
         break;
 
       case 'priority':
-        this.store.updateFilters({priorityGreaterThan: 65})
+        this.store.resetFilters();
+        this.store.updateFilters({ priorityGreaterThan: 65 });
         this.buttonState = 'priority';
         break;
 
       case 'all':
-        this.store.loadTickets();
+        this.store.resetFilters();
+        this.store.updateFilters({});
         this.buttonState = 'all';
         break;
     }
