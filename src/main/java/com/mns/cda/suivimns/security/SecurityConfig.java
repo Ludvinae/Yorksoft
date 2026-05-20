@@ -23,7 +23,7 @@ import java.util.List;
 @EnableWebSecurity
 @RequiredArgsConstructor
 @EnableMethodSecurity
-//Mettre l'annotation @PreAuthorize("hasRole('ROLE_USER')") ou ("hasAnyRole") pour plusieurs sur chaque route
+//Mettre l'annotation @PreAuthorize("hasRole('USER')") ou ("hasAnyRole") pour plusieurs sur chaque route
 // pour gérer les authorisations ou sur la classe si toutes les routes sur contrôleur ont la même authorisations
 public class SecurityConfig {
 

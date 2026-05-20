@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -45,6 +46,12 @@ public class JwtFilter extends OncePerRequestFilter {
             usernamePasswordAuthenticationToken
                     .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+
+            // verification du role de la personne connectée
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            System.out.println("Authorities : " + auth.getAuthorities());
+            System.out.println("Principal : " + auth.getPrincipal());
+            System.out.println("Authenticated : " + auth.isAuthenticated());
         }
 
         filterChain.doFilter(request, response);

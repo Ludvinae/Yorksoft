@@ -4,8 +4,10 @@ import com.mns.cda.suivimns.model.*;
 import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
@@ -58,16 +60,19 @@ public class AppUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+
         return List.of(new SimpleGrantedAuthority(
                 client != null
-                        ? "ROLE_CLIENT"
-                        : technician != null
-                            ? "ROLE_TECHNICIAN"
-                            : manager != null
-                                ? "ROLE_MANAGER"
-                                : director != null
-                                    ? "ROLE_DIRECTOR"
-                                    : "ROLE_ADMIN"
+                    ? "ROLE_CLIENT"
+                    : technician != null
+                        ? "ROLE_TECHNICIAN"
+                        : manager != null
+                            ? "ROLE_MANAGER"
+                            : director != null
+                                ? "ROLE_DIRECTOR"
+                                : admin != null
+                                    ? "ROLE_ADMIN"
+                                    :  null
         ));
     }
 
