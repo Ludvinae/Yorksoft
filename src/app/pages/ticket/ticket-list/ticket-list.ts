@@ -13,9 +13,8 @@ export class TicketList implements OnInit {
   ticketService = inject(TicketService);
   storeService = inject(TicketStoreService);
 
-
   ngOnInit() {
-    this.storeService.loadTickets()
+    this.storeService.loadTickets();
   }
 
   onDelete(id: number) {
@@ -28,4 +27,11 @@ export class TicketList implements OnInit {
     });
   }
 
+  isSorted(field: string): boolean {
+    return this.storeService.sortField() === field;
+  }
+
+  isAsc(): boolean {
+    return this.storeService.sortDirection() === 'asc';
+  }
 }

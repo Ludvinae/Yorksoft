@@ -3,13 +3,62 @@
 <table class="table table-sm">
   <thead>
     <tr>
-      <th>Title</th>
-      <th>Dernière modification</th>
-      <th>Thématique</th>
-      <th>Logiciel</th>
-      <th>Version</th>
-      <th>Statut</th>
-      <th>Priorité</th>
+      <th class="cursor-pointer select-none" (click)="storeService.setSort('title')">
+        <div class="flex items-center gap-2">
+          Titre
+          @if (isSorted("title")) {
+            <span>{{ isAsc() ? '▲' : '▼' }}</span>
+          }
+        </div>
+      </th>
+      <th class="cursor-pointer select-none" (click)="storeService.setSort('modificationDate')">
+        <div class="flex items-center gap-2">
+          Dernière modification
+          @if (isSorted("modificationDate")) {
+            <span>{{ isAsc() ? '▲' : '▼' }}</span>
+          }
+        </div>
+      </th>
+      <th class="cursor-pointer select-none" (click)="storeService.setSort('currentTheme')">
+        <div class="flex items-center gap-2">
+          Thématique
+          @if (isSorted("currentTheme")) {
+            <span>{{ isAsc() ? '▲' : '▼' }}</span>
+          }
+        </div>
+      </th>
+      <th class="cursor-pointer select-none" (click)="storeService.setSort('version.software.name')">
+        <div class="flex items-center gap-2">
+          Logiciel
+          @if (isSorted("version.software.name")) {
+            <span>{{ isAsc() ? '▲' : '▼' }}</span>
+          }
+        </div>
+      </th>
+      <th class="cursor-pointer select-none" (click)="storeService.setSort('version.versionNumber')">
+        <div class="flex items-center gap-2">
+          Version
+          @if (isSorted("version.versionNumber")) {
+            <span>{{ isAsc() ? '▲' : '▼' }}</span>
+          }
+        </div>
+      </th>
+      <th class="cursor-pointer select-none" (click)="storeService.setSort('currentStatus')">
+        <div class="flex items-center gap-2">
+          Statut
+          @if (isSorted("currentStatus")) {
+            <span>{{ isAsc() ? '▲' : '▼' }}</span>
+          }
+        </div>
+      </th>
+      <th class="cursor-pointer select-none" (click)="storeService.setSort('currentPriority')">
+        <div class="flex items-center gap-2">
+          Priorité
+          @if (isSorted("currentPriority")) {
+            <span>{{ isAsc() ? '▲' : '▼' }}</span>
+          }
+        </div>
+      </th>
     </tr>
   </thead>
   <tbody>
