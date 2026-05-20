@@ -21,6 +21,7 @@ public class AppUserDetails implements UserDetails {
     protected Technician technician;
     protected Manager manager;
     protected Director director;
+    protected Admin admin;
 
     protected String email;
     protected String password;
@@ -49,6 +50,12 @@ public class AppUserDetails implements UserDetails {
         this.password = director.getPassword();
     }
 
+    public AppUserDetails(Admin admin) {
+        this.admin = admin;
+        this.email = admin.getEmail();
+        this.password = admin.getPassword();
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(
@@ -58,7 +65,9 @@ public class AppUserDetails implements UserDetails {
                             ? "ROLE_TECHNICIAN"
                             : manager != null
                                 ? "ROLE_MANAGER"
-                                : "ROLE_DIRECTOR"
+                                : director != null
+                                    ? "ROLE_DIRECTOR"
+                                    : "ROLE_ADMIN"
         ));
     }
 

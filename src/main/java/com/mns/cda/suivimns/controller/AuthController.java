@@ -96,7 +96,9 @@ public class AuthController {
                         ? "technician"
                         : appUser.getClient() != null
                             ? "client"
-                            : "director";
+                            : appUser.getDirector() != null
+                                ? "director"
+                                : "admin";
 
             String jwt = Jwts.builder()
                     .setSubject(user.getEmail())

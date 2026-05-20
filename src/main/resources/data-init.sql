@@ -26,7 +26,11 @@ VALUES ( '06 84 54 56 11', 'barbara.dupont99@gmail.com', 'Barbara', 'Dupont', '$
        ('03 55 65 78 99', 'sandraschmidt@yorksoft.fr', 'Sandra', 'Schmidt', '$2a$10$V98VMxgV7myKHPE7eu7n3.GO8EUiqZGK/3ISjSriOFklF2Uvftx8u'),
        ('03 55 65 77 11', 'damienmuller@yorksoft.fr', 'Damien', 'Muller', '$2a$10$V98VMxgV7myKHPE7eu7n3.GO8EUiqZGK/3ISjSriOFklF2Uvftx8u'),
        ('03 55 65 00 01', 'patrickthierry@yorksoft.fr', 'Patrick', 'Thierry', '$2a$10$V98VMxgV7myKHPE7eu7n3.GO8EUiqZGK/3ISjSriOFklF2Uvftx8u' ),
-       ('', 'jeanclaude@creditmutuel.fr', 'Jean-Claude', 'Convenant', '$2a$10$V98VMxgV7myKHPE7eu7n3.GO8EUiqZGK/3ISjSriOFklF2Uvftx8u');
+       ('', 'jeanclaude@creditmutuel.fr', 'Jean-Claude', 'Convenant', '$2a$10$V98VMxgV7myKHPE7eu7n3.GO8EUiqZGK/3ISjSriOFklF2Uvftx8u'),
+       ('', 'admin@yorksoft.fr', '', '', '$2a$10$V98VMxgV7myKHPE7eu7n3.GO8EUiqZGK/3ISjSriOFklF2Uvftx8u');
+
+INSERT INTO admin (id_app_user)
+VALUES (9);
 
 INSERT INTO manager (id_app_user)
 VALUES (4);

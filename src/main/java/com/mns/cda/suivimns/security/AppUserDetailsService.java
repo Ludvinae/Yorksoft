@@ -18,13 +18,15 @@ public class AppUserDetailsService implements UserDetailsService {
     protected final TechnicianDao technicianDao;
     protected final ManagerDao managerDao;
     protected final DirectorDao directorDao;
+    protected final AdminDao adminDao;
 
     public AppUserDetailsService(ClientDao clientDao, TechnicianDao technicianDao,
-                                 ManagerDao managerDao, DirectorDao directorDao) {
+                                 ManagerDao managerDao, DirectorDao directorDao, AdminDao adminDao) {
         this.clientDao = clientDao;
         this.technicianDao = technicianDao;
         this.managerDao = managerDao;
         this.directorDao = directorDao;
+        this.adminDao = adminDao;
     }
 
     @Override
@@ -33,6 +35,7 @@ public class AppUserDetailsService implements UserDetailsService {
         Optional<Technician> technician = technicianDao.findByEmail(email);
         Optional<Manager> manager = managerDao.findByEmail(email);
         Optional<Director> director = directorDao.findByEmail(email);
+        Optional<Admin> admin = adminDao.findByEmail(email);
 
         if (client.isPresent()) {
             return new AppUserDetails(client.get());
@@ -42,6 +45,8 @@ public class AppUserDetailsService implements UserDetailsService {
             return new AppUserDetails(manager.get());
         } else if (director.isPresent()) {
             return new AppUserDetails(director.get());
+        } else if (admin.isPresent()) {
+            return new AppUserDetails(admin.get());
         } else {
             throw new UsernameNotFoundException(email);
         }
