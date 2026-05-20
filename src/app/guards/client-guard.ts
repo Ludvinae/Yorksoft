@@ -11,8 +11,11 @@ export const clientGuard: CanActivateFn = (route, state) => {
   }
 
   if (
-    authService.jwtInfo()?.role != 'CLIENT' &&
-    authService.jwtInfo()?.role != 'ADMIN'
+    authService.jwtInfo()?.role != 'client' &&
+    authService.jwtInfo()?.role != 'admin' &&
+    authService.jwtInfo()?.role == 'technician' &&
+    authService.jwtInfo()?.role == 'director' &&
+    authService.jwtInfo()?.role == 'manager'
   ) {
     return router.parseUrl('/forbidden');
   }

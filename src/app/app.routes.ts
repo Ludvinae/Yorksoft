@@ -39,6 +39,8 @@ import { adminGuard } from './guards/admin-guard';
 import { managerGuard } from './guards/manager-guard';
 import { directorGuard } from './guards/director-guard';
 import { technicianGuard } from './guards/technician-guard';
+import { clientGuard } from './guards/client-guard';
+import { employeeGuard } from './guards/employee-guard';
 
 export const routes: Routes = [
   {
@@ -50,54 +52,54 @@ export const routes: Routes = [
     path: 'dashboard',
     component: Dashboard,
     title: 'Tableau de bord',
+    canActivate: [clientGuard],
   },
   {
     path: 'ticket',
     component: TicketList,
     title: 'Tickets',
-    canActivate: [technicianGuard, adminGuard, managerGuard, directorGuard, adminGuard],
+    canActivate: [employeeGuard],
   },
   {
     path: 'ticket/create',
     component: TicketEdit,
     title: 'Nouveau ticket',
-    canActivate: [technicianGuard, adminGuard, managerGuard, directorGuard, adminGuard],
+    canActivate: [technicianGuard],
   },
   {
     path: 'ticket/update/:id',
     component: TicketEdit,
     title: 'Modification de ticket',
-    canActivate: [technicianGuard, adminGuard, managerGuard, directorGuard, adminGuard],
+    canActivate: [technicianGuard],
   },
   {
     path: 'ticket/:id',
     component: TicketDetail,
     title: 'Details du ticket',
-    canActivate: [technicianGuard, adminGuard, managerGuard, directorGuard, adminGuard],
+    canActivate: [technicianGuard],
   },
   {
     path: 'clients',
     component: Clients,
     title: 'Clients',
-    canActivate: [technicianGuard, adminGuard, managerGuard, directorGuard, adminGuard],
+    canActivate: [employeeGuard],
   },
   {
     path: 'knowledge',
     component: Knowledge,
     title: 'Base de connaissance',
-    canActivate: [technicianGuard, adminGuard, managerGuard, directorGuard, adminGuard],
+    canActivate: [employeeGuard],
   },
   {
     path: 'settings',
     component: Settings,
     title: 'Réglages',
-    canActivate: [technicianGuard, adminGuard, managerGuard, directorGuard, adminGuard],
+    canActivate: [clientGuard],
   },
   {
     path: 'admin',
-    canActivate: [adminGuard],
     children: [
-      { path: '', component: Admin },
+      { path: '', component: Admin, canActivate: [managerGuard] },
       { path: 'software', component: SoftwareList },
       { path: 'software/create', component: SoftwareEdit },
       { path: 'software/update/:id', component: SoftwareEdit },
@@ -135,7 +137,7 @@ export const routes: Routes = [
   {
     path: 'forbidden',
     component: Forbidden,
-    title: 'Accés interdit',
+    title: 'Accès interdit',
   },
   {
     path: '**',

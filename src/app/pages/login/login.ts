@@ -25,7 +25,6 @@ export class Login {
       this.authService.login(this.form.value as { email: string; password: string }).subscribe({
         next: (jwt) => {
           // this.notification.open("connexion réussie", "valid");
-          alert('Connexion réussie');
           this.router.navigate(['/dashboard']);
         },
         error: (err) => {

@@ -5,13 +5,13 @@ import { inject } from '@angular/core';
 export const adminGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
   const router = inject(Router);
-
+  console.log(authService.jwtInfo()?.role);
   if (authService.jwtInfo() == null) {
     return router.parseUrl('/login');
   }
 
   if (
-    authService.jwtInfo()?.role != 'ADMIN'
+    authService.jwtInfo()?.role != 'admin'
   ) {
     return router.parseUrl('/forbidden');
   }

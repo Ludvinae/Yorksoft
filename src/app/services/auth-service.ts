@@ -1,12 +1,14 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   http = inject(HttpClient);
+  router = inject(Router);
 
   readonly jwtInfo = signal<JwtInfo | null>(null);
 
@@ -38,5 +40,8 @@ export class AuthService {
     }
   }
 
-  logout() {}
+  logout() {
+    localStorage.clear();
+    this.router.navigate(['/']);
+  }
 }
