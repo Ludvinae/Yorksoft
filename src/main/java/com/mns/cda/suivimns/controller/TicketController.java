@@ -46,7 +46,7 @@ public class TicketController {
     @GetMapping("/test")
     public ResponseEntity<Page<TicketListDto>> search(
             TicketSearchCriteria criteria,
-            @PageableDefault(size = 20, sort = "openDate", direction = Sort.Direction.DESC)
+            @PageableDefault(size = 15, sort = "openDate", direction = Sort.Direction.DESC)
             Pageable pageable
     ) {
         try {
