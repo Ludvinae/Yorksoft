@@ -1,5 +1,33 @@
 <app-title-bar ></app-title-bar>
 
+<table class="table table-sm">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Dernière modification</th>
+      <th>Thématique</th>
+      <th>Logiciel</th>
+      <th>Version</th>
+      <th>Statut</th>
+      <th>Priorité</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for(ticket of storeService.tickets(); track ticket.idTicket) {
+      <tr>
+        <td>{{ ticket.title }}</td>
+        <td>{{ ticket.modificationDate }}</td>
+        <td>{{ ticket.currentTheme }}</td>
+        <td>{{ ticket.softwareName }}</td>
+        <td>{{ ticket.versionNumber }}</td>
+        <td>{{ ticket.currentStatus }}</td>
+        <td>{{ ticket.currentPriority }}</td>
+      </tr>
+    }
+  </tbody>
+</table>
+
+<!--
 <app-generic-list
   [data]="ticketList()"
   [columns]="[{ label: 'Titre du ticket', field: 'title' },
@@ -29,3 +57,4 @@
     <span>{{ ticket.currentTheme }}</span>
   </div>
 </ng-template>
+-->

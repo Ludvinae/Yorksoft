@@ -16,7 +16,7 @@ export class TicketStoreService {
   sortDirection = signal<'asc' | 'desc'>('desc');
 
   // Response
-  tickets = signal<any[]>([]);
+  tickets = signal<TicketListDto[]>([]);
   totalPages = signal(0);
   totalElements = signal(0);
   loading = signal(false);
@@ -59,7 +59,10 @@ export class TicketStoreService {
 
     this.ticketService.getTickets(this.filters(), this.page(), this.size(), this.sort()).subscribe({
       next: (response) => {
+
+        console.log('API RESPONSE', response);
         this.tickets.set(response.content);
+        console.log('SIGNAL VALUE', this.tickets());
 
         this.totalPages.set(response.totalPages);
 

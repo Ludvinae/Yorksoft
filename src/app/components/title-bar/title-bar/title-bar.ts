@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TicketSearchCriteria } from '../../../models/page/TicketSearchCriteria';
 import { TicketStoreService } from '../../../services/ticket-store-service';
