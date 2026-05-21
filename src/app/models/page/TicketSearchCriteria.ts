@@ -3,11 +3,11 @@ export interface TicketSearchCriteria {
 
   statusesExcluded?: string[];
 
-  clientId?: number;
+  hasClient?: number;
 
-  versionId?: number;
+  hasVersion?: number;
 
-  softwareId?: number;
+  hasSoftware?: number;
 
   keyword?: string;
 

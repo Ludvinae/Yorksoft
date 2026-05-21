@@ -3,10 +3,11 @@ import { TicketService } from '../../../services/api/ticket-service';
 import { TitleBar } from '../../../components/title-bar/title-bar/title-bar';
 import { TicketStoreService } from '../../../services/ticket-store-service';
 import { FooterTicket } from '../../../components/footer-ticket/footer-ticket';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-ticket-list',
-  imports: [TitleBar, FooterTicket],
+  imports: [TitleBar, FooterTicket, DatePipe],
   templateUrl: './ticket-list.html',
   styleUrl: './ticket-list.css',
 })

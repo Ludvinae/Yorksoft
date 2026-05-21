@@ -24,13 +24,13 @@ export class TitleBar {
 
   setFilter(filter: 'all' | 'assigned' | 'priority'): void {
     this.filters = {};
-    //const userId = this.auth.jwtInfo()?.id
+    const userId = this.auth.jwtInfo() != null ? this.auth.jwtInfo()?.id : 0
 
 
     switch (filter) {
       case 'assigned':
         this.store.resetFilters();
-        // prevoir le cas ou p  s d'id user
+        // prevoir le cas ou pas d'id user
         this.store.updateFilters({ assignedTo:  this.auth.jwtInfo()?.id  });
         this.buttonState = 'assigned';
         break;

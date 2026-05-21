@@ -9,6 +9,8 @@
         <span class="loading loading-spinner loading-xl"></span>
       </div>
 
+    } @else if (storeService.clients().length == 0) {
+      <span>Aucun client ne corresponds à ces critères</span>
     } @else {
       <table class="table table-sm">
         <thead>

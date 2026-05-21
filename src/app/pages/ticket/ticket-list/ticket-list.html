@@ -9,6 +9,8 @@
         <span class="loading loading-spinner loading-xl"></span>
       </div>
 
+    } @else if (storeService.tickets().length == 0) {
+      <span>Aucun ticket ne corresponds à ces critères</span>
     } @else {
       <table class="table table-sm">
         <thead>
@@ -75,7 +77,7 @@
           @for(ticket of storeService.tickets(); track ticket.idTicket) {
             <tr>
               <td>{{ ticket.title }}</td>
-              <td>{{ ticket.modificationDate }}</td>
+              <td>{{ ticket.modificationDate | date: 'short'}}</td>
               <td>{{ ticket.currentTheme }}</td>
               <td>{{ ticket.softwareName }}</td>
               <td>{{ ticket.versionNumber }} {{ ticket.versionTypeDesignation }}</td>
