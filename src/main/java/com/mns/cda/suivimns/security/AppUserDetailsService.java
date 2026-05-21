@@ -14,14 +14,16 @@ import java.util.Optional;
 @Service
 public class AppUserDetailsService implements UserDetailsService {
 
+    protected final AppUserDao appUserDao;
     protected final ClientDao clientDao;
     protected final TechnicianDao technicianDao;
     protected final ManagerDao managerDao;
     protected final DirectorDao directorDao;
     protected final AdminDao adminDao;
 
-    public AppUserDetailsService(ClientDao clientDao, TechnicianDao technicianDao,
+    public AppUserDetailsService(AppUserDao appUserDao,ClientDao clientDao, TechnicianDao technicianDao,
                                  ManagerDao managerDao, DirectorDao directorDao, AdminDao adminDao) {
+        this.appUserDao = appUserDao;
         this.clientDao = clientDao;
         this.technicianDao = technicianDao;
         this.managerDao = managerDao;

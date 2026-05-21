@@ -27,35 +27,50 @@ public class AppUserDetails implements UserDetails {
 
     protected String email;
     protected String password;
+    protected String name;
+    protected int id;
+    protected String rank = "";
+
 
     public AppUserDetails(Client client) {
         this.client = client;
         this.email = client.getEmail();
         this.password = client.getPassword();
+        this.name = client.getFirstName() + " " + client.getLastName();
+        this.id = client.getIdAppUser();
     }
 
     public AppUserDetails(Technician technician) {
         this.technician = technician;
         this.email = technician.getEmail();
         this.password = technician.getPassword();
+        this.name = technician.getFirstName() + " " + technician.getLastName();
+        this.id = technician.getIdAppUser();
+        this.rank = "N" + technician.getRank().toString();
     }
 
     public AppUserDetails(Manager manager) {
         this.manager = manager;
         this.email = manager.getEmail();
         this.password = manager.getPassword();
+        this.name = manager.getFirstName() + " " + manager.getLastName();
+        this.id = manager.getIdAppUser();
     }
 
     public AppUserDetails(Director director) {
         this.director = director;
         this.email = director.getEmail();
         this.password = director.getPassword();
+        this.name = director.getFirstName() + " " + director.getLastName();
+        this.id = director.getIdAppUser();
     }
 
     public AppUserDetails(Admin admin) {
         this.admin = admin;
         this.email = admin.getEmail();
         this.password = admin.getPassword();
+        this.name = admin.getFirstName() + " " + admin.getLastName();
+        this.id = admin.getIdAppUser();
     }
 
     @Override

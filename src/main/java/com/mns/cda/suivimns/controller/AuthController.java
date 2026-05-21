@@ -100,10 +100,17 @@ public class AuthController {
                                 ? "DIRECTOR"
                                 : "ADMIN";
 
+            String name = appUser.getName();
+            int id =  appUser.getId();
+            String rank = appUser.getRank();
+
             String jwt = Jwts.builder()
                     .setSubject(user.getEmail())
                     //.addClaims(Map.of("role", appUser.getUser().getRole().getName()))
                     .addClaims(Map.of("role", role))
+                    .addClaims(Map.of("name", name))
+                    .addClaims(Map.of("id", id))
+                    .addClaims(Map.of("rank", rank))
                     .signWith(SignatureAlgorithm.HS256, "azerty")
                     .compact();
             return new ResponseEntity<>(jwt, HttpStatus.OK);
