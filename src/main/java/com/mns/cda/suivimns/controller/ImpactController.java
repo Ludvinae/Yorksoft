@@ -1,6 +1,9 @@
 package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.entity.ImpactDto;
+import com.mns.cda.suivimns.security.IsAdmin;
+import com.mns.cda.suivimns.security.IsManager;
+import com.mns.cda.suivimns.security.IsTechnician;
 import com.mns.cda.suivimns.service.entity.ImpactService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -26,6 +29,7 @@ public class ImpactController {
             description = "Récupere la liste complète de impact de la base")
     @ApiResponse(responseCode = "200", description = "Liste récupérée avec succés")
     @GetMapping("/list")
+    @IsTechnician
     public List<ImpactDto> getAll() {
         return impactService.findAll();
     }
@@ -35,6 +39,7 @@ public class ImpactController {
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Impact trouvée"),
             @ApiResponse(responseCode = "404", description = "Impact non trouvée")})
     @GetMapping("/{id}")
+    @IsTechnician
     public ResponseEntity<ImpactDto> getById(@PathVariable int id) {
 
         try {
@@ -49,6 +54,7 @@ public class ImpactController {
     @ApiResponses({@ApiResponse(responseCode = "201", description = "Impact crée"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PostMapping
+    @IsManager
     public ResponseEntity<ImpactDto> create(@RequestBody @Valid ImpactDto impact) {
         return new ResponseEntity<>(impactService.save(impact), HttpStatus.CREATED);
     }
@@ -58,6 +64,7 @@ public class ImpactController {
     @ApiResponses({@ApiResponse(responseCode = "204", description = "Impact effacée"),
             @ApiResponse(responseCode = "404", description = "Impact non trouvée")})
     @DeleteMapping("/{id}")
+    @IsAdmin
     public ResponseEntity<Void> delete(@PathVariable int id) {
         try {
             impactService.delete(id);
@@ -74,6 +81,7 @@ public class ImpactController {
             @ApiResponse(responseCode = "404", description = "Impact non trouvée"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PutMapping("/{id}")
+    @IsManager
     public ResponseEntity<ImpactDto> update(@PathVariable int id, @RequestBody @Valid ImpactDto impactToUpdate) {
         try {
             return new ResponseEntity<>(impactService.update(id, impactToUpdate), HttpStatus.OK);

@@ -91,14 +91,14 @@ public class AuthController {
 
             // HERITAGE
             String role = appUser.getManager() != null
-                    ? "manager"
+                    ? "MANAGER"
                     : appUser.getTechnician() != null
-                        ? "technician"
+                        ? "TECHNICIAN"
                         : appUser.getClient() != null
-                            ? "client"
+                            ? "CLIENT"
                             : appUser.getDirector() != null
-                                ? "director"
-                                : "admin";
+                                ? "DIRECTOR"
+                                : "ADMIN";
 
             String jwt = Jwts.builder()
                     .setSubject(user.getEmail())

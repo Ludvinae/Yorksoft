@@ -1,6 +1,7 @@
 package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.entity.HistoryDto;
+import com.mns.cda.suivimns.security.IsManager;
 import com.mns.cda.suivimns.service.entity.HistoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -25,6 +26,7 @@ public class HistoryController {
             description = "Récupere la liste complète de historique de la base")
     @ApiResponse(responseCode = "200", description = "Liste récupérée avec succés")
     @GetMapping("/list")
+    @IsManager
     public List<HistoryDto> getAll() {
         return historyService.findAll();
     }
@@ -34,6 +36,7 @@ public class HistoryController {
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Historique trouvée"),
             @ApiResponse(responseCode = "404", description = "Historique non trouvée")})
     @GetMapping("/{id}")
+    @IsManager
     public ResponseEntity<HistoryDto> getById(@PathVariable int id) {
 
         try {

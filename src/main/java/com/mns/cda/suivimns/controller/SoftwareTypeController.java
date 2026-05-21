@@ -1,6 +1,9 @@
 package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.entity.SoftwareTypeDto;
+import com.mns.cda.suivimns.security.IsAdmin;
+import com.mns.cda.suivimns.security.IsManager;
+import com.mns.cda.suivimns.security.IsTechnician;
 import com.mns.cda.suivimns.service.entity.SoftwareTypeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -27,6 +30,7 @@ public class SoftwareTypeController {
             description = "Récupere la liste complète de type de logiciel de la base")
     @ApiResponse(responseCode = "200", description = "Liste récupérée avec succés")
     @GetMapping("/list")
+    @IsTechnician
     public List<SoftwareTypeDto> getAll() {
         return softwareTypeService.findAll();
     }
@@ -36,6 +40,7 @@ public class SoftwareTypeController {
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Type De Logiciel trouvée"),
             @ApiResponse(responseCode = "404", description = "Type De Logiciel non trouvée")})
     @GetMapping("/{id}")
+    @IsTechnician
     public ResponseEntity<SoftwareTypeDto> getById(@PathVariable int id) {
 
         try {
@@ -50,6 +55,7 @@ public class SoftwareTypeController {
     @ApiResponses({@ApiResponse(responseCode = "201", description = "Type De Logiciel crée"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PostMapping
+    @IsManager
     public ResponseEntity<SoftwareTypeDto> create(@RequestBody @Valid SoftwareTypeDto softwareType) {
         return new ResponseEntity<>(softwareTypeService.save(softwareType), HttpStatus.CREATED);
     }
@@ -59,6 +65,7 @@ public class SoftwareTypeController {
     @ApiResponses({@ApiResponse(responseCode = "204", description = "Type De Logiciel effacée"),
             @ApiResponse(responseCode = "404", description = "Type De Logiciel non trouvée")})
     @DeleteMapping("/{id}")
+    @IsAdmin
     public ResponseEntity<Void> delete(@PathVariable int id) {
         try {
             softwareTypeService.delete(id);
@@ -75,6 +82,7 @@ public class SoftwareTypeController {
             @ApiResponse(responseCode = "404", description = "Type De Logiciel non trouvée"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PutMapping("/{id}")
+    @IsManager
     public ResponseEntity<SoftwareTypeDto> update(@PathVariable int id, @RequestBody @Valid SoftwareTypeDto softwareTypeToUpdate) {
         try {
             return new ResponseEntity<>(softwareTypeService.update(id, softwareTypeToUpdate), HttpStatus.OK);

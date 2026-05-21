@@ -1,6 +1,9 @@
 package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.entity.ThemeDto;
+import com.mns.cda.suivimns.security.IsAdmin;
+import com.mns.cda.suivimns.security.IsManager;
+import com.mns.cda.suivimns.security.IsTechnician;
 import com.mns.cda.suivimns.service.entity.ThemeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -26,6 +29,7 @@ public class ThemeController {
             description = "Récupere la liste complète de thématique de la base")
     @ApiResponse(responseCode = "200", description = "Liste récupérée avec succés")
     @GetMapping("/list")
+    @IsTechnician
     public List<ThemeDto> getAll() {
         return themeService.findAll();
     }
@@ -35,6 +39,7 @@ public class ThemeController {
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Thématique trouvée"),
             @ApiResponse(responseCode = "404", description = "Thématique non trouvée")})
     @GetMapping("/{id}")
+    @IsTechnician
     public ResponseEntity<ThemeDto> getById(@PathVariable int id) {
 
         try {
@@ -49,6 +54,7 @@ public class ThemeController {
     @ApiResponses({@ApiResponse(responseCode = "201", description = "Thématique crée"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PostMapping
+    @IsManager
     public ResponseEntity<ThemeDto> create(@RequestBody @Valid ThemeDto theme) {
         return new ResponseEntity<>(themeService.save(theme), HttpStatus.CREATED);
     }
@@ -58,6 +64,7 @@ public class ThemeController {
     @ApiResponses({@ApiResponse(responseCode = "204", description = "Thématique effacée"),
             @ApiResponse(responseCode = "404", description = "Thématique non trouvée")})
     @DeleteMapping("/{id}")
+    @IsAdmin
     public ResponseEntity<Void> delete(@PathVariable int id) {
         try {
             themeService.delete(id);
@@ -74,6 +81,7 @@ public class ThemeController {
             @ApiResponse(responseCode = "404", description = "Thématique non trouvée"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PutMapping("/{id}")
+    @IsManager
     public ResponseEntity<ThemeDto> update(@PathVariable int id, @RequestBody @Valid ThemeDto themeToUpdate) {
         try {
             return new ResponseEntity<>(themeService.update(id, themeToUpdate), HttpStatus.OK);

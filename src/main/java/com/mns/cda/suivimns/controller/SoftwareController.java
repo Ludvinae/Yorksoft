@@ -2,6 +2,9 @@ package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.entity.SoftwareDto;
 import com.mns.cda.suivimns.dto.flat.SoftwareDetailDto;
+import com.mns.cda.suivimns.security.IsAdmin;
+import com.mns.cda.suivimns.security.IsManager;
+import com.mns.cda.suivimns.security.IsTechnician;
 import com.mns.cda.suivimns.service.entity.SoftwareService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -29,6 +32,7 @@ public class SoftwareController {
     @Operation(summary = "Récupérer toutes les logiciels")
     @ApiResponse(responseCode = "200", description = "Liste des logiciels récupérée")
     @GetMapping("/list")
+    @IsTechnician
     public List<SoftwareDto> findAll() {
         return softwareService.findAll();
     }
@@ -36,6 +40,7 @@ public class SoftwareController {
     @Operation(summary = "Récupérer toutes les logiciels avec les details sur le type de logiciel")
     @ApiResponse(responseCode = "200", description = "Liste des logiciels récupérée")
     @GetMapping("/list/detail")
+    @IsTechnician
     public List<SoftwareDetailDto> findAllDetail() {
         return softwareService.findAllDetail();
     }
@@ -46,6 +51,7 @@ public class SoftwareController {
             @ApiResponse(responseCode = "200", description = "Logiciel trouvée"),
             @ApiResponse(responseCode = "404", description = "Logiciel non trouvée")})
     @GetMapping("/{id}")
+    @IsTechnician
     public ResponseEntity<SoftwareDto> findById(@PathVariable Integer id) {
 
         try {
@@ -60,6 +66,7 @@ public class SoftwareController {
             @ApiResponse(responseCode = "200", description = "Logiciel trouvée"),
             @ApiResponse(responseCode = "404", description = "Logiciel non trouvée")})
     @GetMapping("/{id}/detail")
+    @IsTechnician
     public ResponseEntity<SoftwareDetailDto> findByIdDetail(@PathVariable Integer id) {
 
         try {
@@ -75,6 +82,7 @@ public class SoftwareController {
             @ApiResponse(responseCode = "201", description = "Logiciel créée"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PostMapping
+    @IsManager
     public ResponseEntity<SoftwareDto> create(@RequestBody @Valid SoftwareDto software) {
         return new ResponseEntity<>(softwareService.save(software), HttpStatus.CREATED);
     }
@@ -85,6 +93,7 @@ public class SoftwareController {
             @ApiResponse(responseCode = "204", description = "Logiciel supprimée"),
             @ApiResponse(responseCode = "404", description = "Logiciel non trouvée")})
     @DeleteMapping("/{id}")
+    @IsAdmin
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
 
         try {
@@ -103,6 +112,7 @@ public class SoftwareController {
             @ApiResponse(responseCode = "404", description = "Logiciel non trouvée"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PutMapping("/{id}")
+    @IsManager
     public ResponseEntity<SoftwareDto> update(@PathVariable Integer id, @RequestBody @Valid SoftwareDto softwareToUpdate) {
         try {
             return new ResponseEntity<>(softwareService.update(id, softwareToUpdate), HttpStatus.OK);

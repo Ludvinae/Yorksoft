@@ -2,6 +2,8 @@ package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.entity.DirectorDto;
 import com.mns.cda.suivimns.dto.flat.PasswordDto;
+import com.mns.cda.suivimns.security.IsAdmin;
+import com.mns.cda.suivimns.security.IsDirector;
 import com.mns.cda.suivimns.service.entity.AppUserService;
 import com.mns.cda.suivimns.service.entity.DirectorService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,6 +32,7 @@ public class DirectorController {
             description = "Récupere la liste complète de directeur de la base")
     @ApiResponse(responseCode = "200", description = "Liste récupérée avec succés")
     @GetMapping("/list")
+    @IsDirector
     public List<DirectorDto> getAll() {
         return directorService.findAll();
     }
@@ -39,6 +42,7 @@ public class DirectorController {
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Directeur trouvée"),
             @ApiResponse(responseCode = "404", description = "Directeur non trouvée")})
     @GetMapping("/{id}")
+    @IsDirector
     public ResponseEntity<DirectorDto> getById(@PathVariable int id) {
 
         try {
@@ -64,6 +68,7 @@ public class DirectorController {
     @ApiResponses({@ApiResponse(responseCode = "204", description = "Directeur effacée"),
             @ApiResponse(responseCode = "404", description = "Directeur non trouvée")})
     @DeleteMapping("/{id}")
+    @IsAdmin
     public ResponseEntity<Void> delete(@PathVariable int id) {
         try {
             directorService.delete(id);
@@ -81,6 +86,7 @@ public class DirectorController {
             @ApiResponse(responseCode = "404", description = "Directeur non trouvé"),
             @ApiResponse(responseCode = "400", description = "Email déja utilisé")})
     @PatchMapping("/{id}")
+    @IsAdmin
     public ResponseEntity<DirectorDto> update(@PathVariable int id, @RequestBody @Valid DirectorDto dto) {
 
         try {
@@ -103,6 +109,7 @@ public class DirectorController {
             @ApiResponse(responseCode = "404", description = "Directeur non trouvé"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PatchMapping("/{id}/password")
+    @IsAdmin
     public ResponseEntity<Void> patch(@PathVariable int id, @RequestBody PasswordDto dto) {
         try {
             directorService.updatePassword(id, dto);

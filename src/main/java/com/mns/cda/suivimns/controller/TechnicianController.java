@@ -2,6 +2,8 @@ package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.entity.TechnicianDto;
 import com.mns.cda.suivimns.dto.flat.PasswordDto;
+import com.mns.cda.suivimns.security.IsAdmin;
+import com.mns.cda.suivimns.security.IsDirector;
 import com.mns.cda.suivimns.service.entity.AppUserService;
 import com.mns.cda.suivimns.service.entity.TechnicianService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,6 +32,7 @@ public class TechnicianController {
             description = "Récupere la liste complète de technicien de la base")
     @ApiResponse(responseCode = "200", description = "Liste récupérée avec succés")
     @GetMapping("/list")
+    @IsDirector
     public List<TechnicianDto> getAll() {
         return technicianService.findAll();
     }
@@ -39,6 +42,7 @@ public class TechnicianController {
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Technicien trouvée"),
             @ApiResponse(responseCode = "404", description = "Technicien non trouvée")})
     @GetMapping("/{id}")
+    @IsDirector
     public ResponseEntity<TechnicianDto> getById(@PathVariable int id) {
 
         try {
@@ -64,6 +68,7 @@ public class TechnicianController {
     @ApiResponses({@ApiResponse(responseCode = "204", description = "Technicien effacée"),
             @ApiResponse(responseCode = "404", description = "Technicien non trouvée")})
     @DeleteMapping("/{id}")
+    @IsAdmin
     public ResponseEntity<Void> delete(@PathVariable int id) {
         try {
             technicianService.delete(id);
@@ -81,6 +86,7 @@ public class TechnicianController {
             @ApiResponse(responseCode = "404", description = "Technicien non trouvé"),
             @ApiResponse(responseCode = "400", description = "Email déja utilisé")})
     @PatchMapping("/{id}")
+    @IsAdmin
     public ResponseEntity<TechnicianDto> update(@PathVariable int id, @RequestBody @Valid TechnicianDto dto) {
 
         try {
@@ -103,6 +109,7 @@ public class TechnicianController {
             @ApiResponse(responseCode = "404", description = "Technicien non trouvé"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PatchMapping("/{id}/password")
+    @IsAdmin
     public ResponseEntity<Void> patch(@PathVariable int id, @RequestBody PasswordDto dto) {
         try {
             technicianService.updatePassword(id, dto);

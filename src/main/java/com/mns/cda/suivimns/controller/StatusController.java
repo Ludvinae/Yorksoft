@@ -2,6 +2,9 @@ package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.entity.StatusDto;
 import com.mns.cda.suivimns.enumerate.StatusEnum;
+import com.mns.cda.suivimns.security.IsAdmin;
+import com.mns.cda.suivimns.security.IsManager;
+import com.mns.cda.suivimns.security.IsTechnician;
 import com.mns.cda.suivimns.service.entity.StatusService;
 import com.mns.cda.suivimns.service.workflow.StatusTransition;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,6 +34,7 @@ public class StatusController {
             description = "Récupère la liste complète de statut de la base")
     @ApiResponse(responseCode = "200", description = "Liste récupérée avec succés")
     @GetMapping("/list")
+    @IsTechnician
     public List<StatusDto> getAll() {
         return statusService.findAll();
     }
@@ -39,6 +43,7 @@ public class StatusController {
     @Operation(summary = "Récupère les statuts vers lesquels il est possible de transitionner à partir d'un statut donné")
     @ApiResponse(responseCode = "200", description = "Set récupérée avec succès")
     @GetMapping("/allowed-transitions/{status}")
+    @IsTechnician
     public Set<StatusEnum> getPossibleTransitions(@PathVariable StatusEnum status) {
         return transition.getAllowedTransitions(status);
     }
@@ -48,6 +53,7 @@ public class StatusController {
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Statut trouvée"),
             @ApiResponse(responseCode = "404", description = "Statut non trouvée")})
     @GetMapping("/{id}")
+    @IsTechnician
     public ResponseEntity<StatusDto> getById(@PathVariable int id) {
 
         try {
@@ -62,6 +68,7 @@ public class StatusController {
     @ApiResponses({@ApiResponse(responseCode = "201", description = "Statut crée"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PostMapping
+    @IsManager
     public ResponseEntity<StatusDto> create(@RequestBody @Valid StatusDto status) {
         return new ResponseEntity<>(statusService.save(status), HttpStatus.CREATED);
     }
@@ -71,6 +78,7 @@ public class StatusController {
     @ApiResponses({@ApiResponse(responseCode = "204", description = "Statut effacée"),
             @ApiResponse(responseCode = "404", description = "Statut non trouvée")})
     @DeleteMapping("/{id}")
+    @IsAdmin
     public ResponseEntity<Void> delete(@PathVariable int id) {
         try {
             statusService.delete(id);
@@ -87,6 +95,7 @@ public class StatusController {
             @ApiResponse(responseCode = "404", description = "Statut non trouvée"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PutMapping("/{id}")
+    @IsManager
     public ResponseEntity<StatusDto> update(@PathVariable int id, @RequestBody @Valid StatusDto statusToUpdate) {
         try {
             return new ResponseEntity<>(statusService.update(id, statusToUpdate), HttpStatus.OK);

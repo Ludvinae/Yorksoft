@@ -1,6 +1,8 @@
 package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.entity.LicenseDto;
+import com.mns.cda.suivimns.security.IsAdmin;
+import com.mns.cda.suivimns.security.IsDirector;
 import com.mns.cda.suivimns.service.entity.LicenseService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -26,6 +28,7 @@ public class LicenseController {
             description = "Récupere la liste complète de licence de la base")
     @ApiResponse(responseCode = "200", description = "Liste récupérée avec succés")
     @GetMapping("/list")
+    @IsDirector
     public List<LicenseDto> getAll() {
         return licenseService.findAll();
     }
@@ -35,6 +38,7 @@ public class LicenseController {
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Licence trouvée"),
             @ApiResponse(responseCode = "404", description = "Licence non trouvée")})
     @GetMapping("/{id}")
+    @IsDirector
     public ResponseEntity<LicenseDto> getById(@PathVariable int id) {
 
         try {
@@ -49,6 +53,7 @@ public class LicenseController {
     @ApiResponses({@ApiResponse(responseCode = "201", description = "Licence crée"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PostMapping
+    @IsDirector
     public ResponseEntity<LicenseDto> create(@RequestBody @Valid LicenseDto license) {
         return new ResponseEntity<>(licenseService.save(license), HttpStatus.CREATED);
     }
@@ -58,6 +63,7 @@ public class LicenseController {
     @ApiResponses({@ApiResponse(responseCode = "204", description = "Licence effacée"),
             @ApiResponse(responseCode = "404", description = "Licence non trouvée")})
     @DeleteMapping("/{id}")
+    @IsAdmin
     public ResponseEntity<Void> delete(@PathVariable int id) {
         try {
             licenseService.delete(id);
@@ -74,6 +80,7 @@ public class LicenseController {
             @ApiResponse(responseCode = "404", description = "Licence non trouvée"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PutMapping("/{id}")
+    @IsDirector
     public ResponseEntity<LicenseDto> update(@PathVariable int id, @RequestBody @Valid LicenseDto licenseToUpdate) {
         try {
             return new ResponseEntity<>(licenseService.update(id, licenseToUpdate), HttpStatus.OK);
