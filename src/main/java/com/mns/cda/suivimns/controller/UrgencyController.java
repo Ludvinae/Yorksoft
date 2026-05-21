@@ -1,6 +1,9 @@
 package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.entity.UrgencyDto;
+import com.mns.cda.suivimns.security.IsAdmin;
+import com.mns.cda.suivimns.security.IsManager;
+import com.mns.cda.suivimns.security.IsTechnician;
 import com.mns.cda.suivimns.service.entity.UrgencyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -27,6 +30,7 @@ public class UrgencyController {
     @Operation(summary = "Récupérer toutes les urgences")
     @ApiResponse(responseCode = "200", description = "Liste des urgences récupérée")
     @GetMapping("/list")
+    @IsTechnician
     public List<UrgencyDto> findAll() {
         return urgencyService.findAll();
     }
@@ -37,6 +41,7 @@ public class UrgencyController {
             @ApiResponse(responseCode = "200", description = "Urgence trouvée"),
             @ApiResponse(responseCode = "404", description = "Urgence non trouvée")})
     @GetMapping("/{id}")
+    @IsTechnician
     public ResponseEntity<UrgencyDto> findById(@PathVariable Integer id) {
 
         try {
@@ -52,6 +57,7 @@ public class UrgencyController {
             @ApiResponse(responseCode = "201", description = "Urgence créée"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PostMapping
+    @IsManager
     public ResponseEntity<UrgencyDto> create(@RequestBody @Valid UrgencyDto urgency) {
         return new ResponseEntity<>(urgencyService.save(urgency), HttpStatus.CREATED);
     }
@@ -62,6 +68,7 @@ public class UrgencyController {
             @ApiResponse(responseCode = "204", description = "Urgence supprimée"),
             @ApiResponse(responseCode = "404", description = "Urgence non trouvée")})
     @DeleteMapping("/{id}")
+    @IsAdmin
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
 
         try {
@@ -80,6 +87,7 @@ public class UrgencyController {
             @ApiResponse(responseCode = "404", description = "Urgence non trouvée"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PutMapping("/{id}")
+    @IsManager
     public ResponseEntity<UrgencyDto> update(@PathVariable Integer id, @RequestBody @Valid UrgencyDto urgencyToUpdate) {
         try {
             return new ResponseEntity<>(urgencyService.update(id, urgencyToUpdate), HttpStatus.OK);

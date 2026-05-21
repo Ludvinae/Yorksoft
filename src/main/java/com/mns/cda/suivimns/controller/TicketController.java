@@ -5,6 +5,7 @@ import com.mns.cda.suivimns.dto.search.TicketListDto;
 import com.mns.cda.suivimns.dto.search.TicketSearchCriteria;
 import com.mns.cda.suivimns.dto.workflow.*;
 import com.mns.cda.suivimns.dto.flat.TicketFullWithLatest;
+import com.mns.cda.suivimns.security.*;
 import com.mns.cda.suivimns.service.entity.StatusService;
 import com.mns.cda.suivimns.service.entity.TicketService;
 import com.mns.cda.suivimns.service.search.TicketQueryService;
@@ -34,16 +35,12 @@ public class TicketController {
 
     protected final TicketService ticketService;
 
-    @Operation(summary = "Récupère toutes les tickets",
-            description = "Récupère la liste complète de ticket de la base")
+
+    @Operation(summary = "Récupère tous les tickets",
+            description = "Récupère la liste paginée de ticket, peut être triée et filtrée")
     @ApiResponse(responseCode = "200", description = "Liste récupérée avec succès")
     @GetMapping("/list")
-    public List<TicketDto> getAll() {
-        return ticketService.findAll();
-    }
-
-
-    @GetMapping("/test")
+    @IsEmployee
     public ResponseEntity<Page<TicketListDto>> search(
             TicketSearchCriteria criteria,
             @PageableDefault(size = 15, sort = "openDate", direction = Sort.Direction.DESC)
@@ -57,7 +54,12 @@ public class TicketController {
     }
 
 
+    @Operation(summary = "Récupére le temps d'activité d'un ticket en fonction de son ID")
+    @ApiResponses({@ApiResponse(responseCode = "200", description = "Ticket trouvée"),
+            @ApiResponse(responseCode = "404", description = "Ticket non trouvée")})
     @GetMapping("/{id}/active-time")
+    @IsManager
+    @IsDirector
     public Long getActiveTimeInSeconds(@PathVariable Integer id) {
         return ticketService.getActiveTimeInSeconds(id);
     }
@@ -67,6 +69,7 @@ public class TicketController {
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Ticket trouvée"),
             @ApiResponse(responseCode = "404", description = "Ticket non trouvée")})
     @GetMapping("/{id}")
+    @IsEmployee
     public ResponseEntity<TicketDto> getById(@PathVariable int id) {
 
         try {
@@ -81,6 +84,7 @@ public class TicketController {
     @ApiResponses({@ApiResponse(responseCode = "201", description = "Ticket crée"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PostMapping
+    @IsTechnician
     public ResponseEntity<TicketDto> create(@RequestBody @Valid TicketCreationDto ticket) {
         try {
             return new ResponseEntity<>(ticketService.save(ticket), HttpStatus.CREATED);
@@ -110,6 +114,7 @@ public class TicketController {
     @ApiResponses({@ApiResponse(responseCode = "204", description = "Ticket effacée"),
             @ApiResponse(responseCode = "404", description = "Ticket non trouvée")})
     @DeleteMapping("/{id}")
+    @IsAdmin
     public ResponseEntity<Void> delete(@PathVariable int id) {
         try {
             ticketService.delete(id);
@@ -128,6 +133,7 @@ public class TicketController {
             description = "Retourne les tickets avec leur historique récent, statut et affectation actuelle")
     @ApiResponse(responseCode = "200", description = "Liste détaillée récupérée")
     @GetMapping("/list/full")
+    @IsEmployee
     public List<TicketFullWithLatest> getTicketFullLatest() {
         return ticketService.getAllTicketFullWithLatest();
     }
@@ -140,6 +146,7 @@ public class TicketController {
             @ApiResponse(responseCode = "200", description = "Tickets récupérés"),
             @ApiResponse(responseCode = "404", description = "Technicien non trouvé")})
     @GetMapping("/list/technician/{id}")
+    @IsEmployee
     public ResponseEntity<List<TicketFullWithLatest>> getTicketFullWithLatestByTechnician(@PathVariable Integer id) {
         List<TicketFullWithLatest> tickets = ticketService.getTicketFullWithLatestByTechnician(id);
 
@@ -159,6 +166,7 @@ public class TicketController {
             @ApiResponse(responseCode = "404", description = "Ressource inexistante"),
             @ApiResponse(responseCode = "409", description = "Ticket déja attribué à ce technicien")})
     @PostMapping("/{id}/assign")
+    @IsManager
     public ResponseEntity<TicketDto> assign(@PathVariable Integer id,
                                             @RequestBody @Valid TicketAssignmentDto assignment) {
         return new ResponseEntity<>(ticketService.assignTicket(id, assignment), HttpStatus.OK);
@@ -172,6 +180,7 @@ public class TicketController {
             @ApiResponse(responseCode = "409", description = "Transition interdite")
     })
     @PostMapping("/{id}/close")
+    @IsTechnician
     public TicketDto closeTicket(
             @PathVariable Integer id,
             @RequestBody TicketClosingDto ticketClosingDto
@@ -188,6 +197,7 @@ public class TicketController {
             @ApiResponse(responseCode = "409", description = "Transition interdite")
     })
     @PostMapping("/{id}/start-progress")
+    @IsTechnician
     public TicketDto startProgress(
             @PathVariable Integer id,
             @RequestBody TicketProgressDto dto
@@ -203,6 +213,7 @@ public class TicketController {
             @ApiResponse(responseCode = "409", description = "Transition interdite")
     })
     @PostMapping("/{id}/resume-progress")
+    @IsTechnician
     public TicketDto resumeProgress(
             @PathVariable Integer id,
             @RequestBody TicketProgressDto dto
@@ -218,6 +229,7 @@ public class TicketController {
             @ApiResponse(responseCode = "409", description = "Transition interdite")
     })
     @PostMapping("/{id}/solve")
+    @IsTechnician
     public TicketDto solveTicket(
             @PathVariable Integer id,
             @RequestBody @Valid TicketSolvedDto dto
@@ -234,6 +246,7 @@ public class TicketController {
             @ApiResponse(responseCode = "409", description = "Transition interdite")
     })
     @PostMapping("/{id}/wait")
+    @IsTechnician
     public TicketDto setWaitingStatus(
             @PathVariable Integer id,
             @RequestBody @Valid TicketWaitDto dto
@@ -249,6 +262,7 @@ public class TicketController {
             @ApiResponse(responseCode = "404", description = "Ticket non trouvée"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PutMapping("/{id}")
+    @IsTechnician
     public ResponseEntity<TicketDto> update(@PathVariable int id, @RequestBody @Valid TicketDto ticketToUpdate) {
         try {
             return new ResponseEntity<>(ticketService.update(id, ticketToUpdate), HttpStatus.OK);

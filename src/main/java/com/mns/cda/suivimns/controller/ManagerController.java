@@ -2,6 +2,8 @@ package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.entity.ManagerDto;
 import com.mns.cda.suivimns.dto.flat.PasswordDto;
+import com.mns.cda.suivimns.security.IsAdmin;
+import com.mns.cda.suivimns.security.IsDirector;
 import com.mns.cda.suivimns.service.entity.AppUserService;
 import com.mns.cda.suivimns.service.entity.ManagerService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,6 +31,7 @@ public class ManagerController {
             description = "Récupere la liste complète de manager de la base")
     @ApiResponse(responseCode = "200", description = "Liste récupérée avec succés")
     @GetMapping("/list")
+    @IsDirector
     public List<ManagerDto> getAll() {
         return managerService.findAll();
     }
@@ -38,6 +41,7 @@ public class ManagerController {
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Manager trouvée"),
             @ApiResponse(responseCode = "404", description = "Manager non trouvée")})
     @GetMapping("/{id}")
+    @IsDirector
     public ResponseEntity<ManagerDto> getById(@PathVariable int id) {
 
         try {
@@ -47,7 +51,7 @@ public class ManagerController {
         }
     }
 
-
+    /* Replaced by route in Auth controller
     @Operation(summary = "Crée une nouvelle manager")
     @ApiResponses({@ApiResponse(responseCode = "201", description = "Manager crée"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
@@ -56,11 +60,14 @@ public class ManagerController {
         return new ResponseEntity<>(managerService.save(manager), HttpStatus.CREATED);
     }
 
+     */
+
 
     @Operation(summary = "Efface une manager selon son ID")
     @ApiResponses({@ApiResponse(responseCode = "204", description = "Manager effacée"),
             @ApiResponse(responseCode = "404", description = "Manager non trouvée")})
     @DeleteMapping("/{id}")
+    @IsAdmin
     public ResponseEntity<Void> delete(@PathVariable int id) {
         try {
             managerService.delete(id);
@@ -78,6 +85,7 @@ public class ManagerController {
             @ApiResponse(responseCode = "404", description = "Manager non trouvé"),
             @ApiResponse(responseCode = "400", description = "Email déja utilisé")})
     @PatchMapping("/{id}")
+    @IsAdmin
     public ResponseEntity<ManagerDto> update(@PathVariable int id, @RequestBody @Valid ManagerDto dto) {
 
         try {
@@ -100,6 +108,7 @@ public class ManagerController {
             @ApiResponse(responseCode = "404", description = "Manager non trouvé"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PatchMapping("/{id}/password")
+    @IsAdmin
     public ResponseEntity<Void> patch(@PathVariable int id, @RequestBody PasswordDto dto) {
         try {
             managerService.updatePassword(id, dto);

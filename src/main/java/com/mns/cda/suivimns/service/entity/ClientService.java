@@ -4,9 +4,18 @@ import com.mns.cda.suivimns.dao.AppUserDao;
 import com.mns.cda.suivimns.dao.ClientDao;
 import com.mns.cda.suivimns.dto.entity.ClientDto;
 import com.mns.cda.suivimns.dto.flat.PasswordDto;
+import com.mns.cda.suivimns.dto.search.ClientListDto;
+import com.mns.cda.suivimns.dto.search.ClientSearchCriteria;
+import com.mns.cda.suivimns.dto.search.TicketListDto;
+import com.mns.cda.suivimns.dto.search.TicketSearchCriteria;
 import com.mns.cda.suivimns.mapper.entity.ClientMapper;
+import com.mns.cda.suivimns.model.AppUser;
 import com.mns.cda.suivimns.model.Client;
+import com.mns.cda.suivimns.service.search.ClientQueryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,7 +34,8 @@ public class ClientService {
     protected final ClientDao clientDao;
     protected final ClientMapper clientMapper;
     protected final AppUserDao appUserDao;
-
+    protected final PasswordEncoder encoder;
+    protected final ClientQueryService queryService;
 
     public List<ClientDto> findAll() {
         return clientMapper.toDtoList(clientDao.findAll());
@@ -44,6 +54,15 @@ public class ClientService {
         Client saved = clientDao.save(client);
 
         return clientMapper.toDto(saved);
+    }
+
+    public void insert(Client client) {
+        client.setIdAppUser(null);
+
+        // Encodage du password avant de l'inserer en base de données
+        client.setPassword(encoder.encode(client.getPassword()));
+
+        appUserDao.save(client);
     }
 
     public void delete(int id) throws ClientService.ClientNotFoundException {
@@ -82,5 +101,9 @@ public class ClientService {
         user.setPassword(dto.newPassword());
 
         clientDao.save(user);
+    }
+
+    public Page<ClientListDto> search(ClientSearchCriteria criteria, Pageable pageable) {
+        return queryService.search(criteria, pageable);
     }
 }

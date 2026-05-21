@@ -1,6 +1,9 @@
 package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.entity.CommentDto;
+import com.mns.cda.suivimns.security.IsAdmin;
+import com.mns.cda.suivimns.security.IsEmployee;
+import com.mns.cda.suivimns.security.IsTechnician;
 import com.mns.cda.suivimns.service.entity.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -27,6 +30,7 @@ public class CommentController {
             description = "Récupere la liste complète de commentaire de la base")
     @ApiResponse(responseCode = "200", description = "Liste récupérée avec succés")
     @GetMapping("/list")
+    @IsEmployee
     public List<CommentDto> getAll() {
         return commentService.findAll();
     }
@@ -36,6 +40,7 @@ public class CommentController {
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Commentaire trouvée"),
             @ApiResponse(responseCode = "404", description = "Commentaire non trouvée")})
     @GetMapping("/{id}")
+    @IsEmployee
     public ResponseEntity<CommentDto> getById(@PathVariable int id) {
 
         try {
@@ -50,6 +55,7 @@ public class CommentController {
     @ApiResponses({@ApiResponse(responseCode = "201", description = "Commentaire crée"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PostMapping
+    @IsEmployee
     public ResponseEntity<CommentDto> create(@RequestBody @Valid CommentDto comment) {
         return new ResponseEntity<>(commentService.save(comment), HttpStatus.CREATED);
     }
@@ -59,6 +65,7 @@ public class CommentController {
     @ApiResponses({@ApiResponse(responseCode = "204", description = "Commentaire effacée"),
             @ApiResponse(responseCode = "404", description = "Commentaire non trouvée")})
     @DeleteMapping("/{id}")
+    @IsAdmin
     public ResponseEntity<Void> delete(@PathVariable int id) {
         try {
             commentService.delete(id);
@@ -75,6 +82,7 @@ public class CommentController {
             @ApiResponse(responseCode = "404", description = "Commentaire non trouvée"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PutMapping("/{id}")
+    @IsAdmin
     public ResponseEntity<CommentDto> update(@PathVariable int id, @RequestBody @Valid CommentDto commentToUpdate) {
         try {
             return new ResponseEntity<>(commentService.update(id, commentToUpdate), HttpStatus.OK);

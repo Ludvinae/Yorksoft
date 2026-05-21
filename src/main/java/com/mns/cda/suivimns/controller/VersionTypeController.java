@@ -1,6 +1,9 @@
 package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.entity.VersionTypeDto;
+import com.mns.cda.suivimns.security.IsAdmin;
+import com.mns.cda.suivimns.security.IsManager;
+import com.mns.cda.suivimns.security.IsTechnician;
 import com.mns.cda.suivimns.service.entity.VersionTypeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -10,6 +13,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,6 +32,7 @@ public class VersionTypeController {
     @Operation(summary = "Récupérer tous les types de version")
     @ApiResponse(responseCode = "200", description = "Liste des types de version récupérée avec succès")
     @GetMapping("/list")
+    @IsTechnician
     public List<VersionTypeDto> getAll() {
 
         return versionTypeService.findAll();
@@ -38,6 +44,7 @@ public class VersionTypeController {
             @ApiResponse(responseCode = "200", description = "Type de version trouvé"),
             @ApiResponse(responseCode = "404", description = "Type de version non trouvé")})
     @GetMapping("/{id}")
+    @IsTechnician
     public ResponseEntity<VersionTypeDto> getById(@PathVariable Integer id) {
 
         try {
@@ -53,6 +60,7 @@ public class VersionTypeController {
             @ApiResponse(responseCode = "201", description = "Type de version créé"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PostMapping
+    @IsManager
     public ResponseEntity<VersionTypeDto> create(@RequestBody @Valid VersionTypeDto versionType) {
 
         return new ResponseEntity<>(versionTypeService.save(versionType), HttpStatus.CREATED);
@@ -65,6 +73,7 @@ public class VersionTypeController {
             @ApiResponse(responseCode = "404", description = "Type de version non trouvé")
     })
     @DeleteMapping("/{id}")
+    @IsAdmin
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
 
         try {
@@ -84,6 +93,7 @@ public class VersionTypeController {
             @ApiResponse(responseCode = "400", description = "Données invalides")
     })
     @PutMapping("/{id}")
+    @IsManager
     public ResponseEntity<VersionTypeDto> update(@PathVariable Integer id, @RequestBody @Valid VersionTypeDto typeToUpdate) {
         try {
             return new ResponseEntity<>(versionTypeService.update(id, typeToUpdate), HttpStatus.OK);

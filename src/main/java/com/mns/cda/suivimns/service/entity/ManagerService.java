@@ -5,8 +5,10 @@ import com.mns.cda.suivimns.dao.ManagerDao;
 import com.mns.cda.suivimns.dto.entity.ManagerDto;
 import com.mns.cda.suivimns.dto.flat.PasswordDto;
 import com.mns.cda.suivimns.mapper.entity.ManagerMapper;
+import com.mns.cda.suivimns.model.Client;
 import com.mns.cda.suivimns.model.Manager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,7 +27,7 @@ public class ManagerService  {
     protected final ManagerDao managerDao;
     protected final ManagerMapper managerMapper;
     protected final AppUserDao appUserDao;
-
+    protected final PasswordEncoder encoder;
 
     public List<ManagerDto> findAll() {
         return managerMapper.toDtoList(managerDao.findAll());
@@ -44,6 +46,15 @@ public class ManagerService  {
         Manager saved = managerDao.save(manager);
 
         return managerMapper.toDto(saved);
+    }
+
+    public void insert(Manager manager) {
+        manager.setIdAppUser(null);
+
+        // Encodage du password avant de l'inserer en base de données
+        manager.setPassword(encoder.encode(manager.getPassword()));
+
+        appUserDao.save(manager);
     }
 
     public void delete(int id) throws ManagerService.ManagerNotFoundException {

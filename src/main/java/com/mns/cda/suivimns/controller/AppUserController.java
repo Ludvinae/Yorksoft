@@ -2,6 +2,8 @@ package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.entity.AppUserDto;
 import com.mns.cda.suivimns.dto.flat.PasswordDto;
+import com.mns.cda.suivimns.security.IsAdmin;
+import com.mns.cda.suivimns.security.IsDirector;
 import com.mns.cda.suivimns.service.entity.AppUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -28,6 +30,7 @@ public class AppUserController {
             description = "Récupere la liste complète de utilisateur de la base")
     @ApiResponse(responseCode = "200", description = "Liste récupérée avec succés")
     @GetMapping("/list")
+    @IsDirector
     public List<AppUserDto> getAll() {
         return appUserService.findAll();
     }
@@ -37,6 +40,7 @@ public class AppUserController {
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Utilisateur trouvée"),
             @ApiResponse(responseCode = "404", description = "Utilisateur non trouvée")})
     @GetMapping("/{id}")
+    @IsDirector
     public ResponseEntity<AppUserDto> getById(@PathVariable int id) {
 
         try {
@@ -51,6 +55,7 @@ public class AppUserController {
     @ApiResponses({@ApiResponse(responseCode = "201", description = "Utilisateur crée"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PostMapping
+    @IsAdmin
     public ResponseEntity<AppUserDto> create(@RequestBody @Valid AppUserDto appUser) {
         return new ResponseEntity<>(appUserService.save(appUser), HttpStatus.CREATED);
     }
@@ -60,6 +65,7 @@ public class AppUserController {
     @ApiResponses({@ApiResponse(responseCode = "204", description = "Utilisateur effacée"),
             @ApiResponse(responseCode = "404", description = "Utilisateur non trouvée")})
     @DeleteMapping("/{id}")
+    @IsAdmin
     public ResponseEntity<Void> delete(@PathVariable int id) {
         try {
             appUserService.delete(id);
@@ -77,6 +83,7 @@ public class AppUserController {
             @ApiResponse(responseCode = "404", description = "Utilisateur non trouvé"),
             @ApiResponse(responseCode = "400", description = "Email déja utilisé")})
     @PatchMapping("/{id}")
+    @IsAdmin
     public ResponseEntity<AppUserDto> update(@PathVariable int id, @RequestBody @Valid AppUserDto dto) {
 
         try {

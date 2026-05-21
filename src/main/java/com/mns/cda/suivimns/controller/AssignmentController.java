@@ -1,6 +1,9 @@
 package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.entity.AssignmentDto;
+import com.mns.cda.suivimns.security.IsDirector;
+import com.mns.cda.suivimns.security.IsManager;
+import com.mns.cda.suivimns.security.IsTechnician;
 import com.mns.cda.suivimns.service.entity.AssignmentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -27,6 +30,7 @@ public class AssignmentController {
             description = "Récupere la liste complète de attribution de la base")
     @ApiResponse(responseCode = "200", description = "Liste récupérée avec succés")
     @GetMapping("/list")
+    @IsManager
     public List<AssignmentDto> getAll() {
         return assignmentService.findAll();
     }
@@ -36,6 +40,7 @@ public class AssignmentController {
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Attribution trouvée"),
             @ApiResponse(responseCode = "404", description = "Attribution non trouvée")})
     @GetMapping("/{id}")
+    @IsManager
     public ResponseEntity<AssignmentDto> getById(@PathVariable int id) {
 
         try {
@@ -45,7 +50,7 @@ public class AssignmentController {
         }
     }
 
-
+    /* Fait dans le controller du ticket
     @Operation(summary = "Crée une nouvelle attribution")
     @ApiResponses({@ApiResponse(responseCode = "201", description = "Attribution crée"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
@@ -53,6 +58,8 @@ public class AssignmentController {
     public ResponseEntity<AssignmentDto> create(@RequestBody @Valid AssignmentDto assignment) {
         return new ResponseEntity<>(assignmentService.save(assignment), HttpStatus.CREATED);
     }
+
+     */
 
 
     // Pas de route DELETE et PUT

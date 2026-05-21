@@ -5,8 +5,10 @@ import com.mns.cda.suivimns.dao.TechnicianDao;
 import com.mns.cda.suivimns.dto.entity.TechnicianDto;
 import com.mns.cda.suivimns.dto.flat.PasswordDto;
 import com.mns.cda.suivimns.mapper.entity.TechnicianMapper;
+import com.mns.cda.suivimns.model.Client;
 import com.mns.cda.suivimns.model.Technician;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,7 +27,7 @@ public class TechnicianService  {
     protected final TechnicianDao technicianDao;
     protected final TechnicianMapper technicianMapper;
     protected final AppUserDao appUserDao;
-
+    protected final PasswordEncoder encoder;
 
     public List<TechnicianDto> findAll() {
         return technicianMapper.toDtoList(technicianDao.findAll());
@@ -44,6 +46,15 @@ public class TechnicianService  {
         Technician saved = technicianDao.save(technician);
 
         return technicianMapper.toDto(saved);
+    }
+
+    public void insert(Technician technician) {
+        technician.setIdAppUser(null);
+
+        // Encodage du password avant de l'inserer en base de données
+        technician.setPassword(encoder.encode(technician.getPassword()));
+
+        appUserDao.save(technician);
     }
 
     public void delete(int id) throws TechnicianService.TechnicianNotFoundException {

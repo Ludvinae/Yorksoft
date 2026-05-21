@@ -1,6 +1,8 @@
 package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.entity.KnowledgeDto;
+import com.mns.cda.suivimns.security.IsAdmin;
+import com.mns.cda.suivimns.security.IsTechnician;
 import com.mns.cda.suivimns.service.entity.KnowledgeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -28,6 +30,7 @@ public class KnowledgeController {
                 description = "Récupere la liste complète de connaissance de la base")
     @ApiResponse(responseCode = "200", description = "Liste récupérée avec succés")
     @GetMapping("/list")
+    @IsTechnician
     public List<KnowledgeDto> getAll() {
         return knowledgeService.findAll();
     }
@@ -37,6 +40,7 @@ public class KnowledgeController {
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Connaissance trouvée"),
                     @ApiResponse(responseCode = "404", description = "Connaissance non trouvée")})
     @GetMapping("/{id}")
+    @IsTechnician
     public ResponseEntity<KnowledgeDto> getById(@PathVariable int id) {
 
         try {
@@ -51,6 +55,7 @@ public class KnowledgeController {
     @ApiResponses({@ApiResponse(responseCode = "201", description = "Connaissance crée"),
                     @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PostMapping
+    @IsTechnician
     public ResponseEntity<KnowledgeDto> create(@RequestBody @Valid KnowledgeDto knowledge) {
         return new ResponseEntity<>(knowledgeService.save(knowledge), HttpStatus.CREATED);
     }
@@ -60,6 +65,7 @@ public class KnowledgeController {
     @ApiResponses({@ApiResponse(responseCode = "204", description = "Connaissance effacée"),
                     @ApiResponse(responseCode = "404", description = "Connaissance non trouvée")})
     @DeleteMapping("/{id}")
+    @IsAdmin
     public ResponseEntity<Void> delete(@PathVariable int id) {
         try {
             knowledgeService.delete(id);
@@ -76,6 +82,7 @@ public class KnowledgeController {
                     @ApiResponse(responseCode = "404", description = "Connaissance non trouvée"),
                     @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PutMapping("/{id}")
+    @IsTechnician
     public ResponseEntity<KnowledgeDto> update(@PathVariable int id, @RequestBody @Valid KnowledgeDto knowledgeToUpdate) {
         try {
             return new ResponseEntity<>(knowledgeService.update(id, knowledgeToUpdate), HttpStatus.OK);

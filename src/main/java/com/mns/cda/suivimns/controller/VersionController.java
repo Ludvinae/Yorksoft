@@ -2,6 +2,9 @@ package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.entity.VersionDto;
 import com.mns.cda.suivimns.dto.flat.VersionDetailDto;
+import com.mns.cda.suivimns.security.IsAdmin;
+import com.mns.cda.suivimns.security.IsManager;
+import com.mns.cda.suivimns.security.IsTechnician;
 import com.mns.cda.suivimns.service.entity.VersionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -28,6 +31,7 @@ public class VersionController {
     @Operation(summary = "Récupérer toutes les versions")
     @ApiResponse(responseCode = "200", description = "Liste des versions récupérée")
     @GetMapping("/list")
+    @IsTechnician
     public List<VersionDto> findAll() {
         return versionService.findAll();
     }
@@ -36,6 +40,7 @@ public class VersionController {
     @Operation(summary = "Récupérer toutes les versions avec les informations de type de version et de logiciel")
     @ApiResponse(responseCode = "200", description = "Liste des versions récupérée")
     @GetMapping("/list/detail")
+    @IsTechnician
     public List<VersionDetailDto> findAllDetail() {
         return versionService.findAllDetail();
     }
@@ -46,6 +51,7 @@ public class VersionController {
             @ApiResponse(responseCode = "200", description = "Version trouvée"),
             @ApiResponse(responseCode = "404", description = "Version non trouvée")})
     @GetMapping("/{id}")
+    @IsTechnician
     public ResponseEntity<VersionDto> findById(@PathVariable Integer id) {
         try {
             return new ResponseEntity<>(versionService.findById(id) , HttpStatus.OK);
@@ -59,6 +65,7 @@ public class VersionController {
             @ApiResponse(responseCode = "200", description = "Version trouvée"),
             @ApiResponse(responseCode = "404", description = "Version non trouvée")})
     @GetMapping("/{id}/detail")
+    @IsTechnician
     public ResponseEntity<VersionDetailDto> findByIdDetail(@PathVariable Integer id) {
         try {
             return new ResponseEntity<>(versionService.findByIdDetail(id) , HttpStatus.OK);
@@ -73,6 +80,7 @@ public class VersionController {
             @ApiResponse(responseCode = "201", description = "Version créée"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PostMapping
+    @IsManager
     public ResponseEntity<VersionDto> create(@RequestBody @Valid VersionDto version) {
         return new ResponseEntity<>(versionService.save(version), HttpStatus.CREATED);
     }
@@ -83,6 +91,7 @@ public class VersionController {
             @ApiResponse(responseCode = "204", description = "Version supprimée"),
             @ApiResponse(responseCode = "404", description = "Version non trouvée")})
     @DeleteMapping("/{id}")
+    @IsAdmin
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
         try {
             versionService.delete(id);
@@ -101,6 +110,7 @@ public class VersionController {
             @ApiResponse(responseCode = "404", description = "Version non trouvée"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PutMapping("/{id}")
+    @IsManager
     public ResponseEntity<VersionDto> update(@PathVariable Integer id, @RequestBody @Valid VersionDto versionToUpdate) {
         try {
             return new ResponseEntity<>(versionService.update(id, versionToUpdate), HttpStatus.OK);

@@ -1,6 +1,9 @@
 package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.entity.ArticleDto;
+import com.mns.cda.suivimns.security.IsAdmin;
+import com.mns.cda.suivimns.security.IsManager;
+import com.mns.cda.suivimns.security.IsTechnician;
 import com.mns.cda.suivimns.service.entity.ArticleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -28,6 +31,7 @@ public class ArticleController {
             description = "Récupere la liste complète de article de la base")
     @ApiResponse(responseCode = "200", description = "Liste récupérée avec succés")
     @GetMapping("/list")
+    @IsTechnician
     public List<ArticleDto> getAll() {
         return articleService.findAll();
     }
@@ -37,6 +41,7 @@ public class ArticleController {
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Article trouvée"),
             @ApiResponse(responseCode = "404", description = "Article non trouvée")})
     @GetMapping("/{id}")
+    @IsTechnician
     public ResponseEntity<ArticleDto> getById(@PathVariable int id) {
 
         try {
@@ -51,6 +56,7 @@ public class ArticleController {
     @ApiResponses({@ApiResponse(responseCode = "201", description = "Article crée"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PostMapping
+    @IsTechnician
     public ResponseEntity<ArticleDto> create(@RequestBody @Valid ArticleDto article) {
         return new ResponseEntity<>(articleService.save(article), HttpStatus.CREATED);
     }
@@ -60,6 +66,7 @@ public class ArticleController {
     @ApiResponses({@ApiResponse(responseCode = "204", description = "Article effacée"),
             @ApiResponse(responseCode = "404", description = "Article non trouvée")})
     @DeleteMapping("/{id}")
+    @IsAdmin
     public ResponseEntity<Void> delete(@PathVariable int id) {
         try {
             articleService.delete(id);
@@ -76,6 +83,7 @@ public class ArticleController {
             @ApiResponse(responseCode = "404", description = "Article non trouvée"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PutMapping("/{id}")
+    @IsTechnician
     public ResponseEntity<ArticleDto> update(@PathVariable int id, @RequestBody @Valid ArticleDto articleToUpdate) {
         try {
             return new ResponseEntity<>(articleService.update(id, articleToUpdate), HttpStatus.OK);
