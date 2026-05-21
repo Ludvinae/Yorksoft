@@ -5,9 +5,7 @@ import com.mns.cda.suivimns.dto.search.TicketListDto;
 import com.mns.cda.suivimns.dto.search.TicketSearchCriteria;
 import com.mns.cda.suivimns.dto.workflow.*;
 import com.mns.cda.suivimns.dto.flat.TicketFullWithLatest;
-import com.mns.cda.suivimns.security.IsAdmin;
-import com.mns.cda.suivimns.security.IsManager;
-import com.mns.cda.suivimns.security.IsTechnician;
+import com.mns.cda.suivimns.security.*;
 import com.mns.cda.suivimns.service.entity.StatusService;
 import com.mns.cda.suivimns.service.entity.TicketService;
 import com.mns.cda.suivimns.service.search.TicketQueryService;
@@ -41,7 +39,7 @@ public class TicketController {
             description = "Récupère la liste complète de ticket de la base")
     @ApiResponse(responseCode = "200", description = "Liste récupérée avec succès")
     @GetMapping("/list")
-    @IsTechnician
+    @IsEmployee
     public List<TicketDto> getAll() {
         return ticketService.findAll();
     }
@@ -51,7 +49,7 @@ public class TicketController {
             description = "Récupère la liste paginée de ticket, peut être triée et filtrée")
     @ApiResponse(responseCode = "200", description = "Liste récupérée avec succès")
     @GetMapping("/test")
-    @IsTechnician
+    @IsEmployee
     public ResponseEntity<Page<TicketListDto>> search(
             TicketSearchCriteria criteria,
             @PageableDefault(size = 15, sort = "openDate", direction = Sort.Direction.DESC)
@@ -70,6 +68,7 @@ public class TicketController {
             @ApiResponse(responseCode = "404", description = "Ticket non trouvée")})
     @GetMapping("/{id}/active-time")
     @IsManager
+    @IsDirector
     public Long getActiveTimeInSeconds(@PathVariable Integer id) {
         return ticketService.getActiveTimeInSeconds(id);
     }
@@ -79,7 +78,7 @@ public class TicketController {
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Ticket trouvée"),
             @ApiResponse(responseCode = "404", description = "Ticket non trouvée")})
     @GetMapping("/{id}")
-    @IsTechnician
+    @IsEmployee
     public ResponseEntity<TicketDto> getById(@PathVariable int id) {
 
         try {
@@ -143,7 +142,7 @@ public class TicketController {
             description = "Retourne les tickets avec leur historique récent, statut et affectation actuelle")
     @ApiResponse(responseCode = "200", description = "Liste détaillée récupérée")
     @GetMapping("/list/full")
-    @IsTechnician
+    @IsEmployee
     public List<TicketFullWithLatest> getTicketFullLatest() {
         return ticketService.getAllTicketFullWithLatest();
     }
@@ -156,7 +155,7 @@ public class TicketController {
             @ApiResponse(responseCode = "200", description = "Tickets récupérés"),
             @ApiResponse(responseCode = "404", description = "Technicien non trouvé")})
     @GetMapping("/list/technician/{id}")
-    @IsTechnician
+    @IsEmployee
     public ResponseEntity<List<TicketFullWithLatest>> getTicketFullWithLatestByTechnician(@PathVariable Integer id) {
         List<TicketFullWithLatest> tickets = ticketService.getTicketFullWithLatestByTechnician(id);
 
