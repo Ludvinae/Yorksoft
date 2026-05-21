@@ -1,0 +1,75 @@
+<div class="flex flex-col h-screen">
+
+  <app-title-client ></app-title-client>
+
+  <div class="flex-1 overflow-auto">
+
+    @if (storeService.loading()) {
+      <div>
+        <span class="loading loading-spinner loading-xl"></span>
+      </div>
+
+    } @else {
+      <table class="table table-sm">
+        <thead>
+        <tr>
+          <th class="cursor-pointer select-none" (click)="storeService.setSort('firstName')">
+            <div class="flex items-center gap-2">
+              Prénom
+              @if (isSorted("firstName")) {
+                <span>{{ isAsc() ? '▲' : '▼' }}</span>
+              }
+            </div>
+          </th>
+          <th class="cursor-pointer select-none" (click)="storeService.setSort('lastName')">
+            <div class="flex items-center gap-2">
+              Nom
+              @if (isSorted("lastName")) {
+                <span>{{ isAsc() ? '▲' : '▼' }}</span>
+              }
+            </div>
+          </th>
+          <th class="cursor-pointer select-none" (click)="storeService.setSort('email')">
+            <div class="flex items-center gap-2">
+              Courriel
+              @if (isSorted("email")) {
+                <span>{{ isAsc() ? '▲' : '▼' }}</span>
+              }
+            </div>
+          </th>
+          <th class="cursor-pointer select-none" (click)="storeService.setSort('phoneNumber')">
+            <div class="flex items-center gap-2">
+              Téléphone
+              @if (isSorted("phoneNumber")) {
+                <span>{{ isAsc() ? '▲' : '▼' }}</span>
+              }
+            </div>
+          </th>
+          <th class="cursor-pointer select-none" (click)="storeService.setSort('importance')">
+            <div class="flex items-center gap-2">
+              Importance
+              @if (isSorted("importance")) {
+                <span>{{ isAsc() ? '▲' : '▼' }}</span>
+              }
+            </div>
+        </tr>
+        </thead>
+        <tbody>
+          @for(client of storeService.clients(); track client.idAppUser) {
+            <tr>
+              <td>{{ client.firstName }}</td>
+              <td>{{ client.lastName }}</td>
+              <td>{{ client.email }}</td>
+              <td>{{ client.phoneNumber }}</td>
+              <td>{{ client.importance }} </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+
+
+  </div>
+
+  <app-footer-client></app-footer-client>
+</div>

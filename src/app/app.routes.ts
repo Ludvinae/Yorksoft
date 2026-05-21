@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 import { Login } from './pages/login/login';
 import { NotFound } from './pages/not-found/not-found';
-import { Clients } from './pages/clients/clients';
 import { Knowledge } from './pages/knowledge/knowledge';
 import { Settings } from './pages/settings/settings';
 import { Dashboard } from './pages/dashboard/dashboard';
@@ -38,6 +37,7 @@ import { technicianGuard } from './guards/technician-guard';
 import { clientGuard } from './guards/client-guard';
 import { employeeGuard } from './guards/employee-guard';
 import { adminGuard } from './guards/admin-guard';
+import { ClientList } from './pages/client/client-list/client-list';
 
 export const routes: Routes = [
   {
@@ -77,7 +77,7 @@ export const routes: Routes = [
   },
   {
     path: 'clients',
-    component: Clients,
+    component: ClientList,
     title: 'Clients',
     canActivate: [employeeGuard],
   },

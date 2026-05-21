@@ -8,6 +8,7 @@ import { FieldText } from '../../../components/form/field-text/field-text';
 import { GenericFormPage } from '../../../components/form/generic-form-page/generic-form-page';
 import { VersionService } from '../../../services/api/version-service';
 import { list } from 'postcss';
+import { ClientService } from '../../../services/api/client-service';
 
 @Component({
   selector: 'app-ticket-edit',
@@ -21,6 +22,7 @@ export class TicketEdit implements OnInit {
   router = inject(Router);
   route = inject(ActivatedRoute);
   versionService = inject(VersionService);
+  clientService = inject(ClientService);
 
   form: FormGroup<TicketForm> = this.formBuilder.nonNullable.group({
     title: this.formBuilder.nonNullable.control('', {

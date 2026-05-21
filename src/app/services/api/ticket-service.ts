@@ -83,7 +83,7 @@ export class TicketService {
     });
 
     return this.http.get<Page<TicketListDto>>(
-      'http://localhost:8080/ticket/test',
+      'http://localhost:8080/ticket/list',
       { params }
     );
   }
