@@ -43,7 +43,8 @@ public class TicketQueryService {
                 .and(TicketSpecification.closedBefore(criteria.closedBefore()))
                 .and(TicketSpecification.priorityEquals(criteria.priorityEquals()))
                 .and(TicketSpecification.priorityGreaterThan(criteria.priorityGreaterThan()))
-                .and(TicketSpecification.priorityLessThan(criteria.priorityLessThan()));
+                .and(TicketSpecification.priorityLessThan(criteria.priorityLessThan()))
+                .and(TicketSpecification.assignedTo(criteria.idTechnician()));
 
 
         return ticketDao

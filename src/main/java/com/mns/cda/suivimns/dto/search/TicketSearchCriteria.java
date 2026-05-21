@@ -17,7 +17,7 @@ public record TicketSearchCriteria(
         Integer priorityGreaterThan,
         Integer priorityLessThan,
         Integer priorityEquals,
-        Integer technicianId,
+        Integer idTechnician,
         LocalDate createdAfter,
         LocalDate createdBefore,
         Boolean unassigned,

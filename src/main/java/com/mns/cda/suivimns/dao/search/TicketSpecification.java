@@ -89,4 +89,9 @@ public class TicketSpecification {
                 priority == null ? null : cb.equal(root.get("currentPriority"), priority);
     }
 
+    public static Specification<Ticket> assignedTo(Integer idAppUser) {
+        return (root, query, cb) ->
+                idAppUser == null ? null : cb.equal(root.get("currentTechnician.idAppUser"), idAppUser);
+    }
+
 }
