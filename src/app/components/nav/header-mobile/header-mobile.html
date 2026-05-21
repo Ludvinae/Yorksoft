@@ -12,8 +12,8 @@
 
     <!-- User info -->
     <div class="leading-tight">
-      <p class="text-sm font-medium">Stéphane Martin</p>
-      <p class="text-xs text-base-content/60">Technicien N1</p>
+      <p class="text-sm font-medium">{{ auth.jwtInfo()?.name }}</p>
+      <p class="text-xs text-base-content/60">{{ auth.jwtInfo()?.role | titlecase }} {{ auth.jwtInfo()?.rank }}</p>
     </div>
 
   </div>
