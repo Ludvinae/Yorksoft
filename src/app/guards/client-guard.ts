@@ -7,7 +7,7 @@ export const clientGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
 
   if (authService.jwtInfo() == null) {
-    return router.parseUrl('/login');
+    return router.parseUrl('/');
   }
 
   if (

@@ -33,14 +33,11 @@ import { VersionTypeDetail } from './pages/admin/version-type/version-type-detai
 import { TicketList } from './pages/ticket/ticket-list/ticket-list';
 import { TicketEdit } from './pages/ticket/ticket-edit/ticket-edit';
 import { TicketDetail } from './pages/ticket/ticket-detail/ticket-detail';
-import { ListDesktop } from './components/ticket/list-desktop/list-desktop';
 import { Forbidden } from './pages/forbidden/forbidden';
-import { adminGuard } from './guards/admin-guard';
-import { managerGuard } from './guards/manager-guard';
-import { directorGuard } from './guards/director-guard';
 import { technicianGuard } from './guards/technician-guard';
 import { clientGuard } from './guards/client-guard';
 import { employeeGuard } from './guards/employee-guard';
+import { adminGuard } from './guards/admin-guard';
 
 export const routes: Routes = [
   {
@@ -99,39 +96,39 @@ export const routes: Routes = [
   {
     path: 'admin',
     children: [
-      { path: '', component: Admin, canActivate: [managerGuard] },
-      { path: 'software', component: SoftwareList },
-      { path: 'software/create', component: SoftwareEdit },
-      { path: 'software/update/:id', component: SoftwareEdit },
-      { path: 'software/:id', component: SoftwareDetail },
-      { path: 'software-type', component: SoftwareTypeList },
-      { path: 'software-type/create', component: SoftwareTypeEdit },
-      { path: 'software-type/update/:id', component: SoftwareTypeEdit },
-      { path: 'software-type/:id', component: SoftwareTypeDetail },
-      { path: 'impact', component: ImpactList },
-      { path: 'impact/create', component: ImpactEdit },
-      { path: 'impact/update/:id', component: ImpactEdit },
-      { path: 'impact/:id', component: ImpactDetail },
-      { path: 'urgency', component: UrgencyList },
-      { path: 'urgency/create', component: UrgencyEdit },
-      { path: 'urgency/update/:id', component: UrgencyEdit },
-      { path: 'urgency/:id', component: UrgencyDetail },
-      { path: 'theme', component: ThemeList },
-      { path: 'theme/create', component: ThemeEdit },
-      { path: 'theme/update/:id', component: ThemeEdit },
-      { path: 'theme/:id', component: ThemeDetail },
-      { path: 'status', component: StatusList },
-      { path: 'status/create', component: StatusEdit },
-      { path: 'status/update/:id', component: StatusEdit },
-      { path: 'status/:id', component: StatusDetail },
-      { path: 'version', component: VersionList },
-      { path: 'version/create', component: VersionEdit },
-      { path: 'version/update/:id', component: VersionEdit },
-      { path: 'version/:id', component: VersionDetail },
-      { path: 'version-type', component: VersionTypeList },
-      { path: 'version-type/create', component: VersionTypeEdit },
-      { path: 'version-type/update/:id', component: VersionTypeEdit },
-      { path: 'version-type/:id', component: VersionTypeDetail },
+      { path: '', component: Admin, canActivate: [employeeGuard] },
+      { path: 'software', component: SoftwareList, canActivate: [employeeGuard] },
+      { path: 'software/create', component: SoftwareEdit, canActivate: [adminGuard] },
+      { path: 'software/update/:id', component: SoftwareEdit, canActivate: [adminGuard] },
+      { path: 'software/:id', component: SoftwareDetail, canActivate: [employeeGuard] },
+      { path: 'software-type', component: SoftwareTypeList, canActivate: [employeeGuard] },
+      { path: 'software-type/create', component: SoftwareTypeEdit, canActivate: [adminGuard] },
+      { path: 'software-type/update/:id', component: SoftwareTypeEdit, canActivate: [adminGuard] },
+      { path: 'software-type/:id', component: SoftwareTypeDetail, canActivate: [employeeGuard] },
+      { path: 'impact', component: ImpactList, canActivate: [employeeGuard] },
+      { path: 'impact/create', component: ImpactEdit, canActivate: [adminGuard] },
+      { path: 'impact/update/:id', component: ImpactEdit, canActivate: [adminGuard] },
+      { path: 'impact/:id', component: ImpactDetail, canActivate: [employeeGuard] },
+      { path: 'urgency', component: UrgencyList, canActivate: [employeeGuard] },
+      { path: 'urgency/create', component: UrgencyEdit, canActivate: [adminGuard] },
+      { path: 'urgency/update/:id', component: UrgencyEdit, canActivate: [adminGuard] },
+      { path: 'urgency/:id', component: UrgencyDetail, canActivate: [employeeGuard] },
+      { path: 'theme', component: ThemeList, canActivate: [employeeGuard] },
+      { path: 'theme/create', component: ThemeEdit, canActivate: [adminGuard] },
+      { path: 'theme/update/:id', component: ThemeEdit, canActivate: [adminGuard] },
+      { path: 'theme/:id', component: ThemeDetail, canActivate: [employeeGuard] },
+      { path: 'status', component: StatusList, canActivate: [employeeGuard] },
+      { path: 'status/create', component: StatusEdit, canActivate: [adminGuard] },
+      { path: 'status/update/:id', component: StatusEdit, canActivate: [adminGuard] },
+      { path: 'status/:id', component: StatusDetail, canActivate: [employeeGuard] },
+      { path: 'version', component: VersionList, canActivate: [employeeGuard] },
+      { path: 'version/create', component: VersionEdit, canActivate: [adminGuard] },
+      { path: 'version/update/:id', component: VersionEdit, canActivate: [adminGuard] },
+      { path: 'version/:id', component: VersionDetail, canActivate: [employeeGuard] },
+      { path: 'version-type', component: VersionTypeList, canActivate: [employeeGuard] },
+      { path: 'version-type/create', component: VersionTypeEdit, canActivate: [adminGuard] },
+      { path: 'version-type/update/:id', component: VersionTypeEdit, canActivate: [adminGuard] },
+      { path: 'version-type/:id', component: VersionTypeDetail, canActivate: [employeeGuard] },
     ],
   },
   {
