@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { TicketStoreService } from '../../services/ticket-store-service';
+import { TicketStoreService } from '../../services/business/ticket-store-service';
 
 @Component({
   selector: 'app-footer-ticket',

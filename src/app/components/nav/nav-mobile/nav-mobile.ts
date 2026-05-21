@@ -1,6 +1,6 @@
 import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { Auth } from '../../../services/auth';
+import { AuthService } from '../../../services/business/auth-service';
 
 @Component({
   selector: 'app-nav-mobile',
@@ -9,7 +9,7 @@ import { Auth } from '../../../services/auth';
   styleUrl: './nav-mobile.css',
 })
 export class NavMobile {
-  private auth = inject(Auth);
+  private auth = inject(AuthService);
 
   @Output() navigateEvent = new EventEmitter<void>();
 

@@ -1,8 +1,9 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TicketSearchCriteria } from '../../../models/page/TicketSearchCriteria';
-import { TicketStoreService } from '../../../services/ticket-store-service';
-import {AuthService} from '../../../services/auth-service';
+import { TicketStoreService } from '../../../services/business/ticket-store-service';
+import {AuthService} from '../../../services/business/auth-service';
+import { UserPreferencesService } from '../../../services/business/user-preferences-service';
 
 @Component({
   selector: 'app-title-bar',
@@ -10,40 +11,53 @@ import {AuthService} from '../../../services/auth-service';
   templateUrl: './title-bar.html',
   styleUrl: './title-bar.css',
 })
-export class TitleBar {
+export class TitleBar implements OnInit {
   auth = inject(AuthService);
+  preferences = inject(UserPreferencesService)
 
   buttonState = 'all';
 
-  search = "";
-  private searchTimeout : any;
+  search = '';
+  private searchTimeout: any;
 
   filters: TicketSearchCriteria = {};
+  showClosedTickets = true;
 
   constructor(public store: TicketStoreService) {}
 
+  ngOnInit(): void {
+    const preference = this.preferences.getPreferences();
+
+    this.showClosedTickets = preference.showClosedTickets;
+
+    if (!this.showClosedTickets) {
+      this.store.updateFilters({
+        statusesExcluded: ['CLOSED'],
+      });
+    }
+  }
+
   setFilter(filter: 'all' | 'assigned' | 'priority'): void {
     this.filters = {};
-    const userId = this.auth.jwtInfo() != null ? this.auth.jwtInfo()?.id : 0
-
+    const userId = this.auth.jwtInfo() != null ? this.auth.jwtInfo()?.id : 0;
 
     switch (filter) {
       case 'assigned':
-        this.store.resetFilters();
         // prevoir le cas ou pas d'id user
-        this.store.updateFilters({ assignedTo:  this.auth.jwtInfo()?.id  });
+        this.store.updateFilters({
+          assignedTo: this.auth.jwtInfo()?.id,
+          priorityGreaterThan: undefined,
+        });
         this.buttonState = 'assigned';
         break;
 
       case 'priority':
-        this.store.resetFilters();
-        this.store.updateFilters({ priorityGreaterThan: 65 });
+        this.store.updateFilters({ assignedTo: undefined, priorityGreaterThan: 65 });
         this.buttonState = 'priority';
         break;
 
       case 'all':
-        this.store.resetFilters();
-        this.store.updateFilters({});
+        this.store.updateFilters({ assignedTo: undefined, priorityGreaterThan: undefined });
         this.buttonState = 'all';
         break;
     }
@@ -51,11 +65,22 @@ export class TitleBar {
 
   // Fonction de recherche sur le titre, avec debounce 300ms
   onSearch(value: string): void {
-
     this.search = value;
     clearTimeout(this.searchTimeout);
     this.searchTimeout = setTimeout(() => {
-      this.store.updateFilters({keyword: value})
+      this.store.updateFilters({ keyword: value });
     }, 300);
+  }
+
+  onClosedToggleChange(): void {
+    this.preferences.updatePreferences({
+      showClosedTickets: this.showClosedTickets,
+    });
+
+    if (this.showClosedTickets) {
+      this.store.updateFilters({ statusesExcluded: [] });
+    } else {
+      this.store.updateFilters({ statusesExcluded: ['CLOSED'] });
+    }
   }
 }

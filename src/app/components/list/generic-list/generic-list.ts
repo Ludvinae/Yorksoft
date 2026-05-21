@@ -1,5 +1,5 @@
 import { Component, EventEmitter, inject, Input, Output, TemplateRef } from '@angular/core';
-import { BreakpointSwitch } from '../../../services/breakpoint-switch';
+import { BreakpointSwitch } from '../../../services/business/breakpoint-switch';
 import { DesktopTable } from '../desktop-table/desktop-table';
 import { MobileCardList } from '../mobile-card-list/mobile-card-list';
 

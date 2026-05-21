@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ClientStoreService } from '../../../services/client-store-service';
+import { ClientStoreService } from '../../../services/business/client-store-service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @Component({

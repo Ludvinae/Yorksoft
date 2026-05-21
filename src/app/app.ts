@@ -1,7 +1,6 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
-import { Auth } from './services/auth';
-import { BreakpointSwitch } from './services/breakpoint-switch';
+import { BreakpointSwitch } from './services/business/breakpoint-switch';
 import { FormsModule } from '@angular/forms';
 import { HeaderDesktop } from './components/nav/header-desktop/header-desktop';
 import { HeaderMobile } from './components/nav/header-mobile/header-mobile';

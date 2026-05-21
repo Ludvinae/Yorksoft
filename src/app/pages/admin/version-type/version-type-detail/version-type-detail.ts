@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { RouteBuilderService } from '../../../../services/route-builder-service';
+import { RouteBuilderService } from '../../../../services/business/route-builder-service';
 import { tap } from 'rxjs';
 import { VersionTypeService } from '../../../../services/api/version-type-service';
 import { DetailPage } from '../../../../components/detail-page/detail-page';

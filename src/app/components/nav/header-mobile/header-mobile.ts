@@ -1,6 +1,6 @@
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { DatePipe, TitleCasePipe } from '@angular/common';
-import { AuthService } from '../../../services/auth-service';
+import { AuthService } from '../../../services/business/auth-service';
 
 @Component({
   selector: 'app-header-mobile',

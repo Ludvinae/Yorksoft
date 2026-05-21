@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { ClientStoreService } from '../../services/client-store-service';
+import { ClientStoreService } from '../../services/business/client-store-service';
 
 @Component({
   selector: 'app-footer-client',

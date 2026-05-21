@@ -1,8 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { NavDesktop } from '../nav-desktop/nav-desktop';
 import { Router, RouterLink } from '@angular/router';
-import { Auth } from '../../../services/auth';
-import { AuthService } from '../../../services/auth-service';
+import { AuthService } from '../../../services/business/auth-service';
 import { TitleCasePipe } from '@angular/common';
 
 @Component({

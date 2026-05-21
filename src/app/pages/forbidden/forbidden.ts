@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { AuthService } from '../../services/auth-service';
+import { AuthService } from '../../services/business/auth-service';
 
 @Component({
   selector: 'app-forbidden',

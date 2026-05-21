@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { SoftwareService } from '../../../../services/api/software-service';
 import { SoftwareTypeService } from '../../../../services/api/software-type-service';
 import { DetailPage } from '../../../../components/detail-page/detail-page';
-import { RouteBuilderService } from '../../../../services/route-builder-service';
+import { RouteBuilderService } from '../../../../services/business/route-builder-service';
 import { switchMap, tap } from 'rxjs';
 
 @Component({
