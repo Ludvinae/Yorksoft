@@ -63,8 +63,6 @@ export class ListDesktop implements OnInit {
 
   setFilter(filter: 'all' | 'assigned' | 'priority'): void {
 
-
-
     this.page = 0;
 
     this.loadTickets();

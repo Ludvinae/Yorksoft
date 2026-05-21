@@ -2,10 +2,11 @@ import { Component, inject, OnInit } from '@angular/core';
 import { TicketService } from '../../../services/api/ticket-service';
 import { TitleBar } from '../../../components/title-bar/title-bar/title-bar';
 import { TicketStoreService } from '../../../services/ticket-store-service';
+import { FooterTicket } from '../../../components/footer-ticket/footer-ticket';
 
 @Component({
   selector: 'app-ticket-list',
-  imports: [TitleBar],
+  imports: [TitleBar, FooterTicket],
   templateUrl: './ticket-list.html',
   styleUrl: './ticket-list.css',
 })

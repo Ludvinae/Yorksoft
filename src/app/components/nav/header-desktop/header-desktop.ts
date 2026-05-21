@@ -3,15 +3,16 @@ import { NavDesktop } from '../nav-desktop/nav-desktop';
 import { Router, RouterLink } from '@angular/router';
 import { Auth } from '../../../services/auth';
 import { AuthService } from '../../../services/auth-service';
+import { TitleCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-header-desktop',
-  imports: [NavDesktop, RouterLink],
+  imports: [NavDesktop, RouterLink, TitleCasePipe],
   templateUrl: './header-desktop.html',
   styleUrl: './header-desktop.css',
 })
 export class HeaderDesktop {
-  private auth = inject(AuthService);
+  protected auth = inject(AuthService);
 
   constructor(protected router: Router) {}
 
