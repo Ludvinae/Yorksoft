@@ -91,7 +91,7 @@ public class TicketSpecification {
 
     public static Specification<Ticket> assignedTo(Integer idAppUser) {
         return (root, query, cb) ->
-                idAppUser == null ? null : cb.equal(root.get("currentTechnician.idAppUser"), idAppUser);
+                idAppUser == null ? null : cb.equal(root.get("currentTechnician").get("idAppUser"), idAppUser);
     }
 
 }

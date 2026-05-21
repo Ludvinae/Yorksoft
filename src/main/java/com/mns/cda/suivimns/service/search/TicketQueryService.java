@@ -33,9 +33,9 @@ public class TicketQueryService {
         Specification<Ticket> spec = Specification
                 .where(TicketSpecification.hasStatuses(criteria.statuses()))
                 .and(TicketSpecification.hasNotStatuses(criteria.statusesExcluded()))
-                .and(TicketSpecification.hasClient(criteria.clientId()))
-                .and(TicketSpecification.hasVersion(criteria.versionId()))
-                .and(TicketSpecification.hasSoftware(criteria.softwareId()))
+                .and(TicketSpecification.hasClient(criteria.hasClient()))
+                .and(TicketSpecification.hasVersion(criteria.hasVersion()))
+                .and(TicketSpecification.hasSoftware(criteria.hasSoftware()))
                 .and(TicketSpecification.containsKeyword(criteria.keyword()))
                 .and(TicketSpecification.openedAfter(criteria.createdAfter()))
                 .and(TicketSpecification.openedBefore(criteria.createdBefore()))
@@ -44,7 +44,7 @@ public class TicketQueryService {
                 .and(TicketSpecification.priorityEquals(criteria.priorityEquals()))
                 .and(TicketSpecification.priorityGreaterThan(criteria.priorityGreaterThan()))
                 .and(TicketSpecification.priorityLessThan(criteria.priorityLessThan()))
-                .and(TicketSpecification.assignedTo(criteria.idTechnician()));
+                .and(TicketSpecification.assignedTo(criteria.assignedTo()));
 
 
         return ticketDao
