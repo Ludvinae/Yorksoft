@@ -10,6 +10,7 @@ import com.mns.cda.suivimns.dto.search.TicketSearchCriteria;
 import com.mns.cda.suivimns.mapper.entity.ClientMapper;
 import com.mns.cda.suivimns.model.Client;
 import com.mns.cda.suivimns.model.Ticket;
+import com.mns.cda.suivimns.service.entity.ClientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,7 +34,9 @@ public class ClientQueryService {
 
         Specification<Client> spec = Specification
                 .where(ClientSpecification.hasLicense(criteria.softwareId()))
-                .and(ClientSpecification.containsKeyword(criteria.keyword()));
+                .and(ClientSpecification.containsKeyword(criteria.keyword()))
+                .and(ClientSpecification.hasOpenTicket(criteria.hasOpenTicket()))
+                .and(ClientSpecification.importanceGreaterThan(criteria.importanceGreaterThan()));
 
 
         return clientDao
@@ -53,6 +56,7 @@ public class ClientQueryService {
             "firstName",
             "lastName",
             "email",
+            "phoneNumber",
             "importance"
     );
 }

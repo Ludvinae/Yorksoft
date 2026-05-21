@@ -2,6 +2,8 @@ package com.mns.cda.suivimns.dto.search;
 
 public record ClientSearchCriteria(
         String keyword,
-        Integer softwareId
+        Integer softwareId,
+        Integer importanceGreaterThan,
+        Boolean hasOpenTicket
 ) {
 }

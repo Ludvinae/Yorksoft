@@ -1,6 +1,7 @@
 package com.mns.cda.suivimns.dao.search;
 
 import com.mns.cda.suivimns.model.Client;
+import com.mns.cda.suivimns.model.Ticket;
 import jakarta.persistence.criteria.Expression;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -46,4 +47,26 @@ public class ClientSpecification {
                             .get("idSoftware"),
                     softwareId);
         };}
+
+    public static Specification<Client> importanceGreaterThan(Integer importance) {
+        return (root, query, cb) ->
+                importance == null ? null : cb.greaterThan(root.get("importance"), importance);
+    }
+
+    public static Specification<Client> hasOpenTicket(Boolean hasOpenTicket) {
+
+        return (root, query, cb) -> {
+
+            if (hasOpenTicket == null || !hasOpenTicket) {
+                return null;
+            }
+
+            query.distinct(true);
+
+            return cb.isNull(
+                    root.join("ticketList")
+                            .get("closeDate")
+            );
+        };
+    }
 }

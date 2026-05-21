@@ -21,4 +21,7 @@ public class Client extends AppUser {
     @OneToMany(mappedBy = "client")
     protected List<License> licenseList;
 
+    @OneToMany(mappedBy = "client")
+    private List<Ticket> ticketList;
+
 }
