@@ -1,111 +1,84 @@
-<app-title-bar ></app-title-bar>
+<div class="flex flex-col h-screen">
 
-<table class="table table-sm">
-  <thead>
-    <tr>
-      <th class="cursor-pointer select-none" (click)="storeService.setSort('title')">
-        <div class="flex items-center gap-2">
-          Titre
-          @if (isSorted("title")) {
-            <span>{{ isAsc() ? '▲' : '▼' }}</span>
-          }
-        </div>
-      </th>
-      <th class="cursor-pointer select-none" (click)="storeService.setSort('modificationDate')">
-        <div class="flex items-center gap-2">
-          Dernière modification
-          @if (isSorted("modificationDate")) {
-            <span>{{ isAsc() ? '▲' : '▼' }}</span>
-          }
-        </div>
-      </th>
-      <th class="cursor-pointer select-none" (click)="storeService.setSort('currentTheme')">
-        <div class="flex items-center gap-2">
-          Thématique
-          @if (isSorted("currentTheme")) {
-            <span>{{ isAsc() ? '▲' : '▼' }}</span>
-          }
-        </div>
-      </th>
-      <th class="cursor-pointer select-none" (click)="storeService.setSort('version.software.name')">
-        <div class="flex items-center gap-2">
-          Logiciel
-          @if (isSorted("version.software.name")) {
-            <span>{{ isAsc() ? '▲' : '▼' }}</span>
-          }
-        </div>
-      </th>
-      <th class="cursor-pointer select-none" (click)="storeService.setSort('version.versionNumber')">
-        <div class="flex items-center gap-2">
-          Version
-          @if (isSorted("version.versionNumber")) {
-            <span>{{ isAsc() ? '▲' : '▼' }}</span>
-          }
-        </div>
-      </th>
-      <th class="cursor-pointer select-none" (click)="storeService.setSort('currentStatus')">
-        <div class="flex items-center gap-2">
-          Statut
-          @if (isSorted("currentStatus")) {
-            <span>{{ isAsc() ? '▲' : '▼' }}</span>
-          }
-        </div>
-      </th>
-      <th class="cursor-pointer select-none" (click)="storeService.setSort('currentPriority')">
-        <div class="flex items-center gap-2">
-          Priorité
-          @if (isSorted("currentPriority")) {
-            <span>{{ isAsc() ? '▲' : '▼' }}</span>
-          }
-        </div>
-      </th>
-    </tr>
-  </thead>
-  <tbody>
-    @for(ticket of storeService.tickets(); track ticket.idTicket) {
-      <tr>
-        <td>{{ ticket.title }}</td>
-        <td>{{ ticket.modificationDate }}</td>
-        <td>{{ ticket.currentTheme }}</td>
-        <td>{{ ticket.softwareName }}</td>
-        <td>{{ ticket.versionNumber }} {{ ticket.versionTypeDesignation }}</td>
-        <td>{{ ticket.currentStatus }}</td>
-        <td>{{ ticket.currentPriority }}</td>
-      </tr>
-    }
-  </tbody>
-</table>
+  <app-title-bar ></app-title-bar>
 
-<app-footer-ticket></app-footer-ticket>
-
-<!--
-<app-generic-list
-  [data]="ticketList()"
-  [columns]="[{ label: 'Titre du ticket', field: 'title' },
-              { label: 'Thématique', field: 'currentTheme'},
-              { label: 'Dernière modification', field: 'modificationDate'},
-              { label: 'Logiciel', field: 'softwareName'},
-              { label: 'Version', field: 'versionNumber'},
-              { label: 'Type de version', field: 'versionTypeDesignation'},
-              { label: 'Statut', field: 'currentStatus'},
-              { label: 'Priorité', field: 'currentPriority'}]"
-  [baseRoute]="'/ticket'"
-  [idField]="'idTicket'"
-  [itemTemplate]="ticketCard"
-  (deleteItem)="onDelete($event)">
-</app-generic-list>
-
-<ng-template #ticketCard let-ticket >
-  <div>
-    <span>{{ ticket.currentStatus }} {{ ticket.currentPriority }}</span>
-    <span>{{ ticket.modificationDate }}</span>
+  <div class="flex-1 overflow-auto">
+    <table class="table table-sm">
+      <thead>
+        <tr>
+          <th class="cursor-pointer select-none" (click)="storeService.setSort('title')">
+            <div class="flex items-center gap-2">
+              Titre
+              @if (isSorted("title")) {
+                <span>{{ isAsc() ? '▲' : '▼' }}</span>
+              }
+            </div>
+          </th>
+          <th class="cursor-pointer select-none" (click)="storeService.setSort('modificationDate')">
+            <div class="flex items-center gap-2">
+              Dernière modification
+              @if (isSorted("modificationDate")) {
+                <span>{{ isAsc() ? '▲' : '▼' }}</span>
+              }
+            </div>
+          </th>
+          <th class="cursor-pointer select-none" (click)="storeService.setSort('currentTheme')">
+            <div class="flex items-center gap-2">
+              Thématique
+              @if (isSorted("currentTheme")) {
+                <span>{{ isAsc() ? '▲' : '▼' }}</span>
+              }
+            </div>
+          </th>
+          <th class="cursor-pointer select-none" (click)="storeService.setSort('version.software.name')">
+            <div class="flex items-center gap-2">
+              Logiciel
+              @if (isSorted("version.software.name")) {
+                <span>{{ isAsc() ? '▲' : '▼' }}</span>
+              }
+            </div>
+          </th>
+          <th class="cursor-pointer select-none" (click)="storeService.setSort('version.versionNumber')">
+            <div class="flex items-center gap-2">
+              Version
+              @if (isSorted("version.versionNumber")) {
+                <span>{{ isAsc() ? '▲' : '▼' }}</span>
+              }
+            </div>
+          </th>
+          <th class="cursor-pointer select-none" (click)="storeService.setSort('currentStatus')">
+            <div class="flex items-center gap-2">
+              Statut
+              @if (isSorted("currentStatus")) {
+                <span>{{ isAsc() ? '▲' : '▼' }}</span>
+              }
+            </div>
+          </th>
+          <th class="cursor-pointer select-none" (click)="storeService.setSort('currentPriority')">
+            <div class="flex items-center gap-2">
+              Priorité
+              @if (isSorted("currentPriority")) {
+                <span>{{ isAsc() ? '▲' : '▼' }}</span>
+              }
+            </div>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        @for(ticket of storeService.tickets(); track ticket.idTicket) {
+          <tr>
+            <td>{{ ticket.title }}</td>
+            <td>{{ ticket.modificationDate }}</td>
+            <td>{{ ticket.currentTheme }}</td>
+            <td>{{ ticket.softwareName }}</td>
+            <td>{{ ticket.versionNumber }} {{ ticket.versionTypeDesignation }}</td>
+            <td>{{ ticket.currentStatus }}</td>
+            <td>{{ ticket.currentPriority }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
   </div>
-  <div>
-    <h3 class="font-bold text-lg">{{ ticket.title }}</h3>
-  </div>
-  <div>
-    <span>{{ ticket.softwareName }} {{ ticket.versionNumber}} {{ ticket.versionTypeDesignation }}</span>
-    <span>{{ ticket.currentTheme }}</span>
-  </div>
-</ng-template>
--->
+
+  <app-footer-ticket></app-footer-ticket>
+</div>

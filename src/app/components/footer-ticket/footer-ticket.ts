@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { TicketStoreService } from '../../services/ticket-store-service';
 
 @Component({
   selector: 'app-footer-ticket',
@@ -6,4 +7,14 @@ import { Component } from '@angular/core';
   templateUrl: './footer-ticket.html',
   styleUrl: './footer-ticket.css',
 })
-export class FooterTicket {}
+export class FooterTicket {
+  protected readonly store = inject(TicketStoreService);
+
+  nextPage(): void {
+    this.store.nextPage();
+  }
+
+  previousPage(): void {
+    this.store.previousPage();
+  }
+}

@@ -11,7 +11,7 @@ export class TicketStoreService {
   // Request
   filters = signal<TicketSearchCriteria>({keyword: '',});
   page = signal(0);
-  size = signal(15);
+  size = signal(10);
   sortField = signal('modificationDate');
   sortDirection = signal<'asc' | 'desc'>('desc');
 
@@ -45,6 +45,14 @@ export class TicketStoreService {
     this.page.set(page);
 
     this.loadTickets();
+  }
+
+  nextPage(): void {
+    this.setPage(this.page() + 1);
+  }
+
+  previousPage(): void {
+    this.setPage(this.page() - 1);
   }
 
   setSort(field: string): void {
@@ -82,5 +90,13 @@ export class TicketStoreService {
         this.loading.set(false);
       },
     });
+  }
+
+  isFirstPage() {
+    return this.page() === 0;
+  }
+
+  isLastPage() {
+    return this.page() === this.totalPages() -1;
   }
 }
