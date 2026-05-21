@@ -69,22 +69,22 @@ public class Ticket {
     protected Manager currentManager;
 
     // Jointures
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_version")
     @OnDelete(action= OnDeleteAction.SET_NULL)
     protected Version version;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_urgency")
     @OnDelete(action= OnDeleteAction.SET_NULL)
     protected Urgency urgency;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_impact")
     @OnDelete(action= OnDeleteAction.SET_NULL)
     protected Impact impact;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_client")
     @OnDelete(action = OnDeleteAction.SET_NULL)
     protected Client client;
