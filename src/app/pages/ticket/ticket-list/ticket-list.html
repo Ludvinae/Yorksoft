@@ -3,8 +3,15 @@
   <app-title-bar ></app-title-bar>
 
   <div class="flex-1 overflow-auto">
-    <table class="table table-sm">
-      <thead>
+
+    @if (storeService.loading()) {
+      <div>
+        <span class="loading loading-spinner loading-xl"></span>
+      </div>
+
+    } @else {
+      <table class="table table-sm">
+        <thead>
         <tr>
           <th class="cursor-pointer select-none" (click)="storeService.setSort('title')">
             <div class="flex items-center gap-2">
@@ -63,21 +70,24 @@
             </div>
           </th>
         </tr>
-      </thead>
-      <tbody>
-        @for(ticket of storeService.tickets(); track ticket.idTicket) {
-          <tr>
-            <td>{{ ticket.title }}</td>
-            <td>{{ ticket.modificationDate }}</td>
-            <td>{{ ticket.currentTheme }}</td>
-            <td>{{ ticket.softwareName }}</td>
-            <td>{{ ticket.versionNumber }} {{ ticket.versionTypeDesignation }}</td>
-            <td>{{ ticket.currentStatus }}</td>
-            <td>{{ ticket.currentPriority }}</td>
-          </tr>
-        }
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          @for(ticket of storeService.tickets(); track ticket.idTicket) {
+            <tr>
+              <td>{{ ticket.title }}</td>
+              <td>{{ ticket.modificationDate }}</td>
+              <td>{{ ticket.currentTheme }}</td>
+              <td>{{ ticket.softwareName }}</td>
+              <td>{{ ticket.versionNumber }} {{ ticket.versionTypeDesignation }}</td>
+              <td>{{ ticket.currentStatus }}</td>
+              <td>{{ ticket.currentPriority }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+
+
   </div>
 
   <app-footer-ticket></app-footer-ticket>

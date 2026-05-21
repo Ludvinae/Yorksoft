@@ -11,10 +11,10 @@ export const employeeGuard: CanActivateFn = (route, state) => {
   }
 
   if (
-    authService.jwtInfo()?.role != 'admin' &&
-    authService.jwtInfo()?.role == 'technician' &&
-    authService.jwtInfo()?.role == 'director' &&
-    authService.jwtInfo()?.role == 'manager'
+    authService.jwtInfo()?.role != 'ADMIN' &&
+    authService.jwtInfo()?.role != 'TECHNICIAN' &&
+    authService.jwtInfo()?.role != 'DIRECTOR' &&
+    authService.jwtInfo()?.role != 'MANAGER'
   ) {
     return router.parseUrl('/forbidden');
   }

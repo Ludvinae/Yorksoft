@@ -10,7 +10,8 @@ export const directorGuard: CanActivateFn = (route, state) => {
     return router.parseUrl('/');
   }
 
-  if (authService.jwtInfo()?.role != 'director' && authService.jwtInfo()?.role != 'admin') {
+  if (authService.jwtInfo()?.role != 'DIRECTOR' &&
+    authService.jwtInfo()?.role != 'ADMIN') {
     return router.parseUrl('/forbidden');
   }
 
