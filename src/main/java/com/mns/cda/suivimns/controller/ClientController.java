@@ -2,16 +2,25 @@ package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.entity.ClientDto;
 import com.mns.cda.suivimns.dto.flat.PasswordDto;
+import com.mns.cda.suivimns.dto.search.ClientListDto;
+import com.mns.cda.suivimns.dto.search.ClientSearchCriteria;
+import com.mns.cda.suivimns.dto.search.TicketSearchCriteria;
 import com.mns.cda.suivimns.security.IsAdmin;
 import com.mns.cda.suivimns.security.IsDirector;
+import com.mns.cda.suivimns.security.IsTechnician;
 import com.mns.cda.suivimns.service.entity.AppUserService;
 import com.mns.cda.suivimns.service.entity.ClientService;
+import com.mns.cda.suivimns.service.search.TicketQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,13 +36,22 @@ public class ClientController {
 
     protected final ClientService clientService;
 
-    @Operation(summary = "Récupere toutes les clients",
-            description = "Récupere la liste complète de client de la base")
+
+    @Operation(summary = "Récupere tous les clients",
+            description = "Récupere la liste paginée de client de la base")
     @ApiResponse(responseCode = "200", description = "Liste récupérée avec succés")
     @GetMapping("/list")
-    @IsDirector
-    public List<ClientDto> getAll() {
-        return clientService.findAll();
+    @IsTechnician
+    public ResponseEntity<Page<ClientListDto>> search(
+            ClientSearchCriteria criteria,
+            @PageableDefault(size = 10, sort = "lastName", direction = Sort.Direction.ASC)
+            Pageable pageable
+    ) {
+        try {
+            return new ResponseEntity<>(clientService.search(criteria, pageable) , HttpStatus.OK);
+        } catch (TicketQueryService.InvalidSortCriteriaException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
 

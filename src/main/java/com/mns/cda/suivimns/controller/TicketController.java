@@ -35,20 +35,11 @@ public class TicketController {
 
     protected final TicketService ticketService;
 
-    @Operation(summary = "Récupère tous les tickets",
-            description = "Récupère la liste complète de ticket de la base")
-    @ApiResponse(responseCode = "200", description = "Liste récupérée avec succès")
-    @GetMapping("/list")
-    @IsEmployee
-    public List<TicketDto> getAll() {
-        return ticketService.findAll();
-    }
-
 
     @Operation(summary = "Récupère tous les tickets",
             description = "Récupère la liste paginée de ticket, peut être triée et filtrée")
     @ApiResponse(responseCode = "200", description = "Liste récupérée avec succès")
-    @GetMapping("/test")
+    @GetMapping("/list")
     @IsEmployee
     public ResponseEntity<Page<TicketListDto>> search(
             TicketSearchCriteria criteria,
