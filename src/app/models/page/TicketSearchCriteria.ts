@@ -24,4 +24,6 @@ export interface TicketSearchCriteria {
   priorityLessThan?: number;
 
   priorityEquals?: number;
+
+  assignedTo?: number;
 }

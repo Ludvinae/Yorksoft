@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TicketSearchCriteria } from '../../../models/page/TicketSearchCriteria';
 import { TicketStoreService } from '../../../services/ticket-store-service';
+import {AuthService} from '../../../services/auth-service';
 
 @Component({
   selector: 'app-title-bar',
@@ -10,6 +11,8 @@ import { TicketStoreService } from '../../../services/ticket-store-service';
   styleUrl: './title-bar.css',
 })
 export class TitleBar {
+  auth = inject(AuthService);
+
   buttonState = 'all';
 
   search = "";
@@ -21,11 +24,14 @@ export class TitleBar {
 
   setFilter(filter: 'all' | 'assigned' | 'priority'): void {
     this.filters = {};
+    //const userId = this.auth.jwtInfo()?.id
+
 
     switch (filter) {
       case 'assigned':
         this.store.resetFilters();
-        this.store.updateFilters({ statuses: ['ASSIGNED'] });
+        // prevoir le cas ou p  s d'id user
+        this.store.updateFilters({ assignedTo:  this.auth.jwtInfo()?.id  });
         this.buttonState = 'assigned';
         break;
 
