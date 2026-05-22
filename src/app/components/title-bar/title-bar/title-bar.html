@@ -54,13 +54,33 @@
     Tous
   </button>
 
-  <button
-    class="btn"
-    [class.btn-neutral]="buttonState == 'assigned'"
-    (click)="setFilter('assigned')">
+  @if (currentUserRole == "TECHNICIAN") {
+    <button
+      class="btn"
+      [class.btn-neutral]="buttonState == 'assigned'"
+      (click)="setFilter('assigned')">
 
-    Attribués
-  </button>
+      Attribués
+    </button>
+  }
+  @else if (currentUserRole == 'MANAGER') {
+    <button
+      class="btn"
+       [class.btn-neutral]="buttonState == 'open'"
+      (click)="setFilter('open')">
+
+      A attribuer
+    </button>
+  }
+  @else if (currentUserRole == 'DIRECTOR') {
+    <button
+      class="btn"
+      [class.btn-neutral]="buttonState == 'open'"
+      (click)="setFilter('open')">
+
+      A attribuer
+    </button>
+  }
 
   <button
     class="btn"

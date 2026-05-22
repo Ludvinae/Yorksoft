@@ -16,6 +16,7 @@ export class TitleBar implements OnInit {
   preferences = inject(UserPreferencesService)
 
   buttonState = 'all';
+  currentUserRole: string | undefined= undefined;
 
   search = '';
   private searchTimeout: any;
@@ -27,6 +28,7 @@ export class TitleBar implements OnInit {
 
   ngOnInit(): void {
     const preference = this.preferences.getPreferences();
+    this.currentUserRole = this.auth.jwtInfo()?.role;
 
     this.showClosedTickets = preference.showClosedTickets;
 
@@ -37,27 +39,36 @@ export class TitleBar implements OnInit {
     }
   }
 
-  setFilter(filter: 'all' | 'assigned' | 'priority'): void {
+  setFilter(filter: 'all' | 'assigned' | 'priority' | 'open'): void {
     this.filters = {};
-    const userId = this.auth.jwtInfo() != null ? this.auth.jwtInfo()?.id : 0;
 
     switch (filter) {
+      case 'open':
+        this.store.updateFilters({
+          assignedTo: undefined,
+          priorityLessThan: undefined,
+          statuses: ['OPEN'],
+        });
+        this.buttonState = 'open';
+        break;
+
       case 'assigned':
         // prevoir le cas ou pas d'id user
         this.store.updateFilters({
           assignedTo: this.auth.jwtInfo()?.id,
           priorityGreaterThan: undefined,
+          statuses: undefined,
         });
         this.buttonState = 'assigned';
         break;
 
       case 'priority':
-        this.store.updateFilters({ assignedTo: undefined, priorityGreaterThan: 65 });
+        this.store.updateFilters({ assignedTo: undefined, priorityGreaterThan: 65, statuses: undefined });
         this.buttonState = 'priority';
         break;
 
       case 'all':
-        this.store.updateFilters({ assignedTo: undefined, priorityGreaterThan: undefined });
+        this.store.updateFilters({ assignedTo: undefined, priorityGreaterThan: undefined, statuses: undefined });
         this.buttonState = 'all';
         break;
     }
