@@ -4,11 +4,12 @@ package com.mns.cda.suivimns.dto.workflow;
 public record TicketCreationDto(
         String title,
         String description,
+        Integer idSoftware,
+        Integer idVersion,
         Integer idImpact,
         Integer idUrgency,
+        Integer idTheme,
         Integer idClient,
-        Integer idVersion,
-        String themeDesignation,
         Integer idCreator
 
 ) {
