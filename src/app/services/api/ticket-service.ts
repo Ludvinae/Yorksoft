@@ -1,6 +1,6 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { Page } from '../../models/page/Page';
 import { TicketSearchCriteria } from '../../models/page/TicketSearchCriteria';
 
@@ -44,52 +44,32 @@ export class TicketService {
     );
   }
 
-  getTickets(
-    filters: TicketSearchCriteria,
-    page: number,
-    size: number,
-    sort: string
-  ) {
-
-    let params = new HttpParams()
-      .set('page', page)
-      .set('size', size)
-      .set('sort', sort);
+  getTickets(filters: TicketSearchCriteria, page: number, size: number, sort: string) {
+    let params = new HttpParams().set('page', page).set('size', size).set('sort', sort);
 
     Object.entries(filters).forEach(([key, value]) => {
-
-      if (
-        value !== null &&
-        value !== undefined &&
-        value !== ''
-      ) {
-
+      if (value !== null && value !== undefined && value !== '') {
         // tableau
         if (Array.isArray(value)) {
-
-          value.forEach(v => {
-
+          value.forEach((v) => {
             params = params.append(key, v);
           });
-
         } else {
-
-          params = params.set(
-            key,
-            value.toString()
-          );
+          params = params.set(key, value.toString());
         }
       }
     });
 
-    return this.http.get<Page<TicketListDto>>(
-      'http://localhost:8080/ticket/list',
-      { params }
-    );
+    return this.http.get<Page<TicketListDto>>('http://localhost:8080/ticket/list', { params });
   }
 
-  create(ticket: Ticket) {
-    return this.http.post(`${this.apiUrl}`, ticket).pipe(tap(() => this.getAll().subscribe()));
+  create(ticket: TicketCreation): Observable<Ticket> {
+    return this.http.post<Ticket>(`${this.apiUrl}`, ticket);
+  }
+
+  // deprecated
+  save(ticket: Ticket) {
+    return this.http.post<Ticket>(`${this.apiUrl}`, ticket);
   }
 
   update(ticket: Ticket, id: number) {
@@ -107,5 +87,4 @@ export class TicketService {
       }),
     );
   }
-
 }

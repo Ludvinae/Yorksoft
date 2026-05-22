@@ -47,7 +47,7 @@ export class TicketFormService {
   }
 
   save(dto: Ticket, isEdit: boolean) {
-    return isEdit ? this.ticketService.update(dto, dto.idTicket) : this.ticketService.create(dto);
+    return isEdit ? this.ticketService.update(dto, dto.idTicket) : this.ticketService.save(dto);
   }
 
   private formatDate(date: string | Date): string {
