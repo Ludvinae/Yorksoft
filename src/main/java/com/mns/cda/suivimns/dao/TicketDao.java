@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -49,12 +50,12 @@ public interface TicketDao extends JpaRepository<Ticket, Integer>, JpaSpecificat
     @Query("""
         SELECT COUNT(t)
         FROM Ticket t
-        WHERE t.closeDate IS null
-        AND ((t.currentPriority < 34 AND t.openDate - NOW() >= 24)
-            OR (t.currentPriority < 34 AND t.openDate - NOW() >= 8)
-            OR (t.currentPriority < 34 AND t.openDate - NOW() >= 2))
+        WHERE t.closeDate IS NULL
+        AND ((t.currentPriority < 33 AND t.openDate <= :lowLimit)
+            OR (t.currentPriority BETWEEN 33 AND 65 AND t.openDate <= :mediumLimit)
+            OR (t.currentPriority >= 66 AND t.openDate <= :highLimit))
     """)
-    int countOverdueTickets();
+    int countOverdueTickets(LocalDateTime lowLimit, LocalDateTime mediumLimit, LocalDateTime highLimit);
 
     @Query("""
         SELECT COUNT(t)

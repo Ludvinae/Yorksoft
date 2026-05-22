@@ -118,7 +118,7 @@ public class TicketSpecification {
                     cb.lessThan(root.get("openDate"), now.minusHours(8))
             );
 
-            Predicate highPriority = cb.and(cb.greaterThan(root.get("priority"), 65),
+            Predicate highPriority = cb.and(cb.greaterThanOrEqualTo(root.get("priority"), 66),
                     cb.lessThan(root.get("openDate"), now.minusHours(2))
             );
 
