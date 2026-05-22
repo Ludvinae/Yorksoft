@@ -9,7 +9,7 @@ export class TicketStoreService {
   constructor(private ticketService: TicketService) {}
 
   // Request
-  filters = signal<TicketSearchCriteria>({keyword: '',});
+  filters = signal<TicketSearchCriteria>({ keyword: '' });
   page = signal(0);
   size = signal(10);
   sortField = signal('modificationDate');
@@ -37,8 +37,13 @@ export class TicketStoreService {
   }
 
   resetFilters(): void {
-
     this.filters.set({});
+  }
+
+  setFilters(filters: TicketSearchCriteria): void {
+    this.filters.set(filters);
+
+    this.loadTickets();
   }
 
   setPage(page: number): void {
@@ -72,7 +77,6 @@ export class TicketStoreService {
 
     this.ticketService.getTickets(this.filters(), this.page(), this.size(), this.sort()).subscribe({
       next: (response) => {
-
         console.log('API RESPONSE', response);
         this.tickets.set(response.content);
         console.log('SIGNAL VALUE', this.tickets());
@@ -97,6 +101,6 @@ export class TicketStoreService {
   }
 
   isLastPage() {
-    return this.page() === this.totalPages() -1;
+    return this.page() === this.totalPages() - 1;
   }
 }

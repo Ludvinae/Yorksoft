@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "@phosphor-icons/web/regular";
 @plugin "daisyui";
 
 .window {

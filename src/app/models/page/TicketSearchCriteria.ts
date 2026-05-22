@@ -26,4 +26,8 @@ export interface TicketSearchCriteria {
   priorityEquals?: number;
 
   assignedTo?: number;
+
+  isNotClosed?: boolean;
+
+  isOverdue?: boolean;
 }
