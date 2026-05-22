@@ -28,7 +28,7 @@ public class SoftwareTypeController {
 
     @Operation(summary = "Récupere toutes les type de logiciels",
             description = "Récupere la liste complète de type de logiciel de la base")
-    @ApiResponse(responseCode = "200", description = "Liste récupérée avec succés")
+    @ApiResponse(responseCode = "200", description = "Liste récupérée avec succès")
     @GetMapping("/list")
     @IsTechnician
     public List<SoftwareTypeDto> getAll() {

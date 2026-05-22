@@ -14,6 +14,58 @@ import java.util.List;
 @Repository
 public interface TicketDao extends JpaRepository<Ticket, Integer>, JpaSpecificationExecutor<Ticket> {
 
+    // Dashboard KPIs
+    @Query("""
+        SELECT COUNT(t)
+        FROM Ticket t
+        WHERE t.closeDate IS null
+    """)
+    int countOpenTickets();
+
+    @Query("""
+        SELECT COUNT(t)
+        FROM Ticket t
+        WHERE t.currentStatus = 'IN_PROGRESS'
+        AND t.closeDate IS null
+    """)
+    int countInProgressTickets();
+
+    @Query("""
+        SELECT COUNT(t)
+        FROM Ticket t
+        WHERE t.currentStatus = 'WAITING_CLIENT'
+        OR t.currentStatus = 'WAITING_THIRD_PARTY'
+    """)
+    int countWaitingTickets();
+
+    @Query("""
+        SELECT COUNT(t)
+        FROM Ticket t
+        WHERE t.closeDate IS null
+        AND t.currentPriority > 65
+    """)
+    int countPriorityTickets();
+
+    @Query("""
+        SELECT COUNT(t)
+        FROM Ticket t
+        WHERE t.closeDate IS null
+        AND ((t.currentPriority < 34 AND t.openDate - NOW() >= 24)
+            OR (t.currentPriority < 34 AND t.openDate - NOW() >= 8)
+            OR (t.currentPriority < 34 AND t.openDate - NOW() >= 2))
+    """)
+    int countOverdueTickets();
+
+    @Query("""
+        SELECT COUNT(t)
+        FROM Ticket t
+        WHERE t.closeDate IS null
+        AND t.currentTechnician IS null
+    """)
+    int countUnassignedTickets();
+
+
+    // Deprecated queries
     @Query("SELECT new com.mns.cda.suivimns.dto.flat.TicketResponse(" +
             "t.idTicket, t.title, t.description, t.modificationDate, " +
             "t.currentPriority, t.version.versionNumber, t.version.versionType.designation, " +

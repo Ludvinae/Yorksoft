@@ -1,8 +1,5 @@
-package com.mns.cda.suivimns.controller;
+package com.mns.cda.suivimns.controller.business;
 
-import com.mns.cda.suivimns.dao.DirectorDao;
-import com.mns.cda.suivimns.dao.ManagerDao;
-import com.mns.cda.suivimns.dao.TechnicianDao;
 import com.mns.cda.suivimns.model.AppUser;
 import com.mns.cda.suivimns.model.Client;
 import com.mns.cda.suivimns.model.Manager;
@@ -19,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
