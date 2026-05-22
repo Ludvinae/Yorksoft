@@ -38,6 +38,7 @@ import { clientGuard } from './guards/client-guard';
 import { employeeGuard } from './guards/employee-guard';
 import { adminGuard } from './guards/admin-guard';
 import { ClientList } from './pages/client/client-list/client-list';
+import { TicketNew } from './pages/ticket/ticket-new/ticket-new';
 
 export const routes: Routes = [
   {
@@ -59,7 +60,7 @@ export const routes: Routes = [
   },
   {
     path: 'ticket/create',
-    component: TicketEdit,
+    component: TicketNew,
     title: 'Nouveau ticket',
     canActivate: [technicianGuard],
   },

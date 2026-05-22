@@ -40,7 +40,7 @@ export class TicketEdit implements OnInit {
   ticketEdit = signal<Ticket | undefined>(undefined);
   loading = signal(false);
   error = signal<string | undefined>(undefined);
-  routeId = signal<string>('Nouvelle ticket de logiciel');
+  routeId = signal<string>('Nouveau ticket de support');
 
   listVersion = toSignal(this.versionService.getAll(), { initialValue: [] });
 
