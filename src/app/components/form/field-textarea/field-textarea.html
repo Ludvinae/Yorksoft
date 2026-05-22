@@ -1,1 +1,13 @@
-<textarea class="textarea" placeholder="Bio"></textarea>
+<fieldset class="fieldset w-full">
+  <legend class="fieldset-legend">{{ labelKey }}</legend>
+
+  <input
+    class="textarea w-full"
+    [placeholder]="placeholder"
+    [formControl]="control"
+  />
+
+  @if (errorMessage) {
+    <span class="form-error">{{ errorMessage }}</span>
+  }
+</fieldset>

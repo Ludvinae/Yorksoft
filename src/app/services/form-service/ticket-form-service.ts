@@ -18,7 +18,7 @@ export class TicketFormService {
       description: ticket.description ?? '',
       idUrgency: ticket.idUrgency ?? 0,
       idImpact: ticket.idImpact ?? 0,
-      idVersion: ticket.idVersion ?? 0,
+      idVersion: ticket.idVersion ?? 0
     };
   }
 

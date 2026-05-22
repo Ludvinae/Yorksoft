@@ -36,6 +36,14 @@ export class VersionService {
     );
   }
 
+  getAllBySoftware(id: number) {
+    return this.http.get<Version[]>(`${this.apiUrl}/list/${id}`).pipe(
+      tap((versionList) => {
+        this.versionList.set(versionList);
+      }),
+    );
+  }
+
   create(version: Version) {
     return this.http.post(`${this.apiUrl}`, version).pipe(tap(() => this.getAll().subscribe()));
   }
