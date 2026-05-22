@@ -1,10 +1,10 @@
 
 <!-- dashboard.page.html -->
-<div class="flex flex-col gap-6 p-6 bg-base-200 min-h-screen">
+
 
   <!-- HEADER -->
   <div class="flex items-center justify-between">
-    <h1 class="text-5xl bold">Tableau de bord</h1>
+    <h1 class="text-5xl font-bold">Tableau de bord</h1>
 
     <div class="text-right">
       <p class="text-lg font-medium">
@@ -13,210 +13,208 @@
     </div>
   </div>
 
-  <!-- KPI SECTION -->
-  <div class="card bg-base-100 shadow-md border border-base-300">
-    <div class="card-body gap-6">
+  @if (dashboardService.dashboard(); as dashboard) {
+    <!-- KPI SECTION -->
+    <div class="card bg-base-100 shadow-md border border-base-300">
+      <div class="card-body gap-6">
 
-      <h2 class="text-3xl font-bold text-center">
-        Indicateurs de performance
-      </h2>
+        <h2 class="text-3xl font-bold text-center">
+          Indicateurs de performance
+        </h2>
 
-      <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
 
-        <!-- TICKETS -->
-        <div class="card border border-base-300 bg-base-100">
-          <div class="card-body p-4">
+          <!-- TICKETS -->
+          <div class="card border border-base-300 bg-base-100">
+            <div class="card-body p-4">
 
-            <h3 class="text-2xl font-bold text-center mb-4">
-              Tickets
-            </h3>
+              <h3 class="text-2xl font-bold text-center mb-4">
+                Tickets
+              </h3>
 
-            <div class="grid grid-cols-3 divide-x divide-y border rounded-xl overflow-hidden">
+              <div class="grid grid-cols-3 divide-x divide-y border rounded-xl overflow-hidden">
 
 
-              <app-kpi-card
-                title="Ouverts"
-                [value]="72"
-                icon="ph ph-book-open"
-                colorClass="text-warning"
-                [filters]="{ statusesExcluded: ['CLOSED'] }"
-              />
+                <app-kpi-card
+                  title="Ouverts"
+                  [value]="dashboard.openTickets"
+                  icon="ph ph-book-open"
+                  colorClass="text-warning"
+                  [filters]="{ statusesExcluded: ['CLOSED'] }"
+                />
 
-              <app-kpi-card
-                title="En cours"
-                [value]="5"
-                icon="ph ph-package"
-                colorClass="text-success"
-                [filters]="{ statuses: ['IN_PROGRESS'] }"
-              />
+                <app-kpi-card
+                  title="En cours"
+                  [value]="dashboard.inProgressTickets"
+                  icon="ph ph-package"
+                  colorClass="text-success"
+                  [filters]="{ statuses: ['IN_PROGRESS'] }"
+                />
 
-              <app-kpi-card
-                title="En attente"
-                [value]="16"
-                icon="ph ph-hourglass"
-                colorClass="text-info"
-                [filters]="{ statuses: ['WAITING_CLIENT', 'WAITING_THIRD_PARTY'] }"
-              />
+                <app-kpi-card
+                  title="En attente"
+                  [value]="dashboard.waitingTickets"
+                  icon="ph ph-hourglass"
+                  colorClass="text-info"
+                  [filters]="{ statuses: ['WAITING_CLIENT', 'WAITING_THIRD_PARTY'] }"
+                />
 
-              <app-kpi-card
-                title="Prioritaires"
-                [value]="16"
-                icon="ph ph-fast-forward"
-                colorClass="text-info"
-                [filters]="{ priorityGreaterThan: 65 }"
-              />
+                <app-kpi-card
+                  title="Prioritaires"
+                  [value]="dashboard.priorityTickets"
+                  icon="ph ph-fast-forward"
+                  colorClass="text-info"
+                  [filters]="{ priorityGreaterThan: 65 }"
+                />
 
-              <app-kpi-card
-                title="En retard"
-                [value]="16"
-                icon="ph ph-alarm"
-                colorClass="text-error"
-                [filters]="{ isOverdue: true, isNotClosed: true }"
-              />
+                <app-kpi-card
+                  title="En retard"
+                  [value]="dashboard.overdueTickets"
+                  icon="ph ph-alarm"
+                  colorClass="text-error"
+                  [filters]="{ isOverdue: true, isNotClosed: true }"
+                />
 
-              <app-kpi-card
-                title="Non assignés"
-                [value]="16"
-                icon="ph ph-folder-user"
-                colorClass="text-warning"
-                [filters]="{ statuses: ['OPEN'] }"
-              />
+                <app-kpi-card
+                  title="Non assignés"
+                  [value]="dashboard.unassignedTickets"
+                  icon="ph ph-folder-user"
+                  colorClass="text-warning"
+                  [filters]="{ statuses: ['OPEN'] }"
+                />
 
+              </div>
             </div>
           </div>
-        </div>
 
-        <!-- TEMPS -->
-        <div class="card border border-base-300 bg-base-100">
-          <div class="card-body p-4">
+          <!-- TEMPS -->
+          <div class="card border border-base-300 bg-base-100">
+            <div class="card-body p-4">
 
-            <h3 class="text-2xl font-bold text-center mb-4">
-              Temps moyen
-            </h3>
+              <h3 class="text-2xl font-bold text-center mb-4">
+                Temps moyen
+              </h3>
 
-            <div class="grid grid-cols-3 divide-x divide-y border rounded-xl overflow-hidden">
+              <div class="grid grid-cols-3 divide-x divide-y border rounded-xl overflow-hidden">
 
-              <div class="p-4 flex flex-col items-center justify-center">
-                <span class="text-sm opacity-70">Résolution</span>
-                <span class="text-5xl font-black">128m</span>
+                <div class="p-4 flex flex-col items-center justify-center">
+                  <span class="text-sm opacity-70">Résolution</span>
+                  <span class="text-5xl font-black">128m</span>
+                </div>
+
+                <div class="p-4 flex flex-col items-center justify-center">
+                  <span class="text-sm opacity-70">Prise en charge</span>
+                  <span class="text-5xl font-black">32m</span>
+                </div>
+
+                <div class="p-4 flex flex-col items-center justify-center">
+                  <span class="text-sm opacity-70">Appels</span>
+                  <span class="text-5xl font-black">214s</span>
+                </div>
+
+                <div class="p-4 flex flex-col items-center justify-center">
+                  <span class="text-sm opacity-70">Par technicien</span>
+                  <span class="text-5xl font-black">12.6</span>
+                </div>
+
+                <div class="p-4 flex flex-col items-center justify-center">
+                  <span class="text-sm opacity-70">Résolus / jour</span>
+                  <span class="text-5xl font-black">14</span>
+                </div>
+
+                <div class="p-4 flex flex-col items-center justify-center">
+                  <span class="text-sm opacity-70">Clos / semaine</span>
+                  <span class="text-5xl font-black">122</span>
+                </div>
+
               </div>
-
-              <div class="p-4 flex flex-col items-center justify-center">
-                <span class="text-sm opacity-70">Prise en charge</span>
-                <span class="text-5xl font-black">32m</span>
-              </div>
-
-              <div class="p-4 flex flex-col items-center justify-center">
-                <span class="text-sm opacity-70">Appels</span>
-                <span class="text-5xl font-black">214s</span>
-              </div>
-
-              <div class="p-4 flex flex-col items-center justify-center">
-                <span class="text-sm opacity-70">Par technicien</span>
-                <span class="text-5xl font-black">12.6</span>
-              </div>
-
-              <div class="p-4 flex flex-col items-center justify-center">
-                <span class="text-sm opacity-70">Résolus / jour</span>
-                <span class="text-5xl font-black">14</span>
-              </div>
-
-              <div class="p-4 flex flex-col items-center justify-center">
-                <span class="text-sm opacity-70">Clos / semaine</span>
-                <span class="text-5xl font-black">122</span>
-              </div>
-
             </div>
           </div>
-        </div>
 
-      </div>
-
-    </div>
-  </div>
-
-  <!-- CHARTS -->
-  <div class="card bg-base-100 shadow-md border border-base-300">
-    <div class="card-body">
-
-      <h2 class="text-3xl font-bold text-center mb-6">
-        Graphiques
-      </h2>
-
-      <div class="grid grid-cols-1 2xl:grid-cols-2 gap-6">
-
-        <!-- EVOLUTION -->
-        <div class="card border border-base-300">
-          <div class="card-body">
-
-            <h3 class="card-title justify-center">
-              Evolution des tickets
-            </h3>
-
-            <div class="h-[320px] flex items-center justify-center">
-              <!-- ngx charts / chart.js -->
-              <p class="opacity-50">
-                Graphique évolution
-              </p>
-            </div>
-
-          </div>
-        </div>
-
-        <!-- PIE -->
-        <div class="card border border-base-300">
-          <div class="card-body">
-
-            <h3 class="card-title justify-center">
-              Répartition par statut
-            </h3>
-
-            <div class="h-[320px] flex items-center justify-center">
-              <p class="opacity-50">
-                Camembert statuts
-              </p>
-            </div>
-
-          </div>
-        </div>
-
-        <!-- LOGICIEL -->
-        <div class="card border border-base-300">
-          <div class="card-body">
-
-            <h3 class="card-title justify-center">
-              Répartition par logiciel
-            </h3>
-
-            <div class="h-[320px] flex items-center justify-center">
-              <p class="opacity-50">
-                Bar chart logiciels
-              </p>
-            </div>
-
-          </div>
-        </div>
-
-        <!-- THEMATIQUE -->
-        <div class="card border border-base-300">
-          <div class="card-body">
-
-            <h3 class="card-title justify-center">
-              Répartition par thématique
-            </h3>
-
-            <div class="h-[320px] flex items-center justify-center">
-              <p class="opacity-50">
-                Graphique thématiques
-              </p>
-            </div>
-
-          </div>
         </div>
 
       </div>
-
     </div>
-  </div>
 
-</div>
+    <!-- CHARTS -->
+    <div class="card bg-base-100 shadow-md border border-base-300">
+      <div class="card-body">
+
+        <h2 class="text-3xl font-bold text-center mb-6">
+          Graphiques
+        </h2>
+
+        <div class="grid grid-cols-1 2xl:grid-cols-2 gap-6">
+
+          <!-- EVOLUTION -->
+          <div class="card border border-base-300">
+            <div class="card-body">
+
+              <h3 class="card-title justify-center">
+                Evolution des tickets
+              </h3>
+
+              <div class="h-[320px] flex items-center justify-center">
+                <!-- ngx charts / chart.js -->
+                <p class="opacity-50">
+                  Graphique évolution
+                </p>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- PIE -->
+          <div class="card border border-base-300">
+            <div class="card-body">
+
+              <h3 class="card-title justify-center">
+                Répartition par statut
+              </h3>
+
+              <div class="h-[320px] flex items-center justify-center">
+                <p class="opacity-50">
+                  Camembert statuts
+                </p>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- LOGICIEL -->
+          <div class="card border border-base-300">
+            <div class="card-body">
+
+              <h3 class="card-title justify-center">
+                Répartition par logiciel
+              </h3>
+
+              <div class="h-[320px] flex items-center justify-center">
+                <p class="opacity-50">
+                  Bar chart logiciels
+                </p>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- THEMATIQUE -->
+          <div class="card border border-base-300">
+            <div class="card-body">
+
+              <h3 class="card-title justify-center">
+                Répartition par thématique
+              </h3>
+
+              <div class="h-[320px] flex items-center justify-center">
+                <p class="opacity-50">
+                  Graphique thématiques
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
