@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -34,6 +35,7 @@ class AppUserControllerUnitTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
 
     private AppUserDto appUserDto;
 
@@ -63,6 +65,7 @@ class AppUserControllerUnitTest {
     // GET ALL
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturnAll() throws Exception {
 
         when(appUserService.findAll()).thenReturn(List.of(appUserDto));
@@ -78,6 +81,7 @@ class AppUserControllerUnitTest {
     // GET BY ID - OK
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturnById() throws Exception {
 
         when(appUserService.findById(1)).thenReturn(appUserDto);
@@ -93,6 +97,7 @@ class AppUserControllerUnitTest {
     // GET BY ID - NOT FOUND
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturn404WhenNotFound() throws Exception {
 
         when(appUserService.findById(1))
@@ -107,6 +112,7 @@ class AppUserControllerUnitTest {
     // CREATE
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldCreate() throws Exception {
 
         when(appUserService.save(any(AppUserDto.class))).thenReturn(appUserDto);
@@ -124,6 +130,7 @@ class AppUserControllerUnitTest {
     // DELETE - OK
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldDelete() throws Exception {
 
         doNothing().when(appUserService).delete(1);
@@ -139,6 +146,7 @@ class AppUserControllerUnitTest {
     // DELETE - NOT FOUND
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturn404WhenDeleteNotFound() throws Exception {
 
         doThrow(new AppUserService.AppUserNotFoundException())
@@ -153,6 +161,7 @@ class AppUserControllerUnitTest {
     // UPDATE - OK
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldUpdate() throws Exception {
 
         when(appUserService.update(eq(1), any(AppUserDto.class))).thenReturn(appUserDto);
@@ -169,6 +178,7 @@ class AppUserControllerUnitTest {
     // UPDATE - NOT FOUND
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturn404WhenUpdateFails() throws Exception {
 
         when(appUserService.update(eq(1), any(AppUserDto.class)))

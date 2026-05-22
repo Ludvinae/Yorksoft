@@ -38,11 +38,20 @@ public class VersionController {
 
 
     @Operation(summary = "Récupérer toutes les versions avec les informations de type de version et de logiciel")
-    @ApiResponse(responseCode = "200", description = "Liste des versions récupérée")
+    @ApiResponse(responseCode = "200", description = "Liste des versions récupérées")
     @GetMapping("/list/detail")
     @IsTechnician
     public List<VersionDetailDto> findAllDetail() {
         return versionService.findAllDetail();
+    }
+
+
+    @Operation(summary = "Récupérer toutes les versions pour un logiciel donné")
+    @ApiResponse(responseCode = "200", description = "Liste des versions récupérées")
+    @GetMapping("/list/{idSoftware}")
+    @IsTechnician
+    public List<VersionDto> findAllBySoftware(@PathVariable Integer idSoftware) {
+        return versionService.findAllBySoftware(idSoftware);
     }
 
 

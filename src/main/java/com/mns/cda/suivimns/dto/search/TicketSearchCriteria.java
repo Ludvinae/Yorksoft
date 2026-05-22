@@ -20,7 +20,6 @@ public record TicketSearchCriteria(
         Integer assignedTo,
         LocalDate createdAfter,
         LocalDate createdBefore,
-        Boolean unassigned,
         LocalDate closedAfter,
         LocalDate closedBefore
 ) {

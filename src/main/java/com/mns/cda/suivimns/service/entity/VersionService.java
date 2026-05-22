@@ -28,6 +28,11 @@ public class VersionService  {
         return versionDao.findAllDetail();
     }
 
+    public List<VersionDto> findAllBySoftware(Integer idSoftware) {
+
+        return versionDao.findAllBySoftware(idSoftware);
+    }
+
     public VersionDto findById(int id) throws VersionNotFoundException {
         Version version = versionDao.findById(id)
                 .orElseThrow(VersionService.VersionNotFoundException::new);
