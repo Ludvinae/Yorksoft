@@ -2,9 +2,11 @@ package com.mns.cda.suivimns.dao.search;
 
 import com.mns.cda.suivimns.enumerate.StatusEnum;
 import com.mns.cda.suivimns.model.Ticket;
+import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Set;
 
@@ -94,4 +96,34 @@ public class TicketSpecification {
                 idAppUser == null ? null : cb.equal(root.get("currentTechnician").get("idAppUser"), idAppUser);
     }
 
+    public static Specification<Ticket> isNotClosed(Boolean isNotClosed) {
+        return (root, query, cb) ->
+                isNotClosed == null ? null : cb.isNull(root.get("closeDate"));
+    }
+
+    public static Specification<Ticket> isOverdue(Boolean hasExceededSla) {
+
+        return (root, query, cb) -> {
+            if (!Boolean.TRUE.equals(hasExceededSla)) {
+                return cb.conjunction();
+            }
+
+            LocalDateTime now = LocalDateTime.now();
+
+            Predicate lowPriority = cb.and(cb.lessThan(root.get("priority"), 33),
+                    cb.lessThan(root.get("openDate"), now.minusHours(24))
+            );
+
+            Predicate mediumPriority = cb.and(cb.between(root.get("priority"), 34, 66),
+                    cb.lessThan(root.get("openDate"), now.minusHours(8))
+            );
+
+            Predicate highPriority = cb.and(cb.greaterThan(root.get("priority"), 65),
+                    cb.lessThan(root.get("openDate"), now.minusHours(2))
+            );
+
+            return cb.or(lowPriority, mediumPriority, highPriority);
+
+        };
+    }
 }

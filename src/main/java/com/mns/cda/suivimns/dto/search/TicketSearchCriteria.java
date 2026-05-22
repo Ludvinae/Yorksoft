@@ -21,6 +21,8 @@ public record TicketSearchCriteria(
         LocalDate createdAfter,
         LocalDate createdBefore,
         LocalDate closedAfter,
-        LocalDate closedBefore
+        LocalDate closedBefore,
+        Boolean isNotClosed,
+        Boolean isOverdue
 ) {
 }

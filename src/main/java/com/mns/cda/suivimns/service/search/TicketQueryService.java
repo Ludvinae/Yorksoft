@@ -44,7 +44,9 @@ public class TicketQueryService {
                 .and(TicketSpecification.priorityEquals(criteria.priorityEquals()))
                 .and(TicketSpecification.priorityGreaterThan(criteria.priorityGreaterThan()))
                 .and(TicketSpecification.priorityLessThan(criteria.priorityLessThan()))
-                .and(TicketSpecification.assignedTo(criteria.assignedTo()));
+                .and(TicketSpecification.assignedTo(criteria.assignedTo()))
+                .and(TicketSpecification.isNotClosed(criteria.isNotClosed()))
+                .and(TicketSpecification.isOverdue(criteria.isOverdue()));
 
 
         return ticketDao
