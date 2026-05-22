@@ -85,8 +85,8 @@ public class TicketService  {
 
         statusService.initializeStatus(ticketSaved, creator);
 
-        ThemeEnum theme = ThemeEnum.valueOf(dto.themeDesignation().toUpperCase());
-        classificationService.classify(ticketSaved, theme);
+        Theme theme = themeDao.findById(dto.idTheme()).orElseThrow(ThemeService.ThemeNotFoundException::new);
+        classificationService.classify(ticketSaved, theme.getCode());
 
         return ticketMapper.toDto(ticketSaved);
     }
