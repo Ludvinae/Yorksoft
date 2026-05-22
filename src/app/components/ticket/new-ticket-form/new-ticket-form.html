@@ -98,6 +98,13 @@
     </div>
   </fieldset>
 
+  @if (errorMessage()) {
+    <div class="alert alert-error">
+      <span>
+        {{ errorMessage() }}
+      </span>
+    </div>
+  }
   <button type="submit" class="btn btn-primary"
     [disabled]="ticketForm.invalid || isSubmitting()">
 

@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit, signal } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output, signal } from '@angular/core';
 import { FieldSelect } from '../../form/field-select/field-select';
 import { FieldText } from '../../form/field-text/field-text';
 import { FieldTextarea } from '../../form/field-textarea/field-textarea';
@@ -23,6 +23,9 @@ export class NewTicketForm implements OnInit {
   @Input({ required: true })
   client!: ClientListDto;
 
+  @Output()
+  createdTicket = new EventEmitter<Ticket>();
+
   formBuilder = inject(FormBuilder);
   router = inject(Router);
   route = inject(ActivatedRoute);
@@ -34,7 +37,6 @@ export class NewTicketForm implements OnInit {
   impactService = inject(ImpactService);
   urgencyService = inject(UrgencyService);
   themeService = inject(ThemeService);
-
 
   ticketForm: FormGroup<TicketForm> = this.formBuilder.nonNullable.group({
     idSoftware: [null, Validators.required],
@@ -48,12 +50,17 @@ export class NewTicketForm implements OnInit {
     description: ['', [Validators.required, Validators.minLength(20)]],
   });
 
-
   listSoftware = toSignal(this.softwareService.getAll(), { initialValue: [] });
   listImpact = toSignal(this.impactService.getAll(), { initialValue: [] });
   listUrgency = toSignal(this.urgencyService.getAll(), { initialValue: [] });
   listTheme = toSignal(this.themeService.getAll(), { initialValue: [] });
+
+  errorMessage = signal<string | null>(null);
+  ticketCreated = signal(false);
+  createdTicketId = signal<number | null>(null);
   isSubmitting = signal(false);
+
+  listVersion: Version[] = [];
 
   ngOnInit(): void {
     this.ticketForm.get('idSoftware')?.valueChanges.subscribe((idSoftware) => {
@@ -68,6 +75,12 @@ export class NewTicketForm implements OnInit {
       return;
     }
 
+    if (this.isSubmitting()) {
+      return;
+    }
+
+    this.errorMessage.set(null);
+
     this.isSubmitting.set(true);
 
     const payload: TicketCreation = {
@@ -80,11 +93,16 @@ export class NewTicketForm implements OnInit {
 
     this.ticketService.create(payload).subscribe({
       next: (ticket) => {
-        console.log(ticket);
+        this.ticketCreated.set(true);
+
+        this.createdTicketId.set(ticket.idTicket);
+        this.createdTicket.emit(ticket);
       },
 
       error: (err) => {
         console.error(err);
+
+        this.handleApiError(err);
 
         this.isSubmitting.set(false);
       },
@@ -95,7 +113,32 @@ export class NewTicketForm implements OnInit {
     });
   }
 
-  listVersion: Version[] = [];
+  handleApiError(err: any): void {
+    switch (err.status) {
+      case 400:
+        this.errorMessage.set('Le formulaire contient des données invalides.');
+        break;
+
+      case 403:
+        this.errorMessage.set('Vous n’avez pas les droits nécessaires.');
+        break;
+
+      case 404:
+        this.errorMessage.set('Une ressource demandée est introuvable.');
+        break;
+
+      case 409:
+        this.errorMessage.set('Un ticket similaire existe déjà.');
+        break;
+
+      case 500:
+        this.errorMessage.set('Une erreur serveur est survenue.');
+        break;
+
+      default:
+        this.errorMessage.set('Une erreur inattendue est survenue.');
+    }
+  }
 
   loadVersions(softwareId: number): void {
     this.versionService.getAllBySoftware(softwareId).subscribe((versions) => {
