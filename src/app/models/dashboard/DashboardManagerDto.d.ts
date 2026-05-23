@@ -10,5 +10,6 @@ type DashboardManagerDto = {
   averageResolutionTime: number;
   averageResponseTime: number;
 
+  techniciansWorkload: List<TechnicianWorkloadDto>;
   ticketsByStatus: List<TicketStatusStatDto>;
-}
+};

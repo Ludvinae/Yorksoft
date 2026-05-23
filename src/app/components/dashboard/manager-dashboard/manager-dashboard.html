@@ -192,9 +192,9 @@
             </h3>
 
             <div class="h-80 flex items-center justify-center">
-              <p class="opacity-50">
-                Graphique thématiques
-              </p>
+              <app-technician-workload-chart
+                [workloadStats]="dashboard.techniciansWorkload ?? []">
+              </app-technician-workload-chart>
             </div>
           </div>
         </div>
