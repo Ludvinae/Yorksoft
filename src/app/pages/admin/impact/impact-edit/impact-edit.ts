@@ -7,10 +7,7 @@ import { GenericFormPage } from '../../../../components/form/generic-form-page/g
 
 @Component({
   selector: 'app-impact-edit',
-  imports: [
-    FieldText,
-    GenericFormPage
-  ],
+  imports: [FieldText, GenericFormPage],
   templateUrl: './impact-edit.html',
   styleUrl: './impact-edit.css',
 })
@@ -27,15 +24,15 @@ export class ImpactEdit implements OnInit {
     priorityFactor: this.formBuilder.control(null, {
       validators: [Validators.required],
     }),
-    description: this.formBuilder.nonNullable.control("", {
-      validators: [] }),
+    description: this.formBuilder.nonNullable.control('', {
+      validators: [],
+    }),
   });
 
   impactEdit = signal<Impact | undefined>(undefined);
   loading = signal(false);
   error = signal<string | undefined>(undefined);
   routeId = signal<string>('Nouvel impact sur la priorité');
-
 
   isEditMode = signal(false);
 

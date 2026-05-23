@@ -13,7 +13,7 @@ export class SoftwareTypeFormService {
 
   mapToForm(softwareType: SoftwareType) {
     return {
-      designation: softwareType.designation ?? "",
+      designation: softwareType.designation ?? '',
     };
   }
 
@@ -29,5 +29,4 @@ export class SoftwareTypeFormService {
       ? this.softwareTypeService.update(dto, dto.idSoftwareType)
       : this.softwareTypeService.create(dto);
   }
-
 }

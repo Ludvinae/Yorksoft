@@ -1,7 +1,6 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { tap } from 'rxjs';
-import { TicketSearchCriteria } from '../../models/page/TicketSearchCriteria';
 import { Page } from '../../models/page/Page';
 
 @Injectable({
@@ -25,48 +24,23 @@ export class ClientService {
     );
   }
 
-  getClients(
-    filters: ClientSearchCriteria,
-    page: number,
-    size: number,
-    sort: string
-  ) {
-
-    let params = new HttpParams()
-      .set('page', page)
-      .set('size', size)
-      .set('sort', sort);
+  getClients(filters: ClientSearchCriteria, page: number, size: number, sort: string) {
+    let params = new HttpParams().set('page', page).set('size', size).set('sort', sort);
 
     Object.entries(filters).forEach(([key, value]) => {
-
-      if (
-        value !== null &&
-        value !== undefined &&
-        value !== ''
-      ) {
-
+      if (value !== null && value !== undefined && value !== '') {
         // tableau
         if (Array.isArray(value)) {
-
-          value.forEach(v => {
-
+          value.forEach((v) => {
             params = params.append(key, v);
           });
-
         } else {
-
-          params = params.set(
-            key,
-            value.toString()
-          );
+          params = params.set(key, value.toString());
         }
       }
     });
 
-    return this.http.get<Page<ClientListDto>>(
-      'http://localhost:8080/client/list',
-      { params }
-    );
+    return this.http.get<Page<ClientListDto>>('http://localhost:8080/client/list', { params });
   }
 
   create(client: Client) {

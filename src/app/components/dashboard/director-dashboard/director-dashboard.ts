@@ -1,18 +1,18 @@
-import { Component, inject, Signal } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
-import { KpiCard } from '../cards/kpi-card/kpi-card';
-import { TicketStatusPieChart } from '../cards/ticket-status-pie-chart/ticket-status-pie-chart';
+import { Component, inject, OnInit, Signal } from '@angular/core';
 import { DashboardService } from '../../../services/business/dashboard-service';
 
 @Component({
   selector: 'app-director-dashboard',
-  imports: [DecimalPipe, KpiCard, TicketStatusPieChart],
+  imports: [],
   templateUrl: './director-dashboard.html',
   styleUrl: './director-dashboard.css',
 })
-export class DirectorDashboard {
+export class DirectorDashboard implements OnInit {
   dashboardService = inject(DashboardService);
 
-  readonly dashboard = this.dashboardService
-    .dashboard as Signal<DashboardDirectorDto | null>;
+  readonly dashboard = this.dashboardService.dashboard as Signal<DashboardDirectorDto | null>;
+
+  ngOnInit(): void {
+    this.dashboardService.loadDashboard(365);
+  }
 }

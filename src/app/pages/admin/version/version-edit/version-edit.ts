@@ -72,10 +72,7 @@ export class VersionEdit implements OnInit {
   }
 
   onSubmit() {
-    const dto = this.versionFormService.mapToDto(
-      this.form.getRawValue(),
-      this.versionEdit()
-    );
+    const dto = this.versionFormService.mapToDto(this.form.getRawValue(), this.versionEdit());
 
     this.versionFormService.save(dto, this.isEditMode()).subscribe({
       next: () => {

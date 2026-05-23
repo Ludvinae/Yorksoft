@@ -1,1 +1,3 @@
-type DashboardAdminDto = {}
+type DashboardAdminDto = {
+  closedTicketsWithoutEndDate: number;
+};

@@ -3,6 +3,11 @@
   <div class="card bg-base-100 shadow-md border border-base-300">
     <div class="card-body gap-6">
 
+
+      @if (jwt()?.id == null) {
+        <span>Utilisateur non reconnu</span>
+      } @else {
+
       <h2 class="text-3xl font-bold text-center">
         Indicateurs de performance
       </h2>
@@ -19,6 +24,37 @@
 
             <div class="grid grid-cols-3 divide-x divide-y border rounded-xl overflow-hidden">
 
+              <app-kpi-card
+                title="Ouverts"
+                [value]="dashboard.assignedOpenTickets"
+                icon="ph ph-open-book"
+                colorClass="text-info"
+                [filters]="{ isNotClosed: true, assignedTo: jwt()!.id }"
+              />
+
+              <app-kpi-card
+                title="En attente"
+                [value]="dashboard.assignedWaitingTickets"
+                icon="ph ph-hourglass"
+                colorClass="text-success"
+                [filters]="{ statuses: ['WAITING_CLIENT', 'WAITING_THIRD_PARTY'], assignedTo: jwt()!.id  }"
+              />
+
+              <app-kpi-card
+                title="Critiques"
+                [value]="dashboard.assignedCriticalTickets"
+                icon="ph ph-fast-forward"
+                colorClass="text-warning"
+                [filters]="{ statuses: ['CLOSED'], isNotClosed: true, assignedTo: jwt()!.id  }"
+              />
+
+              <app-kpi-card
+                title="En retard"
+                [value]="dashboard.assignedOverdueTickets"
+                icon="ph ph-alarm"
+                colorClass="text-error"
+                [filters]="{ isOverdue: true, isNotClosed: true, assignedTo: jwt()!.id  }"
+              />
 
 
             </div>
@@ -70,6 +106,7 @@
         </div>
 
       </div>
+      }
 
     </div>
   </div>

@@ -18,7 +18,6 @@ export class FieldSelect {
   @Input() placeholder: string = 'Choisir...';
   @Input() errorMessages: Record<string, string> = {};
 
-
   get errorMessage(): string | null {
     if (!this.control.errors || !this.control.touched) return null;
 
@@ -33,5 +32,4 @@ export class FieldSelect {
   getLabel(option: any) {
     return option[this.labelField];
   }
-
 }

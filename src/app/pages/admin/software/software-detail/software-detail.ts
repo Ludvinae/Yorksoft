@@ -1,10 +1,9 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SoftwareService } from '../../../../services/api/software-service';
-import { SoftwareTypeService } from '../../../../services/api/software-type-service';
 import { DetailPage } from '../../../../components/detail-page/detail-page';
 import { RouteBuilderService } from '../../../../services/business/route-builder-service';
-import { switchMap, tap } from 'rxjs';
+import { tap } from 'rxjs';
 
 @Component({
   selector: 'app-software-detail',
@@ -21,7 +20,6 @@ export class SoftwareDetail implements OnInit {
   loading = signal(true);
   error = signal<string | undefined>(undefined);
   label = signal<string | undefined>(undefined);
-
 
   updateRoute: string | undefined = undefined;
 
@@ -46,6 +44,6 @@ export class SoftwareDetail implements OnInit {
           this.loading.set(false);
           this.error.set('Impossible de charger les détails.');
         },
-    });
+      });
   }
 }

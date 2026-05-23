@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { SoftwareService } from '../../../../services/api/software-service';
-import {GenericList} from '../../../../components/list/generic-list/generic-list';
-import {Title} from '../../../../components/list/title/title';
+import { GenericList } from '../../../../components/list/generic-list/generic-list';
+import { Title } from '../../../../components/list/title/title';
 
 @Component({
   selector: 'app-software-list',

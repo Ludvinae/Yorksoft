@@ -7,10 +7,7 @@ import { GenericFormPage } from '../../../../components/form/generic-form-page/g
 
 @Component({
   selector: 'app-urgency-edit',
-  imports: [
-    FieldText,
-    GenericFormPage
-  ],
+  imports: [FieldText, GenericFormPage],
   templateUrl: './urgency-edit.html',
   styleUrl: './urgency-edit.css',
 })
@@ -27,8 +24,9 @@ export class UrgencyEdit implements OnInit {
     priorityFactor: this.formBuilder.control(null, {
       validators: [Validators.required],
     }),
-    description: this.formBuilder.nonNullable.control("", {
-      validators: [] }),
+    description: this.formBuilder.nonNullable.control('', {
+      validators: [],
+    }),
   });
 
   urgencyEdit = signal<Urgency | undefined>(undefined);

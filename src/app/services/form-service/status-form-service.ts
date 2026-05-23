@@ -13,7 +13,7 @@ export class StatusFormService {
 
   mapToForm(status: Status) {
     return {
-      designation: status.designation ?? "",
+      designation: status.designation ?? '',
       code: status.code,
       displayOrder: status.displayOrder,
     };
@@ -27,9 +27,6 @@ export class StatusFormService {
   }
 
   save(dto: Status, isEdit: boolean) {
-    return isEdit
-      ? this.statusService.update(dto, dto.idStatus)
-      : this.statusService.create(dto);
+    return isEdit ? this.statusService.update(dto, dto.idStatus) : this.statusService.create(dto);
   }
-
 }

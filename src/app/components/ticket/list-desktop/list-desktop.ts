@@ -62,7 +62,6 @@ export class ListDesktop implements OnInit {
   }
 
   setFilter(filter: 'all' | 'assigned' | 'priority'): void {
-
     this.page = 0;
 
     this.loadTickets();
@@ -95,7 +94,6 @@ export class ListDesktop implements OnInit {
       this.loadTickets();
     }
   }
-
 
   searchWithDelay(): void {
     clearTimeout(this.searchTimeout);

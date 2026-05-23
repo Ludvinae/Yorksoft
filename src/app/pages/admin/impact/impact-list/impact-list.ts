@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
-import {GenericList} from "../../../../components/list/generic-list/generic-list";
-import {Title} from "../../../../components/list/title/title";
+import { GenericList } from '../../../../components/list/generic-list/generic-list';
+import { Title } from '../../../../components/list/title/title';
 import { ImpactService } from '../../../../services/api/impact-service';
 
 @Component({

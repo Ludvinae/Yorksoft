@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { ClientStoreService } from '../../../services/business/client-store-service';
 import { ClientService } from '../../../services/api/client-service';
 import { FooterClient } from '../../../components/footer-client/footer-client';
-import {TitleClient} from '../../../components/title-bar/title-client/title-client';
+import { TitleClient } from '../../../components/title-bar/title-client/title-client';
 
 @Component({
   selector: 'app-client-list',

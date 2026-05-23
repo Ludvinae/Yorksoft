@@ -1,7 +1,6 @@
 import { computed, Injectable, signal } from '@angular/core';
 import { ClientService } from '../api/client-service';
 
-
 @Injectable({
   providedIn: 'root',
 })

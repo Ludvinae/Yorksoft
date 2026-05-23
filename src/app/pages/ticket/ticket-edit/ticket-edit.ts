@@ -35,7 +35,7 @@ export class TicketEdit implements OnInit {
     idImpact: this.formBuilder.nonNullable.control(0, { validators: [Validators.required] }),
     idVersion: this.formBuilder.nonNullable.control(0, { validators: [Validators.required] }),
     idTheme: this.formBuilder.nonNullable.control(0, { validators: [Validators.required] }),
-    idSoftware: this.formBuilder.nonNullable.control(0, { validators: [Validators.required] })
+    idSoftware: this.formBuilder.nonNullable.control(0, { validators: [Validators.required] }),
   });
 
   ticketEdit = signal<Ticket | undefined>(undefined);

@@ -4,7 +4,6 @@ import { StatusFormService } from '../../../../services/form-service/status-form
 import { ActivatedRoute, Router } from '@angular/router';
 import { FieldText } from '../../../../components/form/field-text/field-text';
 import { GenericFormPage } from '../../../../components/form/generic-form-page/generic-form-page';
-import { ThemeEnum } from '../../../../models/enum/ThemeEnum';
 import { StatusEnum } from '../../../../models/enum/StatusEnum';
 import { FieldSelect } from '../../../../components/form/field-select/field-select';
 

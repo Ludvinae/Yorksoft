@@ -15,16 +15,10 @@ export class DashboardService {
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
 
-
   loadDashboard(timeframe: number | null): void {
-    // Early return si l'état du dashboard n'a pas changé
-    if (this.dashboard()) {
-      return;
-    }
 
     this.loading.set(true);
     this.error.set(null);
-
 
     this.http.get<DashboardDto>(`${this.apiUrl}/${timeframe}`).subscribe({
       next: (data) => {

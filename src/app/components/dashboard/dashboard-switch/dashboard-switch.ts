@@ -13,6 +13,4 @@ import { DirectorDashboard } from '../director-dashboard/director-dashboard';
 })
 export class DashboardSwitch {
   auth = inject(AuthService);
-
-
 }

@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import {FieldText} from "../../../../components/form/field-text/field-text";
+import { FieldText } from '../../../../components/form/field-text/field-text';
 import { GenericFormPage } from '../../../../components/form/generic-form-page/generic-form-page';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -56,7 +56,8 @@ export class VersionTypeEdit implements OnInit {
   onSubmit() {
     const dto = this.versionTypeFormService.mapToDto(
       this.form.getRawValue(),
-      this.versionTypeEdit());
+      this.versionTypeEdit(),
+    );
 
     this.versionTypeFormService.save(dto, this.isEditMode()).subscribe({
       next: () => {

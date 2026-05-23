@@ -13,7 +13,7 @@ export class VersionTypeFormService {
 
   mapToForm(version: VersionType) {
     return {
-      designation: version.designation ?? "",
+      designation: version.designation ?? '',
       urgencyMalus: version.urgencyMalus,
     };
   }

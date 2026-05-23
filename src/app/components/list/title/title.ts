@@ -12,6 +12,6 @@ export class Title {
   @Input() route!: string;
 
   get createRoute(): string {
-    return  this.route == 'ticket' ? `/${this.route}/create` :`/admin/${this.route}/create`;
+    return this.route == 'ticket' ? `/${this.route}/create` : `/admin/${this.route}/create`;
   }
 }

@@ -13,9 +13,9 @@ export class ImpactFormService {
 
   mapToForm(impact: Impact) {
     return {
-      designation: impact.designation ?? "",
+      designation: impact.designation ?? '',
       priorityFactor: impact.priorityFactor,
-      description: impact.description ?? "",
+      description: impact.description ?? '',
     };
   }
 
@@ -27,9 +27,6 @@ export class ImpactFormService {
   }
 
   save(dto: Impact, isEdit: boolean) {
-    return isEdit
-      ? this.impactService.update(dto, dto.idImpact)
-      : this.impactService.create(dto);
+    return isEdit ? this.impactService.update(dto, dto.idImpact) : this.impactService.create(dto);
   }
-
 }

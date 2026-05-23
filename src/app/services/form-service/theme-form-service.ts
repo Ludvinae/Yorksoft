@@ -13,8 +13,8 @@ export class ThemeFormService {
 
   mapToForm(theme: Theme) {
     return {
-      designation: theme.designation ?? "",
-      description: theme.description ?? "",
+      designation: theme.designation ?? '',
+      description: theme.description ?? '',
     };
   }
 
@@ -26,9 +26,6 @@ export class ThemeFormService {
   }
 
   save(dto: Theme, isEdit: boolean) {
-    return isEdit
-      ? this.themeService.update(dto, dto.idTheme)
-      : this.themeService.create(dto);
+    return isEdit ? this.themeService.update(dto, dto.idTheme) : this.themeService.create(dto);
   }
-
 }

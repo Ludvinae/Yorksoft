@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { AdminMenu, AdminMenuItems } from '../../../components/admin/admin-menu/admin-menu';
 
-;
-
 @Component({
   selector: 'app-admin',
   imports: [AdminMenu],

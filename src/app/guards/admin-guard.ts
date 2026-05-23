@@ -10,9 +10,7 @@ export const adminGuard: CanActivateFn = (route, state) => {
     return router.parseUrl('/');
   }
 
-  if (
-    authService.jwtInfo()?.role != 'ADMIN'
-  ) {
+  if (authService.jwtInfo()?.role != 'ADMIN') {
     return router.parseUrl('/forbidden');
   }
 

@@ -10,8 +10,7 @@ export const managerGuard: CanActivateFn = (route, state) => {
     return router.parseUrl('/');
   }
 
-  if (authService.jwtInfo()?.role != 'MANAGER' &&
-    authService.jwtInfo()?.role != 'ADMIN') {
+  if (authService.jwtInfo()?.role != 'MANAGER' && authService.jwtInfo()?.role != 'ADMIN') {
     return router.parseUrl('/forbidden');
   }
 

@@ -15,7 +15,7 @@ export class Forbidden implements OnInit {
 
   ngOnInit(): void {
     if (this.auth.jwtInfo()) {
-      this.route.set("/dashboard");
+      this.route.set('/dashboard');
     }
   }
 }

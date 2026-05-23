@@ -1,8 +1,5 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
-import { ClientService } from '../../../services/api/client-service';
-import { ClientStoreService } from '../../../services/business/client-store-service';
+import { Component } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { TicketStoreService } from '../../../services/business/ticket-store-service';
 import { ClientSearch } from '../../../components/ticket/client-search/client-search';
 import { NewTicketForm } from '../../../components/ticket/new-ticket-form/new-ticket-form';
 import { RouterLink } from '@angular/router';

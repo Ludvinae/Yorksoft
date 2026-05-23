@@ -14,8 +14,7 @@ export class VersionFormService {
   mapToForm(version: Version) {
     return {
       versionNumber: version.versionNumber ?? '',
-      publicationDate: version.publicationDate ?
-        this.formatDate(version.publicationDate) : '',
+      publicationDate: version.publicationDate ? this.formatDate(version.publicationDate) : '',
       idVersionType: version.idVersionType ?? 0,
       idSoftware: version.idSoftware ?? 0,
     };
