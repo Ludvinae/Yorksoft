@@ -1,0 +1,17 @@
+@if (!auth.jwtInfo()) {
+  <div>
+    <span>Rien à afficher</span>
+  </div>
+} @else if (auth.jwtInfo()?.role == "ADMIN") {
+  <app-admin-dashboard/>
+} @else if (auth.jwtInfo()?.role == "MANAGER") {
+  <app-manager-dashboard/>
+} @else if (auth.jwtInfo()?.role == "TECHNICIAN") {
+  <app-technician-dashboard/>
+} @else if (auth.jwtInfo()?.role == "DIRECTOR") {
+  <app-director-dashboard/>
+} @else {
+  <div>
+    <span>Rôle de l'utilisateur incorrect</span>
+  </div>
+}

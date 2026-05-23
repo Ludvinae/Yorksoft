@@ -1,13 +1,15 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { AuthService } from './auth-service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DashboardService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:8080/dashboard';
+  private auth = inject(AuthService);
 
+  private apiUrl = 'http://localhost:8080/dashboard';
 
   readonly dashboard = signal<DashboardDto | null>(null);
   readonly loading = signal(false);
@@ -22,6 +24,7 @@ export class DashboardService {
 
     this.loading.set(true);
     this.error.set(null);
+
 
     this.http.get<DashboardDto>(`${this.apiUrl}/${timeframe}`).subscribe({
       next: (data) => {
