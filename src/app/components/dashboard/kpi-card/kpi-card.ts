@@ -1,11 +1,11 @@
 import { Component, inject, Input } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { TicketStoreService } from '../../../services/business/ticket-store-service';
 import { TicketSearchCriteria } from '../../../models/page/TicketSearchCriteria';
 
 @Component({
   selector: 'app-kpi-card',
-  imports: [RouterLink],
+  imports: [],
   templateUrl: './kpi-card.html',
   styleUrl: './kpi-card.css',
 })

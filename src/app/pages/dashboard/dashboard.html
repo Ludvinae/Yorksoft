@@ -99,12 +99,12 @@
 
                 <div class="p-4 flex flex-col items-center justify-center">
                   <span class="text-sm opacity-70">Résolution</span>
-                  <span class="text-5xl font-black">128m</span>
+                  <span class="text-5xl font-black">{{ dashboard.averageResolutionTime | number: '1.0-0' }} mn</span>
                 </div>
 
                 <div class="p-4 flex flex-col items-center justify-center">
                   <span class="text-sm opacity-70">Prise en charge</span>
-                  <span class="text-5xl font-black">32m</span>
+                  <span class="text-5xl font-black">{{ dashboard.averageResponseTime | number: '1.0-0' }} mn</span>
                 </div>
 
                 <div class="p-4 flex flex-col items-center justify-center">
@@ -154,7 +154,7 @@
                 Evolution des tickets
               </h3>
 
-              <div class="h-[320px] flex items-center justify-center">
+              <div class="h-80 flex items-center justify-center">
                 <!-- ngx charts / chart.js -->
                 <p class="opacity-50">
                   Graphique évolution
@@ -172,10 +172,10 @@
                 Répartition par statut
               </h3>
 
-              <div class="h-[320px] flex items-center justify-center">
-                <p class="opacity-50">
-                  Camembert statuts
-                </p>
+              <div class="h-80 flex items-center justify-center">
+                <app-ticket-status-pie-chart
+                  [stats]="dashboard.ticketsByStatus ?? []">
+                </app-ticket-status-pie-chart>
               </div>
 
             </div>
@@ -189,7 +189,7 @@
                 Répartition par logiciel
               </h3>
 
-              <div class="h-[320px] flex items-center justify-center">
+              <div class="h-80 flex items-center justify-center">
                 <p class="opacity-50">
                   Bar chart logiciels
                 </p>
@@ -206,7 +206,7 @@
                 Répartition par thématique
               </h3>
 
-              <div class="h-[320px] flex items-center justify-center">
+              <div class="h-80 flex items-center justify-center">
                 <p class="opacity-50">
                   Graphique thématiques
                 </p>

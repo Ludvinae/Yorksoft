@@ -33,4 +33,14 @@ export class Login {
       });
     }
   }
+
+  isFieldInvalid(fieldName: string): boolean {
+    const field = this.form.get(fieldName);
+
+    return !!(
+      field &&
+      field.invalid &&
+      (field.dirty || field.touched)
+    );
+  }
 }

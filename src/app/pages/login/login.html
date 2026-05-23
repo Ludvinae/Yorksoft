@@ -9,17 +9,21 @@
         <label class="label" for="email">Email</label>
         <input type="email" class="input" placeholder="Email@company.com" formControlName="email"/>
 
-        @if (form.get('email')?.hasError('required')) {
-          <span class="form-error">L'email est obligatoire</span>
-        } @else if (form.get('email')?.hasError('email')) {
-          <span class="form-error">L'email doit etre valide</span>
+        @if (isFieldInvalid('email')) {
+          @if (form.get('email')?.hasError('required')) {
+            <span class="form-error">L'email est obligatoire</span>
+          } @else if (form.get('email')?.hasError('email')) {
+            <span class="form-error">L'email doit etre valide</span>
+          }
         }
 
         <label class="label" for="password">Password</label>
         <input type="password" class="input" placeholder="Password" formControlName="password"/>
 
-        @if (form.get("password")?.hasError('required')) {
-          <span class="form-error">Le mot de passe est obligatoire</span>
+        @if (isFieldInvalid('password')) {
+          @if (form.get("password")?.hasError('required')) {
+            <span class="form-error">Le mot de passe est obligatoire</span>
+          }
         }
 
         <button class="btn btn-neutral mt-4" type="submit">Login</button>
