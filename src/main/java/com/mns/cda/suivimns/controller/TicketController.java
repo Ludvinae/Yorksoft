@@ -41,28 +41,18 @@ public class TicketController {
     @ApiResponse(responseCode = "200", description = "Liste récupérée avec succès")
     @GetMapping("/list")
     @IsEmployee
-    public ResponseEntity<Page<TicketListDto>> search(
+    public ResponseEntity<Page<TicketListDto>> getAllPageable(
             TicketSearchCriteria criteria,
             @PageableDefault(size = 15, sort = "openDate", direction = Sort.Direction.DESC)
             Pageable pageable
     ) {
         try {
-            return new ResponseEntity<>(ticketService.search(criteria, pageable) , HttpStatus.OK);
+            return new ResponseEntity<>(ticketService.getAllPageable(criteria, pageable) , HttpStatus.OK);
         } catch (TicketQueryService.InvalidSortCriteriaException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
-
-    @Operation(summary = "Récupére le temps d'activité d'un ticket en fonction de son ID")
-    @ApiResponses({@ApiResponse(responseCode = "200", description = "Ticket trouvée"),
-            @ApiResponse(responseCode = "404", description = "Ticket non trouvée")})
-    @GetMapping("/{id}/active-time")
-    @IsManager
-    @IsDirector
-    public Long getActiveTimeInSeconds(@PathVariable Integer id) {
-        return ticketService.getActiveTimeInSeconds(id);
-    }
 
 
     @Operation(summary = "Récupére une ticket en fonction de son ID")
@@ -125,40 +115,6 @@ public class TicketController {
     }
 
 
-
-    // /////////
-
-    @Operation(
-            summary = "Lister les tickets avec détails complets",
-            description = "Retourne les tickets avec leur historique récent, statut et affectation actuelle")
-    @ApiResponse(responseCode = "200", description = "Liste détaillée récupérée")
-    @GetMapping("/list/full")
-    @IsEmployee
-    public List<TicketFullWithLatest> getTicketFullLatest() {
-        return ticketService.getAllTicketFullWithLatest();
-    }
-
-
-    @Operation(
-            summary = "Lister les tickets d’un technicien",
-            description = "Retourne les tickets assignés à un technicien avec leur dernier état")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Tickets récupérés"),
-            @ApiResponse(responseCode = "404", description = "Technicien non trouvé")})
-    @GetMapping("/list/technician/{id}")
-    @IsEmployee
-    public ResponseEntity<List<TicketFullWithLatest>> getTicketFullWithLatestByTechnician(@PathVariable Integer id) {
-        List<TicketFullWithLatest> tickets = ticketService.getTicketFullWithLatestByTechnician(id);
-
-        if (tickets.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        return new ResponseEntity<>(tickets, HttpStatus.OK);
-    }
-
-
-    //
 
     @Operation(summary = "Assigne un ticket à un technicien par un manager")
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Ticket attribué"),

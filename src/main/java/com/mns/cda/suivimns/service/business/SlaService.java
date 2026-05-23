@@ -28,13 +28,11 @@ public class SlaService {
 
     public LocalDateTime computeDeadline(Ticket ticket) {
 
-        return ticket.getOpenDate()
-                .plus(resolveSlaDuration(ticket.getCurrentPriority()));
+        return ticket.getOpenDate().plus(resolveSlaDuration(ticket.getCurrentPriority()));
     }
 
     public boolean isOverdue(Ticket ticket) {
 
-        return LocalDateTime.now()
-                .isAfter(computeDeadline(ticket));
+        return ticket.getActiveTimeInSeconds() > resolveSlaDuration(ticket.getCurrentPriority()).toSeconds();
     }
 }

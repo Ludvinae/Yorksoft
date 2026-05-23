@@ -40,7 +40,6 @@ class TicketControllerUnitTest {
     private ObjectMapper objectMapper;
 
     private TicketDto ticketDto;
-    private TicketFullWithLatest ticketFull;
 
     @BeforeEach
     void setUp() {
@@ -52,10 +51,6 @@ class TicketControllerUnitTest {
                 ThemeEnum.BUG, 1, 1, 1, 1, list, list,
                 list, list);
 
-        ticketFull = new TicketFullWithLatest(
-                1, "Test title", null, 50, "Test number",
-                "Test type designation", "Test software name",
-                "Test theme designation", "Test status designation", 2);
 
     }
 
@@ -75,48 +70,8 @@ class TicketControllerUnitTest {
                 .andExpect(jsonPath("$[0].description").value("Test description"));
     }
 
-    // =========================
-    // GET ALL FULL
-    // =========================
-    @Test
-    void shouldReturnAllFull() throws Exception {
 
-        when(ticketService.getAllTicketFullWithLatest()).thenReturn(List.of(ticketFull));
 
-        mockMvc.perform(get("/ticket/list/full"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(1))
-                .andExpect(jsonPath("$[0].title").value("Test title"));
-    }
-
-    // =========================
-    // GET ALL BY TECHNICIAN ID - OK
-    // =========================
-    @Test
-    void shouldReturnByTechnicianId() throws Exception {
-
-        when(ticketService.getTicketFullWithLatestByTechnician(1)).thenReturn(List.of(ticketFull));
-
-        mockMvc.perform(get("/ticket/list/technician/1"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(1))
-                .andExpect(jsonPath("$[0].title").value("Test title"));
-    }
-
-    // =========================
-    // GET ALL BY TECHNICIAN ID - NOT FOUND
-    // =========================
-    @Test
-    void shouldReturn404WhenTechnicianNotFound() throws Exception {
-
-        when(ticketService.getTicketFullWithLatestByTechnician(10)).thenReturn(List.of());
-
-        mockMvc.perform(get("/ticket/list/technician/1"))
-                .andDo(print())
-                .andExpect(status().isNotFound());
-    }
 
     // =========================
     // GET BY ID - OK

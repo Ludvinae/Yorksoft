@@ -40,7 +40,7 @@ public class TicketService  {
     protected final TicketProgressService progressService;
     protected final TicketSolvedService solvedService;
     protected final TicketWaitService waitingService;
-    protected final ActiveTimeService activeTime;
+    protected final TicketMetricsService metricsService;
     protected final TicketQueryService queryService;
 
     protected final TicketDao ticketDao;
@@ -64,14 +64,6 @@ public class TicketService  {
     }
 
 
-    public List<TicketFullWithLatest> getAllTicketFullWithLatest() {
-        return ticketDao.returnTicketFullWithLatest();
-    }
-
-    public List<TicketFullWithLatest> getTicketFullWithLatestByTechnician(int id) {
-        return ticketDao.returnTicketAttributed(id);
-    }
-
     public TicketDto save(TicketCreationDto dto) throws StatusService.StatusNotFoundException {
 
         Ticket ticket = ticketMapper.creationToEntity(dto);
@@ -87,6 +79,8 @@ public class TicketService  {
 
         Theme theme = themeDao.findById(dto.idTheme()).orElseThrow(ThemeService.ThemeNotFoundException::new);
         classificationService.classify(ticketSaved, theme.getCode());
+
+        metricsService.refreshTicketMetrics(ticketSaved);
 
         return ticketMapper.toDto(ticketSaved);
     }
@@ -108,6 +102,8 @@ public class TicketService  {
         }
 
         ticketMapper.updateEntityFromDto(ticketToUpdate, currentTicket);
+
+        metricsService.refreshTicketMetrics(currentTicket);
 
         return ticketMapper.toDto(ticketDao.save(currentTicket));
     }
@@ -170,6 +166,8 @@ public class TicketService  {
 
         Ticket ticketAssigned = assignmentService.assignTicket(ticket, manager, technician, assignmentDto.statusReason());
 
+        metricsService.refreshTicketMetrics(ticketAssigned);
+
         return ticketMapper.toDto(ticketAssigned);
     }
 
@@ -182,6 +180,8 @@ public class TicketService  {
                 .orElseThrow(AppUserService.AppUserNotFoundException::new);
 
         Ticket ticketClosed = closingService.closeTicket(ticket, user, dto.closingReason());
+
+        metricsService.refreshTicketMetrics(ticketClosed);
 
         return  ticketMapper.toDto(ticketClosed);
     }
@@ -197,6 +197,9 @@ public class TicketService  {
                 .orElseThrow(TechnicianService.TechnicianNotFoundException::new);
 
         Ticket ticketChanged = progressService.takeTicketInCharge(ticket, technician, dto.statusReason());
+
+        metricsService.refreshTicketMetrics(ticketChanged);
+
         return ticketMapper.toDto(ticketChanged);
     }
 
@@ -208,6 +211,9 @@ public class TicketService  {
                 .orElseThrow(AppUserService.AppUserNotFoundException::new);
 
         Ticket ticketChanged = progressService.resumeTicket(ticket, user, dto.statusReason());
+
+        metricsService.refreshTicketMetrics(ticketChanged);
+
         return ticketMapper.toDto(ticketChanged);
     }
 
@@ -221,6 +227,8 @@ public class TicketService  {
                 .orElseThrow(TechnicianService.TechnicianNotFoundException::new);
 
         Ticket ticketChanged = solvedService.proposeSolution(ticket, technician, dto.statusReason());
+
+        metricsService.refreshTicketMetrics(ticketChanged);
 
         return ticketMapper.toDto(ticketChanged);
     }
@@ -241,20 +249,14 @@ public class TicketService  {
 
         Ticket ticketChanged = waitingService.setWaitingStatus(ticket, technician, dto.statusReason(), dto.waitingStatus());
 
+        metricsService.refreshTicketMetrics(ticketChanged);
+
         return ticketMapper.toDto(ticketChanged);
     }
 
-    public Long getActiveTimeInSeconds(Integer idTicket) {
-        List<StatusEnum> statuses = List.of(
-                StatusEnum.OPEN,
-                StatusEnum.ASSIGNED,
-                StatusEnum.IN_PROGRESS
-        );
 
-        return activeTime.getActiveTimeInSeconds(idTicket, statuses);
-    }
 
-    public Page<TicketListDto> search(TicketSearchCriteria criteria, Pageable pageable) {
+    public Page<TicketListDto> getAllPageable(TicketSearchCriteria criteria, Pageable pageable) {
         return queryService.search(criteria, pageable);
     }
 }

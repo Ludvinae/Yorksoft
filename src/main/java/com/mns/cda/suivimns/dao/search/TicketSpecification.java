@@ -103,27 +103,7 @@ public class TicketSpecification {
 
     public static Specification<Ticket> isOverdue(Boolean hasExceededSla) {
 
-        return (root, query, cb) -> {
-            if (!Boolean.TRUE.equals(hasExceededSla)) {
-                return cb.conjunction();
-            }
-
-            LocalDateTime now = LocalDateTime.now();
-
-            Predicate lowPriority = cb.and(cb.lessThan(root.get("priority"), 33),
-                    cb.lessThan(root.get("openDate"), now.minusHours(24))
-            );
-
-            Predicate mediumPriority = cb.and(cb.between(root.get("priority"), 34, 66),
-                    cb.lessThan(root.get("openDate"), now.minusHours(8))
-            );
-
-            Predicate highPriority = cb.and(cb.greaterThanOrEqualTo(root.get("priority"), 66),
-                    cb.lessThan(root.get("openDate"), now.minusHours(2))
-            );
-
-            return cb.or(lowPriority, mediumPriority, highPriority);
-
-        };
+        return (root, query, cb) ->
+                hasExceededSla == null ? null : root.get("isOverdue").in(hasExceededSla);
     }
 }

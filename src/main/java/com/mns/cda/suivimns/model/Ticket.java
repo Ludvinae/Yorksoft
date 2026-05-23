@@ -68,6 +68,13 @@ public class Ticket {
     @JoinColumn(name = "id_current_manager")
     protected Manager currentManager;
 
+    protected Long activeTimeInSeconds;
+
+    protected LocalDateTime slaDeadline;
+
+    @Column(nullable = false)
+    protected boolean isOverdue = false;
+
     // Jointures
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_version")
