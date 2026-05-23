@@ -2,7 +2,8 @@ package com.mns.cda.suivimns.service.business;
 
 import com.mns.cda.suivimns.dao.TicketDao;
 import com.mns.cda.suivimns.dto.dashboard.*;
-import com.mns.cda.suivimns.security.AppUserDetailsService;
+import com.mns.cda.suivimns.dto.dashboard.graphs.TechnicianWorkloadDto;
+import com.mns.cda.suivimns.dto.dashboard.graphs.TicketStatusStatDto;
 import com.mns.cda.suivimns.service.entity.TechnicianService;
 import com.mns.cda.suivimns.service.security.SecurityService;
 import lombok.RequiredArgsConstructor;
@@ -68,10 +69,12 @@ public class DashboardService {
                 ? response / 60 : 0;
 
 
+
+        List<TechnicianWorkloadDto> workload = ticketDao.countTicketsPerTechnician();
         List<TicketStatusStatDto> ticketsByStatus = ticketDao.countTicketsByStatus();
 
         return new DashboardManagerDto(open, progress, waiting, priority, overdue, unassigned,
-                resolutionInMinutes, reponseInMinutes, ticketsByStatus);
+                resolutionInMinutes, reponseInMinutes, workload, ticketsByStatus);
     }
 
     private DashboardTechnicianDto  getTechnicianStats(Integer timeframeInDays, LocalDateTime now) {

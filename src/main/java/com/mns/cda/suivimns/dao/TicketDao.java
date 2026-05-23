@@ -1,6 +1,7 @@
 package com.mns.cda.suivimns.dao;
 
-import com.mns.cda.suivimns.dto.dashboard.TicketStatusStatDto;
+import com.mns.cda.suivimns.dto.dashboard.graphs.TechnicianWorkloadDto;
+import com.mns.cda.suivimns.dto.dashboard.graphs.TicketStatusStatDto;
 import com.mns.cda.suivimns.model.Ticket;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -54,6 +55,9 @@ public interface TicketDao extends JpaRepository<Ticket, Integer>, JpaSpecificat
         AND t.overdue = true
     """)
     int countAssignedOverdueTickets(int id);
+
+    // graphiques
+
 
 
     // Manager dashboard
@@ -130,7 +134,20 @@ public interface TicketDao extends JpaRepository<Ticket, Integer>, JpaSpecificat
 
     // graphiques
     @Query("""
-        SELECT new com.mns.cda.suivimns.dto.dashboard.TicketStatusStatDto(
+        SELECT new com.mns.cda.suivimns.dto.dashboard.graphs.TechnicianWorkloadDto(
+            ct.firstName, ct.lastName, COUNT(t))
+        FROM Ticket t
+        JOIN t.currentTechnician ct
+        WHERE t.closeDate IS null
+        AND t.currentTechnician IS NOT null
+        GROUP BY ct.firstName, ct.lastName
+        ORDER BY COUNT(t) DESC
+        LIMIT 10
+    """)
+    List<TechnicianWorkloadDto> countTicketsPerTechnician();
+
+    @Query("""
+        SELECT new com.mns.cda.suivimns.dto.dashboard.graphs.TicketStatusStatDto(
             t.currentStatus, COUNT(t), s.displayOrder)
         FROM Ticket t
         LEFT JOIN t.historyList h

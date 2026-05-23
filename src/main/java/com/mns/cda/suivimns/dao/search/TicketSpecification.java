@@ -104,6 +104,6 @@ public class TicketSpecification {
     public static Specification<Ticket> isOverdue(Boolean hasExceededSla) {
 
         return (root, query, cb) ->
-                hasExceededSla == null ? null : root.get("isOverdue").in(hasExceededSla);
+                hasExceededSla == null ? null : root.get("overdue").in(hasExceededSla);
     }
 }

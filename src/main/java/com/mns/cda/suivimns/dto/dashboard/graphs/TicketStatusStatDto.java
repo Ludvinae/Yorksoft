@@ -1,4 +1,4 @@
-package com.mns.cda.suivimns.dto.dashboard;
+package com.mns.cda.suivimns.dto.dashboard.graphs;
 
 import com.mns.cda.suivimns.enumerate.StatusEnum;
 

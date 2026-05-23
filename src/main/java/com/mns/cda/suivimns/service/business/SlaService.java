@@ -27,8 +27,9 @@ public class SlaService {
     }
 
     public LocalDateTime computeDeadline(Ticket ticket) {
+        long remainingTime = resolveSlaDuration(ticket.getCurrentPriority()).toSeconds() - ticket.getActiveTimeInSeconds();
 
-        return ticket.getOpenDate().plus(resolveSlaDuration(ticket.getCurrentPriority()));
+        return LocalDateTime.now().plusSeconds(remainingTime);
     }
 
     public boolean isOverdue(Ticket ticket) {
