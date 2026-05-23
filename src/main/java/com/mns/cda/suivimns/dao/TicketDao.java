@@ -1,5 +1,6 @@
 package com.mns.cda.suivimns.dao;
 
+import com.mns.cda.suivimns.dto.dashboard.TicketStatusStatDto;
 import com.mns.cda.suivimns.dto.flat.TicketFullWithLatest;
 import com.mns.cda.suivimns.dto.flat.TicketResponse;
 import com.mns.cda.suivimns.model.Ticket;
@@ -64,6 +65,28 @@ public interface TicketDao extends JpaRepository<Ticket, Integer>, JpaSpecificat
         AND t.currentTechnician IS null
     """)
     int countUnassignedTickets();
+
+
+    @Query(value = """
+        SELECT AVG(EXTRACT(EPOCH FROM (close_date - open_date)))
+        FROM ticket
+        WHERE close_date IS NOT NULL
+        AND open_date >= :startDate
+    """, nativeQuery = true)
+    Double averageResolutionTime(LocalDateTime startDate);
+
+    // graphiques
+    @Query("""
+        SELECT new com.mns.cda.suivimns.dto.dashboard.TicketStatusStatDto(
+            t.currentStatus, COUNT(t), s.displayOrder)
+        FROM Ticket t
+        LEFT JOIN t.historyList h
+        LEFT JOIN h.status s
+        WHERE t.closeDate IS null
+        AND t.currentStatus = s.code
+        GROUP BY t.currentStatus, s.displayOrder
+    """)
+    List<TicketStatusStatDto> countTicketsByStatus();
 
 
     // Deprecated queries

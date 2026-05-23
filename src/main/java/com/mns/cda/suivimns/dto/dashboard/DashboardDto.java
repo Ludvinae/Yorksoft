@@ -9,7 +9,9 @@ public record DashboardDto(
 
         int priorityTickets,
         int overdueTickets,
-        int unassignedTickets
+        int unassignedTickets,
+
+        List<TicketStatusStatDto> ticketsByStatus
 
         /* A ajouter plus tard
         double averageResolutionTime,
@@ -20,7 +22,7 @@ public record DashboardDto(
         double solvedPerDay,
         double closedPerWeek,
 
-        List<TicketStatusStatDto> ticketsByStatus,
+
         List<SoftwareStatDto> ticketsBySoftware,
         List<ThemeStatDto> ticketsByThematic,
         List<TicketEvolutionDto> ticketEvolution

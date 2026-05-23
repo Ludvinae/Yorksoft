@@ -30,6 +30,7 @@ public class AppUser {
     @Column(length = 31)
     protected String phoneNumber;
 
+    // A rendre nullable pour clints ?
     @Column(nullable = false, length = 127)
     protected String password;
 

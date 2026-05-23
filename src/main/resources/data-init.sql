@@ -48,9 +48,11 @@ INSERT INTO status (display_order, designation, code)
 VALUES (1, 'Nouveau', 'OPEN'),
        (2, 'Attribué', 'ASSIGNED'),
        (3, 'En cours', 'IN_PROGRESS'),
-       (4, 'En attente', 'WAITING_CLIENT'),
-       (5, 'Résolu', 'SOLVED'),
-       (6, 'Clos', 'CLOSED');
+       (4, 'En attente client', 'WAITING_CLIENT'),
+       (6, 'Résolu', 'SOLVED'),
+       (7, 'Clos', 'CLOSED'),
+       (5, 'En attente tiers', 'WAITING_THIRD_PARTY'),
+       (8, 'Rejeté', 'REJECTED');
 
 
 INSERT INTO urgency (priority_factor, designation, description)
