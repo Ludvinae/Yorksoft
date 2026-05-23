@@ -2,17 +2,16 @@ package com.mns.cda.suivimns.service.entity;
 
 import com.mns.cda.suivimns.dao.*;
 import com.mns.cda.suivimns.dto.entity.TicketDto;
-import com.mns.cda.suivimns.dto.flat.*;
 import com.mns.cda.suivimns.dto.search.TicketListDto;
 import com.mns.cda.suivimns.dto.search.TicketSearchCriteria;
 import com.mns.cda.suivimns.dto.workflow.*;
 import com.mns.cda.suivimns.enumerate.StatusEnum;
-import com.mns.cda.suivimns.enumerate.ThemeEnum;
 import com.mns.cda.suivimns.mapper.entity.TicketMapper;
 import com.mns.cda.suivimns.model.*;
 import com.mns.cda.suivimns.service.business.*;
 import com.mns.cda.suivimns.service.search.TicketQueryService;
 import com.mns.cda.suivimns.service.workflow.*;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,7 +19,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
 
 import static com.mns.cda.suivimns.service.workflow.TicketClosingService.isNotEditable;
 
@@ -67,6 +65,7 @@ public class TicketService  {
     public TicketDto save(TicketCreationDto dto) throws StatusService.StatusNotFoundException {
 
         Ticket ticket = ticketMapper.creationToEntity(dto);
+        ticket.setOverdue(false);
 
         priorityService.initializePriority(ticket);
 
@@ -258,5 +257,12 @@ public class TicketService  {
 
     public Page<TicketListDto> getAllPageable(TicketSearchCriteria criteria, Pageable pageable) {
         return queryService.search(criteria, pageable);
+    }
+
+    @Transactional
+    public void refreshMetrics(Integer idTicket) {
+        Ticket ticket = ticketDao.findById(idTicket).orElseThrow(TicketService.TicketNotFoundException::new);
+
+        metricsService.refreshTicketMetrics(ticket);
     }
 }

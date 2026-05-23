@@ -42,7 +42,9 @@ public class DashboardService {
     }
 
     private DashboardAdminDto getAdminStats(Integer timeframeInDays, LocalDateTime now) {
-        return new DashboardAdminDto();
+        int closed = ticketDao.closedTicketsWithoutEndDate();
+
+        return new DashboardAdminDto(closed);
     }
 
     private DashboardDirectorDto getDirectorStats(Integer timeframeInDays, LocalDateTime now) {
@@ -55,7 +57,7 @@ public class DashboardService {
         int progress = ticketDao.countInProgressTickets();
         int waiting = ticketDao.countWaitingTickets();
         int priority = ticketDao.countPriorityTickets();
-        int overdue = ticketDao.countOverdueTickets(now.minusHours(24), now.minusHours(8), now.minusHours(2));
+        int overdue = ticketDao.countOpenOverdueTickets();
         int unassigned = ticketDao.countUnassignedTickets();
 
         Double resolution = ticketDao.averageResolutionTime(now.minusDays(timeframeInDays));

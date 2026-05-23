@@ -227,4 +227,12 @@ public class TicketController {
         }
     }
 
+
+    // Debug route
+    @PostMapping("/metrics-refresh/{id}")
+    @IsAdmin
+    public void metricsRefresh(@PathVariable int id) {
+        ticketService.refreshMetrics(id);
+    }
+
 }

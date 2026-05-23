@@ -77,22 +77,22 @@ VALUES ('Erreur de manipulation', 'HANDLING_ERROR', ''),
 
 INSERT INTO ticket (title, open_date, call_duration, current_priority, initial_priority, close_date, modification_date,
                     description, id_client, id_urgency, id_impact, id_version, current_status, current_theme,
-                    id_current_manager, id_current_technician)
+                    id_current_manager, id_current_technician, overdue)
 VALUES  ('Ca marche pas', '2026-04-11 09:12:00', null, 10, 10, null, '2026-04-11 10:13:00',
         'Ca marche pas', 1, 1, 1, 2, 'WAITING_CLIENT', 'OTHER_ISSUE',
-        4, 5),
+        4, 5, false),
        ('Indisponibilité du service de sauvegarde en ligne', NOW(), 1035, 70,
         70, null, NOW(),
         'Impossible d''acceder au dossiers sur le cloud dans le gestionnaire de projets.', 3, 2,
-        2, 3, 'OPEN', 'NETWORK_ISSUE', null, null),
+        2, 3, 'OPEN', 'NETWORK_ISSUE', null, null, true),
         ('Pas de menu', '2026-03-11 14:51:08', 352, 37,
          37, '2026-03-11 16:16:42', '2026-03-11 16:16:42',
          'Impossible d''acceder au items du menu', 1, 2,
-         1, 2, 'CLOSED', 'HANDLING_ERROR', 4, 6),
+         1, 2, 'CLOSED', 'HANDLING_ERROR', 4, 6, false),
        ('Pas de menu apparant', '2026-05-05 08:23:08', 352, 50,
         50, null, '2026-05-05 10:16:42',
         'Impossible d''acceder au items du menu', 3, 2,
-        3, 2, 'ASSIGNED', 'HANDLING_ERROR', 4, 5);
+        3, 2, 'ASSIGNED', 'HANDLING_ERROR', 4, 5, true);
 
 
 INSERT INTO history (id_status, id_ticket, id_app_user, start_date, end_date)

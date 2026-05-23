@@ -73,7 +73,7 @@ public class Ticket {
     protected LocalDateTime slaDeadline;
 
     @Column(nullable = false)
-    protected boolean isOverdue = false;
+    protected boolean overdue = false;
 
     // Jointures
     @ManyToOne(fetch = FetchType.LAZY)

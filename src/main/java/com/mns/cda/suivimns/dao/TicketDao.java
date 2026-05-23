@@ -1,13 +1,10 @@
 package com.mns.cda.suivimns.dao;
 
 import com.mns.cda.suivimns.dto.dashboard.TicketStatusStatDto;
-import com.mns.cda.suivimns.dto.flat.TicketFullWithLatest;
-import com.mns.cda.suivimns.dto.flat.TicketResponse;
 import com.mns.cda.suivimns.model.Ticket;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -18,12 +15,44 @@ public interface TicketDao extends JpaRepository<Ticket, Integer>, JpaSpecificat
 
     // Technician dashboard
     // KPIs
+
+    @Query("""
+        SELECT COUNT(t)
+        FROM Ticket t
+        JOIN t.currentTechnician ct
+        WHERE t.closeDate IS null
+        AND ct.idAppUser = :id
+    """)
     int countAssignedOpenTickets(int id);
 
+    @Query("""
+        SELECT COUNT(t)
+        FROM Ticket t
+        JOIN t.currentTechnician ct
+        WHERE t.closeDate IS null
+        AND ct.idAppUser = :id
+        AND t.currentStatus IN ('WAITING_CLIENT', 'WAITING_THIRD_PARTY')
+    """)
     int countAssignedWaitingTickets(int id);
 
+    @Query("""
+        SELECT COUNT(t)
+        FROM Ticket t
+        JOIN t.currentTechnician ct
+        WHERE t.closeDate IS null
+        AND ct.idAppUser = :id
+        AND t.currentPriority > 75
+    """)
     int countAssignedCriticalTickets(int id);
 
+    @Query("""
+        SELECT COUNT(t)
+        FROM Ticket t
+        JOIN t.currentTechnician ct
+        WHERE t.closeDate IS null
+        AND ct.idAppUser = :id
+        AND t.overdue = true
+    """)
     int countAssignedOverdueTickets(int id);
 
 
@@ -64,11 +93,9 @@ public interface TicketDao extends JpaRepository<Ticket, Integer>, JpaSpecificat
         SELECT COUNT(t)
         FROM Ticket t
         WHERE t.closeDate IS NULL
-        AND ((t.currentPriority < 33 AND t.openDate <= :lowLimit)
-            OR (t.currentPriority BETWEEN 33 AND 65 AND t.openDate <= :mediumLimit)
-            OR (t.currentPriority >= 66 AND t.openDate <= :highLimit))
+        AND t.overdue = true
     """)
-    int countOverdueTickets(LocalDateTime lowLimit, LocalDateTime mediumLimit, LocalDateTime highLimit);
+    int countOpenOverdueTickets();
 
     @Query("""
         SELECT COUNT(t)
@@ -115,6 +142,14 @@ public interface TicketDao extends JpaRepository<Ticket, Integer>, JpaSpecificat
     List<TicketStatusStatDto> countTicketsByStatus();
 
 
+    // Admin dashboard
+    @Query("""
+        SELECT COUNT(t)
+        FROM Ticket t
+        WHERE t.currentStatus = 'CLOSED'
+        AND t.closeDate IS null
+    """)
+    int closedTicketsWithoutEndDate();
 
 
     /* Deprecated queries
