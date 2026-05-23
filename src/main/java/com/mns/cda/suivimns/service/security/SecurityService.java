@@ -1,5 +1,6 @@
 package com.mns.cda.suivimns.service.security;
 
+import com.mns.cda.suivimns.security.AppUserDetails;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -35,5 +36,18 @@ public class SecurityService {
 
     public boolean isDirector() {
         return hasRole("ROLE_DIRECTOR");
+    }
+
+
+    private AppUserDetails getCurrentUser() {
+        Authentication authentication = SecurityContextHolder
+                .getContext()
+                .getAuthentication();
+
+        return (AppUserDetails) authentication.getPrincipal();
+    }
+
+    public Integer getCurrentUserId() {
+        return getCurrentUser().getId();
     }
 }

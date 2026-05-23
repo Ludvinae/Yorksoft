@@ -2,6 +2,8 @@ package com.mns.cda.suivimns.service.business;
 
 import com.mns.cda.suivimns.dao.TicketDao;
 import com.mns.cda.suivimns.dto.dashboard.*;
+import com.mns.cda.suivimns.security.AppUserDetailsService;
+import com.mns.cda.suivimns.service.entity.TechnicianService;
 import com.mns.cda.suivimns.service.security.SecurityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,33 +24,32 @@ public class DashboardService {
 
         int timeframe = (timeframeInDays != null && timeframeInDays > 0)
                 ? timeframeInDays : 30;
+        LocalDateTime now = LocalDateTime.now();
 
         if (securityService.isAdmin()) {
-            return getAdminStats(timeframe);
+            return getAdminStats(timeframe, now);
         }
         if (securityService.isDirector()) {
-            return getDirectorStats(timeframe);
+            return getDirectorStats(timeframe, now);
         }
         if (securityService.isManager()) {
-            return getManagerStats(timeframe);
+            return getManagerStats(timeframe, now);
         }
         if (securityService.isTechnician()) {
-            return getTechnicianStats(timeframe);
+            return getTechnicianStats(timeframe, now);
         }
         throw new AuthenticationException();
     }
 
-    private DashboardAdminDto getAdminStats(Integer timeframeInDays) {
+    private DashboardAdminDto getAdminStats(Integer timeframeInDays, LocalDateTime now) {
         return new DashboardAdminDto();
     }
 
-    private DashboardDirectorDto getDirectorStats(Integer timeframeInDays) {
+    private DashboardDirectorDto getDirectorStats(Integer timeframeInDays, LocalDateTime now) {
         return new DashboardDirectorDto();
     }
 
-    private DashboardManagerDto getManagerStats(Integer timeframeInDays) {
-
-        LocalDateTime now = LocalDateTime.now();
+    private DashboardManagerDto getManagerStats(Integer timeframeInDays, LocalDateTime now) {
 
         int open = ticketDao.countOpenTickets();
         int progress = ticketDao.countInProgressTickets();
@@ -71,7 +72,18 @@ public class DashboardService {
                 resolutionInMinutes, reponseInMinutes, ticketsByStatus);
     }
 
-    private DashboardTechnicianDto  getTechnicianStats(Integer timeframeInDays) {
-        return new DashboardTechnicianDto();
+    private DashboardTechnicianDto  getTechnicianStats(Integer timeframeInDays, LocalDateTime now) {
+        Integer id = securityService.getCurrentUserId();
+        if (id == null) {
+            throw new TechnicianService.TechnicianNotFoundException();
+        }
+
+        int open = ticketDao.countAssignedOpenTickets(id);
+        int waiting = ticketDao.countAssignedWaitingTickets(id);
+        int critical = ticketDao.countAssignedCriticalTickets(id);
+        int overdue = ticketDao.countAssignedOverdueTickets(id);
+
+
+        return new DashboardTechnicianDto(open, waiting,  critical, overdue);
     }
 }

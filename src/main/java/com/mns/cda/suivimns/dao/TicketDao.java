@@ -16,6 +16,18 @@ import java.util.List;
 @Repository
 public interface TicketDao extends JpaRepository<Ticket, Integer>, JpaSpecificationExecutor<Ticket> {
 
+    // Technician dashboard
+    // KPIs
+    int countAssignedOpenTickets(int id);
+
+    int countAssignedWaitingTickets(int id);
+
+    int countAssignedCriticalTickets(int id);
+
+    int countAssignedOverdueTickets(int id);
+
+
+    // Manager dashboard
     // Dashboard KPIs
     @Query("""
         SELECT COUNT(t)
@@ -103,7 +115,9 @@ public interface TicketDao extends JpaRepository<Ticket, Integer>, JpaSpecificat
     List<TicketStatusStatDto> countTicketsByStatus();
 
 
-    // Deprecated queries
+
+
+    /* Deprecated queries
     @Query("SELECT new com.mns.cda.suivimns.dto.flat.TicketResponse(" +
             "t.idTicket, t.title, t.description, t.modificationDate, " +
             "t.currentPriority, t.version.versionNumber, t.version.versionType.designation, " +
@@ -196,5 +210,7 @@ public interface TicketDao extends JpaRepository<Ticket, Integer>, JpaSpecificat
             "t.currentPriority, v.versionNumber, vt.designation, " +
             "s.name, th.designation, st.designation ")
     List<TicketFullWithLatest> returnPriorityTicketFullWithLatest();
+
+     */
 
 }
