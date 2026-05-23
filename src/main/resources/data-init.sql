@@ -78,7 +78,7 @@ VALUES ('Erreur de manipulation', 'HANDLING_ERROR', ''),
 INSERT INTO ticket (title, open_date, call_duration, current_priority, initial_priority, close_date, modification_date,
                     description, id_client, id_urgency, id_impact, id_version, current_status, current_theme,
                     id_current_manager, id_current_technician)
-VALUES  ('Ca marche pas', NOW(), null, 10, 10, null, NOW(),
+VALUES  ('Ca marche pas', '2026-04-11 09:12:00', null, 10, 10, null, '2026-04-11 10:13:00',
         'Ca marche pas', 1, 1, 1, 2, 'WAITING_CLIENT', 'OTHER_ISSUE',
         4, 5),
        ('Indisponibilité du service de sauvegarde en ligne', NOW(), 1035, 70,
@@ -96,10 +96,11 @@ VALUES  ('Ca marche pas', NOW(), null, 10, 10, null, NOW(),
 
 
 INSERT INTO history (id_status, id_ticket, id_app_user, start_date, end_date)
-VALUES (1, 1, 1, '2026-04-11 09:12:00', '2026-04-11 09:27:00'),
+VALUES (1, 1, 5, '2026-04-11 09:12:00', '2026-04-11 09:27:00'),
        (1, 2, 3, '2026-04-11 11:31:00', null),
-       (2, 1, 1, '2026-04-11 09:27:00', '2026-04-11 10:13:00'),
-       (4, 1, 3, '2026-04-11 10:13:00', null),
+       (2, 1, 4, '2026-04-11 09:27:00', '2026-04-11 10:08:00'),
+       (3, 1, 5, '2026-04-11 10:08:00', '2026-04-11 10:13:00'),
+       (4, 1, 5, '2026-04-11 10:13:00', null),
        (1, 3, 5, '2026-03-11 14:51:08', '2026-03-11 15:08:08'),
        (1, 3, 4, '2026-03-11 15:08:08', '2026-03-11 15:26:33'),
        (3, 3, 6, '2026-03-11 15:26:33', '2026-03-11 15:45:33'),

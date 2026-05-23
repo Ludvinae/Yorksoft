@@ -16,7 +16,8 @@ public class DashboardService {
     private final TicketDao ticketDao;
 
 
-    public DashboardDto getStats() {
+    public DashboardDto getStats(Integer timeframeInDays) {
+        int timeframe = timeframeInDays != null ? timeframeInDays : 30;
         LocalDateTime now = LocalDateTime.now();
 
         int open = ticketDao.countOpenTickets();
@@ -26,8 +27,17 @@ public class DashboardService {
         int overdue = ticketDao.countOverdueTickets(now.minusHours(24), now.minusHours(8), now.minusHours(2));
         int unassigned = ticketDao.countUnassignedTickets();
 
+        Double resolution = ticketDao.averageResolutionTime(now.minusDays(timeframe));
+        double resolutionInMinutes = (resolution != null) && (resolution > 0)
+                ? resolution / 60 : 0;
+        Double response = ticketDao.averageResponseTime(now.minusDays(timeframe));
+        double reponseInMinutes = (response != null) && (response > 0)
+                ? response / 60 : 0;
+
+
         List<TicketStatusStatDto> ticketsByStatus = ticketDao.countTicketsByStatus();
 
-        return new DashboardDto(open, progress, waiting, priority, overdue, unassigned, ticketsByStatus);
+        return new DashboardDto(open, progress, waiting, priority, overdue, unassigned,
+                resolutionInMinutes, reponseInMinutes, ticketsByStatus);
     }
 }

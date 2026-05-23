@@ -11,11 +11,13 @@ public record DashboardDto(
         int overdueTickets,
         int unassignedTickets,
 
+        double averageResolutionTime,
+        double averageResponseTime,
+
         List<TicketStatusStatDto> ticketsByStatus
 
         /* A ajouter plus tard
-        double averageResolutionTime,
-        double averageResponseTime,
+
         double averageCallDuration,
 
         double ticketPerTechnician,

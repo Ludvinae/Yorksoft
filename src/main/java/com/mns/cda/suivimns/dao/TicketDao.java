@@ -75,6 +75,20 @@ public interface TicketDao extends JpaRepository<Ticket, Integer>, JpaSpecificat
     """, nativeQuery = true)
     Double averageResolutionTime(LocalDateTime startDate);
 
+    @Query(value = """
+        SELECT AVG(EXTRACT(EPOCH FROM (first_in_progress.start_date - t.open_date)))
+        FROM ticket t
+        JOIN (
+            SELECT h.id_ticket, MIN(h.start_date) AS start_date
+            FROM history h
+            JOIN status s ON h.id_status = s.id_status
+            WHERE s.code = 'IN_PROGRESS'
+            GROUP BY h.id_ticket
+        ) first_in_progress ON t.id_ticket = first_in_progress.id_ticket
+        WHERE t.open_date >= :startDate
+    """, nativeQuery = true)
+    Double averageResponseTime(LocalDateTime startDate);
+
     // graphiques
     @Query("""
         SELECT new com.mns.cda.suivimns.dto.dashboard.TicketStatusStatDto(
