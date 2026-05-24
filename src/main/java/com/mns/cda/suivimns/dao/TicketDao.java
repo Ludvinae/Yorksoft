@@ -1,8 +1,11 @@
 package com.mns.cda.suivimns.dao;
 
+import com.mns.cda.suivimns.dto.dashboard.graphs.SoftwareStatDto;
 import com.mns.cda.suivimns.dto.dashboard.graphs.TechnicianWorkloadDto;
+import com.mns.cda.suivimns.dto.dashboard.graphs.ThemeStatDto;
 import com.mns.cda.suivimns.dto.dashboard.graphs.TicketStatusStatDto;
 import com.mns.cda.suivimns.model.Ticket;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -132,6 +135,49 @@ public interface TicketDao extends JpaRepository<Ticket, Integer>, JpaSpecificat
     """, nativeQuery = true)
     Double averageResponseTime(LocalDateTime startDate);
 
+    @Query(value = """
+        SELECT AVG(t.callDuration)
+        FROM Ticket t
+        WHERE t.openDate >= :startDate
+    """)
+    Double averageCallDuration(LocalDateTime startDate);
+
+    @Query("""
+        SELECT CAST(COUNT(t) AS double) /(
+           (SELECT COUNT(te)
+            FROM Technician te))
+        FROM Ticket t
+        WHERE t.closeDate IS NULL
+        AND t.currentTechnician IS NOT null
+    """)
+    Double ticketsPerTechnician();
+
+    @Query("""
+        SELECT COUNT(t)
+        FROM Ticket t
+        WHERE t.closeDate IS NOT null
+        AND t.closeDate >= :startDate
+    """)
+    Integer ticketsClosed(LocalDateTime startDate);
+
+    @Query("""
+        SELECT CAST(COUNT(t) AS double) /
+                      COUNT(DISTINCT(FUNCTION('DATE', t.modificationDate)))
+               FROM Ticket t
+               WHERE t.closeDate IS NOT NULL
+               AND t.closeDate >= :startDate
+    """)
+    Double ticketsClosedPerDay(LocalDateTime startDate);
+
+    @Query("""
+        SELECT CAST(COUNT(t) AS double) /
+                      COUNT(DISTINCT(FUNCTION('DATE_TRUNC', 'week', t.modificationDate)))
+               FROM Ticket t
+               WHERE t.closeDate IS NOT NULL
+               AND t.closeDate >= :startDate
+    """)
+    Double ticketsClosedPerWeek(LocalDateTime startDate);
+
     // graphiques
     @Query("""
         SELECT new com.mns.cda.suivimns.dto.dashboard.graphs.TechnicianWorkloadDto(
@@ -158,6 +204,27 @@ public interface TicketDao extends JpaRepository<Ticket, Integer>, JpaSpecificat
     """)
     List<TicketStatusStatDto> countTicketsByStatus();
 
+    @Query("""
+        SELECT new com.mns.cda.suivimns.dto.dashboard.graphs.SoftwareStatDto(
+            s.name, COUNT(t))
+        FROM Ticket t
+        JOIN t.version v
+        JOIN v.software s
+        WHERE t.closeDate IS null
+        GROUP BY s.name
+    """)
+    List<SoftwareStatDto> countTicketsBySoftware();
+
+    @Query("""
+        SELECT new com.mns.cda.suivimns.dto.dashboard.graphs.ThemeStatDto(
+            th.designation, COUNT(t))
+        FROM Ticket t
+        LEFT JOIN t.classificationList c
+        LEFT JOIN c.theme th
+        WHERE t.closeDate IS null
+        GROUP BY th.designation
+    """)
+    List<ThemeStatDto> countTicketsByTheme();
 
     // Admin dashboard
     @Query("""

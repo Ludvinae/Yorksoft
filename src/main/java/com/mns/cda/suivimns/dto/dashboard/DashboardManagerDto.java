@@ -1,6 +1,8 @@
 package com.mns.cda.suivimns.dto.dashboard;
 
+import com.mns.cda.suivimns.dto.dashboard.graphs.SoftwareStatDto;
 import com.mns.cda.suivimns.dto.dashboard.graphs.TechnicianWorkloadDto;
+import com.mns.cda.suivimns.dto.dashboard.graphs.ThemeStatDto;
 import com.mns.cda.suivimns.dto.dashboard.graphs.TicketStatusStatDto;
 
 import java.util.List;
@@ -16,24 +18,21 @@ public record DashboardManagerDto(
 
         double averageResolutionTime,
         double averageResponseTime,
-
-        List<TechnicianWorkloadDto> techniciansWorkload,
-        List<TicketStatusStatDto> ticketsByStatus
-
-        /* A ajouter plus tard
-
         double averageCallDuration,
-
         double ticketPerTechnician,
-        double solvedPerDay,
+        double closedPerDay,
         double closedPerWeek,
 
-
+        List<TechnicianWorkloadDto> techniciansWorkload,
+        List<TicketStatusStatDto> ticketsByStatus,
         List<SoftwareStatDto> ticketsBySoftware,
-        List<ThemeStatDto> ticketsByThematic,
-        List<TicketEvolutionDto> ticketEvolution
+        List<ThemeStatDto> ticketsByThematic
 
+
+        /* A ajouter plus tard
+        List<TicketEvolutionDto> ticketEvolution
          */
+
 ) implements DashboardDto {}
 
     /*

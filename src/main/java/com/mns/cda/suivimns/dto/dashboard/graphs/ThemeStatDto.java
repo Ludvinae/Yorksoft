@@ -2,7 +2,6 @@ package com.mns.cda.suivimns.dto.dashboard.graphs;
 
 public record ThemeStatDto(
         String themeName,
-        Integer numberOfTickets,
-        String color
+        Long numberOfTickets
 ) {
 }
