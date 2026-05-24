@@ -218,10 +218,10 @@ public interface TicketDao extends JpaRepository<Ticket, Integer>, JpaSpecificat
     @Query("""
         SELECT new com.mns.cda.suivimns.dto.dashboard.graphs.ThemeStatDto(
             th.designation, COUNT(t))
-        FROM Ticket t
-        LEFT JOIN t.classificationList c
-        LEFT JOIN c.theme th
-        WHERE t.closeDate IS null
+        FROM Theme th
+        LEFT JOIN th.classificationList c
+        LEFT JOIN c.ticket t
+            ON t.closeDate IS NULL
         GROUP BY th.designation
     """)
     List<ThemeStatDto> countTicketsByTheme();

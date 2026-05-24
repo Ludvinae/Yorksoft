@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -27,4 +29,7 @@ public class Theme {
 
     @Column(columnDefinition = "TEXT")
     protected String description;
+
+    @OneToMany(mappedBy = "theme")
+    protected List<Classification> classificationList;
 }

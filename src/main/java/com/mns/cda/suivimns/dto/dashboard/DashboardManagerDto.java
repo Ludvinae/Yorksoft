@@ -26,7 +26,7 @@ public record DashboardManagerDto(
         List<TechnicianWorkloadDto> techniciansWorkload,
         List<TicketStatusStatDto> ticketsByStatus,
         List<SoftwareStatDto> ticketsBySoftware,
-        List<ThemeStatDto> ticketsByThematic
+        List<ThemeStatDto> ticketsByTheme
 
 
         /* A ajouter plus tard

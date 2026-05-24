@@ -111,13 +111,13 @@ INSERT INTO ticket (title, open_date, call_duration, current_priority, initial_p
                     description, id_client, id_urgency, id_impact, id_version, current_status, current_theme,
                     id_current_manager, id_current_technician, overdue)
 VALUES  ('Ca marche pas', '2026-04-11 09:12:00', 468, 0, 0, null, '2026-04-11 10:13:00',
-        'Ca marche pas', 1, 1, 1, 2, 'WAITING_CLIENT', 'OTHER_ISSUE',
+        'Ca marche pas', 1, 1, 1, (5), 'WAITING_CLIENT', 'OTHER_ISSUE',
         4, 5, false),
 
        ('Indisponibilité du service de sauvegarde en ligne', NOW(), 1035, 70,
         70, null, NOW(),
         'Impossible d''acceder au dossiers sur le cloud dans le gestionnaire de projets.', 3, 2,
-        2, 3, 'OPEN', 'NETWORK_ISSUE', null, null, true),
+        2, 5, 'OPEN', 'NETWORK_ISSUE', null, null, true),
 
         ('Pas de menu', '2026-03-11 14:51:08', 952, 37,
          37, '2026-03-11 16:16:42', '2026-03-11 16:16:42',
@@ -127,7 +127,7 @@ VALUES  ('Ca marche pas', '2026-04-11 09:12:00', 468, 0, 0, null, '2026-04-11 10
        ('Pas de menu apparant', '2026-05-05 08:23:08', 1352, 85,
         85, null, '2026-05-05 10:16:42',
         'Impossible d''acceder au items du menu', 3, 2,
-        3, 2, 'ASSIGNED', 'HANDLING_ERROR', 4, 5, true),
+        3, 4, 'ASSIGNED', 'HANDLING_ERROR', 4, 5, true),
 
         ('Erreur de connexion au logiciel', '2026-05-20 08:15:00', 671, 0, 0,
         NULL,'2026-05-20 08:15:00','Le client ne peut plus se connecter à l''application depuis ce matin.',
@@ -146,7 +146,7 @@ VALUES  ('Ca marche pas', '2026-04-11 09:12:00', 468, 0, 0, null, '2026-04-11 10
 
         ('Impossible d''imprimer les rapports', '2026-05-20 11:25:00',782, 23,23,
         NULL,'2026-05-20 11:25:00', 'Les impressions restent bloquées dans la file d''attente.',
-        13, 1, 2, 1, 'OPEN', 'HANDLING_ERROR',NULL,
+        13, 1, 2, 4, 'OPEN', 'HANDLING_ERROR',NULL,
         NULL, true),
 
         ('Erreur serveur 500', '2026-05-20 13:05:00', 4120,100,100,
@@ -156,12 +156,12 @@ VALUES  ('Ca marche pas', '2026-04-11 09:12:00', 468, 0, 0, null, '2026-04-11 10
 
         ('Synchronisation des données impossible', '2026-05-20 14:33:00',2280, 76,
         76,NULL,'2026-05-20 14:33:00','Les données ne remontent plus depuis l''API distante.',
-        15, 3, 3, 2, 'OPEN','NETWORK_ISSUE', NULL,
+        15, 3, 3, 5, 'OPEN','NETWORK_ISSUE', NULL,
         NULL, true),
 
         ('Mot de passe refusé','2026-05-21 08:20:00',467,0,0,NULL,
          '2026-05-21 08:20:00', 'Le client indique que son mot de passe n''est plus reconnu.',
-         16, 1, 1, 1, 'OPEN','CONFIGURATION_ERROR',NULL,
+         16, 1, 1, 5, 'OPEN','CONFIGURATION_ERROR',NULL,
          NULL,true),
 
         ('Bug affichage mobile', '2026-05-21 09:50:00',1089, 46,46,
