@@ -1,5 +1,6 @@
 package com.mns.cda.suivimns.controller.business;
 
+import com.mns.cda.suivimns.dto.flat.UserLoginDto;
 import com.mns.cda.suivimns.model.AppUser;
 import com.mns.cda.suivimns.model.Client;
 import com.mns.cda.suivimns.model.Manager;
@@ -77,12 +78,12 @@ public class AuthController {
 
     @PostMapping("/log-in")
     public ResponseEntity<String> logIn(
-            @RequestBody  AppUser user) {
+            @RequestBody UserLoginDto user) {
         try {
             AppUserDetails appUser = (AppUserDetails) authenticationProvider
                     .authenticate(new UsernamePasswordAuthenticationToken(
-                            user.getEmail(),
-                            user.getPassword())
+                            user.email(),
+                            user.password())
                     ).getPrincipal();
 
             // HERITAGE
@@ -101,7 +102,7 @@ public class AuthController {
             String rank = appUser.getRank();
 
             String jwt = Jwts.builder()
-                    .setSubject(user.getEmail())
+                    .setSubject(user.email())
                     //.addClaims(Map.of("role", appUser.getUser().getRole().getName()))
                     .addClaims(Map.of("role", role))
                     .addClaims(Map.of("name", name))
