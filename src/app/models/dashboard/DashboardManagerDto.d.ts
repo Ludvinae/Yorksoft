@@ -9,7 +9,13 @@ type DashboardManagerDto = {
 
   averageResolutionTime: number;
   averageResponseTime: number;
+  averageCallDuration: number;
+  ticketPerTechnician: number;
+  closedPerDay: number;
+  closedPerWeek: number;
 
   techniciansWorkload: List<TechnicianWorkloadDto>;
   ticketsByStatus: List<TicketStatusStatDto>;
+  ticketsBySoftware : List<TicketSoftwareStatDto>;
+  ticketsByTheme: List<TicketThemeStatDto>;
 };

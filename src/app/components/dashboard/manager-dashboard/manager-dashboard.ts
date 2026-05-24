@@ -4,10 +4,19 @@ import { KpiCard } from '../cards/kpi-card/kpi-card';
 import { TicketStatusPieChart } from '../cards/ticket-status-pie-chart/ticket-status-pie-chart';
 import { DashboardService } from '../../../services/business/dashboard-service';
 import { TechnicianWorkloadChart } from '../cards/technician-workload-chart/technician-workload-chart';
+import { TicketSoftwareChart } from '../cards/ticket-software-chart/ticket-software-chart';
+import { TicketThemeChart } from '../cards/ticket-theme-chart/ticket-theme-chart';
 
 @Component({
   selector: 'app-manager-dashboard',
-  imports: [DecimalPipe, KpiCard, TicketStatusPieChart, TechnicianWorkloadChart],
+  imports: [
+    DecimalPipe,
+    KpiCard,
+    TicketStatusPieChart,
+    TechnicianWorkloadChart,
+    TicketSoftwareChart,
+    TicketThemeChart,
+  ],
   templateUrl: './manager-dashboard.html',
   styleUrl: './manager-dashboard.css',
 })

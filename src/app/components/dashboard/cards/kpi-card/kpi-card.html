@@ -1,15 +1,15 @@
 <!-- dashboard-kpi-card.component.html -->
 
-<div class="group flex items-center justify-around gap-4 p-4 transition-all duration-200
-            hover:bg-base-200 hover:shadow-md cursor-pointer"
+<div class="group flex justify-between items-center gap-4 p-2 transition-all duration-200
+            hover:bg-base-200 hover:shadow-md cursor-pointer card border border-base-300"
   (click)="navigateToTickets()">
 
-  <div class="flex flex-col">
+  <div class="flex flex-col items-center">
     <span class="text-sm opacity-70">
       {{ title }}
     </span>
 
-    <span class="text-5xl font-black" [class]="colorClass">
+    <span class="text-2xl font-black" [class]="colorClass">
       {{ value }}
     </span>
   </div>
