@@ -14,7 +14,7 @@ type TicketListDto = {
   clientLastName: string;
   softwareName: string;
   versionNumber: string;
-  versionTypeDesignation: string;
+  versionTypeCode: string;
   idTechnician: number;
   idManager: number;
 };

@@ -2,7 +2,7 @@
 
 <app-title-bar ></app-title-bar>
 
-  <div class="flex-1 overflow-auto">
+  <div class="flex-1">
 
     @if (storeService.loading()) {
       <div>
@@ -80,7 +80,7 @@
               <td>{{ ticket.modificationDate | date: 'short'}}</td>
               <td>{{ ticket.currentTheme }}</td>
               <td>{{ ticket.softwareName }}</td>
-              <td>{{ ticket.versionNumber }} {{ ticket.versionTypeDesignation }}</td>
+              <td>{{ ticket.versionNumber }} {{ ticket.versionTypeCode }}</td>
               <td>{{ ticket.currentStatus }}</td>
               <td>{{ ticket.currentPriority }}</td>
             </tr>

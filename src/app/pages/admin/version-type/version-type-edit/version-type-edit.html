@@ -19,6 +19,14 @@
     maxlength: 'Max 127 caractères'}">
   </app-field-text>
 
+  <app-field-text labelKey="Abbréviation" placeholder="r"
+                  [control]="form.controls.code"
+                  [errorMessages]="{
+    required: 'Le code est obligatoire',
+    minlength: 'Min 1 caractère',
+    maxlength: 'Max 3 caractères'}">
+  </app-field-text>
+
   <app-field-text labelKey="Malus sur l'urgence"
                   [control]="form.controls.urgencyMalus"
                   [errorMessages]="{
