@@ -20,5 +20,8 @@ public class VersionType {
     @Column(nullable = false, length = 127)
     protected String designation;
 
+    @Column(nullable = false, length = 3)
+    protected String code;
+
     protected Byte urgencyMalus;
 }

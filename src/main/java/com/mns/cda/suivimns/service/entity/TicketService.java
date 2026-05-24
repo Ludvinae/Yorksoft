@@ -259,10 +259,18 @@ public class TicketService  {
         return queryService.search(criteria, pageable);
     }
 
+    // DEBUG
     @Transactional
     public void refreshMetrics(Integer idTicket) {
         Ticket ticket = ticketDao.findById(idTicket).orElseThrow(TicketService.TicketNotFoundException::new);
 
         metricsService.refreshTicketMetrics(ticket);
+    }
+
+    @Transactional
+    public void refreshPriority(Integer idTicket) {
+        Ticket ticket = ticketDao.findById(idTicket).orElseThrow(TicketService.TicketNotFoundException::new);
+
+        priorityService.recalculateCurrentPriority(ticket);
     }
 }

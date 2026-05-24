@@ -10,12 +10,12 @@ VALUES ('Pexel', 'Le meilleur tableur du marché !', 1),
        ('FastApp', 'Application mobile de géolocalisation', 4),
        ('EasyRent', 'Système complet de location de matériel', 2);
 
-INSERT INTO version_type (designation, urgency_malus)
-VALUES ('Release', 0),
-       ('Release Candidate', 0),
-       ('Beta', 1),
-       ('Snapshot', 1),
-       ('Alpha', 2);
+INSERT INTO version_type (designation, urgency_malus, code)
+VALUES ('Release', 0, 'r'),
+       ('Release Candidate', 0, 'rc'),
+       ('Beta', 1, 'b'),
+       ('Snapshot', 1, 's'),
+       ('Alpha', 2, 'a');
 
 INSERT INTO version (version_number, publication_date, id_version_type, id_software)
 VALUES ('1.0.0', '2011-11-11 14:30:00', 1, 1),
@@ -110,70 +110,89 @@ VALUES ('Erreur de manipulation', 'HANDLING_ERROR', ''),
 INSERT INTO ticket (title, open_date, call_duration, current_priority, initial_priority, close_date, modification_date,
                     description, id_client, id_urgency, id_impact, id_version, current_status, current_theme,
                     id_current_manager, id_current_technician, overdue)
-VALUES  ('Ca marche pas', '2026-04-11 09:12:00', 468, 10, 10, null, '2026-04-11 10:13:00',
+VALUES  ('Ca marche pas', '2026-04-11 09:12:00', 468, 0, 0, null, '2026-04-11 10:13:00',
         'Ca marche pas', 1, 1, 1, 2, 'WAITING_CLIENT', 'OTHER_ISSUE',
         4, 5, false),
+
        ('Indisponibilité du service de sauvegarde en ligne', NOW(), 1035, 70,
         70, null, NOW(),
         'Impossible d''acceder au dossiers sur le cloud dans le gestionnaire de projets.', 3, 2,
         2, 3, 'OPEN', 'NETWORK_ISSUE', null, null, true),
+
         ('Pas de menu', '2026-03-11 14:51:08', 952, 37,
          37, '2026-03-11 16:16:42', '2026-03-11 16:16:42',
          'Impossible d''acceder au items du menu', 1, 2,
-         1, 2, 'CLOSED', 'HANDLING_ERROR', 4, 6, false),
-       ('Pas de menu apparant', '2026-05-05 08:23:08', 1352, 50,
-        50, null, '2026-05-05 10:16:42',
+         1, 2, 'CLOSED', 'HANDLING_ERROR', 4, 6, true),
+
+       ('Pas de menu apparant', '2026-05-05 08:23:08', 1352, 85,
+        85, null, '2026-05-05 10:16:42',
         'Impossible d''acceder au items du menu', 3, 2,
         3, 2, 'ASSIGNED', 'HANDLING_ERROR', 4, 5, true),
-        ('Erreur de connexion au logiciel', '2026-05-20 08:15:00', 671, 25, 25,
+
+        ('Erreur de connexion au logiciel', '2026-05-20 08:15:00', 671, 0, 0,
         NULL,'2026-05-20 08:15:00','Le client ne peut plus se connecter à l''application depuis ce matin.',
-        10, 1,1,1, 'OPEN', 'NETWORK_ISSUE', NULL, NULL, FALSE),
-        ('Application extrêmement lente','2026-05-20 09:42:00',1028,55,55,
+        10, 1,1,1, 'OPEN', 'NETWORK_ISSUE',
+         NULL, NULL, true),
+
+        ('Application extrêmement lente','2026-05-20 09:42:00',1028,61,61,
         NULL,'2026-05-20 09:42:00','Des ralentissements importants sont constatés sur plusieurs postes.',
-        11, 2,2,1,'OPEN','RESPONSE_TIME',NULL,NULL,FALSE),
-        ('Crash lors de la génération PDF','2026-05-20 10:10:00',1438, 68, 68,
+        11, 2,2,1,'OPEN','RESPONSE_TIME',
+         NULL,NULL,true),
+
+        ('Crash lors de la génération PDF','2026-05-20 10:10:00',1438, 85, 85,
         NULL,'2026-05-20 10:10:00','Le logiciel plante systématiquement lors de l''export PDF.',
-        12,2, 3,2,'OPEN','BUG', NULL, NULL,FALSE),
-        ('Impossible d''imprimer les rapports', '2026-05-20 11:25:00',782, 40,40,
+        12,2, 3,2,'OPEN','BUG',
+         NULL, NULL,true),
+
+        ('Impossible d''imprimer les rapports', '2026-05-20 11:25:00',782, 23,23,
         NULL,'2026-05-20 11:25:00', 'Les impressions restent bloquées dans la file d''attente.',
         13, 1, 2, 1, 'OPEN', 'HANDLING_ERROR',NULL,
-        NULL, FALSE),
-        ('Erreur serveur 500', '2026-05-20 13:05:00', 4120,82,82,
+        NULL, true),
+
+        ('Erreur serveur 500', '2026-05-20 13:05:00', 4120,100,100,
         NULL, '2026-05-20 13:05:00','Une erreur 500 apparaît lors de l''accès au tableau de bord.',
-        14,3, 4, 3, 'OPEN', 'SYSTEM_ERROR',NULL,
-        NULL,TRUE),
-        ('Synchronisation des données impossible', '2026-05-20 14:33:00',2280, 73,
-        73,NULL,'2026-05-20 14:33:00','Les données ne remontent plus depuis l''API distante.',
+        14,3, 4, 1, 'OPEN', 'SYSTEM_ERROR',NULL,
+        NULL,true),
+
+        ('Synchronisation des données impossible', '2026-05-20 14:33:00',2280, 76,
+        76,NULL,'2026-05-20 14:33:00','Les données ne remontent plus depuis l''API distante.',
         15, 3, 3, 2, 'OPEN','NETWORK_ISSUE', NULL,
-        NULL, TRUE),
-        ('Mot de passe refusé','2026-05-21 08:20:00',7,900,15,NULL,
+        NULL, true),
+
+        ('Mot de passe refusé','2026-05-21 08:20:00',467,0,0,NULL,
          '2026-05-21 08:20:00', 'Le client indique que son mot de passe n''est plus reconnu.',
          16, 1, 1, 1, 'OPEN','CONFIGURATION_ERROR',NULL,
-         NULL,FALSE),
-        ('Bug affichage mobile', '2026-05-21 09:50:00',19, 2100,35,
+         NULL,true),
+
+        ('Bug affichage mobile', '2026-05-21 09:50:00',1089, 46,46,
         NULL,'2026-05-21 09:50:00', 'Le menu principal disparaît sur smartphone.',
         17, 1, 2, 2,'OPEN', 'BUG', NULL,
-        NULL, FALSE),
-        ('Données incohérentes dans les statistiques', '2026-05-21 10:48:00', 1560,65,
-        65, NULL, '2026-05-21 10:48:00', 'Les indicateurs affichent des valeurs incorrectes.',
+        NULL, true),
+
+        ('Données incohérentes dans les statistiques', '2026-05-21 10:48:00', 1560,46,
+        46, NULL, '2026-05-21 10:48:00', 'Les indicateurs affichent des valeurs incorrectes.',
         18, 2,3, 3, 'OPEN', 'SYSTEM_ERROR',NULL,
-        NULL, FALSE),
-        ('Perte de connexion base de données', '2026-05-21 11:37:00', 3120, 91,
-        91,NULL,'2026-05-21 11:37:00','La connexion PostgreSQL tombe régulièrement.',
+        NULL, true),
+
+        ('Perte de connexion base de données', '2026-05-21 11:37:00', 3120, 85,
+        85,NULL,'2026-05-21 11:37:00','La connexion PostgreSQL tombe régulièrement.',
         19,3,4,3,'OPEN','NETWORK_ISSUE',NULL,
-        NULL, TRUE),
-        ('Erreur lors de la création d''un ticket','2026-05-21 13:14:00',1260,50,
-        50, NULL,'2026-05-21 13:14:00','Le formulaire retourne une erreur inattendue.',
+        NULL, true),
+
+        ('Erreur lors de la création d''un ticket','2026-05-21 13:14:00',1260,38,
+        38, NULL,'2026-05-21 13:14:00','Le formulaire retourne une erreur inattendue.',
          20, 2, 2, 2, 'OPEN', 'SYSTEM_ERROR',NULL,
-         NULL,FALSE),
-        ('Notifications email non reçues','2026-05-21 14:55:00',1020,44,
-        44,NULL,'2026-05-21 14:55:00','Les utilisateurs ne reçoivent plus les notifications.',
+         NULL,false),
+
+        ('Notifications email non reçues','2026-05-21 14:55:00',1020,61,
+        61,NULL,'2026-05-21 14:55:00','Les utilisateurs ne reçoivent plus les notifications.',
         21, 2,2,1,'OPEN','SYSTEM_ERROR',NULL,
-        NULL,FALSE),
-        ('Interface bloquée après connexion','2026-05-21 15:32:00',2460,77,
-        77, NULL,'2026-05-21 15:32:00','L''application reste figée après authentification.',
+        NULL,true),
+
+        ('Interface bloquée après connexion','2026-05-21 15:32:00',2460,76,
+        76, NULL,'2026-05-21 15:32:00','L''application reste figée après authentification.',
         22,3,3,2,'OPEN','RESPONSE_TIME', NULL,
-        NULL,TRUE);
+        NULL,true);
 
 
 INSERT INTO history (id_status, id_ticket, id_app_user, start_date, end_date)

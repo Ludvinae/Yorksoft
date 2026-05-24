@@ -5,8 +5,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class PriorityCalculator {
 
-    public Integer computePriority(int impact, int urgency, int importance, int malus) {
-        return calcul(adjustImpact(impact, importance),adjustUrgency(urgency, malus));
+    public Integer computePriority(int impactFactor, int urgencyFactor, int importance, int malus) {
+        return calcul(adjustImpact(impactFactor, importance),adjustUrgency(urgencyFactor, malus));
     }
 
     private Integer calcul(double adjustedImpact, double adjustedUrgency) {
@@ -17,17 +17,17 @@ public class PriorityCalculator {
 
     /**
      * Ajuste l'impact en fonction de l'importance du client
-     * Toujours compris entre 0 (impact bas) et 4 (impact max)
+     * Toujours compris entre 0 (impact bas) et 3 (impact max)
      * @param impact
      * @param importance
      * @return
      */
     private double adjustImpact(int impact, int importance) {
-        int adjusted = impact + importance - 1;
+        int adjusted = impact + importance;
 
-        adjusted = Math.max(0, Math.min(adjusted, 4));
+        adjusted = Math.max(0, Math.min(adjusted, 3));
 
-        return adjusted / 4.0;
+        return adjusted / 3.0;
     }
 
     /**
@@ -40,8 +40,8 @@ public class PriorityCalculator {
     private double adjustUrgency(int urgency, int malus) {
         int adjusted = urgency - malus;
 
-        adjusted = Math.max(0, Math.min(adjusted, 3));
+        adjusted = Math.max(0, Math.min(adjusted, 2));
 
-        return adjusted / 3.0;
+        return adjusted / 2.0;
     }
 }

@@ -235,4 +235,10 @@ public class TicketController {
         ticketService.refreshMetrics(id);
     }
 
+    @PostMapping("priority-refresh/{id}")
+    @IsAdmin
+    public void priorityRefresh(@PathVariable int id) {
+        ticketService.refreshPriority(id);
+    }
+
 }

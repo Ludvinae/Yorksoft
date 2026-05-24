@@ -19,7 +19,7 @@ public record TicketListDto(
     String clientLastName,
     String softwareName,
     String versionNumber,
-    String versionTypeDesignation,
+    String versionTypeCode,
     Integer idTechnician,
     Integer idManager
 ) {}
