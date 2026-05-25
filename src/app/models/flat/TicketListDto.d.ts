@@ -6,6 +6,8 @@ type TicketListDto = {
   openDate: Date;
   modificationDate: Date;
   closeDate: Date;
+  predictedDeadline: Date;
+  overdue: boolean;
   callCuration: number;
   currentPriority: number;
   currentStatus: StatusEnum;

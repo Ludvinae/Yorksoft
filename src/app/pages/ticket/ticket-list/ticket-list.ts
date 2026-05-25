@@ -7,10 +7,19 @@ import { DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { AssignTicketModal } from '../../../components/ticket/assign-ticket-modal/assign-ticket-modal';
 import { BadgePriority } from '../../../components/ticket/badge-priority/badge-priority';
+import { BadgeSla } from '../../../components/ticket/badge-sla/badge-sla';
 
 @Component({
   selector: 'app-ticket-list',
-  imports: [TitleBar, FooterTicket, DatePipe, RouterLink, AssignTicketModal, BadgePriority],
+  imports: [
+    TitleBar,
+    FooterTicket,
+    DatePipe,
+    RouterLink,
+    AssignTicketModal,
+    BadgePriority,
+    BadgeSla,
+  ],
   templateUrl: './ticket-list.html',
   styleUrl: './ticket-list.css',
 })
@@ -56,5 +65,26 @@ export class TicketList implements OnInit {
 
   onAssigned(): void {
     this.assignModal.close();
+    this.storeService.loadTickets();
+  }
+
+  isNearDeadline(ticket: TicketListDto): boolean {
+    if (!ticket.predictedDeadline) {
+      return false;
+    }
+
+    const deadline = new Date(ticket.predictedDeadline).getTime();
+    const now = Date.now();
+    const remainingMs = deadline - now;
+
+    if (ticket.currentPriority > 75) {
+      return remainingMs < (1000 * 60 * 60) / 2; // 30mn restantes
+    } else if (ticket.currentPriority > 50) {
+      return remainingMs < 1000 * 60 * 60 * 2; // 2h restantes
+    } else if (ticket.currentPriority > 25) {
+      return remainingMs < 1000 * 60 * 60 * 6; // 6h restantes
+    } else {
+      return remainingMs < 1000 * 60 * 60 * 18; // 18h restantes
+    }
   }
 }

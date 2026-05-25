@@ -1,0 +1,28 @@
+@if (overdue) {
+
+  <div
+    class="badge badge-sm badge-outline badge-error gap-2 m-0"
+    [title]="'Deadline estimée : ' + (predictedDeadline | date:'short')"
+  >
+    🔴 Retard
+  </div>
+
+} @else if (isNearDeadline()) {
+
+  <div
+    class="badge badge-sm badge-outline badge-warning gap-2 m-0"
+    [title]="'Deadline estimée : ' + (predictedDeadline | date:'short')"
+  >
+    🟡 {{ remainingTime() }}
+  </div>
+
+} @else {
+
+  <div
+    class="badge badge-sm badge-outline badge-success gap-2 m-0"
+    [title]="'Deadline estimée : ' + (predictedDeadline | date:'short')"
+  >
+    🟢 OK
+  </div>
+
+}

@@ -26,10 +26,10 @@
               }
             </div>
           </th>
-          <th class="cursor-pointer select-none" (click)="storeService.setSort('modificationDate')">
+          <th class="cursor-pointer select-none" (click)="storeService.setSort('openDate')">
             <div class="flex items-center gap-2">
-              Dernière modif.
-              @if (isSorted("modificationDate")) {
+              Ouvert le
+              @if (isSorted("openDate")) {
                 <span>{{ isAsc() ? '▲' : '▼' }}</span>
               }
             </div>
@@ -74,6 +74,14 @@
               }
             </div>
           </th>
+          <th class="cursor-pointer select-none" (click)="storeService.setSort('slaDeadline')">
+            <div class="flex items-center gap-2">
+              SLA
+              @if (isSorted("slaDeadline")) {
+                <span>{{ isAsc() ? '▲' : '▼' }}</span>
+              }
+            </div>
+          </th>
           <th>
             <div class="flex items-center gap-2">
               Actions
@@ -85,12 +93,17 @@
           @for(ticket of storeService.tickets(); track ticket.idTicket) {
             <tr>
               <td class="align-middle">{{ ticket.title }}</td>
-              <td class="align-middle">{{ ticket.modificationDate | date: 'short'}}</td>
+              <td class="align-middle">{{ ticket.openDate | date: 'short'}}</td>
               <td class="align-middle">{{ ticket.currentTheme }}</td>
               <td class="align-middle">{{ ticket.softwareName }}</td>
               <td class="align-middle">{{ ticket.versionNumber }} {{ ticket.versionTypeCode }}</td>
               <td class="align-middle">{{ ticket.currentStatus }}</td>
               <td class="align-middle"><app-badge-priority [priority]="ticket.currentPriority"/></td>
+              <td class="align-middle">
+                <app-badge-sla [overdue]="ticket.overdue"
+                               [predictedDeadline]="ticket.predictedDeadline"
+                               [priority]="ticket.currentPriority"/>
+              </td>
               <td class="align-middle">
                 <div class="flex items-center gap-1">
                   <button type="button" class="btn btn-square btn-xs" [routerLink]="[baseRoute, ticket.idTicket]">
