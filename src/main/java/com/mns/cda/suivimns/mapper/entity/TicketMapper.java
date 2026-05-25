@@ -74,6 +74,8 @@ public abstract class TicketMapper {
 
 
     // Pagination and filters
+    @Mapping(source="closeDate", target="closeDate")
+    @Mapping(source="slaDeadline", target="predictedDeadline")
     @Mapping(source="client.firstName", target="clientFirstName")
     @Mapping(source="client.lastName", target="clientLastName")
     @Mapping(source="version.software.name", target="softwareName")
