@@ -15,10 +15,11 @@ import { TechnicianService } from '../../../services/api/technician-service';
 import { AuthService } from '../../../services/business/auth-service';
 import { BadgePriority } from '../badge-priority/badge-priority';
 import { BadgeSla } from '../badge-sla/badge-sla';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-assign-ticket-modal',
-  imports: [BadgePriority, BadgeSla],
+  imports: [BadgePriority, BadgeSla, FormsModule],
   templateUrl: './assign-ticket-modal.html',
   styleUrl: './assign-ticket-modal.css',
 })
@@ -38,8 +39,8 @@ export class AssignTicketModal implements OnInit {
   modal!: ElementRef<HTMLDialogElement>;
 
   technicians: TechnicianWorkloadDetailedDto[] = [];
-
   loading = false;
+  reassignmentReason = '';
 
   ngOnInit(): void {
     this.loadTechnicians();
@@ -80,7 +81,7 @@ export class AssignTicketModal implements OnInit {
     const idManager: number = this.authService.jwtInfo()!.id;
 
     this.ticketService
-      .assign(this.ticket.idTicket, technician.idTechnician, idManager, '')
+      .assign(this.ticket.idTicket, technician.idTechnician, idManager, this.reassignmentReason)
       .subscribe({
         next: () => {
           this.loadTechnicians();
@@ -91,7 +92,6 @@ export class AssignTicketModal implements OnInit {
   }
 
   get currentTechnician(): TechnicianWorkloadDetailedDto | undefined {
-    return this.technicians.find(
-      (tech) => tech.idTechnician === this.ticket?.idTechnician);
+    return this.technicians.find((tech) => tech.idTechnician === this.ticket?.idTechnician);
   }
 }

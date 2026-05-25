@@ -33,7 +33,21 @@
     } @else {
 
       @if (currentTechnician) {
+        @if (ticket?.idTechnician) {
 
+          <div class="mb-4">
+            <label class="label">
+              <span class="label-text font-semibold">
+                Justification de la réassignation
+               </span>
+            </label>
+
+            <input type="text"
+              class="input input-sm w-full"
+              placeholder="Expliquez pourquoi ce ticket est réassigné"
+              [(ngModel)]="reassignmentReason"/>
+          </div>
+        }
         <div class="mb-4">
 
           <div class="card bg-info/10 border border-info">
@@ -72,7 +86,7 @@
         @for (tech of technicians; track tech.idTechnician) {
           @if (tech.idTechnician !== ticket?.idTechnician) {
 
-            <button class="btn btn-outline h-auto py-4 justify-between" (click)="assignTo(tech)">
+            <button class="btn btn-outline h-auto py-4 justify-between" (click)="assignTo(tech)"  [disabled]="ticket?.idTechnician && !reassignmentReason.trim()">
               <div class="text-left">
                 <div class="font-semibold">
                   {{ tech.fullName }} N{{ tech.rank }}
