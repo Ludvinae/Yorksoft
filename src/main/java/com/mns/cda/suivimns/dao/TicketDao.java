@@ -181,7 +181,7 @@ public interface TicketDao extends JpaRepository<Ticket, Integer>, JpaSpecificat
     // graphiques
     @Query("""
         SELECT new com.mns.cda.suivimns.dto.dashboard.graphs.TechnicianWorkloadDto(
-            ct.idAppUser, ct.firstName, ct.lastName, COUNT(t))
+            ct.firstName, ct.lastName, COUNT(t))
         FROM Ticket t
         JOIN t.currentTechnician ct
         WHERE t.closeDate IS null
