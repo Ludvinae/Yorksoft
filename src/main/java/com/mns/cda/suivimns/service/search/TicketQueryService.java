@@ -66,6 +66,7 @@ public class TicketQueryService {
             "openDate",
             "modificationDate",
             "closeDate",
+            "slaDeadline",
             "currentPriority",
             "currentStatus",
             "currentTechnician",
