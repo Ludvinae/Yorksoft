@@ -25,6 +25,7 @@ public interface TechnicianDao extends JpaRepository<Technician, Integer> {
         LEFT JOIN a.ticket t
             ON t.closeDate IS null
         GROUP BY te.idAppUser, te.firstName, te.lastName, te.rank
+        ORDER BY COUNT(t), te.rank ASC
     """)
     List<TechnicianWorkloadDetailedDto> getTechnicianWorkload();
 }
