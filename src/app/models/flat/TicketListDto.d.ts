@@ -5,7 +5,7 @@ type TicketListDto = {
   description: string;
   openDate: Date;
   modificationDate: Date;
-  endDate: Date;
+  closeDate: Date;
   callCuration: number;
   currentPriority: number;
   currentStatus: StatusEnum;

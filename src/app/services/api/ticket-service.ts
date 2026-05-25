@@ -14,6 +14,8 @@ import { TicketSearchCriteria } from '../../models/page/TicketSearchCriteria';
  * !!! A adapter au nouveau template !!!
  */
 export class TicketService {
+
+
   private http = inject(HttpClient);
   private apiUrl = 'http://localhost:8080/ticket';
 
@@ -85,6 +87,17 @@ export class TicketService {
       tap((result) => {
         this.getAll().subscribe();
       }),
+    );
+  }
+
+  assign(idTicket: number, idTechnician: number, idManager: number, statusReason: string) {
+
+    const assignment: TicketAssignment = {idTechnician, idManager, statusReason};
+
+    return this.http.post(`${this.apiUrl}/${idTicket}/assign`, assignment).pipe(
+      tap((result) => {
+        this.getAll().subscribe();
+      })
     );
   }
 }

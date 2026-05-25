@@ -10,6 +10,7 @@ export class TechnicianService {
   private apiUrl = 'http://localhost:8080/technician';
 
   readonly technicianList = signal<Technician[]>([]);
+  readonly technicianWorkload = signal<TechnicianWorkloadDetailedDto[]>([]);
 
   get(id: number) {
     return this.http.get<Technician>(`${this.apiUrl}/${id}`);
@@ -19,6 +20,14 @@ export class TechnicianService {
     return this.http.get<Technician[]>(`${this.apiUrl}/list`).pipe(
       tap((technicianList) => {
         this.technicianList.set(technicianList);
+      }),
+    );
+  }
+
+  getAllWorkload() {
+    return this.http.get<TechnicianWorkloadDetailedDto[]>(`${this.apiUrl}/list/workload`).pipe(
+      tap((technicianList) => {
+        this.technicianWorkload.set(technicianList);
       }),
     );
   }

@@ -2,6 +2,8 @@
 
 <app-title-bar ></app-title-bar>
 
+  <app-assign-ticket-modal [ticket]="selectedTicket" (assigned)="onAssigned()"/>
+
   <div class="flex-1">
 
     @if (storeService.loading()) {
@@ -12,7 +14,8 @@
     } @else if (storeService.tickets().length == 0) {
       <span>Aucun ticket ne corresponds à ces critères</span>
     } @else {
-      <table class="table table-sm">
+
+      <table class="table table-xs">
         <thead>
         <tr>
           <th class="cursor-pointer select-none" (click)="storeService.setSort('title')">
@@ -25,7 +28,7 @@
           </th>
           <th class="cursor-pointer select-none" (click)="storeService.setSort('modificationDate')">
             <div class="flex items-center gap-2">
-              Dernière modification
+              Dernière modif.
               @if (isSorted("modificationDate")) {
                 <span>{{ isAsc() ? '▲' : '▼' }}</span>
               }
@@ -71,18 +74,43 @@
               }
             </div>
           </th>
+          <th>
+            <div class="flex items-center gap-2">
+              Actions
+            </div>
+          </th>
         </tr>
         </thead>
         <tbody>
           @for(ticket of storeService.tickets(); track ticket.idTicket) {
             <tr>
-              <td>{{ ticket.title }}</td>
-              <td>{{ ticket.modificationDate | date: 'short'}}</td>
-              <td>{{ ticket.currentTheme }}</td>
-              <td>{{ ticket.softwareName }}</td>
-              <td>{{ ticket.versionNumber }} {{ ticket.versionTypeCode }}</td>
-              <td>{{ ticket.currentStatus }}</td>
-              <td>{{ ticket.currentPriority }}</td>
+              <td class="align-middle">{{ ticket.title }}</td>
+              <td class="align-middle">{{ ticket.modificationDate | date: 'short'}}</td>
+              <td class="align-middle">{{ ticket.currentTheme }}</td>
+              <td class="align-middle">{{ ticket.softwareName }}</td>
+              <td class="align-middle">{{ ticket.versionNumber }} {{ ticket.versionTypeCode }}</td>
+              <td class="align-middle">{{ ticket.currentStatus }}</td>
+              <td class="align-middle"><app-badge-priority [priority]="ticket.currentPriority"/></td>
+              <td class="align-middle">
+                <div class="flex items-center gap-1">
+                  <button type="button" class="btn btn-square btn-xs" [routerLink]="[baseRoute, ticket.idTicket]">
+                    👁️
+                  </button>
+                  @if (ticket.closeDate) {
+                    <button class="btn btn-square btn-xs btn-disabled" title="Clôturé">
+                      🔒
+                    </button>
+                  } @else if (ticket.idTechnician) {
+                    <button type="button" class="btn btn-square btn-xs" (click)="assign(ticket)" title="Réassigner">
+                      ☑
+                    </button>
+                  } @else {
+                    <button type="button" class="btn btn-square btn-xs" (click)="assign(ticket)" title="Assigner">
+                      ✅
+                    </button>
+                  }
+                </div>
+              </td>
             </tr>
           }
         </tbody>
