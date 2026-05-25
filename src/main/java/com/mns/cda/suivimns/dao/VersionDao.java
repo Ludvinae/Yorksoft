@@ -2,6 +2,7 @@ package com.mns.cda.suivimns.dao;
 
 import com.mns.cda.suivimns.dto.entity.VersionDto;
 import com.mns.cda.suivimns.dto.flat.VersionDetailDto;
+import com.mns.cda.suivimns.dto.flat.VersionSelectDto;
 import com.mns.cda.suivimns.model.Version;
 import com.mns.cda.suivimns.service.entity.VersionService;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,16 +16,14 @@ import java.util.List;
 public interface VersionDao extends JpaRepository<Version, Integer> {
 
     @Query("""
-        SELECT new com.mns.cda.suivimns.dto.entity.VersionDto(
-            v.idVersion, v.versionNumber, v.publicationDate,
-            t.idVersionType, s.idSoftware
-        )
+        SELECT new com.mns.cda.suivimns.dto.flat.VersionSelectDto(
+            v.idVersion, CONCAT(v.versionNumber, ' ', t.designation))
         FROM Version v
         JOIN v.software s
         JOIN v.versionType t
         WHERE s.idSoftware = :idSoftware
     """)
-    List<VersionDto> findAllBySoftware(@Param("idSoftware") Integer idSoftware);
+    List<VersionSelectDto> findAllBySoftware(@Param("idSoftware") Integer idSoftware);
 
     @Query(""" 
         SELECT new com.mns.cda.suivimns.dto.flat.VersionDetailDto(

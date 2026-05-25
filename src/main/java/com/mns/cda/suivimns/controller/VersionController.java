@@ -2,6 +2,7 @@ package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.entity.VersionDto;
 import com.mns.cda.suivimns.dto.flat.VersionDetailDto;
+import com.mns.cda.suivimns.dto.flat.VersionSelectDto;
 import com.mns.cda.suivimns.security.IsAdmin;
 import com.mns.cda.suivimns.security.IsManager;
 import com.mns.cda.suivimns.security.IsTechnician;
@@ -50,7 +51,7 @@ public class VersionController {
     @ApiResponse(responseCode = "200", description = "Liste des versions récupérées")
     @GetMapping("/list/{idSoftware}")
     @IsTechnician
-    public List<VersionDto> findAllBySoftware(@PathVariable Integer idSoftware) {
+    public List<VersionSelectDto> findAllBySoftware(@PathVariable Integer idSoftware) {
         return versionService.findAllBySoftware(idSoftware);
     }
 

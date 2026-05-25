@@ -3,6 +3,7 @@ package com.mns.cda.suivimns.service.entity;
 import com.mns.cda.suivimns.dao.VersionDao;
 import com.mns.cda.suivimns.dto.entity.VersionDto;
 import com.mns.cda.suivimns.dto.flat.VersionDetailDto;
+import com.mns.cda.suivimns.dto.flat.VersionSelectDto;
 import com.mns.cda.suivimns.mapper.entity.VersionMapper;
 import com.mns.cda.suivimns.model.Version;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,7 @@ public class VersionService  {
         return versionDao.findAllDetail();
     }
 
-    public List<VersionDto> findAllBySoftware(Integer idSoftware) {
+    public List<VersionSelectDto> findAllBySoftware(Integer idSoftware) {
 
         return versionDao.findAllBySoftware(idSoftware);
     }
