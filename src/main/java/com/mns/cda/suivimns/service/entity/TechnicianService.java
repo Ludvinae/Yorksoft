@@ -4,8 +4,8 @@ import com.mns.cda.suivimns.dao.AppUserDao;
 import com.mns.cda.suivimns.dao.TechnicianDao;
 import com.mns.cda.suivimns.dto.entity.TechnicianDto;
 import com.mns.cda.suivimns.dto.flat.PasswordDto;
+import com.mns.cda.suivimns.dto.flat.TechnicianWorkloadDetailedDto;
 import com.mns.cda.suivimns.mapper.entity.TechnicianMapper;
-import com.mns.cda.suivimns.model.Client;
 import com.mns.cda.suivimns.model.Technician;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -93,5 +93,10 @@ public class TechnicianService  {
         user.setPassword(dto.newPassword());
 
         technicianDao.save(user);
+    }
+
+    public List<TechnicianWorkloadDetailedDto> getAllWorkload() {
+
+        return technicianDao.getTechnicianWorkload();
     }
 }

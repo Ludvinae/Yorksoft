@@ -2,8 +2,11 @@ package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.entity.TechnicianDto;
 import com.mns.cda.suivimns.dto.flat.PasswordDto;
+import com.mns.cda.suivimns.dto.flat.TechnicianWorkloadDetailedDto;
+import com.mns.cda.suivimns.dto.flat.TechnicianWorkloadDetailedDto;
 import com.mns.cda.suivimns.security.IsAdmin;
 import com.mns.cda.suivimns.security.IsDirector;
+import com.mns.cda.suivimns.security.IsManager;
 import com.mns.cda.suivimns.service.entity.AppUserService;
 import com.mns.cda.suivimns.service.entity.TechnicianService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,9 +31,9 @@ public class TechnicianController {
     protected final TechnicianService technicianService;
 
 
-    @Operation(summary = "Récupere toutes les techniciens",
-            description = "Récupere la liste complète de technicien de la base")
-    @ApiResponse(responseCode = "200", description = "Liste récupérée avec succés")
+    @Operation(summary = "Récupère toutes les techniciens",
+            description = "Récupère la liste complète de technicien de la base")
+    @ApiResponse(responseCode = "200", description = "Liste récupérée avec succès")
     @GetMapping("/list")
     @IsDirector
     public List<TechnicianDto> getAll() {
@@ -38,7 +41,16 @@ public class TechnicianController {
     }
 
 
-    @Operation(summary = "Récupére une technicien en fonction de son ID")
+    @Operation(summary = "Récupère la liste des techniciens avec leur charge de travail",
+            description = "Récupère la liste complète de technicien avec le nombre de tickets actifs qui leur sont assignés")
+    @ApiResponse(responseCode = "200", description = "Liste récupérée avec succès")
+    @GetMapping("/list/workload")
+    @IsManager
+    public List<TechnicianWorkloadDetailedDto> getAllWorkload() {
+        return technicianService.getAllWorkload();
+    }
+
+    @Operation(summary = "Récupère une technicien en fonction de son ID")
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Technicien trouvée"),
             @ApiResponse(responseCode = "404", description = "Technicien non trouvée")})
     @GetMapping("/{id}")
@@ -51,6 +63,7 @@ public class TechnicianController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
 
     /* Replaced by route in Auth controller
     @Operation(summary = "Crée une nouvelle technicien")

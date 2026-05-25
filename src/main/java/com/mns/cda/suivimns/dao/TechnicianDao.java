@@ -1,14 +1,30 @@
 package com.mns.cda.suivimns.dao;
 
-import com.mns.cda.suivimns.model.AppUser;
+import com.mns.cda.suivimns.dto.flat.TechnicianWorkloadDetailedDto;
 import com.mns.cda.suivimns.model.Technician;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface TechnicianDao extends JpaRepository<Technician, Integer> {
 
     Optional<Technician> findByEmail(String email);
+
+
+    @Query("""
+        SELECT new com.mns.cda.suivimns.dto.flat.TechnicianWorkloadDetailedDto(
+            te.idAppUser, CONCAT(te.firstName, ' ', te.lastName), te.rank, COUNT(t),
+            COALESCE(SUM(CASE WHEN t.currentPriority > 75 THEN 1 ELSE 0 END), 0))
+        FROM Technician te
+        LEFT JOIN te.assignmentList a
+            ON a.endDate IS null
+        LEFT JOIN a.ticket t
+            ON t.closeDate IS null
+        GROUP BY te.idAppUser, te.firstName, te.lastName, te.rank
+    """)
+    List<TechnicianWorkloadDetailedDto> getTechnicianWorkload();
 }
