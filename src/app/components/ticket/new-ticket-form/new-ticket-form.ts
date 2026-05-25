@@ -60,7 +60,7 @@ export class NewTicketForm implements OnInit {
   createdTicketId = signal<number | null>(null);
   isSubmitting = signal(false);
 
-  listVersion: Version[] = [];
+  listVersion: VersionSelectDto[] = [];
 
   ngOnInit(): void {
     this.ticketForm.get('idSoftware')?.valueChanges.subscribe((idSoftware) => {

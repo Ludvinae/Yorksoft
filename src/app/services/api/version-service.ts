@@ -11,6 +11,7 @@ export class VersionService {
 
   readonly versionList = signal<Version[]>([]);
   readonly versionDetail = signal<VersionDetailDto[]>([]);
+  readonly versionSelect = signal<VersionSelectDto[]>([]);
 
   get(id: number) {
     return this.http.get<Version>(`${this.apiUrl}/${id}`);
@@ -37,9 +38,9 @@ export class VersionService {
   }
 
   getAllBySoftware(id: number) {
-    return this.http.get<Version[]>(`${this.apiUrl}/list/${id}`).pipe(
+    return this.http.get<VersionSelectDto[]>(`${this.apiUrl}/list/${id}`).pipe(
       tap((versionList) => {
-        this.versionList.set(versionList);
+        this.versionSelect.set(versionList);
       }),
     );
   }
