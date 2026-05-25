@@ -15,7 +15,13 @@
 
       </h3>
       @if (ticket) {
-        <app-badge-priority [priority]="ticket!.currentPriority"/>
+        <div>
+          <app-badge-priority [priority]="ticket!.currentPriority"/>
+          <app-badge-sla [overdue]="ticket.overdue"
+                         [predictedDeadline]="ticket.predictedDeadline"
+                         [priority]="ticket.currentPriority"/>
+        </div>
+
       }
     </div>
     @if (loading) {
@@ -26,50 +32,69 @@
 
     } @else {
 
+      @if (currentTechnician) {
+
+        <div class="mb-4">
+
+          <div class="card bg-info/10 border border-info">
+            <div class="card-body py-3 px-4">
+              <div class="flex justify-between items-center">
+
+                <div class="font-semibold">
+                  {{ currentTechnician.fullName }} N{{ currentTechnician.rank }}
+                </div>
+                <div class="flex gap-2">
+                  @if (currentTechnician.criticalTicketsCount > 0) {
+                    <div class="badge badge-error">
+                      {{ currentTechnician.criticalTicketsCount }} critiques
+                    </div>
+                  }
+                  <div class="badge" [class.badge-success]="currentTechnician.activeTicketsCount <= 3"
+                       [class.badge-warning]="currentTechnician.activeTicketsCount > 3 && currentTechnician.activeTicketsCount <= 7"
+                       [class.badge-error]="currentTechnician.activeTicketsCount > 7">
+                    {{ currentTechnician.activeTicketsCount }}
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="divider">
+          Réassigner à
+        </div>
+      }
+
       <div class="flex flex-col gap-3">
 
         @for (tech of technicians; track tech.idTechnician) {
+          @if (tech.idTechnician !== ticket?.idTechnician) {
 
-          <button
-            class="btn btn-outline h-auto py-4 justify-between"
-            (click)="assignTo(tech)"
-          >
-
-            <div class="text-left">
-
-              <div class="font-semibold">
-                {{ tech.fullName }} N{{ tech.rank }}
-              </div>
-
-            </div>
-
-            <div class="flex gap-2">
-
-              @if (tech.criticalTicketsCount > 0) {
-
-                <div class="badge badge-error">
-                  {{ tech.criticalTicketsCount }} critiques
+            <button class="btn btn-outline h-auto py-4 justify-between" (click)="assignTo(tech)">
+              <div class="text-left">
+                <div class="font-semibold">
+                  {{ tech.fullName }} N{{ tech.rank }}
                 </div>
-
-              }
-
-              <div
-                class="badge"
-                [class.badge-success]="tech.activeTicketsCount <= 3"
-                [class.badge-warning]="tech.activeTicketsCount > 3 && tech.activeTicketsCount <= 7"
-                [class.badge-error]="tech.activeTicketsCount > 7"
-              >
-                {{ tech.activeTicketsCount }}
+              </div>
+              <div class="flex gap-2">
+                @if (tech.criticalTicketsCount > 0) {
+                  <div class="badge badge-error">
+                    {{ tech.criticalTicketsCount }} critiques
+                  </div>
+                }
+                <div class="badge" [class.badge-success]="tech.activeTicketsCount <= 3"
+                      [class.badge-warning]="tech.activeTicketsCount > 3 && tech.activeTicketsCount <= 7"
+                      [class.badge-error]="tech.activeTicketsCount > 7">
+                  {{ tech.activeTicketsCount }}
+                </div>
               </div>
 
-            </div>
-
-          </button>
-
+            </button>
+          }
         }
-
       </div>
-
     }
 
     <div class="modal-action flex justify-around">

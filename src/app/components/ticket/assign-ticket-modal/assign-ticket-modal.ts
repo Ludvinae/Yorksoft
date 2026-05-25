@@ -14,10 +14,11 @@ import { TicketService } from '../../../services/api/ticket-service';
 import { TechnicianService } from '../../../services/api/technician-service';
 import { AuthService } from '../../../services/business/auth-service';
 import { BadgePriority } from '../badge-priority/badge-priority';
+import { BadgeSla } from '../badge-sla/badge-sla';
 
 @Component({
   selector: 'app-assign-ticket-modal',
-  imports: [BadgePriority],
+  imports: [BadgePriority, BadgeSla],
   templateUrl: './assign-ticket-modal.html',
   styleUrl: './assign-ticket-modal.css',
 })
@@ -87,5 +88,10 @@ export class AssignTicketModal implements OnInit {
           this.close();
         },
       });
+  }
+
+  get currentTechnician(): TechnicianWorkloadDetailedDto | undefined {
+    return this.technicians.find(
+      (tech) => tech.idTechnician === this.ticket?.idTechnician);
   }
 }
