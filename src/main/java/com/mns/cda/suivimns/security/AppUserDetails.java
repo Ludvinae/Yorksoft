@@ -73,6 +73,15 @@ public class AppUserDetails implements UserDetails {
         this.id = admin.getIdAppUser();
     }
 
+    public String getUserRole() {
+        if (this.getAdmin() != null) return "ADMIN";
+        if (this.getManager() != null) return "MANAGER";
+        if (this.getDirector() != null) return "DIRECTOR";
+        if (this.getTechnician() != null) return "TECHNICIAN";
+        if (this.getClient() != null) return "CLIENT";
+        return null;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 

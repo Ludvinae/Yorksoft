@@ -4,9 +4,7 @@ import com.mns.cda.suivimns.dto.entity.TechnicianDto;
 import com.mns.cda.suivimns.dto.flat.PasswordDto;
 import com.mns.cda.suivimns.dto.flat.TechnicianWorkloadDetailedDto;
 import com.mns.cda.suivimns.dto.flat.TechnicianWorkloadDetailedDto;
-import com.mns.cda.suivimns.security.IsAdmin;
-import com.mns.cda.suivimns.security.IsDirector;
-import com.mns.cda.suivimns.security.IsManager;
+import com.mns.cda.suivimns.security.*;
 import com.mns.cda.suivimns.service.entity.AppUserService;
 import com.mns.cda.suivimns.service.entity.TechnicianService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,6 +15,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -81,13 +81,15 @@ public class TechnicianController {
     @ApiResponses({@ApiResponse(responseCode = "204", description = "Technicien effacée"),
             @ApiResponse(responseCode = "404", description = "Technicien non trouvée")})
     @DeleteMapping("/{id}")
-    @IsAdmin
-    public ResponseEntity<Void> delete(@PathVariable int id) {
+    @IsTechnician
+    public ResponseEntity<Void> delete(@PathVariable int id, @AuthenticationPrincipal AppUserDetails userDetails) {
         try {
-            technicianService.delete(id);
+            technicianService.delete(id, userDetails);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (TechnicianService.TechnicianNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (AppUserService.AccountNotOwnedException e) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
     }
 
@@ -99,17 +101,20 @@ public class TechnicianController {
             @ApiResponse(responseCode = "404", description = "Technicien non trouvé"),
             @ApiResponse(responseCode = "400", description = "Email déja utilisé")})
     @PatchMapping("/{id}")
-    @IsAdmin
-    public ResponseEntity<TechnicianDto> update(@PathVariable int id, @RequestBody @Valid TechnicianDto dto) {
+    @IsTechnician
+    public ResponseEntity<TechnicianDto> update(@PathVariable int id, @RequestBody @Valid TechnicianDto dto,
+                                                @AuthenticationPrincipal AppUserDetails userDetails) {
 
         try {
-            TechnicianDto user = technicianService.update(id, dto);
+            TechnicianDto user = technicianService.update(id, dto, userDetails);
             return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (TechnicianService.TechnicianNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             // IMPLEMENTER TEST UNICITE EMAIL !!!
         } catch (AppUserService.EmailAlreadyUsedException e) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
+        } catch (AppUserService.AccountNotOwnedException e) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
     }
 
@@ -122,15 +127,18 @@ public class TechnicianController {
             @ApiResponse(responseCode = "404", description = "Technicien non trouvé"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PatchMapping("/{id}/password")
-    @IsAdmin
-    public ResponseEntity<Void> patch(@PathVariable int id, @RequestBody PasswordDto dto) {
+    @IsTechnician
+    public ResponseEntity<Void> patch(@PathVariable int id, @RequestBody PasswordDto dto,
+                                      @AuthenticationPrincipal AppUserDetails userDetails) {
         try {
-            technicianService.updatePassword(id, dto);
+            technicianService.updatePassword(id, dto, userDetails);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (TechnicianService.TechnicianNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (TechnicianService.BadPasswordException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (AppUserService.AccountNotOwnedException e) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
     }
 }

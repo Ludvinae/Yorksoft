@@ -1,6 +1,7 @@
 package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.entity.ArticleDto;
+import com.mns.cda.suivimns.security.AppUserDetails;
 import com.mns.cda.suivimns.security.IsAdmin;
 import com.mns.cda.suivimns.security.IsManager;
 import com.mns.cda.suivimns.security.IsTechnician;
@@ -13,6 +14,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -84,9 +86,10 @@ public class ArticleController {
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PutMapping("/{id}")
     @IsTechnician
-    public ResponseEntity<ArticleDto> update(@PathVariable int id, @RequestBody @Valid ArticleDto articleToUpdate) {
+    public ResponseEntity<ArticleDto> update(@PathVariable int id, @RequestBody @Valid ArticleDto articleToUpdate,
+                                             @AuthenticationPrincipal AppUserDetails userDetails) {
         try {
-            return new ResponseEntity<>(articleService.update(id, articleToUpdate), HttpStatus.OK);
+            return new ResponseEntity<>(articleService.update(id, articleToUpdate, userDetails), HttpStatus.OK);
         } catch (ArticleService.ArticleNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

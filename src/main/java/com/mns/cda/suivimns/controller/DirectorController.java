@@ -2,6 +2,8 @@ package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.entity.DirectorDto;
 import com.mns.cda.suivimns.dto.flat.PasswordDto;
+import com.mns.cda.suivimns.model.AppUser;
+import com.mns.cda.suivimns.security.AppUserDetails;
 import com.mns.cda.suivimns.security.IsAdmin;
 import com.mns.cda.suivimns.security.IsDirector;
 import com.mns.cda.suivimns.service.entity.AppUserService;
@@ -14,6 +16,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -68,13 +71,15 @@ public class DirectorController {
     @ApiResponses({@ApiResponse(responseCode = "204", description = "Directeur effacée"),
             @ApiResponse(responseCode = "404", description = "Directeur non trouvée")})
     @DeleteMapping("/{id}")
-    @IsAdmin
-    public ResponseEntity<Void> delete(@PathVariable int id) {
+    @IsDirector
+    public ResponseEntity<Void> delete(@PathVariable int id, @AuthenticationPrincipal AppUserDetails userDetails) {
         try {
-            directorService.delete(id);
+            directorService.delete(id, userDetails);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (DirectorService.DirectorNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (AppUserService.AccountNotOwnedException e) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
     }
 
@@ -86,17 +91,20 @@ public class DirectorController {
             @ApiResponse(responseCode = "404", description = "Directeur non trouvé"),
             @ApiResponse(responseCode = "400", description = "Email déja utilisé")})
     @PatchMapping("/{id}")
-    @IsAdmin
-    public ResponseEntity<DirectorDto> update(@PathVariable int id, @RequestBody @Valid DirectorDto dto) {
+    @IsDirector
+    public ResponseEntity<DirectorDto> update(@PathVariable int id, @RequestBody @Valid DirectorDto dto,
+                                              @AuthenticationPrincipal AppUserDetails userDetails) {
 
         try {
-            DirectorDto user = directorService.update(id, dto);
+            DirectorDto user = directorService.update(id, dto, userDetails);
             return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (DirectorService.DirectorNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             // IMPLEMENTER TEST UNICITE EMAIL !!!
         } catch (AppUserService.EmailAlreadyUsedException e) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
+        } catch (AppUserService.AccountNotOwnedException e) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
     }
 
@@ -109,15 +117,18 @@ public class DirectorController {
             @ApiResponse(responseCode = "404", description = "Directeur non trouvé"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PatchMapping("/{id}/password")
-    @IsAdmin
-    public ResponseEntity<Void> patch(@PathVariable int id, @RequestBody PasswordDto dto) {
+    @IsDirector
+    public ResponseEntity<Void> patch(@PathVariable int id, @RequestBody PasswordDto dto,
+                                      @AuthenticationPrincipal AppUserDetails userDetails) {
         try {
-            directorService.updatePassword(id, dto);
+            directorService.updatePassword(id, dto, userDetails);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (DirectorService.DirectorNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (DirectorService.BadPasswordException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (AppUserService.AccountNotOwnedException e) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
     }
 }

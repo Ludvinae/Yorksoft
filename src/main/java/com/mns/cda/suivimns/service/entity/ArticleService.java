@@ -4,10 +4,12 @@ import com.mns.cda.suivimns.dao.ArticleDao;
 import com.mns.cda.suivimns.dto.entity.ArticleDto;
 import com.mns.cda.suivimns.mapper.entity.ArticleMapper;
 import com.mns.cda.suivimns.model.Article;
+import com.mns.cda.suivimns.security.AppUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -15,6 +17,8 @@ public class ArticleService {
 
     public static class ArticleNotFoundException extends RuntimeException {
     }
+
+    public static class ArticleNotOwnedException extends RuntimeException {}
 
     protected final ArticleDao articleDao;
     protected final ArticleMapper articleMapper;
@@ -45,10 +49,16 @@ public class ArticleService {
         articleDao.delete(article);
     }
 
-    public ArticleDto update(int id, ArticleDto articleToUpdate) throws ArticleService.ArticleNotFoundException {
+    public ArticleDto update(int id, ArticleDto articleToUpdate, AppUserDetails userDetails) throws ArticleService.ArticleNotFoundException {
 
         Article currentArticle = articleDao.findById(id)
                 .orElseThrow(ArticleService.ArticleNotFoundException::new);
+
+        // On verifie si l'utilisateur est admin ou s'il est le proprietaire de la ressource
+        if (!Objects.equals(userDetails.getUserRole(), "ADMIN") &&
+                !currentArticle.getTechnician().getIdAppUser().equals(userDetails.getId())) {
+            throw new ArticleNotOwnedException();
+        }
 
         articleMapper.updateEntityFromDto(articleToUpdate, currentArticle);
 

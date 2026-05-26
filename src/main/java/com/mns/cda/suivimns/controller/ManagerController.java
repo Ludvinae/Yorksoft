@@ -2,8 +2,10 @@ package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.entity.ManagerDto;
 import com.mns.cda.suivimns.dto.flat.PasswordDto;
+import com.mns.cda.suivimns.security.AppUserDetails;
 import com.mns.cda.suivimns.security.IsAdmin;
 import com.mns.cda.suivimns.security.IsDirector;
+import com.mns.cda.suivimns.security.IsManager;
 import com.mns.cda.suivimns.service.entity.AppUserService;
 import com.mns.cda.suivimns.service.entity.ManagerService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,6 +16,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -67,13 +70,15 @@ public class ManagerController {
     @ApiResponses({@ApiResponse(responseCode = "204", description = "Manager effacée"),
             @ApiResponse(responseCode = "404", description = "Manager non trouvée")})
     @DeleteMapping("/{id}")
-    @IsAdmin
-    public ResponseEntity<Void> delete(@PathVariable int id) {
+    @IsManager
+    public ResponseEntity<Void> delete(@PathVariable int id, @AuthenticationPrincipal AppUserDetails userDetails) {
         try {
-            managerService.delete(id);
+            managerService.delete(id, userDetails);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (ManagerService.ManagerNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (AppUserService.AccountNotOwnedException e) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
     }
 
@@ -85,17 +90,20 @@ public class ManagerController {
             @ApiResponse(responseCode = "404", description = "Manager non trouvé"),
             @ApiResponse(responseCode = "400", description = "Email déja utilisé")})
     @PatchMapping("/{id}")
-    @IsAdmin
-    public ResponseEntity<ManagerDto> update(@PathVariable int id, @RequestBody @Valid ManagerDto dto) {
+    @IsManager
+    public ResponseEntity<ManagerDto> update(@PathVariable int id, @RequestBody @Valid ManagerDto dto,
+                                             @AuthenticationPrincipal AppUserDetails userDetails) {
 
         try {
-            ManagerDto user = managerService.update(id, dto);
+            ManagerDto user = managerService.update(id, dto, userDetails);
             return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (ManagerService.ManagerNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             // IMPLEMENTER TEST UNICITE EMAIL !!!
         } catch (AppUserService.EmailAlreadyUsedException e) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
+        } catch (AppUserService.AccountNotOwnedException e) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
     }
 
@@ -108,15 +116,18 @@ public class ManagerController {
             @ApiResponse(responseCode = "404", description = "Manager non trouvé"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PatchMapping("/{id}/password")
-    @IsAdmin
-    public ResponseEntity<Void> patch(@PathVariable int id, @RequestBody PasswordDto dto) {
+    @IsManager
+    public ResponseEntity<Void> patch(@PathVariable int id, @RequestBody PasswordDto dto,
+                                      @AuthenticationPrincipal AppUserDetails userDetails) {
         try {
-            managerService.updatePassword(id, dto);
+            managerService.updatePassword(id, dto, userDetails);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (ManagerService.ManagerNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (ManagerService.BadPasswordException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (AppUserService.AccountNotOwnedException e) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
     }
 }

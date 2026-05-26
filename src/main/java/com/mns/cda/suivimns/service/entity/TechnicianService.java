@@ -7,6 +7,7 @@ import com.mns.cda.suivimns.dto.flat.PasswordDto;
 import com.mns.cda.suivimns.dto.flat.TechnicianWorkloadDetailedDto;
 import com.mns.cda.suivimns.mapper.entity.TechnicianMapper;
 import com.mns.cda.suivimns.model.Technician;
+import com.mns.cda.suivimns.security.AppUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -57,15 +58,20 @@ public class TechnicianService  {
         appUserDao.save(technician);
     }
 
-    public void delete(int id) throws TechnicianService.TechnicianNotFoundException {
+    public void delete(int id, AppUserDetails userDetails) throws TechnicianService.TechnicianNotFoundException, AppUserService.AccountNotOwnedException {
         Technician technician = technicianDao.findById(id)
                 .orElseThrow(TechnicianService.TechnicianNotFoundException::new);
+
+        if (!Objects.equals(userDetails.getUserRole(), "ADMIN") &&
+                userDetails.getId() != id) {
+            throw new AppUserService.AccountNotOwnedException();
+        }
 
         technicianDao.delete(technician);
     }
 
-    public TechnicianDto update(int id, TechnicianDto dto)
-            throws TechnicianService.TechnicianNotFoundException, AppUserService.EmailAlreadyUsedException {
+    public TechnicianDto update(int id, TechnicianDto dto, AppUserDetails userDetails)
+            throws TechnicianService.TechnicianNotFoundException, AppUserService.EmailAlreadyUsedException, AppUserService.AccountNotOwnedException {
 
         if (appUserDao.existsByEmail(dto.email())) {
             throw new AppUserService.EmailAlreadyUsedException();
@@ -74,13 +80,18 @@ public class TechnicianService  {
         Technician currentTechnician = technicianDao.findById(id)
                 .orElseThrow(TechnicianService.TechnicianNotFoundException::new);
 
+        if (!Objects.equals(userDetails.getUserRole(), "ADMIN") &&
+                userDetails.getId() != id) {
+            throw new AppUserService.AccountNotOwnedException();
+        }
+
         technicianMapper.updateEntityFromDto(dto, currentTechnician);
 
         return technicianMapper.toDto(technicianDao.save(currentTechnician));
     }
 
-    public void updatePassword(int id, PasswordDto dto)
-            throws TechnicianService.TechnicianNotFoundException, TechnicianService.BadPasswordException {
+    public void updatePassword(int id, PasswordDto dto, AppUserDetails userDetails)
+            throws TechnicianService.TechnicianNotFoundException, TechnicianService.BadPasswordException, AppUserService.AccountNotOwnedException {
 
         Technician user = technicianDao.findById(id)
                 .orElseThrow(TechnicianService.TechnicianNotFoundException::new);
@@ -88,6 +99,11 @@ public class TechnicianService  {
         // vérifier ancien mot de passe
         if (!Objects.equals(user.getPassword(), dto.oldPassword())) {
             throw new TechnicianService.BadPasswordException();
+        }
+
+        if (!Objects.equals(userDetails.getUserRole(), "ADMIN") &&
+                userDetails.getId() != id) {
+            throw new AppUserService.AccountNotOwnedException();
         }
 
         user.setPassword(dto.newPassword());

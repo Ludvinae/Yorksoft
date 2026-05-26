@@ -24,6 +24,8 @@ public class AppUserService {
 
     public static class BadPasswordException extends Exception {}
 
+    public static class AccountNotOwnedException extends Exception {}
+
 
     protected final AppUserDao appUserDao;
     protected final AppUserMapper appUserMapper;

@@ -11,6 +11,7 @@ import com.mns.cda.suivimns.dto.search.TicketSearchCriteria;
 import com.mns.cda.suivimns.mapper.entity.ClientMapper;
 import com.mns.cda.suivimns.model.AppUser;
 import com.mns.cda.suivimns.model.Client;
+import com.mns.cda.suivimns.security.AppUserDetails;
 import com.mns.cda.suivimns.service.search.ClientQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -65,18 +66,28 @@ public class ClientService {
         appUserDao.save(client);
     }
 
-    public void delete(int id) throws ClientService.ClientNotFoundException {
+    public void delete(int id, AppUserDetails userDetails) throws ClientService.ClientNotFoundException, AppUserService.AccountNotOwnedException {
         Client client = clientDao.findById(id)
                 .orElseThrow(ClientService.ClientNotFoundException::new);
+
+        if (!Objects.equals(userDetails.getUserRole(), "ADMIN") &&
+                userDetails.getId() != id) {
+            throw new AppUserService.AccountNotOwnedException();
+        }
 
         clientDao.delete(client);
     }
 
-    public ClientDto update(int id, ClientDto dto)
-            throws ClientService.ClientNotFoundException, AppUserService.EmailAlreadyUsedException {
+    public ClientDto update(int id, ClientDto dto, AppUserDetails userDetails)
+            throws ClientService.ClientNotFoundException, AppUserService.EmailAlreadyUsedException, AppUserService.AccountNotOwnedException {
 
         if (appUserDao.existsByEmail(dto.email())) {
             throw new AppUserService.EmailAlreadyUsedException();
+        }
+
+        if (!Objects.equals(userDetails.getUserRole(), "ADMIN") &&
+                userDetails.getId() != id) {
+            throw new AppUserService.AccountNotOwnedException();
         }
 
         Client currentClient = clientDao.findById(id)
@@ -87,8 +98,8 @@ public class ClientService {
         return clientMapper.toDto(clientDao.save(currentClient));
     }
 
-    public void updatePassword(int id, PasswordDto dto)
-            throws ClientService.ClientNotFoundException, ClientService.BadPasswordException {
+    public void updatePassword(int id, PasswordDto dto, AppUserDetails userDetails)
+            throws ClientService.ClientNotFoundException, ClientService.BadPasswordException, AppUserService.AccountNotOwnedException {
 
         Client user = clientDao.findById(id)
                 .orElseThrow(ClientService.ClientNotFoundException::new);
@@ -96,6 +107,11 @@ public class ClientService {
         // vérifier ancien mot de passe
         if (!Objects.equals(user.getPassword(), dto.oldPassword())) {
             throw new ClientService.BadPasswordException();
+        }
+
+        if (!Objects.equals(userDetails.getUserRole(), "ADMIN") &&
+                userDetails.getId() != id) {
+            throw new AppUserService.AccountNotOwnedException();
         }
 
         user.setPassword(dto.newPassword());

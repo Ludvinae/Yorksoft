@@ -1,6 +1,7 @@
 package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.entity.CommentDto;
+import com.mns.cda.suivimns.security.AppUserDetails;
 import com.mns.cda.suivimns.security.IsAdmin;
 import com.mns.cda.suivimns.security.IsEmployee;
 import com.mns.cda.suivimns.security.IsTechnician;
@@ -13,6 +14,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -66,9 +68,9 @@ public class CommentController {
             @ApiResponse(responseCode = "404", description = "Commentaire non trouvée")})
     @DeleteMapping("/{id}")
     @IsAdmin
-    public ResponseEntity<Void> delete(@PathVariable int id) {
+    public ResponseEntity<Void> delete(@PathVariable int id, @AuthenticationPrincipal AppUserDetails userDetail) {
         try {
-            commentService.delete(id);
+            commentService.delete(id, userDetail);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (CommentService.CommentNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -83,9 +85,10 @@ public class CommentController {
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PutMapping("/{id}")
     @IsAdmin
-    public ResponseEntity<CommentDto> update(@PathVariable int id, @RequestBody @Valid CommentDto commentToUpdate) {
+    public ResponseEntity<CommentDto> update(@PathVariable int id, @RequestBody @Valid CommentDto commentToUpdate,
+                                             @AuthenticationPrincipal AppUserDetails userDetail) {
         try {
-            return new ResponseEntity<>(commentService.update(id, commentToUpdate), HttpStatus.OK);
+            return new ResponseEntity<>(commentService.update(id, commentToUpdate, userDetail), HttpStatus.OK);
         } catch (CommentService.CommentNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
