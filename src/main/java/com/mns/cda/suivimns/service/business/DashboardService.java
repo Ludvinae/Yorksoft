@@ -28,34 +28,34 @@ public class DashboardService {
         int timeframe = (timeframeInDays != null && timeframeInDays > 0)
                 ? timeframeInDays : 30;
         LocalDateTime now = LocalDateTime.now();
+        LocalDateTime startDate = now.minusDays(timeframe);
 
         if (securityService.isAdmin()) {
-            return getAdminStats(timeframe, now);
+            return getAdminStats(startDate);
         }
         if (securityService.isDirector()) {
-            return getDirectorStats(timeframe, now);
+            return getDirectorStats(startDate);
         }
         if (securityService.isManager()) {
-            return getManagerStats(timeframe, now);
+            return getManagerStats(startDate, timeframe);
         }
         if (securityService.isTechnician()) {
-            return getTechnicianStats(timeframe, now);
+            return getTechnicianStats(startDate);
         }
         throw new AuthenticationException();
     }
 
-    private DashboardAdminDto getAdminStats(Integer timeframeInDays, LocalDateTime now) {
+    private DashboardAdminDto getAdminStats(LocalDateTime startDate) {
         int closed = ticketDao.closedTicketsWithoutEndDate();
 
         return new DashboardAdminDto(closed);
     }
 
-    private DashboardDirectorDto getDirectorStats(Integer timeframeInDays, LocalDateTime now) {
+    private DashboardDirectorDto getDirectorStats(LocalDateTime startDate) {
         return new DashboardDirectorDto();
     }
 
-    private DashboardManagerDto getManagerStats(Integer timeframeInDays, LocalDateTime now) {
-        LocalDateTime startDate = now.minusDays(timeframeInDays);
+    private DashboardManagerDto getManagerStats(LocalDateTime startDate, Integer timeframeInDays) {
 
         int open = ticketDao.countOpenTickets();
         int progress = ticketDao.countInProgressTickets();
@@ -91,7 +91,7 @@ public class DashboardService {
                 closedDay, closedWeek, workload, status, software, theme);
     }
 
-    private DashboardTechnicianDto  getTechnicianStats(Integer timeframeInDays, LocalDateTime now) {
+    private DashboardTechnicianDto  getTechnicianStats(LocalDateTime startDate) {
         Integer id = securityService.getCurrentUserId();
         if (id == null) {
             throw new TechnicianService.TechnicianNotFoundException();
@@ -102,7 +102,9 @@ public class DashboardService {
         int critical = ticketDao.countAssignedCriticalTickets(id);
         int overdue = ticketDao.countAssignedOverdueTickets(id);
 
+        double timeToSolve = ticketDao.meanTimeToSolveTickets(id, startDate);
 
-        return new DashboardTechnicianDto(open, waiting,  critical, overdue);
+
+        return new DashboardTechnicianDto(open, waiting,  critical, overdue, timeToSolve);
     }
 }

@@ -87,8 +87,9 @@ public class ManagerController {
             description = "Modifie les champs 'firstName', 'lastName', 'email' et 'phoneNumber'")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Manager mis à jour"),
+            @ApiResponse(responseCode = "403", description = "Impossible d'acceder à la ressource"),
             @ApiResponse(responseCode = "404", description = "Manager non trouvé"),
-            @ApiResponse(responseCode = "400", description = "Email déja utilisé")})
+            @ApiResponse(responseCode = "400", description = "Email déja utilisé"),})
     @PatchMapping("/{id}")
     @IsManager
     public ResponseEntity<ManagerDto> update(@PathVariable int id, @RequestBody @Valid ManagerDto dto,

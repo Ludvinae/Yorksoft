@@ -59,6 +59,24 @@ public interface TicketDao extends JpaRepository<Ticket, Integer>, JpaSpecificat
     """)
     int countAssignedOverdueTickets(int id);
 
+
+    @Query(value = """
+        SELECT AVG(ticket_duration)
+        FROM (
+            SELECT 
+                t.id_ticket,
+                SUM(EXTRACT(EPOCH FROM (h.end_date - h.start_date))) AS ticket_duration
+            FROM ticket t
+            JOIN history h ON h.id_ticket = t.id_ticket
+            WHERE t.id_technician = :id
+              AND t.close_date >= :startDate
+              AND h.status_code = 'IN_PROGRESS'
+              AND h.end_date IS NOT NULL
+            GROUP BY t.id_ticket
+        ) durations
+    """, nativeQuery = true)
+    Double meanTimeToSolveTickets(int id, LocalDateTime startDate);
+
     // graphiques
 
 

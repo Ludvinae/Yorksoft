@@ -8,7 +8,9 @@ public record DashboardTechnicianDto(
     int assignedOpenTickets,
     int assignedWaitingTickets,
     int assignedCriticalTickets,
-    int assignedOverdueTickets
+    int assignedOverdueTickets,
+
+    double meanTimeToSolveTickets
 
 
 ) implements DashboardDto {}
