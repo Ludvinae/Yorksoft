@@ -73,7 +73,7 @@ public class ManagerService  {
     public ManagerDto update(int id, ManagerDto dto, AppUserDetails userDetails)
             throws ManagerService.ManagerNotFoundException, AppUserService.EmailAlreadyUsedException, AppUserService.AccountNotOwnedException {
 
-        if (appUserDao.existsByEmail(dto.email())) {
+        if (appUserDao.existsByEmail(dto.email()) && !userDetails.getEmail().equals(dto.email())) {
             throw new AppUserService.EmailAlreadyUsedException();
         }
 

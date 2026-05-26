@@ -45,6 +45,8 @@ public class DirectorService  {
     public DirectorDto save(DirectorDto dto) {
         Director director = directorMapper.toEntity(dto);
         director.setIdAppUser(null);
+        director.setPhoneNumber(director.getPhoneNumber().trim());
+
         Director saved = directorDao.save(director);
 
         return directorMapper.toDto(saved);
@@ -52,6 +54,7 @@ public class DirectorService  {
 
     public void insert(Director director) {
         director.setIdAppUser(null);
+        director.setPhoneNumber(director.getPhoneNumber().trim());
 
         // Encodage du password avant de l'inserer en base de données
         director.setPassword(encoder.encode(director.getPassword()));
@@ -87,6 +90,7 @@ public class DirectorService  {
                 .orElseThrow(DirectorService.DirectorNotFoundException::new);
 
         directorMapper.updateEntityFromDto(dto, currentDirector);
+        currentDirector.setPhoneNumber(currentDirector.getPhoneNumber().trim());
 
         return directorMapper.toDto(directorDao.save(currentDirector));
     }

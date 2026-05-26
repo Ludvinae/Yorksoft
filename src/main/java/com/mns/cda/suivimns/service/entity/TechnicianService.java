@@ -44,6 +44,8 @@ public class TechnicianService  {
     public TechnicianDto save(TechnicianDto dto) {
         Technician technician = technicianMapper.toEntity(dto);
         technician.setIdAppUser(null);
+        technician.setPhoneNumber(technician.getPhoneNumber().trim());
+
         Technician saved = technicianDao.save(technician);
 
         return technicianMapper.toDto(saved);
@@ -51,6 +53,7 @@ public class TechnicianService  {
 
     public void insert(Technician technician) {
         technician.setIdAppUser(null);
+        technician.setPhoneNumber(technician.getPhoneNumber().trim());
 
         // Encodage du password avant de l'inserer en base de données
         technician.setPassword(encoder.encode(technician.getPassword()));
@@ -86,6 +89,7 @@ public class TechnicianService  {
         }
 
         technicianMapper.updateEntityFromDto(dto, currentTechnician);
+        currentTechnician.setPhoneNumber(currentTechnician.getPhoneNumber().trim());
 
         return technicianMapper.toDto(technicianDao.save(currentTechnician));
     }

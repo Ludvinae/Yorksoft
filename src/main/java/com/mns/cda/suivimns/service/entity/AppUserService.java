@@ -45,6 +45,7 @@ public class AppUserService {
     public AppUserDto save(AppUserDto dto) {
         AppUser appUser = appUserMapper.toEntity(dto);
         appUser.setIdAppUser(null);
+        appUser.setPhoneNumber(appUser.getPhoneNumber().trim());
 
         AppUser saved = appUserDao.save(appUser);
 
@@ -53,6 +54,7 @@ public class AppUserService {
 
     public void insert(AppUser appUser) {
         appUser.setIdAppUser(null);
+        appUser.setPhoneNumber(appUser.getPhoneNumber().trim());
 
         // Encodage du password avant de l'inserer en base de données
         appUser.setPassword(encoder.encode(appUser.getPassword()));
@@ -78,6 +80,7 @@ public class AppUserService {
                 .orElseThrow(AppUserService.AppUserNotFoundException::new);
 
         appUserMapper.updateEntityFromDto(dto, currentAppUser);
+        currentAppUser.setPhoneNumber(currentAppUser.getPhoneNumber().trim());
 
         return appUserMapper.toDto(appUserDao.save(currentAppUser));
     }

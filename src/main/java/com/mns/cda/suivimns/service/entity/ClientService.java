@@ -52,6 +52,7 @@ public class ClientService {
     public ClientDto save(ClientDto dto) {
         Client client = clientMapper.toEntity(dto);
         client.setIdAppUser(null);
+        client.setPhoneNumber(client.getPhoneNumber().trim());
         Client saved = clientDao.save(client);
 
         return clientMapper.toDto(saved);
@@ -59,6 +60,7 @@ public class ClientService {
 
     public void insert(Client client) {
         client.setIdAppUser(null);
+        client.setPhoneNumber(client.getPhoneNumber().trim());
 
         // Encodage du password avant de l'inserer en base de données
         client.setPassword(encoder.encode(client.getPassword()));
@@ -94,6 +96,7 @@ public class ClientService {
                 .orElseThrow(ClientService.ClientNotFoundException::new);
 
         clientMapper.updateEntityFromDto(dto, currentClient);
+        currentClient.setPhoneNumber(currentClient.getPhoneNumber().trim());
 
         return clientMapper.toDto(clientDao.save(currentClient));
     }
