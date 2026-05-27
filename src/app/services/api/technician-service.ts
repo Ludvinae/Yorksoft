@@ -1,13 +1,14 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TechnicianService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:8080/technician';
+  private apiUrl = `${environment.serverUrl}/technician`;
 
   readonly technicianList = signal<Technician[]>([]);
   readonly technicianWorkload = signal<TechnicianWorkloadDetailedDto[]>([]);

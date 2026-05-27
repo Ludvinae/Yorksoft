@@ -2,13 +2,14 @@ import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { tap } from 'rxjs';
 import { Page } from '../../models/page/Page';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ClientService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:8080/client';
+  private apiUrl = `${environment.serverUrl}/client`;
 
   readonly clientList = signal<Client[]>([]);
 
@@ -40,7 +41,7 @@ export class ClientService {
       }
     });
 
-    return this.http.get<Page<ClientListDto>>('http://localhost:8080/client/list', { params });
+    return this.http.get<Page<ClientListDto>>(`${environment.serverUrl}/client/list`, { params });
   }
 
   create(client: Client) {

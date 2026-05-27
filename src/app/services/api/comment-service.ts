@@ -1,13 +1,14 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CommentService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:8080/comment';
+  private apiUrl = `${environment.serverUrl}/comment`;
 
   readonly commentList = signal<Comment[]>([]);
 

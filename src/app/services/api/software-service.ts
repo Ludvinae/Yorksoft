@@ -1,13 +1,14 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SoftwareService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:8080/software';
+  private apiUrl = `${environment.serverUrl}/software`;
 
   readonly softwareList = signal<Software[]>([]);
   readonly softwareDetail = signal<SoftwareDetailDto[]>([]);

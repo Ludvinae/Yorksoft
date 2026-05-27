@@ -1,6 +1,7 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from './auth-service';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -9,14 +10,13 @@ export class DashboardService {
   private http = inject(HttpClient);
   private auth = inject(AuthService);
 
-  private apiUrl = 'http://localhost:8080/dashboard';
+  private apiUrl = `${environment.serverUrl}/dashboard`;
 
   readonly dashboard = signal<DashboardDto | null>(null);
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
 
   loadDashboard(timeframe: number | null): void {
-
     this.loading.set(true);
     this.error.set(null);
 

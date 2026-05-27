@@ -2,6 +2,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs';
 import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +19,7 @@ export class AuthService {
 
   login(credentials: { email: string; password: string }) {
     return this.http
-      .post('http://localhost:8080/log-in', credentials, { responseType: 'text' })
+      .post(`${environment.serverUrl}/log-in`, credentials, { responseType: 'text' })
       .pipe(
         tap((jwt) => {
           localStorage.setItem('jwt', jwt);

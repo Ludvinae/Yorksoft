@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { Page } from '../../models/page/Page';
 import { TicketSearchCriteria } from '../../models/page/TicketSearchCriteria';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -14,10 +15,8 @@ import { TicketSearchCriteria } from '../../models/page/TicketSearchCriteria';
  * !!! A adapter au nouveau template !!!
  */
 export class TicketService {
-
-
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:8080/ticket';
+  private apiUrl = `${environment.serverUrl}/ticket`;
 
   readonly ticketList = signal<Ticket[]>([]);
   readonly ticketDetail = signal<TicketListDto[]>([]);
@@ -62,7 +61,7 @@ export class TicketService {
       }
     });
 
-    return this.http.get<Page<TicketListDto>>('http://localhost:8080/ticket/list', { params });
+    return this.http.get<Page<TicketListDto>>(`${environment.serverUrl}/ticket/list`, { params });
   }
 
   create(ticket: TicketCreation): Observable<Ticket> {
@@ -91,13 +90,12 @@ export class TicketService {
   }
 
   assign(idTicket: number, idTechnician: number, idManager: number, statusReason: string) {
-
-    const assignment: TicketAssignment = {idTechnician, idManager, statusReason};
+    const assignment: TicketAssignment = { idTechnician, idManager, statusReason };
 
     return this.http.post(`${this.apiUrl}/${idTicket}/assign`, assignment).pipe(
       tap((result) => {
         this.getAll().subscribe();
-      })
+      }),
     );
   }
 }

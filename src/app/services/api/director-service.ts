@@ -1,13 +1,14 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DirectorService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:8080/director';
+  private apiUrl = `${environment.serverUrl}/director`;
 
   readonly directorList = signal<Director[]>([]);
 
