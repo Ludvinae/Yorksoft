@@ -262,20 +262,19 @@ public interface TicketDao extends JpaRepository<Ticket, Integer>, JpaSpecificat
     @Query("""
         SELECT new com.mns.cda.suivimns.dto.details.TicketDetailDto(
             t.idTicket, t.title, t.initialPriority, t.currentPriority, t.currentStatus,
-            c.idAppUser, CONCAT(c.firstName, ' ', c.lastName), c.email, c.phoneNumber,
+            c.idAppUser, CONCAT(c.firstName, ' ', c.lastName), c.email, c.phoneNumber, c.importance,
             t.currentTheme, s.name, v.idVersion, CONCAT(v.versionNumber, ' ', vt.code), t.openDate, t.closeDate,
             t.description,
-            CONCAT(te.firstName, '', te.lastName), CONCAT(m.firstName, ' ', m.lastName), a.assignmentDate)
+            CONCAT(te.firstName, ' ', te.lastName), CONCAT(m.firstName, ' ', m.lastName), a.assignmentDate)
         FROM Ticket t
         JOIN t.client c
         JOIN t.version v
         JOIN v.versionType vt
         JOIN v.software s
-        JOIN t.currentTechnician te
-        JOIN t.currentManager m
-        JOIN t.assignmentList a
+        LEFT JOIN t.currentTechnician te
+        LEFT JOIN t.currentManager m
+        LEFT JOIN t.assignmentList a ON a.endDate IS null
         WHERE t.idTicket = :idTicket
-        AND (a.endDate IS null OR te IS null)
     """)
     TicketDetailDto ticketDetail(Integer idTicket);
 
@@ -301,7 +300,7 @@ public interface TicketDao extends JpaRepository<Ticket, Integer>, JpaSpecificat
 
     @Query("""
         SELECT new com.mns.cda.suivimns.dto.details.TicketDetailComment(
-            c.idComment, c.content, c.dateSent, c.lastModification, 
+            c.idComment, c.content, c.dateSent, c.lastModification,
             CONCAT(a.firstName, ' ', a.lastName))
         FROM Comment c
         JOIN c.ticket t ON t.idTicket = :idTicket

@@ -21,6 +21,7 @@ public record TicketDetailDto(
         String clientFullName,
         String clientEmail,
         String clientPhone,
+        Byte importance,
 
         // Détails techniques
         ThemeEnum currentTheme,
