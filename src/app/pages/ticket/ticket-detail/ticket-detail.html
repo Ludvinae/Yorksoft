@@ -1,10 +1,328 @@
 
+@if (!detail()) {
+  <div class="items-center">
+    <span class="loading loading-ring loading-xl"></span>
+    <span class="loading loading-ring loading-xl"></span>
+    <span class="loading loading-ring loading-xl"></span>
+  </div>
+} @else {
+
+  <!-- HEADER -->
+  <div class="flex flex-col gap-4 mb-6">
+
+    <div class="flex items-center gap-3">
+
+      <div class="badge badge-outline">
+        {{ detail()?.currentStatus }}
+      </div>
+
+      <div class="badge badge-outline">
+        {{ detail()?.currentPriority }}
+      </div>
+
+      <span class="text-lg">
+        Ticket #{{ detail()?.idTicket }}
+      </span>
+
+    </div>
+
+    <h1 class="text-5xl font-bold">
+      {{ detail()?.title }}
+    </h1>
+
+  </div>
+
+  <!-- MAIN GRID -->
+  <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+
+    <!-- LEFT -->
+    <div class="xl:col-span-9 flex flex-col gap-6">
+
+      <!-- TOP INFO -->
+      <div class="grid md:grid-cols-2 gap-6">
+
+        <!-- CLIENT -->
+        <div class="card bg-base-100 shadow-md border border-base-300">
+          <div class="card-body">
+
+            <h2 class="card-title">
+              Informations sur le client
+            </h2>
+
+            <div class="space-y-2 text-sm">
+
+              <div class="flex justify-between">
+                <span>ID</span>
+                <span class="font-semibold">
+                  #{{ detail()?.idClient }}
+                </span>
+              </div>
+
+              <div class="flex justify-between">
+                <span>Prénom</span>
+                <span class="font-semibold">
+                  {{ detail()?.clientFullName }}
+                </span>
+              </div>
+
+              <!--
+              <div class="flex justify-between">
+                <span>Nom</span>
+                <span class="font-semibold">
+                  {{ detail()?.client.lastname }}
+                </span>
+              </div>
+              -->
+
+              <div class="flex justify-between">
+                <span>Courriel</span>
+                <span class="font-semibold">
+                  {{ detail()?.clientEmail }}
+                </span>
+              </div>
+
+              <div class="flex justify-between">
+                <span>Téléphone</span>
+                <span class="font-semibold">
+                  {{ detail()?.clientPhone }}
+                </span>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+        <!-- TECHNICAL -->
+        <div class="card bg-base-100 shadow-md border border-base-300">
+          <div class="card-body">
+
+            <h2 class="card-title">
+              Détails techniques
+            </h2>
+
+            <div class="space-y-2 text-sm">
+
+              <div class="flex justify-between">
+                <span>Thématique</span>
+                <span class="font-semibold">
+                  {{ detail()?.currentTheme }}
+                </span>
+              </div>
+
+              <div class="flex justify-between">
+                <span>Logiciel</span>
+                <span class="font-semibold">
+                  {{ detail()?.softwareName }}
+                </span>
+              </div>
+
+              <div class="flex justify-between">
+                <span>Version</span>
+                <span class="font-semibold">
+                  {{ detail()?.versionAbbreviatedLabel }}
+                </span>
+              </div>
+
+              <div class="flex justify-between">
+                <span>Date de création</span>
+                <span class="font-semibold">
+                  {{ detail()?.openDate }}
+                </span>
+              </div>
+
+              <div class="flex justify-between">
+                <span>Heure</span>
+                <span class="font-semibold">
+                  {{ detail()?.openDate }}
+                </span>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- DESCRIPTION -->
+      <div class="card bg-base-100 shadow-md border border-base-300">
+        <div class="card-body">
+
+          <h2 class="card-title">
+            Description de l’incident
+          </h2>
+
+          <div class="bg-base-200 rounded-xl p-4 leading-relaxed whitespace-pre-line">
+            {{ detail()?.description }}
+          </div>
+
+        </div>
+      </div>
+
+      <!-- COMMENTS -->
+      <div class="card bg-base-100 shadow-md border border-base-300">
+        <div class="card-body">
+
+          <div class="flex justify-between items-center">
+            <h2 class="card-title">
+              Commentaires
+            </h2>
+
+            <span class="text-sm opacity-70">
+              {{ comments()!.length }} messages
+            </span>
+          </div>
+
+          <div class="space-y-4">
+
+            @for (comment of comments(); track comment.idComment) {
+
+              <div class="bg-base-200 rounded-xl p-4">
+
+                <div class="flex justify-between items-start mb-2">
+
+                  <div>
+                    <p class="font-bold">
+                      {{ comment.authorFullName }}
+                    </p>
+                    <!--
+                    <p class="text-sm opacity-70">
+                      {{ comment.role }}
+                    </p>
+                    -->
+                  </div>
+
+                  <span class="text-sm opacity-60">
+                    {{ comment.dateSent }}
+                  </span>
+
+                </div>
+
+                <p class="leading-relaxed">
+                  {{ comment.content }}
+                </p>
+
+              </div>
+
+            }
+
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT SIDEBAR -->
+    <div class="xl:col-span-3 flex flex-col gap-6">
+
+      <!-- ACTIONS -->
+      <div class="card bg-base-100 shadow-md border border-base-300">
+        <div class="card-body">
+
+          <h2 class="card-title justify-center">
+            Marquer le ticket
+          </h2>
+
+          <div class="flex gap-3 justify-center mt-2">
+
+            <button class="btn btn-success">
+              Résolu
+            </button>
+
+            <button class="btn btn-neutral">
+              Clos
+            </button>
+
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ASSIGNATION -->
+      <div class="card bg-base-100 shadow-md border border-base-300">
+        <div class="card-body">
+
+          <h2 class="card-title">
+            Affectation
+          </h2>
+
+          <div class="space-y-4">
+
+            <div>
+              <p class="font-semibold">
+                {{ detail()?.currentTechnicianFullName }}
+              </p>
+            </div>
+
+            <div>
+              <p class="text-sm opacity-70">
+                Attribué par
+              </p>
+
+              <p class="font-semibold">
+                {{ detail()?.currentManagerFullName }}
+              </p>
+            </div>
+
+            <div class="flex justify-between text-sm">
+              <span>{{ detail()?.assignmentDate }}</span>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+      <!-- KNOWLEDGE -->
+      <div class="card bg-base-100 shadow-md border border-base-300">
+        <div class="card-body">
+
+          <h2 class="card-title">
+            Articles connexes
+          </h2>
+
+          <div class="space-y-4">
+
+            @for (article of articles(); track article.idArticle) {
+
+              <div>
+
+                <h3 class="font-semibold leading-tight">
+                  {{ article.title }}
+                </h3>
+
+                <p class="text-sm opacity-70">
+                  {{ article.content }}
+                </p>
+
+              </div>
+
+            }
+
+          </div>
+
+          <button class="btn btn-outline mt-4">
+            BASE DE CONNAISSANCES
+          </button>
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+}
+
+<!--
 @if (ticket()) {
   <app-detail-page [loading]="loading()" [error]="error()" [title]="label()"
                    [updateRoute]="updateRoute">
 
     <h2 class="text-2xl font-bold">{{ ticket()?.title }} {{ ticket()?.currentStatus }}</h2>
-    <h3>Logiciel : {{ ticket()?.currentTheme }}</h3>
+    <h3>Thématique : {{ ticket()?.currentTheme }}</h3>
     <p>Sorti le : {{ ticket()?.modificationDate }}</p>
 
   </app-detail-page>
@@ -14,6 +332,7 @@
   <span class="loading loading-ring loading-xl"></span>
   <span class="loading loading-ring loading-xl"></span>
 }
+-->
 
 
 

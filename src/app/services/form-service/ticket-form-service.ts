@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { TicketService } from '../api/ticket-service';
 import { ThemeEnum } from '../../models/enum/ThemeEnum';
+import { StatusEnum } from '../../models/enum/StatusEnum';
 
 @Injectable({
   providedIn: 'root',
@@ -39,6 +40,7 @@ export class TicketFormService {
       idImpact: existing?.idImpact ?? 0,
       idUrgency: existing?.idUrgency ?? 0,
       currentTheme: existing?.currentTheme ?? ThemeEnum.OTHER_ISSUE,
+      currentStatus: existing?.currentStatus ?? StatusEnum.OPEN,
       commentIds: existing?.commentIds ?? [],
       assignmentIds: existing?.assignmentIds ?? [],
       themeIds: existing?.themeIds ?? [],

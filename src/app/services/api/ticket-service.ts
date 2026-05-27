@@ -27,7 +27,7 @@ export class TicketService {
   }
 
   getDetail(id: number) {
-    return this.http.get<TicketListDto>(`${this.apiUrl}/${id}/detail`);
+    return this.http.get<TicketDetailFullDto>(`${this.apiUrl}/${id}/detail`);
   }
 
   getAll() {

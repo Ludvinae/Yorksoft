@@ -10,6 +10,7 @@ type Ticket = {
   initialPriority: number;
   currentPriority: number;
   currentTheme: ThemeEnum;
+  currentStatus: StatusEnum;
   idVersion: number;
   idClient: number;
   idImpact: number;

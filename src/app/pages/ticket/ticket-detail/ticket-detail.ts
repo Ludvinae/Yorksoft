@@ -4,10 +4,11 @@ import { TicketService } from '../../../services/api/ticket-service';
 import { RouteBuilderService } from '../../../services/business/route-builder-service';
 import { tap } from 'rxjs';
 import { DetailPage } from '../../../components/detail-page/detail-page';
+import {TicketDetailDto} from '../../../models/details/TicketDetailDto';
 
 @Component({
   selector: 'app-ticket-detail',
-  imports: [DetailPage],
+  imports: [],
   templateUrl: './ticket-detail.html',
   styleUrl: './ticket-detail.css',
 })
@@ -16,16 +17,22 @@ export class TicketDetail implements OnInit {
   ticketService = inject(TicketService);
   routeBuilder = inject(RouteBuilderService);
 
-  ticket = signal<TicketListDto | null>(null);
+  //ticket = signal<TicketDetailFullDto | null>(null);
+  detail = signal<TicketDetailDto | null>(null);
+  comments = signal<TicketDetailComment[] | null>(null);
+  knowledge = signal<TicketDetailKnowledge | null>(null);
+  articles = signal<TicketDetailArticle[] | null>(null);
+
   loading = signal(true);
   error = signal<string | undefined>(undefined);
   label = signal<string | undefined>(undefined);
+
 
   updateRoute: string | undefined = undefined;
 
   ngOnInit() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.label.set('Logiciel #' + id);
+    this.label.set('Ticket #' + id);
 
     this.updateRoute = this.routeBuilder.getUpdateRoute(id, 'ticket');
 
@@ -33,7 +40,10 @@ export class TicketDetail implements OnInit {
       .getDetail(id)
       .pipe(
         tap((s) => {
-          this.ticket.set(s);
+          this.detail.set(s.details);
+          this.comments.set(s.comments);
+          this.knowledge.set(s.knowledge);
+          this.articles.set(s.articles);
         }),
       )
       .subscribe({
