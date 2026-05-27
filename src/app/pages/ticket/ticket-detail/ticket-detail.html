@@ -1,42 +1,56 @@
 
 @if (!detail()) {
-  <div class="items-center">
-    <span class="loading loading-ring loading-xl"></span>
-    <span class="loading loading-ring loading-xl"></span>
-    <span class="loading loading-ring loading-xl"></span>
+  <div class="flex justify-between m-2">
+    <div class="items-center">
+      <span class="loading loading-ring loading-xl"></span>
+      <span class="loading loading-ring loading-xl"></span>
+      <span class="loading loading-ring loading-xl"></span>
+    </div>
+    <button class="btn btn-outline btn-sm" routerLink="/ticket">
+      Retour
+    </button>
   </div>
+
 } @else {
 
   <!-- HEADER -->
-  <div class="flex flex-col gap-4 mb-6">
+  <div class="flex flex-col  m-2">
 
-    <div class="flex items-center gap-3">
+    <div class="flex justify-between">
 
-      <div class="badge badge-outline">
-        {{ detail()?.currentStatus }}
-      </div>
+      <div class="flex items-center gap-3">
+        <div class="badge badge-outline">
+          {{ detail()?.currentStatus }}
+        </div>
 
-      <div class="badge badge-outline">
-        {{ detail()?.currentPriority }}
-      </div>
+        <div class="badge badge-outline">
+          {{ detail()?.currentPriority }}
+        </div>
 
-      <span class="text-lg">
+        <span class="text-lg">
         Ticket #{{ detail()?.idTicket }}
-      </span>
+        </span>
+      </div>
+
+      <div>
+        <button class="btn btn-outline btn-sm" routerLink="/ticket">
+          Retour
+        </button>
+      </div>
 
     </div>
 
-    <h1 class="text-5xl font-bold">
+    <h1 class="text-2xl font-bold">
       {{ detail()?.title }}
     </h1>
 
   </div>
 
   <!-- MAIN GRID -->
-  <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
     <!-- LEFT -->
-    <div class="xl:col-span-9 flex flex-col gap-6">
+    <div class="lg:col-span-8 flex flex-col gap-6">
 
       <!-- TOP INFO -->
       <div class="grid md:grid-cols-2 gap-6">
@@ -59,20 +73,11 @@
               </div>
 
               <div class="flex justify-between">
-                <span>Prénom</span>
+                <span>Nom</span>
                 <span class="font-semibold">
                   {{ detail()?.clientFullName }}
                 </span>
               </div>
-
-              <!--
-              <div class="flex justify-between">
-                <span>Nom</span>
-                <span class="font-semibold">
-                  {{ detail()?.client.lastname }}
-                </span>
-              </div>
-              -->
 
               <div class="flex justify-between">
                 <span>Courriel</span>
@@ -85,6 +90,13 @@
                 <span>Téléphone</span>
                 <span class="font-semibold">
                   {{ detail()?.clientPhone }}
+                </span>
+              </div>
+
+              <div class="flex justify-between">
+                <span>Importance</span>
+                <span class="font-semibold">
+                  {{ detail()?.importance }}
                 </span>
               </div>
 
@@ -127,14 +139,14 @@
               <div class="flex justify-between">
                 <span>Date de création</span>
                 <span class="font-semibold">
-                  {{ detail()?.openDate }}
+                  {{ detail()?.openDate | date: 'fullDate' }}
                 </span>
               </div>
 
               <div class="flex justify-between">
                 <span>Heure</span>
                 <span class="font-semibold">
-                  {{ detail()?.openDate }}
+                  {{ detail()?.openDate | date: 'shortTime' }}
                 </span>
               </div>
 
@@ -215,7 +227,7 @@
     </div>
 
     <!-- RIGHT SIDEBAR -->
-    <div class="xl:col-span-3 flex flex-col gap-6">
+    <div class="lg:col-span-4 flex flex-col gap-6">
 
       <!-- ACTIONS -->
       <div class="card bg-base-100 shadow-md border border-base-300">
@@ -227,11 +239,11 @@
 
           <div class="flex gap-3 justify-center mt-2">
 
-            <button class="btn btn-success">
+            <button class="btn btn-success btn-sm">
               Résolu
             </button>
 
-            <button class="btn btn-neutral">
+            <button class="btn btn-neutral btn-sm">
               Clos
             </button>
 
@@ -248,29 +260,39 @@
             Affectation
           </h2>
 
+          @if (detail()?.currentTechnicianFullName) {
           <div class="space-y-4">
+            <div class="flex flex-row justify-between">
+              <div>
+                <p class="text-sm opacity-70">
+                  Technicien
+                </p>
+                <p class="font-semibold">
+                  {{ detail()?.currentTechnicianFullName }}
+                </p>
+              </div>
+              <div>
+                <p class="text-sm opacity-70">
+                  Attribué par
+                </p>
 
-            <div>
-              <p class="font-semibold">
-                {{ detail()?.currentTechnicianFullName }}
-              </p>
+                <p class="font-semibold">
+                  {{ detail()?.currentManagerFullName }}
+                </p>
+              </div>
             </div>
 
-            <div>
-              <p class="text-sm opacity-70">
-                Attribué par
-              </p>
-
-              <p class="font-semibold">
-                {{ detail()?.currentManagerFullName }}
-              </p>
-            </div>
 
             <div class="flex justify-between text-sm">
-              <span>{{ detail()?.assignmentDate }}</span>
+              <span>{{ detail()?.assignmentDate | date: 'medium' }}</span>
             </div>
 
           </div>
+          } @else {
+            <p class="font-semibold">
+              Aucune affectation
+            </p>
+          }
 
         </div>
       </div>
@@ -283,26 +305,28 @@
             Articles connexes
           </h2>
 
-          <div class="space-y-4">
+          @if (articles().length > 0) {
+            <div class="space-y-4">
 
-            @for (article of articles(); track article.idArticle) {
+              @for (article of articles(); track article.idArticle) {
 
-              <div>
+                <div>
 
-                <h3 class="font-semibold leading-tight">
-                  {{ article.title }}
-                </h3>
+                  <h3 class="font-semibold leading-tight">
+                    {{ article.title }}
+                  </h3>
 
-                <p class="text-sm opacity-70">
-                  {{ article.content }}
-                </p>
-
-              </div>
-
-            }
-
-          </div>
-
+                  <p class="text-sm opacity-70">
+                    {{ article.content }}
+                  </p>
+                </div>
+              }
+            </div>
+          } @else {
+            <p class="font-semibold">
+              Aucun article correspondant trouvé
+            </p>
+          }
           <button class="btn btn-outline mt-4">
             BASE DE CONNAISSANCES
           </button>

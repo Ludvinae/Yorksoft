@@ -1,14 +1,13 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { TicketService } from '../../../services/api/ticket-service';
 import { RouteBuilderService } from '../../../services/business/route-builder-service';
 import { tap } from 'rxjs';
-import { DetailPage } from '../../../components/detail-page/detail-page';
-import {TicketDetailDto} from '../../../models/details/TicketDetailDto';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-ticket-detail',
-  imports: [],
+  imports: [RouterLink, DatePipe],
   templateUrl: './ticket-detail.html',
   styleUrl: './ticket-detail.css',
 })
@@ -17,16 +16,16 @@ export class TicketDetail implements OnInit {
   ticketService = inject(TicketService);
   routeBuilder = inject(RouteBuilderService);
 
-  //ticket = signal<TicketDetailFullDto | null>(null);
-  detail = signal<TicketDetailDto | null>(null);
-  comments = signal<TicketDetailComment[] | null>(null);
-  knowledge = signal<TicketDetailKnowledge | null>(null);
-  articles = signal<TicketDetailArticle[] | null>(null);
+  ticket = signal<TicketDetailFullDto | null>(null);
+
+  detail = computed(() => this.ticket()?.details);
+  comments = computed(() => this.ticket()?.comments ?? []);
+  knowledge = computed(() => this.ticket()?.knowledge);
+  articles = computed(() => this.ticket()?.articles ?? []);
 
   loading = signal(true);
   error = signal<string | undefined>(undefined);
   label = signal<string | undefined>(undefined);
-
 
   updateRoute: string | undefined = undefined;
 
@@ -40,10 +39,7 @@ export class TicketDetail implements OnInit {
       .getDetail(id)
       .pipe(
         tap((s) => {
-          this.detail.set(s.details);
-          this.comments.set(s.comments);
-          this.knowledge.set(s.knowledge);
-          this.articles.set(s.articles);
+          this.ticket.set(s);
         }),
       )
       .subscribe({

@@ -1,5 +1,3 @@
-import { StatusEnum } from '../enum/StatusEnum';
-import { ThemeEnum } from '../enum/ThemeEnum';
 
 type TicketDetailDto = {
   // Titre
@@ -14,6 +12,7 @@ type TicketDetailDto = {
   clientFullName: string;
   clientEmail: string;
   clientPhone: string;
+  importance: number;
 
   // Details techniques
   currentTheme: ThemeEnum;

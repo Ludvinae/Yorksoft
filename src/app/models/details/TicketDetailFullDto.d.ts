@@ -1,6 +1,6 @@
 type TicketDetailFullDto = {
   details: TicketDetailDto;
-  comments: List<TicketDetailComment>;
+  comments: TicketDetailComment[];
   knowledge: TicketDetailKnowledge;
-  articles: List<TicketDetailArticle>;
+  articles: TicketDetailArticle[];
 };
