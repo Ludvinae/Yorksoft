@@ -12,6 +12,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -33,6 +34,9 @@ public class AuthController {
     protected  final DirectorService directorService;
 
     protected final AuthenticationProvider authenticationProvider;
+
+    @Value("${jwt.secret}")
+    private String jwtSecret;
 
     // Should be removed once security is set-up
     @PostMapping("/sign-in")
@@ -108,7 +112,7 @@ public class AuthController {
                     .addClaims(Map.of("name", name))
                     .addClaims(Map.of("id", id))
                     .addClaims(Map.of("rank", rank))
-                    .signWith(SignatureAlgorithm.HS256, "azerty")
+                    .signWith(SignatureAlgorithm.HS256, jwtSecret)
                     .compact();
             return new ResponseEntity<>(jwt, HttpStatus.OK);
 

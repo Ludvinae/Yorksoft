@@ -273,8 +273,9 @@ public interface TicketDao extends JpaRepository<Ticket, Integer>, JpaSpecificat
         JOIN v.software s
         JOIN t.currentTechnician te
         JOIN t.currentManager m
-        JOIN t.assignmentList a ON a.endDate IS null
+        JOIN t.assignmentList a
         WHERE t.idTicket = :idTicket
+        AND (a.endDate IS null OR te IS null)
     """)
     TicketDetailDto ticketDetail(Integer idTicket);
 
