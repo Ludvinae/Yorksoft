@@ -1,0 +1,32 @@
+<form
+  class="flex flex-col gap-3"
+  [formGroup]="form"
+  (ngSubmit)="submit()"
+>
+
+  <textarea
+    class="textarea textarea-bordered min-h-32 w-full"
+    formControlName="content"
+    placeholder="Écrire un commentaire"
+  ></textarea>
+
+  @if (
+    form.controls.content.invalid
+    && form.controls.content.touched
+    ) {
+    <span class="text-error text-sm">
+      Le commentaire est invalide
+    </span>
+  }
+
+  <div class="flex justify-end">
+    <button
+      class="btn btn-primary"
+      type="submit"
+      [disabled]="form.invalid"
+    >
+      Envoyer
+    </button>
+  </div>
+
+</form>

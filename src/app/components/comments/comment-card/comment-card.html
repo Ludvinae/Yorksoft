@@ -1,0 +1,53 @@
+<div class="card bg-base-100 border border-base-300">
+  <div class="card-body p-4">
+
+    <div class="flex items-start gap-3">
+
+      <div class="avatar placeholder">
+        <div class="bg-neutral text-neutral-content rounded w-12">
+          <span>
+            <img src="https://ui-avatars.com/api/?name={{ comment?.authorFullName }}" />
+          </span>
+        </div>
+      </div>
+
+      <div class="flex-1">
+
+        <div class="flex justify-between items-center">
+
+          <div class="flex items-center gap-2">
+            <span class="font-semibold">
+              {{ comment?.authorFullName }}
+            </span>
+
+            <span class="text-sm opacity-70">
+              Role placeholder
+            </span>
+          </div>
+
+          <span class="text-xs opacity-60">
+            {{ comment?.dateSent | date:'HH:mm' }}
+          </span>
+
+          @if (comment?.lastModification != comment?.dateSent) {
+            <span class="text-xs italic opacity-60">
+              modifié à {{ comment?.lastModification }}
+            </span>
+          }
+
+        </div>
+
+        <div>
+          <p class="mt-2 whitespace-pre-line">
+            {{ comment?.content }}
+          </p>
+
+          <span class="text-xs opacity-60">
+            {{ comment?.lastModification | date:'HH:mm' }}
+          </span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

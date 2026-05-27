@@ -1,6 +1,6 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
 @Injectable({
@@ -24,8 +24,12 @@ export class CommentService {
     );
   }
 
-  create(comment: Comment) {
+  create(comment: CommentDto) {
     return this.http.post(`${this.apiUrl}`, comment).pipe(tap(() => this.getAll().subscribe()));
+  }
+
+  createComment(comment: CommentDto): Observable<TicketDetailComment> {
+    return this.http.post<TicketDetailComment>(`${this.apiUrl}/comment`, comment);
   }
 
   update(comment: Comment, id: number) {
