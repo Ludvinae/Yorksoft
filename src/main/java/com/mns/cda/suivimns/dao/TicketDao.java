@@ -4,8 +4,12 @@ import com.mns.cda.suivimns.dto.dashboard.graphs.SoftwareStatDto;
 import com.mns.cda.suivimns.dto.dashboard.graphs.TechnicianWorkloadDto;
 import com.mns.cda.suivimns.dto.dashboard.graphs.ThemeStatDto;
 import com.mns.cda.suivimns.dto.dashboard.graphs.TicketStatusStatDto;
+import com.mns.cda.suivimns.dto.details.TicketDetailArticle;
+import com.mns.cda.suivimns.dto.details.TicketDetailComment;
+import com.mns.cda.suivimns.dto.details.TicketDetailDto;
+import com.mns.cda.suivimns.dto.details.TicketDetailKnowledge;
+import com.mns.cda.suivimns.enumerate.ThemeEnum;
 import com.mns.cda.suivimns.model.Ticket;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -254,6 +258,56 @@ public interface TicketDao extends JpaRepository<Ticket, Integer>, JpaSpecificat
     int closedTicketsWithoutEndDate();
 
 
+    // Details des tickets
+    @Query("""
+        SELECT new com.mns.cda.suivimns.dto.details.TicketDetailDto(
+            t.idTicket, t.title, t.initialPriority, t.currentPriority, t.currentStatus,
+            c.idAppUser, CONCAT(c.firstName, ' ', c.lastName), c.email, c.phoneNumber,
+            t.currentTheme, s.name, v.idVersion, CONCAT(v.versionNumber, ' ', vt.code), t.openDate, t.closeDate,
+            t.description,
+            CONCAT(te.firstName, '', te.lastName), CONCAT(m.firstName, ' ', m.lastName), a.assignmentDate)
+        FROM Ticket t
+        JOIN t.client c
+        JOIN t.version v
+        JOIN v.versionType vt
+        JOIN v.software s
+        JOIN t.currentTechnician te
+        JOIN t.currentManager m
+        JOIN t.assignmentList a ON a.endDate IS null
+        WHERE t.idTicket = :idTicket
+    """)
+    TicketDetailDto ticketDetail(Integer idTicket);
+
+
+    @Query("""
+        SELECT new com.mns.cda.suivimns.dto.details.TicketDetailKnowledge(
+            k.idKnowledge, k.subject)
+        FROM Knowledge k
+        JOIN k.versionList v ON v.idVersion = :idVersion
+        WHERE k.theme.code = :themeEnum
+    """)
+    TicketDetailKnowledge ticketKnowledge(ThemeEnum themeEnum, Integer idVersion);
+
+
+    @Query("""
+        SELECT new com.mns.cda.suivimns.dto.details.TicketDetailArticle(
+            a.idArticle, a.creationDate, a.modificationDate, a.title, a.content)
+        FROM Article a
+        JOIN a.knowledge k
+        WHERE k.idKnowledge = :idKnowledge
+    """)
+    List<TicketDetailArticle>  ticketDetailArticles(Integer idKnowledge);
+
+    @Query("""
+        SELECT new com.mns.cda.suivimns.dto.details.TicketDetailComment(
+            c.idComment, c.content, c.dateSent, c.lastModification, 
+            CONCAT(a.firstName, ' ', a.lastName))
+        FROM Comment c
+        JOIN c.ticket t ON t.idTicket = :idTicket
+        JOIN c.author a
+    """)
+    List<TicketDetailComment> ticketDetailComments(Integer idTicket);
+
     /* Deprecated queries
     @Query("SELECT new com.mns.cda.suivimns.dto.flat.TicketResponse(" +
             "t.idTicket, t.title, t.description, t.modificationDate, " +
@@ -271,30 +325,6 @@ public interface TicketDao extends JpaRepository<Ticket, Integer>, JpaSpecificat
             "FROM Classification cl2 " +
             "WHERE cl2.ticket = t)")
     List<TicketResponse> findAllDto() ;
-
-    @Query("SELECT new com.mns.cda.suivimns.dto.flat.TicketFullWithLatest(" +
-                "t.idTicket, t.title, t.modificationDate, " +
-                "t.currentPriority, v.versionNumber, vt.designation, " +
-                "s.name, th.designation, st.designation, " +
-                "COUNT(DISTINCT cm.idComment) AS commentCount) " +
-            "FROM Ticket t " +
-            "JOIN t.version v " +
-            "JOIN v.versionType vt " +
-            "JOIN v.software s " +
-            "JOIN t.classificationList cl " +
-            "JOIN cl.theme th " +
-            "JOIN t.historyList h " +
-            "JOIN h.status st " +
-            "LEFT JOIN t.commentList cm " +
-            "WHERE h.endDate IS NULL " +
-            "AND cl.affectationDate = (" +
-                "SELECT MAX(cl2.affectationDate) " +
-                "FROM Classification cl2 " +
-                "WHERE cl2.ticket = t)" +
-            "GROUP BY t.idTicket, t.title, t.modificationDate, " +
-                "t.currentPriority, v.versionNumber, vt.designation, " +
-                "s.name, th.designation, st.designation")
-    List<TicketFullWithLatest> returnTicketFullWithLatest();
 
     @Query("SELECT new com.mns.cda.suivimns.dto.flat.TicketFullWithLatest(" +
             "t.idTicket, t.title, t.modificationDate, " +

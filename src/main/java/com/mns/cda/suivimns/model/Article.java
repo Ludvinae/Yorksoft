@@ -36,6 +36,9 @@ public class Article {
     @Column(nullable = false, columnDefinition = "TEXT")
     protected String content;
 
+    @Column(nullable = false)
+    protected String title;
+
     @ManyToOne(optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_knowledge", nullable = false)

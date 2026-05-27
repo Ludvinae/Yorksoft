@@ -1,0 +1,42 @@
+package com.mns.cda.suivimns.dto.details;
+
+import com.mns.cda.suivimns.enumerate.StatusEnum;
+import com.mns.cda.suivimns.enumerate.ThemeEnum;
+import com.mns.cda.suivimns.model.Article;
+import com.mns.cda.suivimns.model.Comment;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+public record TicketDetailDto(
+        // Titre
+        Integer idTicket,
+        String title,
+        Integer initialPriority,
+        Integer currentPriority,
+        StatusEnum currentStatus,
+
+        // Client
+        Integer idClient,
+        String clientFullName,
+        String clientEmail,
+        String clientPhone,
+
+        // Détails techniques
+        ThemeEnum currentTheme,
+        String softwareName,
+        Integer idVersion,
+        String versionAbbreviatedLabel,
+        LocalDateTime openDate,
+        LocalDateTime closeDate,
+
+        // Description
+        String description,
+
+        // Affectation
+        String currentTechnicianFullName,
+        String currentManagerFullName,
+        LocalDateTime assignmentDate
+
+) {
+}

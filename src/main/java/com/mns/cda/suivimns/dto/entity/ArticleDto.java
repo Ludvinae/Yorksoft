@@ -9,6 +9,7 @@ public record ArticleDto(
         Integer idArticle,
         LocalDateTime creationDate,
         LocalDateTime modificationDate,
+        @NotBlank String title,
         @NotBlank String content,
         @NotNull Integer idKnowledge,
         Integer idAuthor

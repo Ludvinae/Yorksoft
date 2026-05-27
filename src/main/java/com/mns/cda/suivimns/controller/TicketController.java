@@ -1,11 +1,13 @@
 package com.mns.cda.suivimns.controller;
 
+import com.mns.cda.suivimns.dto.details.TicketDetailFullDto;
 import com.mns.cda.suivimns.dto.entity.TicketDto;
 import com.mns.cda.suivimns.dto.search.TicketListDto;
 import com.mns.cda.suivimns.dto.search.TicketSearchCriteria;
 import com.mns.cda.suivimns.dto.workflow.*;
 import com.mns.cda.suivimns.dto.flat.TicketFullWithLatest;
 import com.mns.cda.suivimns.security.*;
+import com.mns.cda.suivimns.service.business.TicketDetailService;
 import com.mns.cda.suivimns.service.entity.StatusService;
 import com.mns.cda.suivimns.service.entity.TicketService;
 import com.mns.cda.suivimns.service.search.TicketQueryService;
@@ -34,6 +36,7 @@ import java.util.List;
 public class TicketController {
 
     protected final TicketService ticketService;
+    protected final TicketDetailService ticketDetailService;
 
 
     @Operation(summary = "Récupère tous les tickets",
@@ -64,6 +67,21 @@ public class TicketController {
 
         try {
             return new ResponseEntity<>(ticketService.findById(id) , HttpStatus.OK);
+        } catch (TicketService.TicketNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+    @Operation(summary = "Récupére les détails d'un ticket en fonction de son ID")
+    @ApiResponses({@ApiResponse(responseCode = "200", description = "Ticket trouvée"),
+            @ApiResponse(responseCode = "404", description = "Ticket non trouvée")})
+    @GetMapping("/{id}/detail")
+    @IsEmployee
+    public ResponseEntity<TicketDetailFullDto> getDetails(@PathVariable int id) {
+
+        try {
+            return new ResponseEntity<>(ticketDetailService.getTicketDetails(id) , HttpStatus.OK);
         } catch (TicketService.TicketNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

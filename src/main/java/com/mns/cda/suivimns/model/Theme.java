@@ -32,4 +32,5 @@ public class Theme {
 
     @OneToMany(mappedBy = "theme")
     protected List<Classification> classificationList;
+
 }

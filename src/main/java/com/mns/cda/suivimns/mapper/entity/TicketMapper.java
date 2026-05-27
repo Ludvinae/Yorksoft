@@ -86,6 +86,7 @@ public abstract class TicketMapper {
     public abstract TicketListDto toListDto(Ticket ticket);
 
 
+
     // Method helper pour ID vers ENTITE
     protected Version mapIdToVersion(Integer id) {
         return versionDao.getReferenceById(id);
