@@ -1,6 +1,8 @@
 package com.mns.cda.suivimns.controller;
 
+import com.mns.cda.suivimns.dto.details.TicketDetailComment;
 import com.mns.cda.suivimns.dto.entity.CommentDto;
+import com.mns.cda.suivimns.dto.flat.PostCommentDto;
 import com.mns.cda.suivimns.security.AppUserDetails;
 import com.mns.cda.suivimns.security.IsAdmin;
 import com.mns.cda.suivimns.security.IsEmployee;
@@ -58,7 +60,7 @@ public class CommentController {
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PostMapping
     @IsEmployee
-    public ResponseEntity<CommentDto> create(@RequestBody @Valid CommentDto comment) {
+    public ResponseEntity<TicketDetailComment> create(@RequestBody @Valid PostCommentDto comment) {
         return new ResponseEntity<>(commentService.save(comment), HttpStatus.CREATED);
     }
 

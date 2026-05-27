@@ -1,9 +1,15 @@
 package com.mns.cda.suivimns.service.entity;
 
+import com.mns.cda.suivimns.dao.AppUserDao;
 import com.mns.cda.suivimns.dao.CommentDao;
+import com.mns.cda.suivimns.dao.TicketDao;
+import com.mns.cda.suivimns.dto.details.TicketDetailComment;
 import com.mns.cda.suivimns.dto.entity.CommentDto;
+import com.mns.cda.suivimns.dto.flat.PostCommentDto;
 import com.mns.cda.suivimns.mapper.entity.CommentMapper;
+import com.mns.cda.suivimns.model.AppUser;
 import com.mns.cda.suivimns.model.Comment;
+import com.mns.cda.suivimns.model.Ticket;
 import com.mns.cda.suivimns.security.AppUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,6 +31,8 @@ public class CommentService  {
 
     protected final CommentDao commentDao;
     protected final CommentMapper commentMapper;
+    protected final TicketDao ticketDao;
+    protected final AppUserDao appUserDao;
 
     public List<CommentDto> findAll() {
         return commentMapper.toDtoList(commentDao.findAll());
@@ -37,12 +45,18 @@ public class CommentService  {
         return commentMapper.toDto(comment);
     }
 
-    public CommentDto save(CommentDto dto) {
-        Comment comment = commentMapper.toEntity(dto);
-        comment.setIdComment(null);
+    public TicketDetailComment save(PostCommentDto dto) {
+        Ticket ticket = ticketDao.findById(dto.idTicket()).orElseThrow(TicketService.TicketNotFoundException::new);
+        AppUser author = appUserDao.findById(dto.idAuthor()).orElseThrow(AppUserService.AppUserNotFoundException::new);
+        // Utiliser authorities pour comparer avec le principal
+        // Ou bien ne pas inclure l'id de l'auteur dans PostCommentDto
+        String authorName = author.getFirstName() + " " + author.getLastName();
+
+        Comment comment = new Comment(null, dto.content(), null, null, ticket, author);
         Comment saved = commentDao.save(comment);
 
-        return commentMapper.toDto(saved);
+        return new TicketDetailComment(comment.getIdComment(), comment.getContent(),
+                comment.getDateSent(), comment.getLastModification(), authorName);
     }
 
     public void delete(int id, AppUserDetails userDetails) throws CommentService.CommentNotFoundException {

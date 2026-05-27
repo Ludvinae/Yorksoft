@@ -308,6 +308,7 @@ public interface TicketDao extends JpaRepository<Ticket, Integer>, JpaSpecificat
     """)
     List<TicketDetailComment> ticketDetailComments(Integer idTicket);
 
+
     /* Deprecated queries
     @Query("SELECT new com.mns.cda.suivimns.dto.flat.TicketResponse(" +
             "t.idTicket, t.title, t.description, t.modificationDate, " +
