@@ -41,7 +41,7 @@ class VersionTypeControllerUnitTest {
     void setUp() {
         //DTO
         versionTypeDto = new VersionTypeDto(
-                1, "Test designation", (byte) 1);
+                1, "Test designation", "ABC", (byte) 1);
 
     }
 
@@ -51,7 +51,7 @@ class VersionTypeControllerUnitTest {
     @Test
     void shouldReturn400WhenCreateInvalid() throws Exception {
 
-        VersionTypeDto invalidDto = new VersionTypeDto(null,"", (byte) 1);
+        VersionTypeDto invalidDto = new VersionTypeDto(null,"", "ABC", (byte) 1);
 
         mockMvc.perform(post("/version-type")
                         .contentType(MediaType.APPLICATION_JSON)

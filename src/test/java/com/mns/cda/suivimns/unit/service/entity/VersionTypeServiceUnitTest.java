@@ -35,7 +35,7 @@ public class VersionTypeServiceUnitTest {
     void shouldReturnAll() {
 
         List<VersionType> entities = List.of(new VersionType());
-        List<VersionTypeDto> dtos = List.of(new VersionTypeDto(1, "Test", (byte) 1));
+        List<VersionTypeDto> dtos = List.of(new VersionTypeDto(1, "Test", "ABC" , (byte) 1));
 
         when(versionTypeDao.findAll()).thenReturn(entities);
         when(versionTypeMapper.toDtoList(entities)).thenReturn(dtos);
@@ -51,7 +51,7 @@ public class VersionTypeServiceUnitTest {
     void shouldReturnById() throws Exception {
 
         VersionType entity = new VersionType();
-        VersionTypeDto dto = new VersionTypeDto(1, "Test", (byte) 1);
+        VersionTypeDto dto = new VersionTypeDto(1, "Test", "ABC", (byte) 1);
 
         when(versionTypeDao.findById(1)).thenReturn(Optional.of(entity));
         when(versionTypeMapper.toDto(entity)).thenReturn(dto);
@@ -73,10 +73,10 @@ public class VersionTypeServiceUnitTest {
     @Test
     void shouldSave() {
 
-        VersionTypeDto createDto = new VersionTypeDto(null,"Test", (byte) 1);
+        VersionTypeDto createDto = new VersionTypeDto(null,"Test","ABC", (byte) 1);
         VersionType entity = new VersionType();
         VersionType saved = new VersionType();
-        VersionTypeDto responseDto = new VersionTypeDto(1, "Test", (byte) 1);
+        VersionTypeDto responseDto = new VersionTypeDto(1, "Test", "ABC", (byte) 1);
 
         when(versionTypeMapper.toEntity(createDto)).thenReturn(entity);
         when(versionTypeDao.save(entity)).thenReturn(saved);

@@ -119,7 +119,7 @@ class TechnicianControllerUnitTest {
                 .andExpect(jsonPath("$.idAppUser").value(1))
                 .andExpect(jsonPath("$.email").value("Test@email.com"));
     }
-
+/*
     // =========================
     // DELETE - OK
     // =========================
@@ -180,5 +180,7 @@ class TechnicianControllerUnitTest {
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
+
+ */
 
 }

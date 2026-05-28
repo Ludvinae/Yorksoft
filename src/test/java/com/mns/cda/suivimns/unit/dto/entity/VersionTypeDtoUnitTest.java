@@ -19,7 +19,7 @@ public class VersionTypeDtoUnitTest {
 
     @Test
     public void versionTypeWithBlankDesignation_shouldNotBeValid() {
-        VersionTypeDto type = new VersionTypeDto(1, "", (byte) 0);
+        VersionTypeDto type = new VersionTypeDto(1, "", "ABC", (byte) 0);
 
         boolean constraintExists = TestUtils.constraintViolationExists(
                 validator.validate(type),
@@ -33,7 +33,7 @@ public class VersionTypeDtoUnitTest {
     @Test
     public void versionTypeWithTooLongDesignation_shouldNotBeValid() {
         String designation = "a".repeat(128);
-        VersionTypeDto type = new VersionTypeDto(1, designation, (byte) 1);
+        VersionTypeDto type = new VersionTypeDto(1, designation, "ABC", (byte) 1);
 
         boolean constraintExists = TestUtils.constraintViolationExists(
                 validator.validate(type),
@@ -48,7 +48,7 @@ public class VersionTypeDtoUnitTest {
 
     @Test
     public void versionTypeWithValidData_shouldBeValid() {
-        VersionTypeDto type = new VersionTypeDto(1, "Test designation", (byte) 0);
+        VersionTypeDto type = new VersionTypeDto(1, "Test designation","ABC",  (byte) 0);
 
         Assertions.assertTrue(
                 validator.validate(type).isEmpty(),

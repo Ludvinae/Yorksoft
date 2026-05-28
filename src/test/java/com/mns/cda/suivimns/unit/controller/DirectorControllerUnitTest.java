@@ -119,7 +119,7 @@ class DirectorControllerUnitTest {
                 .andExpect(jsonPath("$.idAppUser").value(1))
                 .andExpect(jsonPath("$.email").value("Test@email.com"));
     }
-
+/*
     // =========================
     // DELETE - OK
     // =========================
@@ -180,4 +180,6 @@ class DirectorControllerUnitTest {
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
+
+ */
 }

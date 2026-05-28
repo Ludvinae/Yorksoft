@@ -12,5 +12,11 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql
 
+  app:
+    image: bchamplon/suivi-mns-26-back:latest
+    ports:
+      - "8080:8080"
+
+
 volumes:
   postgres_data:

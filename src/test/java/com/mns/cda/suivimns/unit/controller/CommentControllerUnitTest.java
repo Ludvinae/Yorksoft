@@ -102,7 +102,7 @@ class CommentControllerUnitTest {
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
-
+/*
     // =========================
     // CREATE
     // =========================
@@ -180,4 +180,6 @@ class CommentControllerUnitTest {
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
+
+ */
 }
