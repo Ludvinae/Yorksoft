@@ -10,12 +10,14 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql
+      - postgres_data:/var/lib/postgresql/data
 
   app:
     image: bchamplon/suivi-mns-26-back:latest
     ports:
       - "8080:8080"
+    depends_on:
+      - postgres
 
 
 volumes:
