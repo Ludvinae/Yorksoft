@@ -10,6 +10,6 @@ public record TicketDetailFullDto(
         List<TicketDetailComment> comments,
         TicketDetailKnowledge knowledge,
         List<TicketDetailArticle> articles,
-        Set<StatusEnum> possibleStatusTransitions
+        List<StatusEnum> possibleStatusTransitions
 ) {
 }

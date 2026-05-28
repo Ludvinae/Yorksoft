@@ -28,7 +28,7 @@ public class TicketDetailService {
         }
 
         List<TicketDetailComment> comments = ticketDao.ticketDetailComments(idTicket);
-        Set<StatusEnum> statusList = transition.getAllowedTransitions(details.currentStatus());
+        List<StatusEnum> statusList = transition.getAllowedTransitions(details.currentStatus()).stream().toList();
 
         return new  TicketDetailFullDto(details, comments, knowledge, articles, statusList);
     }
