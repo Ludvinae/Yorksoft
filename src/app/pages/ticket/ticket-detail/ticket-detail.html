@@ -243,17 +243,42 @@
             Marquer le ticket
           </h2>
 
+          @if (possibleTransitions().length > 0) {
+
           <div class="flex gap-3 justify-center mt-2">
 
-            <button class="btn btn-success btn-sm">
-              Résolu
-            </button>
-
-            <button class="btn btn-neutral btn-sm">
-              Clos
-            </button>
-
+            @if (possibleTransitions().includes('SOLVED')) {
+              <button class="btn btn-secondary btn-sm" (click)="solve()">
+                Résoudre
+              </button>
+            }
+            @if (possibleTransitions().includes('CLOSED')) {
+              <button class="btn btn-secondary btn-sm" (click)="close()">
+                Clore
+              </button>
+            }
+            @if (possibleTransitions().includes('WAITING_CLIENT')) {
+              <button class="btn btn-secondary btn-sm" (click)="waitClient()">
+                Attente client
+              </button>
+            }
+            @if (possibleTransitions().includes('WAITING_THIRD_PARTY')) {
+              <button class="btn btn-secondary btn-sm" (click)="waitThirdParty()">
+                Attente tiers
+              </button>
+            }
+            @if (possibleTransitions().includes('ASSIGNED')) {
+              <button class="btn btn-secondary btn-sm" (click)="assign()">
+                Assigner
+              </button>
+            }
+            @if (possibleTransitions().includes('IN_PROGRESS')) {
+              <button class="btn btn-secondary btn-sm"  (click)="progress()">
+                {{ detail()?.currentStatus == StatusEnum.ASSIGNED ? 'Prendre' : 'Reprendre' }} en charge
+              </button>
+            }
           </div>
+          }
 
         </div>
       </div>

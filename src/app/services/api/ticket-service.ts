@@ -98,4 +98,12 @@ export class TicketService {
       }),
     );
   }
+
+  solve(idTicket: number, justification: TicketTransition) {
+    return this.http.post(`${this.apiUrl}/${idTicket}/solve`, justification).pipe(
+      tap((result) => {
+        this.getAll().subscribe();
+      }),
+    );
+  }
 }

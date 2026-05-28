@@ -5,6 +5,9 @@ import { RouteBuilderService } from '../../../services/business/route-builder-se
 import { tap } from 'rxjs';
 import { DatePipe } from '@angular/common';
 import { TicketComment } from '../../../components/comments/ticket-comment/ticket-comment';
+import { StatusEnum } from '../../../models/enum/StatusEnum';
+import { TicketThemeChart } from '../../../components/dashboard/cards/ticket-theme-chart/ticket-theme-chart';
+import { AuthService } from '../../../services/business/auth-service';
 
 @Component({
   selector: 'app-ticket-detail',
@@ -16,6 +19,7 @@ export class TicketDetail implements OnInit {
   route = inject(ActivatedRoute);
   ticketService = inject(TicketService);
   routeBuilder = inject(RouteBuilderService);
+  auth = inject(AuthService);
 
   ticket = signal<TicketDetailFullDto | null>(null);
   comments = signal<TicketDetailComment[]>([]);
@@ -23,6 +27,7 @@ export class TicketDetail implements OnInit {
   detail = computed(() => this.ticket()?.details);
   knowledge = computed(() => this.ticket()?.knowledge);
   articles = computed(() => this.ticket()?.articles ?? []);
+  possibleTransitions = computed(() => this.ticket()?.possibleStatusTransitions ?? []);
 
   loading = signal(true);
   error = signal<string | undefined>(undefined);
@@ -61,4 +66,23 @@ export class TicketDetail implements OnInit {
   protected onCommentCreated(comment: TicketDetailComment): void {
     this.comments.update((comments) => [comment, ...comments]);
   }
+
+  protected readonly StatusEnum = StatusEnum;
+
+  solve() {
+    const idUser = this.auth.jwtInfo() ? this.auth.jwtInfo()!.id : 0;
+    const reason = "reason"
+    const justification: TicketTransition = { idAppUser: idUser, reason: reason };
+    this.ticketService.solve(this.id()!, justification)
+  }
+
+  close() {}
+
+  assign(){}
+
+  waitClient() {}
+
+  waitThirdParty() {}
+
+  progress() {}
 }
