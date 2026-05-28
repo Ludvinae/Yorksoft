@@ -286,35 +286,37 @@
 
           @if (possibleTransitions().length > 0) {
 
-          <div class="flex gap-3 justify-center mt-2">
+          <div class="flex flex-row flex-wrap gap-3 justify-center mt-2">
 
             @if (possibleTransitions().includes('SOLVED')) {
-              <button class="btn btn-secondary btn-sm" (click)="openActionModal(StatusEnum.SOLVED)">
+              <button class="btn btn-secondary btn-xs" (click)="openActionModal(StatusEnum.SOLVED)">
                 Résoudre
               </button>
             }
             @if (possibleTransitions().includes('CLOSED')) {
-              <button class="btn btn-secondary btn-sm" (click)="openActionModal(StatusEnum.CLOSED)">
+              <button class="btn btn-secondary btn-xs" (click)="openActionModal(StatusEnum.CLOSED)">
                 Clore
               </button>
             }
             @if (possibleTransitions().includes('WAITING_CLIENT')) {
-              <button class="btn btn-secondary btn-sm" (click)="openActionModal(StatusEnum.WAITING_CLIENT)">
+              <button class="btn btn-secondary btn-xs" (click)="openActionModal(StatusEnum.WAITING_CLIENT)">
                 Attente client
               </button>
             }
             @if (possibleTransitions().includes('WAITING_THIRD_PARTY')) {
-              <button class="btn btn-secondary btn-sm" (click)="openActionModal(StatusEnum.WAITING_THIRD_PARTY)">
+              <button class="btn btn-secondary btn-xs" (click)="openActionModal(StatusEnum.WAITING_THIRD_PARTY)">
                 Attente tiers
               </button>
             }
+            <!--
             @if (possibleTransitions().includes('ASSIGNED')) {
               <button class="btn btn-secondary btn-sm" (click)="openActionModal(StatusEnum.ASSIGNED)">
                 Assigner
               </button>
             }
+            -->
             @if (possibleTransitions().includes('IN_PROGRESS')) {
-              <button class="btn btn-secondary btn-sm"  (click)="openActionModal(StatusEnum.IN_PROGRESS)">
+              <button class="btn btn-secondary btn-xs"  (click)="openActionModal(StatusEnum.IN_PROGRESS)">
                 {{ detail()?.currentStatus == StatusEnum.ASSIGNED ? 'Prendre' : 'Reprendre' }} en charge
               </button>
             }
