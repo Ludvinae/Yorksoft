@@ -1,3 +1,3 @@
 export const environment = {
-  serverUrl: 'http://suivi.mns.com:8080'
+  serverUrl: 'http://yorksoft.fr:8080'
 }

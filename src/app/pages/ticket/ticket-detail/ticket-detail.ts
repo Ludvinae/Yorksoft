@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, ElementRef, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { TicketService } from '../../../services/api/ticket-service';
 import { RouteBuilderService } from '../../../services/business/route-builder-service';
@@ -6,7 +6,6 @@ import { tap } from 'rxjs';
 import { DatePipe } from '@angular/common';
 import { TicketComment } from '../../../components/comments/ticket-comment/ticket-comment';
 import { StatusEnum } from '../../../models/enum/StatusEnum';
-import { TicketThemeChart } from '../../../components/dashboard/cards/ticket-theme-chart/ticket-theme-chart';
 import { AuthService } from '../../../services/business/auth-service';
 
 @Component({
@@ -35,6 +34,9 @@ export class TicketDetail implements OnInit {
 
   label = computed(() => 'ticket #' + this.id());
 
+  selectedAction = signal<StatusEnum | null>(null);
+  justification = signal('');
+
   updateRoute: string | undefined = undefined;
 
   ngOnInit() {
@@ -60,7 +62,6 @@ export class TicketDetail implements OnInit {
           this.error.set('Impossible de charger les détails.');
         },
       });
-
   }
 
   protected onCommentCreated(comment: TicketDetailComment): void {
@@ -69,20 +70,72 @@ export class TicketDetail implements OnInit {
 
   protected readonly StatusEnum = StatusEnum;
 
-  solve() {
-    const idUser = this.auth.jwtInfo() ? this.auth.jwtInfo()!.id : 0;
-    const reason = "reason"
-    const justification: TicketTransition = { idAppUser: idUser, reason: reason };
-    this.ticketService.solve(this.id()!, justification)
+  @ViewChild('actionModal')
+  actionModal!: ElementRef<HTMLDialogElement>;
+
+  openActionModal(action: StatusEnum): void {
+    this.selectedAction.set(action);
+
+    this.justification.set('');
+
+    this.actionModal.nativeElement.showModal();
   }
 
-  close() {}
+  confirmAction(modal: HTMLDialogElement): void {
+    const action = this.selectedAction();
 
-  assign(){}
+    if (!action || !this.id()) {
+      return;
+    }
 
-  waitClient() {}
+    const payload: TicketTransition = {
+      idAppUser: this.auth.jwtInfo() ? this.auth.jwtInfo()!.id : 0,
+      reason: this.justification(),
+    };
 
-  waitThirdParty() {}
+    let request$;
 
-  progress() {}
+    switch (action) {
+      case StatusEnum.IN_PROGRESS:
+        if (this.detail()?.currentStatus === StatusEnum.ASSIGNED) {
+          request$ = this.ticketService.progressStart(this.id()!, payload);
+          break;
+        } else {
+          request$ = this.ticketService.progressResume(this.id()!, payload);
+          break;
+        }
+      case StatusEnum.WAITING_CLIENT:
+        request$ = this.ticketService.waitClient(this.id()!, payload);
+        break;
+
+      case StatusEnum.WAITING_THIRD_PARTY:
+        request$ = this.ticketService.waitThirdParty(this.id()!, payload);
+        break;
+
+      case StatusEnum.SOLVED:
+        request$ = this.ticketService.solve(this.id()!, payload);
+        break;
+
+      case StatusEnum.CLOSED:
+        request$ = this.ticketService.close(this.id()!, payload);
+        break;
+
+      /*
+      case StatusEnum.ASSIGNED:
+        request$ = this.ticketService.proposeSolution(this.id(), payload);
+        break;
+       */
+
+      default:
+        return;
+    }
+
+    request$.subscribe({
+      next: () => {
+        modal.close();
+
+        //this.reloadTicket();
+      },
+    });
+  }
 }

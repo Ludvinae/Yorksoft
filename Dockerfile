@@ -6,5 +6,5 @@ COPY . .
 RUN npm run build
 
 FROM nginx:1.31-alpine
-COPY --from=build /app/dist/Suivi-MNS-Frontend /usr/share/nginx/html
+COPY --from=build /app/dist/Suivi-MNS-Frontend/browser /usr/share/nginx/html
 COPY nginx-custom.conf /etc/nginx/conf.d/default.conf

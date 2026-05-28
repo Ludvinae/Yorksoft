@@ -4,6 +4,7 @@ import { Observable, tap } from 'rxjs';
 import { Page } from '../../models/page/Page';
 import { TicketSearchCriteria } from '../../models/page/TicketSearchCriteria';
 import { environment } from '../../../environments/environment';
+import { StatusEnum } from '../../models/enum/StatusEnum';
 
 @Injectable({
   providedIn: 'root',
@@ -100,10 +101,38 @@ export class TicketService {
   }
 
   solve(idTicket: number, justification: TicketTransition) {
-    return this.http.post(`${this.apiUrl}/${idTicket}/solve`, justification).pipe(
-      tap((result) => {
-        this.getAll().subscribe();
-      }),
-    );
+    const payload = { idTechnician: justification.idAppUser, statusReason: justification.reason };
+    return this.http.post(`${this.apiUrl}/${idTicket}/solve`, payload);
+  }
+
+  progressStart(idTicket: number, justification: TicketTransition) {
+    const payload = { idAppUser: justification.idAppUser, statusReason: justification.reason };
+    return this.http.post(`${this.apiUrl}/${idTicket}/start-progress`, payload);
+  }
+
+  progressResume(idTicket: number, justification: TicketTransition) {
+    const payload = { idAppUser: justification.idAppUser, statusReason: justification.reason };
+    return this.http.post(`${this.apiUrl}/${idTicket}/resume-progress`, payload);
+  }
+
+  waitClient(idTicket: number, justification: TicketTransition) {
+    const payload = {idTechnician: justification.idAppUser,
+      waitingStatus: StatusEnum.WAITING_CLIENT,
+      statusReason: justification.reason}
+    return this.http.post(`${this.apiUrl}/${idTicket}/wait`, payload);
+  }
+
+  waitThirdParty(idTicket: number, justification: TicketTransition) {
+    const payload = {
+      idTechnician: justification.idAppUser,
+      waitingStatus: StatusEnum.WAITING_THIRD_PARTY,
+      statusReason: justification.reason,
+    };
+    return this.http.post(`${this.apiUrl}/${idTicket}/wait`, payload);
+  }
+
+  close(idTicket: number, justification: TicketTransition) {
+    const payload = { idAppUser: justification.idAppUser, closingReason: justification.reason };
+    return this.http.post(`${this.apiUrl}/${idTicket}/close`, payload);
   }
 }
