@@ -1,0 +1,5 @@
+services:
+  front:
+    image: bchamplon/suivi-mns-26-front:latest
+    ports:
+      - "80:80"
