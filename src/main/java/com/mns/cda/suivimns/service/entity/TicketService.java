@@ -1,6 +1,7 @@
 package com.mns.cda.suivimns.service.entity;
 
 import com.mns.cda.suivimns.dao.*;
+import com.mns.cda.suivimns.dao.search.TicketSpecification;
 import com.mns.cda.suivimns.dto.entity.TicketDto;
 import com.mns.cda.suivimns.dto.search.TicketListDto;
 import com.mns.cda.suivimns.dto.search.TicketSearchCriteria;
@@ -8,6 +9,7 @@ import com.mns.cda.suivimns.dto.workflow.*;
 import com.mns.cda.suivimns.enumerate.StatusEnum;
 import com.mns.cda.suivimns.mapper.entity.TicketMapper;
 import com.mns.cda.suivimns.model.*;
+import com.mns.cda.suivimns.security.AppUserDetails;
 import com.mns.cda.suivimns.service.business.*;
 import com.mns.cda.suivimns.service.search.TicketQueryService;
 import com.mns.cda.suivimns.service.workflow.*;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 import static com.mns.cda.suivimns.service.workflow.TicketClosingService.isNotEditable;
 
@@ -255,7 +258,18 @@ public class TicketService  {
 
 
 
-    public Page<TicketListDto> getAllPageable(TicketSearchCriteria criteria, Pageable pageable) {
+    public Page<TicketListDto> getAllPageable(TicketSearchCriteria criteria, Pageable pageable, AppUserDetails principal) throws IllegalAccessException {
+        if (principal.getUserRole() == null) {
+            throw new IllegalAccessException();
+        } else if (Objects.equals(principal.getUserRole(), "CLIENT")) {
+            TicketSearchCriteria newCriteria = new TicketSearchCriteria(
+                    criteria.keyword(), principal.getId(), criteria.hasVersion(), criteria.hasSoftware(),
+                    criteria.statuses(), criteria.statusesExcluded(), criteria.priorityGreaterThan(),
+                    criteria.priorityLessThan(), criteria.priorityEquals(), criteria.assignedTo(),
+                    criteria.createdAfter(), criteria.createdBefore(), criteria.closedAfter(),
+                    criteria.closedBefore(), criteria.isNotClosed(), criteria.isOverdue());
+            return queryService.search(newCriteria, pageable);
+        }
         return queryService.search(criteria, pageable);
     }
 

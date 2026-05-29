@@ -24,6 +24,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -43,19 +44,21 @@ public class TicketController {
             description = "Récupère la liste paginée de ticket, peut être triée et filtrée")
     @ApiResponse(responseCode = "200", description = "Liste récupérée avec succès")
     @GetMapping("/list")
-    @IsEmployee
+    @IsUser
     public ResponseEntity<Page<TicketListDto>> getAllPageable(
             TicketSearchCriteria criteria,
             @PageableDefault(size = 15, sort = "openDate", direction = Sort.Direction.DESC)
-            Pageable pageable
+            Pageable pageable,
+            @AuthenticationPrincipal AppUserDetails principal
     ) {
         try {
-            return new ResponseEntity<>(ticketService.getAllPageable(criteria, pageable) , HttpStatus.OK);
+            return new ResponseEntity<>(ticketService.getAllPageable(criteria, pageable, principal) , HttpStatus.OK);
         } catch (TicketQueryService.InvalidSortCriteriaException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (IllegalAccessException e) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
-
 
 
     @Operation(summary = "Récupére une ticket en fonction de son ID")
@@ -77,13 +80,16 @@ public class TicketController {
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Ticket trouvée"),
             @ApiResponse(responseCode = "404", description = "Ticket non trouvée")})
     @GetMapping("/{id}/detail")
-    @IsEmployee
-    public ResponseEntity<TicketDetailFullDto> getDetails(@PathVariable int id) {
+    @IsUser
+    public ResponseEntity<TicketDetailFullDto> getDetails(@PathVariable int id,
+                                                          @AuthenticationPrincipal AppUserDetails principal) {
 
         try {
-            return new ResponseEntity<>(ticketDetailService.getTicketDetails(id) , HttpStatus.OK);
+            return new ResponseEntity<>(ticketDetailService.getTicketDetails(id, principal) , HttpStatus.OK);
         } catch (TicketService.TicketNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (IllegalAccessException e) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
 

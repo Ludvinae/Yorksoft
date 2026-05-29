@@ -301,7 +301,15 @@ public interface TicketDao extends JpaRepository<Ticket, Integer>, JpaSpecificat
     @Query("""
         SELECT new com.mns.cda.suivimns.dto.details.TicketDetailComment(
             c.idComment, c.content, c.dateSent, c.lastModification,
-            CONCAT(a.firstName, ' ', a.lastName))
+            CONCAT(a.firstName, ' ', a.lastName),
+            CASE
+                WHEN TYPE(a) = Director THEN 'DIRECTOR'
+                WHEN TYPE(a) = Client THEN 'CLIENT'
+                WHEN TYPE(a) = Manager THEN 'MANAGER'
+                WHEN TYPE(a) = Admin THEN 'ADMIN'
+                WHEN TYPE(a) = Technician THEN 'TECHNICIAN'
+                ELSE 'UNKNOWN'
+            END, TREAT(a AS Technician).rank)
         FROM Comment c
         JOIN c.ticket t ON t.idTicket = :idTicket
         JOIN c.author a

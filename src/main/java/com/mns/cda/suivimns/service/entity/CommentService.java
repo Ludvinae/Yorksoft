@@ -55,7 +55,7 @@ public class CommentService  {
         Comment saved = commentDao.save(comment);
 
         return new TicketDetailComment(saved.getIdComment(), saved.getContent(),
-                saved.getDateSent(), saved.getLastModification(), authorName);
+                saved.getDateSent(), saved.getLastModification(), authorName, appUser.getUserRole(), appUser.getTechnician().getRank());
     }
 
     public void delete(int id, AppUserDetails userDetails) throws CommentService.CommentNotFoundException {

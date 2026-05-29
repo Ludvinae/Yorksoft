@@ -7,8 +7,8 @@ public record TicketDetailComment(
         String content,
         LocalDateTime dateSent,
         LocalDateTime lastModification,
-        String authorFullName
-        //String authorRole,
-        //String authorRank
+        String authorFullName,
+        String authorRole,
+        Byte authorRank
 ) {
 }
