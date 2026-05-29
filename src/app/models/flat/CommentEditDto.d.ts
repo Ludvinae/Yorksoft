@@ -1,0 +1,3 @@
+type CommentEditDto = {
+  content: string;
+}

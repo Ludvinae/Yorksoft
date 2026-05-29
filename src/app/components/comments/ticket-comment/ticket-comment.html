@@ -11,7 +11,10 @@
     @for (comment of comments(); track comment.idComment) {
       <app-comment-card
         [comment]="comment"
-      />
+        [isEditing]="editingCommentId() === comment.idComment"
+        (edit)="startEdit(comment.idComment)"
+        (cancel)="cancelEdit()"
+        (save)="updateComment(comment.idComment, $event)"/>
     }
   </div>
 

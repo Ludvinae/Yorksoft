@@ -32,8 +32,8 @@ export class CommentService {
     return this.http.post<TicketDetailComment>(`${this.apiUrl}`, comment);
   }
 
-  update(comment: Comment, id: number) {
-    return this.http.put(`${this.apiUrl}/${id}`, comment).pipe(
+  update(comment: CommentEditDto, id: number): Observable<TicketDetailComment> {
+    return this.http.patch<TicketDetailComment>(`${this.apiUrl}/${id}`, comment).pipe(
       tap((result) => {
         this.getAll().subscribe();
       }),

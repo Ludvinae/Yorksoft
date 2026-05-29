@@ -210,7 +210,8 @@
       <!-- COMMENTS -->
       @if (id() ) {
         <app-ticket-comment [comments]="comments()" [ticketId]="id()!"
-                            (commentCreated)="onCommentCreated($event)"/>
+                            (commentCreated)="onCommentCreated($event)"
+                            (commentUpdated)="onCommentUpdated($event)"/>
       }
       <!--
       <div class="card bg-base-100 shadow-md border border-base-300">

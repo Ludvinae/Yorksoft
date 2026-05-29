@@ -25,6 +25,8 @@ export class TicketComment {
   readonly ticketId = input.required<number>();
   protected readonly isSubmitting = signal(false);
 
+  protected readonly editingCommentId = signal<number | null>(null);
+  readonly commentUpdated = output<TicketDetailComment>();
   readonly commentCreated = output<TicketDetailComment>();
 
   protected createComment(content: string): void {
@@ -41,7 +43,7 @@ export class TicketComment {
     this.commentService
       .createComment({
         content,
-        idTicket: this.ticketId()
+        idTicket: this.ticketId(),
       })
       .pipe(finalize(() => this.isSubmitting.set(false)))
       .subscribe({
@@ -55,5 +57,25 @@ export class TicketComment {
           // toast plus tard
         },
       });
+  }
+
+  protected startEdit(idComment: number): void {
+    this.editingCommentId.set(idComment);
+  }
+
+  protected cancelEdit(): void {
+    this.editingCommentId.set(null);
+  }
+
+  protected updateComment(idComment: number, content: string): void {
+    this.commentService.update({ content: content }, idComment).subscribe({
+      next: (updatedComment) => {
+        this.commentUpdated.emit(updatedComment);
+
+        this.editingCommentId.set(null);
+      },
+
+      error: console.error,
+    });
   }
 }

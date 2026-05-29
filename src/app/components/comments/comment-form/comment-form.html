@@ -19,9 +19,13 @@
     </span>
   }
 
-  <div class="flex justify-end">
-    <button class="btn btn-primary" type="submit" [disabled]="form.invalid">
-      Envoyer
+  <div class="flex justify-end gap-2">
+    <button type="button" class="btn btn-ghost" (click)="cancel.emit()">
+      Annuler
+    </button>
+
+    <button class="btn btn-primary" type="submit">
+      {{ submitLabel() }}
     </button>
   </div>
 

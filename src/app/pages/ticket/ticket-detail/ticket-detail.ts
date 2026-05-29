@@ -72,6 +72,14 @@ export class TicketDetail implements OnInit {
     this.comments.update((comments) => [comment, ...comments]);
   }
 
+  protected onCommentUpdated(updatedComment: TicketDetailComment): void {
+    this.comments.update((comments) =>
+      comments.map((comment) =>
+        comment.idComment === updatedComment.idComment ? updatedComment : comment,
+      ),
+    );
+  }
+
   protected readonly StatusEnum = StatusEnum;
 
   @ViewChild('actionModal')
