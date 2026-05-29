@@ -45,18 +45,17 @@ public class CommentService  {
         return commentMapper.toDto(comment);
     }
 
-    public TicketDetailComment save(PostCommentDto dto) {
+    public TicketDetailComment save(PostCommentDto dto, AppUserDetails appUser) {
         Ticket ticket = ticketDao.findById(dto.idTicket()).orElseThrow(TicketService.TicketNotFoundException::new);
-        AppUser author = appUserDao.findById(dto.idAuthor()).orElseThrow(AppUserService.AppUserNotFoundException::new);
-        // Utiliser authorities pour comparer avec le principal
-        // Ou bien ne pas inclure l'id de l'auteur dans PostCommentDto
+
+        AppUser author = appUserDao.findById(appUser.getId()).orElseThrow(AppUserService.AppUserNotFoundException::new);
         String authorName = author.getFirstName() + " " + author.getLastName();
 
         Comment comment = new Comment(null, dto.content(), null, null, ticket, author);
         Comment saved = commentDao.save(comment);
 
-        return new TicketDetailComment(comment.getIdComment(), comment.getContent(),
-                comment.getDateSent(), comment.getLastModification(), authorName);
+        return new TicketDetailComment(saved.getIdComment(), saved.getContent(),
+                saved.getDateSent(), saved.getLastModification(), authorName);
     }
 
     public void delete(int id, AppUserDetails userDetails) throws CommentService.CommentNotFoundException {

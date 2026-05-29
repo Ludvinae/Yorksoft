@@ -60,8 +60,9 @@ public class CommentController {
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PostMapping
     @IsEmployee
-    public ResponseEntity<TicketDetailComment> create(@RequestBody @Valid PostCommentDto comment) {
-        return new ResponseEntity<>(commentService.save(comment), HttpStatus.CREATED);
+    public ResponseEntity<TicketDetailComment> create(@RequestBody @Valid PostCommentDto comment,
+                                                      @AuthenticationPrincipal AppUserDetails user) {
+        return new ResponseEntity<>(commentService.save(comment, user), HttpStatus.CREATED);
     }
 
 
