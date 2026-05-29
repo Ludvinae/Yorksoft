@@ -4,4 +4,6 @@ type TicketDetailComment = {
   dateSent: Date;
   lastModification: Date;
   authorFullName: string;
+  authorRole: String;
+  authorRank: number | null;
 }

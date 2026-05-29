@@ -41,8 +41,7 @@ export class TicketComment {
     this.commentService
       .createComment({
         content,
-        idTicket: this.ticketId(),
-        idAuthor: this.authService.jwtInfo()!.id,
+        idTicket: this.ticketId()
       })
       .pipe(finalize(() => this.isSubmitting.set(false)))
       .subscribe({

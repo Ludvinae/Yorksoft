@@ -21,7 +21,7 @@
             </span>
 
             <span class="text-sm opacity-70">
-              Role placeholder
+              {{ comment?.authorRole | userRoleLabel:comment?.authorRank }}
             </span>
           </div>
 
