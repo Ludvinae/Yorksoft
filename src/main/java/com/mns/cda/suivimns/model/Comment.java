@@ -40,7 +40,7 @@ public class Comment {
     @OnDelete(action = OnDeleteAction.CASCADE)
     protected Ticket ticket;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = true)
     @JoinColumn(name = "id_app_user")
     @OnDelete(action = OnDeleteAction.SET_NULL)
     protected AppUser author;

@@ -62,6 +62,7 @@ public class Ticket {
 
     @ManyToOne()
     @JoinColumn(name = "id_current_technician")
+    @OnDelete(action = OnDeleteAction.SET_NULL)
     protected Technician currentTechnician;
 
     @ManyToOne()

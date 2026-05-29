@@ -5,6 +5,7 @@ import com.mns.cda.suivimns.dao.CommentDao;
 import com.mns.cda.suivimns.dao.TicketDao;
 import com.mns.cda.suivimns.dto.details.TicketDetailComment;
 import com.mns.cda.suivimns.dto.entity.CommentDto;
+import com.mns.cda.suivimns.dto.flat.CommentEditDto;
 import com.mns.cda.suivimns.dto.flat.PostCommentDto;
 import com.mns.cda.suivimns.mapper.entity.CommentMapper;
 import com.mns.cda.suivimns.model.AppUser;
@@ -71,7 +72,7 @@ public class CommentService  {
         commentDao.delete(comment);
     }
 
-    public CommentDto update(int id, CommentDto commentToUpdate, AppUserDetails userDetails) throws CommentService.CommentNotFoundException {
+    public TicketDetailComment update(int id, CommentEditDto commentToUpdate, AppUserDetails userDetails) throws CommentService.CommentNotFoundException {
 
         Comment currentComment = commentDao.findById(id)
                 .orElseThrow(CommentService.CommentNotFoundException::new);
@@ -82,8 +83,11 @@ public class CommentService  {
             throw new CommentNotOwnedException();
         }
 
-        commentMapper.updateEntityFromDto(commentToUpdate, currentComment);
+        currentComment.setContent(commentToUpdate.content());
+        //commentMapper.updateEntityFromDto(commentToUpdate, currentComment);
 
-        return commentMapper.toDto(commentDao.save(currentComment));
+        Comment commentSaved = commentDao.save(currentComment);
+        return ticketDao.ticketDetailComments(commentSaved.getTicket().getIdTicket()).get(id);
+
     }
 }

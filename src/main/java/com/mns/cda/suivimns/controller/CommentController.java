@@ -2,11 +2,9 @@ package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.details.TicketDetailComment;
 import com.mns.cda.suivimns.dto.entity.CommentDto;
+import com.mns.cda.suivimns.dto.flat.CommentEditDto;
 import com.mns.cda.suivimns.dto.flat.PostCommentDto;
-import com.mns.cda.suivimns.security.AppUserDetails;
-import com.mns.cda.suivimns.security.IsAdmin;
-import com.mns.cda.suivimns.security.IsEmployee;
-import com.mns.cda.suivimns.security.IsTechnician;
+import com.mns.cda.suivimns.security.*;
 import com.mns.cda.suivimns.service.entity.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -82,13 +80,13 @@ public class CommentController {
 
 
     @Operation(summary = "Modifie une commentaire en fonction de son ID",
-            description = "Modifie les champs 'subject', 'theme' et 'commentList' d'une commentaire")
+            description = "Modifie le contenu d'un commentaire")
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Commentaire modifiée avec succés"),
             @ApiResponse(responseCode = "404", description = "Commentaire non trouvée"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
-    @PutMapping("/{id}")
-    @IsAdmin
-    public ResponseEntity<CommentDto> update(@PathVariable int id, @RequestBody @Valid CommentDto commentToUpdate,
+    @PatchMapping("/{id}")
+    @IsUser
+    public ResponseEntity<TicketDetailComment> update(@PathVariable int id, @RequestBody @Valid CommentEditDto commentToUpdate,
                                              @AuthenticationPrincipal AppUserDetails userDetail) {
         try {
             return new ResponseEntity<>(commentService.update(id, commentToUpdate, userDetail), HttpStatus.OK);
