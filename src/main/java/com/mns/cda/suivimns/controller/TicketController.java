@@ -163,10 +163,11 @@ public class TicketController {
     @IsTechnician
     public TicketDto closeTicket(
             @PathVariable Integer id,
-            @RequestBody TicketClosingDto ticketClosingDto
+            @RequestBody StateChangeJustification justification,
+            @AuthenticationPrincipal AppUserDetails principal
             ) {
 
-        return ticketService.closeTicket(id, ticketClosingDto);
+        return ticketService.closeTicket(id, justification, principal);
     }
 
 
@@ -180,9 +181,10 @@ public class TicketController {
     @IsTechnician
     public TicketDto startProgress(
             @PathVariable Integer id,
-            @RequestBody TicketProgressDto dto
+            @RequestBody StateChangeJustification justification,
+            @AuthenticationPrincipal AppUserDetails principal
     ) {
-        return ticketService.takeTicketInCharge(id, dto);
+        return ticketService.takeTicketInCharge(id, justification, principal);
     }
 
 
@@ -196,9 +198,10 @@ public class TicketController {
     @IsTechnician
     public TicketDto resumeProgress(
             @PathVariable Integer id,
-            @RequestBody TicketProgressDto dto
+            @RequestBody StateChangeJustification justification,
+            @AuthenticationPrincipal AppUserDetails principal
     ) {
-        return ticketService.resumeTicket(id, dto);
+        return ticketService.resumeTicket(id, justification, principal);
     }
 
 
@@ -212,10 +215,11 @@ public class TicketController {
     @IsTechnician
     public TicketDto solveTicket(
             @PathVariable Integer id,
-            @RequestBody @Valid TicketSolvedDto dto
+            @RequestBody @Valid StateChangeJustification justification,
+            @AuthenticationPrincipal AppUserDetails principal
     ) {
 
-        return ticketService.solveTicket(id, dto);
+        return ticketService.solveTicket(id, justification, principal);
     }
 
 
@@ -236,7 +240,7 @@ public class TicketController {
     }
 
 
-    @Operation(summary = "Modifie une ticket en fonction de son ID",
+    @Operation(summary = "Modifie un ticket en fonction de son ID",
             description = "Modifie les champs 'subject', 'theme' et 'ticketList' d'une ticket")
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Ticket modifiée avec succés"),
             @ApiResponse(responseCode = "404", description = "Ticket non trouvée"),

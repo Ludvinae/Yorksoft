@@ -173,15 +173,19 @@ public class TicketService  {
         return ticketMapper.toDto(ticketAssigned);
     }
 
-    public TicketDto closeTicket(Integer idTicket, TicketClosingDto dto) {
+    public TicketDto closeTicket(Integer idTicket, StateChangeJustification justification, AppUserDetails principal) {
         // Récupère le ticket par l'id
         Ticket ticket = ticketDao.findById(idTicket)
                 .orElseThrow(TicketService.TicketNotFoundException::new);
 
-        AppUser user = appUserDao.findById(dto.idAppUser())
+        AppUser user = appUserDao.findById(principal.getId())
                 .orElseThrow(AppUserService.AppUserNotFoundException::new);
 
-        Ticket ticketClosed = closingService.closeTicket(ticket, user, dto.closingReason());
+        if (ticket.getCurrentTechnician() != user && !Objects.equals(principal.getUserRole(), "ADMIN")) {
+            throw new TicketProgressService.UnauthorizedTechnicianException();
+        }
+
+        Ticket ticketClosed = closingService.closeTicket(ticket, user, justification.reason());
 
         metricsService.refreshTicketMetrics(ticketClosed);
 
@@ -189,46 +193,58 @@ public class TicketService  {
     }
 
 
-    public TicketDto takeTicketInCharge(Integer idTicket, TicketProgressDto dto) {
+    public TicketDto takeTicketInCharge(Integer idTicket, StateChangeJustification justification, AppUserDetails principal) {
 
         // Récupère le ticket par l'id
         Ticket ticket = ticketDao.findById(idTicket)
                 .orElseThrow(TicketService.TicketNotFoundException::new);
 
-        Technician technician = technicianDao.findById(dto.idAppUser())
+        Technician technician = technicianDao.findById(principal.getId())
                 .orElseThrow(TechnicianService.TechnicianNotFoundException::new);
 
-        Ticket ticketChanged = progressService.takeTicketInCharge(ticket, technician, dto.statusReason());
+        if (ticket.getCurrentTechnician() != technician && !Objects.equals(principal.getUserRole(), "ADMIN")) {
+            throw new TicketProgressService.UnauthorizedTechnicianException();
+        }
+
+        Ticket ticketChanged = progressService.takeTicketInCharge(ticket, technician, justification.reason());
 
         metricsService.refreshTicketMetrics(ticketChanged);
 
         return ticketMapper.toDto(ticketChanged);
     }
 
-    public TicketDto resumeTicket(Integer idTicket, TicketProgressDto dto) {
+    public TicketDto resumeTicket(Integer idTicket, StateChangeJustification justification, AppUserDetails principal) {
         Ticket ticket = ticketDao.findById(idTicket)
                 .orElseThrow(TicketService.TicketNotFoundException::new);
 
-        AppUser user = appUserDao.findById(dto.idAppUser())
+        AppUser user = appUserDao.findById(principal.getId())
                 .orElseThrow(AppUserService.AppUserNotFoundException::new);
 
-        Ticket ticketChanged = progressService.resumeTicket(ticket, user, dto.statusReason());
+        if (ticket.getCurrentTechnician() != user && !Objects.equals(principal.getUserRole(), "ADMIN")) {
+            throw new TicketProgressService.UnauthorizedTechnicianException();
+        }
+
+        Ticket ticketChanged = progressService.resumeTicket(ticket, user, justification.reason());
 
         metricsService.refreshTicketMetrics(ticketChanged);
 
         return ticketMapper.toDto(ticketChanged);
     }
 
-    public TicketDto solveTicket(Integer idTicket, TicketSolvedDto dto) {
+    public TicketDto solveTicket(Integer idTicket, StateChangeJustification justification, AppUserDetails principal) {
 
         // Récupère le ticket par l'id
         Ticket ticket = ticketDao.findById(idTicket)
                 .orElseThrow(TicketService.TicketNotFoundException::new);
 
-        Technician technician = technicianDao.findById(dto.idTechnician())
+        Technician technician = technicianDao.findById(principal.getId())
                 .orElseThrow(TechnicianService.TechnicianNotFoundException::new);
 
-        Ticket ticketChanged = solvedService.proposeSolution(ticket, technician, dto.statusReason());
+        if (ticket.getCurrentTechnician() != technician && !Objects.equals(principal.getUserRole(), "ADMIN")) {
+            throw new TicketProgressService.UnauthorizedTechnicianException();
+        }
+
+        Ticket ticketChanged = solvedService.proposeSolution(ticket, technician, justification.reason());
 
         metricsService.refreshTicketMetrics(ticketChanged);
 
