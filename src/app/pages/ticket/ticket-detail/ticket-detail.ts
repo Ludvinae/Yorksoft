@@ -7,6 +7,7 @@ import { DatePipe } from '@angular/common';
 import { TicketComment } from '../../../components/comments/ticket-comment/ticket-comment';
 import { StatusEnum } from '../../../models/enum/StatusEnum';
 import { AuthService } from '../../../services/business/auth-service';
+import {AssignTicketModal} from '../../../components/ticket/assign-ticket-modal/assign-ticket-modal';
 
 @Component({
   selector: 'app-ticket-detail',
@@ -38,6 +39,9 @@ export class TicketDetail implements OnInit {
   justification = signal('');
 
   updateRoute: string | undefined = undefined;
+
+  @ViewChild(AssignTicketModal)
+  assignModal!: AssignTicketModal;
 
   ngOnInit() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
@@ -119,11 +123,11 @@ export class TicketDetail implements OnInit {
       case StatusEnum.CLOSED:
         request$ = this.ticketService.close(this.id()!, payload);
         break;
-
       /*
       case StatusEnum.ASSIGNED:
-        request$ = this.ticketService.proposeSolution(this.id(), payload);
+        request$ = this.ticketService.assign(this.id()!, payload.idAppUser, this.auth.jwtInfo()!.id, payload.reason);
         break;
+
        */
 
       default:
@@ -137,5 +141,18 @@ export class TicketDetail implements OnInit {
         //this.reloadTicket();
       },
     });
+  }
+
+  assign(): void {
+    //this.selectedTicket = ticket;
+
+    queueMicrotask(() => {
+      this.assignModal.open();
+    });
+  }
+
+  onAssigned(): void {
+    this.assignModal.close();
+    //this.storeService.loadTickets();
   }
 }

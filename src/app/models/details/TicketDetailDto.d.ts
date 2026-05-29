@@ -26,7 +26,9 @@ type TicketDetailDto = {
   description: string;
 
   // Affectation
-  currentTechnicianFullName: string;
-  currentManagerFullName: string;
+  currentTechnicianFullName: string | null;
+  currentTechnicianId: number | null;
+  currentManagerFullName: string | null;
+  currentManagerId: number | null;
   assignmentDate: Date;
 }
