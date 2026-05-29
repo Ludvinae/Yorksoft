@@ -29,7 +29,7 @@ export class CommentService {
   }
 
   createComment(comment: CommentDto): Observable<TicketDetailComment> {
-    return this.http.post<TicketDetailComment>(`${this.apiUrl}/comment`, comment);
+    return this.http.post<TicketDetailComment>(`${this.apiUrl}`, comment);
   }
 
   update(comment: Comment, id: number) {
