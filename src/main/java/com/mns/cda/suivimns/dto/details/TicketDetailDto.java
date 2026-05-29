@@ -36,7 +36,9 @@ public record TicketDetailDto(
 
         // Affectation
         String currentTechnicianFullName,
+        Integer currentTechnicianId,
         String currentManagerFullName,
+        Integer currentManagerId,
         LocalDateTime assignmentDate
 
 ) {
