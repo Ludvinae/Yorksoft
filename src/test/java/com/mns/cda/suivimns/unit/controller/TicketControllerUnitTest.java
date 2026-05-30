@@ -2,11 +2,17 @@ package com.mns.cda.suivimns.unit.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.TicketController;
+import com.mns.cda.suivimns.dto.details.TicketDetailDto;
+import com.mns.cda.suivimns.dto.details.TicketDetailFullDto;
+import com.mns.cda.suivimns.dto.details.TicketDetailKnowledge;
 import com.mns.cda.suivimns.dto.entity.TicketDto;
 import com.mns.cda.suivimns.dto.workflow.TicketCreationDto;
+import com.mns.cda.suivimns.dto.workflow.TicketDescriptionDto;
 import com.mns.cda.suivimns.enumerate.StatusEnum;
 import com.mns.cda.suivimns.enumerate.ThemeEnum;
 import com.mns.cda.suivimns.exception.TicketNotFoundException;
+import com.mns.cda.suivimns.model.Admin;
+import com.mns.cda.suivimns.security.AppUserDetails;
 import com.mns.cda.suivimns.service.entity.TicketService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,6 +47,9 @@ class TicketControllerUnitTest {
     private ObjectMapper objectMapper;
 
     private TicketDto ticketDto;
+    private TicketDetailFullDto ticketDetailFullDto;
+
+    private AppUserDetails principal;
 
     @BeforeEach
     void setUp() {
@@ -52,7 +61,25 @@ class TicketControllerUnitTest {
                 ThemeEnum.BUG, StatusEnum.OPEN, 1, 1, 1, 1, list, list,
                 list, list);
 
+        TicketDetailDto ticketDetailDto = new TicketDetailDto(1, null,
+                null, null, null, null, null,
+                null, null, null, null, null,
+                null, null, null, null,
+                null, null, null, null, null,
+                null, null, null, null);
+        TicketDetailKnowledge ticketDetailKnowledge = new TicketDetailKnowledge(1, "Test subject");
 
+        ticketDetailFullDto = new TicketDetailFullDto(ticketDetailDto,
+                List.of(), ticketDetailKnowledge, List.of(), List.of());
+
+        Admin admin = new Admin();
+        admin.setIdAppUser(1);
+        admin.setPassword("password");
+        admin.setEmail("email@test.com");
+        admin.setFirstName("FirstName");
+        admin.setLastName("LastName");
+        admin.setPhoneNumber("123456789");
+        principal = new AppUserDetails(admin);
     }
 
     // =========================
@@ -109,7 +136,7 @@ class TicketControllerUnitTest {
     @Test
     void shouldCreate() throws Exception {
 
-        when(ticketService.save(any(TicketCreationDto.class))).thenReturn(ticketDto);
+        when(ticketService.save(any(TicketCreationDto.class), principal)).thenReturn(ticketDto);
 
         mockMvc.perform(post("/ticket")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -154,7 +181,7 @@ class TicketControllerUnitTest {
     @Test
     void shouldUpdate() throws Exception {
 
-        when(ticketService.update(eq(1), any(TicketDto.class))).thenReturn(ticketDto);
+        when(ticketService.update(eq(1), any(TicketDescriptionDto.class), principal)).thenReturn(ticketDetailFullDto);
 
         mockMvc.perform(put("/ticket/1")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -170,7 +197,7 @@ class TicketControllerUnitTest {
     @Test
     void shouldReturn404WhenUpdateFails() throws Exception {
 
-        when(ticketService.update(eq(1), any(TicketDto.class)))
+        when(ticketService.update(eq(1), any(TicketDescriptionDto.class), principal))
                 .thenThrow(new TicketNotFoundException());
 
         mockMvc.perform(put("/ticket/1")

@@ -59,7 +59,7 @@ public class TicketAssignmentDtoUnitTest {
                 .isEqualTo("idTechnician");
 
         assertThat(violation.getMessage())
-                .contains("ne doit pas être nul");
+                .contains("must not be null");
     }
 
     @Test
@@ -83,7 +83,7 @@ public class TicketAssignmentDtoUnitTest {
                 .isEqualTo("idManager");
 
         assertThat(violation.getMessage())
-                .contains("ne doit pas être nul");
+                .contains("must not be null");
     }
 
     @Test
@@ -124,7 +124,7 @@ public class TicketAssignmentDtoUnitTest {
                 .isEqualTo("statusReason");
 
         assertThat(violation.getMessage())
-                .contains("la taille doit être comprise entre 0 et 255");
+                .contains("size must be between 0 and 255");
     }
 
     @Test
