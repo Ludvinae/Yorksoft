@@ -7,6 +7,10 @@ type TicketDetailDto = {
   currentPriority: number;
   currentStatus: StatusEnum;
 
+  // Sla
+  overdue: boolean;
+  predictedDeadline: Date;
+
   // Client
   idClient: number;
   clientFullName: string;

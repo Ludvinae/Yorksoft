@@ -8,7 +8,7 @@ type TicketListDto = {
   closeDate: Date;
   predictedDeadline: Date;
   overdue: boolean;
-  callCuration: number;
+  callDuration: number;
   currentPriority: number;
   currentStatus: StatusEnum;
   currentTheme: ThemeEnum;

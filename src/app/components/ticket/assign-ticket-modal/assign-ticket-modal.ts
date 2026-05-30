@@ -25,7 +25,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class AssignTicketModal implements OnInit {
   @Input()
-  ticket!: TicketListDto | null;
+  ticket!: TicketAssignDto | null;
 
   @Output()
   assigned = new EventEmitter<void>();

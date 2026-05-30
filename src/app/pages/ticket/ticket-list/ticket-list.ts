@@ -28,7 +28,7 @@ export class TicketList implements OnInit {
   storeService = inject(TicketStoreService);
 
   baseRoute = '/ticket/';
-  selectedTicket: TicketListDto | null = null;
+  selectedTicket: TicketAssignDto | null = null;
 
   @ViewChild(AssignTicketModal)
   assignModal!: AssignTicketModal;
@@ -56,7 +56,11 @@ export class TicketList implements OnInit {
   }
 
   assign(ticket: TicketListDto): void {
-    this.selectedTicket = ticket;
+    this.selectedTicket = { idTicket: ticket.idTicket,
+                            currentPriority: ticket.currentPriority,
+                            overdue: ticket.overdue,
+                            predictedDeadline: ticket.predictedDeadline,
+                            idTechnician: ticket.idTechnician }
 
     queueMicrotask(() => {
       this.assignModal.open();

@@ -50,6 +50,8 @@
   <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
     <!-- MODAL -->
+    <app-assign-ticket-modal #assignModal [ticket]="ticketAssign()" (assigned)="onAssigned()"/>
+
     <dialog #actionModal class="modal">
 
       <div class="modal-box">
@@ -315,11 +317,11 @@
 
                 @if (possibleTransitions().includes('ASSIGNED')) {
                   @if (detail()?.currentTechnicianFullName != null) {
-                    <button class="btn btn-secondary btn-sm" (click)="assign()">
+                    <button class="btn btn-secondary btn-sm" (click)="openActionModal(StatusEnum.ASSIGNED)">
                       Réassigner
                     </button>
                   } @else {
-                    <button class="btn btn-secondary btn-sm" (click)="assign()">
+                    <button class="btn btn-secondary btn-sm" (click)="openActionModal(StatusEnum.ASSIGNED)">
                       Assigner
                     </button>
                   }

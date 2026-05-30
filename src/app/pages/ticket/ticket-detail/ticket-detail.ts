@@ -11,7 +11,7 @@ import {AssignTicketModal} from '../../../components/ticket/assign-ticket-modal/
 
 @Component({
   selector: 'app-ticket-detail',
-  imports: [RouterLink, DatePipe, TicketComment],
+  imports: [RouterLink, DatePipe, TicketComment, AssignTicketModal],
   templateUrl: './ticket-detail.html',
   styleUrl: './ticket-detail.css',
 })
@@ -38,6 +38,19 @@ export class TicketDetail implements OnInit {
   selectedAction = signal<StatusEnum | null>(null);
   justification = signal('');
 
+  ticketAssign = computed((): TicketAssignDto | null => {
+    if (this.ticket() != null) {
+      return {
+        idTicket: this.ticket()!.details.idTicket,
+        currentPriority: this.ticket()!.details.currentPriority,
+        overdue: this.ticket()!.details.overdue,
+        predictedDeadline: this.ticket()!.details.predictedDeadline,
+        idTechnician: this.ticket()!.details.currentTechnicianId
+      }
+    } else return null;
+  });
+
+
   updateRoute: string | undefined = undefined;
 
   @ViewChild(AssignTicketModal)
@@ -49,12 +62,24 @@ export class TicketDetail implements OnInit {
 
     this.updateRoute = this.routeBuilder.getUpdateRoute(id, 'ticket');
 
+    this.loadTicket();
+  }
+
+  private loadTicket(): void {
+    const id = this.id();
+
+    if (!id) {
+      return;
+    }
+
+    this.loading.set(true);
+
     this.ticketService
       .getDetail(id)
       .pipe(
-        tap((s) => {
-          this.ticket.set(s);
-          this.comments.set(s.comments);
+        tap((ticket) => {
+          this.ticket.set(ticket);
+          this.comments.set(ticket.comments);
         }),
       )
       .subscribe({
@@ -69,15 +94,19 @@ export class TicketDetail implements OnInit {
   }
 
   protected onCommentCreated(comment: TicketDetailComment): void {
-    this.comments.update((comments) => [comment, ...comments]);
+    //this.comments.update((comments) => [comment, ...comments]);
+    this.loadTicket();
   }
 
   protected onCommentUpdated(updatedComment: TicketDetailComment): void {
+    this.loadTicket();
+    /*
     this.comments.update((comments) =>
       comments.map((comment) =>
         comment.idComment === updatedComment.idComment ? updatedComment : comment,
       ),
     );
+     */
   }
 
   protected readonly StatusEnum = StatusEnum;
@@ -86,10 +115,15 @@ export class TicketDetail implements OnInit {
   actionModal!: ElementRef<HTMLDialogElement>;
 
   openActionModal(action: StatusEnum): void {
+    if (action === StatusEnum.ASSIGNED) {
+      queueMicrotask(() => {
+        this.assignModal.open();
+      });
+      return;
+    }
+
     this.selectedAction.set(action);
-
     this.justification.set('');
-
     this.actionModal.nativeElement.showModal();
   }
 
@@ -131,12 +165,15 @@ export class TicketDetail implements OnInit {
       case StatusEnum.CLOSED:
         request$ = this.ticketService.close(this.id()!, payload);
         break;
-      /*
-      case StatusEnum.ASSIGNED:
-        request$ = this.ticketService.assign(this.id()!, payload.idAppUser, this.auth.jwtInfo()!.id, payload.reason);
-        break;
 
-       */
+      case StatusEnum.ASSIGNED:
+        request$ = this.ticketService.assign(
+          this.id()!,
+          payload.idAppUser,
+          this.auth.jwtInfo()!.id,
+          payload.reason,
+        );
+        break;
 
       default:
         return;
@@ -146,21 +183,12 @@ export class TicketDetail implements OnInit {
       next: () => {
         modal.close();
 
-        //this.reloadTicket();
+        this.loadTicket();
       },
     });
   }
 
-  assign(): void {
-    //this.selectedTicket = ticket;
-
-    queueMicrotask(() => {
-      this.assignModal.open();
-    });
-  }
-
   onAssigned(): void {
-    this.assignModal.close();
-    //this.storeService.loadTickets();
+    this.loadTicket();
   }
 }
