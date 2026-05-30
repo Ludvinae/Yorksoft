@@ -54,6 +54,8 @@ export class TicketDetail implements OnInit {
   updateRoute: string | undefined = undefined;
   editingDescription = false;
   editedDescription = '';
+  editingSolution = false;
+  editedSolution = '';
 
   @ViewChild(AssignTicketModal)
   assignModal!: AssignTicketModal;
@@ -194,8 +196,6 @@ export class TicketDetail implements OnInit {
     this.loadTicket();
   }
 
-
-
   startDescriptionEdit(): void {
     this.editedDescription = this.detail()?.description ?? '';
     this.editingDescription = true;
@@ -213,7 +213,7 @@ export class TicketDetail implements OnInit {
       return;
     }
 
-    this.ticketService.updateDescription(ticketId, this.editedDescription).subscribe({
+    this.ticketService.patch(ticketId, this.editedDescription, "").subscribe({
       next: (updatedTicket) => {
         this.ticket.set(updatedTicket);
         this.editingDescription = false;
@@ -227,8 +227,48 @@ export class TicketDetail implements OnInit {
   canEditDescription() {
     const idViewer = this.auth.jwtInfo() ? this.auth.jwtInfo()!.id : 0;
 
-    return this.detail()?.currentTechnicianId == idViewer
-          || this.auth.jwtInfo()?.role === "ADMIN"
-          || this.auth.jwtInfo()?.role === "MANAGER"
-  };
+    return (
+      this.detail()?.currentTechnicianId == idViewer ||
+      this.auth.jwtInfo()?.role === 'ADMIN' ||
+      this.auth.jwtInfo()?.role === 'MANAGER'
+    );
+  }
+
+  startSolutionEdit(): void {
+    this.editedSolution = this.detail()?.solution ?? '';
+    this.editingSolution = true;
+  }
+
+  cancelSolutionEdit(): void {
+    this.editingSolution = false;
+    this.editedSolution = '';
+  }
+
+  saveSolution(): void {
+    const ticketId = this.detail()?.idTicket;
+
+    if (!ticketId) {
+      return;
+    }
+
+    this.ticketService.patch(ticketId, "", this.editedSolution).subscribe({
+      next: (updatedTicket) => {
+        this.ticket.set(updatedTicket);
+        this.editingSolution = false;
+      },
+      error: (err) => {
+        console.error(err);
+      },
+    });
+  }
+
+  canEditSolution() {
+    const idViewer = this.auth.jwtInfo() ? this.auth.jwtInfo()!.id : 0;
+
+    return (
+      this.detail()?.currentTechnicianId == idViewer ||
+      this.auth.jwtInfo()?.role === 'ADMIN' ||
+      this.auth.jwtInfo()?.role === 'MANAGER'
+    );
+  }
 }

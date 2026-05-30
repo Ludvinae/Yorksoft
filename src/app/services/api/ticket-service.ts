@@ -82,8 +82,8 @@ export class TicketService {
     );
   }
 
-  updateDescription(id: number, description: string) {
-    const payload: TicketDescriptionDto = { description: description, solution: '' };
+  patch(id: number, description: string, solution: string) {
+    const payload: TicketDescriptionDto = { description: description, solution: solution };
 
     return this.http.patch<TicketDetailFullDto>(`${this.apiUrl}/${id}/description`, payload)
   }
