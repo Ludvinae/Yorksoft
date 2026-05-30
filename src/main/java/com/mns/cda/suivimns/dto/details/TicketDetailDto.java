@@ -4,6 +4,7 @@ import com.mns.cda.suivimns.enumerate.StatusEnum;
 import com.mns.cda.suivimns.enumerate.ThemeEnum;
 import com.mns.cda.suivimns.model.Article;
 import com.mns.cda.suivimns.model.Comment;
+import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,6 +16,10 @@ public record TicketDetailDto(
         Integer initialPriority,
         Integer currentPriority,
         StatusEnum currentStatus,
+
+        // Sla
+        Boolean overdue,
+        LocalDateTime predictedDeadline,
 
         // Client
         Integer idClient,

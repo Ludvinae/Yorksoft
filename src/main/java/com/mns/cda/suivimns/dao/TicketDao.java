@@ -263,6 +263,7 @@ public interface TicketDao extends JpaRepository<Ticket, Integer>, JpaSpecificat
     @Query("""
         SELECT new com.mns.cda.suivimns.dto.details.TicketDetailDto(
             t.idTicket, t.title, t.initialPriority, t.currentPriority, t.currentStatus,
+            t.overdue, t.slaDeadline,
             c.idAppUser, CONCAT(c.firstName, ' ', c.lastName), c.email, c.phoneNumber, c.importance,
             t.currentTheme, s.name, v.idVersion, CONCAT(v.versionNumber, ' ', vt.code), t.openDate, t.closeDate,
             t.description,
