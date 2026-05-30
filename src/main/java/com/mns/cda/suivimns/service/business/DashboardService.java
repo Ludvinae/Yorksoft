@@ -102,8 +102,7 @@ public class DashboardService {
         int critical = ticketDao.countAssignedCriticalTickets(id);
         int overdue = ticketDao.countAssignedOverdueTickets(id);
 
-        double timeToSolve = ticketDao.meanTimeToSolveTickets(id, startDate);
-
+        Double timeToSolve = ticketDao.meanTimeToSolveTickets(id, startDate);
 
         return new DashboardTechnicianDto(open, waiting,  critical, overdue, timeToSolve);
     }

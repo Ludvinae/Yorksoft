@@ -10,7 +10,7 @@ public record DashboardTechnicianDto(
     int assignedCriticalTickets,
     int assignedOverdueTickets,
 
-    double meanTimeToSolveTickets
+    Double meanTimeToSolveTickets
 
 
 ) implements DashboardDto {}
