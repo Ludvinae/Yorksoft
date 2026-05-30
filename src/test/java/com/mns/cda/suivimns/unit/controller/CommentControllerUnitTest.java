@@ -3,6 +3,7 @@ package com.mns.cda.suivimns.unit.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.CommentController;
 import com.mns.cda.suivimns.dto.entity.CommentDto;
+import com.mns.cda.suivimns.exception.CommentNotFoundException;
 import com.mns.cda.suivimns.service.entity.CommentService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -96,7 +97,7 @@ class CommentControllerUnitTest {
     void shouldReturn404WhenNotFound() throws Exception {
 
         when(commentService.findById(1))
-                .thenThrow(new CommentService.CommentNotFoundException());
+                .thenThrow(new CommentNotFoundException());
 
         mockMvc.perform(get("/comment/1"))
                 .andDo(print())

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.ThemeController;
 import com.mns.cda.suivimns.dto.entity.ThemeDto;
 import com.mns.cda.suivimns.enumerate.ThemeEnum;
+import com.mns.cda.suivimns.exception.ThemeNotFoundException;
 import com.mns.cda.suivimns.service.entity.ThemeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -97,7 +98,7 @@ class ThemeControllerUnitTest {
     void shouldReturn404WhenNotFound() throws Exception {
 
         when(themeService.findById(1))
-                .thenThrow(new ThemeService.ThemeNotFoundException());
+                .thenThrow(new ThemeNotFoundException());
 
         mockMvc.perform(get("/theme/1"))
                 .andDo(print())
@@ -142,7 +143,7 @@ class ThemeControllerUnitTest {
     @Test
     void shouldReturn404WhenDeleteNotFound() throws Exception {
 
-        doThrow(new ThemeService.ThemeNotFoundException())
+        doThrow(new ThemeNotFoundException())
                 .when(themeService).delete(1);
 
         mockMvc.perform(delete("/theme/1"))
@@ -174,7 +175,7 @@ class ThemeControllerUnitTest {
     void shouldReturn404WhenUpdateFails() throws Exception {
 
         when(themeService.update(eq(1), any(ThemeDto.class)))
-                .thenThrow(new ThemeService.ThemeNotFoundException());
+                .thenThrow(new ThemeNotFoundException());
 
         mockMvc.perform(put("/theme/1")
                         .contentType(MediaType.APPLICATION_JSON)

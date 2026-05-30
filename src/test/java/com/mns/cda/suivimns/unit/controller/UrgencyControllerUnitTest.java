@@ -3,6 +3,7 @@ package com.mns.cda.suivimns.unit.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.UrgencyController;
 import com.mns.cda.suivimns.dto.entity.UrgencyDto;
+import com.mns.cda.suivimns.exception.UrgencyNotFoundException;
 import com.mns.cda.suivimns.service.entity.UrgencyService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -95,7 +96,7 @@ class UrgencyControllerUnitTest {
     void shouldReturn404WhenNotFound() throws Exception {
 
         when(urgencyService.findById(1))
-                .thenThrow(new UrgencyService.UrgencyNotFoundException());
+                .thenThrow(new UrgencyNotFoundException());
 
         mockMvc.perform(get("/urgency/1"))
                 .andDo(print())
@@ -140,7 +141,7 @@ class UrgencyControllerUnitTest {
     @Test
     void shouldReturn404WhenDeleteNotFound() throws Exception {
 
-        doThrow(new UrgencyService.UrgencyNotFoundException())
+        doThrow(new UrgencyNotFoundException())
                 .when(urgencyService).delete(1);
 
         mockMvc.perform(delete("/urgency/1"))
@@ -171,7 +172,7 @@ class UrgencyControllerUnitTest {
     void shouldReturn404WhenUpdateFails() throws Exception {
 
         when(urgencyService.update(eq(1), any(UrgencyDto.class)))
-                .thenThrow(new UrgencyService.UrgencyNotFoundException());
+                .thenThrow(new UrgencyNotFoundException());
 
         mockMvc.perform(put("/urgency/1")
                         .contentType(MediaType.APPLICATION_JSON)

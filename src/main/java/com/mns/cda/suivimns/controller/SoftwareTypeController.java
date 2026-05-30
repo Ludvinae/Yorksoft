@@ -1,6 +1,7 @@
 package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.entity.SoftwareTypeDto;
+import com.mns.cda.suivimns.exception.SoftwareTypeNotFoundException;
 import com.mns.cda.suivimns.security.IsAdmin;
 import com.mns.cda.suivimns.security.IsManager;
 import com.mns.cda.suivimns.security.IsTechnician;
@@ -45,7 +46,7 @@ public class SoftwareTypeController {
 
         try {
             return new ResponseEntity<>(softwareTypeService.findById(id) , HttpStatus.OK);
-        } catch (SoftwareTypeService.SoftwareTypeNotFoundException e) {
+        } catch (SoftwareTypeNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -70,7 +71,7 @@ public class SoftwareTypeController {
         try {
             softwareTypeService.delete(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (SoftwareTypeService.SoftwareTypeNotFoundException e) {
+        } catch (SoftwareTypeNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -86,7 +87,7 @@ public class SoftwareTypeController {
     public ResponseEntity<SoftwareTypeDto> update(@PathVariable int id, @RequestBody @Valid SoftwareTypeDto softwareTypeToUpdate) {
         try {
             return new ResponseEntity<>(softwareTypeService.update(id, softwareTypeToUpdate), HttpStatus.OK);
-        } catch (SoftwareTypeService.SoftwareTypeNotFoundException e) {
+        } catch (SoftwareTypeNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

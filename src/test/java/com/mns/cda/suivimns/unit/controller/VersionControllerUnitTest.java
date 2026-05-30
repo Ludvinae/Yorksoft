@@ -3,6 +3,7 @@ package com.mns.cda.suivimns.unit.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.VersionController;
 import com.mns.cda.suivimns.dto.entity.VersionDto;
+import com.mns.cda.suivimns.exception.VersionNotFoundException;
 import com.mns.cda.suivimns.service.entity.VersionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -96,7 +97,7 @@ class VersionControllerUnitTest {
     void shouldReturn404WhenNotFound() throws Exception {
 
         when(versionService.findById(1))
-                .thenThrow(new VersionService.VersionNotFoundException());
+                .thenThrow(new VersionNotFoundException());
 
         mockMvc.perform(get("/version/1"))
                 .andDo(print())
@@ -140,7 +141,7 @@ class VersionControllerUnitTest {
     @Test
     void shouldReturn404WhenDeleteNotFound() throws Exception {
 
-        doThrow(new VersionService.VersionNotFoundException())
+        doThrow(new VersionNotFoundException())
                 .when(versionService).delete(1);
 
         mockMvc.perform(delete("/version/1"))
@@ -171,7 +172,7 @@ class VersionControllerUnitTest {
     void shouldReturn404WhenUpdateFails() throws Exception {
 
         when(versionService.update(eq(1), any(VersionDto.class)))
-                .thenThrow(new VersionService.VersionNotFoundException());
+                .thenThrow(new VersionNotFoundException());
 
         mockMvc.perform(put("/version/1")
                         .contentType(MediaType.APPLICATION_JSON)

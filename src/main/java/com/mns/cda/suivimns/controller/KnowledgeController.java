@@ -1,6 +1,7 @@
 package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.entity.KnowledgeDto;
+import com.mns.cda.suivimns.exception.KnowledgeNotFoundException;
 import com.mns.cda.suivimns.security.IsAdmin;
 import com.mns.cda.suivimns.security.IsTechnician;
 import com.mns.cda.suivimns.service.entity.KnowledgeService;
@@ -45,7 +46,7 @@ public class KnowledgeController {
 
         try {
             return new ResponseEntity<>(knowledgeService.findById(id) , HttpStatus.OK);
-        } catch (KnowledgeService.KnowledgeNotFoundException e) {
+        } catch (KnowledgeNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -70,7 +71,7 @@ public class KnowledgeController {
         try {
             knowledgeService.delete(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (KnowledgeService.KnowledgeNotFoundException e) {
+        } catch (KnowledgeNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -86,7 +87,7 @@ public class KnowledgeController {
     public ResponseEntity<KnowledgeDto> update(@PathVariable int id, @RequestBody @Valid KnowledgeDto knowledgeToUpdate) {
         try {
             return new ResponseEntity<>(knowledgeService.update(id, knowledgeToUpdate), HttpStatus.OK);
-        } catch (KnowledgeService.KnowledgeNotFoundException e) {
+        } catch (KnowledgeNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

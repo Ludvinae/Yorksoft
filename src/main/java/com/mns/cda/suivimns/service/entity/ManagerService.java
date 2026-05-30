@@ -4,8 +4,11 @@ import com.mns.cda.suivimns.dao.AppUserDao;
 import com.mns.cda.suivimns.dao.ManagerDao;
 import com.mns.cda.suivimns.dto.entity.ManagerDto;
 import com.mns.cda.suivimns.dto.flat.PasswordDto;
+import com.mns.cda.suivimns.exception.AccountNotOwnedException;
+import com.mns.cda.suivimns.exception.BadPasswordException;
+import com.mns.cda.suivimns.exception.EmailAlreadyUsedException;
+import com.mns.cda.suivimns.exception.ManagerNotFoundException;
 import com.mns.cda.suivimns.mapper.entity.ManagerMapper;
-import com.mns.cda.suivimns.model.Client;
 import com.mns.cda.suivimns.model.Manager;
 import com.mns.cda.suivimns.security.AppUserDetails;
 import lombok.RequiredArgsConstructor;
@@ -19,11 +22,6 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class ManagerService  {
 
-    // Classe d'erreur
-    public static class ManagerNotFoundException extends AppUserService.AppUserNotFoundException {}
-
-    public static class BadPasswordException extends Exception {}
-
 
     protected final ManagerDao managerDao;
     protected final ManagerMapper managerMapper;
@@ -34,9 +32,9 @@ public class ManagerService  {
         return managerMapper.toDtoList(managerDao.findAll());
     }
 
-    public ManagerDto findById(int id) throws ManagerService.ManagerNotFoundException {
+    public ManagerDto findById(int id) throws ManagerNotFoundException {
         Manager manager = managerDao.findById(id)
-                .orElseThrow(ManagerService.ManagerNotFoundException::new);
+                .orElseThrow(ManagerNotFoundException::new);
 
         return managerMapper.toDto(manager);
     }
@@ -58,32 +56,32 @@ public class ManagerService  {
         appUserDao.save(manager);
     }
 
-    public void delete(int id, AppUserDetails userDetails) throws ManagerService.ManagerNotFoundException, AppUserService.AccountNotOwnedException {
+    public void delete(int id, AppUserDetails userDetails) throws ManagerNotFoundException, AccountNotOwnedException {
         Manager manager = managerDao.findById(id)
-                .orElseThrow(ManagerService.ManagerNotFoundException::new);
+                .orElseThrow(ManagerNotFoundException::new);
 
         if (!Objects.equals(userDetails.getUserRole(), "ADMIN") &&
                 userDetails.getId() != id) {
-            throw new AppUserService.AccountNotOwnedException();
+            throw new AccountNotOwnedException();
         }
 
         managerDao.delete(manager);
     }
 
     public ManagerDto update(int id, ManagerDto dto, AppUserDetails userDetails)
-            throws ManagerService.ManagerNotFoundException, AppUserService.EmailAlreadyUsedException, AppUserService.AccountNotOwnedException {
+            throws ManagerNotFoundException, EmailAlreadyUsedException, AccountNotOwnedException {
 
         if (appUserDao.existsByEmail(dto.email()) && !userDetails.getEmail().equals(dto.email())) {
-            throw new AppUserService.EmailAlreadyUsedException();
+            throw new EmailAlreadyUsedException();
         }
 
         if (!Objects.equals(userDetails.getUserRole(), "ADMIN") &&
                 userDetails.getId() != id) {
-            throw new AppUserService.AccountNotOwnedException();
+            throw new AccountNotOwnedException();
         }
 
         Manager currentManager = managerDao.findById(id)
-                .orElseThrow(ManagerService.ManagerNotFoundException::new);
+                .orElseThrow(ManagerNotFoundException::new);
 
         managerMapper.updateEntityFromDto(dto, currentManager);
 
@@ -91,19 +89,19 @@ public class ManagerService  {
     }
 
     public void updatePassword(int id, PasswordDto dto, AppUserDetails userDetails)
-            throws ManagerService.ManagerNotFoundException, ManagerService.BadPasswordException, AppUserService.AccountNotOwnedException {
+            throws ManagerNotFoundException, BadPasswordException, AccountNotOwnedException {
 
         Manager user = managerDao.findById(id)
-                .orElseThrow(ManagerService.ManagerNotFoundException::new);
+                .orElseThrow(ManagerNotFoundException::new);
 
         // vérifier ancien mot de passe
         if (!Objects.equals(user.getPassword(), dto.oldPassword())) {
-            throw new ManagerService.BadPasswordException();
+            throw new BadPasswordException();
         }
 
         if (!Objects.equals(userDetails.getUserRole(), "ADMIN") &&
                 userDetails.getId() != id) {
-            throw new AppUserService.AccountNotOwnedException();
+            throw new AccountNotOwnedException();
         }
 
         user.setPassword(dto.newPassword());

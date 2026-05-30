@@ -5,6 +5,8 @@ import com.mns.cda.suivimns.dao.HistoryDao;
 import com.mns.cda.suivimns.dao.StatusDao;
 import com.mns.cda.suivimns.dto.entity.HistoryDto;
 import com.mns.cda.suivimns.enumerate.StatusEnum;
+import com.mns.cda.suivimns.exception.HistoryNotFoundException;
+import com.mns.cda.suivimns.exception.StatusNotFoundException;
 import com.mns.cda.suivimns.mapper.entity.HistoryMapper;
 import com.mns.cda.suivimns.model.AppUser;
 import com.mns.cda.suivimns.model.History;
@@ -23,9 +25,6 @@ import java.util.Optional;
 public class HistoryService {
 
 
-    public static class HistoryNotFoundException extends RuntimeException {
-    }
-
     protected final HistoryDao historyDao;
     protected final StatusDao statusDao;
     protected final AppUserDao appUserDao;
@@ -35,9 +34,9 @@ public class HistoryService {
         return historyMapper.toDtoList(historyDao.findAll());
     }
 
-    public HistoryDto findById(int id) throws HistoryService.HistoryNotFoundException {
+    public HistoryDto findById(int id) throws HistoryNotFoundException {
         History history = historyDao.findById(id)
-                .orElseThrow(HistoryService.HistoryNotFoundException::new);
+                .orElseThrow(HistoryNotFoundException::new);
 
         return historyMapper.toDto(history);
     }
@@ -45,7 +44,7 @@ public class HistoryService {
 
     // METHODS
     public void addHistory(Ticket ticket, AppUser user, StatusEnum newStatus, String reason)
-            throws StatusService.StatusNotFoundException {
+            throws StatusNotFoundException {
 
         History history = new History();
 
@@ -53,7 +52,7 @@ public class HistoryService {
         history.setActor(user);
         history.setStatusReason(reason);
         history.setStatus(statusDao.findByCode(newStatus)
-                .orElseThrow(StatusService.StatusNotFoundException::new));
+                .orElseThrow(StatusNotFoundException::new));
 
         historyDao.save(history);
     }

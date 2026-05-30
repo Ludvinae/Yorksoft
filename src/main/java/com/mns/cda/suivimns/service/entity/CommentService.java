@@ -7,14 +7,16 @@ import com.mns.cda.suivimns.dto.details.TicketDetailComment;
 import com.mns.cda.suivimns.dto.entity.CommentDto;
 import com.mns.cda.suivimns.dto.flat.CommentEditDto;
 import com.mns.cda.suivimns.dto.flat.PostCommentDto;
+import com.mns.cda.suivimns.exception.AppUserNotFoundException;
+import com.mns.cda.suivimns.exception.CommentNotFoundException;
+import com.mns.cda.suivimns.exception.CommentNotOwnedException;
+import com.mns.cda.suivimns.exception.TicketNotFoundException;
 import com.mns.cda.suivimns.mapper.entity.CommentMapper;
 import com.mns.cda.suivimns.model.AppUser;
 import com.mns.cda.suivimns.model.Comment;
 import com.mns.cda.suivimns.model.Ticket;
 import com.mns.cda.suivimns.security.AppUserDetails;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,11 +27,6 @@ import java.util.Objects;
 public class CommentService  {
 
 
-    public static class CommentNotFoundException extends RuntimeException {
-    }
-
-    public static class CommentNotOwnedException extends RuntimeException {}
-
     protected final CommentDao commentDao;
     protected final CommentMapper commentMapper;
     protected final TicketDao ticketDao;
@@ -39,17 +36,17 @@ public class CommentService  {
         return commentMapper.toDtoList(commentDao.findAll());
     }
 
-    public CommentDto findById(int id) throws CommentService.CommentNotFoundException {
+    public CommentDto findById(int id) throws CommentNotFoundException {
         Comment comment = commentDao.findById(id)
-                .orElseThrow(CommentService.CommentNotFoundException::new);
+                .orElseThrow(CommentNotFoundException::new);
 
         return commentMapper.toDto(comment);
     }
 
     public TicketDetailComment save(PostCommentDto dto, AppUserDetails appUser) {
-        Ticket ticket = ticketDao.findById(dto.idTicket()).orElseThrow(TicketService.TicketNotFoundException::new);
+        Ticket ticket = ticketDao.findById(dto.idTicket()).orElseThrow(TicketNotFoundException::new);
 
-        AppUser author = appUserDao.findById(appUser.getId()).orElseThrow(AppUserService.AppUserNotFoundException::new);
+        AppUser author = appUserDao.findById(appUser.getId()).orElseThrow(AppUserNotFoundException::new);
         String authorName = author.getFirstName() + " " + author.getLastName();
 
         Comment comment = new Comment(null, dto.content(), null, null, ticket, author);
@@ -59,9 +56,9 @@ public class CommentService  {
                 saved.getDateSent(), saved.getLastModification(), authorName, appUser.getUserRole(), appUser.getTechnician().getRank());
     }
 
-    public void delete(int id, AppUserDetails userDetails) throws CommentService.CommentNotFoundException {
+    public void delete(int id, AppUserDetails userDetails) throws CommentNotFoundException {
         Comment comment = commentDao.findById(id)
-                .orElseThrow(CommentService.CommentNotFoundException::new);
+                .orElseThrow(CommentNotFoundException::new);
 
         // On verifie si l'utilisateur est admin ou s'il est le proprietaire de la ressource
         if (!Objects.equals(userDetails.getUserRole(), "ADMIN") &&
@@ -72,10 +69,10 @@ public class CommentService  {
         commentDao.delete(comment);
     }
 
-    public TicketDetailComment update(int id, CommentEditDto commentToUpdate, AppUserDetails userDetails) throws CommentService.CommentNotFoundException {
+    public TicketDetailComment update(int id, CommentEditDto commentToUpdate, AppUserDetails userDetails) throws CommentNotFoundException {
 
         Comment currentComment = commentDao.findById(id)
-                .orElseThrow(CommentService.CommentNotFoundException::new);
+                .orElseThrow(CommentNotFoundException::new);
 
         // On verifie si l'utilisateur est admin ou s'il est le proprietaire de la ressource
         if (!Objects.equals(userDetails.getUserRole(), "ADMIN") &&

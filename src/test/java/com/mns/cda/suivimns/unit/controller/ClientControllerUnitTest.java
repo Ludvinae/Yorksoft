@@ -3,6 +3,7 @@ package com.mns.cda.suivimns.unit.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.ClientController;
 import com.mns.cda.suivimns.dto.entity.ClientDto;
+import com.mns.cda.suivimns.exception.ClientNotFoundException;
 import com.mns.cda.suivimns.service.entity.ClientService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -96,7 +97,7 @@ class ClientControllerUnitTest {
     void shouldReturn404WhenNotFound() throws Exception {
 
         when(clientService.findById(1))
-                .thenThrow(new ClientService.ClientNotFoundException());
+                .thenThrow(new ClientNotFoundException());
 
         mockMvc.perform(get("/client/1"))
                 .andDo(print())

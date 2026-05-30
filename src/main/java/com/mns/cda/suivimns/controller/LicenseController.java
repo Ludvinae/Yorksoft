@@ -1,6 +1,7 @@
 package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.entity.LicenseDto;
+import com.mns.cda.suivimns.exception.LicenseNotFoundException;
 import com.mns.cda.suivimns.security.IsAdmin;
 import com.mns.cda.suivimns.security.IsDirector;
 import com.mns.cda.suivimns.service.entity.LicenseService;
@@ -43,7 +44,7 @@ public class LicenseController {
 
         try {
             return new ResponseEntity<>(licenseService.findById(id) , HttpStatus.OK);
-        } catch (LicenseService.LicenseNotFoundException e) {
+        } catch (LicenseNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -68,7 +69,7 @@ public class LicenseController {
         try {
             licenseService.delete(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (LicenseService.LicenseNotFoundException e) {
+        } catch (LicenseNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -84,7 +85,7 @@ public class LicenseController {
     public ResponseEntity<LicenseDto> update(@PathVariable int id, @RequestBody @Valid LicenseDto licenseToUpdate) {
         try {
             return new ResponseEntity<>(licenseService.update(id, licenseToUpdate), HttpStatus.OK);
-        } catch (LicenseService.LicenseNotFoundException e) {
+        } catch (LicenseNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

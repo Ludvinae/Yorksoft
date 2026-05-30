@@ -1,6 +1,7 @@
 package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.entity.UrgencyDto;
+import com.mns.cda.suivimns.exception.UrgencyNotFoundException;
 import com.mns.cda.suivimns.security.IsAdmin;
 import com.mns.cda.suivimns.security.IsManager;
 import com.mns.cda.suivimns.security.IsTechnician;
@@ -46,7 +47,7 @@ public class UrgencyController {
 
         try {
             return new ResponseEntity<>(urgencyService.findById(id) , HttpStatus.OK);
-        } catch (UrgencyService.UrgencyNotFoundException e) {
+        } catch (UrgencyNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -74,7 +75,7 @@ public class UrgencyController {
         try {
             urgencyService.delete(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (UrgencyService.UrgencyNotFoundException e) {
+        } catch (UrgencyNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -91,7 +92,7 @@ public class UrgencyController {
     public ResponseEntity<UrgencyDto> update(@PathVariable Integer id, @RequestBody @Valid UrgencyDto urgencyToUpdate) {
         try {
             return new ResponseEntity<>(urgencyService.update(id, urgencyToUpdate), HttpStatus.OK);
-        } catch (UrgencyService.UrgencyNotFoundException e) {
+        } catch (UrgencyNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

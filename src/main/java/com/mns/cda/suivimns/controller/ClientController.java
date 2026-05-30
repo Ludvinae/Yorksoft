@@ -4,9 +4,11 @@ import com.mns.cda.suivimns.dto.entity.ClientDto;
 import com.mns.cda.suivimns.dto.flat.PasswordDto;
 import com.mns.cda.suivimns.dto.search.ClientListDto;
 import com.mns.cda.suivimns.dto.search.ClientSearchCriteria;
-import com.mns.cda.suivimns.dto.search.TicketSearchCriteria;
+import com.mns.cda.suivimns.exception.BadPasswordException;
+import com.mns.cda.suivimns.exception.ClientNotFoundException;
+import com.mns.cda.suivimns.exception.EmailAlreadyUsedException;
 import com.mns.cda.suivimns.security.*;
-import com.mns.cda.suivimns.service.entity.AppUserService;
+import com.mns.cda.suivimns.exception.AccountNotOwnedException;
 import com.mns.cda.suivimns.service.entity.ClientService;
 import com.mns.cda.suivimns.service.search.TicketQueryService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,8 +25,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @CrossOrigin
@@ -63,7 +63,7 @@ public class ClientController {
 
         try {
             return new ResponseEntity<>(clientService.findById(id) , HttpStatus.OK);
-        } catch (ClientService.ClientNotFoundException e) {
+        } catch (ClientNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -90,9 +90,9 @@ public class ClientController {
         try {
             clientService.delete(id, userDetails);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (ClientService.ClientNotFoundException e) {
+        } catch (ClientNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (AppUserService.AccountNotOwnedException e) {
+        } catch (AccountNotOwnedException e) {
             return new  ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
     }
@@ -112,12 +112,12 @@ public class ClientController {
         try {
             ClientDto user = clientService.update(id, dto, userDetails);
             return new ResponseEntity<>(user, HttpStatus.OK);
-        } catch (ClientService.ClientNotFoundException e) {
+        } catch (ClientNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             // IMPLEMENTER TEST UNICITE EMAIL !!!
-        } catch (AppUserService.EmailAlreadyUsedException e) {
+        } catch (EmailAlreadyUsedException e) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
-        } catch (AppUserService.AccountNotOwnedException e) {
+        } catch (AccountNotOwnedException e) {
             return new  ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
     }
@@ -137,11 +137,11 @@ public class ClientController {
         try {
             clientService.updatePassword(id, dto, userDetails);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (ClientService.ClientNotFoundException e) {
+        } catch (ClientNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (ClientService.BadPasswordException e) {
+        } catch (BadPasswordException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } catch (AppUserService.AccountNotOwnedException e) {
+        } catch (AccountNotOwnedException e) {
             return new  ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
     }

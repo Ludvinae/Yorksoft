@@ -2,6 +2,7 @@ package com.mns.cda.suivimns.service.entity;
 
 import com.mns.cda.suivimns.dao.LicenseDao;
 import com.mns.cda.suivimns.dto.entity.LicenseDto;
+import com.mns.cda.suivimns.exception.LicenseNotFoundException;
 import com.mns.cda.suivimns.mapper.entity.LicenseMapper;
 import com.mns.cda.suivimns.model.License;
 import lombok.RequiredArgsConstructor;
@@ -13,9 +14,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class LicenseService  {
 
-    public static class LicenseNotFoundException extends RuntimeException {
-    }
-
     protected final LicenseDao licenseDao;
     protected final LicenseMapper licenseMapper;
 
@@ -23,9 +21,9 @@ public class LicenseService  {
         return licenseMapper.toDtoList(licenseDao.findAll());
     }
 
-    public LicenseDto findById(int id) throws LicenseService.LicenseNotFoundException {
+    public LicenseDto findById(int id) throws LicenseNotFoundException {
         License license = licenseDao.findById(id)
-                .orElseThrow(LicenseService.LicenseNotFoundException::new);
+                .orElseThrow(LicenseNotFoundException::new);
 
         return licenseMapper.toDto(license);
     }
@@ -38,17 +36,17 @@ public class LicenseService  {
         return licenseMapper.toDto(saved);
     }
 
-    public void delete(int id) throws LicenseService.LicenseNotFoundException {
+    public void delete(int id) throws LicenseNotFoundException {
         License license = licenseDao.findById(id)
-                .orElseThrow(LicenseService.LicenseNotFoundException::new);
+                .orElseThrow(LicenseNotFoundException::new);
 
         licenseDao.delete(license);
     }
 
-    public LicenseDto update(int id, LicenseDto licenseToUpdate) throws LicenseService.LicenseNotFoundException {
+    public LicenseDto update(int id, LicenseDto licenseToUpdate) throws LicenseNotFoundException {
 
         License currentLicense = licenseDao.findById(id)
-                .orElseThrow(LicenseService.LicenseNotFoundException::new);
+                .orElseThrow(LicenseNotFoundException::new);
 
         licenseMapper.updateEntityFromDto(licenseToUpdate, currentLicense);
 

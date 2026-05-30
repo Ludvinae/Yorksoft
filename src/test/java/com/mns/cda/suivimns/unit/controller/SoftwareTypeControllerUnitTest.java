@@ -3,6 +3,7 @@ package com.mns.cda.suivimns.unit.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.SoftwareTypeController;
 import com.mns.cda.suivimns.dto.entity.SoftwareTypeDto;
+import com.mns.cda.suivimns.exception.SoftwareTypeNotFoundException;
 import com.mns.cda.suivimns.service.entity.SoftwareTypeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -95,7 +96,7 @@ class SoftwareTypeControllerUnitTest {
     void shouldReturn404WhenNotFound() throws Exception {
 
         when(softwareTypeService.findById(1))
-                .thenThrow(new SoftwareTypeService.SoftwareTypeNotFoundException());
+                .thenThrow(new SoftwareTypeNotFoundException());
 
         mockMvc.perform(get("/software-type/1"))
                 .andDo(print())
@@ -140,7 +141,7 @@ class SoftwareTypeControllerUnitTest {
     @Test
     void shouldReturn404WhenDeleteNotFound() throws Exception {
 
-        doThrow(new SoftwareTypeService.SoftwareTypeNotFoundException())
+        doThrow(new SoftwareTypeNotFoundException())
                 .when(softwareTypeService).delete(1);
 
         mockMvc.perform(delete("/software-type/1"))
@@ -171,7 +172,7 @@ class SoftwareTypeControllerUnitTest {
     void shouldReturn404WhenUpdateFails() throws Exception {
 
         when(softwareTypeService.update(eq(1), any(SoftwareTypeDto.class)))
-                .thenThrow(new SoftwareTypeService.SoftwareTypeNotFoundException());
+                .thenThrow(new SoftwareTypeNotFoundException());
 
         mockMvc.perform(put("/software-type/1")
                         .contentType(MediaType.APPLICATION_JSON)

@@ -3,6 +3,7 @@ package com.mns.cda.suivimns.unit.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.DirectorController;
 import com.mns.cda.suivimns.dto.entity.DirectorDto;
+import com.mns.cda.suivimns.exception.DirectorNotFoundException;
 import com.mns.cda.suivimns.service.entity.DirectorService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -96,7 +97,7 @@ class DirectorControllerUnitTest {
     void shouldReturn404WhenNotFound() throws Exception {
 
         when(directorService.findById(1))
-                .thenThrow(new DirectorService.DirectorNotFoundException());
+                .thenThrow(new DirectorNotFoundException());
 
         mockMvc.perform(get("/director/1"))
                 .andDo(print())

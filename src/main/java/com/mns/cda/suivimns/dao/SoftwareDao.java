@@ -1,8 +1,8 @@
 package com.mns.cda.suivimns.dao;
 
 import com.mns.cda.suivimns.dto.flat.SoftwareDetailDto;
+import com.mns.cda.suivimns.exception.SoftwareNotFoundException;
 import com.mns.cda.suivimns.model.Software;
-import com.mns.cda.suivimns.service.entity.SoftwareService;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -27,5 +27,5 @@ public interface SoftwareDao extends JpaRepository<Software, Integer> {
         JOIN s.type t
         WHERE s.idSoftware = :id
     """)
-    SoftwareDetailDto findByIdDetail(int id) throws SoftwareService.SoftwareNotFoundException;
+    SoftwareDetailDto findByIdDetail(int id) throws SoftwareNotFoundException;
 }

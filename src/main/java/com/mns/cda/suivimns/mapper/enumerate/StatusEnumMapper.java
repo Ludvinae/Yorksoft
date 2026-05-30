@@ -2,8 +2,8 @@ package com.mns.cda.suivimns.mapper.enumerate;
 
 import com.mns.cda.suivimns.dao.StatusDao;
 import com.mns.cda.suivimns.enumerate.StatusEnum;
+import com.mns.cda.suivimns.exception.StatusNotFoundException;
 import com.mns.cda.suivimns.model.Status;
-import com.mns.cda.suivimns.service.entity.StatusService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -17,8 +17,8 @@ public class StatusEnumMapper {
         return status.getCode();
     }
 
-    public Status enumToEntity(StatusEnum status) throws StatusService.StatusNotFoundException {
+    public Status enumToEntity(StatusEnum status) throws StatusNotFoundException {
 
-        return statusDao.findByCode(status).orElseThrow(StatusService.StatusNotFoundException::new);
+        return statusDao.findByCode(status).orElseThrow(StatusNotFoundException::new);
     }
 }

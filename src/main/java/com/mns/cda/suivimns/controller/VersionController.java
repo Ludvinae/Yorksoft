@@ -3,6 +3,7 @@ package com.mns.cda.suivimns.controller;
 import com.mns.cda.suivimns.dto.entity.VersionDto;
 import com.mns.cda.suivimns.dto.flat.VersionDetailDto;
 import com.mns.cda.suivimns.dto.flat.VersionSelectDto;
+import com.mns.cda.suivimns.exception.VersionNotFoundException;
 import com.mns.cda.suivimns.security.IsAdmin;
 import com.mns.cda.suivimns.security.IsManager;
 import com.mns.cda.suivimns.security.IsTechnician;
@@ -65,7 +66,7 @@ public class VersionController {
     public ResponseEntity<VersionDto> findById(@PathVariable Integer id) {
         try {
             return new ResponseEntity<>(versionService.findById(id) , HttpStatus.OK);
-        } catch (VersionService.VersionNotFoundException e) {
+        } catch (VersionNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -79,7 +80,7 @@ public class VersionController {
     public ResponseEntity<VersionDetailDto> findByIdDetail(@PathVariable Integer id) {
         try {
             return new ResponseEntity<>(versionService.findByIdDetail(id) , HttpStatus.OK);
-        } catch (VersionService.VersionNotFoundException e) {
+        } catch (VersionNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -106,7 +107,7 @@ public class VersionController {
         try {
             versionService.delete(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (VersionService.VersionNotFoundException e) {
+        } catch (VersionNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -124,7 +125,7 @@ public class VersionController {
     public ResponseEntity<VersionDto> update(@PathVariable Integer id, @RequestBody @Valid VersionDto versionToUpdate) {
         try {
             return new ResponseEntity<>(versionService.update(id, versionToUpdate), HttpStatus.OK);
-        } catch (VersionService.VersionNotFoundException e) {
+        } catch (VersionNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

@@ -2,6 +2,7 @@ package com.mns.cda.suivimns.unit.service.entity;
 
 import com.mns.cda.suivimns.dao.VersionTypeDao;
 import com.mns.cda.suivimns.dto.entity.VersionTypeDto;
+import com.mns.cda.suivimns.exception.VersionTypeNotFoundException;
 import com.mns.cda.suivimns.mapper.entity.VersionTypeMapper;
 import com.mns.cda.suivimns.model.VersionType;
 import com.mns.cda.suivimns.service.entity.VersionTypeService;
@@ -66,7 +67,7 @@ public class VersionTypeServiceUnitTest {
 
         when(versionTypeDao.findById(1)).thenReturn(Optional.empty());
 
-        assertThrows(VersionTypeService.VersionTypeNotFoundException.class,
+        assertThrows(VersionTypeNotFoundException.class,
                 () -> versionTypeService.findById(1));
     }
 
@@ -105,7 +106,7 @@ public class VersionTypeServiceUnitTest {
 
         when(versionTypeDao.findById(1)).thenReturn(Optional.empty());
 
-        assertThrows(VersionTypeService.VersionTypeNotFoundException.class,
+        assertThrows(VersionTypeNotFoundException.class,
                 () -> versionTypeService.delete(1));
     }
 

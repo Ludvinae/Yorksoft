@@ -4,6 +4,7 @@ import com.mns.cda.suivimns.dao.VersionDao;
 import com.mns.cda.suivimns.dto.entity.VersionDto;
 import com.mns.cda.suivimns.dto.flat.VersionDetailDto;
 import com.mns.cda.suivimns.dto.flat.VersionSelectDto;
+import com.mns.cda.suivimns.exception.VersionNotFoundException;
 import com.mns.cda.suivimns.mapper.entity.VersionMapper;
 import com.mns.cda.suivimns.model.Version;
 import lombok.RequiredArgsConstructor;
@@ -14,9 +15,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class VersionService  {
-
-    // Custom exception
-    public static class VersionNotFoundException extends RuntimeException {}
 
     protected final VersionDao versionDao;
     protected final VersionMapper versionMapper;
@@ -36,7 +34,7 @@ public class VersionService  {
 
     public VersionDto findById(int id) throws VersionNotFoundException {
         Version version = versionDao.findById(id)
-                .orElseThrow(VersionService.VersionNotFoundException::new);
+                .orElseThrow(VersionNotFoundException::new);
 
         return versionMapper.toDto(version);
     }
@@ -55,7 +53,7 @@ public class VersionService  {
 
     public void delete(int id) throws VersionNotFoundException {
         Version version = versionDao.findById(id)
-                .orElseThrow(VersionService.VersionNotFoundException::new);
+                .orElseThrow(VersionNotFoundException::new);
 
         versionDao.delete(version);
     }

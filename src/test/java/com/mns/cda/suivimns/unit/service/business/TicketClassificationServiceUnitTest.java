@@ -3,10 +3,10 @@ package com.mns.cda.suivimns.unit.service.business;
 import com.mns.cda.suivimns.dao.ClassificationDao;
 import com.mns.cda.suivimns.dao.ThemeDao;
 import com.mns.cda.suivimns.enumerate.ThemeEnum;
+import com.mns.cda.suivimns.exception.ThemeNotFoundException;
 import com.mns.cda.suivimns.model.Classification;
 import com.mns.cda.suivimns.model.Theme;
 import com.mns.cda.suivimns.model.Ticket;
-import com.mns.cda.suivimns.service.entity.ThemeService;
 import com.mns.cda.suivimns.service.business.TicketClassificationService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -92,7 +92,7 @@ public class TicketClassificationServiceUnitTest {
                 .thenReturn(Optional.empty());
 
         assertThrows(
-                ThemeService.ThemeNotFoundException.class,
+                ThemeNotFoundException.class,
                 () -> service.classify(ticket, ThemeEnum.BUG)
         );
 

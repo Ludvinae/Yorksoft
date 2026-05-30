@@ -1,6 +1,7 @@
 package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.entity.ImpactDto;
+import com.mns.cda.suivimns.exception.ImpactNotFoundException;
 import com.mns.cda.suivimns.security.IsAdmin;
 import com.mns.cda.suivimns.security.IsManager;
 import com.mns.cda.suivimns.security.IsTechnician;
@@ -44,7 +45,7 @@ public class ImpactController {
 
         try {
             return new ResponseEntity<>(impactService.findById(id) , HttpStatus.OK);
-        } catch (ImpactService.ImpactNotFoundException e) {
+        } catch (ImpactNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -69,7 +70,7 @@ public class ImpactController {
         try {
             impactService.delete(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (ImpactService.ImpactNotFoundException e) {
+        } catch (ImpactNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -85,7 +86,7 @@ public class ImpactController {
     public ResponseEntity<ImpactDto> update(@PathVariable int id, @RequestBody @Valid ImpactDto impactToUpdate) {
         try {
             return new ResponseEntity<>(impactService.update(id, impactToUpdate), HttpStatus.OK);
-        } catch (ImpactService.ImpactNotFoundException e) {
+        } catch (ImpactNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

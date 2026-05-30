@@ -2,6 +2,7 @@ package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.entity.StatusDto;
 import com.mns.cda.suivimns.enumerate.StatusEnum;
+import com.mns.cda.suivimns.exception.StatusNotFoundException;
 import com.mns.cda.suivimns.security.IsAdmin;
 import com.mns.cda.suivimns.security.IsManager;
 import com.mns.cda.suivimns.security.IsTechnician;
@@ -58,7 +59,7 @@ public class StatusController {
 
         try {
             return new ResponseEntity<>(statusService.findById(id) , HttpStatus.OK);
-        } catch (StatusService.StatusNotFoundException e) {
+        } catch (StatusNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -83,7 +84,7 @@ public class StatusController {
         try {
             statusService.delete(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (StatusService.StatusNotFoundException e) {
+        } catch (StatusNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -99,7 +100,7 @@ public class StatusController {
     public ResponseEntity<StatusDto> update(@PathVariable int id, @RequestBody @Valid StatusDto statusToUpdate) {
         try {
             return new ResponseEntity<>(statusService.update(id, statusToUpdate), HttpStatus.OK);
-        } catch (StatusService.StatusNotFoundException e) {
+        } catch (StatusNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

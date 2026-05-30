@@ -4,8 +4,11 @@ import com.mns.cda.suivimns.dao.AppUserDao;
 import com.mns.cda.suivimns.dao.DirectorDao;
 import com.mns.cda.suivimns.dto.entity.DirectorDto;
 import com.mns.cda.suivimns.dto.flat.PasswordDto;
+import com.mns.cda.suivimns.exception.AccountNotOwnedException;
+import com.mns.cda.suivimns.exception.BadPasswordException;
+import com.mns.cda.suivimns.exception.DirectorNotFoundException;
+import com.mns.cda.suivimns.exception.EmailAlreadyUsedException;
 import com.mns.cda.suivimns.mapper.entity.DirectorMapper;
-import com.mns.cda.suivimns.model.Client;
 import com.mns.cda.suivimns.model.Director;
 import com.mns.cda.suivimns.security.AppUserDetails;
 import lombok.RequiredArgsConstructor;
@@ -20,10 +23,6 @@ import java.util.Objects;
 public class DirectorService  {
 
 
-    // Classe d'erreur
-    public static class DirectorNotFoundException extends AppUserService.AppUserNotFoundException {}
-
-    public static class BadPasswordException extends Exception {}
 
 
     protected final DirectorDao directorDao;
@@ -35,9 +34,9 @@ public class DirectorService  {
         return directorMapper.toDtoList(directorDao.findAll());
     }
 
-    public DirectorDto findById(int id) throws DirectorService.DirectorNotFoundException {
+    public DirectorDto findById(int id) throws DirectorNotFoundException {
         Director director = directorDao.findById(id)
-                .orElseThrow(DirectorService.DirectorNotFoundException::new);
+                .orElseThrow(DirectorNotFoundException::new);
 
         return directorMapper.toDto(director);
     }
@@ -62,32 +61,32 @@ public class DirectorService  {
         appUserDao.save(director);
     }
 
-    public void delete(int id, AppUserDetails userDetails) throws DirectorService.DirectorNotFoundException, AppUserService.AccountNotOwnedException {
+    public void delete(int id, AppUserDetails userDetails) throws DirectorNotFoundException, AccountNotOwnedException {
         Director director = directorDao.findById(id)
-                .orElseThrow(DirectorService.DirectorNotFoundException::new);
+                .orElseThrow(DirectorNotFoundException::new);
 
         if (!Objects.equals(userDetails.getUserRole(), "ADMIN") &&
                 userDetails.getId() != id) {
-            throw new AppUserService.AccountNotOwnedException();
+            throw new AccountNotOwnedException();
         }
 
         directorDao.delete(director);
     }
 
     public DirectorDto update(int id, DirectorDto dto, AppUserDetails userDetails)
-            throws DirectorService.DirectorNotFoundException, AppUserService.EmailAlreadyUsedException, AppUserService.AccountNotOwnedException {
+            throws DirectorNotFoundException, EmailAlreadyUsedException, AccountNotOwnedException {
 
         if (appUserDao.existsByEmail(dto.email())) {
-            throw new AppUserService.EmailAlreadyUsedException();
+            throw new EmailAlreadyUsedException();
         }
 
         if (!Objects.equals(userDetails.getUserRole(), "ADMIN") &&
                 userDetails.getId() != id) {
-            throw new AppUserService.AccountNotOwnedException();
+            throw new AccountNotOwnedException();
         }
 
         Director currentDirector = directorDao.findById(id)
-                .orElseThrow(DirectorService.DirectorNotFoundException::new);
+                .orElseThrow(DirectorNotFoundException::new);
 
         directorMapper.updateEntityFromDto(dto, currentDirector);
         currentDirector.setPhoneNumber(currentDirector.getPhoneNumber().trim());
@@ -96,19 +95,19 @@ public class DirectorService  {
     }
 
     public void updatePassword(int id, PasswordDto dto, AppUserDetails userDetails)
-            throws DirectorService.DirectorNotFoundException, DirectorService.BadPasswordException, AppUserService.AccountNotOwnedException {
+            throws DirectorNotFoundException, BadPasswordException, AccountNotOwnedException {
 
         Director user = directorDao.findById(id)
-                .orElseThrow(DirectorService.DirectorNotFoundException::new);
+                .orElseThrow(DirectorNotFoundException::new);
 
         // vérifier ancien mot de passe
         if (!Objects.equals(user.getPassword(), dto.oldPassword())) {
-            throw new DirectorService.BadPasswordException();
+            throw new BadPasswordException();
         }
 
         if (!Objects.equals(userDetails.getUserRole(), "ADMIN") &&
                 userDetails.getId() != id) {
-            throw new AppUserService.AccountNotOwnedException();
+            throw new AccountNotOwnedException();
         }
 
         user.setPassword(dto.newPassword());

@@ -3,6 +3,7 @@ package com.mns.cda.suivimns.unit.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.ArticleController;
 import com.mns.cda.suivimns.dto.entity.ArticleDto;
+import com.mns.cda.suivimns.exception.ArticleNotFoundException;
 import com.mns.cda.suivimns.service.entity.ArticleService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -96,7 +97,7 @@ class ArticleControllerUnitTest {
     void shouldReturn404WhenNotFound() throws Exception {
 
         when(articleService.findById(1))
-                .thenThrow(new ArticleService.ArticleNotFoundException());
+                .thenThrow(new ArticleNotFoundException());
 
         mockMvc.perform(get("/article/1"))
                 .andDo(print())
@@ -141,7 +142,7 @@ class ArticleControllerUnitTest {
     @Test
     void shouldReturn404WhenDeleteNotFound() throws Exception {
 
-        doThrow(new ArticleService.ArticleNotFoundException())
+        doThrow(new ArticleNotFoundException())
                 .when(articleService).delete(1);
 
         mockMvc.perform(delete("/article/1"))

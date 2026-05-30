@@ -3,10 +3,10 @@ package com.mns.cda.suivimns.unit.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.TicketController;
 import com.mns.cda.suivimns.dto.entity.TicketDto;
-import com.mns.cda.suivimns.dto.flat.TicketFullWithLatest;
 import com.mns.cda.suivimns.dto.workflow.TicketCreationDto;
 import com.mns.cda.suivimns.enumerate.StatusEnum;
 import com.mns.cda.suivimns.enumerate.ThemeEnum;
+import com.mns.cda.suivimns.exception.TicketNotFoundException;
 import com.mns.cda.suivimns.service.entity.TicketService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -96,7 +96,7 @@ class TicketControllerUnitTest {
     void shouldReturn404WhenNotFound() throws Exception {
 
         when(ticketService.findById(1))
-                .thenThrow(new TicketService.TicketNotFoundException());
+                .thenThrow(new TicketNotFoundException());
 
         mockMvc.perform(get("/ticket/1"))
                 .andDo(print())
@@ -140,7 +140,7 @@ class TicketControllerUnitTest {
     @Test
     void shouldReturn404WhenDeleteNotFound() throws Exception {
 
-        doThrow(new TicketService.TicketNotFoundException())
+        doThrow(new TicketNotFoundException())
                 .when(ticketService).delete(1);
 
         mockMvc.perform(delete("/ticket/1"))
@@ -171,7 +171,7 @@ class TicketControllerUnitTest {
     void shouldReturn404WhenUpdateFails() throws Exception {
 
         when(ticketService.update(eq(1), any(TicketDto.class)))
-                .thenThrow(new TicketService.TicketNotFoundException());
+                .thenThrow(new TicketNotFoundException());
 
         mockMvc.perform(put("/ticket/1")
                         .contentType(MediaType.APPLICATION_JSON)

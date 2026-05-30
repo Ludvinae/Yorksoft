@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.StatusController;
 import com.mns.cda.suivimns.dto.entity.StatusDto;
 import com.mns.cda.suivimns.enumerate.StatusEnum;
+import com.mns.cda.suivimns.exception.StatusNotFoundException;
 import com.mns.cda.suivimns.service.entity.StatusService;
 import com.mns.cda.suivimns.service.workflow.StatusTransition;
 import org.junit.jupiter.api.BeforeEach;
@@ -137,7 +138,7 @@ class StatusControllerUnitTest {
     void shouldReturn404WhenNotFound() throws Exception {
 
         when(statusService.findById(1))
-                .thenThrow(new StatusService.StatusNotFoundException());
+                .thenThrow(new StatusNotFoundException());
 
         mockMvc.perform(get("/status/1"))
                 .andDo(print())
@@ -182,7 +183,7 @@ class StatusControllerUnitTest {
     @Test
     void shouldReturn404WhenDeleteNotFound() throws Exception {
 
-        doThrow(new StatusService.StatusNotFoundException())
+        doThrow(new StatusNotFoundException())
                 .when(statusService).delete(1);
 
         mockMvc.perform(delete("/status/1"))
@@ -214,7 +215,7 @@ class StatusControllerUnitTest {
     void shouldReturn404WhenUpdateFails() throws Exception {
 
         when(statusService.update(eq(1), any(StatusDto.class)))
-                .thenThrow(new StatusService.StatusNotFoundException());
+                .thenThrow(new StatusNotFoundException());
 
         mockMvc.perform(put("/status/1")
                         .contentType(MediaType.APPLICATION_JSON)

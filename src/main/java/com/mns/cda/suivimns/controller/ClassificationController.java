@@ -1,8 +1,8 @@
 package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.entity.ClassificationDto;
+import com.mns.cda.suivimns.exception.ClassificationNotFoundException;
 import com.mns.cda.suivimns.security.IsManager;
-import com.mns.cda.suivimns.security.IsTechnician;
 import com.mns.cda.suivimns.service.entity.ClassificationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -43,7 +43,7 @@ public class ClassificationController {
 
         try {
             return new ResponseEntity<>(classificationService.findById(idClassification) , HttpStatus.OK);
-        } catch (ClassificationService.ClassificationNotFoundException e) {
+        } catch (ClassificationNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

@@ -3,6 +3,7 @@ package com.mns.cda.suivimns.unit.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.TechnicianController;
 import com.mns.cda.suivimns.dto.entity.TechnicianDto;
+import com.mns.cda.suivimns.exception.TechnicianNotFoundException;
 import com.mns.cda.suivimns.service.entity.TechnicianService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -96,7 +97,7 @@ class TechnicianControllerUnitTest {
     void shouldReturn404WhenNotFound() throws Exception {
 
         when(technicianService.findById(1))
-                .thenThrow(new TechnicianService.TechnicianNotFoundException());
+                .thenThrow(new TechnicianNotFoundException());
 
         mockMvc.perform(get("/technician/1"))
                 .andDo(print())

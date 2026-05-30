@@ -3,6 +3,7 @@ package com.mns.cda.suivimns.unit.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.KnowledgeController;
 import com.mns.cda.suivimns.dto.entity.KnowledgeDto;
+import com.mns.cda.suivimns.exception.KnowledgeNotFoundException;
 import com.mns.cda.suivimns.service.entity.KnowledgeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -103,7 +104,7 @@ class KnowledgeControllerUnitTest {
     void shouldReturn404WhenNotFound() throws Exception {
 
         when(knowledgeService.findById(1))
-                .thenThrow(new KnowledgeService.KnowledgeNotFoundException());
+                .thenThrow(new KnowledgeNotFoundException());
 
         mockMvc.perform(get("/knowledge/1"))
                 .andDo(print())
@@ -147,7 +148,7 @@ class KnowledgeControllerUnitTest {
     @Test
     void shouldReturn404WhenDeleteNotFound() throws Exception {
 
-        doThrow(new KnowledgeService.KnowledgeNotFoundException())
+        doThrow(new KnowledgeNotFoundException())
                 .when(knowledgeService).delete(1);
 
         mockMvc.perform(delete("/knowledge/1"))
@@ -178,7 +179,7 @@ class KnowledgeControllerUnitTest {
     void shouldReturn404WhenUpdateFails() throws Exception {
 
         when(knowledgeService.update(eq(1), any(KnowledgeDto.class)))
-                .thenThrow(new KnowledgeService.KnowledgeNotFoundException());
+                .thenThrow(new KnowledgeNotFoundException());
 
         mockMvc.perform(put("/knowledge/1")
                         .contentType(MediaType.APPLICATION_JSON)

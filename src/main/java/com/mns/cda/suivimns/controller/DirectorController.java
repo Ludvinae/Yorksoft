@@ -2,11 +2,12 @@ package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.entity.DirectorDto;
 import com.mns.cda.suivimns.dto.flat.PasswordDto;
-import com.mns.cda.suivimns.model.AppUser;
+import com.mns.cda.suivimns.exception.BadPasswordException;
+import com.mns.cda.suivimns.exception.DirectorNotFoundException;
+import com.mns.cda.suivimns.exception.EmailAlreadyUsedException;
 import com.mns.cda.suivimns.security.AppUserDetails;
-import com.mns.cda.suivimns.security.IsAdmin;
 import com.mns.cda.suivimns.security.IsDirector;
-import com.mns.cda.suivimns.service.entity.AppUserService;
+import com.mns.cda.suivimns.exception.AccountNotOwnedException;
 import com.mns.cda.suivimns.service.entity.DirectorService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -50,7 +51,7 @@ public class DirectorController {
 
         try {
             return new ResponseEntity<>(directorService.findById(id) , HttpStatus.OK);
-        } catch (DirectorService.DirectorNotFoundException e) {
+        } catch (DirectorNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -76,9 +77,9 @@ public class DirectorController {
         try {
             directorService.delete(id, userDetails);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (DirectorService.DirectorNotFoundException e) {
+        } catch (DirectorNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (AppUserService.AccountNotOwnedException e) {
+        } catch (AccountNotOwnedException e) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
     }
@@ -98,12 +99,12 @@ public class DirectorController {
         try {
             DirectorDto user = directorService.update(id, dto, userDetails);
             return new ResponseEntity<>(user, HttpStatus.OK);
-        } catch (DirectorService.DirectorNotFoundException e) {
+        } catch (DirectorNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             // IMPLEMENTER TEST UNICITE EMAIL !!!
-        } catch (AppUserService.EmailAlreadyUsedException e) {
+        } catch (EmailAlreadyUsedException e) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
-        } catch (AppUserService.AccountNotOwnedException e) {
+        } catch (AccountNotOwnedException e) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
     }
@@ -123,11 +124,11 @@ public class DirectorController {
         try {
             directorService.updatePassword(id, dto, userDetails);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (DirectorService.DirectorNotFoundException e) {
+        } catch (DirectorNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (DirectorService.BadPasswordException e) {
+        } catch (BadPasswordException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } catch (AppUserService.AccountNotOwnedException e) {
+        } catch (AccountNotOwnedException e) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
     }

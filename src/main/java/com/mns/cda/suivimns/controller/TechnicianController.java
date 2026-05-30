@@ -3,9 +3,11 @@ package com.mns.cda.suivimns.controller;
 import com.mns.cda.suivimns.dto.entity.TechnicianDto;
 import com.mns.cda.suivimns.dto.flat.PasswordDto;
 import com.mns.cda.suivimns.dto.flat.TechnicianWorkloadDetailedDto;
-import com.mns.cda.suivimns.dto.flat.TechnicianWorkloadDetailedDto;
+import com.mns.cda.suivimns.exception.BadPasswordException;
+import com.mns.cda.suivimns.exception.EmailAlreadyUsedException;
+import com.mns.cda.suivimns.exception.TechnicianNotFoundException;
 import com.mns.cda.suivimns.security.*;
-import com.mns.cda.suivimns.service.entity.AppUserService;
+import com.mns.cda.suivimns.exception.AccountNotOwnedException;
 import com.mns.cda.suivimns.service.entity.TechnicianService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -16,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -59,7 +60,7 @@ public class TechnicianController {
 
         try {
             return new ResponseEntity<>(technicianService.findById(id) , HttpStatus.OK);
-        } catch (TechnicianService.TechnicianNotFoundException e) {
+        } catch (TechnicianNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -86,9 +87,9 @@ public class TechnicianController {
         try {
             technicianService.delete(id, userDetails);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (TechnicianService.TechnicianNotFoundException e) {
+        } catch (TechnicianNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (AppUserService.AccountNotOwnedException e) {
+        } catch (AccountNotOwnedException e) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
     }
@@ -108,12 +109,12 @@ public class TechnicianController {
         try {
             TechnicianDto user = technicianService.update(id, dto, userDetails);
             return new ResponseEntity<>(user, HttpStatus.OK);
-        } catch (TechnicianService.TechnicianNotFoundException e) {
+        } catch (TechnicianNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             // IMPLEMENTER TEST UNICITE EMAIL !!!
-        } catch (AppUserService.EmailAlreadyUsedException e) {
+        } catch (EmailAlreadyUsedException e) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
-        } catch (AppUserService.AccountNotOwnedException e) {
+        } catch (AccountNotOwnedException e) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
     }
@@ -133,11 +134,11 @@ public class TechnicianController {
         try {
             technicianService.updatePassword(id, dto, userDetails);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (TechnicianService.TechnicianNotFoundException e) {
+        } catch (TechnicianNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (TechnicianService.BadPasswordException e) {
+        } catch (BadPasswordException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } catch (AppUserService.AccountNotOwnedException e) {
+        } catch (AccountNotOwnedException e) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
     }

@@ -2,6 +2,7 @@ package com.mns.cda.suivimns.service.entity;
 
 import com.mns.cda.suivimns.dao.AssignmentDao;
 import com.mns.cda.suivimns.dto.entity.AssignmentDto;
+import com.mns.cda.suivimns.exception.AssignmentNotFoundException;
 import com.mns.cda.suivimns.mapper.entity.AssignmentMapper;
 import com.mns.cda.suivimns.model.Assignment;
 import lombok.RequiredArgsConstructor;
@@ -13,12 +14,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AssignmentService {
 
-    public static class AssignmentNotFoundException extends RuntimeException {
-    }
-
-    public static class AssignmentConflictException extends RuntimeException {
-    }
-
     protected final AssignmentDao assignmentDao;
     protected final AssignmentMapper assignmentMapper;
 
@@ -26,9 +21,9 @@ public class AssignmentService {
         return assignmentMapper.toDtoList(assignmentDao.findAll());
     }
 
-    public AssignmentDto findById(int id) throws AssignmentService.AssignmentNotFoundException {
+    public AssignmentDto findById(int id) throws AssignmentNotFoundException {
         Assignment assignment = assignmentDao.findById(id)
-                .orElseThrow(AssignmentService.AssignmentNotFoundException::new);
+                .orElseThrow(AssignmentNotFoundException::new);
 
         return assignmentMapper.toDto(assignment);
     }

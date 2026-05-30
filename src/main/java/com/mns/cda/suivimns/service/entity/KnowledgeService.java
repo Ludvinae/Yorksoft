@@ -2,6 +2,7 @@ package com.mns.cda.suivimns.service.entity;
 
 import com.mns.cda.suivimns.dao.KnowledgeDao;
 import com.mns.cda.suivimns.dto.entity.KnowledgeDto;
+import com.mns.cda.suivimns.exception.KnowledgeNotFoundException;
 import com.mns.cda.suivimns.mapper.entity.KnowledgeMapper;
 import com.mns.cda.suivimns.model.Knowledge;
 import lombok.RequiredArgsConstructor;
@@ -13,9 +14,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class KnowledgeService  {
 
-    public static class KnowledgeNotFoundException extends RuntimeException {
-    }
-
     protected final KnowledgeDao knowledgeDao;
     protected final KnowledgeMapper knowledgeMapper;
 
@@ -23,9 +21,9 @@ public class KnowledgeService  {
         return knowledgeMapper.toDtoList(knowledgeDao.findAll());
     }
 
-    public KnowledgeDto findById(int id) throws KnowledgeService.KnowledgeNotFoundException {
+    public KnowledgeDto findById(int id) throws KnowledgeNotFoundException {
         Knowledge knowledge = knowledgeDao.findById(id)
-                .orElseThrow(KnowledgeService.KnowledgeNotFoundException::new);
+                .orElseThrow(KnowledgeNotFoundException::new);
 
         return knowledgeMapper.toDto(knowledge);
     }
@@ -38,17 +36,17 @@ public class KnowledgeService  {
         return knowledgeMapper.toDto(saved);
     }
 
-    public void delete(int id) throws KnowledgeService.KnowledgeNotFoundException {
+    public void delete(int id) throws KnowledgeNotFoundException {
         Knowledge knowledge = knowledgeDao.findById(id)
-                .orElseThrow(KnowledgeService.KnowledgeNotFoundException::new);
+                .orElseThrow(KnowledgeNotFoundException::new);
 
         knowledgeDao.delete(knowledge);
     }
 
-    public KnowledgeDto update(int id, KnowledgeDto knowledgeToUpdate) throws KnowledgeService.KnowledgeNotFoundException {
+    public KnowledgeDto update(int id, KnowledgeDto knowledgeToUpdate) throws KnowledgeNotFoundException {
 
         Knowledge currentKnowledge = knowledgeDao.findById(id)
-                .orElseThrow(KnowledgeService.KnowledgeNotFoundException::new);
+                .orElseThrow(KnowledgeNotFoundException::new);
 
         knowledgeMapper.updateEntityFromDto(knowledgeToUpdate, currentKnowledge);
 

@@ -3,6 +3,7 @@ package com.mns.cda.suivimns.unit.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.SoftwareController;
 import com.mns.cda.suivimns.dto.entity.SoftwareDto;
+import com.mns.cda.suivimns.exception.SoftwareNotFoundException;
 import com.mns.cda.suivimns.service.entity.SoftwareService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -95,7 +96,7 @@ class SoftwareControllerUnitTest {
     void shouldReturn404WhenNotFound() throws Exception {
 
         when(softwareService.findById(1))
-                .thenThrow(new SoftwareService.SoftwareNotFoundException());
+                .thenThrow(new SoftwareNotFoundException());
 
         mockMvc.perform(get("/software/1"))
                 .andDo(print())
@@ -139,7 +140,7 @@ class SoftwareControllerUnitTest {
     @Test
     void shouldReturn404WhenDeleteNotFound() throws Exception {
 
-        doThrow(new SoftwareService.SoftwareNotFoundException())
+        doThrow(new SoftwareNotFoundException())
                 .when(softwareService).delete(1);
 
         mockMvc.perform(delete("/software/1"))
@@ -170,7 +171,7 @@ class SoftwareControllerUnitTest {
     void shouldReturn404WhenUpdateFails() throws Exception {
 
         when(softwareService.update(eq(1), any(SoftwareDto.class)))
-                .thenThrow(new SoftwareService.SoftwareNotFoundException());
+                .thenThrow(new SoftwareNotFoundException());
 
         mockMvc.perform(put("/software/1")
                         .contentType(MediaType.APPLICATION_JSON)

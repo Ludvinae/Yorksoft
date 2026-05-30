@@ -2,6 +2,7 @@ package com.mns.cda.suivimns.service.entity;
 
 import com.mns.cda.suivimns.dao.StatusDao;
 import com.mns.cda.suivimns.dto.entity.StatusDto;
+import com.mns.cda.suivimns.exception.StatusNotFoundException;
 import com.mns.cda.suivimns.mapper.entity.StatusMapper;
 import com.mns.cda.suivimns.model.Status;
 import lombok.RequiredArgsConstructor;
@@ -13,9 +14,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StatusService {
 
-    public static class StatusNotFoundException extends RuntimeException {
-    }
-
     protected final StatusDao statusDao;
     protected final StatusMapper statusMapper;
 
@@ -23,9 +21,9 @@ public class StatusService {
         return statusMapper.toDtoList(statusDao.findAll());
     }
 
-    public StatusDto findById(int id) throws StatusService.StatusNotFoundException {
+    public StatusDto findById(int id) throws StatusNotFoundException {
         Status status = statusDao.findById(id)
-                .orElseThrow(StatusService.StatusNotFoundException::new);
+                .orElseThrow(StatusNotFoundException::new);
 
         return statusMapper.toDto(status);
     }
@@ -38,17 +36,17 @@ public class StatusService {
         return statusMapper.toDto(saved);
     }
 
-    public void delete(int id) throws StatusService.StatusNotFoundException {
+    public void delete(int id) throws StatusNotFoundException {
         Status status = statusDao.findById(id)
-                .orElseThrow(StatusService.StatusNotFoundException::new);
+                .orElseThrow(StatusNotFoundException::new);
 
         statusDao.delete(status);
     }
 
-    public StatusDto update(int id, StatusDto statusToUpdate) throws StatusService.StatusNotFoundException {
+    public StatusDto update(int id, StatusDto statusToUpdate) throws StatusNotFoundException {
 
         Status currentStatus = statusDao.findById(id)
-                .orElseThrow(StatusService.StatusNotFoundException::new);
+                .orElseThrow(StatusNotFoundException::new);
 
         statusMapper.updateEntityFromDto(statusToUpdate, currentStatus);
 

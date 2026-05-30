@@ -3,6 +3,9 @@ package com.mns.cda.suivimns.service.entity;
 import com.mns.cda.suivimns.dao.AppUserDao;
 import com.mns.cda.suivimns.dto.entity.AppUserDto;
 import com.mns.cda.suivimns.dto.flat.PasswordDto;
+import com.mns.cda.suivimns.exception.AppUserNotFoundException;
+import com.mns.cda.suivimns.exception.BadPasswordException;
+import com.mns.cda.suivimns.exception.EmailAlreadyUsedException;
 import com.mns.cda.suivimns.mapper.entity.AppUserMapper;
 import com.mns.cda.suivimns.model.AppUser;
 import lombok.RequiredArgsConstructor;
@@ -16,16 +19,6 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class AppUserService {
 
-    // Classe d'erreur
-    public static class AppUserNotFoundException extends RuntimeException {
-    }
-
-    public static class EmailAlreadyUsedException extends Exception {}
-
-    public static class BadPasswordException extends Exception {}
-
-    public static class AccountNotOwnedException extends Exception {}
-
 
     protected final AppUserDao appUserDao;
     protected final AppUserMapper appUserMapper;
@@ -37,7 +30,7 @@ public class AppUserService {
 
     public AppUserDto findById(int id) throws AppUserNotFoundException {
         AppUser appUser = appUserDao.findById(id)
-                .orElseThrow(AppUserService.AppUserNotFoundException::new);
+                .orElseThrow(AppUserNotFoundException::new);
 
         return appUserMapper.toDto(appUser);
     }
@@ -64,7 +57,7 @@ public class AppUserService {
 
     public void delete(int id) throws AppUserNotFoundException {
         AppUser appUser = appUserDao.findById(id)
-                .orElseThrow(AppUserService.AppUserNotFoundException::new);
+                .orElseThrow(AppUserNotFoundException::new);
 
         appUserDao.delete(appUser);
     }
@@ -77,7 +70,7 @@ public class AppUserService {
         }
 
         AppUser currentAppUser = appUserDao.findById(id)
-                .orElseThrow(AppUserService.AppUserNotFoundException::new);
+                .orElseThrow(AppUserNotFoundException::new);
 
         appUserMapper.updateEntityFromDto(dto, currentAppUser);
         currentAppUser.setPhoneNumber(currentAppUser.getPhoneNumber().trim());

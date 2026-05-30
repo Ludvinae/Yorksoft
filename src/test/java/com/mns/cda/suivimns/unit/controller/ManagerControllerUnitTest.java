@@ -3,6 +3,7 @@ package com.mns.cda.suivimns.unit.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.ManagerController;
 import com.mns.cda.suivimns.dto.entity.ManagerDto;
+import com.mns.cda.suivimns.exception.ManagerNotFoundException;
 import com.mns.cda.suivimns.service.entity.ManagerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -96,7 +97,7 @@ class ManagerControllerUnitTest {
     void shouldReturn404WhenNotFound() throws Exception {
 
         when(managerService.findById(1))
-                .thenThrow(new ManagerService.ManagerNotFoundException());
+                .thenThrow(new ManagerNotFoundException());
 
         mockMvc.perform(get("/manager/1"))
                 .andDo(print())

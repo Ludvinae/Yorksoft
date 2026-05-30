@@ -3,6 +3,7 @@ package com.mns.cda.suivimns.unit.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.AppUserController;
 import com.mns.cda.suivimns.dto.entity.AppUserDto;
+import com.mns.cda.suivimns.exception.AppUserNotFoundException;
 import com.mns.cda.suivimns.service.entity.AppUserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -101,7 +102,7 @@ class AppUserControllerUnitTest {
     void shouldReturn404WhenNotFound() throws Exception {
 
         when(appUserService.findById(1))
-                .thenThrow(new AppUserService.AppUserNotFoundException());
+                .thenThrow(new AppUserNotFoundException());
 
         mockMvc.perform(get("/user/1"))
                 .andDo(print())
@@ -149,7 +150,7 @@ class AppUserControllerUnitTest {
     @WithMockUser(roles = "ADMIN")
     void shouldReturn404WhenDeleteNotFound() throws Exception {
 
-        doThrow(new AppUserService.AppUserNotFoundException())
+        doThrow(new AppUserNotFoundException())
                 .when(appUserService).delete(1);
 
         mockMvc.perform(delete("/user/1"))
@@ -182,7 +183,7 @@ class AppUserControllerUnitTest {
     void shouldReturn404WhenUpdateFails() throws Exception {
 
         when(appUserService.update(eq(1), any(AppUserDto.class)))
-                .thenThrow(new AppUserService.AppUserNotFoundException());
+                .thenThrow(new AppUserNotFoundException());
 
         mockMvc.perform(patch("/user/1")
                         .contentType(MediaType.APPLICATION_JSON)

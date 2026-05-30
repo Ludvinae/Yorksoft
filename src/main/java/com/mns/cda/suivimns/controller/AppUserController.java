@@ -2,6 +2,9 @@ package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.entity.AppUserDto;
 import com.mns.cda.suivimns.dto.flat.PasswordDto;
+import com.mns.cda.suivimns.exception.AppUserNotFoundException;
+import com.mns.cda.suivimns.exception.BadPasswordException;
+import com.mns.cda.suivimns.exception.EmailAlreadyUsedException;
 import com.mns.cda.suivimns.security.IsAdmin;
 import com.mns.cda.suivimns.security.IsDirector;
 import com.mns.cda.suivimns.service.entity.AppUserService;
@@ -45,7 +48,7 @@ public class AppUserController {
 
         try {
             return new ResponseEntity<>(appUserService.findById(id) , HttpStatus.OK);
-        } catch (AppUserService.AppUserNotFoundException e) {
+        } catch (AppUserNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -70,7 +73,7 @@ public class AppUserController {
         try {
             appUserService.delete(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (AppUserService.AppUserNotFoundException e) {
+        } catch (AppUserNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -89,10 +92,10 @@ public class AppUserController {
         try {
             AppUserDto user = appUserService.update(id, dto);
             return new ResponseEntity<>(user, HttpStatus.OK);
-        } catch (AppUserService.AppUserNotFoundException e) {
+        } catch (AppUserNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             // IMPLEMENTER TEST UNICITE EMAIL !!!
-        } catch (AppUserService.EmailAlreadyUsedException e) {
+        } catch (EmailAlreadyUsedException e) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
@@ -110,9 +113,9 @@ public class AppUserController {
         try {
             appUserService.updatePassword(id, dto);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (AppUserService.AppUserNotFoundException e) {
+        } catch (AppUserNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (AppUserService.BadPasswordException e) {
+        } catch (BadPasswordException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }

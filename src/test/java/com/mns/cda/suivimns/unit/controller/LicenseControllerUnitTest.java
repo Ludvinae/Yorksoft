@@ -3,6 +3,7 @@ package com.mns.cda.suivimns.unit.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.LicenseController;
 import com.mns.cda.suivimns.dto.entity.LicenseDto;
+import com.mns.cda.suivimns.exception.LicenseNotFoundException;
 import com.mns.cda.suivimns.service.entity.LicenseService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -96,7 +97,7 @@ class LicenseControllerUnitTest {
     void shouldReturn404WhenNotFound() throws Exception {
 
         when(licenseService.findById(1))
-                .thenThrow(new LicenseService.LicenseNotFoundException());
+                .thenThrow(new LicenseNotFoundException());
 
         mockMvc.perform(get("/license/1"))
                 .andDo(print())
@@ -141,7 +142,7 @@ class LicenseControllerUnitTest {
     @Test
     void shouldReturn404WhenDeleteNotFound() throws Exception {
 
-        doThrow(new LicenseService.LicenseNotFoundException())
+        doThrow(new LicenseNotFoundException())
                 .when(licenseService).delete(1);
 
         mockMvc.perform(delete("/license/1"))
@@ -172,7 +173,7 @@ class LicenseControllerUnitTest {
     void shouldReturn404WhenUpdateFails() throws Exception {
 
         when(licenseService.update(eq(1), any(LicenseDto.class)))
-                .thenThrow(new LicenseService.LicenseNotFoundException());
+                .thenThrow(new LicenseNotFoundException());
 
         mockMvc.perform(put("/license/1")
                         .contentType(MediaType.APPLICATION_JSON)

@@ -3,6 +3,7 @@ package com.mns.cda.suivimns.unit.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.HistoryController;
 import com.mns.cda.suivimns.dto.entity.HistoryDto;
+import com.mns.cda.suivimns.exception.HistoryNotFoundException;
 import com.mns.cda.suivimns.service.entity.HistoryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -78,7 +79,7 @@ class HistoryControllerUnitTest {
     void shouldReturn404WhenNotFound() throws Exception {
 
         when(historyService.findById(1))
-                .thenThrow(new HistoryService.HistoryNotFoundException());
+                .thenThrow(new HistoryNotFoundException());
 
         mockMvc.perform(get("/history/1"))
                 .andDo(print())

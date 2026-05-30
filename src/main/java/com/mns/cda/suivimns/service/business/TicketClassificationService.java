@@ -3,10 +3,10 @@ package com.mns.cda.suivimns.service.business;
 import com.mns.cda.suivimns.dao.ClassificationDao;
 import com.mns.cda.suivimns.dao.ThemeDao;
 import com.mns.cda.suivimns.enumerate.ThemeEnum;
+import com.mns.cda.suivimns.exception.ThemeNotFoundException;
 import com.mns.cda.suivimns.model.Classification;
 import com.mns.cda.suivimns.model.Theme;
 import com.mns.cda.suivimns.model.Ticket;
-import com.mns.cda.suivimns.service.entity.ThemeService;
 import com.mns.cda.suivimns.service.workflow.TicketClosingService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +32,7 @@ public class TicketClassificationService {
         }
 
         Theme theme = themeDao.findByCode(themeEnum)
-                .orElseThrow(ThemeService.ThemeNotFoundException::new);
+                .orElseThrow(ThemeNotFoundException::new);
 
         if (theme.getCode().equals(ticket.getCurrentTheme())) {
             return;

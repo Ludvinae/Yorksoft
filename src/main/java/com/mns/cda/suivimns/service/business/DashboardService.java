@@ -6,7 +6,7 @@ import com.mns.cda.suivimns.dto.dashboard.graphs.SoftwareStatDto;
 import com.mns.cda.suivimns.dto.dashboard.graphs.TechnicianWorkloadDto;
 import com.mns.cda.suivimns.dto.dashboard.graphs.ThemeStatDto;
 import com.mns.cda.suivimns.dto.dashboard.graphs.TicketStatusStatDto;
-import com.mns.cda.suivimns.service.entity.TechnicianService;
+import com.mns.cda.suivimns.exception.TechnicianNotFoundException;
 import com.mns.cda.suivimns.service.security.SecurityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -94,7 +94,7 @@ public class DashboardService {
     private DashboardTechnicianDto  getTechnicianStats(LocalDateTime startDate) {
         Integer id = securityService.getCurrentUserId();
         if (id == null) {
-            throw new TechnicianService.TechnicianNotFoundException();
+            throw new TechnicianNotFoundException();
         }
 
         int open = ticketDao.countAssignedOpenTickets(id);

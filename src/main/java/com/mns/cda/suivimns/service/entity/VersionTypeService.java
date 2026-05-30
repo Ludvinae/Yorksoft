@@ -2,6 +2,7 @@ package com.mns.cda.suivimns.service.entity;
 
 import com.mns.cda.suivimns.dao.VersionTypeDao;
 import com.mns.cda.suivimns.dto.entity.VersionTypeDto;
+import com.mns.cda.suivimns.exception.VersionTypeNotFoundException;
 import com.mns.cda.suivimns.mapper.entity.VersionTypeMapper;
 import com.mns.cda.suivimns.model.VersionType;
 import lombok.RequiredArgsConstructor;
@@ -13,9 +14,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class VersionTypeService {
 
-    // Custom exception
-    public static class VersionTypeNotFoundException extends RuntimeException {}
-
     protected final VersionTypeDao versionTypeDao;
     private final VersionTypeMapper typeMapper;
 
@@ -23,7 +21,7 @@ public class VersionTypeService {
         return typeMapper.toDtoList(versionTypeDao.findAll());
     }
 
-    public VersionTypeDto findById(int id) throws VersionTypeNotFoundException{
+    public VersionTypeDto findById(int id) throws VersionTypeNotFoundException {
         VersionType type = versionTypeDao.findById(id)
                 .orElseThrow(VersionTypeNotFoundException::new);
 

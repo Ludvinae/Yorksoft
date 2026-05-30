@@ -2,6 +2,7 @@ package com.mns.cda.suivimns.service.entity;
 
 import com.mns.cda.suivimns.dao.ThemeDao;
 import com.mns.cda.suivimns.dto.entity.ThemeDto;
+import com.mns.cda.suivimns.exception.ThemeNotFoundException;
 import com.mns.cda.suivimns.mapper.entity.ThemeMapper;
 import com.mns.cda.suivimns.model.Theme;
 import lombok.RequiredArgsConstructor;
@@ -13,9 +14,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ThemeService {
 
-    public static class ThemeNotFoundException extends RuntimeException {
-    }
-
     protected final ThemeDao themeDao;
     protected final ThemeMapper themeMapper;
 
@@ -23,9 +21,9 @@ public class ThemeService {
         return themeMapper.toDtoList(themeDao.findAll());
     }
 
-    public ThemeDto findById(int id) throws ThemeService.ThemeNotFoundException {
+    public ThemeDto findById(int id) throws ThemeNotFoundException {
         Theme theme = themeDao.findById(id)
-                .orElseThrow(ThemeService.ThemeNotFoundException::new);
+                .orElseThrow(ThemeNotFoundException::new);
 
         return themeMapper.toDto(theme);
     }
@@ -38,17 +36,17 @@ public class ThemeService {
         return themeMapper.toDto(saved);
     }
 
-    public void delete(int id) throws ThemeService.ThemeNotFoundException {
+    public void delete(int id) throws ThemeNotFoundException {
         Theme theme = themeDao.findById(id)
-                .orElseThrow(ThemeService.ThemeNotFoundException::new);
+                .orElseThrow(ThemeNotFoundException::new);
 
         themeDao.delete(theme);
     }
 
-    public ThemeDto update(int id, ThemeDto themeToUpdate) throws ThemeService.ThemeNotFoundException {
+    public ThemeDto update(int id, ThemeDto themeToUpdate) throws ThemeNotFoundException {
 
         Theme currentTheme = themeDao.findById(id)
-                .orElseThrow(ThemeService.ThemeNotFoundException::new);
+                .orElseThrow(ThemeNotFoundException::new);
 
         themeMapper.updateEntityFromDto(themeToUpdate, currentTheme);
 

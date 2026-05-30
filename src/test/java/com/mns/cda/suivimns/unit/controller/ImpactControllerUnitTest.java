@@ -3,6 +3,7 @@ package com.mns.cda.suivimns.unit.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.ImpactController;
 import com.mns.cda.suivimns.dto.entity.ImpactDto;
+import com.mns.cda.suivimns.exception.ImpactNotFoundException;
 import com.mns.cda.suivimns.service.entity.ImpactService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -95,7 +96,7 @@ class ImpactControllerUnitTest {
     void shouldReturn404WhenNotFound() throws Exception {
 
         when(impactService.findById(1))
-                .thenThrow(new ImpactService.ImpactNotFoundException());
+                .thenThrow(new ImpactNotFoundException());
 
         mockMvc.perform(get("/impact/1"))
                 .andDo(print())
@@ -140,7 +141,7 @@ class ImpactControllerUnitTest {
     @Test
     void shouldReturn404WhenDeleteNotFound() throws Exception {
 
-        doThrow(new ImpactService.ImpactNotFoundException())
+        doThrow(new ImpactNotFoundException())
                 .when(impactService).delete(1);
 
         mockMvc.perform(delete("/impact/1"))
@@ -171,7 +172,7 @@ class ImpactControllerUnitTest {
     void shouldReturn404WhenUpdateFails() throws Exception {
 
         when(impactService.update(eq(1), any(ImpactDto.class)))
-                .thenThrow(new ImpactService.ImpactNotFoundException());
+                .thenThrow(new ImpactNotFoundException());
 
         mockMvc.perform(put("/impact/1")
                         .contentType(MediaType.APPLICATION_JSON)

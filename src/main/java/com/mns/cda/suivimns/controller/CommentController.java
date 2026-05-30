@@ -4,6 +4,7 @@ import com.mns.cda.suivimns.dto.details.TicketDetailComment;
 import com.mns.cda.suivimns.dto.entity.CommentDto;
 import com.mns.cda.suivimns.dto.flat.CommentEditDto;
 import com.mns.cda.suivimns.dto.flat.PostCommentDto;
+import com.mns.cda.suivimns.exception.CommentNotFoundException;
 import com.mns.cda.suivimns.security.*;
 import com.mns.cda.suivimns.service.entity.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -47,7 +48,7 @@ public class CommentController {
 
         try {
             return new ResponseEntity<>(commentService.findById(id) , HttpStatus.OK);
-        } catch (CommentService.CommentNotFoundException e) {
+        } catch (CommentNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -73,7 +74,7 @@ public class CommentController {
         try {
             commentService.delete(id, userDetail);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (CommentService.CommentNotFoundException e) {
+        } catch (CommentNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -90,7 +91,7 @@ public class CommentController {
                                              @AuthenticationPrincipal AppUserDetails userDetail) {
         try {
             return new ResponseEntity<>(commentService.update(id, commentToUpdate, userDetail), HttpStatus.OK);
-        } catch (CommentService.CommentNotFoundException e) {
+        } catch (CommentNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

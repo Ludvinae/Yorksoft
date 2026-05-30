@@ -1,15 +1,13 @@
 package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.entity.AssignmentDto;
-import com.mns.cda.suivimns.security.IsDirector;
+import com.mns.cda.suivimns.exception.AssignmentNotFoundException;
 import com.mns.cda.suivimns.security.IsManager;
-import com.mns.cda.suivimns.security.IsTechnician;
 import com.mns.cda.suivimns.service.entity.AssignmentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,7 +43,7 @@ public class AssignmentController {
 
         try {
             return new ResponseEntity<>(assignmentService.findById(id) , HttpStatus.OK);
-        } catch (AssignmentService.AssignmentNotFoundException e) {
+        } catch (AssignmentNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

@@ -2,11 +2,11 @@ package com.mns.cda.suivimns.unit.service.business;
 
 import com.mns.cda.suivimns.dao.AssignmentDao;
 import com.mns.cda.suivimns.enumerate.StatusEnum;
+import com.mns.cda.suivimns.exception.AssignmentConflictException;
 import com.mns.cda.suivimns.model.Assignment;
 import com.mns.cda.suivimns.model.Manager;
 import com.mns.cda.suivimns.model.Technician;
 import com.mns.cda.suivimns.model.Ticket;
-import com.mns.cda.suivimns.service.entity.AssignmentService;
 import com.mns.cda.suivimns.service.workflow.StatusTransition;
 import com.mns.cda.suivimns.service.workflow.TicketAssignmentService;
 import com.mns.cda.suivimns.service.workflow.TicketStatusService;
@@ -146,7 +146,7 @@ public class TicketAssignmentServiceUnitTest {
 
 
         assertThrows(
-                AssignmentService.AssignmentConflictException.class,
+                AssignmentConflictException.class,
                 () -> service.assignTicket(
                         ticket,
                         manager,

@@ -2,11 +2,11 @@ package com.mns.cda.suivimns.service.workflow;
 
 import com.mns.cda.suivimns.dao.HistoryDao;
 import com.mns.cda.suivimns.enumerate.StatusEnum;
+import com.mns.cda.suivimns.exception.StatusNotFoundException;
 import com.mns.cda.suivimns.model.AppUser;
 import com.mns.cda.suivimns.model.History;
 import com.mns.cda.suivimns.model.Ticket;
 import com.mns.cda.suivimns.service.entity.HistoryService;
-import com.mns.cda.suivimns.service.entity.StatusService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -39,7 +39,7 @@ public class TicketStatusService {
 
     @Transactional
     public void initializeStatus(Ticket ticket, AppUser user)
-            throws StatusService.StatusNotFoundException {
+            throws StatusNotFoundException {
 
         // Verifier que le ticket n'a pas déja un statut
         if (ticket.getCurrentStatus() != null) {
@@ -57,7 +57,7 @@ public class TicketStatusService {
             AppUser user,
             String statusReason
     ) throws StatusTransition.IllegalStatusTransitionException,
-            StatusService.StatusNotFoundException,
+            StatusNotFoundException,
             MissingCurrentHistoryException {
 
         StatusEnum currentStatus = ticket.getCurrentStatus();

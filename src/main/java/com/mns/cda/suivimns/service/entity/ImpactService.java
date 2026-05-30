@@ -2,6 +2,7 @@ package com.mns.cda.suivimns.service.entity;
 
 import com.mns.cda.suivimns.dao.ImpactDao;
 import com.mns.cda.suivimns.dto.entity.ImpactDto;
+import com.mns.cda.suivimns.exception.ImpactNotFoundException;
 import com.mns.cda.suivimns.mapper.entity.ImpactMapper;
 import com.mns.cda.suivimns.model.Impact;
 import lombok.RequiredArgsConstructor;
@@ -13,9 +14,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ImpactService  {
 
-    public static class ImpactNotFoundException extends RuntimeException {
-    }
-
     protected final ImpactDao impactDao;
     protected final ImpactMapper impactMapper;
 
@@ -23,9 +21,9 @@ public class ImpactService  {
         return impactMapper.toDtoList(impactDao.findAll());
     }
 
-    public ImpactDto findById(int id) throws ImpactService.ImpactNotFoundException {
+    public ImpactDto findById(int id) throws ImpactNotFoundException {
         Impact impact = impactDao.findById(id)
-                .orElseThrow(ImpactService.ImpactNotFoundException::new);
+                .orElseThrow(ImpactNotFoundException::new);
 
         return impactMapper.toDto(impact);
     }
@@ -38,17 +36,17 @@ public class ImpactService  {
         return impactMapper.toDto(saved);
     }
 
-    public void delete(int id) throws ImpactService.ImpactNotFoundException {
+    public void delete(int id) throws ImpactNotFoundException {
         Impact impact = impactDao.findById(id)
-                .orElseThrow(ImpactService.ImpactNotFoundException::new);
+                .orElseThrow(ImpactNotFoundException::new);
 
         impactDao.delete(impact);
     }
 
-    public ImpactDto update(int id, ImpactDto impactToUpdate) throws ImpactService.ImpactNotFoundException {
+    public ImpactDto update(int id, ImpactDto impactToUpdate) throws ImpactNotFoundException {
 
         Impact currentImpact = impactDao.findById(id)
-                .orElseThrow(ImpactService.ImpactNotFoundException::new);
+                .orElseThrow(ImpactNotFoundException::new);
 
         impactMapper.updateEntityFromDto(impactToUpdate, currentImpact);
 

@@ -5,11 +5,10 @@ import com.mns.cda.suivimns.dto.entity.TicketDto;
 import com.mns.cda.suivimns.dto.search.TicketListDto;
 import com.mns.cda.suivimns.dto.search.TicketSearchCriteria;
 import com.mns.cda.suivimns.dto.workflow.*;
-import com.mns.cda.suivimns.dto.flat.TicketFullWithLatest;
-import com.mns.cda.suivimns.model.Ticket;
+import com.mns.cda.suivimns.exception.StatusNotFoundException;
+import com.mns.cda.suivimns.exception.TicketNotFoundException;
 import com.mns.cda.suivimns.security.*;
 import com.mns.cda.suivimns.service.business.TicketDetailService;
-import com.mns.cda.suivimns.service.entity.StatusService;
 import com.mns.cda.suivimns.service.entity.TicketService;
 import com.mns.cda.suivimns.service.search.TicketQueryService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,7 +17,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -27,8 +25,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -71,7 +67,7 @@ public class TicketController {
 
         try {
             return new ResponseEntity<>(ticketService.findById(id) , HttpStatus.OK);
-        } catch (TicketService.TicketNotFoundException e) {
+        } catch (TicketNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -87,7 +83,7 @@ public class TicketController {
 
         try {
             return new ResponseEntity<>(ticketDetailService.getTicketDetails(id, principal) , HttpStatus.OK);
-        } catch (TicketService.TicketNotFoundException e) {
+        } catch (TicketNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (IllegalAccessException e) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -104,7 +100,7 @@ public class TicketController {
                                             @AuthenticationPrincipal AppUserDetails principal) {
         try {
             return new ResponseEntity<>(ticketService.save(ticket, principal), HttpStatus.CREATED);
-        } catch (StatusService.StatusNotFoundException e) {
+        } catch (StatusNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -119,7 +115,7 @@ public class TicketController {
         try {
             ticketService.delete(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (TicketService.TicketNotFoundException e) {
+        } catch (TicketNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -135,7 +131,7 @@ public class TicketController {
                                             @AuthenticationPrincipal AppUserDetails principal) {
         try {
             return new ResponseEntity<>(ticketService.update(id, ticketToUpdate, principal), HttpStatus.OK);
-        } catch (TicketService.TicketNotFoundException e) {
+        } catch (TicketNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (IllegalAccessException e) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);

@@ -1,6 +1,7 @@
 package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.entity.HistoryDto;
+import com.mns.cda.suivimns.exception.HistoryNotFoundException;
 import com.mns.cda.suivimns.security.IsManager;
 import com.mns.cda.suivimns.service.entity.HistoryService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -41,7 +42,7 @@ public class HistoryController {
 
         try {
             return new ResponseEntity<>(historyService.findById(id) , HttpStatus.OK);
-        } catch (HistoryService.HistoryNotFoundException e) {
+        } catch (HistoryNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

@@ -1,9 +1,9 @@
 package com.mns.cda.suivimns.config;
 
 import com.mns.cda.suivimns.dto.config.ErrorResponseDto;
-import com.mns.cda.suivimns.service.entity.AppUserService;
-import com.mns.cda.suivimns.service.entity.AssignmentService;
-import com.mns.cda.suivimns.service.entity.TicketService;
+import com.mns.cda.suivimns.exception.AppUserNotFoundException;
+import com.mns.cda.suivimns.exception.AssignmentConflictException;
+import com.mns.cda.suivimns.exception.TicketNotFoundException;
 import com.mns.cda.suivimns.service.workflow.StatusTransition;
 import com.mns.cda.suivimns.service.workflow.TicketStatusService;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -47,10 +47,10 @@ public class GlobalExceptionInterceptor {
         return ResponseEntity.badRequest().body(ex.getMessage());
     }
 
-    @ExceptionHandler(TicketService.TicketNotFoundException.class)
+    @ExceptionHandler(TicketNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponseDto handleTicketNotFound(
-            TicketService.TicketNotFoundException ex
+            TicketNotFoundException ex
     ) {
         return new ErrorResponseDto(
                 404,"TICKET_NOT_FOUND", "Ticket introuvable"
@@ -77,10 +77,10 @@ public class GlobalExceptionInterceptor {
         );
     }
 
-    @ExceptionHandler(AppUserService.AppUserNotFoundException.class)
+    @ExceptionHandler(AppUserNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponseDto handleAppUserNotFound(
-            AppUserService.AppUserNotFoundException ex
+            AppUserNotFoundException ex
     ) {
         return new ErrorResponseDto(
                 404,
@@ -89,10 +89,10 @@ public class GlobalExceptionInterceptor {
         );
     }
 
-    @ExceptionHandler(AssignmentService.AssignmentConflictException.class)
+    @ExceptionHandler(AssignmentConflictException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponseDto handleTechnicianAlreadyAssigned(
-            AssignmentService.AssignmentConflictException ex
+            AssignmentConflictException ex
     ) {
         return new ErrorResponseDto(
                 409,

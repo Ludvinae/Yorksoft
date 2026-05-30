@@ -1,6 +1,7 @@
 package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.entity.VersionTypeDto;
+import com.mns.cda.suivimns.exception.VersionTypeNotFoundException;
 import com.mns.cda.suivimns.security.IsAdmin;
 import com.mns.cda.suivimns.security.IsManager;
 import com.mns.cda.suivimns.security.IsTechnician;
@@ -13,8 +14,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -49,7 +48,7 @@ public class VersionTypeController {
 
         try {
             return new ResponseEntity<>(versionTypeService.findById(id) , HttpStatus.OK);
-        } catch (VersionTypeService.VersionTypeNotFoundException e) {
+        } catch (VersionTypeNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -79,7 +78,7 @@ public class VersionTypeController {
         try {
             versionTypeService.delete(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (VersionTypeService.VersionTypeNotFoundException e) {
+        } catch (VersionTypeNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -97,7 +96,7 @@ public class VersionTypeController {
     public ResponseEntity<VersionTypeDto> update(@PathVariable Integer id, @RequestBody @Valid VersionTypeDto typeToUpdate) {
         try {
             return new ResponseEntity<>(versionTypeService.update(id, typeToUpdate), HttpStatus.OK);
-        } catch (VersionTypeService.VersionTypeNotFoundException e) {
+        } catch (VersionTypeNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

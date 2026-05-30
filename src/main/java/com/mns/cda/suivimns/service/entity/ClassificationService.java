@@ -2,6 +2,7 @@ package com.mns.cda.suivimns.service.entity;
 
 import com.mns.cda.suivimns.dao.ClassificationDao;
 import com.mns.cda.suivimns.dto.entity.ClassificationDto;
+import com.mns.cda.suivimns.exception.ClassificationNotFoundException;
 import com.mns.cda.suivimns.mapper.entity.ClassificationMapper;
 import com.mns.cda.suivimns.model.Classification;
 import com.mns.cda.suivimns.model.Theme;
@@ -16,9 +17,6 @@ import java.util.Optional;
 public class ClassificationService {
 
 
-    public static class ClassificationNotFoundException extends RuntimeException {
-    }
-
     // NEED REWORKING TO ACCOUNT FOR ID FOR BOTH LINKED TABLES
 
     protected final ClassificationDao classificationDao;
@@ -28,7 +26,7 @@ public class ClassificationService {
         return classificationMapper.toDtoList(classificationDao.findAll());
     }
 
-    public ClassificationDto findById(int idClassification) throws ClassificationService.ClassificationNotFoundException {
+    public ClassificationDto findById(int idClassification) throws ClassificationNotFoundException {
 
         Classification classification = classificationDao.findById(idClassification)
                 .orElseThrow(ClassificationNotFoundException::new);

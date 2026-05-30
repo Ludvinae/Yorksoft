@@ -1,13 +1,13 @@
 package com.mns.cda.suivimns.service.entity;
 
 import com.mns.cda.suivimns.dao.*;
-import com.mns.cda.suivimns.dao.search.TicketSpecification;
 import com.mns.cda.suivimns.dto.details.TicketDetailFullDto;
 import com.mns.cda.suivimns.dto.entity.TicketDto;
 import com.mns.cda.suivimns.dto.search.TicketListDto;
 import com.mns.cda.suivimns.dto.search.TicketSearchCriteria;
 import com.mns.cda.suivimns.dto.workflow.*;
 import com.mns.cda.suivimns.enumerate.StatusEnum;
+import com.mns.cda.suivimns.exception.*;
 import com.mns.cda.suivimns.mapper.entity.TicketMapper;
 import com.mns.cda.suivimns.model.*;
 import com.mns.cda.suivimns.security.AppUserDetails;
@@ -29,9 +29,6 @@ import static com.mns.cda.suivimns.service.workflow.TicketClosingService.isNotEd
 @Service
 @RequiredArgsConstructor
 public class TicketService  {
-
-    public static class TicketNotFoundException extends RuntimeException {
-    }
 
     protected final TicketMapper ticketMapper;
     protected final TicketPriorityService priorityService;
@@ -61,13 +58,13 @@ public class TicketService  {
 
     public TicketDto findById(int id) throws TicketNotFoundException {
         Ticket ticket = ticketDao.findById(id)
-                .orElseThrow(TicketService.TicketNotFoundException::new);
+                .orElseThrow(TicketNotFoundException::new);
 
         return ticketMapper.toDto(ticket);
     }
 
 
-    public TicketDto save(TicketCreationDto dto, AppUserDetails principal) throws StatusService.StatusNotFoundException {
+    public TicketDto save(TicketCreationDto dto, AppUserDetails principal) throws StatusNotFoundException {
 
         Ticket ticket = ticketMapper.creationToEntity(dto);
         ticket.setOverdue(false);
@@ -77,11 +74,11 @@ public class TicketService  {
         Ticket ticketSaved = ticketDao.save(ticket);
 
         AppUser creator = appUserDao.findById(principal.getId())
-            .orElseThrow(AppUserService.AppUserNotFoundException::new);
+            .orElseThrow(AppUserNotFoundException::new);
 
         statusService.initializeStatus(ticketSaved, creator);
 
-        Theme theme = themeDao.findById(dto.idTheme()).orElseThrow(ThemeService.ThemeNotFoundException::new);
+        Theme theme = themeDao.findById(dto.idTheme()).orElseThrow(ThemeNotFoundException::new);
         classificationService.classify(ticketSaved, theme.getCode());
 
         metricsService.refreshTicketMetrics(ticketSaved);
@@ -91,7 +88,7 @@ public class TicketService  {
 
     public void delete(int id) throws TicketNotFoundException {
         Ticket ticket = ticketDao.findById(id)
-                .orElseThrow(TicketService.TicketNotFoundException::new);
+                .orElseThrow(TicketNotFoundException::new);
 
         ticketDao.delete(ticket);
     }
@@ -102,7 +99,7 @@ public class TicketService  {
         boolean isEdited = false;
 
         Ticket currentTicket = ticketDao.findById(id)
-                .orElseThrow(TicketService.TicketNotFoundException::new);
+                .orElseThrow(TicketNotFoundException::new);
 
         if (isNotEditable(currentTicket)) {
             throw new TicketClosingService.TicketNotEditableException();
@@ -181,13 +178,13 @@ public class TicketService  {
 
         // Récupère le ticket par l'id
         Ticket ticket = ticketDao.findById(idTicket)
-                .orElseThrow(TicketService.TicketNotFoundException::new);
+                .orElseThrow(TicketNotFoundException::new);
 
         // Récupère le technicien et le manager
         Manager manager = managerDao.findById(assignmentDto.idManager())
-                .orElseThrow(ManagerService.ManagerNotFoundException::new);
+                .orElseThrow(ManagerNotFoundException::new);
         Technician technician = technicianDao.findById(assignmentDto.idTechnician())
-                .orElseThrow(TechnicianService.TechnicianNotFoundException::new);
+                .orElseThrow(TechnicianNotFoundException::new);
 
         Ticket ticketAssigned = assignmentService.assignTicket(ticket, manager, technician, assignmentDto.statusReason());
 
@@ -199,10 +196,10 @@ public class TicketService  {
     public TicketDto closeTicket(Integer idTicket, StateChangeJustification justification, AppUserDetails principal) {
         // Récupère le ticket par l'id
         Ticket ticket = ticketDao.findById(idTicket)
-                .orElseThrow(TicketService.TicketNotFoundException::new);
+                .orElseThrow(TicketNotFoundException::new);
 
         AppUser user = appUserDao.findById(principal.getId())
-                .orElseThrow(AppUserService.AppUserNotFoundException::new);
+                .orElseThrow(AppUserNotFoundException::new);
 
         if (ticket.getCurrentTechnician() != user && !Objects.equals(principal.getUserRole(), "ADMIN")) {
             throw new TicketProgressService.UnauthorizedTechnicianException();
@@ -220,10 +217,10 @@ public class TicketService  {
 
         // Récupère le ticket par l'id
         Ticket ticket = ticketDao.findById(idTicket)
-                .orElseThrow(TicketService.TicketNotFoundException::new);
+                .orElseThrow(TicketNotFoundException::new);
 
         Technician technician = technicianDao.findById(principal.getId())
-                .orElseThrow(TechnicianService.TechnicianNotFoundException::new);
+                .orElseThrow(TechnicianNotFoundException::new);
 
         if (ticket.getCurrentTechnician() != technician && !Objects.equals(principal.getUserRole(), "ADMIN")) {
             throw new TicketProgressService.UnauthorizedTechnicianException();
@@ -238,10 +235,10 @@ public class TicketService  {
 
     public TicketDto resumeTicket(Integer idTicket, StateChangeJustification justification, AppUserDetails principal) {
         Ticket ticket = ticketDao.findById(idTicket)
-                .orElseThrow(TicketService.TicketNotFoundException::new);
+                .orElseThrow(TicketNotFoundException::new);
 
         AppUser user = appUserDao.findById(principal.getId())
-                .orElseThrow(AppUserService.AppUserNotFoundException::new);
+                .orElseThrow(AppUserNotFoundException::new);
 
         if (ticket.getCurrentTechnician() != user && !Objects.equals(principal.getUserRole(), "ADMIN")) {
             throw new TicketProgressService.UnauthorizedTechnicianException();
@@ -258,10 +255,10 @@ public class TicketService  {
 
         // Récupère le ticket par l'id
         Ticket ticket = ticketDao.findById(idTicket)
-                .orElseThrow(TicketService.TicketNotFoundException::new);
+                .orElseThrow(TicketNotFoundException::new);
 
         Technician technician = technicianDao.findById(principal.getId())
-                .orElseThrow(TechnicianService.TechnicianNotFoundException::new);
+                .orElseThrow(TechnicianNotFoundException::new);
 
         if (ticket.getCurrentTechnician() != technician && !Objects.equals(principal.getUserRole(), "ADMIN")) {
             throw new TicketProgressService.UnauthorizedTechnicianException();
@@ -278,10 +275,10 @@ public class TicketService  {
 
         // Récupère le ticket par l'id
         Ticket ticket = ticketDao.findById(idTicket)
-                .orElseThrow(TicketService.TicketNotFoundException::new);
+                .orElseThrow(TicketNotFoundException::new);
 
         Technician technician = technicianDao.findById(dto.idTechnician())
-                .orElseThrow(TechnicianService.TechnicianNotFoundException::new);
+                .orElseThrow(TechnicianNotFoundException::new);
 
         if (dto.waitingStatus() != StatusEnum.WAITING_CLIENT
             && dto.waitingStatus() != StatusEnum.WAITING_THIRD_PARTY) {
@@ -315,14 +312,14 @@ public class TicketService  {
     // DEBUG
     @Transactional
     public void refreshMetrics(Integer idTicket) {
-        Ticket ticket = ticketDao.findById(idTicket).orElseThrow(TicketService.TicketNotFoundException::new);
+        Ticket ticket = ticketDao.findById(idTicket).orElseThrow(TicketNotFoundException::new);
 
         metricsService.refreshTicketMetrics(ticket);
     }
 
     @Transactional
     public void refreshPriority(Integer idTicket) {
-        Ticket ticket = ticketDao.findById(idTicket).orElseThrow(TicketService.TicketNotFoundException::new);
+        Ticket ticket = ticketDao.findById(idTicket).orElseThrow(TicketNotFoundException::new);
 
         priorityService.recalculateCurrentPriority(ticket);
     }

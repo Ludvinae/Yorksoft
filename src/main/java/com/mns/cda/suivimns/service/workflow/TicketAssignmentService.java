@@ -2,11 +2,11 @@ package com.mns.cda.suivimns.service.workflow;
 
 import com.mns.cda.suivimns.dao.AssignmentDao;
 import com.mns.cda.suivimns.enumerate.StatusEnum;
+import com.mns.cda.suivimns.exception.AssignmentConflictException;
 import com.mns.cda.suivimns.model.Assignment;
 import com.mns.cda.suivimns.model.Manager;
 import com.mns.cda.suivimns.model.Technician;
 import com.mns.cda.suivimns.model.Ticket;
-import com.mns.cda.suivimns.service.entity.AssignmentService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -41,7 +41,7 @@ public class TicketAssignmentService {
         Integer currentTechnicianId = (ticket.getCurrentTechnician() != null
                 ? ticket.getCurrentTechnician().getIdAppUser() : null);
         if (Objects.equals(technician.getIdAppUser(), currentTechnicianId)) {
-            throw new AssignmentService.AssignmentConflictException();
+            throw new AssignmentConflictException();
         }
 
         // Marque l'affectation actuelle comme finie si elle existe

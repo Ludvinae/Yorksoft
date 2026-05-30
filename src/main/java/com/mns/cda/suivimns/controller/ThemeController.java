@@ -1,6 +1,7 @@
 package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.entity.ThemeDto;
+import com.mns.cda.suivimns.exception.ThemeNotFoundException;
 import com.mns.cda.suivimns.security.IsAdmin;
 import com.mns.cda.suivimns.security.IsManager;
 import com.mns.cda.suivimns.security.IsTechnician;
@@ -44,7 +45,7 @@ public class ThemeController {
 
         try {
             return new ResponseEntity<>(themeService.findById(id) , HttpStatus.OK);
-        } catch (ThemeService.ThemeNotFoundException e) {
+        } catch (ThemeNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -69,7 +70,7 @@ public class ThemeController {
         try {
             themeService.delete(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (ThemeService.ThemeNotFoundException e) {
+        } catch (ThemeNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -85,7 +86,7 @@ public class ThemeController {
     public ResponseEntity<ThemeDto> update(@PathVariable int id, @RequestBody @Valid ThemeDto themeToUpdate) {
         try {
             return new ResponseEntity<>(themeService.update(id, themeToUpdate), HttpStatus.OK);
-        } catch (ThemeService.ThemeNotFoundException e) {
+        } catch (ThemeNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

@@ -1,9 +1,9 @@
 package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.entity.ArticleDto;
+import com.mns.cda.suivimns.exception.ArticleNotFoundException;
 import com.mns.cda.suivimns.security.AppUserDetails;
 import com.mns.cda.suivimns.security.IsAdmin;
-import com.mns.cda.suivimns.security.IsManager;
 import com.mns.cda.suivimns.security.IsTechnician;
 import com.mns.cda.suivimns.service.entity.ArticleService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -48,7 +48,7 @@ public class ArticleController {
 
         try {
             return new ResponseEntity<>(articleService.findById(id) , HttpStatus.OK);
-        } catch (ArticleService.ArticleNotFoundException e) {
+        } catch (ArticleNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -73,7 +73,7 @@ public class ArticleController {
         try {
             articleService.delete(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (ArticleService.ArticleNotFoundException e) {
+        } catch (ArticleNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -90,7 +90,7 @@ public class ArticleController {
                                              @AuthenticationPrincipal AppUserDetails userDetails) {
         try {
             return new ResponseEntity<>(articleService.update(id, articleToUpdate, userDetails), HttpStatus.OK);
-        } catch (ArticleService.ArticleNotFoundException e) {
+        } catch (ArticleNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

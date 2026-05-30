@@ -2,6 +2,7 @@ package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.entity.SoftwareDto;
 import com.mns.cda.suivimns.dto.flat.SoftwareDetailDto;
+import com.mns.cda.suivimns.exception.SoftwareNotFoundException;
 import com.mns.cda.suivimns.security.IsAdmin;
 import com.mns.cda.suivimns.security.IsManager;
 import com.mns.cda.suivimns.security.IsTechnician;
@@ -56,7 +57,7 @@ public class SoftwareController {
 
         try {
             return new ResponseEntity<>(softwareService.findById(id) , HttpStatus.OK);
-        } catch (SoftwareService.SoftwareNotFoundException e) {
+        } catch (SoftwareNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -71,7 +72,7 @@ public class SoftwareController {
 
         try {
             return new ResponseEntity<>(softwareService.findByIdDetail(id) , HttpStatus.OK);
-        } catch (SoftwareService.SoftwareNotFoundException e) {
+        } catch (SoftwareNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -99,7 +100,7 @@ public class SoftwareController {
         try {
             softwareService.delete(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (SoftwareService.SoftwareNotFoundException e) {
+        } catch (SoftwareNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -116,7 +117,7 @@ public class SoftwareController {
     public ResponseEntity<SoftwareDto> update(@PathVariable Integer id, @RequestBody @Valid SoftwareDto softwareToUpdate) {
         try {
             return new ResponseEntity<>(softwareService.update(id, softwareToUpdate), HttpStatus.OK);
-        } catch (SoftwareService.SoftwareNotFoundException e) {
+        } catch (SoftwareNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

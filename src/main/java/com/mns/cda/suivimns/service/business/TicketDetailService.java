@@ -3,16 +3,15 @@ package com.mns.cda.suivimns.service.business;
 import com.mns.cda.suivimns.dao.TicketDao;
 import com.mns.cda.suivimns.dto.details.*;
 import com.mns.cda.suivimns.enumerate.StatusEnum;
+import com.mns.cda.suivimns.exception.TicketNotFoundException;
 import com.mns.cda.suivimns.model.Ticket;
 import com.mns.cda.suivimns.security.AppUserDetails;
-import com.mns.cda.suivimns.service.entity.TicketService;
 import com.mns.cda.suivimns.service.workflow.StatusTransition;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +25,7 @@ public class TicketDetailService {
             throw new IllegalAccessException();
         }
         if (Objects.equals(principal.getUserRole(), "CLIENT")) {
-            Ticket requestedTicket = ticketDao.findById(idTicket).orElseThrow(TicketService.TicketNotFoundException::new);
+            Ticket requestedTicket = ticketDao.findById(idTicket).orElseThrow(TicketNotFoundException::new);
             if (principal.getId() != requestedTicket.getIdTicket()) {
                 throw new IllegalAccessException();
             }

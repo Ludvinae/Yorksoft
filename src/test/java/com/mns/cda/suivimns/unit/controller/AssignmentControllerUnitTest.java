@@ -3,6 +3,7 @@ package com.mns.cda.suivimns.unit.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.AssignmentController;
 import com.mns.cda.suivimns.dto.entity.AssignmentDto;
+import com.mns.cda.suivimns.exception.AssignmentNotFoundException;
 import com.mns.cda.suivimns.service.entity.AssignmentService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -95,7 +96,7 @@ class AssignmentControllerUnitTest {
     void shouldReturn404WhenNotFound() throws Exception {
 
         when(assignmentService.findById(1))
-                .thenThrow(new AssignmentService.AssignmentNotFoundException());
+                .thenThrow(new AssignmentNotFoundException());
 
         mockMvc.perform(get("/assignment/1"))
                 .andDo(print())

@@ -2,11 +2,13 @@ package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.entity.ManagerDto;
 import com.mns.cda.suivimns.dto.flat.PasswordDto;
+import com.mns.cda.suivimns.exception.BadPasswordException;
+import com.mns.cda.suivimns.exception.EmailAlreadyUsedException;
+import com.mns.cda.suivimns.exception.ManagerNotFoundException;
 import com.mns.cda.suivimns.security.AppUserDetails;
-import com.mns.cda.suivimns.security.IsAdmin;
 import com.mns.cda.suivimns.security.IsDirector;
 import com.mns.cda.suivimns.security.IsManager;
-import com.mns.cda.suivimns.service.entity.AppUserService;
+import com.mns.cda.suivimns.exception.AccountNotOwnedException;
 import com.mns.cda.suivimns.service.entity.ManagerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -49,7 +51,7 @@ public class ManagerController {
 
         try {
             return new ResponseEntity<>(managerService.findById(id) , HttpStatus.OK);
-        } catch (ManagerService.ManagerNotFoundException e) {
+        } catch (ManagerNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -75,9 +77,9 @@ public class ManagerController {
         try {
             managerService.delete(id, userDetails);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (ManagerService.ManagerNotFoundException e) {
+        } catch (ManagerNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (AppUserService.AccountNotOwnedException e) {
+        } catch (AccountNotOwnedException e) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
     }
@@ -98,12 +100,12 @@ public class ManagerController {
         try {
             ManagerDto user = managerService.update(id, dto, userDetails);
             return new ResponseEntity<>(user, HttpStatus.OK);
-        } catch (ManagerService.ManagerNotFoundException e) {
+        } catch (ManagerNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             // IMPLEMENTER TEST UNICITE EMAIL !!!
-        } catch (AppUserService.EmailAlreadyUsedException e) {
+        } catch (EmailAlreadyUsedException e) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
-        } catch (AppUserService.AccountNotOwnedException e) {
+        } catch (AccountNotOwnedException e) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
     }
@@ -123,11 +125,11 @@ public class ManagerController {
         try {
             managerService.updatePassword(id, dto, userDetails);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (ManagerService.ManagerNotFoundException e) {
+        } catch (ManagerNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (ManagerService.BadPasswordException e) {
+        } catch (BadPasswordException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } catch (AppUserService.AccountNotOwnedException e) {
+        } catch (AccountNotOwnedException e) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
     }

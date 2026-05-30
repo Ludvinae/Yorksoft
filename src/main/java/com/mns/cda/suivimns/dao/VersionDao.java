@@ -1,10 +1,9 @@
 package com.mns.cda.suivimns.dao;
 
-import com.mns.cda.suivimns.dto.entity.VersionDto;
 import com.mns.cda.suivimns.dto.flat.VersionDetailDto;
 import com.mns.cda.suivimns.dto.flat.VersionSelectDto;
+import com.mns.cda.suivimns.exception.VersionNotFoundException;
 import com.mns.cda.suivimns.model.Version;
-import com.mns.cda.suivimns.service.entity.VersionService;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -44,5 +43,5 @@ public interface VersionDao extends JpaRepository<Version, Integer> {
         JOIN v.software s
         WHERE v.idVersion = :id
     """)
-    VersionDetailDto findByIdDetail(Integer id) throws VersionService.VersionNotFoundException;
+    VersionDetailDto findByIdDetail(Integer id) throws VersionNotFoundException;
 }
