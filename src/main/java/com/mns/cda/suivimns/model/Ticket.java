@@ -43,6 +43,9 @@ public class Ticket {
     @Column(nullable = false, columnDefinition = "TEXT")
     protected String description;
 
+    @Column(columnDefinition = "TEXT")
+    protected String solution;
+
     protected Integer callDuration;
 
     // Champs calculés

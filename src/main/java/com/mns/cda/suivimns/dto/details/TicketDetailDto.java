@@ -38,6 +38,7 @@ public record TicketDetailDto(
 
         // Description
         String description,
+        String solution,
 
         // Affectation
         String currentTechnicianFullName,
