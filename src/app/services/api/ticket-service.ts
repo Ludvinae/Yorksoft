@@ -82,6 +82,12 @@ export class TicketService {
     );
   }
 
+  updateDescription(id: number, description: string) {
+    const payload: TicketDescriptionDto = { description: description, solution: '' };
+
+    return this.http.patch<TicketDetailFullDto>(`${this.apiUrl}/${id}/description`, payload)
+  }
+
   delete(id: number) {
     return this.http.delete(`${this.apiUrl}/${id}`).pipe(
       tap((result) => {

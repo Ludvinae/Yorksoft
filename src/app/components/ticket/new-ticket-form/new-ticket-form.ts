@@ -84,11 +84,9 @@ export class NewTicketForm implements OnInit {
     this.isSubmitting.set(true);
 
     const payload: TicketCreation = {
-      ...(this.ticketForm.getRawValue() as Omit<TicketCreation, 'idClient' | 'idCreator'>),
+      ...(this.ticketForm.getRawValue() as Omit<TicketCreation, 'idClient'>),
 
-      idClient: this.client.idAppUser,
-
-      idCreator: this.auth.jwtInfo()!.id,
+      idClient: this.client.idAppUser
     };
 
     this.ticketService.create(payload).subscribe({

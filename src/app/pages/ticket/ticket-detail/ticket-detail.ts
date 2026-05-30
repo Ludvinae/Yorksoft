@@ -8,10 +8,11 @@ import { TicketComment } from '../../../components/comments/ticket-comment/ticke
 import { StatusEnum } from '../../../models/enum/StatusEnum';
 import { AuthService } from '../../../services/business/auth-service';
 import {AssignTicketModal} from '../../../components/ticket/assign-ticket-modal/assign-ticket-modal';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-ticket-detail',
-  imports: [RouterLink, DatePipe, TicketComment, AssignTicketModal],
+  imports: [RouterLink, DatePipe, TicketComment, AssignTicketModal, FormsModule],
   templateUrl: './ticket-detail.html',
   styleUrl: './ticket-detail.css',
 })
@@ -45,13 +46,14 @@ export class TicketDetail implements OnInit {
         currentPriority: this.ticket()!.details.currentPriority,
         overdue: this.ticket()!.details.overdue,
         predictedDeadline: this.ticket()!.details.predictedDeadline,
-        idTechnician: this.ticket()!.details.currentTechnicianId
-      }
+        idTechnician: this.ticket()!.details.currentTechnicianId,
+      };
     } else return null;
   });
 
-
   updateRoute: string | undefined = undefined;
+  editingDescription = false;
+  editedDescription = '';
 
   @ViewChild(AssignTicketModal)
   assignModal!: AssignTicketModal;
@@ -191,4 +193,42 @@ export class TicketDetail implements OnInit {
   onAssigned(): void {
     this.loadTicket();
   }
+
+
+
+  startDescriptionEdit(): void {
+    this.editedDescription = this.detail()?.description ?? '';
+    this.editingDescription = true;
+  }
+
+  cancelDescriptionEdit(): void {
+    this.editingDescription = false;
+    this.editedDescription = '';
+  }
+
+  saveDescription(): void {
+    const ticketId = this.detail()?.idTicket;
+
+    if (!ticketId) {
+      return;
+    }
+
+    this.ticketService.updateDescription(ticketId, this.editedDescription).subscribe({
+      next: (updatedTicket) => {
+        this.ticket.set(updatedTicket);
+        this.editingDescription = false;
+      },
+      error: (err) => {
+        console.error(err);
+      },
+    });
+  }
+
+  canEditDescription() {
+    const idViewer = this.auth.jwtInfo() ? this.auth.jwtInfo()!.id : 0;
+
+    return this.detail()?.currentTechnicianId == idViewer
+          || this.auth.jwtInfo()?.role === "ADMIN"
+          || this.auth.jwtInfo()?.role === "MANAGER"
+  };
 }

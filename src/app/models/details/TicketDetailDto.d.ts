@@ -28,6 +28,7 @@ type TicketDetailDto = {
 
   //Description
   description: string;
+  solution: string;
 
   // Affectation
   currentTechnicianFullName: string | null;

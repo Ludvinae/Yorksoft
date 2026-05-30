@@ -7,5 +7,4 @@ type TicketCreation = {
   idUrgency: number;
   idTheme: number;
   idClient: number;
-  idCreator: number | undefined;
 }

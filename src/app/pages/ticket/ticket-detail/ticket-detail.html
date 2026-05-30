@@ -200,14 +200,94 @@
       <div class="card bg-base-100 shadow-md border border-base-300">
         <div class="card-body">
 
-          <h2 class="card-title">
-            Description de l’incident
-          </h2>
+          <div>
+            <div class="flex justify-between items-center">
+              <h2 class="card-title">
+                Description de l’incident
+              </h2>
 
-          <div class="bg-base-200 rounded-xl p-4 leading-relaxed whitespace-pre-line">
-            {{ detail()?.description }}
+              @if (canEditDescription()) {
+                <button
+                  class="btn btn-sm btn-ghost"
+                  (click)="startDescriptionEdit()">
+                  Modifier
+                </button>
+              }
+            </div>
+
+            @if (!editingDescription) {
+              <div class="bg-base-200 rounded-xl p-4 leading-relaxed whitespace-pre-line">
+                {{ detail()?.description }}
+              </div>
+            } @else {
+              <textarea
+                class="textarea textarea-bordered w-full"
+                [(ngModel)]="editedDescription">
+              </textarea>
+
+              <div class="flex justify-end gap-2 mt-2">
+                <button
+                  class="btn btn-ghost"
+                  (click)="cancelDescriptionEdit()">
+                  Annuler
+                </button>
+
+                <button
+                  class="btn btn-primary"
+                  (click)="saveDescription()">
+                  Enregistrer
+                </button>
+              </div>
+            }
           </div>
+          <!--
+          <div>
+            <div class="flex justify-between items-center">
+              <h2 class="card-title">
+                Protocole de résolution
+              </h2>
 
+              @if (canEditSolution()) {
+                <button
+                  class="btn btn-sm btn-ghost"
+                  (click)="editingSolution = !editingSolution">
+                  Modifier
+                </button>
+              }
+            </div>
+
+            @if (!editingSolution) {
+              @if (detail()?.solution) {
+                <div class="bg-base-200 rounded-xl p-4 leading-relaxed whitespace-pre-line">
+                  {{ detail()?.solution }}
+                </div>
+              } @else {
+                <div class="alert alert-info">
+                  Aucune procédure de résolution n'a encore été documentée.
+                </div>
+              }
+            } @else {
+              <textarea
+                class="textarea textarea-bordered w-full"
+                [(ngModel)]="editedSolution">
+              </textarea>
+
+              <div class="flex justify-end gap-2 mt-2">
+                <button
+                  class="btn btn-ghost"
+                  (click)="cancelSolutionEdit()">
+                  Annuler
+                </button>
+
+                <button
+                  class="btn btn-primary"
+                  (click)="saveSolution()">
+                  Enregistrer
+                </button>
+              </div>
+            }
+          </div>
+          -->
         </div>
       </div>
 
