@@ -9,8 +9,7 @@ public record TicketCreationDto(
         Integer idImpact,
         Integer idUrgency,
         Integer idTheme,
-        Integer idClient,
-        Integer idCreator
+        Integer idClient
 
 ) {
 }

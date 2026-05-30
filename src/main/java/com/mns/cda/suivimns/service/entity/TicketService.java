@@ -2,6 +2,7 @@ package com.mns.cda.suivimns.service.entity;
 
 import com.mns.cda.suivimns.dao.*;
 import com.mns.cda.suivimns.dao.search.TicketSpecification;
+import com.mns.cda.suivimns.dto.details.TicketDetailFullDto;
 import com.mns.cda.suivimns.dto.entity.TicketDto;
 import com.mns.cda.suivimns.dto.search.TicketListDto;
 import com.mns.cda.suivimns.dto.search.TicketSearchCriteria;
@@ -43,6 +44,7 @@ public class TicketService  {
     protected final TicketWaitService waitingService;
     protected final TicketMetricsService metricsService;
     protected final TicketQueryService queryService;
+    protected final TicketDetailService detailService;
 
     protected final TicketDao ticketDao;
     private final ThemeDao themeDao;
@@ -65,7 +67,7 @@ public class TicketService  {
     }
 
 
-    public TicketDto save(TicketCreationDto dto) throws StatusService.StatusNotFoundException {
+    public TicketDto save(TicketCreationDto dto, AppUserDetails principal) throws StatusService.StatusNotFoundException {
 
         Ticket ticket = ticketMapper.creationToEntity(dto);
         ticket.setOverdue(false);
@@ -74,7 +76,7 @@ public class TicketService  {
 
         Ticket ticketSaved = ticketDao.save(ticket);
 
-        AppUser creator = appUserDao.findById(dto.idCreator())
+        AppUser creator = appUserDao.findById(principal.getId())
             .orElseThrow(AppUserService.AppUserNotFoundException::new);
 
         statusService.initializeStatus(ticketSaved, creator);
@@ -94,8 +96,11 @@ public class TicketService  {
         ticketDao.delete(ticket);
     }
 
-    public TicketDto update(int id, TicketDto ticketToUpdate)
-            throws TicketNotFoundException {
+    public TicketDetailFullDto update(int id, TicketDescriptionDto ticketToUpdate, AppUserDetails principal)
+            throws TicketNotFoundException, IllegalAccessException {
+
+        boolean isEdited = false;
+
         Ticket currentTicket = ticketDao.findById(id)
                 .orElseThrow(TicketService.TicketNotFoundException::new);
 
@@ -103,11 +108,29 @@ public class TicketService  {
             throw new TicketClosingService.TicketNotEditableException();
         }
 
-        ticketMapper.updateEntityFromDto(ticketToUpdate, currentTicket);
+        if (!Objects.equals(principal.getUserRole(), "ADMIN")
+            && !Objects.equals(principal.getUserRole(), "MANAGER")
+            && !Objects.equals(currentTicket.getCurrentTechnician().getIdAppUser(), principal.getId())) {
+            throw new TicketProgressService.UnauthorizedTechnicianException();
+        }
+
+        if (!ticketToUpdate.description().isBlank() || ticketToUpdate.description().equals(currentTicket.getDescription())) {
+            currentTicket.setDescription(ticketToUpdate.description());
+            isEdited = true;
+        }
+        if (!ticketToUpdate.solution().isBlank() || ticketToUpdate.solution().equals(currentTicket.getSolution())) {
+            currentTicket.setSolution(ticketToUpdate.solution());
+            isEdited = true;
+        }
+
+        if (!isEdited) {
+            throw new IllegalArgumentException();
+        }
 
         metricsService.refreshTicketMetrics(currentTicket);
+        ticketDao.save(currentTicket);
 
-        return ticketMapper.toDto(ticketDao.save(currentTicket));
+        return detailService.getTicketDetails(id, principal);
     }
 
     public Ticket forceChangePriority(int priority, int id) throws TicketNotFoundException {

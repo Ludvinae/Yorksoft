@@ -6,6 +6,7 @@ import com.mns.cda.suivimns.dto.search.TicketListDto;
 import com.mns.cda.suivimns.dto.search.TicketSearchCriteria;
 import com.mns.cda.suivimns.dto.workflow.*;
 import com.mns.cda.suivimns.dto.flat.TicketFullWithLatest;
+import com.mns.cda.suivimns.model.Ticket;
 import com.mns.cda.suivimns.security.*;
 import com.mns.cda.suivimns.service.business.TicketDetailService;
 import com.mns.cda.suivimns.service.entity.StatusService;
@@ -99,30 +100,15 @@ public class TicketController {
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PostMapping
     @IsTechnician
-    public ResponseEntity<TicketDto> create(@RequestBody @Valid TicketCreationDto ticket) {
+    public ResponseEntity<TicketDto> create(@RequestBody @Valid TicketCreationDto ticket,
+                                            @AuthenticationPrincipal AppUserDetails principal) {
         try {
-            return new ResponseEntity<>(ticketService.save(ticket), HttpStatus.CREATED);
+            return new ResponseEntity<>(ticketService.save(ticket, principal), HttpStatus.CREATED);
         } catch (StatusService.StatusNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
-/*
-    @Operation(
-            summary = "Créer un ticket",
-            description = "Crée un nouveau ticket à partir d’une demande client (description, urgence, impact, etc.)")
-    @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Ticket créé"),
-            @ApiResponse(responseCode = "400", description = "Données invalides")})
-    @PostMapping
-    public ResponseEntity<TicketResponse> create(@RequestBody @Valid TicketCreation ticketCreated) {
-
-        Ticket ticket = ticketService.createTicket(ticketCreated);
-
-        return new ResponseEntity<>(ticketService.responseToDto(ticket), HttpStatus.CREATED);
-    }
-
- */
 
     @Operation(summary = "Efface une ticket selon son ID")
     @ApiResponses({@ApiResponse(responseCode = "204", description = "Ticket effacée"),
@@ -138,8 +124,26 @@ public class TicketController {
         }
     }
 
+    @Operation(summary = "Modifie la description et la solution d'un ticket",
+            description = "Modifie les champs 'description' et 'solution' d'un ticket")
+    @ApiResponses({@ApiResponse(responseCode = "200", description = "Ticket modifiée avec succès"),
+            @ApiResponse(responseCode = "404", description = "Ticket non trouvée"),
+            @ApiResponse(responseCode = "400", description = "Données invalides")})
+    @PatchMapping("/{id}/description")
+    @IsTechnician
+    public ResponseEntity<TicketDetailFullDto> update(@PathVariable int id, @RequestBody @Valid TicketDescriptionDto ticketToUpdate,
+                                            @AuthenticationPrincipal AppUserDetails principal) {
+        try {
+            return new ResponseEntity<>(ticketService.update(id, ticketToUpdate, principal), HttpStatus.OK);
+        } catch (TicketService.TicketNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (IllegalAccessException e) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+    }
 
 
+    // Workflow
     @Operation(summary = "Assigne un ticket à un technicien par un manager")
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Ticket attribué"),
             @ApiResponse(responseCode = "400", description = "Données invalides"),
@@ -240,20 +244,7 @@ public class TicketController {
     }
 
 
-    @Operation(summary = "Modifie un ticket en fonction de son ID",
-            description = "Modifie les champs 'subject', 'theme' et 'ticketList' d'une ticket")
-    @ApiResponses({@ApiResponse(responseCode = "200", description = "Ticket modifiée avec succés"),
-            @ApiResponse(responseCode = "404", description = "Ticket non trouvée"),
-            @ApiResponse(responseCode = "400", description = "Données invalides")})
-    @PutMapping("/{id}")
-    @IsTechnician
-    public ResponseEntity<TicketDto> update(@PathVariable int id, @RequestBody @Valid TicketDto ticketToUpdate) {
-        try {
-            return new ResponseEntity<>(ticketService.update(id, ticketToUpdate), HttpStatus.OK);
-        } catch (TicketService.TicketNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
+
 
 
     // Debug route
