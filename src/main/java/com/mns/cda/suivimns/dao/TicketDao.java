@@ -72,9 +72,10 @@ public interface TicketDao extends JpaRepository<Ticket, Integer>, JpaSpecificat
                 SUM(EXTRACT(EPOCH FROM (h.end_date - h.start_date))) AS ticket_duration
             FROM ticket t
             JOIN history h ON h.id_ticket = t.id_ticket
-            WHERE t.id_technician = :id
+            JOIN status s ON s.id_status = h.id_status
+            WHERE t.id_current_technician = :id
               AND t.close_date >= :startDate
-              AND h.status_code = 'IN_PROGRESS'
+              AND s.code = 'IN_PROGRESS'
               AND h.end_date IS NOT NULL
             GROUP BY t.id_ticket
         ) durations
