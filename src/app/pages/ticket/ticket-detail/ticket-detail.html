@@ -46,10 +46,8 @@
 
   </div>
 
-  <!-- MAIN GRID -->
-  <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-
-    <!-- MODAL -->
+  <!-- MODAL -->
+  <div>
     <app-assign-ticket-modal #assignModal [ticket]="ticketAssign()" (assigned)="onAssigned()"/>
 
     <dialog #actionModal class="modal">
@@ -83,6 +81,10 @@
       </div>
 
     </dialog>
+  </div>
+  <!-- MAIN GRID -->
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
 
 
 
@@ -409,7 +411,7 @@
               Aucun article correspondant trouvé
             </p>
           }
-          <button class="btn btn-outline mt-4">
+          <button class="btn btn-outline mt-4" routerLink="/knowledge">
             BASE DE CONNAISSANCES
           </button>
 

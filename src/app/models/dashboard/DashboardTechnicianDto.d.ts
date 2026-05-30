@@ -4,5 +4,5 @@ type DashboardTechnicianDto = {
   assignedCriticalTickets: number;
   assignedOverdueTickets: number;
 
-  meanTimeToSolveTickets: number;
+  meanTimeToSolveTickets: number | null;
 };

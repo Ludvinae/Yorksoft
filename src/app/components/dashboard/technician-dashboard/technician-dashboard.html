@@ -73,7 +73,11 @@
 
               <div class="p-4 flex flex-col items-center justify-center">
                 <span class="text-sm opacity-70">Résolution</span>
+                @if (dashboard.meanTimeToSolveTickets) {
                 <span class="text-5xl font-black">{{ dashboard.meanTimeToSolveTickets / 60 | number: '1.0-0' }}m</span>
+                } @else {
+                  <span class="text-5xl font-black">-</span>
+                }
               </div>
 
               <div class="p-4 flex flex-col items-center justify-center">
