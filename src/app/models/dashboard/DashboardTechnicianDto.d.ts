@@ -1,6 +1,8 @@
 type DashboardTechnicianDto = {
-  assignedOpenTickets : number;
+  assignedOpenTickets: number;
   assignedWaitingTickets: number;
   assignedCriticalTickets: number;
   assignedOverdueTickets: number;
-}
+
+  meanTimeToSolveTickets: number;
+};

@@ -2,10 +2,11 @@ import { Component, inject, OnInit, Signal } from '@angular/core';
 import { KpiCard } from '../cards/kpi-card/kpi-card';
 import { DashboardService } from '../../../services/business/dashboard-service';
 import { AuthService } from '../../../services/business/auth-service';
+import { DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'app-technician-dashboard',
-  imports: [KpiCard],
+  imports: [KpiCard, DecimalPipe],
   templateUrl: './technician-dashboard.html',
   styleUrl: './technician-dashboard.css',
 })
@@ -19,5 +20,5 @@ export class TechnicianDashboard implements OnInit {
     this.dashboardService.loadDashboard(365);
   }
 
-  readonly jwt = this.auth.jwtInfo
+  readonly jwt = this.auth.jwtInfo;
 }
