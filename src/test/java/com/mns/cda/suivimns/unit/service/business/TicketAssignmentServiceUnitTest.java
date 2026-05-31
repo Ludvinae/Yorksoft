@@ -64,10 +64,6 @@ public class TicketAssignmentServiceUnitTest {
     @Test
     void assignTicket_shouldAssignTicketSuccessfully() {
 
-        when(transition.canTransition(
-                StatusEnum.OPEN,
-                StatusEnum.ASSIGNED
-        )).thenReturn(true);
 
         when(ticketStatusService.changeStatus(
                 ticket,
@@ -113,10 +109,12 @@ public class TicketAssignmentServiceUnitTest {
     @Test
     void assignTicket_shouldThrowIfTransitionIsIllegal() {
 
-        when(transition.canTransition(
-                StatusEnum.OPEN,
-                StatusEnum.ASSIGNED
-        )).thenReturn(false);
+        when(ticketStatusService.changeStatus(
+                ticket,
+                StatusEnum.ASSIGNED,
+                manager,
+                "Test reason"
+        )).thenThrow(new IllegalStatusTransitionException());
 
         assertThrows(
                 IllegalStatusTransitionException.class,
@@ -128,22 +126,13 @@ public class TicketAssignmentServiceUnitTest {
                 )
         );
 
-        verify(ticketStatusService, never())
-                .changeStatus(any(), any(), any(), any());
-
-        verify(assignmentDao, never())
-                .save(any());
+        verify(assignmentDao, never()).save(any());
     }
 
     @Test
     void assignTicket_shouldThrowIfAlreadyAssignedToSameTechnician() {
 
         ticket.setCurrentTechnician(technician);
-
-        when(transition.canTransition(
-                StatusEnum.OPEN,
-                StatusEnum.ASSIGNED
-        )).thenReturn(true);
 
 
         assertThrows(
@@ -168,11 +157,6 @@ public class TicketAssignmentServiceUnitTest {
 
         Assignment existingAssignment = new Assignment();
         existingAssignment.setEndDate(null);
-
-        when(transition.canTransition(
-                StatusEnum.OPEN,
-                StatusEnum.ASSIGNED
-        )).thenReturn(true);
 
         when(ticketStatusService.changeStatus(
                 ticket,
@@ -202,11 +186,6 @@ public class TicketAssignmentServiceUnitTest {
     @Test
     void assignTicket_shouldIgnoreIfNoCurrentAssignmentExists() {
 
-        when(transition.canTransition(
-                StatusEnum.OPEN,
-                StatusEnum.ASSIGNED
-        )).thenReturn(true);
-
         when(ticketStatusService.changeStatus(
                 ticket,
                 StatusEnum.ASSIGNED,
@@ -232,10 +211,6 @@ public class TicketAssignmentServiceUnitTest {
     @Test
     void assignTicket_shouldSaveExactlyOneAssignment() {
 
-        when(transition.canTransition(
-                StatusEnum.OPEN,
-                StatusEnum.ASSIGNED
-        )).thenReturn(true);
 
         when(ticketStatusService.changeStatus(
                 ticket,
@@ -257,11 +232,6 @@ public class TicketAssignmentServiceUnitTest {
 
     @Test
     void assignTicket_shouldUpdateTicketReferences() {
-
-        when(transition.canTransition(
-                StatusEnum.OPEN,
-                StatusEnum.ASSIGNED
-        )).thenReturn(true);
 
         when(ticketStatusService.changeStatus(
                 ticket,

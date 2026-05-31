@@ -144,7 +144,7 @@
                 <configuration>
                     <!-- Inclure les tests unitaires -->
                     <includes>
-                        <include>**/unit/*</include>
+                        <include>**/unit/**</include>
                     </includes>
                     <!-- Exclure les tests d'intégration -->
                     <excludes>
