@@ -127,4 +127,20 @@ public class GlobalExceptionInterceptor {
 
         return new ErrorResponseDto(400, "INVALID_SORT_CRITERIA", "Critère de tri non reconnu");
     }
+
+    @ExceptionHandler(MissingTicketSolutionException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorResponseDto handleMissingSolution(MissingTicketSolutionException ex) {
+
+        return new ErrorResponseDto(409, "MISSING_TICKET_SOLUTION",
+                "Le ticket doit contenir une solution afin de pouvoir être considéré résolu");
+    }
+
+    @ExceptionHandler(TicketNotEditableInCurrentStateException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorResponseDto handleMissingSolution(TicketNotEditableInCurrentStateException ex) {
+
+        return new ErrorResponseDto(409, "TICKET_NOT_EDITABLE_IN_CURRENT_STATE",
+                "Prérequis manquant afin de transitionner vers un nouvel état");
+    }
 }

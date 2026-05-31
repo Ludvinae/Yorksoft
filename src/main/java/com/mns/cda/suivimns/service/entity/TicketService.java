@@ -19,7 +19,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -124,6 +123,10 @@ public class TicketService  {
             isEdited = true;
         }
         if (!ticketToUpdate.solution().isBlank() && !ticketToUpdate.solution().equals(currentTicket.getSolution())) {
+            if (currentTicket.getCurrentStatus() != StatusEnum.IN_PROGRESS) {
+                throw new TicketNotEditableInCurrentStateException();
+            }
+
             currentTicket.setSolution(ticketToUpdate.solution());
             isEdited = true;
         }

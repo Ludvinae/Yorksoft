@@ -116,7 +116,7 @@ public class TicketController {
             @ApiResponse(responseCode = "409", description = "Refusé: provoquerait une incoherence d'état"),})
     @PatchMapping("/{id}/description")
     @IsTechnician
-    public ResponseEntity<TicketDetailFullDto> update(@PathVariable int id, @RequestBody @Valid TicketDescriptionDto ticketToUpdate,
+    public ResponseEntity<TicketDetailFullDto> updateDescription(@PathVariable int id, @RequestBody @Valid TicketDescriptionDto ticketToUpdate,
                                             @AuthenticationPrincipal AppUserDetails principal) {
 
         return new ResponseEntity<>(ticketService.update(id, ticketToUpdate, principal), HttpStatus.OK);

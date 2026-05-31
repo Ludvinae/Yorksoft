@@ -1,6 +1,7 @@
 package com.mns.cda.suivimns.service.workflow;
 
 import com.mns.cda.suivimns.enumerate.StatusEnum;
+import com.mns.cda.suivimns.exception.MissingTicketSolutionException;
 import com.mns.cda.suivimns.exception.UnauthorizedTechnicianException;
 import com.mns.cda.suivimns.model.Technician;
 import com.mns.cda.suivimns.model.Ticket;
@@ -19,6 +20,10 @@ public class TicketSolvedService {
 
         if (assignedTechnician == null || !assignedTechnician.equals(technician)) {
             throw new UnauthorizedTechnicianException();
+        }
+
+        if (ticket.getSolution().isBlank()) {
+            throw new MissingTicketSolutionException();
         }
 
         return statusService.changeStatus(ticket, StatusEnum.SOLVED, technician, reason);
