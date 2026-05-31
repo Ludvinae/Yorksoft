@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -118,11 +119,21 @@ public class TicketService  {
             validateTechnicianAccess(currentTicket, principal.getId(), principal.getUserRole());
         }
 
-        if (!ticketToUpdate.description().isBlank() && !ticketToUpdate.description().equals(currentTicket.getDescription())) {
+        if (StringUtils.hasText(ticketToUpdate.description())
+                && !ticketToUpdate.description().equals(currentTicket.getDescription())) {
+
+            if (currentTicket.getCurrentStatus().equals(StatusEnum.SOLVED)
+                    || currentTicket.getCurrentStatus().equals(StatusEnum.CLOSED)) {
+                throw new TicketNotEditableInCurrentStateException();
+            }
+
             currentTicket.setDescription(ticketToUpdate.description());
             isEdited = true;
         }
-        if (!ticketToUpdate.solution().isBlank() && !ticketToUpdate.solution().equals(currentTicket.getSolution())) {
+
+        if (StringUtils.hasText(ticketToUpdate.solution())
+                && !ticketToUpdate.solution().equals(currentTicket.getSolution())) {
+
             if (currentTicket.getCurrentStatus() != StatusEnum.IN_PROGRESS) {
                 throw new TicketNotEditableInCurrentStateException();
             }

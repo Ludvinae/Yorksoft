@@ -140,7 +140,23 @@ public class GlobalExceptionInterceptor {
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponseDto handleMissingSolution(TicketNotEditableInCurrentStateException ex) {
 
-        return new ErrorResponseDto(409, "TICKET_NOT_EDITABLE_IN_CURRENT_STATE",
+        return new ErrorResponseDto(409, "NOT_EDITABLE_IN_CURRENT_STATE",
                 "Prérequis manquant afin de transitionner vers un nouvel état");
+    }
+
+    @ExceptionHandler(MissingAssignedTechnicianException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponseDto handleMissingAssignedTechnician(MissingAssignedTechnicianException ex) {
+
+        return new ErrorResponseDto(400, "NO_TECHNICIAN_ASSIGNED",
+                "Transition requires a technician to be assigned");
+    }
+
+    @ExceptionHandler(MissingStatusTransitionJustificationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponseDto handleMissingJustification(MissingStatusTransitionJustificationException ex) {
+
+        return new ErrorResponseDto(400, "MISSING_JUSTIFICATION",
+                "Transition requires a justification");
     }
 }

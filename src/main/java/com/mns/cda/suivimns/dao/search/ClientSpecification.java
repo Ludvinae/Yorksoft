@@ -4,6 +4,7 @@ import com.mns.cda.suivimns.model.Client;
 import com.mns.cda.suivimns.model.Ticket;
 import jakarta.persistence.criteria.Expression;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.util.StringUtils;
 
 public class ClientSpecification {
 
@@ -11,7 +12,7 @@ public class ClientSpecification {
 
         return (root, query, cb) -> {
 
-            if (keyword == null || keyword.isBlank()) {
+            if (!StringUtils.hasText(keyword)) {
                 return null;
             }
 

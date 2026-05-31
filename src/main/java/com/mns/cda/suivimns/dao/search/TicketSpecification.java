@@ -4,6 +4,7 @@ import com.mns.cda.suivimns.enumerate.StatusEnum;
 import com.mns.cda.suivimns.model.Ticket;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -44,7 +45,7 @@ public class TicketSpecification {
 
     public static Specification<Ticket> containsKeyword(String keyword) {
         return (root, query, cb) ->
-                keyword == null || keyword.isBlank()
+                !StringUtils.hasText(keyword)
                         ? null
                         : cb.like(
                         cb.lower(root.get("title")),

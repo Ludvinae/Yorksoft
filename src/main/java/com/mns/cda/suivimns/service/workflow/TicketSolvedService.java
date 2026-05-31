@@ -7,6 +7,7 @@ import com.mns.cda.suivimns.model.Technician;
 import com.mns.cda.suivimns.model.Ticket;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 @Service
 @RequiredArgsConstructor
@@ -22,7 +23,7 @@ public class TicketSolvedService {
             throw new UnauthorizedTechnicianException();
         }
 
-        if (ticket.getSolution().isBlank()) {
+        if (!StringUtils.hasText(ticket.getSolution())) {
             throw new MissingTicketSolutionException();
         }
 

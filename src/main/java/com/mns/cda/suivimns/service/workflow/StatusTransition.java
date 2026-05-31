@@ -4,7 +4,9 @@ import com.mns.cda.suivimns.enumerate.StatusEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Component
@@ -34,6 +36,21 @@ public class StatusTransition {
                     false;
         };
     }
+
+    public boolean statusRequiresAssignedTechnician(StatusEnum statusToTransitionTo) {
+        List<StatusEnum> statusRequiringAssignation = List.of(
+                StatusEnum.WAITING_CLIENT, StatusEnum.WAITING_THIRD_PARTY, StatusEnum.SOLVED, StatusEnum.CLOSED);
+
+        return statusRequiringAssignation.contains(statusToTransitionTo);
+    }
+
+    public boolean statusRequiresJustification(StatusEnum currentStatus, StatusEnum statusToTransitionTo) {
+        return switch (statusToTransitionTo) {
+            case WAITING_CLIENT, WAITING_THIRD_PARTY, REJECTED -> true;
+            case ASSIGNED -> currentStatus != StatusEnum.OPEN;
+            default -> false;
+        };
+    };
 
     public Set<StatusEnum> getAllowedTransitions(StatusEnum current) {
         Set<StatusEnum> allowedTransitions = new HashSet<>();

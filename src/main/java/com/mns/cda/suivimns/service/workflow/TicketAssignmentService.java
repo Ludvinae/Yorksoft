@@ -33,11 +33,6 @@ public class TicketAssignmentService {
     public Ticket assignTicket(Ticket ticket, Manager manager,
                                Technician technician, String statusReason) {
 
-        // Verifier que le ticket puisse transitionner vers le status 'ASSIGNED'
-        if (!transition.canTransition(ticket.getCurrentStatus(), StatusEnum.ASSIGNED)) {
-            throw new IllegalStatusTransitionException();
-        }
-
         // Verifier que le ticket n'est pas déja attribué à ce technicien
         Integer currentTechnicianId = (ticket.getCurrentTechnician() != null
                 ? ticket.getCurrentTechnician().getIdAppUser() : null);
