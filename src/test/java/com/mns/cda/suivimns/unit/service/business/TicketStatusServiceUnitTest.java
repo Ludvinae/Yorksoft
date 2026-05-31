@@ -2,6 +2,8 @@ package com.mns.cda.suivimns.unit.service.business;
 
 import com.mns.cda.suivimns.dao.HistoryDao;
 import com.mns.cda.suivimns.enumerate.StatusEnum;
+import com.mns.cda.suivimns.exception.IllegalStatusTransitionException;
+import com.mns.cda.suivimns.exception.MissingCurrentHistoryException;
 import com.mns.cda.suivimns.model.AppUser;
 import com.mns.cda.suivimns.model.History;
 import com.mns.cda.suivimns.model.Ticket;
@@ -139,7 +141,7 @@ public class TicketStatusServiceUnitTest {
                 .thenReturn(false);
 
         assertThrows(
-                StatusTransition.IllegalStatusTransitionException.class,
+                IllegalStatusTransitionException.class,
                 () -> service.changeStatus(
                         ticket,
                         StatusEnum.CLOSED,
@@ -164,7 +166,7 @@ public class TicketStatusServiceUnitTest {
                 .thenReturn(Optional.empty());
 
         assertThrows(
-                TicketStatusService.MissingCurrentHistoryException.class,
+                MissingCurrentHistoryException.class,
                 () -> service.changeStatus(
                         ticket,
                         StatusEnum.ASSIGNED,

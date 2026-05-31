@@ -4,10 +4,10 @@ import com.mns.cda.suivimns.dao.ClassificationDao;
 import com.mns.cda.suivimns.dao.ThemeDao;
 import com.mns.cda.suivimns.enumerate.ThemeEnum;
 import com.mns.cda.suivimns.exception.ThemeNotFoundException;
+import com.mns.cda.suivimns.exception.TicketNotEditableException;
 import com.mns.cda.suivimns.model.Classification;
 import com.mns.cda.suivimns.model.Theme;
 import com.mns.cda.suivimns.model.Ticket;
-import com.mns.cda.suivimns.service.workflow.TicketClosingService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,7 +28,7 @@ public class TicketClassificationService {
     public void classify(Ticket ticket, ThemeEnum themeEnum) {
 
         if (isNotEditable(ticket)) {
-            throw new TicketClosingService.TicketNotEditableException();
+            throw new TicketNotEditableException();
         }
 
         Theme theme = themeDao.findByCode(themeEnum)

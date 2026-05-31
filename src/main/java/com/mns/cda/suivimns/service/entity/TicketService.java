@@ -14,7 +14,6 @@ import com.mns.cda.suivimns.security.AppUserDetails;
 import com.mns.cda.suivimns.service.business.*;
 import com.mns.cda.suivimns.service.search.TicketQueryService;
 import com.mns.cda.suivimns.service.workflow.*;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -93,8 +92,7 @@ public class TicketService  {
         ticketDao.delete(ticket);
     }
 
-    public TicketDetailFullDto update(int id, TicketDescriptionDto ticketToUpdate, AppUserDetails principal)
-            throws TicketNotFoundException, IllegalAccessException {
+    public TicketDetailFullDto update(int id, TicketDescriptionDto ticketToUpdate, AppUserDetails principal) {
 
         boolean isEdited = false;
 
@@ -102,13 +100,13 @@ public class TicketService  {
                 .orElseThrow(TicketNotFoundException::new);
 
         if (isNotEditable(currentTicket)) {
-            throw new TicketClosingService.TicketNotEditableException();
+            throw new TicketNotEditableException();
         }
 
         if (!Objects.equals(principal.getUserRole(), "ADMIN")
             && !Objects.equals(principal.getUserRole(), "MANAGER")
             && !Objects.equals(currentTicket.getCurrentTechnician().getIdAppUser(), principal.getId())) {
-            throw new TicketProgressService.UnauthorizedTechnicianException();
+            throw new UnauthorizedTechnicianException();
         }
 
         if (!ticketToUpdate.description().isBlank() || ticketToUpdate.description().equals(currentTicket.getDescription())) {
@@ -202,7 +200,7 @@ public class TicketService  {
                 .orElseThrow(AppUserNotFoundException::new);
 
         if (ticket.getCurrentTechnician() != user && !Objects.equals(principal.getUserRole(), "ADMIN")) {
-            throw new TicketProgressService.UnauthorizedTechnicianException();
+            throw new UnauthorizedTechnicianException();
         }
 
         Ticket ticketClosed = closingService.closeTicket(ticket, user, justification.reason());
@@ -223,7 +221,7 @@ public class TicketService  {
                 .orElseThrow(TechnicianNotFoundException::new);
 
         if (ticket.getCurrentTechnician() != technician && !Objects.equals(principal.getUserRole(), "ADMIN")) {
-            throw new TicketProgressService.UnauthorizedTechnicianException();
+            throw new UnauthorizedTechnicianException();
         }
 
         Ticket ticketChanged = progressService.takeTicketInCharge(ticket, technician, justification.reason());
@@ -241,7 +239,7 @@ public class TicketService  {
                 .orElseThrow(AppUserNotFoundException::new);
 
         if (ticket.getCurrentTechnician() != user && !Objects.equals(principal.getUserRole(), "ADMIN")) {
-            throw new TicketProgressService.UnauthorizedTechnicianException();
+            throw new UnauthorizedTechnicianException();
         }
 
         Ticket ticketChanged = progressService.resumeTicket(ticket, user, justification.reason());
@@ -261,7 +259,7 @@ public class TicketService  {
                 .orElseThrow(TechnicianNotFoundException::new);
 
         if (ticket.getCurrentTechnician() != technician && !Objects.equals(principal.getUserRole(), "ADMIN")) {
-            throw new TicketProgressService.UnauthorizedTechnicianException();
+            throw new UnauthorizedTechnicianException();
         }
 
         Ticket ticketChanged = solvedService.proposeSolution(ticket, technician, justification.reason());
@@ -294,9 +292,9 @@ public class TicketService  {
 
 
 
-    public Page<TicketListDto> getAllPageable(TicketSearchCriteria criteria, Pageable pageable, AppUserDetails principal) throws IllegalAccessException {
+    public Page<TicketListDto> getAllPageable(TicketSearchCriteria criteria, Pageable pageable, AppUserDetails principal) {
         if (principal.getUserRole() == null) {
-            throw new IllegalAccessException();
+            throw new InvalidUserRoleException();
         } else if (Objects.equals(principal.getUserRole(), "CLIENT")) {
             TicketSearchCriteria newCriteria = new TicketSearchCriteria(
                     criteria.keyword(), principal.getId(), criteria.hasVersion(), criteria.hasSoftware(),
@@ -310,17 +308,5 @@ public class TicketService  {
     }
 
     // DEBUG
-    @Transactional
-    public void refreshMetrics(Integer idTicket) {
-        Ticket ticket = ticketDao.findById(idTicket).orElseThrow(TicketNotFoundException::new);
 
-        metricsService.refreshTicketMetrics(ticket);
-    }
-
-    @Transactional
-    public void refreshPriority(Integer idTicket) {
-        Ticket ticket = ticketDao.findById(idTicket).orElseThrow(TicketNotFoundException::new);
-
-        priorityService.recalculateCurrentPriority(ticket);
-    }
 }

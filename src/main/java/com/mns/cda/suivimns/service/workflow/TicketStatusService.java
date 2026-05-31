@@ -2,6 +2,8 @@ package com.mns.cda.suivimns.service.workflow;
 
 import com.mns.cda.suivimns.dao.HistoryDao;
 import com.mns.cda.suivimns.enumerate.StatusEnum;
+import com.mns.cda.suivimns.exception.IllegalStatusTransitionException;
+import com.mns.cda.suivimns.exception.MissingCurrentHistoryException;
 import com.mns.cda.suivimns.exception.StatusNotFoundException;
 import com.mns.cda.suivimns.model.AppUser;
 import com.mns.cda.suivimns.model.History;
@@ -20,9 +22,6 @@ public class TicketStatusService {
     private final HistoryDao historyDao;
     private final StatusTransition transition;
     private final HistoryService historyService;
-
-    public static class MissingCurrentHistoryException extends RuntimeException {
-    }
 
     public StatusEnum getCurrentStatus(Ticket ticket) {
         return ticket.getCurrentStatus();
@@ -56,13 +55,13 @@ public class TicketStatusService {
             StatusEnum newStatus,
             AppUser user,
             String statusReason
-    ) throws StatusTransition.IllegalStatusTransitionException,
+    ) throws IllegalStatusTransitionException,
             StatusNotFoundException,
             MissingCurrentHistoryException {
 
         StatusEnum currentStatus = ticket.getCurrentStatus();
         if (!transition.canTransition(currentStatus, newStatus)) {
-            throw new StatusTransition.IllegalStatusTransitionException();
+            throw new IllegalStatusTransitionException();
         }
 
         // Ajoute la date de fin sur le status actuel

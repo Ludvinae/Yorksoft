@@ -5,12 +5,10 @@ import com.mns.cda.suivimns.dto.entity.TicketDto;
 import com.mns.cda.suivimns.dto.search.TicketListDto;
 import com.mns.cda.suivimns.dto.search.TicketSearchCriteria;
 import com.mns.cda.suivimns.dto.workflow.*;
-import com.mns.cda.suivimns.exception.StatusNotFoundException;
-import com.mns.cda.suivimns.exception.TicketNotFoundException;
+import com.mns.cda.suivimns.exception.InvalidSortCriteriaException;
 import com.mns.cda.suivimns.security.*;
 import com.mns.cda.suivimns.service.business.TicketDetailService;
 import com.mns.cda.suivimns.service.entity.TicketService;
-import com.mns.cda.suivimns.service.search.TicketQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -50,10 +48,8 @@ public class TicketController {
     ) {
         try {
             return new ResponseEntity<>(ticketService.getAllPageable(criteria, pageable, principal) , HttpStatus.OK);
-        } catch (TicketQueryService.InvalidSortCriteriaException e) {
+        } catch (InvalidSortCriteriaException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } catch (IllegalAccessException e) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
 
@@ -65,11 +61,7 @@ public class TicketController {
     @IsEmployee
     public ResponseEntity<TicketDto> getById(@PathVariable int id) {
 
-        try {
-            return new ResponseEntity<>(ticketService.findById(id) , HttpStatus.OK);
-        } catch (TicketNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(ticketService.findById(id) , HttpStatus.OK);
     }
 
 
@@ -81,13 +73,7 @@ public class TicketController {
     public ResponseEntity<TicketDetailFullDto> getDetails(@PathVariable int id,
                                                           @AuthenticationPrincipal AppUserDetails principal) {
 
-        try {
-            return new ResponseEntity<>(ticketDetailService.getTicketDetails(id, principal) , HttpStatus.OK);
-        } catch (TicketNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (IllegalAccessException e) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
+        return new ResponseEntity<>(ticketDetailService.getTicketDetails(id, principal) , HttpStatus.OK);
     }
 
 
@@ -98,11 +84,7 @@ public class TicketController {
     @IsTechnician
     public ResponseEntity<TicketDto> create(@RequestBody @Valid TicketCreationDto ticket,
                                             @AuthenticationPrincipal AppUserDetails principal) {
-        try {
-            return new ResponseEntity<>(ticketService.save(ticket, principal), HttpStatus.CREATED);
-        } catch (StatusNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(ticketService.save(ticket, principal), HttpStatus.CREATED);
     }
 
 
@@ -112,12 +94,9 @@ public class TicketController {
     @DeleteMapping("/{id}")
     @IsAdmin
     public ResponseEntity<Void> delete(@PathVariable int id) {
-        try {
-            ticketService.delete(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (TicketNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+
+        ticketService.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Operation(summary = "Modifie la description et la solution d'un ticket",
@@ -129,13 +108,8 @@ public class TicketController {
     @IsTechnician
     public ResponseEntity<TicketDetailFullDto> update(@PathVariable int id, @RequestBody @Valid TicketDescriptionDto ticketToUpdate,
                                             @AuthenticationPrincipal AppUserDetails principal) {
-        try {
-            return new ResponseEntity<>(ticketService.update(id, ticketToUpdate, principal), HttpStatus.OK);
-        } catch (TicketNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (IllegalAccessException e) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
+
+        return new ResponseEntity<>(ticketService.update(id, ticketToUpdate, principal), HttpStatus.OK);
     }
 
 
@@ -239,21 +213,5 @@ public class TicketController {
         return ticketService.setWaitingStatus(id, dto);
     }
 
-
-
-
-
-    // Debug route
-    @PostMapping("/metrics-refresh/{id}")
-    @IsAdmin
-    public void metricsRefresh(@PathVariable int id) {
-        ticketService.refreshMetrics(id);
-    }
-
-    @PostMapping("priority-refresh/{id}")
-    @IsAdmin
-    public void priorityRefresh(@PathVariable int id) {
-        ticketService.refreshPriority(id);
-    }
 
 }

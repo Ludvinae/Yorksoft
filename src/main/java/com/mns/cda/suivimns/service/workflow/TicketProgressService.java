@@ -1,6 +1,7 @@
 package com.mns.cda.suivimns.service.workflow;
 
 import com.mns.cda.suivimns.enumerate.StatusEnum;
+import com.mns.cda.suivimns.exception.UnauthorizedTechnicianException;
 import com.mns.cda.suivimns.model.AppUser;
 import com.mns.cda.suivimns.model.Technician;
 import com.mns.cda.suivimns.model.Ticket;
@@ -12,8 +13,6 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class TicketProgressService {
-
-    public static class UnauthorizedTechnicianException extends RuntimeException {}
 
     private final TicketStatusService statusService;
 

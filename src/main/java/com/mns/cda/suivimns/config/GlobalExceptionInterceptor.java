@@ -1,11 +1,7 @@
 package com.mns.cda.suivimns.config;
 
 import com.mns.cda.suivimns.dto.config.ErrorResponseDto;
-import com.mns.cda.suivimns.exception.AppUserNotFoundException;
-import com.mns.cda.suivimns.exception.AssignmentConflictException;
-import com.mns.cda.suivimns.exception.TicketNotFoundException;
-import com.mns.cda.suivimns.service.workflow.StatusTransition;
-import com.mns.cda.suivimns.service.workflow.TicketStatusService;
+import com.mns.cda.suivimns.exception.*;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -57,20 +53,20 @@ public class GlobalExceptionInterceptor {
         );
     }
 
-    @ExceptionHandler(StatusTransition.IllegalStatusTransitionException.class)
+    @ExceptionHandler(IllegalStatusTransitionException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponseDto handleIllegalTransition(
-            StatusTransition.IllegalStatusTransitionException ex
+            IllegalStatusTransitionException ex
     ) {
         return new ErrorResponseDto(
                 400,"BAD_STATUS_REQUEST", "Transition de statut invalide"
         );
     }
 
-    @ExceptionHandler(TicketStatusService.MissingCurrentHistoryException.class)
+    @ExceptionHandler(MissingCurrentHistoryException.class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     public ErrorResponseDto handleMissingCurrentHistory(
-            TicketStatusService.MissingCurrentHistoryException ex
+            MissingCurrentHistoryException ex
     ) {
         return new ErrorResponseDto(
                 422,"UNPROCESSABLE_HISTORY", "Historique courant introuvable"
@@ -99,5 +95,25 @@ public class GlobalExceptionInterceptor {
                 "ASSIGNMENT_CONFLICT",
                 "Le technicien est déja attribué"
         );
+    }
+
+    @ExceptionHandler(TicketAccessDeniedException.class)
+    public ResponseEntity<Void> handleAccessDenied() {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    }
+
+    @ExceptionHandler(InvalidUserRoleException.class)
+    public ResponseEntity<Void> handleInvalidRole() {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+
+    @ExceptionHandler(TicketNotFoundException.class)
+    public ResponseEntity<Void> handleMissingTicket() {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
+    @ExceptionHandler(StatusNotFoundException.class)
+    public ResponseEntity<Void> handleMissingStatus() {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 }

@@ -3,6 +3,7 @@ package com.mns.cda.suivimns.service.workflow;
 import com.mns.cda.suivimns.dao.AssignmentDao;
 import com.mns.cda.suivimns.enumerate.StatusEnum;
 import com.mns.cda.suivimns.exception.AssignmentConflictException;
+import com.mns.cda.suivimns.exception.IllegalStatusTransitionException;
 import com.mns.cda.suivimns.model.Assignment;
 import com.mns.cda.suivimns.model.Manager;
 import com.mns.cda.suivimns.model.Technician;
@@ -34,7 +35,7 @@ public class TicketAssignmentService {
 
         // Verifier que le ticket puisse transitionner vers le status 'ASSIGNED'
         if (!transition.canTransition(ticket.getCurrentStatus(), StatusEnum.ASSIGNED)) {
-            throw new StatusTransition.IllegalStatusTransitionException();
+            throw new IllegalStatusTransitionException();
         }
 
         // Verifier que le ticket n'est pas déja attribué à ce technicien

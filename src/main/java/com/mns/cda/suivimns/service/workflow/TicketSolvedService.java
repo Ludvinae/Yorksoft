@@ -1,6 +1,7 @@
 package com.mns.cda.suivimns.service.workflow;
 
 import com.mns.cda.suivimns.enumerate.StatusEnum;
+import com.mns.cda.suivimns.exception.UnauthorizedTechnicianException;
 import com.mns.cda.suivimns.model.Technician;
 import com.mns.cda.suivimns.model.Ticket;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ public class TicketSolvedService {
         Technician assignedTechnician = ticket.getCurrentTechnician();
 
         if (assignedTechnician == null || !assignedTechnician.equals(technician)) {
-            throw new TicketProgressService.UnauthorizedTechnicianException();
+            throw new UnauthorizedTechnicianException();
         }
 
         return statusService.changeStatus(ticket, StatusEnum.SOLVED, technician, reason);

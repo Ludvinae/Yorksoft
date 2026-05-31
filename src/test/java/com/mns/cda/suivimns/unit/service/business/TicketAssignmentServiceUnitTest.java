@@ -3,6 +3,7 @@ package com.mns.cda.suivimns.unit.service.business;
 import com.mns.cda.suivimns.dao.AssignmentDao;
 import com.mns.cda.suivimns.enumerate.StatusEnum;
 import com.mns.cda.suivimns.exception.AssignmentConflictException;
+import com.mns.cda.suivimns.exception.IllegalStatusTransitionException;
 import com.mns.cda.suivimns.model.Assignment;
 import com.mns.cda.suivimns.model.Manager;
 import com.mns.cda.suivimns.model.Technician;
@@ -118,7 +119,7 @@ public class TicketAssignmentServiceUnitTest {
         )).thenReturn(false);
 
         assertThrows(
-                StatusTransition.IllegalStatusTransitionException.class,
+                IllegalStatusTransitionException.class,
                 () -> service.assignTicket(
                         ticket,
                         manager,

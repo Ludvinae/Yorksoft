@@ -1,7 +1,7 @@
 package com.mns.cda.suivimns.service.business;
 
+import com.mns.cda.suivimns.exception.TicketNotEditableException;
 import com.mns.cda.suivimns.model.Ticket;
-import com.mns.cda.suivimns.service.workflow.TicketClosingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +15,7 @@ public class TicketPriorityService {
 
     public void recalculateCurrentPriority(Ticket ticket) {
         if (isNotEditable(ticket)) {
-            throw new TicketClosingService.TicketNotEditableException();
+            throw new TicketNotEditableException();
         }
 
         ticket.setCurrentPriority(compute(ticket));

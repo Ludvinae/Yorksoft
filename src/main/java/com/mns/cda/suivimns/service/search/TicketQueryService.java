@@ -4,6 +4,7 @@ import com.mns.cda.suivimns.dao.TicketDao;
 import com.mns.cda.suivimns.dao.search.TicketSpecification;
 import com.mns.cda.suivimns.dto.search.TicketListDto;
 import com.mns.cda.suivimns.dto.search.TicketSearchCriteria;
+import com.mns.cda.suivimns.exception.InvalidSortCriteriaException;
 import com.mns.cda.suivimns.mapper.entity.TicketMapper;
 import com.mns.cda.suivimns.model.Ticket;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +20,6 @@ import java.util.Set;
 @Service
 @RequiredArgsConstructor
 public class TicketQueryService {
-
-    public static class InvalidSortCriteriaException extends RuntimeException {}
 
     private final TicketDao ticketDao;
     private final TicketMapper ticketMapper;

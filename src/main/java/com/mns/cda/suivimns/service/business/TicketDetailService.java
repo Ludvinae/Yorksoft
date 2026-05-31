@@ -3,6 +3,8 @@ package com.mns.cda.suivimns.service.business;
 import com.mns.cda.suivimns.dao.TicketDao;
 import com.mns.cda.suivimns.dto.details.*;
 import com.mns.cda.suivimns.enumerate.StatusEnum;
+import com.mns.cda.suivimns.exception.InvalidUserRoleException;
+import com.mns.cda.suivimns.exception.TicketAccessDeniedException;
 import com.mns.cda.suivimns.exception.TicketNotFoundException;
 import com.mns.cda.suivimns.model.Ticket;
 import com.mns.cda.suivimns.security.AppUserDetails;
@@ -20,14 +22,14 @@ public class TicketDetailService {
     private final TicketDao ticketDao;
     private final StatusTransition transition;
 
-    public TicketDetailFullDto getTicketDetails(Integer idTicket, AppUserDetails principal) throws IllegalAccessException {
+    public TicketDetailFullDto getTicketDetails(Integer idTicket, AppUserDetails principal) {
         if (principal.getUserRole() == null) {
-            throw new IllegalAccessException();
+            throw new InvalidUserRoleException();
         }
         if (Objects.equals(principal.getUserRole(), "CLIENT")) {
             Ticket requestedTicket = ticketDao.findById(idTicket).orElseThrow(TicketNotFoundException::new);
-            if (principal.getId() != requestedTicket.getIdTicket()) {
-                throw new IllegalAccessException();
+            if (principal.getId() != requestedTicket.getClient().getIdAppUser()) {
+                throw new TicketAccessDeniedException();
             }
         }
 

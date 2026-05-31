@@ -1,6 +1,7 @@
 package com.mns.cda.suivimns.service.workflow;
 
 import com.mns.cda.suivimns.enumerate.StatusEnum;
+import com.mns.cda.suivimns.exception.TicketAlreadyClosedException;
 import com.mns.cda.suivimns.model.AppUser;
 import com.mns.cda.suivimns.model.Ticket;
 import jakarta.transaction.Transactional;
@@ -12,9 +13,6 @@ import java.time.LocalDateTime;
 @Service
 @RequiredArgsConstructor
 public class TicketClosingService {
-
-    public static class TicketNotEditableException extends RuntimeException {}
-    public static class TicketAlreadyClosedException extends RuntimeException {}
 
     private final TicketStatusService statusService;
 

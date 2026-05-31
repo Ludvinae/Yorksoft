@@ -4,13 +4,9 @@ import com.mns.cda.suivimns.dto.entity.ClientDto;
 import com.mns.cda.suivimns.dto.flat.PasswordDto;
 import com.mns.cda.suivimns.dto.search.ClientListDto;
 import com.mns.cda.suivimns.dto.search.ClientSearchCriteria;
-import com.mns.cda.suivimns.exception.BadPasswordException;
-import com.mns.cda.suivimns.exception.ClientNotFoundException;
-import com.mns.cda.suivimns.exception.EmailAlreadyUsedException;
+import com.mns.cda.suivimns.exception.*;
 import com.mns.cda.suivimns.security.*;
-import com.mns.cda.suivimns.exception.AccountNotOwnedException;
 import com.mns.cda.suivimns.service.entity.ClientService;
-import com.mns.cda.suivimns.service.search.TicketQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -50,7 +46,7 @@ public class ClientController {
     ) {
         try {
             return new ResponseEntity<>(clientService.search(criteria, pageable) , HttpStatus.OK);
-        } catch (TicketQueryService.InvalidSortCriteriaException e) {
+        } catch (InvalidSortCriteriaException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }

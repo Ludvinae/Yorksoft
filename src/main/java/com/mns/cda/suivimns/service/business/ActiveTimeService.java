@@ -2,6 +2,7 @@ package com.mns.cda.suivimns.service.business;
 
 import com.mns.cda.suivimns.dao.HistoryDao;
 import com.mns.cda.suivimns.enumerate.StatusEnum;
+import com.mns.cda.suivimns.exception.IncoherentHistoryTimeException;
 import com.mns.cda.suivimns.model.History;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,8 +15,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ActiveTimeService {
-
-    public static class IncoherentHistoryTimeException extends RuntimeException {}
 
     private final HistoryDao historyDao;
     private final Clock clock;

@@ -2,15 +2,11 @@ package com.mns.cda.suivimns.service.search;
 
 import com.mns.cda.suivimns.dao.ClientDao;
 import com.mns.cda.suivimns.dao.search.ClientSpecification;
-import com.mns.cda.suivimns.dao.search.TicketSpecification;
 import com.mns.cda.suivimns.dto.search.ClientListDto;
 import com.mns.cda.suivimns.dto.search.ClientSearchCriteria;
-import com.mns.cda.suivimns.dto.search.TicketListDto;
-import com.mns.cda.suivimns.dto.search.TicketSearchCriteria;
+import com.mns.cda.suivimns.exception.InvalidSortCriteriaException;
 import com.mns.cda.suivimns.mapper.entity.ClientMapper;
 import com.mns.cda.suivimns.model.Client;
-import com.mns.cda.suivimns.model.Ticket;
-import com.mns.cda.suivimns.service.entity.ClientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,7 +24,7 @@ public class ClientQueryService {
     private final ClientMapper clientMapper;
 
     public Page<ClientListDto> search(ClientSearchCriteria criteria, Pageable pageable)
-            throws TicketQueryService.InvalidSortCriteriaException {
+            throws InvalidSortCriteriaException {
 
         validateSort(pageable);
 
@@ -44,10 +40,10 @@ public class ClientQueryService {
                 .map(clientMapper::toListDto);
     }
 
-    private void validateSort(Pageable pageable) throws TicketQueryService.InvalidSortCriteriaException {
+    private void validateSort(Pageable pageable) throws InvalidSortCriteriaException {
         for (Sort.Order order : pageable.getSort()) {
             if (!ALLOWED_SORTS.contains(order.getProperty())) {
-                throw new TicketQueryService.InvalidSortCriteriaException();
+                throw new InvalidSortCriteriaException();
             }
         }
     }
