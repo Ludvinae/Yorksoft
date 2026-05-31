@@ -38,9 +38,12 @@ public class GlobalExceptionInterceptor {
                 409, "CONFLICT", "Erreur de contrainte");
     }
 
+
     @ExceptionHandler(IllegalStateException.class)
-    public ResponseEntity<String> handleIllegalState(IllegalStateException ex) {
-        return ResponseEntity.badRequest().body(ex.getMessage());
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponseDto handleIllegalState(IllegalStateException ex) {
+
+        return new ErrorResponseDto(400, "ILLEGAL_STATE", "Statut invalide");
     }
 
     @ExceptionHandler(TicketNotFoundException.class)
@@ -98,22 +101,43 @@ public class GlobalExceptionInterceptor {
     }
 
     @ExceptionHandler(TicketAccessDeniedException.class)
-    public ResponseEntity<Void> handleAccessDenied() {
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ErrorResponseDto handleAccessDenied(TicketAccessDeniedException ex) {
+
+        return new ErrorResponseDto(403, "TICKET_ACCESS_DENIED", "Non autorisé à acceder à ce ticket");
     }
 
     @ExceptionHandler(InvalidUserRoleException.class)
-    public ResponseEntity<Void> handleInvalidRole() {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponseDto handleInvalidRole(InvalidUserRoleException ex) {
+
+        return new ErrorResponseDto(500, "INVALID_USER_ROLE", "Role non reconnu par le serveur");
     }
 
+
     @ExceptionHandler(TicketNotFoundException.class)
-    public ResponseEntity<Void> handleMissingTicket() {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponseDto handleMissingTicket(TicketNotFoundException ex) {
+
+        return new ErrorResponseDto(404, "TICKET_NOT_FOUND", "Impossible de retrouver ce ticket");
     }
 
     @ExceptionHandler(StatusNotFoundException.class)
     public ResponseEntity<Void> handleMissingStatus() {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
+    @ExceptionHandler(StatusNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponseDto handleMissingStatus(StatusNotFoundException ex) {
+
+        return new ErrorResponseDto(404, "STATUS_NOT_FOUND", "Impossible de retrouver ce statut");
+    }
+
+    @ExceptionHandler(InvalidSortCriteriaException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponseDto handleInvalidSortCriteria(InvalidSortCriteriaException ex) {
+
+        return new ErrorResponseDto(400, "INVALID_SORT_CRITERIA", "Critère de tri non reconnu");
     }
 }

@@ -44,26 +44,40 @@ public class TicketService  {
 
     protected final TicketDao ticketDao;
     private final ThemeDao themeDao;
-    protected final ClassificationDao classificationDao;
     protected final ManagerDao managerDao;
     protected final TechnicianDao technicianDao;
     protected final AppUserDao appUserDao;
 
 
+    // Helper methods
+
+    private Ticket getTicket(Integer idTicket) {
+        return ticketDao.findById(idTicket).orElseThrow(TicketNotFoundException::new);
+    }
+
+    private void validateTechnicianAccess(Ticket ticket, Integer userId, String role) {
+        if ("ADMIN".equals(role)) {
+            return;
+        }
+        if (!Objects.equals(ticket.getCurrentTechnician().getIdAppUser(), userId)) {
+            throw new UnauthorizedTechnicianException();
+        }
+    }
+
+    // Controller logic
 
     public List<TicketDto> findAll() {
         return ticketMapper.toDtoList(ticketDao.findAll());
     }
 
-    public TicketDto findById(int id) throws TicketNotFoundException {
-        Ticket ticket = ticketDao.findById(id)
-                .orElseThrow(TicketNotFoundException::new);
+    public TicketDto findById(int id) {
+        Ticket ticket = getTicket(id);
 
         return ticketMapper.toDto(ticket);
     }
 
 
-    public TicketDto save(TicketCreationDto dto, AppUserDetails principal) throws StatusNotFoundException {
+    public TicketDto save(TicketCreationDto dto, AppUserDetails principal) {
 
         Ticket ticket = ticketMapper.creationToEntity(dto);
         ticket.setOverdue(false);
@@ -86,8 +100,7 @@ public class TicketService  {
     }
 
     public void delete(int id) throws TicketNotFoundException {
-        Ticket ticket = ticketDao.findById(id)
-                .orElseThrow(TicketNotFoundException::new);
+        Ticket ticket = getTicket(id);
 
         ticketDao.delete(ticket);
     }
@@ -96,24 +109,21 @@ public class TicketService  {
 
         boolean isEdited = false;
 
-        Ticket currentTicket = ticketDao.findById(id)
-                .orElseThrow(TicketNotFoundException::new);
+        Ticket currentTicket = getTicket(id);
 
         if (isNotEditable(currentTicket)) {
             throw new TicketNotEditableException();
         }
 
-        if (!Objects.equals(principal.getUserRole(), "ADMIN")
-            && !Objects.equals(principal.getUserRole(), "MANAGER")
-            && !Objects.equals(currentTicket.getCurrentTechnician().getIdAppUser(), principal.getId())) {
-            throw new UnauthorizedTechnicianException();
+        if (!"MANAGER".equals(principal.getUserRole())) {
+            validateTechnicianAccess(currentTicket, principal.getId(), principal.getUserRole());
         }
 
-        if (!ticketToUpdate.description().isBlank() || ticketToUpdate.description().equals(currentTicket.getDescription())) {
+        if (!ticketToUpdate.description().isBlank() && !ticketToUpdate.description().equals(currentTicket.getDescription())) {
             currentTicket.setDescription(ticketToUpdate.description());
             isEdited = true;
         }
-        if (!ticketToUpdate.solution().isBlank() || ticketToUpdate.solution().equals(currentTicket.getSolution())) {
+        if (!ticketToUpdate.solution().isBlank() && !ticketToUpdate.solution().equals(currentTicket.getSolution())) {
             currentTicket.setSolution(ticketToUpdate.solution());
             isEdited = true;
         }
@@ -128,41 +138,22 @@ public class TicketService  {
         return detailService.getTicketDetails(id, principal);
     }
 
-    public Ticket forceChangePriority(int priority, int id) throws TicketNotFoundException {
-        Ticket currentTicket = ticketDao.findById(id)
-                .orElseThrow(TicketNotFoundException::new);
-
-        priorityService.recalculateCurrentPriority(currentTicket);
-
-        return ticketDao.save(currentTicket);
+    public Page<TicketListDto> getAllPageable(TicketSearchCriteria criteria, Pageable pageable, AppUserDetails principal) {
+        if (principal.getUserRole() == null) {
+            throw new InvalidUserRoleException();
+        } else if (Objects.equals(principal.getUserRole(), "CLIENT")) {
+            TicketSearchCriteria newCriteria = new TicketSearchCriteria(
+                    criteria.keyword(), principal.getId(), criteria.hasVersion(), criteria.hasSoftware(),
+                    criteria.statuses(), criteria.statusesExcluded(), criteria.priorityGreaterThan(),
+                    criteria.priorityLessThan(), criteria.priorityEquals(), criteria.assignedTo(),
+                    criteria.createdAfter(), criteria.createdBefore(), criteria.closedAfter(),
+                    criteria.closedBefore(), criteria.isNotClosed(), criteria.isOverdue());
+            return queryService.search(newCriteria, pageable);
+        }
+        return queryService.search(criteria, pageable);
     }
 
-
-
-    // METHODS
-
-    public void addThemeToTicket(Ticket ticket, String designation) {
-
-        // 1. récupérer la thématique
-        Theme theme = themeDao.findByDesignation(designation)
-                .orElseThrow(() -> new RuntimeException("Thématique introuvable"));
-
-        // 2. créer la classification
-        Classification classification = new Classification();
-        classification.setTicket(ticket);
-        classification.setTheme(theme);
-
-        // 3. sauvegarder
-        classificationDao.save(classification);
-    }
-
-    public String getCurrentTheme(Ticket ticket) {
-        return ticket.getClassificationList().stream()
-                .max(Comparator.comparing(Classification::getAffectationDate))
-                .map(c -> c.getTheme().getDesignation())
-                .orElse(null);
-    }
-
+    // WORKFLOW methods
 
     /**
      * Gère l'assignation d'un ticket
@@ -175,8 +166,7 @@ public class TicketService  {
     public TicketDto assignTicket(Integer idTicket, TicketAssignmentDto assignmentDto) {
 
         // Récupère le ticket par l'id
-        Ticket ticket = ticketDao.findById(idTicket)
-                .orElseThrow(TicketNotFoundException::new);
+        Ticket ticket = getTicket(idTicket);
 
         // Récupère le technicien et le manager
         Manager manager = managerDao.findById(assignmentDto.idManager())
@@ -193,15 +183,12 @@ public class TicketService  {
 
     public TicketDto closeTicket(Integer idTicket, StateChangeJustification justification, AppUserDetails principal) {
         // Récupère le ticket par l'id
-        Ticket ticket = ticketDao.findById(idTicket)
-                .orElseThrow(TicketNotFoundException::new);
+        Ticket ticket = getTicket(idTicket);
 
         AppUser user = appUserDao.findById(principal.getId())
                 .orElseThrow(AppUserNotFoundException::new);
 
-        if (ticket.getCurrentTechnician() != user && !Objects.equals(principal.getUserRole(), "ADMIN")) {
-            throw new UnauthorizedTechnicianException();
-        }
+        validateTechnicianAccess(ticket, principal.getId(), principal.getUserRole());
 
         Ticket ticketClosed = closingService.closeTicket(ticket, user, justification.reason());
 
@@ -214,15 +201,12 @@ public class TicketService  {
     public TicketDto takeTicketInCharge(Integer idTicket, StateChangeJustification justification, AppUserDetails principal) {
 
         // Récupère le ticket par l'id
-        Ticket ticket = ticketDao.findById(idTicket)
-                .orElseThrow(TicketNotFoundException::new);
+        Ticket ticket = getTicket(idTicket);
 
         Technician technician = technicianDao.findById(principal.getId())
                 .orElseThrow(TechnicianNotFoundException::new);
 
-        if (ticket.getCurrentTechnician() != technician && !Objects.equals(principal.getUserRole(), "ADMIN")) {
-            throw new UnauthorizedTechnicianException();
-        }
+        validateTechnicianAccess(ticket, principal.getId(), principal.getUserRole());
 
         Ticket ticketChanged = progressService.takeTicketInCharge(ticket, technician, justification.reason());
 
@@ -232,15 +216,12 @@ public class TicketService  {
     }
 
     public TicketDto resumeTicket(Integer idTicket, StateChangeJustification justification, AppUserDetails principal) {
-        Ticket ticket = ticketDao.findById(idTicket)
-                .orElseThrow(TicketNotFoundException::new);
+        Ticket ticket = getTicket(idTicket);
 
         AppUser user = appUserDao.findById(principal.getId())
                 .orElseThrow(AppUserNotFoundException::new);
 
-        if (ticket.getCurrentTechnician() != user && !Objects.equals(principal.getUserRole(), "ADMIN")) {
-            throw new UnauthorizedTechnicianException();
-        }
+        validateTechnicianAccess(ticket, principal.getId(), principal.getUserRole());
 
         Ticket ticketChanged = progressService.resumeTicket(ticket, user, justification.reason());
 
@@ -252,15 +233,12 @@ public class TicketService  {
     public TicketDto solveTicket(Integer idTicket, StateChangeJustification justification, AppUserDetails principal) {
 
         // Récupère le ticket par l'id
-        Ticket ticket = ticketDao.findById(idTicket)
-                .orElseThrow(TicketNotFoundException::new);
+        Ticket ticket = getTicket(idTicket);
 
         Technician technician = technicianDao.findById(principal.getId())
                 .orElseThrow(TechnicianNotFoundException::new);
 
-        if (ticket.getCurrentTechnician() != technician && !Objects.equals(principal.getUserRole(), "ADMIN")) {
-            throw new UnauthorizedTechnicianException();
-        }
+        validateTechnicianAccess(ticket, principal.getId(), principal.getUserRole());
 
         Ticket ticketChanged = solvedService.proposeSolution(ticket, technician, justification.reason());
 
@@ -272,8 +250,7 @@ public class TicketService  {
     public TicketDto setWaitingStatus(Integer idTicket, TicketWaitDto dto) {
 
         // Récupère le ticket par l'id
-        Ticket ticket = ticketDao.findById(idTicket)
-                .orElseThrow(TicketNotFoundException::new);
+        Ticket ticket = getTicket(idTicket);
 
         Technician technician = technicianDao.findById(dto.idTechnician())
                 .orElseThrow(TechnicianNotFoundException::new);
@@ -292,21 +269,5 @@ public class TicketService  {
 
 
 
-    public Page<TicketListDto> getAllPageable(TicketSearchCriteria criteria, Pageable pageable, AppUserDetails principal) {
-        if (principal.getUserRole() == null) {
-            throw new InvalidUserRoleException();
-        } else if (Objects.equals(principal.getUserRole(), "CLIENT")) {
-            TicketSearchCriteria newCriteria = new TicketSearchCriteria(
-                    criteria.keyword(), principal.getId(), criteria.hasVersion(), criteria.hasSoftware(),
-                    criteria.statuses(), criteria.statusesExcluded(), criteria.priorityGreaterThan(),
-                    criteria.priorityLessThan(), criteria.priorityEquals(), criteria.assignedTo(),
-                    criteria.createdAfter(), criteria.createdBefore(), criteria.closedAfter(),
-                    criteria.closedBefore(), criteria.isNotClosed(), criteria.isOverdue());
-            return queryService.search(newCriteria, pageable);
-        }
-        return queryService.search(criteria, pageable);
-    }
-
-    // DEBUG
 
 }

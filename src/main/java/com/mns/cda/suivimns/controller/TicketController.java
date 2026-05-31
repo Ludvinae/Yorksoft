@@ -46,11 +46,7 @@ public class TicketController {
             Pageable pageable,
             @AuthenticationPrincipal AppUserDetails principal
     ) {
-        try {
-            return new ResponseEntity<>(ticketService.getAllPageable(criteria, pageable, principal) , HttpStatus.OK);
-        } catch (InvalidSortCriteriaException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        return new ResponseEntity<>(ticketService.getAllPageable(criteria, pageable, principal) , HttpStatus.OK);
     }
 
 
