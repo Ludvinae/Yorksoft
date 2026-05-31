@@ -144,12 +144,10 @@
                 <configuration>
                     <!-- Inclure les tests unitaires -->
                     <includes>
-                        <include>**/unit/dto/*</include>
-                        <include>**/unit/service/*</include>
+                        <include>**/unit/*</include>
                     </includes>
                     <!-- Exclure les tests d'intégration -->
                     <excludes>
-                        <exclude>**/unit/controller/*</exclude>
                         <exclude>**/integration/*</exclude>
                     </excludes>
                 </configuration>

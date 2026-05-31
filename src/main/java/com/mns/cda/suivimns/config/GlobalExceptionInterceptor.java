@@ -46,14 +46,12 @@ public class GlobalExceptionInterceptor {
         return new ErrorResponseDto(400, "ILLEGAL_STATE", "Statut invalide");
     }
 
+
     @ExceptionHandler(TicketNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponseDto handleTicketNotFound(
-            TicketNotFoundException ex
-    ) {
-        return new ErrorResponseDto(
-                404,"TICKET_NOT_FOUND", "Ticket introuvable"
-        );
+    public ErrorResponseDto handleMissingTicket(TicketNotFoundException ex) {
+
+        return new ErrorResponseDto(404, "TICKET_NOT_FOUND", "Impossible de retrouver ce ticket");
     }
 
     @ExceptionHandler(IllegalStatusTransitionException.class)
@@ -115,17 +113,6 @@ public class GlobalExceptionInterceptor {
     }
 
 
-    @ExceptionHandler(TicketNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponseDto handleMissingTicket(TicketNotFoundException ex) {
-
-        return new ErrorResponseDto(404, "TICKET_NOT_FOUND", "Impossible de retrouver ce ticket");
-    }
-
-    @ExceptionHandler(StatusNotFoundException.class)
-    public ResponseEntity<Void> handleMissingStatus() {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-    }
 
     @ExceptionHandler(StatusNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
