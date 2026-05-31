@@ -99,7 +99,7 @@ public class TicketService  {
         return ticketMapper.toDto(ticketSaved);
     }
 
-    public void delete(int id) throws TicketNotFoundException {
+    public void delete(int id) {
         Ticket ticket = getTicket(id);
 
         ticketDao.delete(ticket);

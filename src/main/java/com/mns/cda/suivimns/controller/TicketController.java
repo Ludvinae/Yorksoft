@@ -37,7 +37,11 @@ public class TicketController {
 
     @Operation(summary = "Récupère tous les tickets",
             description = "Récupère la liste paginée de ticket, peut être triée et filtrée")
-    @ApiResponse(responseCode = "200", description = "Liste récupérée avec succès")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Liste récupérée avec succès"),
+            @ApiResponse(responseCode = "400", description = "Critère de tri invalide"),
+            @ApiResponse(responseCode = "403", description = "Utilisateur non autorisé"),
+            @ApiResponse(responseCode = "500", description = "Role inconnu")})
     @GetMapping("/list")
     @IsUser
     public ResponseEntity<Page<TicketListDto>> getAllPageable(
@@ -50,9 +54,12 @@ public class TicketController {
     }
 
 
-    @Operation(summary = "Récupére une ticket en fonction de son ID")
+    @Operation(summary = "Récupère une ticket en fonction de son ID")
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Ticket trouvée"),
-            @ApiResponse(responseCode = "404", description = "Ticket non trouvée")})
+            @ApiResponse(responseCode = "401", description = "Utilisateur non autorisé"),
+            @ApiResponse(responseCode = "403", description = "Pas autorisé à consulter ce ticket"),
+            @ApiResponse(responseCode = "404", description = "Ticket non trouvée"),
+            @ApiResponse(responseCode = "500", description = "Role inconnu")})
     @GetMapping("/{id}")
     @IsEmployee
     public ResponseEntity<TicketDto> getById(@PathVariable int id) {
@@ -63,7 +70,9 @@ public class TicketController {
 
     @Operation(summary = "Récupére les détails d'un ticket en fonction de son ID")
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Ticket trouvée"),
-            @ApiResponse(responseCode = "404", description = "Ticket non trouvée")})
+            @ApiResponse(responseCode = "403", description = "Pas autorisé à consulter ce ticket"),
+            @ApiResponse(responseCode = "404", description = "Ticket non trouvée"),
+            @ApiResponse(responseCode = "500", description = "Role inconnu")})
     @GetMapping("/{id}/detail")
     @IsUser
     public ResponseEntity<TicketDetailFullDto> getDetails(@PathVariable int id,
@@ -75,7 +84,9 @@ public class TicketController {
 
     @Operation(summary = "Crée un nouveau ticket")
     @ApiResponses({@ApiResponse(responseCode = "201", description = "Ticket crée"),
-            @ApiResponse(responseCode = "400", description = "Données invalides")})
+            @ApiResponse(responseCode = "400", description = "Données invalides"),
+            @ApiResponse(responseCode = "403", description = "Autorisations insuffisantes"),
+            @ApiResponse(responseCode = "404", description = "Ressource introuvable")})
     @PostMapping
     @IsTechnician
     public ResponseEntity<TicketDto> create(@RequestBody @Valid TicketCreationDto ticket,
@@ -86,6 +97,7 @@ public class TicketController {
 
     @Operation(summary = "Efface une ticket selon son ID")
     @ApiResponses({@ApiResponse(responseCode = "204", description = "Ticket effacée"),
+            @ApiResponse(responseCode = "403", description = "Autorisations insuffisantes"),
             @ApiResponse(responseCode = "404", description = "Ticket non trouvée")})
     @DeleteMapping("/{id}")
     @IsAdmin
@@ -98,8 +110,10 @@ public class TicketController {
     @Operation(summary = "Modifie la description et la solution d'un ticket",
             description = "Modifie les champs 'description' et 'solution' d'un ticket")
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Ticket modifiée avec succès"),
+            @ApiResponse(responseCode = "403", description = "Autorisations insuffisantes"),
             @ApiResponse(responseCode = "404", description = "Ticket non trouvée"),
-            @ApiResponse(responseCode = "400", description = "Données invalides")})
+            @ApiResponse(responseCode = "400", description = "Données invalides"),
+            @ApiResponse(responseCode = "409", description = "Refusé: provoquerait une incoherence d'état"),})
     @PatchMapping("/{id}/description")
     @IsTechnician
     public ResponseEntity<TicketDetailFullDto> update(@PathVariable int id, @RequestBody @Valid TicketDescriptionDto ticketToUpdate,
@@ -126,6 +140,7 @@ public class TicketController {
     @Operation(summary = "Clôture un ticket")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Ticket clôturé"),
+            @ApiResponse(responseCode = "403", description = "Autorisations insuffisantes"),
             @ApiResponse(responseCode = "404", description = "Ticket ou utilisateur introuvable"),
             @ApiResponse(responseCode = "409", description = "Transition interdite")
     })
@@ -144,6 +159,7 @@ public class TicketController {
     @Operation(summary = "Prends en charge un ticket")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Ticket pris en charge"),
+            @ApiResponse(responseCode = "403", description = "Autorisations insuffisantes"),
             @ApiResponse(responseCode = "404", description = "Ticket ou technicien introuvable"),
             @ApiResponse(responseCode = "409", description = "Transition interdite")
     })
@@ -161,6 +177,7 @@ public class TicketController {
     @Operation(summary = "Reprends la prise en charge d'un ticket")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Ticket repris en charge"),
+            @ApiResponse(responseCode = "403", description = "Autorisations insuffisantes"),
             @ApiResponse(responseCode = "404", description = "Ticket ou technicien introuvable"),
             @ApiResponse(responseCode = "409", description = "Transition interdite")
     })
@@ -178,6 +195,7 @@ public class TicketController {
     @Operation(summary = "Propose une solution pour le ticket")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Solution proposée"),
+            @ApiResponse(responseCode = "403", description = "Autorisations insuffisantes"),
             @ApiResponse(responseCode = "404", description = "Ticket ou technicien introuvable"),
             @ApiResponse(responseCode = "409", description = "Transition interdite")
     })
@@ -196,6 +214,8 @@ public class TicketController {
     @Operation(summary = "Met le ticket en attente")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Ticket mis en attente"),
+            @ApiResponse(responseCode = "400", description = "Statut non reconnu"),
+            @ApiResponse(responseCode = "403", description = "Autorisations insuffisantes"),
             @ApiResponse(responseCode = "404", description = "Ticket ou technicien introuvable"),
             @ApiResponse(responseCode = "409", description = "Transition interdite")
     })
@@ -208,6 +228,5 @@ public class TicketController {
 
         return ticketService.setWaitingStatus(id, dto);
     }
-
 
 }
