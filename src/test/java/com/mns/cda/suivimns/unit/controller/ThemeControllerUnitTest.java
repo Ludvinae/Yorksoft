@@ -12,11 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -49,11 +51,13 @@ class ThemeControllerUnitTest {
     // TEST DTO
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturn400WhenCreateInvalid() throws Exception {
 
         ThemeDto invalidDto = new ThemeDto(null,"", ThemeEnum.BUG, null);
 
         mockMvc.perform(post("/theme")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(invalidDto)))
                 .andExpect(status().isBadRequest());
@@ -63,6 +67,7 @@ class ThemeControllerUnitTest {
     // GET ALL
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturnAll() throws Exception {
 
         when(themeService.findAll()).thenReturn(List.of(themeDto));
@@ -79,6 +84,7 @@ class ThemeControllerUnitTest {
     // GET BY ID - OK
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturnById() throws Exception {
 
         when(themeService.findById(1)).thenReturn(themeDto);
@@ -95,6 +101,7 @@ class ThemeControllerUnitTest {
     // GET BY ID - NOT FOUND
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturn404WhenNotFound() throws Exception {
 
         when(themeService.findById(1))
@@ -109,11 +116,13 @@ class ThemeControllerUnitTest {
     // CREATE
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldCreate() throws Exception {
 
         when(themeService.save(any(ThemeDto.class))).thenReturn(themeDto);
 
         mockMvc.perform(post("/theme")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(themeDto)))
                 .andDo(print())
@@ -126,11 +135,13 @@ class ThemeControllerUnitTest {
     // DELETE - OK
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldDelete() throws Exception {
 
         doNothing().when(themeService).delete(1);
 
-        mockMvc.perform(delete("/theme/1"))
+        mockMvc.perform(delete("/theme/1")
+                        .with(csrf()))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
@@ -141,12 +152,14 @@ class ThemeControllerUnitTest {
     // DELETE - NOT FOUND
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturn404WhenDeleteNotFound() throws Exception {
 
         doThrow(new ThemeNotFoundException())
                 .when(themeService).delete(1);
 
-        mockMvc.perform(delete("/theme/1"))
+        mockMvc.perform(delete("/theme/1")
+                        .with(csrf()))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
@@ -155,11 +168,13 @@ class ThemeControllerUnitTest {
     // UPDATE - OK
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldUpdate() throws Exception {
 
         when(themeService.update(eq(1), any(ThemeDto.class))).thenReturn(themeDto);
 
         mockMvc.perform(put("/theme/1")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(themeDto)))
                 .andDo(print())
@@ -172,12 +187,14 @@ class ThemeControllerUnitTest {
     // UPDATE - NOT FOUND
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturn404WhenUpdateFails() throws Exception {
 
         when(themeService.update(eq(1), any(ThemeDto.class)))
                 .thenThrow(new ThemeNotFoundException());
 
         mockMvc.perform(put("/theme/1")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(themeDto)))
                 .andDo(print())

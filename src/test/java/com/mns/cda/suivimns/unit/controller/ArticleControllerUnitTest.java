@@ -10,13 +10,18 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -37,6 +42,7 @@ class ArticleControllerUnitTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+
     private ArticleDto articleDto;
 
     @BeforeEach
@@ -46,15 +52,18 @@ class ArticleControllerUnitTest {
                 1, LocalDateTime.now(), LocalDateTime.now(), "Test title", "Test content", 1, 1);
     }
 
+
     // =========================
     // TEST DTO
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturn400WhenCreateInvalid() throws Exception {
 
         ArticleDto invalidDto = new ArticleDto(null,null, null, "", null, null, null);
 
         mockMvc.perform(post("/article")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(invalidDto)))
                 .andExpect(status().isBadRequest());
@@ -64,6 +73,7 @@ class ArticleControllerUnitTest {
     // GET ALL
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturnAll() throws Exception {
 
         when(articleService.findAll()).thenReturn(List.of(articleDto));
@@ -79,6 +89,7 @@ class ArticleControllerUnitTest {
     // GET BY ID - OK
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturnById() throws Exception {
 
         when(articleService.findById(1)).thenReturn(articleDto);
@@ -94,6 +105,7 @@ class ArticleControllerUnitTest {
     // GET BY ID - NOT FOUND
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturn404WhenNotFound() throws Exception {
 
         when(articleService.findById(1))
@@ -108,11 +120,13 @@ class ArticleControllerUnitTest {
     // CREATE
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldCreate() throws Exception {
 
         when(articleService.save(any(ArticleDto.class))).thenReturn(articleDto);
 
         mockMvc.perform(post("/article")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(articleDto)))
                 .andDo(print())
@@ -125,11 +139,13 @@ class ArticleControllerUnitTest {
     // DELETE - OK
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldDelete() throws Exception {
 
         doNothing().when(articleService).delete(1);
 
-        mockMvc.perform(delete("/article/1"))
+        mockMvc.perform(delete("/article/1")
+                        .with(csrf()))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
@@ -140,12 +156,14 @@ class ArticleControllerUnitTest {
     // DELETE - NOT FOUND
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturn404WhenDeleteNotFound() throws Exception {
 
         doThrow(new ArticleNotFoundException())
                 .when(articleService).delete(1);
 
-        mockMvc.perform(delete("/article/1"))
+        mockMvc.perform(delete("/article/1")
+                        .with(csrf()))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }

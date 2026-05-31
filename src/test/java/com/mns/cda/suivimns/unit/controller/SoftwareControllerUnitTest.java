@@ -11,11 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -49,11 +51,13 @@ class SoftwareControllerUnitTest {
     // TEST DTO
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturn400WhenCreateInvalid() throws Exception {
 
         SoftwareDto invalidDto = new SoftwareDto(null,"", null, null);
 
         mockMvc.perform(post("/software")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(invalidDto)))
                 .andExpect(status().isBadRequest());
@@ -63,6 +67,7 @@ class SoftwareControllerUnitTest {
     // GET ALL
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturnAll() throws Exception {
 
         when(softwareService.findAll()).thenReturn(List.of(softwareDto));
@@ -78,6 +83,7 @@ class SoftwareControllerUnitTest {
     // GET BY ID - OK
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturnById() throws Exception {
 
         when(softwareService.findById(1)).thenReturn(softwareDto);
@@ -93,6 +99,7 @@ class SoftwareControllerUnitTest {
     // GET BY ID - NOT FOUND
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturn404WhenNotFound() throws Exception {
 
         when(softwareService.findById(1))
@@ -107,11 +114,13 @@ class SoftwareControllerUnitTest {
     // CREATE
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldCreate() throws Exception {
 
         when(softwareService.save(any(SoftwareDto.class))).thenReturn(softwareDto);
 
         mockMvc.perform(post("/software")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(softwareDto)))
                 .andDo(print())
@@ -123,11 +132,13 @@ class SoftwareControllerUnitTest {
     // DELETE - OK
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldDelete() throws Exception {
 
         doNothing().when(softwareService).delete(1);
 
-        mockMvc.perform(delete("/software/1"))
+        mockMvc.perform(delete("/software/1")
+                        .with(csrf()))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
@@ -138,12 +149,14 @@ class SoftwareControllerUnitTest {
     // DELETE - NOT FOUND
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturn404WhenDeleteNotFound() throws Exception {
 
         doThrow(new SoftwareNotFoundException())
                 .when(softwareService).delete(1);
 
-        mockMvc.perform(delete("/software/1"))
+        mockMvc.perform(delete("/software/1")
+                        .with(csrf()))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
@@ -152,11 +165,13 @@ class SoftwareControllerUnitTest {
     // UPDATE - OK
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldUpdate() throws Exception {
 
         when(softwareService.update(eq(1), any(SoftwareDto.class))).thenReturn(softwareDto);
 
         mockMvc.perform(put("/software/1")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(softwareDto)))
                 .andDo(print())
@@ -168,12 +183,14 @@ class SoftwareControllerUnitTest {
     // UPDATE - NOT FOUND
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturn404WhenUpdateFails() throws Exception {
 
         when(softwareService.update(eq(1), any(SoftwareDto.class)))
                 .thenThrow(new SoftwareNotFoundException());
 
         mockMvc.perform(put("/software/1")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(softwareDto)))
                 .andDo(print())

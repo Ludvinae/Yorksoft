@@ -11,11 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -50,11 +52,13 @@ class VersionTypeControllerUnitTest {
     // TEST DTO
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturn400WhenCreateInvalid() throws Exception {
 
         VersionTypeDto invalidDto = new VersionTypeDto(null,"", "ABC", (byte) 1);
 
         mockMvc.perform(post("/version-type")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(invalidDto)))
                 .andExpect(status().isBadRequest());
@@ -64,6 +68,7 @@ class VersionTypeControllerUnitTest {
     // GET ALL
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturnAll() throws Exception {
 
         when(versionTypeService.findAll()).thenReturn(List.of(versionTypeDto));
@@ -79,6 +84,7 @@ class VersionTypeControllerUnitTest {
     // GET BY ID - OK
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturnById() throws Exception {
 
         when(versionTypeService.findById(1)).thenReturn(versionTypeDto);
@@ -94,6 +100,7 @@ class VersionTypeControllerUnitTest {
     // GET BY ID - NOT FOUND
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturn404WhenNotFound() throws Exception {
 
         when(versionTypeService.findById(1))
@@ -108,11 +115,13 @@ class VersionTypeControllerUnitTest {
     // CREATE
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldCreate() throws Exception {
 
         when(versionTypeService.save(any(VersionTypeDto.class))).thenReturn(versionTypeDto);
 
         mockMvc.perform(post("/version-type")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(versionTypeDto)))
                 .andDo(print())
@@ -125,11 +134,13 @@ class VersionTypeControllerUnitTest {
     // DELETE - OK
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldDelete() throws Exception {
 
         doNothing().when(versionTypeService).delete(1);
 
-        mockMvc.perform(delete("/version-type/1"))
+        mockMvc.perform(delete("/version-type/1")
+                        .with(csrf()))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
@@ -140,12 +151,14 @@ class VersionTypeControllerUnitTest {
     // DELETE - NOT FOUND
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturn404WhenDeleteNotFound() throws Exception {
 
         doThrow(new VersionTypeNotFoundException())
                 .when(versionTypeService).delete(1);
 
-        mockMvc.perform(delete("/version-type/1"))
+        mockMvc.perform(delete("/version-type/1")
+                        .with(csrf()))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
@@ -154,11 +167,13 @@ class VersionTypeControllerUnitTest {
     // UPDATE - OK
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldUpdate() throws Exception {
 
         when(versionTypeService.update(eq(1), any(VersionTypeDto.class))).thenReturn(versionTypeDto);
 
         mockMvc.perform(put("/version-type/1")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(versionTypeDto)))
                 .andDo(print())
@@ -170,12 +185,14 @@ class VersionTypeControllerUnitTest {
     // UPDATE - NOT FOUND
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturn404WhenUpdateFails() throws Exception {
 
         when(versionTypeService.update(eq(1), any(VersionTypeDto.class)))
                 .thenThrow(new VersionTypeNotFoundException());
 
         mockMvc.perform(put("/version-type/1")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(versionTypeDto)))
                 .andDo(print())

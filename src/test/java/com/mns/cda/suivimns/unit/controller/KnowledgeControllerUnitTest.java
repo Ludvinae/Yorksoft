@@ -11,12 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -57,11 +59,13 @@ class KnowledgeControllerUnitTest {
     // TEST DTO
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturn400WhenCreateInvalid() throws Exception {
 
         KnowledgeDto invalidDto = new KnowledgeDto(null,"", null, null, null);
 
         mockMvc.perform(post("/knowledge")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(invalidDto)))
                 .andExpect(status().isBadRequest());
@@ -71,6 +75,7 @@ class KnowledgeControllerUnitTest {
     // GET ALL
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturnAll() throws Exception {
 
         when(knowledgeService.findAll()).thenReturn(List.of(knowledgeDto));
@@ -86,6 +91,7 @@ class KnowledgeControllerUnitTest {
     // GET BY ID - OK
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturnById() throws Exception {
 
         when(knowledgeService.findById(1)).thenReturn(knowledgeDto);
@@ -101,6 +107,7 @@ class KnowledgeControllerUnitTest {
     // GET BY ID - NOT FOUND
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturn404WhenNotFound() throws Exception {
 
         when(knowledgeService.findById(1))
@@ -115,11 +122,13 @@ class KnowledgeControllerUnitTest {
     // CREATE
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldCreate() throws Exception {
 
         when(knowledgeService.save(any(KnowledgeDto.class))).thenReturn(knowledgeDto);
 
         mockMvc.perform(post("/knowledge")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(knowledgeDto)))
                 .andDo(print())
@@ -131,11 +140,13 @@ class KnowledgeControllerUnitTest {
     // DELETE - OK
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldDelete() throws Exception {
 
         doNothing().when(knowledgeService).delete(1);
 
-        mockMvc.perform(delete("/knowledge/1"))
+        mockMvc.perform(delete("/knowledge/1")
+                        .with(csrf()))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
@@ -146,12 +157,14 @@ class KnowledgeControllerUnitTest {
     // DELETE - NOT FOUND
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturn404WhenDeleteNotFound() throws Exception {
 
         doThrow(new KnowledgeNotFoundException())
                 .when(knowledgeService).delete(1);
 
-        mockMvc.perform(delete("/knowledge/1"))
+        mockMvc.perform(delete("/knowledge/1")
+                        .with(csrf()))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
@@ -160,11 +173,13 @@ class KnowledgeControllerUnitTest {
     // UPDATE - OK
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldUpdate() throws Exception {
 
         when(knowledgeService.update(eq(1), any(KnowledgeDto.class))).thenReturn(knowledgeDto);
 
         mockMvc.perform(put("/knowledge/1")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(knowledgeDto)))
                 .andDo(print())
@@ -176,12 +191,14 @@ class KnowledgeControllerUnitTest {
     // UPDATE - NOT FOUND
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturn404WhenUpdateFails() throws Exception {
 
         when(knowledgeService.update(eq(1), any(KnowledgeDto.class)))
                 .thenThrow(new KnowledgeNotFoundException());
 
         mockMvc.perform(put("/knowledge/1")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(knowledgeDto)))
                 .andDo(print())

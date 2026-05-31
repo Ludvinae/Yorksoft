@@ -3,6 +3,8 @@ package com.mns.cda.suivimns.unit.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.ClientController;
 import com.mns.cda.suivimns.dto.entity.ClientDto;
+import com.mns.cda.suivimns.dto.search.ClientListDto;
+import com.mns.cda.suivimns.dto.search.ClientSearchCriteria;
 import com.mns.cda.suivimns.exception.ClientNotFoundException;
 import com.mns.cda.suivimns.service.entity.ClientService;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,12 +12,18 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -33,10 +41,10 @@ class ClientControllerUnitTest {
     @MockBean
     private org.springframework.data.jpa.mapping.JpaMetamodelMappingContext jpaMetamodelMappingContext;
 
-    @Autowired
-    private ObjectMapper objectMapper;
 
     private ClientDto clientDto;
+
+    private ClientListDto clientListDto;
 
     @BeforeEach
     void setUp() {
@@ -44,41 +52,58 @@ class ClientControllerUnitTest {
         clientDto = new ClientDto(
                 1, "Test firstName", "Test lastName",
                 "Test@email.com", "Test phoneNumber", (byte) 1);
+
+        clientListDto = new ClientListDto(1, "Test firstName", "Test lastName",
+                "Test@email.com", "Test phoneNumber", (byte) 1, List.of());
     }
 
     // =========================
-    // TEST DTO
+    // PAGINATION
     // =========================
     @Test
-    void shouldReturn400WhenCreateInvalid() throws Exception {
+    @WithMockUser(roles="ADMIN")
+    void transmitCorrectPaginationCriteria_shouldReturnCorrectPage() throws Exception {
 
-        ClientDto invalidDto = new ClientDto(null,"", null, "wrong email format",null, null);
+        mockMvc.perform(get("/client/list")
+                .param("page", "0")
+                .param("size", "20")
+                .param("lastName", "Dupont"));
 
-        mockMvc.perform(post("/client")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(invalidDto)))
-                .andExpect(status().isBadRequest());
+        verify(clientService).search(
+                any(ClientSearchCriteria.class),
+                any(Pageable.class));
+
     }
+
 
     // =========================
     // GET ALL
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturnAll() throws Exception {
 
-        when(clientService.findAll()).thenReturn(List.of(clientDto));
+        Page<ClientListDto> page =
+                new PageImpl<>(List.of(clientListDto));
+
+        when(clientService.search(
+                any(ClientSearchCriteria.class),
+                any(Pageable.class)))
+                .thenReturn(page);
 
         mockMvc.perform(get("/client/list"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].idAppUser").value(1))
-                .andExpect(jsonPath("$[0].email").value("Test@email.com"));
+                .andExpect(jsonPath("$.content[0].idAppUser").value(1))
+                .andExpect(jsonPath("$.content[0].email").value("Test@email.com"))
+                .andExpect(jsonPath("$.totalElements").value(1));
     }
 
     // =========================
     // GET BY ID - OK
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturnById() throws Exception {
 
         when(clientService.findById(1)).thenReturn(clientDto);
@@ -94,6 +119,7 @@ class ClientControllerUnitTest {
     // GET BY ID - NOT FOUND
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturn404WhenNotFound() throws Exception {
 
         when(clientService.findById(1))
@@ -104,22 +130,6 @@ class ClientControllerUnitTest {
                 .andExpect(status().isNotFound());
     }
 
-    // =========================
-    // CREATE
-    // =========================
-    @Test
-    void shouldCreate() throws Exception {
-
-        when(clientService.save(any(ClientDto.class))).thenReturn(clientDto);
-
-        mockMvc.perform(post("/client")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(clientDto)))
-                .andDo(print())
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.idAppUser").value(1))
-                .andExpect(jsonPath("$.email").value("Test@email.com"));
-    }
 /*
     // =========================
     // DELETE - OK

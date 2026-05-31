@@ -38,7 +38,9 @@ public class ClientController {
 
     @Operation(summary = "Récupere tous les clients",
             description = "Récupere la liste paginée de client de la base")
-    @ApiResponse(responseCode = "200", description = "Liste récupérée avec succés")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Liste récupérée avec succés"),
+            @ApiResponse(responseCode = "400", description = "Critère de recherche invalide")})
     @GetMapping("/list")
     @IsTechnician
     public ResponseEntity<Page<ClientListDto>> search(

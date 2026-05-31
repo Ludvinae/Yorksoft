@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -49,14 +50,29 @@ class AppUserControllerUnitTest {
     }
 
     // =========================
+    // TEST CSRF
+    // =========================
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void shouldReturn403WithoutCsrf() throws Exception {
+
+        mockMvc.perform(post("/user")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(appUserDto)))
+                .andExpect(status().isForbidden());
+    }
+
+    // =========================
     // TEST DTO
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturn400WhenCreateInvalid() throws Exception {
 
         AppUserDto invalidDto = new AppUserDto(null,"", null, "wrong email format",null);
 
         mockMvc.perform(post("/user")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(invalidDto)))
                 .andExpect(status().isBadRequest());
@@ -119,6 +135,7 @@ class AppUserControllerUnitTest {
         when(appUserService.save(any(AppUserDto.class))).thenReturn(appUserDto);
 
         mockMvc.perform(post("/user")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(appUserDto)))
                 .andDo(print())
@@ -136,7 +153,8 @@ class AppUserControllerUnitTest {
 
         doNothing().when(appUserService).delete(1);
 
-        mockMvc.perform(delete("/user/1"))
+        mockMvc.perform(delete("/user/1")
+                        .with(csrf()))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
@@ -153,7 +171,8 @@ class AppUserControllerUnitTest {
         doThrow(new AppUserNotFoundException())
                 .when(appUserService).delete(1);
 
-        mockMvc.perform(delete("/user/1"))
+        mockMvc.perform(delete("/user/1")
+                        .with(csrf()))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
@@ -168,6 +187,7 @@ class AppUserControllerUnitTest {
         when(appUserService.update(eq(1), any(AppUserDto.class))).thenReturn(appUserDto);
 
         mockMvc.perform(patch("/user/1")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(appUserDto)))
                 .andDo(print())
@@ -186,6 +206,7 @@ class AppUserControllerUnitTest {
                 .thenThrow(new AppUserNotFoundException());
 
         mockMvc.perform(patch("/user/1")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(appUserDto)))
                 .andDo(print())

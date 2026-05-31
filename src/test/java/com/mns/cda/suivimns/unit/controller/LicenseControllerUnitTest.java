@@ -11,12 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -50,11 +52,13 @@ class LicenseControllerUnitTest {
     // TEST DTO
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturn400WhenCreateInvalid() throws Exception {
 
         LicenseDto invalidDto = new LicenseDto(null,"", null, null, null);
 
         mockMvc.perform(post("/license")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(invalidDto)))
                 .andExpect(status().isBadRequest());
@@ -64,6 +68,7 @@ class LicenseControllerUnitTest {
     // GET ALL
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturnAll() throws Exception {
 
         when(licenseService.findAll()).thenReturn(List.of(licenseDto));
@@ -79,6 +84,7 @@ class LicenseControllerUnitTest {
     // GET BY ID - OK
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturnById() throws Exception {
 
         when(licenseService.findById(1)).thenReturn(licenseDto);
@@ -94,6 +100,7 @@ class LicenseControllerUnitTest {
     // GET BY ID - NOT FOUND
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturn404WhenNotFound() throws Exception {
 
         when(licenseService.findById(1))
@@ -108,11 +115,13 @@ class LicenseControllerUnitTest {
     // CREATE
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldCreate() throws Exception {
 
         when(licenseService.save(any(LicenseDto.class))).thenReturn(licenseDto);
 
         mockMvc.perform(post("/license")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(licenseDto)))
                 .andDo(print())
@@ -125,11 +134,13 @@ class LicenseControllerUnitTest {
     // DELETE - OK
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldDelete() throws Exception {
 
         doNothing().when(licenseService).delete(1);
 
-        mockMvc.perform(delete("/license/1"))
+        mockMvc.perform(delete("/license/1")
+                        .with(csrf()))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
@@ -140,12 +151,14 @@ class LicenseControllerUnitTest {
     // DELETE - NOT FOUND
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturn404WhenDeleteNotFound() throws Exception {
 
         doThrow(new LicenseNotFoundException())
                 .when(licenseService).delete(1);
 
-        mockMvc.perform(delete("/license/1"))
+        mockMvc.perform(delete("/license/1")
+                        .with(csrf()))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
@@ -154,11 +167,13 @@ class LicenseControllerUnitTest {
     // UPDATE - OK
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldUpdate() throws Exception {
 
         when(licenseService.update(eq(1), any(LicenseDto.class))).thenReturn(licenseDto);
 
         mockMvc.perform(put("/license/1")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(licenseDto)))
                 .andDo(print())
@@ -170,12 +185,14 @@ class LicenseControllerUnitTest {
     // UPDATE - NOT FOUND
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturn404WhenUpdateFails() throws Exception {
 
         when(licenseService.update(eq(1), any(LicenseDto.class)))
                 .thenThrow(new LicenseNotFoundException());
 
         mockMvc.perform(put("/license/1")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(licenseDto)))
                 .andDo(print())

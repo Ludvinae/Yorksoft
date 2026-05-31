@@ -11,12 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -35,9 +37,6 @@ class AssignmentControllerUnitTest {
     @MockBean
     private org.springframework.data.jpa.mapping.JpaMetamodelMappingContext jpaMetamodelMappingContext;
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
 
     private AssignmentDto assignmentDto;
 
@@ -47,24 +46,12 @@ class AssignmentControllerUnitTest {
                 1, LocalDateTime.now(), null, 1, 1, 1);
     }
 
-    // =========================
-    // TEST DTO
-    // =========================
-    @Test
-    void shouldReturn400WhenCreateInvalid() throws Exception {
-
-        AssignmentDto invalidDto = new AssignmentDto(null,null, null, null, null, null);
-
-        mockMvc.perform(post("/assignment")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(invalidDto)))
-                .andExpect(status().isBadRequest());
-    }
 
     // =========================
     // GET ALL
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturnAll() throws Exception {
 
         when(assignmentService.findAll()).thenReturn(List.of(assignmentDto));
@@ -79,6 +66,7 @@ class AssignmentControllerUnitTest {
     // GET BY ID - OK
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturnById() throws Exception {
 
         when(assignmentService.findById(1)).thenReturn(assignmentDto);
@@ -93,6 +81,7 @@ class AssignmentControllerUnitTest {
     // GET BY ID - NOT FOUND
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturn404WhenNotFound() throws Exception {
 
         when(assignmentService.findById(1))

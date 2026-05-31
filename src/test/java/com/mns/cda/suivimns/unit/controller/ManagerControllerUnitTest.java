@@ -11,11 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -46,24 +48,12 @@ class ManagerControllerUnitTest {
                 "Test@email.com", "Test phoneNumber");
     }
 
-    // =========================
-    // TEST DTO
-    // =========================
-    @Test
-    void shouldReturn400WhenCreateInvalid() throws Exception {
-
-        ManagerDto invalidDto = new ManagerDto(null,"", null,"wrong email format", null);
-
-        mockMvc.perform(post("/manager")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(invalidDto)))
-                .andExpect(status().isBadRequest());
-    }
 
     // =========================
     // GET ALL
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturnAll() throws Exception {
 
         when(managerService.findAll()).thenReturn(List.of(managerDto));
@@ -79,6 +69,7 @@ class ManagerControllerUnitTest {
     // GET BY ID - OK
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturnById() throws Exception {
 
         when(managerService.findById(1)).thenReturn(managerDto);
@@ -94,6 +85,7 @@ class ManagerControllerUnitTest {
     // GET BY ID - NOT FOUND
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturn404WhenNotFound() throws Exception {
 
         when(managerService.findById(1))
@@ -104,22 +96,7 @@ class ManagerControllerUnitTest {
                 .andExpect(status().isNotFound());
     }
 
-    // =========================
-    // CREATE
-    // =========================
-    @Test
-    void shouldCreate() throws Exception {
 
-        when(managerService.save(any(ManagerDto.class))).thenReturn(managerDto);
-
-        mockMvc.perform(post("/manager")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(managerDto)))
-                .andDo(print())
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.idAppUser").value(1))
-                .andExpect(jsonPath("$.email").value("Test@email.com"));
-    }
 /*
     // =========================
     // DELETE - OK

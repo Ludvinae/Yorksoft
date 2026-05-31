@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.Set;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -55,11 +57,13 @@ class StatusControllerUnitTest {
     // TEST DTO
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturn400WhenCreateInvalid() throws Exception {
 
         StatusDto invalidDto = new StatusDto(null,"",null, null);
 
         mockMvc.perform(post("/status")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(invalidDto)))
                 .andExpect(status().isBadRequest());
@@ -69,6 +73,7 @@ class StatusControllerUnitTest {
     // GET ALL
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturnAll() throws Exception {
 
         when(statusService.findAll()).thenReturn(List.of(statusDto));
@@ -85,6 +90,7 @@ class StatusControllerUnitTest {
     // GET POSSIBLE TRANSITIONS - CORRECT SET
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturnAllowedTransitions() throws Exception {
 
         Set<StatusEnum> transitions = Set.of(
@@ -108,6 +114,7 @@ class StatusControllerUnitTest {
     // GET POSSIBLE TRANSITIONS - INVALID STATUS
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturnBadRequestForInvalidStatus() throws Exception {
 
         mockMvc.perform(get("/status/allowed-transitions/INVALID"))
@@ -119,6 +126,7 @@ class StatusControllerUnitTest {
     // GET BY ID - OK
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturnById() throws Exception {
 
         when(statusService.findById(1)).thenReturn(statusDto);
@@ -135,6 +143,7 @@ class StatusControllerUnitTest {
     // GET BY ID - NOT FOUND
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturn404WhenNotFound() throws Exception {
 
         when(statusService.findById(1))
@@ -149,11 +158,13 @@ class StatusControllerUnitTest {
     // CREATE
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldCreate() throws Exception {
 
         when(statusService.save(any(StatusDto.class))).thenReturn(statusDto);
 
         mockMvc.perform(post("/status")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(statusDto)))
                 .andDo(print())
@@ -166,11 +177,13 @@ class StatusControllerUnitTest {
     // DELETE - OK
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldDelete() throws Exception {
 
         doNothing().when(statusService).delete(1);
 
-        mockMvc.perform(delete("/status/1"))
+        mockMvc.perform(delete("/status/1")
+                        .with(csrf()))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
@@ -181,12 +194,14 @@ class StatusControllerUnitTest {
     // DELETE - NOT FOUND
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturn404WhenDeleteNotFound() throws Exception {
 
         doThrow(new StatusNotFoundException())
                 .when(statusService).delete(1);
 
-        mockMvc.perform(delete("/status/1"))
+        mockMvc.perform(delete("/status/1")
+                        .with(csrf()))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
@@ -195,11 +210,13 @@ class StatusControllerUnitTest {
     // UPDATE - OK
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldUpdate() throws Exception {
 
         when(statusService.update(eq(1), any(StatusDto.class))).thenReturn(statusDto);
 
         mockMvc.perform(put("/status/1")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(statusDto)))
                 .andDo(print())
@@ -212,12 +229,14 @@ class StatusControllerUnitTest {
     // UPDATE - NOT FOUND
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturn404WhenUpdateFails() throws Exception {
 
         when(statusService.update(eq(1), any(StatusDto.class)))
                 .thenThrow(new StatusNotFoundException());
 
         mockMvc.perform(put("/status/1")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(statusDto)))
                 .andDo(print())

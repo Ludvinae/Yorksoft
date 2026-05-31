@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
@@ -86,6 +87,7 @@ class TicketControllerUnitTest {
     // GET ALL
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturnAll() throws Exception {
 
         when(ticketService.findAll()).thenReturn(List.of(ticketDto));
@@ -105,6 +107,7 @@ class TicketControllerUnitTest {
     // GET BY ID - OK
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturnById() throws Exception {
 
         when(ticketService.findById(1)).thenReturn(ticketDto);
@@ -120,6 +123,7 @@ class TicketControllerUnitTest {
     // GET BY ID - NOT FOUND
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturn404WhenNotFound() throws Exception {
 
         when(ticketService.findById(1))
@@ -134,6 +138,7 @@ class TicketControllerUnitTest {
     // CREATE
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldCreate() throws Exception {
 
         when(ticketService.save(any(TicketCreationDto.class), principal)).thenReturn(ticketDto);
@@ -150,6 +155,7 @@ class TicketControllerUnitTest {
     // DELETE - OK
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldDelete() throws Exception {
 
         doNothing().when(ticketService).delete(1);
@@ -165,6 +171,7 @@ class TicketControllerUnitTest {
     // DELETE - NOT FOUND
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturn404WhenDeleteNotFound() throws Exception {
 
         doThrow(new TicketNotFoundException())
@@ -179,6 +186,7 @@ class TicketControllerUnitTest {
     // UPDATE - OK
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldUpdate() throws Exception {
 
         when(ticketService.update(eq(1), any(TicketDescriptionDto.class), principal)).thenReturn(ticketDetailFullDto);
@@ -195,6 +203,7 @@ class TicketControllerUnitTest {
     // UPDATE - NOT FOUND
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturn404WhenUpdateFails() throws Exception {
 
         when(ticketService.update(eq(1), any(TicketDescriptionDto.class), principal))

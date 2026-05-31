@@ -11,11 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -49,11 +51,13 @@ class UrgencyControllerUnitTest {
     // TEST DTO
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturn400WhenCreateInvalid() throws Exception {
 
         UrgencyDto invalidDto = new UrgencyDto(null,"", (byte) 1, null);
 
         mockMvc.perform(post("/urgency")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(invalidDto)))
                 .andExpect(status().isBadRequest());
@@ -63,6 +67,7 @@ class UrgencyControllerUnitTest {
     // GET ALL
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturnAll() throws Exception {
 
         when(urgencyService.findAll()).thenReturn(List.of(urgencyDto));
@@ -78,6 +83,7 @@ class UrgencyControllerUnitTest {
     // GET BY ID - OK
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturnById() throws Exception {
 
         when(urgencyService.findById(1)).thenReturn(urgencyDto);
@@ -93,6 +99,7 @@ class UrgencyControllerUnitTest {
     // GET BY ID - NOT FOUND
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturn404WhenNotFound() throws Exception {
 
         when(urgencyService.findById(1))
@@ -107,11 +114,13 @@ class UrgencyControllerUnitTest {
     // CREATE
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldCreate() throws Exception {
 
         when(urgencyService.save(any(UrgencyDto.class))).thenReturn(urgencyDto);
 
         mockMvc.perform(post("/urgency")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(urgencyDto)))
                 .andDo(print())
@@ -124,11 +133,13 @@ class UrgencyControllerUnitTest {
     // DELETE - OK
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldDelete() throws Exception {
 
         doNothing().when(urgencyService).delete(1);
 
-        mockMvc.perform(delete("/urgency/1"))
+        mockMvc.perform(delete("/urgency/1")
+                        .with(csrf()))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
@@ -139,12 +150,14 @@ class UrgencyControllerUnitTest {
     // DELETE - NOT FOUND
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturn404WhenDeleteNotFound() throws Exception {
 
         doThrow(new UrgencyNotFoundException())
                 .when(urgencyService).delete(1);
 
-        mockMvc.perform(delete("/urgency/1"))
+        mockMvc.perform(delete("/urgency/1")
+                        .with(csrf()))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
@@ -153,11 +166,13 @@ class UrgencyControllerUnitTest {
     // UPDATE - OK
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldUpdate() throws Exception {
 
         when(urgencyService.update(eq(1), any(UrgencyDto.class))).thenReturn(urgencyDto);
 
         mockMvc.perform(put("/urgency/1")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(urgencyDto)))
                 .andDo(print())
@@ -169,12 +184,14 @@ class UrgencyControllerUnitTest {
     // UPDATE - NOT FOUND
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturn404WhenUpdateFails() throws Exception {
 
         when(urgencyService.update(eq(1), any(UrgencyDto.class)))
                 .thenThrow(new UrgencyNotFoundException());
 
         mockMvc.perform(put("/urgency/1")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(urgencyDto)))
                 .andDo(print())

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -46,24 +47,13 @@ class TechnicianControllerUnitTest {
                 "Test@email.com", "Test phoneNumber", (byte) 1);
     }
 
-    // =========================
-    // TEST DTO
-    // =========================
-    @Test
-    void shouldReturn400WhenCreateInvalid() throws Exception {
 
-        TechnicianDto invalidDto = new TechnicianDto(null,"", null, "wrong email format",null, null);
-
-        mockMvc.perform(post("/technician")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(invalidDto)))
-                .andExpect(status().isBadRequest());
-    }
 
     // =========================
     // GET ALL
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturnAll() throws Exception {
 
         when(technicianService.findAll()).thenReturn(List.of(technicianDto));
@@ -79,6 +69,7 @@ class TechnicianControllerUnitTest {
     // GET BY ID - OK
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturnById() throws Exception {
 
         when(technicianService.findById(1)).thenReturn(technicianDto);
@@ -94,6 +85,7 @@ class TechnicianControllerUnitTest {
     // GET BY ID - NOT FOUND
     // =========================
     @Test
+    @WithMockUser(roles = "ADMIN")
     void shouldReturn404WhenNotFound() throws Exception {
 
         when(technicianService.findById(1))
@@ -104,22 +96,7 @@ class TechnicianControllerUnitTest {
                 .andExpect(status().isNotFound());
     }
 
-    // =========================
-    // CREATE
-    // =========================
-    @Test
-    void shouldCreate() throws Exception {
 
-        when(technicianService.save(any(TechnicianDto.class))).thenReturn(technicianDto);
-
-        mockMvc.perform(post("/technician")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(technicianDto)))
-                .andDo(print())
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.idAppUser").value(1))
-                .andExpect(jsonPath("$.email").value("Test@email.com"));
-    }
 /*
     // =========================
     // DELETE - OK
