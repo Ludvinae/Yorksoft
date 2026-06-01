@@ -8,23 +8,39 @@ import { TicketSearchCriteria } from '../../models/page/TicketSearchCriteria';
 export class TicketStoreService {
   constructor(private ticketService: TicketService) {}
 
-  // Request
-  filters = signal<TicketSearchCriteria>({ keyword: '' });
+  // Filtres métier
+  filters = signal<TicketSearchCriteria>({});
+
+  // Préférences d'affichage
+  showClosedTickets = signal(true);
+
   page = signal(0);
   size = signal(10);
   sortField = signal('modificationDate');
   sortDirection = signal<'asc' | 'desc'>('desc');
 
-  // Response
   tickets = signal<TicketListDto[]>([]);
   totalPages = signal(0);
   totalElements = signal(0);
   loading = signal(false);
 
-  // COMPUTED
   sort = computed(() => `${this.sortField()},${this.sortDirection()}`);
 
-  // ACTIONS
+  // Filtres réellement envoyés à l'API
+  effectiveFilters = computed(() => {
+    const filters = { ...this.filters() };
+
+    if (filters.closedAfter || filters.closedBefore) {
+      return filters;
+    }
+
+    if (!this.showClosedTickets()) {
+      filters.statusesExcluded = ['CLOSED'];
+    }
+
+    return filters;
+  });
+
   updateFilters(partial: Partial<TicketSearchCriteria>): void {
     this.filters.update((current) => ({
       ...current,
@@ -32,7 +48,6 @@ export class TicketStoreService {
     }));
 
     this.page.set(0);
-
     this.loadTickets();
   }
 
@@ -43,64 +58,38 @@ export class TicketStoreService {
   setFilters(filters: TicketSearchCriteria): void {
     this.filters.set(filters);
 
+    this.page.set(0);
     this.loadTickets();
   }
 
-  setPage(page: number): void {
-    this.page.set(page);
+  setShowClosedTickets(show: boolean): void {
+    this.showClosedTickets.set(show);
 
-    this.loadTickets();
-  }
-
-  nextPage(): void {
-    this.setPage(this.page() + 1);
-  }
-
-  previousPage(): void {
-    this.setPage(this.page() - 1);
-  }
-
-  setSort(field: string): void {
-    if (this.sortField() === field) {
-      this.sortDirection.update((dir) => (dir === 'asc' ? 'desc' : 'asc'));
-    } else {
-      this.sortField.set(field);
-
-      this.sortDirection.set('asc');
-    }
-
+    this.page.set(0);
     this.loadTickets();
   }
 
   loadTickets(): void {
     this.loading.set(true);
 
-    this.ticketService.getTickets(this.filters(), this.page(), this.size(), this.sort()).subscribe({
-      next: (response) => {
-        console.log('API RESPONSE', response);
-        this.tickets.set(response.content);
-        console.log('SIGNAL VALUE', this.tickets());
-
-        this.totalPages.set(response.totalPages);
-
-        this.totalElements.set(response.totalElements);
-
-        this.loading.set(false);
-      },
-
-      error: (err) => {
-        console.error(err);
-
-        this.loading.set(false);
-      },
-    });
-  }
-
-  isFirstPage() {
-    return this.page() === 0;
-  }
-
-  isLastPage() {
-    return this.page() === this.totalPages() - 1;
+    this.ticketService
+      .getTickets(
+        this.effectiveFilters(), // <- important
+        this.page(),
+        this.size(),
+        this.sort(),
+      )
+      .subscribe({
+        next: (response) => {
+          this.tickets.set(response.content);
+          this.totalPages.set(response.totalPages);
+          this.totalElements.set(response.totalElements);
+          this.loading.set(false);
+        },
+        error: (err) => {
+          console.error(err);
+          this.loading.set(false);
+        },
+      });
   }
 }

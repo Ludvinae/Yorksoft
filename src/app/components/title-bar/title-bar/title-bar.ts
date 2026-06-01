@@ -31,6 +31,7 @@ export class TitleBar implements OnInit {
     this.currentUserRole = this.auth.jwtInfo()?.role;
 
     this.showClosedTickets = preference.showClosedTickets;
+    this.store.setShowClosedTickets(this.showClosedTickets);
 
     if (!this.showClosedTickets) {
       this.store.updateFilters({
@@ -44,9 +45,7 @@ export class TitleBar implements OnInit {
 
     switch (filter) {
       case 'open':
-        this.store.updateFilters({
-          assignedTo: undefined,
-          priorityLessThan: undefined,
+        this.store.setFilters({
           statuses: ['OPEN'],
         });
         this.buttonState = 'open';
@@ -54,29 +53,21 @@ export class TitleBar implements OnInit {
 
       case 'assigned':
         // prevoir le cas ou pas d'id user
-        this.store.updateFilters({
+        this.store.setFilters({
           assignedTo: this.auth.jwtInfo()?.id,
-          priorityGreaterThan: undefined,
-          statuses: undefined,
         });
         this.buttonState = 'assigned';
         break;
 
       case 'priority':
-        this.store.updateFilters({
-          assignedTo: undefined,
+        this.store.setFilters({
           priorityGreaterThan: 65,
-          statuses: undefined,
         });
         this.buttonState = 'priority';
         break;
 
       case 'all':
-        this.store.updateFilters({
-          assignedTo: undefined,
-          priorityGreaterThan: undefined,
-          statuses: undefined,
-        });
+        this.store.setFilters({});
         this.buttonState = 'all';
         break;
 
@@ -101,10 +92,6 @@ export class TitleBar implements OnInit {
       showClosedTickets: this.showClosedTickets,
     });
 
-    if (this.showClosedTickets) {
-      this.store.updateFilters({ statusesExcluded: [] });
-    } else {
-      this.store.updateFilters({ statusesExcluded: ['CLOSED'] });
-    }
+    this.store.setShowClosedTickets(this.showClosedTickets);
   }
 }
