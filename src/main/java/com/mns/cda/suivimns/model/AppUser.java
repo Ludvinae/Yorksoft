@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Setter
 @Getter
 @AllArgsConstructor
@@ -33,5 +35,11 @@ public class AppUser {
     // A rendre nullable pour clients ?
     @Column(nullable = false, length = 127)
     protected String password;
+
+    @OneToMany(mappedBy = "author")
+    protected List<Comment> commentList;
+
+    @OneToMany(mappedBy = "actor")
+    protected List<History> historyList;
 
 }

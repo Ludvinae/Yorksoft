@@ -1,5 +1,6 @@
 package com.mns.cda.suivimns.dao;
 
+import com.mns.cda.suivimns.dto.dashboard.activity.UserActivity;
 import com.mns.cda.suivimns.dto.flat.TechnicianWorkloadDetailedDto;
 import com.mns.cda.suivimns.model.Technician;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -28,4 +29,28 @@ public interface TechnicianDao extends JpaRepository<Technician, Integer> {
         ORDER BY COUNT(t), te.rank ASC
     """)
     List<TechnicianWorkloadDetailedDto> getTechnicianWorkload();
+
+
+/*
+    @Query("""
+        SELECT new com.mns.cda.suivimns.dto.dashboard.activity.UserActivity(
+            t.
+        FROM Technician u
+        JOIN u.assignmentList a
+        JOIN a.ticket t
+        WHERE u.idAppUser = :id
+    """)
+    List<UserActivity> getTechnicianAssignmentActivity(int id);
+
+
+    @Query("""
+        SELECT new com.mns.cda.suivimns.dto.dashboard.activity.UserActivity(
+            )
+        FROM Technician u
+        JOIN u.articleList a
+        WHERE u.idAppUser = :id
+    """)
+    List<UserActivity> getTechnicianArticleActivity(int id);
+
+ */
 }

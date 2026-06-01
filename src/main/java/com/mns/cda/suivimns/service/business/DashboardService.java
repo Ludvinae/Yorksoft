@@ -115,6 +115,8 @@ public class DashboardService {
 
         Double timeToSolve = ticketDao.meanTimeToSolveTickets(id, startDate);
 
+
+
         return new DashboardTechnicianDto(open, waiting,  critical, overdue, closedDay, closedWeek, timeToSolve);
     }
 }

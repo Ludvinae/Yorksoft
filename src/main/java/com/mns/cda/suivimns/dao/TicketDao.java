@@ -1,5 +1,6 @@
 package com.mns.cda.suivimns.dao;
 
+import com.mns.cda.suivimns.dto.dashboard.activity.UserActivity;
 import com.mns.cda.suivimns.dto.dashboard.graphs.SoftwareStatDto;
 import com.mns.cda.suivimns.dto.dashboard.graphs.TechnicianWorkloadDto;
 import com.mns.cda.suivimns.dto.dashboard.graphs.ThemeStatDto;
@@ -90,6 +91,9 @@ public interface TicketDao extends JpaRepository<Ticket, Integer>, JpaSpecificat
         ) durations
     """, nativeQuery = true)
     Double meanTimeToSolveTickets(int id, LocalDateTime startDate);
+
+
+
 
     // graphiques
 
