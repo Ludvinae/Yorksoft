@@ -147,8 +147,8 @@
                         <include>**/unit/dto/*</include>
                         <!--
                         <include>**/unit/controller/*</include>
+                         -->
                         <include>**/unit/service/*</include>
-                        -->
                     </includes>
                     <!-- Exclure les tests d'intégration -->
                     <excludes>
