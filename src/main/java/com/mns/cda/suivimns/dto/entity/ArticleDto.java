@@ -11,7 +11,6 @@ public record ArticleDto(
         LocalDateTime modificationDate,
         @NotBlank String title,
         @NotBlank String content,
-        @NotNull Integer idKnowledge,
-        Integer idAuthor
+        @NotNull Integer idKnowledge
 ) {
 }

@@ -1,9 +1,12 @@
 package com.mns.cda.suivimns.service.workflow;
 
 import com.mns.cda.suivimns.enumerate.StatusEnum;
+import com.mns.cda.suivimns.exception.InvalidStatusException;
 import com.mns.cda.suivimns.exception.UnauthorizedTechnicianException;
 import com.mns.cda.suivimns.model.Technician;
 import com.mns.cda.suivimns.model.Ticket;
+import com.mns.cda.suivimns.service.entity.ActivityService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +15,9 @@ import org.springframework.stereotype.Service;
 public class TicketWaitService {
 
     protected final TicketStatusService statusService;
+    protected final ActivityService activityService;
 
+    @Transactional
     public Ticket setWaitingStatus(Ticket ticket, Technician technician, String reason, StatusEnum status) {
 
         Technician assignedTechnician = ticket.getCurrentTechnician();
@@ -20,6 +25,15 @@ public class TicketWaitService {
         if (assignedTechnician == null || !assignedTechnician.equals(technician)) {
             throw new UnauthorizedTechnicianException();
         }
+
+        String target;
+        switch (status) {
+            case WAITING_CLIENT -> target = "client";
+            case WAITING_THIRD_PARTY ->  target = "tiers";
+            default -> throw new InvalidStatusException();
+        }
+
+        activityService.log(technician, "A mis le ticket #" + ticket.getIdTicket() + " en attente d'un " + target);
 
         return statusService.changeStatus(ticket, status, technician, reason);
     }

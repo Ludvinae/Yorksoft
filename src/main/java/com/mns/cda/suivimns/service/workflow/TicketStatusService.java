@@ -6,6 +6,7 @@ import com.mns.cda.suivimns.exception.*;
 import com.mns.cda.suivimns.model.AppUser;
 import com.mns.cda.suivimns.model.History;
 import com.mns.cda.suivimns.model.Ticket;
+import com.mns.cda.suivimns.service.entity.ActivityService;
 import com.mns.cda.suivimns.service.entity.HistoryService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ public class TicketStatusService {
     private final HistoryDao historyDao;
     private final StatusTransition transition;
     private final HistoryService historyService;
+    private final ActivityService activityService;
 
     public StatusEnum getCurrentStatus(Ticket ticket) {
         return ticket.getCurrentStatus();
@@ -43,6 +45,9 @@ public class TicketStatusService {
         }
 
         ticket.setCurrentStatus(StatusEnum.OPEN);
+
+        activityService.log(user, "A ouvert le ticket #" + ticket.getIdTicket());
+
         historyService.addHistory(ticket, user, StatusEnum.OPEN, null);
     }
 

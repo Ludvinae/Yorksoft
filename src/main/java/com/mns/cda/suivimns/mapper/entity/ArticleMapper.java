@@ -30,7 +30,6 @@ public abstract class ArticleMapper {
     public abstract List<ArticleDto> toDtoList(List<Article> article);
 
     @Mapping(target="knowledge", source="idKnowledge")
-    @Mapping(target="technician", source="idAuthor")
     public abstract Article toEntity(ArticleDto dto);
 
 

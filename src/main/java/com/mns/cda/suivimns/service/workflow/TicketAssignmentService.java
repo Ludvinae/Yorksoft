@@ -8,6 +8,7 @@ import com.mns.cda.suivimns.model.Assignment;
 import com.mns.cda.suivimns.model.Manager;
 import com.mns.cda.suivimns.model.Technician;
 import com.mns.cda.suivimns.model.Ticket;
+import com.mns.cda.suivimns.service.entity.ActivityService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ public class TicketAssignmentService {
 
     private final AssignmentDao assignmentDao;
     private final TicketStatusService ticketStatusService;
-    private final StatusTransition transition;
+    private final ActivityService activityService;
 
     private void closeCurrentAssignment(Integer idTicket) {
         assignmentDao.findLatestByTicket(idTicket)
@@ -54,9 +55,13 @@ public class TicketAssignmentService {
 
         assignmentDao.save(assignment);
 
-        // Mettre à jour le ticket avec le technicien assigné, et le manager ayant crée l'affectation
+        // Mettre à jour le ticket avec le technicien assigné, et le manager ayant créé l'affectation
         ticketChanged.setCurrentTechnician(technician);
         ticketChanged.setCurrentManager(manager);
+
+        activityService.log(manager, "A attribué le ticket #" + ticket.getIdTicket() +
+                " à " + technician.getFirstName() + " " + technician.getLastName());
+        activityService.log(technician, "A reçu l'attribution du ticket #" + ticket.getIdTicket());
 
         return ticketChanged;
     }

@@ -29,8 +29,11 @@ public class CommentService  {
 
     protected final CommentDao commentDao;
     protected final CommentMapper commentMapper;
+
     protected final TicketDao ticketDao;
     protected final AppUserDao appUserDao;
+
+    protected final ActivityService activityService;
 
     public List<CommentDto> findAll() {
         return commentMapper.toDtoList(commentDao.findAll());
@@ -52,11 +55,13 @@ public class CommentService  {
         Comment comment = new Comment(null, dto.content(), null, null, ticket, author);
         Comment saved = commentDao.save(comment);
 
+        activityService.log(author, "A commenté le ticket #" + ticket.getIdTicket());
+
         return new TicketDetailComment(saved.getIdComment(), saved.getContent(),
                 saved.getDateSent(), saved.getLastModification(), authorName, appUser.getUserRole(), appUser.getTechnician().getRank());
     }
 
-    public void delete(int id, AppUserDetails userDetails) throws CommentNotFoundException {
+    public void delete(int id, AppUserDetails userDetails) {
         Comment comment = commentDao.findById(id)
                 .orElseThrow(CommentNotFoundException::new);
 
@@ -66,10 +71,13 @@ public class CommentService  {
             throw new CommentNotOwnedException();
         }
 
+        AppUser actor = appUserDao.findById(userDetails.getId()).orElseThrow(AppUserNotFoundException::new);
+        activityService.log(actor, "A effacer le commentaire #" + id);
+
         commentDao.delete(comment);
     }
 
-    public TicketDetailComment update(int id, CommentEditDto commentToUpdate, AppUserDetails userDetails) throws CommentNotFoundException {
+    public TicketDetailComment update(int id, CommentEditDto commentToUpdate, AppUserDetails userDetails) {
 
         Comment currentComment = commentDao.findById(id)
                 .orElseThrow(CommentNotFoundException::new);
@@ -81,9 +89,12 @@ public class CommentService  {
         }
 
         currentComment.setContent(commentToUpdate.content());
-        //commentMapper.updateEntityFromDto(commentToUpdate, currentComment);
 
         Comment commentSaved = commentDao.save(currentComment);
+
+        AppUser editor = appUserDao.findById(userDetails.getId()).orElseThrow(AppUserNotFoundException::new);
+        activityService.log(editor, "A édité le commentaire #" + id);
+
         return ticketDao.ticketDetailComments(commentSaved.getTicket().getIdTicket()).get(id);
 
     }

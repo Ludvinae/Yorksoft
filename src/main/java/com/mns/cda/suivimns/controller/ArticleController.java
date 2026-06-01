@@ -59,8 +59,9 @@ public class ArticleController {
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PostMapping
     @IsTechnician
-    public ResponseEntity<ArticleDto> create(@RequestBody @Valid ArticleDto article) {
-        return new ResponseEntity<>(articleService.save(article), HttpStatus.CREATED);
+    public ResponseEntity<ArticleDto> create(@RequestBody @Valid ArticleDto article,
+                                             @AuthenticationPrincipal AppUserDetails user) {
+        return new ResponseEntity<>(articleService.save(article, user), HttpStatus.CREATED);
     }
 
 
@@ -69,9 +70,9 @@ public class ArticleController {
             @ApiResponse(responseCode = "404", description = "Article non trouvée")})
     @DeleteMapping("/{id}")
     @IsAdmin
-    public ResponseEntity<Void> delete(@PathVariable int id) {
+    public ResponseEntity<Void> delete(@PathVariable int id, @AuthenticationPrincipal AppUserDetails user) {
         try {
-            articleService.delete(id);
+            articleService.delete(id, user);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (ArticleNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

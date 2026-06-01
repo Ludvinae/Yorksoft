@@ -112,6 +112,12 @@ public class GlobalExceptionInterceptor {
         return new ErrorResponseDto(500, "INVALID_USER_ROLE", "Role non reconnu par le serveur");
     }
 
+    @ExceptionHandler(InvalidStatusException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponseDto handleInvalidRole(InvalidStatusException ex) {
+
+        return new ErrorResponseDto(500, "INVALID_STATUS", "Statut non reconnu par le serveur");
+    }
 
 
     @ExceptionHandler(StatusNotFoundException.class)
