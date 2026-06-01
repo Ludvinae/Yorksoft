@@ -235,7 +235,7 @@ INSERT INTO knowledge (subject, id_theme)
 VALUES ('Service Cloud indisponible', 4);
 
 INSERT INTO article (creation_date, modification_date, title, content, id_knowledge, id_technician)
-VALUES ('2024-04-06', null, 'Sauvegarde', 'Explication sur la résolution des problemes de sauvegarde sur le Cloud', 1, 6);
+VALUES ('2024-04-06 09:08:07', null, 'Sauvegarde', 'Explication sur la résolution des problemes de sauvegarde sur le Cloud', 1, 6);
 
 INSERT INTO license (id_software, expiration_date, license_number, id_app_user)
 VALUES ( 1, '2027-12-02', 'azerty123456', 3),
@@ -280,6 +280,11 @@ VALUES (5, 1, '2026-04-11 09:12:00'),
 
 INSERT INTO knowledge_versions (id_version, id_knowledge)
 VALUES (3, 1);
+
+INSERT INTO activity (id_app_user, timestamp, description)
+VALUES (5, NOW(), 'A écrit un commentaire sur le ticket #1'),
+       (6, '2024-04-06 09:08:07', 'A publié un article sur la connaissance #1'),
+       (24, '2026-05-21 15:32:00', 'A ouvert le ticket #17')
 
 
 
