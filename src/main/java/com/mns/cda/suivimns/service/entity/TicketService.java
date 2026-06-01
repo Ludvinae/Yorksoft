@@ -34,6 +34,7 @@ public class TicketService  {
     protected final TicketStatusService statusService;
     protected final TicketAssignmentService assignmentService;
     protected final TicketClassificationService classificationService;
+    protected final TicketOpeningService openingService;
     protected final TicketClosingService closingService;
     protected final TicketProgressService progressService;
     protected final TicketSolvedService solvedService;
@@ -89,7 +90,7 @@ public class TicketService  {
         AppUser creator = appUserDao.findById(principal.getId())
             .orElseThrow(AppUserNotFoundException::new);
 
-        statusService.initializeStatus(ticketSaved, creator);
+        openingService.initializeStatus(ticketSaved, creator);
 
         Theme theme = themeDao.findById(dto.idTheme()).orElseThrow(ThemeNotFoundException::new);
         classificationService.classify(ticketSaved, theme.getCode());

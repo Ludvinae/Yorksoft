@@ -2,11 +2,16 @@ package com.mns.cda.suivimns.unit.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.ArticleController;
+import com.mns.cda.suivimns.dao.AppUserDao;
 import com.mns.cda.suivimns.dto.entity.ArticleDto;
 import com.mns.cda.suivimns.exception.ArticleNotFoundException;
+import com.mns.cda.suivimns.model.AppUser;
+import com.mns.cda.suivimns.model.Technician;
+import com.mns.cda.suivimns.security.AppUserDetails;
 import com.mns.cda.suivimns.service.entity.ArticleService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -19,6 +24,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -42,14 +48,24 @@ class ArticleControllerUnitTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @MockBean
+    private AppUserDao appUserDao;
+
 
     private ArticleDto articleDto;
+    private Technician technician;
+    private AppUserDetails user;
 
     @BeforeEach
     void setUp() {
         // DTO
         articleDto = new ArticleDto(
-                1, LocalDateTime.now(), LocalDateTime.now(), "Test title", "Test content", 1, 1);
+                1, LocalDateTime.now(), LocalDateTime.now(), "Test title", "Test content", 1);
+
+        technician = new Technician();
+        technician.setIdAppUser(1);
+        technician.setRank((byte) 1);
+        user = new AppUserDetails(technician);
     }
 
 
@@ -60,7 +76,7 @@ class ArticleControllerUnitTest {
     @WithMockUser(roles = "ADMIN")
     void shouldReturn400WhenCreateInvalid() throws Exception {
 
-        ArticleDto invalidDto = new ArticleDto(null,null, null, "", null, null, null);
+        ArticleDto invalidDto = new ArticleDto(null,null, null, "", null, null);
 
         mockMvc.perform(post("/article")
                         .with(csrf())
@@ -123,7 +139,9 @@ class ArticleControllerUnitTest {
     @WithMockUser(roles = "ADMIN")
     void shouldCreate() throws Exception {
 
-        when(articleService.save(any(ArticleDto.class))).thenReturn(articleDto);
+        when(articleService.save(any(ArticleDto.class), nullable(AppUserDetails.class))).thenReturn(articleDto);
+
+        when(appUserDao.findById(user.getId())).thenReturn(Optional.of(technician));
 
         mockMvc.perform(post("/article")
                         .with(csrf())
@@ -142,14 +160,16 @@ class ArticleControllerUnitTest {
     @WithMockUser(roles = "ADMIN")
     void shouldDelete() throws Exception {
 
-        doNothing().when(articleService).delete(1);
+        doNothing().when(articleService)
+                .delete(eq(1), nullable(AppUserDetails.class));
 
         mockMvc.perform(delete("/article/1")
                         .with(csrf()))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
-        verify(articleService).delete(1);
+        verify(articleService)
+                .delete(eq(1), nullable(AppUserDetails.class));
     }
 
     // =========================
@@ -160,7 +180,8 @@ class ArticleControllerUnitTest {
     void shouldReturn404WhenDeleteNotFound() throws Exception {
 
         doThrow(new ArticleNotFoundException())
-                .when(articleService).delete(1);
+                .when(articleService)
+                .delete(eq(1), isNull());
 
         mockMvc.perform(delete("/article/1")
                         .with(csrf()))

@@ -22,7 +22,7 @@ public class ArticleDtoUnitTest {
     @Test
     public void articleWithBlankContent_shouldNotBeValid() {
         ArticleDto article = new ArticleDto(1, LocalDateTime.now(), LocalDateTime.now(),
-                "Test title", "", 1, 1);
+                "Test title", "", 1);
 
         boolean constraintExists = TestUtils.constraintViolationExists(
                 validator.validate(article),
@@ -37,7 +37,7 @@ public class ArticleDtoUnitTest {
     @Test
     public void validArticleWithNullKnowledge_shouldNotBeValid() {
         ArticleDto article = new ArticleDto(1, LocalDateTime.now(), LocalDateTime.now(),
-                "Test title", "Test content", null, 1);
+                "Test title", "Test content", null);
 
         boolean constraintExists = TestUtils.constraintViolationExists(
                 validator.validate(article),
@@ -53,7 +53,7 @@ public class ArticleDtoUnitTest {
     @Test
     public void articleWithValidData_shouldBeValid() {
         ArticleDto article = new ArticleDto(1, LocalDateTime.now(), LocalDateTime.now(),
-                "Test title", "Test content", 1, 1);
+                "Test title", "Test content", 1);
 
         Assertions.assertTrue(
                 validator.validate(article).isEmpty(),

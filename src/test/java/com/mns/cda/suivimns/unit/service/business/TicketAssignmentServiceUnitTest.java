@@ -8,6 +8,7 @@ import com.mns.cda.suivimns.model.Assignment;
 import com.mns.cda.suivimns.model.Manager;
 import com.mns.cda.suivimns.model.Technician;
 import com.mns.cda.suivimns.model.Ticket;
+import com.mns.cda.suivimns.service.entity.ActivityService;
 import com.mns.cda.suivimns.service.workflow.StatusTransition;
 import com.mns.cda.suivimns.service.workflow.TicketAssignmentService;
 import com.mns.cda.suivimns.service.workflow.TicketStatusService;
@@ -34,11 +35,11 @@ public class TicketAssignmentServiceUnitTest {
     @Mock
     private TicketStatusService ticketStatusService;
 
-    @Mock
-    private StatusTransition transition;
-
     @InjectMocks
     private TicketAssignmentService service;
+
+    @Mock
+    private ActivityService activityService;
 
     private Ticket ticket;
     private Manager manager;
@@ -55,6 +56,8 @@ public class TicketAssignmentServiceUnitTest {
 
         technician = new Technician();
         technician.setIdAppUser(5);
+        technician.setFirstName("FirstName");
+        technician.setLastName("LastName");
     }
 
     // =========================================================

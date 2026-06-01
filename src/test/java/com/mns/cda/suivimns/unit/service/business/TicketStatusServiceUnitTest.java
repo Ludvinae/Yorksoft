@@ -9,6 +9,7 @@ import com.mns.cda.suivimns.model.History;
 import com.mns.cda.suivimns.model.Ticket;
 import com.mns.cda.suivimns.service.entity.HistoryService;
 import com.mns.cda.suivimns.service.workflow.StatusTransition;
+import com.mns.cda.suivimns.service.workflow.TicketOpeningService;
 import com.mns.cda.suivimns.service.workflow.TicketStatusService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,6 +40,7 @@ public class TicketStatusServiceUnitTest {
     @InjectMocks
     private TicketStatusService service;
 
+
     private Ticket ticket;
     private AppUser user;
 
@@ -64,37 +66,6 @@ public class TicketStatusServiceUnitTest {
         assertEquals(StatusEnum.OPEN, result);
     }
 
-    // =========================================================
-    // initializeStatus
-    // =========================================================
-
-    @Test
-    void initializeStatus_shouldInitializeTicket() throws Exception {
-
-        service.initializeStatus(ticket, user);
-
-        assertEquals(StatusEnum.OPEN, ticket.getCurrentStatus());
-
-        verify(historyService).addHistory(
-                ticket,
-                user,
-                StatusEnum.OPEN,
-                null
-        );
-    }
-
-    @Test
-    void initializeStatus_shouldThrowIfAlreadyInitialized() {
-
-        ticket.setCurrentStatus(StatusEnum.OPEN);
-
-        assertThrows(
-                IllegalStateException.class,
-                () -> service.initializeStatus(ticket, user)
-        );
-
-        verify(historyService, never()).addHistory(any(), any(), any(), any());
-    }
 
     // =========================================================
     // changeStatus

@@ -36,20 +36,6 @@ public class TicketStatusService {
         currentHistory.setEndDate(LocalDateTime.now());
     }
 
-    @Transactional
-    public void initializeStatus(Ticket ticket, AppUser user) {
-
-        // Verifier que le ticket n'a pas déja un statut
-        if (ticket.getCurrentStatus() != null) {
-            throw new IllegalStateException("Ticket already initialized");
-        }
-
-        ticket.setCurrentStatus(StatusEnum.OPEN);
-
-        activityService.log(user, "A ouvert le ticket #" + ticket.getIdTicket());
-
-        historyService.addHistory(ticket, user, StatusEnum.OPEN, null);
-    }
 
     @Transactional
     public Ticket changeStatus(Ticket ticket,StatusEnum newStatus,AppUser user, String statusReason) {

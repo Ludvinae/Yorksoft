@@ -23,7 +23,6 @@ public abstract class ArticleMapper {
     protected TechnicianDao technicianDao;
 
     @Mapping(target = "idKnowledge", source = "knowledge")
-    @Mapping(target = "idAuthor", source = "technician")
     public abstract ArticleDto toDto(Article article);
 
     //@Mapping(target = "idArticleType", source = "articleType")
@@ -54,6 +53,5 @@ public abstract class ArticleMapper {
     // Method helper pour Update
     @Mapping(target = "idArticle", ignore = true)
     @Mapping(target = "knowledge", source = "idKnowledge")
-    @Mapping(target = "technician", source = "idAuthor")
     public abstract void updateEntityFromDto(ArticleDto dto, @MappingTarget Article entity);
 }
