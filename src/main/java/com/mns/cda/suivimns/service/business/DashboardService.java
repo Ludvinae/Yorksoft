@@ -9,9 +9,12 @@ import com.mns.cda.suivimns.dto.dashboard.graphs.TicketStatusStatDto;
 import com.mns.cda.suivimns.exception.TechnicianNotFoundException;
 import com.mns.cda.suivimns.service.security.SecurityService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 
-import javax.security.sasl.AuthenticationException;
+import java.time.temporal.TemporalAdjusters;
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -42,7 +45,7 @@ public class DashboardService {
         if (securityService.isTechnician()) {
             return getTechnicianStats(startDate);
         }
-        throw new AuthenticationException();
+        throw new AuthenticationCredentialsNotFoundException("Authentication credentials not found");
     }
 
     private DashboardAdminDto getAdminStats(LocalDateTime startDate) {
@@ -97,13 +100,21 @@ public class DashboardService {
             throw new TechnicianNotFoundException();
         }
 
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime today = now.toLocalDate().atStartOfDay();
+        LocalDateTime startOfWeek = now.toLocalDate()
+                .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+                .atStartOfDay();
+
         int open = ticketDao.countAssignedOpenTickets(id);
         int waiting = ticketDao.countAssignedWaitingTickets(id);
         int critical = ticketDao.countAssignedCriticalTickets(id);
         int overdue = ticketDao.countAssignedOverdueTickets(id);
+        int closedDay = ticketDao.countClosedSinceDate(id, today);
+        int closedWeek = ticketDao.countClosedSinceDate(id, startOfWeek);
 
         Double timeToSolve = ticketDao.meanTimeToSolveTickets(id, startDate);
 
-        return new DashboardTechnicianDto(open, waiting,  critical, overdue, timeToSolve);
+        return new DashboardTechnicianDto(open, waiting,  critical, overdue, closedDay, closedWeek, timeToSolve);
     }
 }

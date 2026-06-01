@@ -1,14 +1,12 @@
 package com.mns.cda.suivimns.dto.dashboard;
 
-import com.mns.cda.suivimns.dto.dashboard.graphs.TechnicianWorkloadDto;
-
-import java.util.List;
-
 public record DashboardTechnicianDto(
     int assignedOpenTickets,
     int assignedWaitingTickets,
     int assignedCriticalTickets,
     int assignedOverdueTickets,
+    int closedToday,
+    int closedThisWeek,
 
     Double meanTimeToSolveTickets
 

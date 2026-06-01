@@ -64,6 +64,15 @@ public interface TicketDao extends JpaRepository<Ticket, Integer>, JpaSpecificat
     int countAssignedOverdueTickets(int id);
 
 
+    @Query("""
+        SELECT COUNT(t)
+        FROM Ticket t
+        WHERE t.closeDate >= :startDate
+        AND t.currentTechnician.idAppUser = :id
+    """)
+    int countClosedSinceDate(int id, LocalDateTime startDate);
+
+
     @Query(value = """
         SELECT AVG(ticket_duration)
         FROM (
