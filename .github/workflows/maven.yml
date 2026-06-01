@@ -31,12 +31,14 @@ jobs:
     - name: Update DB_HOST in application.properties, to database service name in docker-compose (postgres)
       run: sed -i 's/ ${DB_HOST} /postgres/' src/main/resources/application.properties
 
-    - name: Build with Maven
-      run: mvn -B package --file pom.xml
-
 
     - name: Rename /example.env to .env
       run: mv .example.env .env
+
+
+    - name: Build with Maven
+      run: mvn -B package --file pom.xml
+
 
     - name: Build Docker image
       run: docker build -t bchamplon/suivi-mns-26-back .
