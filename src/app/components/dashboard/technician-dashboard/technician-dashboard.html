@@ -27,7 +27,7 @@
               <app-kpi-card
                 title="Ouverts"
                 [value]="dashboard.assignedOpenTickets"
-                icon="ph ph-open-book"
+                icon="ph ph-book-open"
                 colorClass="text-info"
                 [filters]="{ isNotClosed: true, assignedTo: jwt()!.id }"
               />
@@ -54,6 +54,22 @@
                 icon="ph ph-alarm"
                 colorClass="text-error"
                 [filters]="{ isOverdue: true, isNotClosed: true, assignedTo: jwt()!.id  }"
+              />
+
+              <app-kpi-card
+                title="Aujourd'hui"
+                [value]="dashboard.closedToday"
+                icon="ph ph-calendar-dot"
+                colorClass="text-success"
+                [filters]="{ closedAfter: today.toString(), statuses: ['CLOSED'], assignedTo: jwt()!.id  }"
+              />
+
+              <app-kpi-card
+                title="Cette semaine"
+                [value]="dashboard.closedThisWeek"
+                icon="ph ph-calendar-dots"
+                colorClass="text-success"
+                [filters]="{ closedAfter: startOfWeek.toString(), statuses: ['CLOSED'], assignedTo: jwt()!.id  }"
               />
 
 

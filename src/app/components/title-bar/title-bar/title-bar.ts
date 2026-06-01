@@ -15,7 +15,7 @@ export class TitleBar implements OnInit {
   auth = inject(AuthService);
   preferences = inject(UserPreferencesService);
 
-  buttonState = 'all';
+  buttonState = 'none';
   currentUserRole: string | undefined = undefined;
 
   search = '';
@@ -78,6 +78,11 @@ export class TitleBar implements OnInit {
           statuses: undefined,
         });
         this.buttonState = 'all';
+        break;
+
+      default:
+        this.store.resetFilters();
+        this.buttonState = 'none';
         break;
     }
   }

@@ -3,6 +3,8 @@ type DashboardTechnicianDto = {
   assignedWaitingTickets: number;
   assignedCriticalTickets: number;
   assignedOverdueTickets: number;
+  closedToday: number;
+  closedThisWeek: number;
 
   meanTimeToSolveTickets: number | null;
 };

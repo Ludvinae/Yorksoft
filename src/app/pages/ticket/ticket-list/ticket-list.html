@@ -94,10 +94,10 @@
             <tr>
               <td class="align-middle">{{ ticket.title }}</td>
               <td class="align-middle">{{ ticket.openDate | date: 'short'}}</td>
-              <td class="align-middle">{{ ticket.currentTheme }}</td>
+              <td class="align-middle">{{ ticket.currentTheme | themeLabel }}</td>
               <td class="align-middle">{{ ticket.softwareName }}</td>
               <td class="align-middle">{{ ticket.versionNumber }} {{ ticket.versionTypeCode }}</td>
-              <td class="align-middle">{{ ticket.currentStatus }}</td>
+              <td class="align-middle">{{ ticket.currentStatus | statusLabel }}</td>
               <td class="align-middle"><app-badge-priority [priority]="ticket.currentPriority"/></td>
               <td class="align-middle">
                 <app-badge-sla [overdue]="ticket.overdue"

@@ -1,10 +1,10 @@
 export enum StatusEnum {
-  OPEN = 'OPEN',
-  ASSIGNED = 'ASSIGNED',
-  IN_PROGRESS = 'IN_PROGRESS',
-  WAITING_CLIENT = 'WAITING_CLIENT',
-  WAITING_THIRD_PARTY = 'WAITING_THIRD_PARTY',
-  SOLVED = 'SOLVED',
-  CLOSED = 'CLOSED',
-  REJECTED = 'REJECTED',
+  OPEN = 'Ouvert',
+  ASSIGNED = 'Assigné',
+  IN_PROGRESS = 'En cours',
+  WAITING_CLIENT = 'Attente client',
+  WAITING_THIRD_PARTY = 'Attente tiers',
+  SOLVED = 'Résolu',
+  CLOSED = 'Clos',
+  REJECTED = 'Rejeté',
 }

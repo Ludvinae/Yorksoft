@@ -1,9 +1,9 @@
 export enum ThemeEnum {
-  HANDLING_ERROR = 'HANDLING_ERROR',
-  SYSTEM_ERROR = 'SYSTEM_ERROR',
-  NETWORK_ISSUE = 'NETWORK_ISSUE',
-  RESPONSE_TIME = 'RESPONSE_TIME',
-  BUG = 'BUG',
-  CONFIGURATION_ERROR = 'CONFIGURATION_ERROR',
-  OTHER_ISSUE = 'OTHER_ISSUE'
+  HANDLING_ERROR = 'Manipulation',
+  SYSTEM_ERROR = 'Système',
+  NETWORK_ISSUE = 'Réseau',
+  RESPONSE_TIME = 'Temps de réponse',
+  BUG = 'Bug',
+  CONFIGURATION_ERROR = 'Configuration',
+  OTHER_ISSUE = 'Autres'
 }

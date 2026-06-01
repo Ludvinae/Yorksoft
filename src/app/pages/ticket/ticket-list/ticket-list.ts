@@ -8,6 +8,8 @@ import { RouterLink } from '@angular/router';
 import { AssignTicketModal } from '../../../components/ticket/assign-ticket-modal/assign-ticket-modal';
 import { BadgePriority } from '../../../components/ticket/badge-priority/badge-priority';
 import { BadgeSla } from '../../../components/ticket/badge-sla/badge-sla';
+import { StatusLabel } from '../../../pipe/StatusLabel';
+import { ThemeLabel } from '../../../pipe/ThemeLabel';
 
 @Component({
   selector: 'app-ticket-list',
@@ -19,6 +21,8 @@ import { BadgeSla } from '../../../components/ticket/badge-sla/badge-sla';
     AssignTicketModal,
     BadgePriority,
     BadgeSla,
+    StatusLabel,
+    ThemeLabel,
   ],
   templateUrl: './ticket-list.html',
   styleUrl: './ticket-list.css',
@@ -56,11 +60,13 @@ export class TicketList implements OnInit {
   }
 
   assign(ticket: TicketListDto): void {
-    this.selectedTicket = { idTicket: ticket.idTicket,
-                            currentPriority: ticket.currentPriority,
-                            overdue: ticket.overdue,
-                            predictedDeadline: ticket.predictedDeadline,
-                            idTechnician: ticket.idTechnician }
+    this.selectedTicket = {
+      idTicket: ticket.idTicket,
+      currentPriority: ticket.currentPriority,
+      overdue: ticket.overdue,
+      predictedDeadline: ticket.predictedDeadline,
+      idTechnician: ticket.idTechnician,
+    };
 
     queueMicrotask(() => {
       this.assignModal.open();

@@ -163,7 +163,7 @@
 
               <td>
                 <div class="badge badge-outline">
-                  {{ ticket.currentStatus }}
+                  {{ ticket.currentStatus | statusLabel }}
                 </div>
               </td>
 
@@ -173,11 +173,8 @@
                   [ngClass]="{
         'badge-error': ticket.currentPriority > 66,
         'badge-info': ticket.currentPriority < 33,
-        'badge-warning': ticket.currentPriority <= 66  && ticket.currentPriority >= 33,
-      }">
-
+        'badge-warning': ticket.currentPriority <= 66  && ticket.currentPriority >= 33}">
                   {{ ticket.currentPriority }}
-
                 </div>
               </td>
 

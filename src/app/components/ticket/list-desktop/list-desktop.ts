@@ -3,10 +3,12 @@ import { FormsModule } from '@angular/forms';
 import { DatePipe, NgClass } from '@angular/common';
 import { TicketService } from '../../../services/api/ticket-service';
 import { TicketSearchCriteria } from '../../../models/page/TicketSearchCriteria';
+import { StatusEnum } from '../../../models/enum/StatusEnum';
+import { StatusLabel } from '../../../pipe/StatusLabel';
 
 @Component({
   selector: 'app-list-desktop',
-  imports: [FormsModule, DatePipe, NgClass],
+  imports: [FormsModule, DatePipe, NgClass, StatusLabel],
   templateUrl: './list-desktop.html',
   styleUrl: './list-desktop.css',
 })
@@ -104,4 +106,5 @@ export class ListDesktop implements OnInit {
       this.loadTickets();
     }, 300);
   }
+
 }
