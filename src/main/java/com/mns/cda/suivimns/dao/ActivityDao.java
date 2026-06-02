@@ -13,7 +13,7 @@ public interface ActivityDao extends JpaRepository<Activity, Integer> {
 
     @Query("""
         SELECT new com.mns.cda.suivimns.dto.dashboard.activity.UserActivity(
-            a.description, a.timestamp
+            a.idActivity, a.description, a.timestamp
             )
         FROM Activity a
         ORDER BY a.timestamp DESC

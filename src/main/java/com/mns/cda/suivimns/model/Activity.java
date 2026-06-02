@@ -22,7 +22,7 @@ public class Activity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer idActivity;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_app_user", nullable = false)
