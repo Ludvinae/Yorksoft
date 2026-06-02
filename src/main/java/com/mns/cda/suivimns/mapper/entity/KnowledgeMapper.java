@@ -4,6 +4,7 @@ import com.mns.cda.suivimns.dao.ProcedureDao;
 import com.mns.cda.suivimns.dao.ThemeDao;
 import com.mns.cda.suivimns.dao.VersionDao;
 import com.mns.cda.suivimns.dto.entity.KnowledgeDto;
+import com.mns.cda.suivimns.dto.search.KnowledgeSelect;
 import com.mns.cda.suivimns.model.Procedure;
 import com.mns.cda.suivimns.model.Knowledge;
 import com.mns.cda.suivimns.model.Theme;
@@ -28,10 +29,12 @@ public abstract class KnowledgeMapper {
     @Autowired
     protected ProcedureDao procedureDao;
 
+    public abstract KnowledgeSelect toKnowledgeSelect(Knowledge knowledge);
+
+    public abstract List<KnowledgeSelect> toKnowledgeSelectList(List<Knowledge> knowledgeList);
 
     @Mapping(target = "idTheme", source = "theme")
     @Mapping(target = "versionIds", source = "versionList")
-    @Mapping(target = "procedureIds", source = "procedureList")
     public abstract KnowledgeDto toDto(Knowledge knowledge);
 
     //@Mapping(target = "idKnowledgeType", source = "knowledgeType")
@@ -39,7 +42,6 @@ public abstract class KnowledgeMapper {
 
     @Mapping(target="theme", source="idTheme")
     @Mapping(target = "versionList", source = "versionIds")
-    @Mapping(target = "procedureList", source = "procedureIds")
     public abstract Knowledge toEntity(KnowledgeDto dto);
 
 
@@ -88,7 +90,6 @@ public abstract class KnowledgeMapper {
 
     // Method helper pour Update
     @Mapping(target = "idKnowledge", ignore = true)
-    @Mapping(target = "procedureList", ignore = true)
     @Mapping(target = "theme", source = "idTheme")
     @Mapping(target = "versionList", ignore = true)
     public abstract void updateEntityFromDto(KnowledgeDto dto, @MappingTarget Knowledge entity);

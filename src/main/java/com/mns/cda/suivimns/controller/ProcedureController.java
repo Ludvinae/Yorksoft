@@ -81,7 +81,7 @@ public class ProcedureController {
 
 
     @Operation(summary = "Modifie une procedure en fonction de son ID",
-            description = "Modifie les champs 'subject', 'theme' et 'procedureList' d'une procedure")
+            description = "Modifie les champs 'subject', 'contenu' d'une procedure")
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Procedure modifiée avec succés"),
             @ApiResponse(responseCode = "404", description = "Procedure non trouvée"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})

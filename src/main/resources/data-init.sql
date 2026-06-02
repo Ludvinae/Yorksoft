@@ -231,11 +231,58 @@ VALUES ('2026-04-11 09:27:00', null, 1, 4, 5),
        ('2026-03-03 13:24', null,  4, 4, 5);
 
 
-INSERT INTO knowledge (subject, id_theme)
-VALUES ('Service Cloud indisponible', 4);
+INSERT INTO knowledge(subject, description, resolution, id_theme)
+VALUES(
+        'Profil Outlook corrompu après changement de mot de passe',
+        'Après un changement de mot de passe, Outlook conserve parfois des jetons d''authentification invalides.',
+        'Supprimer puis recréer le profil Outlook.', 1),
+        ('Boîte mail saturée',
+        'L''utilisateur ne peut plus envoyer ou recevoir de messages lorsque son quota est atteint.',
+        'Archiver ou supprimer des messages afin de libérer de l''espace.',
+        1),
+        ('Mot de passe expiré',
+        'Le compte utilisateur a dépassé sa durée de validité.',
+        'Réinitialiser le mot de passe et forcer son renouvellement.',
+        2),
+        ('Compte verrouillé après tentatives multiples',
+        'Le compte a été verrouillé suite à plusieurs échecs d''authentification.',
+        'Déverrouiller le compte depuis l''annuaire.',
+        2),
+        ('Impression bloquée dans la file d''attente',
+        'Le spooler d''impression conserve des travaux corrompus.',
+        'Vider la file d''attente puis redémarrer le service Spooler.',
+        3),
+        ('Erreur PDF sur version 4.2',
+        'L''export PDF échoue à cause d''une bibliothèque défectueuse.',
+        'Installer le correctif PDF fourni avec la version 4.2.1.',
+        4),
+        ('Connexion VPN impossible après mise à jour',
+        'Le certificat local est devenu invalide après une mise à jour du client VPN.',
+        'Réinstaller le certificat et redémarrer le poste.',
+        5),
+        ('Licence expirée',
+        'La licence du logiciel est arrivée à expiration.',
+        'Importer une nouvelle licence valide.',
+        6),
+        ('Service applicatif arrêté',
+        'Le service principal du logiciel n''est plus démarré.',
+        'Redémarrer le service et vérifier les journaux.',
+        7),
+        ('Erreur de connexion à la base de données',
+        'Le logiciel ne peut plus joindre le serveur de base de données.',
+        'Vérifier la connectivité réseau et les paramètres de connexion.',
+        7);
+
+INSERT INTO knowledge_versions(id_knowledge, id_version)
+VALUES  (1, 1), (1, 2), (2, 1),
+        (2, 2), (3, 1), (3, 2),
+        (4, 1), (5, 3), (6, 4),
+        (7, 5), (8, 6), (9, 4),
+        (10, 4);
 
 INSERT INTO procedure (creation_date, modification_date, title, content, id_knowledge, id_technician)
-VALUES ('2024-04-06 09:08:07', null, 'Sauvegarde', 'Explication sur la résolution des problemes de sauvegarde sur le Cloud', 1, 6);
+VALUES ('2024-04-06 09:08:07', null, 'Sauvegarde',
+        'Explication sur la résolution des problèmes de sauvegarde sur le Cloud', 1, 6);
 
 INSERT INTO license (id_software, expiration_date, license_number, id_app_user)
 VALUES ( 1, '2027-12-02', 'azerty123456', 3),

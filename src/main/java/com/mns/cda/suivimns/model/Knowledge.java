@@ -40,6 +40,6 @@ public class Knowledge {
     @OnDelete(action= OnDeleteAction.SET_NULL)
     protected List<Version> versionList;
 
-    @OneToMany(mappedBy = "knowledge")
-    protected List<Procedure> procedureList;
+    @OneToOne(mappedBy = "knowledge")
+    protected Procedure procedure;
 }

@@ -1,6 +1,8 @@
 package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.entity.KnowledgeDto;
+import com.mns.cda.suivimns.dto.search.KnowledgeSelect;
+import com.mns.cda.suivimns.dto.search.KnowledgeSearch;
 import com.mns.cda.suivimns.exception.KnowledgeNotFoundException;
 import com.mns.cda.suivimns.security.IsAdmin;
 import com.mns.cda.suivimns.security.IsTechnician;
@@ -90,5 +92,11 @@ public class KnowledgeController {
         } catch (KnowledgeNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @PostMapping("search")
+    @IsTechnician
+    public ResponseEntity<List<KnowledgeSelect>> search(@RequestBody KnowledgeSearch request) {
+        return new ResponseEntity<>(knowledgeService.search(request), HttpStatus.OK);
     }
 }
