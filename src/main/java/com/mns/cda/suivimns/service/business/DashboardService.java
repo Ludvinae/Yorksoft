@@ -2,11 +2,14 @@ package com.mns.cda.suivimns.service.business;
 
 import com.mns.cda.suivimns.dao.TicketDao;
 import com.mns.cda.suivimns.dto.dashboard.*;
+import com.mns.cda.suivimns.dto.dashboard.activity.UserActivity;
 import com.mns.cda.suivimns.dto.dashboard.graphs.SoftwareStatDto;
 import com.mns.cda.suivimns.dto.dashboard.graphs.TechnicianWorkloadDto;
 import com.mns.cda.suivimns.dto.dashboard.graphs.ThemeStatDto;
 import com.mns.cda.suivimns.dto.dashboard.graphs.TicketStatusStatDto;
+import com.mns.cda.suivimns.exception.ManagerNotFoundException;
 import com.mns.cda.suivimns.exception.TechnicianNotFoundException;
+import com.mns.cda.suivimns.service.entity.ActivityService;
 import com.mns.cda.suivimns.service.security.SecurityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
@@ -24,6 +27,7 @@ public class DashboardService {
 
     private final TicketDao ticketDao;
     private final SecurityService securityService;
+    private final ActivityService activityService;
 
     public DashboardDto getStats(Integer timeframeInDays)
             throws AuthenticationException {
@@ -49,16 +53,35 @@ public class DashboardService {
     }
 
     private DashboardAdminDto getAdminStats(LocalDateTime startDate) {
+        Integer id = securityService.getCurrentUserId();
+        if (id == null) {
+            throw new TechnicianNotFoundException();
+        }
+
         int closed = ticketDao.closedTicketsWithoutEndDate();
 
-        return new DashboardAdminDto(closed);
+        List<UserActivity> activities = activityService.activityFeed(id);
+
+        return new DashboardAdminDto(closed, activities);
     }
 
     private DashboardDirectorDto getDirectorStats(LocalDateTime startDate) {
-        return new DashboardDirectorDto();
+        Integer id = securityService.getCurrentUserId();
+        if (id == null) {
+            throw new TechnicianNotFoundException();
+        }
+
+        List<UserActivity> activities = activityService.activityFeed(id);
+
+        return new DashboardDirectorDto(activities);
     }
 
     private DashboardManagerDto getManagerStats(LocalDateTime startDate, Integer timeframeInDays) {
+
+        Integer id = securityService.getCurrentUserId();
+        if (id == null) {
+            throw new ManagerNotFoundException();
+        }
 
         int open = ticketDao.countOpenTickets();
         int progress = ticketDao.countInProgressTickets();
@@ -89,9 +112,11 @@ public class DashboardService {
         List<SoftwareStatDto> software = ticketDao.countTicketsBySoftware();
         List<ThemeStatDto> theme = ticketDao.countTicketsByTheme();
 
+        List<UserActivity> activities = activityService.activityFeed(id);
+
         return new DashboardManagerDto(open, progress, waiting, priority, overdue, unassigned,
                 resolutionInMinutes, reponseInMinutes, callInMinutes, affectations,
-                closedDay, closedWeek, workload, status, software, theme);
+                closedDay, closedWeek, workload, status, software, theme, activities);
     }
 
     private DashboardTechnicianDto  getTechnicianStats(LocalDateTime startDate) {
@@ -115,8 +140,8 @@ public class DashboardService {
 
         Double timeToSolve = ticketDao.meanTimeToSolveTickets(id, startDate);
 
+        List<UserActivity> activities = activityService.activityFeed(id);
 
-
-        return new DashboardTechnicianDto(open, waiting,  critical, overdue, closedDay, closedWeek, timeToSolve);
+        return new DashboardTechnicianDto(open, waiting,  critical, overdue, closedDay, closedWeek, timeToSolve, activities);
     }
 }

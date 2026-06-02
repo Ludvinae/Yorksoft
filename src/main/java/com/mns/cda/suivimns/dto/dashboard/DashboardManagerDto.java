@@ -1,5 +1,6 @@
 package com.mns.cda.suivimns.dto.dashboard;
 
+import com.mns.cda.suivimns.dto.dashboard.activity.UserActivity;
 import com.mns.cda.suivimns.dto.dashboard.graphs.SoftwareStatDto;
 import com.mns.cda.suivimns.dto.dashboard.graphs.TechnicianWorkloadDto;
 import com.mns.cda.suivimns.dto.dashboard.graphs.ThemeStatDto;
@@ -26,8 +27,9 @@ public record DashboardManagerDto(
         List<TechnicianWorkloadDto> techniciansWorkload,
         List<TicketStatusStatDto> ticketsByStatus,
         List<SoftwareStatDto> ticketsBySoftware,
-        List<ThemeStatDto> ticketsByTheme
+        List<ThemeStatDto> ticketsByTheme,
 
+        List<UserActivity> activities
 
         /* A ajouter plus tard
         List<TicketEvolutionDto> ticketEvolution

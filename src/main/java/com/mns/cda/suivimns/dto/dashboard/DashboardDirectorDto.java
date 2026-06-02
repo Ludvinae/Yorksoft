@@ -1,6 +1,12 @@
 package com.mns.cda.suivimns.dto.dashboard;
 
-public record DashboardDirectorDto() implements DashboardDto {
+import com.mns.cda.suivimns.dto.dashboard.activity.UserActivity;
+
+import java.util.List;
+
+public record DashboardDirectorDto(
+        List<UserActivity> activities
+) implements DashboardDto {
 }
         /*
     Directeur

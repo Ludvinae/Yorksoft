@@ -1,5 +1,9 @@
 package com.mns.cda.suivimns.dto.dashboard;
 
+import com.mns.cda.suivimns.dto.dashboard.activity.UserActivity;
+
+import java.util.List;
+
 public record DashboardTechnicianDto(
     int assignedOpenTickets,
     int assignedWaitingTickets,
@@ -8,7 +12,9 @@ public record DashboardTechnicianDto(
     int closedToday,
     int closedThisWeek,
 
-    Double meanTimeToSolveTickets
+    Double meanTimeToSolveTickets,
+
+    List<UserActivity> activities
 
 
 ) implements DashboardDto {}
