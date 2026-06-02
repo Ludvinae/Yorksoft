@@ -100,7 +100,10 @@ public class Ticket {
     @OnDelete(action = OnDeleteAction.SET_NULL)
     protected Client client;
 
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_knowledge")
+    @OnDelete(action = OnDeleteAction.SET_NULL)
+    protected Knowledge knowledge;
 
 
     // Review later to see if it's still relevant

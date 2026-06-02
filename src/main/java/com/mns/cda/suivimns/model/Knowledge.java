@@ -24,6 +24,10 @@ public class Knowledge {
     @Column(nullable = false)
     protected String subject;
 
+    protected String description;
+
+    protected String resolution;
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_theme", nullable = false)
     @OnDelete(action= OnDeleteAction.CASCADE)
