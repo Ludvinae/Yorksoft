@@ -3,10 +3,11 @@ import { KpiCard } from '../cards/kpi-card/kpi-card';
 import { DashboardService } from '../../../services/business/dashboard-service';
 import { AuthService } from '../../../services/business/auth-service';
 import { DecimalPipe } from '@angular/common';
+import {ActivityFeed} from '../../activity-feed/activity-feed';
 
 @Component({
   selector: 'app-technician-dashboard',
-  imports: [KpiCard, DecimalPipe],
+  imports: [KpiCard, DecimalPipe, ActivityFeed],
   templateUrl: './technician-dashboard.html',
   styleUrl: './technician-dashboard.css',
 })

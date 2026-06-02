@@ -8,5 +8,5 @@ type DashboardTechnicianDto = {
 
   meanTimeToSolveTickets: number | null;
 
-  activities: List<UserActivity>;
+  activities: UserActivity[];
 };
