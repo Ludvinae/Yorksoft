@@ -18,4 +18,6 @@ type DashboardManagerDto = {
   ticketsByStatus: List<TicketStatusStatDto>;
   ticketsBySoftware : List<TicketSoftwareStatDto>;
   ticketsByTheme: List<TicketThemeStatDto>;
+
+  activities: List<UserActivity>
 };

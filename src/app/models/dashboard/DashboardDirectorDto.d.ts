@@ -1,1 +1,3 @@
-type DashboardDirectorDto = {}
+type DashboardDirectorDto = {
+  activities: List<UserActivity>;
+}
