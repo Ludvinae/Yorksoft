@@ -6,6 +6,7 @@ import { DashboardService } from '../../../services/business/dashboard-service';
 import { TechnicianWorkloadChart } from '../cards/technician-workload-chart/technician-workload-chart';
 import { TicketSoftwareChart } from '../cards/ticket-software-chart/ticket-software-chart';
 import { TicketThemeChart } from '../cards/ticket-theme-chart/ticket-theme-chart';
+import {ActivityFeed} from '../../activity-feed/activity-feed';
 
 @Component({
   selector: 'app-manager-dashboard',
@@ -16,6 +17,7 @@ import { TicketThemeChart } from '../cards/ticket-theme-chart/ticket-theme-chart
     TechnicianWorkloadChart,
     TicketSoftwareChart,
     TicketThemeChart,
+    ActivityFeed,
   ],
   templateUrl: './manager-dashboard.html',
   styleUrl: './manager-dashboard.css',
