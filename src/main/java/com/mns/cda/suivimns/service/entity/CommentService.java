@@ -57,8 +57,10 @@ public class CommentService  {
 
         activityService.log(author, "A commenté le ticket #" + ticket.getIdTicket());
 
+        Byte rank = appUser.getUserRole().equals("TECHNICIAN") ? appUser.getTechnician().getRank() : null;
+
         return new TicketDetailComment(saved.getIdComment(), saved.getContent(),
-                saved.getDateSent(), saved.getLastModification(), authorName, appUser.getUserRole(), appUser.getTechnician().getRank());
+                saved.getDateSent(), saved.getLastModification(), authorName, appUser.getUserRole(), rank);
     }
 
     public void delete(int id, AppUserDetails userDetails) {

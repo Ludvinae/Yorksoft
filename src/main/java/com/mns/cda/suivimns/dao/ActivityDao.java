@@ -16,6 +16,7 @@ public interface ActivityDao extends JpaRepository<Activity, Integer> {
             a.idActivity, a.description, a.timestamp
             )
         FROM Activity a
+        JOIN a.user u ON u.idAppUser = :userId
         ORDER BY a.timestamp DESC
         LIMIT 20
     """)
