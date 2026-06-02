@@ -12,7 +12,17 @@
         <div class="flex gap-3 items-start">
 
           <div class="mt-1">
-            <div class="badge badge-primary badge-sm"></div>
+            @if (activity.activityType == ActivityType.TICKET) {
+              <i class="ph ph-ticket text-xl"></i>
+            } @else if (activity.activityType == ActivityType.ARTICLE) {
+              <i class="ph ph-article text-xl"></i>
+            } @else if (activity.activityType == ActivityType.COMMENT) {
+              <i class="ph ph-chat text-xl"></i>
+            } @else if (activity.activityType == ActivityType.ASSIGNMENT) {
+              <i class="ph ph-hand-deposit text-xl"></i>
+            } @else {
+              <i class="ph ph-bookmark text-xl"></i>
+            }
           </div>
 
           <div class="flex-1">
@@ -22,7 +32,7 @@
             </p>
 
             <p class="text-xs text-base-content/60">
-              {{ activity.activityTimestamp | date:'dd/MM/yyyy HH:mm' }}
+              {{ activity.activityTimestamp | timesAgo }}
             </p>
 
           </div>
