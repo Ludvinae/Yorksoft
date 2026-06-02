@@ -17,7 +17,7 @@ public interface ActivityDao extends JpaRepository<Activity, Integer> {
             )
         FROM Activity a
         ORDER BY a.timestamp DESC
-        LIMIT 10
+        LIMIT 20
     """)
     List<UserActivity> activityFeed(Integer userId);
 }

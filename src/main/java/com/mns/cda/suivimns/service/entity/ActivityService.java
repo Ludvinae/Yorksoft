@@ -25,8 +25,8 @@ public class ActivityService {
         activityDao.save(activity);
     }
 
-public List<UserActivity> activityFeed(Integer userId) {
+    public List<UserActivity> activityFeed(Integer userId) {
         return activityDao.activityFeed(userId);
-}
+    }
 
 }

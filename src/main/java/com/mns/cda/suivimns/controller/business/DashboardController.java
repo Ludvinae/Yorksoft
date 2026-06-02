@@ -1,6 +1,7 @@
 package com.mns.cda.suivimns.controller.business;
 
 import com.mns.cda.suivimns.dto.dashboard.DashboardDto;
+import com.mns.cda.suivimns.security.AppUserDetails;
 import com.mns.cda.suivimns.security.IsEmployee;
 import com.mns.cda.suivimns.service.business.DashboardService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -27,9 +29,10 @@ public class DashboardController {
                     @ApiResponse(responseCode = "401", description = "Non autorisé à accéder à cette ressource")})
     @GetMapping("/dashboard/{timeframeInDays}")
     @IsEmployee
-    public ResponseEntity<DashboardDto> getStats(@PathVariable Integer timeframeInDays) {
+    public ResponseEntity<DashboardDto> getStats(@PathVariable Integer timeframeInDays,
+                                                 @AuthenticationPrincipal AppUserDetails principal) {
         try {
-            return new ResponseEntity<>(dashboardService.getStats(timeframeInDays), HttpStatus.OK);
+            return new ResponseEntity<>(dashboardService.getStats(timeframeInDays, principal), HttpStatus.OK);
         }
         catch (AuthenticationException e) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);

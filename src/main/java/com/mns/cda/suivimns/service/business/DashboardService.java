@@ -7,8 +7,7 @@ import com.mns.cda.suivimns.dto.dashboard.graphs.SoftwareStatDto;
 import com.mns.cda.suivimns.dto.dashboard.graphs.TechnicianWorkloadDto;
 import com.mns.cda.suivimns.dto.dashboard.graphs.ThemeStatDto;
 import com.mns.cda.suivimns.dto.dashboard.graphs.TicketStatusStatDto;
-import com.mns.cda.suivimns.exception.ManagerNotFoundException;
-import com.mns.cda.suivimns.exception.TechnicianNotFoundException;
+import com.mns.cda.suivimns.security.AppUserDetails;
 import com.mns.cda.suivimns.service.entity.ActivityService;
 import com.mns.cda.suivimns.service.security.SecurityService;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +28,7 @@ public class DashboardService {
     private final SecurityService securityService;
     private final ActivityService activityService;
 
-    public DashboardDto getStats(Integer timeframeInDays)
+    public DashboardDto getStats(Integer timeframeInDays, AppUserDetails principal)
             throws AuthenticationException {
 
         int timeframe = (timeframeInDays != null && timeframeInDays > 0)
@@ -38,25 +37,22 @@ public class DashboardService {
         LocalDateTime startDate = now.minusDays(timeframe);
 
         if (securityService.isAdmin()) {
-            return getAdminStats(startDate);
+            return getAdminStats(startDate, principal);
         }
         if (securityService.isDirector()) {
-            return getDirectorStats(startDate);
+            return getDirectorStats(startDate, principal);
         }
         if (securityService.isManager()) {
-            return getManagerStats(startDate, timeframe);
+            return getManagerStats(startDate, timeframe, principal);
         }
         if (securityService.isTechnician()) {
-            return getTechnicianStats(startDate);
+            return getTechnicianStats(startDate, principal);
         }
         throw new AuthenticationCredentialsNotFoundException("Authentication credentials not found");
     }
 
-    private DashboardAdminDto getAdminStats(LocalDateTime startDate) {
-        Integer id = securityService.getCurrentUserId();
-        if (id == null) {
-            throw new TechnicianNotFoundException();
-        }
+    private DashboardAdminDto getAdminStats(LocalDateTime startDate, AppUserDetails principal) {
+        Integer id = principal.getId();
 
         int closed = ticketDao.closedTicketsWithoutEndDate();
 
@@ -65,23 +61,16 @@ public class DashboardService {
         return new DashboardAdminDto(closed, activities);
     }
 
-    private DashboardDirectorDto getDirectorStats(LocalDateTime startDate) {
-        Integer id = securityService.getCurrentUserId();
-        if (id == null) {
-            throw new TechnicianNotFoundException();
-        }
+    private DashboardDirectorDto getDirectorStats(LocalDateTime startDate, AppUserDetails principal) {
+        Integer id = principal.getId();
 
         List<UserActivity> activities = activityService.activityFeed(id);
 
         return new DashboardDirectorDto(activities);
     }
 
-    private DashboardManagerDto getManagerStats(LocalDateTime startDate, Integer timeframeInDays) {
-
-        Integer id = securityService.getCurrentUserId();
-        if (id == null) {
-            throw new ManagerNotFoundException();
-        }
+    private DashboardManagerDto getManagerStats(LocalDateTime startDate, Integer timeframeInDays, AppUserDetails principal) {
+        Integer id = principal.getId();
 
         int open = ticketDao.countOpenTickets();
         int progress = ticketDao.countInProgressTickets();
@@ -119,11 +108,8 @@ public class DashboardService {
                 closedDay, closedWeek, workload, status, software, theme, activities);
     }
 
-    private DashboardTechnicianDto  getTechnicianStats(LocalDateTime startDate) {
-        Integer id = securityService.getCurrentUserId();
-        if (id == null) {
-            throw new TechnicianNotFoundException();
-        }
+    private DashboardTechnicianDto  getTechnicianStats(LocalDateTime startDate, AppUserDetails principal) {
+        Integer id = principal.getId();
 
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime today = now.toLocalDate().atStartOfDay();
