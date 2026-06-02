@@ -1,11 +1,10 @@
 import {Component, Input} from '@angular/core';
-import {DatePipe } from '@angular/common';
 import { ActivityType } from '../../models/enum/ActivityType';
 import { TimesAgoPipe } from '../../pipe/times-ago-pipe';
 
 @Component({
   selector: 'app-activity-feed',
-  imports: [DatePipe, TimesAgoPipe],
+  imports: [TimesAgoPipe],
   templateUrl: './activity-feed.html',
   styleUrl: './activity-feed.css',
 })
