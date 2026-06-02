@@ -62,12 +62,51 @@ export class TicketStoreService {
     this.loadTickets();
   }
 
+  setPage(page: number): void {
+    this.page.set(page);
+
+    this.loadTickets();
+  }
+
+  isFirstPage():boolean {
+    return this.page() <= 0
+  }
+
+  isLastPage(): boolean {
+    return this.page() >= this.totalPages() - 1;
+  }
+
+  previousPage(): void {
+    if (!this.isFirstPage()) {
+      this.setPage(this.page() - 1);
+    }
+  }
+
+  nextPage(): void {
+    if (!this.isLastPage()) {
+      this.setPage(this.page() + 1);
+    }
+  }
+
+  setSort(field: string): void {
+    if (this.sortField() === field) {
+      this.sortDirection.update((dir) => (dir === 'asc' ? 'desc' : 'asc'));
+    } else {
+      this.sortField.set(field);
+
+      this.sortDirection.set('asc');
+    }
+
+    this.loadTickets();
+  }
+
   setShowClosedTickets(show: boolean): void {
     this.showClosedTickets.set(show);
 
     this.page.set(0);
     this.loadTickets();
   }
+
 
   loadTickets(): void {
     this.loading.set(true);
