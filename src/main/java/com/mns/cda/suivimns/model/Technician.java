@@ -22,5 +22,5 @@ public class Technician extends AppUser{
     protected List<Assignment> assignmentList;
 
     @OneToMany(mappedBy = "technician")
-    protected List<Article> articleList;
+    protected List<Procedure> procedureList;
 }

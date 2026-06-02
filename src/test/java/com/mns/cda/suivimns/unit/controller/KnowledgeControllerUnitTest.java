@@ -47,11 +47,11 @@ class KnowledgeControllerUnitTest {
         List<Integer> versions = new ArrayList<>();
         versions.add(1);
 
-        List<Integer> articles = new ArrayList<>();
-        articles.add(1);
+        List<Integer> procedures = new ArrayList<>();
+        procedures.add(1);
 
         knowledgeDto = new KnowledgeDto(
-                1, "Test subject", 1, versions, articles);
+                1, "Test subject", 1, versions, procedures);
 
     }
 

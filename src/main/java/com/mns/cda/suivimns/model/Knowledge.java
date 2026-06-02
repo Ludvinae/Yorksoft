@@ -41,5 +41,5 @@ public class Knowledge {
     protected List<Version> versionList;
 
     @OneToMany(mappedBy = "knowledge")
-    protected List<Article> articleList;
+    protected List<Procedure> procedureList;
 }

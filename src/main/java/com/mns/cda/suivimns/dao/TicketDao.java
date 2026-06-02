@@ -1,11 +1,10 @@
 package com.mns.cda.suivimns.dao;
 
-import com.mns.cda.suivimns.dto.dashboard.activity.UserActivity;
 import com.mns.cda.suivimns.dto.dashboard.graphs.SoftwareStatDto;
 import com.mns.cda.suivimns.dto.dashboard.graphs.TechnicianWorkloadDto;
 import com.mns.cda.suivimns.dto.dashboard.graphs.ThemeStatDto;
 import com.mns.cda.suivimns.dto.dashboard.graphs.TicketStatusStatDto;
-import com.mns.cda.suivimns.dto.details.TicketDetailArticle;
+import com.mns.cda.suivimns.dto.details.TicketDetailProcedure;
 import com.mns.cda.suivimns.dto.details.TicketDetailComment;
 import com.mns.cda.suivimns.dto.details.TicketDetailDto;
 import com.mns.cda.suivimns.dto.details.TicketDetailKnowledge;
@@ -305,13 +304,13 @@ public interface TicketDao extends JpaRepository<Ticket, Integer>, JpaSpecificat
 
 
     @Query("""
-        SELECT new com.mns.cda.suivimns.dto.details.TicketDetailArticle(
-            a.idArticle, a.creationDate, a.modificationDate, a.title, a.content)
-        FROM Article a
+        SELECT new com.mns.cda.suivimns.dto.details.TicketDetailProcedure(
+            a.idProcedure, a.creationDate, a.modificationDate, a.title, a.content)
+        FROM Procedure a
         JOIN a.knowledge k
         WHERE k.idKnowledge = :idKnowledge
     """)
-    List<TicketDetailArticle>  ticketDetailArticles(Integer idKnowledge);
+    List<TicketDetailProcedure>  ticketDetailProcedures(Integer idKnowledge);
 
     @Query("""
         SELECT new com.mns.cda.suivimns.dto.details.TicketDetailComment(

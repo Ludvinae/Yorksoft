@@ -11,6 +11,6 @@ public record KnowledgeDto(
         @NotBlank @Size(max = 255) String subject,
         @NotNull Integer idTheme,
         List<Integer> versionIds,
-        List<Integer> articleIds
+        List<Integer> procedureIds
 ) {
 }

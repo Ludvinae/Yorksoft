@@ -5,8 +5,8 @@ import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 
-public record ArticleDto(
-        Integer idArticle,
+public record ProcedureDto(
+        Integer idProcedure,
         LocalDateTime creationDate,
         LocalDateTime modificationDate,
         @NotBlank String title,

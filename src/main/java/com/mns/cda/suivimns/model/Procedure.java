@@ -19,11 +19,11 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-public class Article {
+public class Procedure {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected Integer idArticle;
+    protected Integer idProcedure;
 
     @CreatedDate
     @Column(updatable = false)

@@ -47,10 +47,10 @@ public interface TechnicianDao extends JpaRepository<Technician, Integer> {
         SELECT new com.mns.cda.suivimns.dto.dashboard.activity.UserActivity(
             )
         FROM Technician u
-        JOIN u.articleList a
+        JOIN u.procedureList a
         WHERE u.idAppUser = :id
     """)
-    List<UserActivity> getTechnicianArticleActivity(int id);
+    List<UserActivity> getTechnicianProcedureActivity(int id);
 
  */
 }

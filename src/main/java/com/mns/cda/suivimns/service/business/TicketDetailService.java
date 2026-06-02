@@ -35,16 +35,16 @@ public class TicketDetailService {
 
         TicketDetailDto details = ticketDao.ticketDetail(idTicket);
         TicketDetailKnowledge knowledge = ticketDao.ticketKnowledge(details.currentTheme(), details.idVersion());
-        List<TicketDetailArticle> articles;
+        List<TicketDetailProcedure> procedures;
         if (knowledge != null) {
-             articles = ticketDao.ticketDetailArticles(knowledge.idKnowledge());
+             procedures = ticketDao.ticketDetailProcedures(knowledge.idKnowledge());
         } else {
-            articles = List.of();
+            procedures = List.of();
         }
 
         List<TicketDetailComment> comments = ticketDao.ticketDetailComments(idTicket);
         List<StatusEnum> statusList = transition.getAllowedTransitions(details.currentStatus()).stream().toList();
 
-        return new  TicketDetailFullDto(details, comments, knowledge, articles, statusList);
+        return new  TicketDetailFullDto(details, comments, knowledge, procedures, statusList);
     }
 }

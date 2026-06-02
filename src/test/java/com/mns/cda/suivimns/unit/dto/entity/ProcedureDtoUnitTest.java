@@ -1,7 +1,7 @@
 package com.mns.cda.suivimns.unit.dto.entity;
 
 import com.mns.cda.suivimns.TestUtils;
-import com.mns.cda.suivimns.dto.entity.ArticleDto;
+import com.mns.cda.suivimns.dto.entity.ProcedureDto;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import org.junit.jupiter.api.Assertions;
@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 
-public class ArticleDtoUnitTest {
+public class ProcedureDtoUnitTest {
 
     protected static Validator validator;
 
@@ -20,12 +20,12 @@ public class ArticleDtoUnitTest {
     }
 
     @Test
-    public void articleWithBlankContent_shouldNotBeValid() {
-        ArticleDto article = new ArticleDto(1, LocalDateTime.now(), LocalDateTime.now(),
+    public void procedureWithBlankContent_shouldNotBeValid() {
+        ProcedureDto procedure = new ProcedureDto(1, LocalDateTime.now(), LocalDateTime.now(),
                 "Test title", "", 1);
 
         boolean constraintExists = TestUtils.constraintViolationExists(
-                validator.validate(article),
+                validator.validate(procedure),
                 "content",
                 "NotBlank"
         );
@@ -35,29 +35,29 @@ public class ArticleDtoUnitTest {
 
 
     @Test
-    public void validArticleWithNullKnowledge_shouldNotBeValid() {
-        ArticleDto article = new ArticleDto(1, LocalDateTime.now(), LocalDateTime.now(),
+    public void validProcedureWithNullKnowledge_shouldNotBeValid() {
+        ProcedureDto procedure = new ProcedureDto(1, LocalDateTime.now(), LocalDateTime.now(),
                 "Test title", "Test content", null);
 
         boolean constraintExists = TestUtils.constraintViolationExists(
-                validator.validate(article),
+                validator.validate(procedure),
                 "idKnowledge",
                 "NotNull"
         );
 
-        Assertions.assertTrue(constraintExists, "Article should have a knowledge associated");
+        Assertions.assertTrue(constraintExists, "Procedure should have a knowledge associated");
     }
 
     // ---------- valid case ----------
 
     @Test
-    public void articleWithValidData_shouldBeValid() {
-        ArticleDto article = new ArticleDto(1, LocalDateTime.now(), LocalDateTime.now(),
+    public void procedureWithValidData_shouldBeValid() {
+        ProcedureDto procedure = new ProcedureDto(1, LocalDateTime.now(), LocalDateTime.now(),
                 "Test title", "Test content", 1);
 
         Assertions.assertTrue(
-                validator.validate(article).isEmpty(),
-                "ArticleDto should be valid"
+                validator.validate(procedure).isEmpty(),
+                "ProcedureDto should be valid"
         );
     }
 }

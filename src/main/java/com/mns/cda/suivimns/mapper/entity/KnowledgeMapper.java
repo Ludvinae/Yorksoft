@@ -1,10 +1,10 @@
 package com.mns.cda.suivimns.mapper.entity;
 
-import com.mns.cda.suivimns.dao.ArticleDao;
+import com.mns.cda.suivimns.dao.ProcedureDao;
 import com.mns.cda.suivimns.dao.ThemeDao;
 import com.mns.cda.suivimns.dao.VersionDao;
 import com.mns.cda.suivimns.dto.entity.KnowledgeDto;
-import com.mns.cda.suivimns.model.Article;
+import com.mns.cda.suivimns.model.Procedure;
 import com.mns.cda.suivimns.model.Knowledge;
 import com.mns.cda.suivimns.model.Theme;
 import com.mns.cda.suivimns.model.Version;
@@ -26,12 +26,12 @@ public abstract class KnowledgeMapper {
     protected VersionDao versionDao;
 
     @Autowired
-    protected ArticleDao articleDao;
+    protected ProcedureDao procedureDao;
 
 
     @Mapping(target = "idTheme", source = "theme")
     @Mapping(target = "versionIds", source = "versionList")
-    @Mapping(target = "articleIds", source = "articleList")
+    @Mapping(target = "procedureIds", source = "procedureList")
     public abstract KnowledgeDto toDto(Knowledge knowledge);
 
     //@Mapping(target = "idKnowledgeType", source = "knowledgeType")
@@ -39,7 +39,7 @@ public abstract class KnowledgeMapper {
 
     @Mapping(target="theme", source="idTheme")
     @Mapping(target = "versionList", source = "versionIds")
-    @Mapping(target = "articleList", source = "articleIds")
+    @Mapping(target = "procedureList", source = "procedureIds")
     public abstract Knowledge toEntity(KnowledgeDto dto);
 
 
@@ -56,11 +56,11 @@ public abstract class KnowledgeMapper {
                 .toList();
     }
 
-    protected List<Article> mapIdsToArticles(List<Integer> ids) {
+    protected List<Procedure> mapIdsToProcedures(List<Integer> ids) {
         if (ids == null) return null;
 
         return ids.stream()
-                .map(articleDao::getReferenceById)
+                .map(procedureDao::getReferenceById)
                 .toList();
     }
 
@@ -78,17 +78,17 @@ public abstract class KnowledgeMapper {
                 .toList();
     }
 
-    protected List<Integer> mapArticlesToIds(List<Article> articles) {
-        if (articles == null) return null;
+    protected List<Integer> mapProceduresToIds(List<Procedure> procedures) {
+        if (procedures == null) return null;
 
-        return articles.stream()
-                .map(Article::getIdArticle)
+        return procedures.stream()
+                .map(Procedure::getIdProcedure)
                 .toList();
     }
 
     // Method helper pour Update
     @Mapping(target = "idKnowledge", ignore = true)
-    @Mapping(target = "articleList", ignore = true)
+    @Mapping(target = "procedureList", ignore = true)
     @Mapping(target = "theme", source = "idTheme")
     @Mapping(target = "versionList", ignore = true)
     public abstract void updateEntityFromDto(KnowledgeDto dto, @MappingTarget Knowledge entity);

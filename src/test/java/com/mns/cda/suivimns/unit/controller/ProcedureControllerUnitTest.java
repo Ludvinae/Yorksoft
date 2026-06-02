@@ -1,28 +1,23 @@
 package com.mns.cda.suivimns.unit.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mns.cda.suivimns.controller.ArticleController;
+import com.mns.cda.suivimns.controller.ProcedureController;
 import com.mns.cda.suivimns.dao.AppUserDao;
-import com.mns.cda.suivimns.dto.entity.ArticleDto;
-import com.mns.cda.suivimns.exception.ArticleNotFoundException;
-import com.mns.cda.suivimns.model.AppUser;
+import com.mns.cda.suivimns.dto.entity.ProcedureDto;
+import com.mns.cda.suivimns.exception.ProcedureNotFoundException;
 import com.mns.cda.suivimns.model.Technician;
 import com.mns.cda.suivimns.security.AppUserDetails;
-import com.mns.cda.suivimns.service.entity.ArticleService;
+import com.mns.cda.suivimns.service.entity.ProcedureService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.ApplicationContext;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,14 +28,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = ArticleController.class)
-class ArticleControllerUnitTest {
+@WebMvcTest(controllers = ProcedureController.class)
+class ProcedureControllerUnitTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private ArticleService articleService;
+    private ProcedureService procedureService;
 
     @MockBean
     private org.springframework.data.jpa.mapping.JpaMetamodelMappingContext jpaMetamodelMappingContext;
@@ -52,14 +47,14 @@ class ArticleControllerUnitTest {
     private AppUserDao appUserDao;
 
 
-    private ArticleDto articleDto;
+    private ProcedureDto procedureDto;
     private Technician technician;
     private AppUserDetails user;
 
     @BeforeEach
     void setUp() {
         // DTO
-        articleDto = new ArticleDto(
+        procedureDto = new ProcedureDto(
                 1, LocalDateTime.now(), LocalDateTime.now(), "Test title", "Test content", 1);
 
         technician = new Technician();
@@ -76,9 +71,9 @@ class ArticleControllerUnitTest {
     @WithMockUser(roles = "ADMIN")
     void shouldReturn400WhenCreateInvalid() throws Exception {
 
-        ArticleDto invalidDto = new ArticleDto(null,null, null, "", null, null);
+        ProcedureDto invalidDto = new ProcedureDto(null,null, null, "", null, null);
 
-        mockMvc.perform(post("/article")
+        mockMvc.perform(post("/procedure")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(invalidDto)))
@@ -92,12 +87,12 @@ class ArticleControllerUnitTest {
     @WithMockUser(roles = "ADMIN")
     void shouldReturnAll() throws Exception {
 
-        when(articleService.findAll()).thenReturn(List.of(articleDto));
+        when(procedureService.findAll()).thenReturn(List.of(procedureDto));
 
-        mockMvc.perform(get("/article/list"))
+        mockMvc.perform(get("/procedure/list"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].idArticle").value(1))
+                .andExpect(jsonPath("$[0].idProcedure").value(1))
                 .andExpect(jsonPath("$[0].content").value("Test content"));
     }
 
@@ -108,12 +103,12 @@ class ArticleControllerUnitTest {
     @WithMockUser(roles = "ADMIN")
     void shouldReturnById() throws Exception {
 
-        when(articleService.findById(1)).thenReturn(articleDto);
+        when(procedureService.findById(1)).thenReturn(procedureDto);
 
-        mockMvc.perform(get("/article/1"))
+        mockMvc.perform(get("/procedure/1"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.idArticle").value(1))
+                .andExpect(jsonPath("$.idProcedure").value(1))
                 .andExpect(jsonPath("$.content").value("Test content"));
     }
 
@@ -124,10 +119,10 @@ class ArticleControllerUnitTest {
     @WithMockUser(roles = "ADMIN")
     void shouldReturn404WhenNotFound() throws Exception {
 
-        when(articleService.findById(1))
-                .thenThrow(new ArticleNotFoundException());
+        when(procedureService.findById(1))
+                .thenThrow(new ProcedureNotFoundException());
 
-        mockMvc.perform(get("/article/1"))
+        mockMvc.perform(get("/procedure/1"))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
@@ -139,17 +134,17 @@ class ArticleControllerUnitTest {
     @WithMockUser(roles = "ADMIN")
     void shouldCreate() throws Exception {
 
-        when(articleService.save(any(ArticleDto.class), nullable(AppUserDetails.class))).thenReturn(articleDto);
+        when(procedureService.save(any(ProcedureDto.class), nullable(AppUserDetails.class))).thenReturn(procedureDto);
 
         when(appUserDao.findById(user.getId())).thenReturn(Optional.of(technician));
 
-        mockMvc.perform(post("/article")
+        mockMvc.perform(post("/procedure")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(articleDto)))
+                        .content(objectMapper.writeValueAsString(procedureDto)))
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.idArticle").value(1))
+                .andExpect(jsonPath("$.idProcedure").value(1))
                 .andExpect(jsonPath("$.content").value("Test content"));
     }
 
@@ -160,15 +155,15 @@ class ArticleControllerUnitTest {
     @WithMockUser(roles = "ADMIN")
     void shouldDelete() throws Exception {
 
-        doNothing().when(articleService)
+        doNothing().when(procedureService)
                 .delete(eq(1), nullable(AppUserDetails.class));
 
-        mockMvc.perform(delete("/article/1")
+        mockMvc.perform(delete("/procedure/1")
                         .with(csrf()))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
-        verify(articleService)
+        verify(procedureService)
                 .delete(eq(1), nullable(AppUserDetails.class));
     }
 
@@ -179,11 +174,11 @@ class ArticleControllerUnitTest {
     @WithMockUser(roles = "ADMIN")
     void shouldReturn404WhenDeleteNotFound() throws Exception {
 
-        doThrow(new ArticleNotFoundException())
-                .when(articleService)
+        doThrow(new ProcedureNotFoundException())
+                .when(procedureService)
                 .delete(eq(1), isNull());
 
-        mockMvc.perform(delete("/article/1")
+        mockMvc.perform(delete("/procedure/1")
                         .with(csrf()))
                 .andDo(print())
                 .andExpect(status().isNotFound());
@@ -195,11 +190,11 @@ class ArticleControllerUnitTest {
     @Test
     void shouldUpdate() throws Exception {
 
-        when(articleService.update(eq(1), any(ArticleDto.class))).thenReturn(articleDto);
+        when(procedureService.update(eq(1), any(ProcedureDto.class))).thenReturn(procedureDto);
 
-        mockMvc.perform(put("/article/1")
+        mockMvc.perform(put("/procedure/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(articleDto)))
+                        .content(objectMapper.writeValueAsString(procedureDto)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content").value("Test content"));
@@ -211,12 +206,12 @@ class ArticleControllerUnitTest {
     @Test
     void shouldReturn404WhenUpdateFails() throws Exception {
 
-        when(articleService.update(eq(1), any(ArticleDto.class)))
-                .thenThrow(new ArticleService.ArticleNotFoundException());
+        when(procedureService.update(eq(1), any(ProcedureDto.class)))
+                .thenThrow(new ProcedureService.ProcedureNotFoundException());
 
-        mockMvc.perform(put("/article/1")
+        mockMvc.perform(put("/procedure/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(articleDto)))
+                        .content(objectMapper.writeValueAsString(procedureDto)))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
