@@ -7,6 +7,7 @@ import com.mns.cda.suivimns.dto.details.TicketDetailComment;
 import com.mns.cda.suivimns.dto.entity.CommentDto;
 import com.mns.cda.suivimns.dto.flat.CommentEditDto;
 import com.mns.cda.suivimns.dto.flat.PostCommentDto;
+import com.mns.cda.suivimns.enumerate.ActivityType;
 import com.mns.cda.suivimns.exception.AppUserNotFoundException;
 import com.mns.cda.suivimns.exception.CommentNotFoundException;
 import com.mns.cda.suivimns.exception.CommentNotOwnedException;
@@ -55,7 +56,7 @@ public class CommentService  {
         Comment comment = new Comment(null, dto.content(), null, null, ticket, author);
         Comment saved = commentDao.save(comment);
 
-        activityService.log(author, "A commenté le ticket #" + ticket.getIdTicket());
+        activityService.log(author, "A commenté le ticket #" + ticket.getIdTicket(), ActivityType.COMMENT);
 
         Byte rank = appUser.getUserRole().equals("TECHNICIAN") ? appUser.getTechnician().getRank() : null;
 
@@ -74,7 +75,7 @@ public class CommentService  {
         }
 
         AppUser actor = appUserDao.findById(userDetails.getId()).orElseThrow(AppUserNotFoundException::new);
-        activityService.log(actor, "A effacer le commentaire #" + id);
+        activityService.log(actor, "A effacer le commentaire #" + id, ActivityType.COMMENT);
 
         commentDao.delete(comment);
     }
@@ -95,7 +96,7 @@ public class CommentService  {
         Comment commentSaved = commentDao.save(currentComment);
 
         AppUser editor = appUserDao.findById(userDetails.getId()).orElseThrow(AppUserNotFoundException::new);
-        activityService.log(editor, "A édité le commentaire #" + id);
+        activityService.log(editor, "A édité le commentaire #" + id, ActivityType.COMMENT);
 
         return ticketDao.ticketDetailComments(commentSaved.getTicket().getIdTicket()).get(id);
 

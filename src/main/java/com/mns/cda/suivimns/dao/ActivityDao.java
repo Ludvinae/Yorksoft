@@ -13,7 +13,7 @@ public interface ActivityDao extends JpaRepository<Activity, Integer> {
 
     @Query("""
         SELECT new com.mns.cda.suivimns.dto.dashboard.activity.UserActivity(
-            a.idActivity, a.description, a.timestamp
+            a.idActivity, a.description, a.timestamp, a.activityType
             )
         FROM Activity a
         JOIN a.user u ON u.idAppUser = :userId

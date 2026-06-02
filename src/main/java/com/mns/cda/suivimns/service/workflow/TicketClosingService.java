@@ -1,5 +1,6 @@
 package com.mns.cda.suivimns.service.workflow;
 
+import com.mns.cda.suivimns.enumerate.ActivityType;
 import com.mns.cda.suivimns.enumerate.StatusEnum;
 import com.mns.cda.suivimns.exception.TicketAlreadyClosedException;
 import com.mns.cda.suivimns.model.AppUser;
@@ -31,7 +32,7 @@ public class TicketClosingService {
         Ticket ticketChanged = statusService.changeStatus(ticket, StatusEnum.CLOSED, user, closingReason);
         ticketChanged.setCloseDate(LocalDateTime.now());
 
-        activityService.log(user, "A clos le ticket #" + ticket.getIdTicket());
+        activityService.log(user, "A clos le ticket #" + ticket.getIdTicket(), ActivityType.TICKET);
 
         return ticketChanged;
     }

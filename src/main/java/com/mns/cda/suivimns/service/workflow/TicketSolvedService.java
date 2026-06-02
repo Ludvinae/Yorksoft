@@ -1,5 +1,6 @@
 package com.mns.cda.suivimns.service.workflow;
 
+import com.mns.cda.suivimns.enumerate.ActivityType;
 import com.mns.cda.suivimns.enumerate.StatusEnum;
 import com.mns.cda.suivimns.exception.MissingTicketSolutionException;
 import com.mns.cda.suivimns.exception.UnauthorizedTechnicianException;
@@ -31,7 +32,8 @@ public class TicketSolvedService {
             throw new MissingTicketSolutionException();
         }
 
-        activityService.log(technician, "A proposé une solution pour le ticket #" + ticket.getIdTicket());
+        activityService.log(technician, "A proposé une solution pour le ticket #" + ticket.getIdTicket(),
+                ActivityType.TICKET);
 
         return statusService.changeStatus(ticket, StatusEnum.SOLVED, technician, reason);
 

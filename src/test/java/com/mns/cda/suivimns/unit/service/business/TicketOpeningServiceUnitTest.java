@@ -1,6 +1,7 @@
 package com.mns.cda.suivimns.unit.service.business;
 
 import com.mns.cda.suivimns.dao.HistoryDao;
+import com.mns.cda.suivimns.enumerate.ActivityType;
 import com.mns.cda.suivimns.enumerate.StatusEnum;
 import com.mns.cda.suivimns.exception.IllegalStatusTransitionException;
 import com.mns.cda.suivimns.model.AppUser;
@@ -61,10 +62,9 @@ public class TicketOpeningServiceUnitTest {
 
         assertEquals(StatusEnum.OPEN, ticket.getCurrentStatus());
 
-        verify(activityService).log(
-                user,
-                "A ouvert le ticket #" + ticket.getIdTicket()
-        );
+        verify(activityService).log(user,
+                "A ouvert le ticket #" + ticket.getIdTicket(),
+                ActivityType.TICKET);
 
         verify(historyService).addHistory(
                 ticket,

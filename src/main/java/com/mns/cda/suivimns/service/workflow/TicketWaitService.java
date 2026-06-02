@@ -1,5 +1,6 @@
 package com.mns.cda.suivimns.service.workflow;
 
+import com.mns.cda.suivimns.enumerate.ActivityType;
 import com.mns.cda.suivimns.enumerate.StatusEnum;
 import com.mns.cda.suivimns.exception.InvalidStatusException;
 import com.mns.cda.suivimns.exception.UnauthorizedTechnicianException;
@@ -33,7 +34,9 @@ public class TicketWaitService {
             default -> throw new InvalidStatusException();
         }
 
-        activityService.log(technician, "A mis le ticket #" + ticket.getIdTicket() + " en attente d'un " + target);
+        activityService.log(technician,
+                "A mis le ticket #" + ticket.getIdTicket() + " en attente d'un " + target,
+                ActivityType.TICKET);
 
         return statusService.changeStatus(ticket, status, technician, reason);
     }

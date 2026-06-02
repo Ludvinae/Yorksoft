@@ -1,5 +1,6 @@
 package com.mns.cda.suivimns.model;
 
+import com.mns.cda.suivimns.enumerate.ActivityType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -34,4 +35,7 @@ public class Activity {
 
     @Column(nullable = false)
     private String description;
+
+    @Enumerated(EnumType.STRING)
+    private ActivityType activityType;
 }

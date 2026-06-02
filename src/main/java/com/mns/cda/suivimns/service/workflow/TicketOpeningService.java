@@ -1,5 +1,6 @@
 package com.mns.cda.suivimns.service.workflow;
 
+import com.mns.cda.suivimns.enumerate.ActivityType;
 import com.mns.cda.suivimns.enumerate.StatusEnum;
 import com.mns.cda.suivimns.exception.IllegalStatusTransitionException;
 import com.mns.cda.suivimns.model.AppUser;
@@ -27,7 +28,7 @@ public class TicketOpeningService {
 
         ticket.setCurrentStatus(StatusEnum.OPEN);
 
-        activityService.log(user, "A ouvert le ticket #" + ticket.getIdTicket());
+        activityService.log(user, "A ouvert le ticket #" + ticket.getIdTicket(), ActivityType.TICKET);
 
         historyService.addHistory(ticket, user, StatusEnum.OPEN, null);
     }

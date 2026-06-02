@@ -3,6 +3,7 @@ package com.mns.cda.suivimns.service.entity;
 import com.mns.cda.suivimns.dao.AppUserDao;
 import com.mns.cda.suivimns.dao.ArticleDao;
 import com.mns.cda.suivimns.dto.entity.ArticleDto;
+import com.mns.cda.suivimns.enumerate.ActivityType;
 import com.mns.cda.suivimns.exception.AppUserNotFoundException;
 import com.mns.cda.suivimns.exception.ArticleNotFoundException;
 import com.mns.cda.suivimns.exception.ArticleNotOwnedException;
@@ -49,7 +50,9 @@ public class ArticleService {
         Article saved = articleDao.save(article);
 
         AppUser author = appUserDao.findById(user.getId()).orElseThrow(AppUserNotFoundException::new);
-        activityService.log(author, "A écrit un article à propos de la connaissance #" + dto.idKnowledge());
+        activityService.log(author,
+                "A écrit un article à propos de la connaissance #" + dto.idKnowledge(),
+                ActivityType.ARTICLE);
 
         return articleMapper.toDto(saved);
     }
@@ -59,7 +62,7 @@ public class ArticleService {
                 .orElseThrow(ArticleNotFoundException::new);
 
         AppUser author = appUserDao.findById(user.getId()).orElseThrow(AppUserNotFoundException::new);
-        activityService.log(author, "A effacé l'article #" + id);
+        activityService.log(author, "A effacé l'article #" + id, ActivityType.ARTICLE);
 
         articleDao.delete(article);
     }
@@ -78,7 +81,7 @@ public class ArticleService {
         articleMapper.updateEntityFromDto(articleToUpdate, currentArticle);
 
         AppUser author = appUserDao.findById(userDetails.getId()).orElseThrow(AppUserNotFoundException::new);
-        activityService.log(author, "A édité l'article #" + id);
+        activityService.log(author, "A édité l'article #" + id, ActivityType.ARTICLE);
 
         return articleMapper.toDto(articleDao.save(currentArticle));
     }

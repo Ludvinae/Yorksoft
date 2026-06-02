@@ -1,6 +1,7 @@
 package com.mns.cda.suivimns.service.workflow;
 
 import com.mns.cda.suivimns.dao.AssignmentDao;
+import com.mns.cda.suivimns.enumerate.ActivityType;
 import com.mns.cda.suivimns.enumerate.StatusEnum;
 import com.mns.cda.suivimns.exception.AssignmentConflictException;
 import com.mns.cda.suivimns.exception.IllegalStatusTransitionException;
@@ -60,8 +61,9 @@ public class TicketAssignmentService {
         ticketChanged.setCurrentManager(manager);
 
         activityService.log(manager, "A attribué le ticket #" + ticket.getIdTicket() +
-                " à " + technician.getFirstName() + " " + technician.getLastName());
-        activityService.log(technician, "A reçu l'attribution du ticket #" + ticket.getIdTicket());
+                " à " + technician.getFirstName() + " " + technician.getLastName(), ActivityType.ASSIGNMENT);
+        activityService.log(technician, "A reçu l'attribution du ticket #" + ticket.getIdTicket(),
+                ActivityType.ASSIGNMENT);
 
         return ticketChanged;
     }
