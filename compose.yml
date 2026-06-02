@@ -7,17 +7,30 @@ services:
       POSTGRES_PASSWORD: root
       POSTGRES_DB: db
       TZ: UTC
+    # Ports a supprimer en production
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql
+    networks:
+      - backend
 
   app:
-    build: .
+    image: bchamplon/suivi-mns-26-back:latest
     ports:
       - "8080:8080"
     depends_on:
       - postgres
+    networks:
+      - backend
+
+  front:
+    image: bchamplon/suivi-mns-26-front:latest
+    ports:
+      - "80:80"
 
 volumes:
   postgres_data:
+
+networks:
+  backend:
