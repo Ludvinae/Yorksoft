@@ -1,7 +1,6 @@
 package com.mns.cda.suivimns.dto.details;
 
 import com.mns.cda.suivimns.enumerate.StatusEnum;
-import com.mns.cda.suivimns.enumerate.ThemeEnum;
 
 import java.time.LocalDateTime;
 
@@ -25,7 +24,8 @@ public record TicketDetailDto(
         Byte importance,
 
         // Détails techniques
-        ThemeEnum currentTheme,
+        Integer idTheme,
+        String themeCode,
         String softwareName,
         Integer idVersion,
         String versionAbbreviatedLabel,

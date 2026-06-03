@@ -1,7 +1,8 @@
 package com.mns.cda.suivimns.dto.search;
 
 import com.mns.cda.suivimns.enumerate.StatusEnum;
-import com.mns.cda.suivimns.enumerate.ThemeEnum;
+import com.mns.cda.suivimns.model.Theme;
+
 import java.time.LocalDateTime;
 
 public record TicketListDto(
@@ -16,7 +17,7 @@ public record TicketListDto(
     Integer callDuration,
     Integer currentPriority,
     StatusEnum currentStatus,
-    ThemeEnum currentTheme,
+    Theme currentTheme,
     String clientFirstName,
     String clientLastName,
     String softwareName,

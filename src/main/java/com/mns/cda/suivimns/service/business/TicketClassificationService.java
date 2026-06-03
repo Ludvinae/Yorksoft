@@ -2,7 +2,6 @@ package com.mns.cda.suivimns.service.business;
 
 import com.mns.cda.suivimns.dao.ClassificationDao;
 import com.mns.cda.suivimns.dao.ThemeDao;
-import com.mns.cda.suivimns.enumerate.ThemeEnum;
 import com.mns.cda.suivimns.exception.ThemeNotFoundException;
 import com.mns.cda.suivimns.exception.TicketNotEditableException;
 import com.mns.cda.suivimns.model.Classification;
@@ -25,16 +24,16 @@ public class TicketClassificationService {
     private final ClassificationDao classificationDao;
     private final ThemeDao themeDao;
 
-    public void classify(Ticket ticket, ThemeEnum themeEnum) {
+    public void classify(Ticket ticket, String code) {
 
         if (isNotEditable(ticket)) {
             throw new TicketNotEditableException();
         }
 
-        Theme theme = themeDao.findByCode(themeEnum)
+        Theme theme = themeDao.findByCode(code)
                 .orElseThrow(ThemeNotFoundException::new);
 
-        if (theme.getCode().equals(ticket.getCurrentTheme())) {
+        if (theme.getCode().equals(ticket.getCurrentTheme().getCode())) {
             return;
         }
 
@@ -45,7 +44,7 @@ public class TicketClassificationService {
 
         classificationDao.save(classification);
 
-        ticket.setCurrentTheme(theme.getCode());
+        ticket.setCurrentTheme(theme);
     }
 
 }

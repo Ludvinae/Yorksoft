@@ -8,7 +8,6 @@ import com.mns.cda.suivimns.dto.details.TicketDetailProcedure;
 import com.mns.cda.suivimns.dto.details.TicketDetailComment;
 import com.mns.cda.suivimns.dto.details.TicketDetailDto;
 import com.mns.cda.suivimns.dto.details.TicketDetailKnowledge;
-import com.mns.cda.suivimns.enumerate.ThemeEnum;
 import com.mns.cda.suivimns.model.Ticket;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -277,7 +276,7 @@ public interface TicketDao extends JpaRepository<Ticket, Integer>, JpaSpecificat
             t.idTicket, t.title, t.initialPriority, t.currentPriority, t.currentStatus,
             t.overdue, t.slaDeadline,
             c.idAppUser, CONCAT(c.firstName, ' ', c.lastName), c.email, c.phoneNumber, c.importance,
-            t.currentTheme, s.name, v.idVersion, CONCAT(v.versionNumber, ' ', vt.code), t.openDate, t.closeDate,
+            th.idTheme, th.code, s.name, v.idVersion, CONCAT(v.versionNumber, ' ', vt.code), t.openDate, t.closeDate,
             t.description, t.solution,
             CONCAT(te.firstName, ' ', te.lastName), te.idAppUser, CONCAT(m.firstName, ' ', m.lastName), m.idAppUser, a.assignmentDate)
         FROM Ticket t
@@ -285,6 +284,7 @@ public interface TicketDao extends JpaRepository<Ticket, Integer>, JpaSpecificat
         JOIN t.version v
         JOIN v.versionType vt
         JOIN v.software s
+        JOIN t.currentTheme th
         LEFT JOIN t.currentTechnician te
         LEFT JOIN t.currentManager m
         LEFT JOIN t.assignmentList a ON a.endDate IS null
@@ -298,9 +298,9 @@ public interface TicketDao extends JpaRepository<Ticket, Integer>, JpaSpecificat
             k.idKnowledge, k.subject)
         FROM Knowledge k
         JOIN k.versionList v ON v.idVersion = :idVersion
-        WHERE k.theme.code = :themeEnum
+        WHERE k.theme.code = :themeCode
     """)
-    TicketDetailKnowledge ticketKnowledge(ThemeEnum themeEnum, Integer idVersion);
+    TicketDetailKnowledge ticketKnowledge(String themeCode, Integer idVersion);
 
 
     @Query("""

@@ -9,10 +9,8 @@ import com.mns.cda.suivimns.dto.entity.TicketDto;
 import com.mns.cda.suivimns.dto.search.TicketListDto;
 import com.mns.cda.suivimns.dto.workflow.*;
 import com.mns.cda.suivimns.enumerate.StatusEnum;
-import com.mns.cda.suivimns.enumerate.ThemeEnum;
 import com.mns.cda.suivimns.exception.TicketNotFoundException;
-import com.mns.cda.suivimns.model.Admin;
-import com.mns.cda.suivimns.security.AppUserDetails;
+import com.mns.cda.suivimns.model.Theme;
 import com.mns.cda.suivimns.service.business.TicketDetailService;
 import com.mns.cda.suivimns.service.entity.TicketService;
 import org.junit.jupiter.api.BeforeEach;
@@ -58,21 +56,24 @@ class TicketControllerUnitTest {
 
     private TicketDto ticketDto;
     private TicketDetailFullDto ticketDetailFullDto;
+    private Theme theme;
 
     @BeforeEach
     void setUp() {
         List<Integer> list = new ArrayList<>();
+        theme = new Theme();
+        theme.setCode("BUG");
         // DTO
         ticketDto = new TicketDto(
                 1, "Test title", "Test description", null,
                 null, null, 0, 85, 85,
-                ThemeEnum.BUG, StatusEnum.OPEN, 1, 1, 1, 1, list, list,
+                theme, StatusEnum.OPEN, 1, 1, 1, 1, list, list,
                 list, list);
 
         TicketDetailDto ticketDetailDto = new TicketDetailDto(1, "Test title",
                 50, 50, StatusEnum.OPEN, false, null,
                 1, "Test Test", "test@test.com", "", (byte) 0,
-                ThemeEnum.BUG, "Test software", 1, "r",
+                1, "BUG", "Test software", 1, "r",
                 LocalDateTime.now(), null, "Test description", null, null,
                 null, null, null, null);
         TicketDetailKnowledge ticketDetailKnowledge = new TicketDetailKnowledge(1, "Test subject");
@@ -117,7 +118,7 @@ class TicketControllerUnitTest {
         TicketListDto dto = new TicketListDto(
                 1, "Test title", "Test description", LocalDateTime.now(), LocalDateTime.now()
                 , null, null, false, 0, 50
-                , StatusEnum.OPEN, ThemeEnum.BUG, "firstname", "lastname",
+                , StatusEnum.OPEN, this.theme, "firstname", "lastname",
                 "Test software", "1.0.0", "r", null, null);
 
         Page<TicketListDto> page = new PageImpl<>(List.of(dto));

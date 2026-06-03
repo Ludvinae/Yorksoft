@@ -34,7 +34,7 @@ public class TicketDetailService {
         }
 
         TicketDetailDto details = ticketDao.ticketDetail(idTicket);
-        TicketDetailKnowledge knowledge = ticketDao.ticketKnowledge(details.currentTheme(), details.idVersion());
+        TicketDetailKnowledge knowledge = ticketDao.ticketKnowledge(details.themeCode(), details.idVersion());
         List<TicketDetailProcedure> procedures;
         if (knowledge != null) {
              procedures = ticketDao.ticketDetailProcedures(knowledge.idKnowledge());

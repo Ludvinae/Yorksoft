@@ -63,8 +63,8 @@ public class KnowledgeService  {
         Specification<Knowledge> spec =
                 Specification.allOf(
                         KnowledgeSpecification.search(request.search()),
-                        KnowledgeSpecification.theme(request.thematiqueId()),
-                        KnowledgeSpecification.version(request.versionId())
+                        KnowledgeSpecification.theme(request.idTheme()),
+                        KnowledgeSpecification.version(request.idVersion())
                 );
 
         List<Knowledge> knowledgeList =

@@ -2,7 +2,6 @@ package com.mns.cda.suivimns.unit.service.business;
 
 import com.mns.cda.suivimns.dao.ClassificationDao;
 import com.mns.cda.suivimns.dao.ThemeDao;
-import com.mns.cda.suivimns.enumerate.ThemeEnum;
 import com.mns.cda.suivimns.exception.ThemeNotFoundException;
 import com.mns.cda.suivimns.model.Classification;
 import com.mns.cda.suivimns.model.Theme;
@@ -43,12 +42,12 @@ public class TicketClassificationServiceUnitTest {
         Ticket ticket = new Ticket();
 
         Theme theme = new Theme();
-        theme.setCode(ThemeEnum.BUG);
+        theme.setCode("BUG");
 
-        when(themeDao.findByCode(ThemeEnum.BUG))
+        when(themeDao.findByCode("BUG"))
                 .thenReturn(Optional.of(theme));
 
-        service.classify(ticket, ThemeEnum.BUG);
+        service.classify(ticket, "BUG");
 
         ArgumentCaptor<Classification> captor =
                 ArgumentCaptor.forClass(Classification.class);
@@ -61,7 +60,7 @@ public class TicketClassificationServiceUnitTest {
         assertEquals(theme, savedClassification.getTheme());
 
         assertEquals(
-                ThemeEnum.BUG,
+                "BUG",
                 ticket.getCurrentTheme()
         );
     }
@@ -70,15 +69,16 @@ public class TicketClassificationServiceUnitTest {
     void classify_shouldDoNothingIfThemeAlreadyAssigned() {
 
         Ticket ticket = new Ticket();
-        ticket.setCurrentTheme(ThemeEnum.BUG);
-
         Theme theme = new Theme();
-        theme.setCode(ThemeEnum.BUG);
+        theme.setCode("BUG");
+        ticket.setCurrentTheme(theme);
 
-        when(themeDao.findByCode(ThemeEnum.BUG))
+
+
+        when(themeDao.findByCode("BUG"))
                 .thenReturn(Optional.of(theme));
 
-        service.classify(ticket, ThemeEnum.BUG);
+        service.classify(ticket, "BUG");
 
         verify(classificationDao, never()).save(any());
     }
@@ -88,12 +88,12 @@ public class TicketClassificationServiceUnitTest {
 
         Ticket ticket = new Ticket();
 
-        when(themeDao.findByCode(ThemeEnum.BUG))
+        when(themeDao.findByCode("BUG"))
                 .thenReturn(Optional.empty());
 
         assertThrows(
                 ThemeNotFoundException.class,
-                () -> service.classify(ticket, ThemeEnum.BUG)
+                () -> service.classify(ticket, "BUG")
         );
 
         verify(classificationDao, never()).save(any());
@@ -103,18 +103,17 @@ public class TicketClassificationServiceUnitTest {
     void classify_shouldUpdateCurrentTheme() {
 
         Ticket ticket = new Ticket();
-        ticket.setCurrentTheme(ThemeEnum.SYSTEM_ERROR);
-
         Theme theme = new Theme();
-        theme.setCode(ThemeEnum.BUG);
+        theme.setCode("BUG");
+        ticket.setCurrentTheme(theme);
 
-        when(themeDao.findByCode(ThemeEnum.BUG))
+        when(themeDao.findByCode("BUG"))
                 .thenReturn(Optional.of(theme));
 
-        service.classify(ticket, ThemeEnum.BUG);
+        service.classify(ticket, "BUG");
 
         assertEquals(
-                ThemeEnum.BUG,
+                "BUG",
                 ticket.getCurrentTheme()
         );
     }
@@ -125,12 +124,12 @@ public class TicketClassificationServiceUnitTest {
         Ticket ticket = new Ticket();
 
         Theme theme = new Theme();
-        theme.setCode(ThemeEnum.BUG);
+        theme.setCode("BUG");
 
-        when(themeDao.findByCode(ThemeEnum.BUG))
+        when(themeDao.findByCode("BUG"))
                 .thenReturn(Optional.of(theme));
 
-        service.classify(ticket, ThemeEnum.BUG);
+        service.classify(ticket, "BUG");
 
         verify(classificationDao, times(1))
                 .save(any(Classification.class));

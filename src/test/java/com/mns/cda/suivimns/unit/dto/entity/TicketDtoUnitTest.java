@@ -3,7 +3,7 @@ package com.mns.cda.suivimns.unit.dto.entity;
 import com.mns.cda.suivimns.TestUtils;
 import com.mns.cda.suivimns.dto.entity.TicketDto;
 import com.mns.cda.suivimns.enumerate.StatusEnum;
-import com.mns.cda.suivimns.enumerate.ThemeEnum;
+import com.mns.cda.suivimns.model.Theme;
 import com.mns.cda.suivimns.model.groups.OnCreate;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -19,6 +19,8 @@ public class TicketDtoUnitTest {
 
     protected static Validator validator;
 
+    private Theme theme = new Theme();
+
     @BeforeAll
     public static void init() {
         validator = Validation.buildDefaultValidatorFactory().getValidator();
@@ -29,7 +31,7 @@ public class TicketDtoUnitTest {
         String title = "a".repeat(64);
         List<Integer> list = new ArrayList<>();
         TicketDto ticket = new TicketDto(1, title, "Test description", LocalDateTime.now(),
-                null, LocalDateTime.now(), null, 90, 90, ThemeEnum.BUG, StatusEnum.OPEN, 1, 1,
+                null, LocalDateTime.now(), null, 90, 90, theme, StatusEnum.OPEN, 1, 1,
                 1, 1, list, list, list, list);
 
         boolean constraintExists = TestUtils.constraintViolationExists(
@@ -45,7 +47,7 @@ public class TicketDtoUnitTest {
     public void ticketWithBlankTitle_shouldNotBeValid() {
         List<Integer> list = new ArrayList<>();
         TicketDto ticket = new TicketDto(1, "", "Test description", LocalDateTime.now(),
-                null, LocalDateTime.now(), null, 90, 90, ThemeEnum.BUG, StatusEnum.OPEN, 1, 1,
+                null, LocalDateTime.now(), null, 90, 90, theme, StatusEnum.OPEN, 1, 1,
                 1, 1, list, list, list, list);
 
         boolean constraintExists = TestUtils.constraintViolationExists(
@@ -61,7 +63,7 @@ public class TicketDtoUnitTest {
     public void ticketWithBlankDescription_shouldNotBeValid() {
         List<Integer> list = new ArrayList<>();
         TicketDto ticket = new TicketDto(1, "Test title", "", LocalDateTime.now(),
-                null, LocalDateTime.now(), null, 85, 85, ThemeEnum.BUG, StatusEnum.OPEN, 1, 1,
+                null, LocalDateTime.now(), null, 85, 85, theme, StatusEnum.OPEN, 1, 1,
                 1, 1, list, list, list, list);
 
         boolean constraintExists = TestUtils.constraintViolationExists(
@@ -78,7 +80,7 @@ public class TicketDtoUnitTest {
     public void validTicketWithNullImpact_shouldNotBeValid() {
         List<Integer> list = new ArrayList<>();
         TicketDto ticket = new TicketDto(1, "Test title", "Test description", LocalDateTime.now(),
-                null, LocalDateTime.now(), null, 85, 85, ThemeEnum.BUG, StatusEnum.OPEN, 1, 1,
+                null, LocalDateTime.now(), null, 85, 85, theme, StatusEnum.OPEN, 1, 1,
                 null, 1, list, list, list, list);
 
         boolean constraintExists = TestUtils.constraintViolationExists(
@@ -94,7 +96,7 @@ public class TicketDtoUnitTest {
     public void validTicketWithNullUrgency_shouldNotBeValid() {
         List<Integer> list = new ArrayList<>();
         TicketDto ticket = new TicketDto(1, "Test title", "Test description", LocalDateTime.now(),
-                null, LocalDateTime.now(), null, 100, 100, ThemeEnum.BUG, StatusEnum.OPEN,1, 1,
+                null, LocalDateTime.now(), null, 100, 100, theme, StatusEnum.OPEN,1, 1,
                 1, null, list, list, list, list);
 
         boolean constraintExists = TestUtils.constraintViolationExists(
@@ -110,7 +112,7 @@ public class TicketDtoUnitTest {
     public void validTicketWithNullClient_shouldNotBeValid() {
         List<Integer> list = new ArrayList<>();
         TicketDto ticket = new TicketDto(1, "Test title", "Test description", LocalDateTime.now(),
-                null, LocalDateTime.now(), null, 100, 100, ThemeEnum.BUG, StatusEnum.OPEN, 1, null,
+                null, LocalDateTime.now(), null, 100, 100, theme, StatusEnum.OPEN, 1, null,
                 1, 1, list, list, list, list);
 
         boolean constraintExists = TestUtils.constraintViolationExists(
@@ -128,7 +130,8 @@ public class TicketDtoUnitTest {
     public void ticketWithValidData_shouldBeValid() {
         List<Integer> list = new ArrayList<>();
         TicketDto ticket = new TicketDto(1, "Test title", "Test description", LocalDateTime.now(),
-                null, LocalDateTime.now(), null, 80, 80, ThemeEnum.BUG, StatusEnum.OPEN, 1, 1,
+                null, LocalDateTime.now(), null, 80, 80,
+                this.theme, StatusEnum.OPEN, 1, 1,
                 1, 1, list, list, list, list);
 
         Assertions.assertTrue(

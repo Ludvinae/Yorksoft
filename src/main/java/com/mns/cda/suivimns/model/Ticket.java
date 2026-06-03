@@ -1,7 +1,6 @@
 package com.mns.cda.suivimns.model;
 
 import com.mns.cda.suivimns.enumerate.StatusEnum;
-import com.mns.cda.suivimns.enumerate.ThemeEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -59,9 +58,10 @@ public class Ticket {
     @Column
     protected StatusEnum currentStatus;
 
-    @Enumerated(EnumType.STRING)
-    @Column
-    protected ThemeEnum currentTheme;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_current_theme")
+    @OnDelete(action = OnDeleteAction.SET_NULL)
+    protected Theme currentTheme;
 
     @ManyToOne()
     @JoinColumn(name = "id_current_technician")

@@ -2,7 +2,6 @@ package com.mns.cda.suivimns.unit.dto.entity;
 
 import com.mns.cda.suivimns.TestUtils;
 import com.mns.cda.suivimns.dto.entity.ThemeDto;
-import com.mns.cda.suivimns.enumerate.ThemeEnum;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import org.junit.jupiter.api.Assertions;
@@ -20,7 +19,7 @@ public class ThemeDtoUnitTest {
 
     @Test
     public void themeWithBlankDesignation_shouldNotBeValid() {
-        ThemeDto theme = new ThemeDto(1, "", ThemeEnum.BUG, "Test description");
+        ThemeDto theme = new ThemeDto(1, "", "BUG", "Test description");
 
         boolean constraintExists = TestUtils.constraintViolationExists(
                 validator.validate(theme),
@@ -33,7 +32,7 @@ public class ThemeDtoUnitTest {
 
     @Test
     public void themeWithTooShortDesignation_shouldNotBeValid() {
-        ThemeDto theme = new ThemeDto(1, "T", ThemeEnum.BUG, "Test description");
+        ThemeDto theme = new ThemeDto(1, "T", "BUG", "Test description");
 
         boolean constraintExists = TestUtils.constraintViolationExists(
                 validator.validate(theme),
@@ -47,7 +46,7 @@ public class ThemeDtoUnitTest {
     @Test
     public void themeWithTooLongDesignation_shouldNotBeValid() {
         String designation = "a".repeat(128);
-        ThemeDto theme = new ThemeDto(1, designation, ThemeEnum.BUG, "Test description");
+        ThemeDto theme = new ThemeDto(1, designation, "BUG", "Test description");
 
         boolean constraintExists = TestUtils.constraintViolationExists(
                 validator.validate(theme),
@@ -75,7 +74,7 @@ public class ThemeDtoUnitTest {
 
     @Test
     public void themeWithValidData_shouldBeValid() {
-        ThemeDto theme = new ThemeDto(1, "Test designation", ThemeEnum.BUG, "Test description");
+        ThemeDto theme = new ThemeDto(1, "Test designation", "BUG", "Test description");
 
         Assertions.assertTrue(
                 validator.validate(theme).isEmpty(),

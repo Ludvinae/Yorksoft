@@ -1,6 +1,5 @@
 package com.mns.cda.suivimns.model;
 
-import com.mns.cda.suivimns.enumerate.ThemeEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,8 +23,7 @@ public class Theme {
     protected String designation;
 
     @Column(nullable = false, length = 127, unique = true)
-    @Enumerated(EnumType.STRING)
-    protected ThemeEnum code;
+    protected String code;
 
     @Column(columnDefinition = "TEXT")
     protected String description;
