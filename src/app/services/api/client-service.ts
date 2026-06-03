@@ -1,7 +1,7 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { tap } from 'rxjs';
-import { Page } from '../../models/page/Page';
+import { Page } from '../../models/search/Page';
 import { environment } from '../../../environments/environment';
 
 @Injectable({

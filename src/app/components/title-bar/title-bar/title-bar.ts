@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { TicketSearchCriteria } from '../../../models/page/TicketSearchCriteria';
+import { TicketSearchCriteria } from '../../../models/search/TicketSearchCriteria';
 import { TicketStoreService } from '../../../services/business/ticket-store-service';
 import { AuthService } from '../../../services/business/auth-service';
 import { UserPreferencesService } from '../../../services/business/user-preferences-service';

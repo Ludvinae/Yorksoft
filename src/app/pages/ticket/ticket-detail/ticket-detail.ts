@@ -9,10 +9,11 @@ import { StatusEnum } from '../../../models/enum/StatusEnum';
 import { AuthService } from '../../../services/business/auth-service';
 import {AssignTicketModal} from '../../../components/ticket/assign-ticket-modal/assign-ticket-modal';
 import { FormsModule } from '@angular/forms';
+import { KnowledgeSelector } from '../../../components/knowledge-selector/knowledge-selector';
 
 @Component({
   selector: 'app-ticket-detail',
-  imports: [RouterLink, DatePipe, TicketComment, AssignTicketModal, FormsModule],
+  imports: [RouterLink, DatePipe, TicketComment, AssignTicketModal, FormsModule, KnowledgeSelector],
   templateUrl: './ticket-detail.html',
   styleUrl: './ticket-detail.css',
 })
@@ -213,7 +214,7 @@ export class TicketDetail implements OnInit {
       return;
     }
 
-    this.ticketService.patch(ticketId, this.editedDescription, "").subscribe({
+    this.ticketService.patch(ticketId, this.editedDescription, '').subscribe({
       next: (updatedTicket) => {
         this.ticket.set(updatedTicket);
         this.editingDescription = false;
@@ -251,7 +252,7 @@ export class TicketDetail implements OnInit {
       return;
     }
 
-    this.ticketService.patch(ticketId, "", this.editedSolution).subscribe({
+    this.ticketService.patch(ticketId, '', this.editedSolution).subscribe({
       next: (updatedTicket) => {
         this.ticket.set(updatedTicket);
         this.editingSolution = false;

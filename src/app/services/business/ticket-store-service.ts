@@ -1,6 +1,6 @@
 import { computed, Injectable, signal } from '@angular/core';
 import { TicketService } from '../api/ticket-service';
-import { TicketSearchCriteria } from '../../models/page/TicketSearchCriteria';
+import { TicketSearchCriteria } from '../../models/search/TicketSearchCriteria';
 
 @Injectable({
   providedIn: 'root',

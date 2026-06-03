@@ -1,7 +1,7 @@
 import { Component, inject, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { TicketStoreService } from '../../../../services/business/ticket-store-service';
-import { TicketSearchCriteria } from '../../../../models/page/TicketSearchCriteria';
+import { TicketSearchCriteria } from '../../../../models/search/TicketSearchCriteria';
 
 @Component({
   selector: 'app-kpi-card',

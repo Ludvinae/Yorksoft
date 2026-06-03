@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DatePipe, NgClass } from '@angular/common';
 import { TicketService } from '../../../services/api/ticket-service';
-import { TicketSearchCriteria } from '../../../models/page/TicketSearchCriteria';
+import { TicketSearchCriteria } from '../../../models/search/TicketSearchCriteria';
 import { StatusEnum } from '../../../models/enum/StatusEnum';
 import { StatusLabel } from '../../../pipe/StatusLabel';
 

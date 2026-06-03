@@ -1,6 +1,6 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
 @Injectable({
@@ -41,6 +41,13 @@ export class KnowledgeService {
       tap((result) => {
         this.getAll().subscribe();
       }),
+    );
+  }
+
+  searchKnowledge(request: KnowledgeSearch): Observable<KnowledgeSelect[]> {
+    return this.http.post<KnowledgeSelect[]>(
+      `${this.apiUrl}/knowledge/search`,
+      request
     );
   }
 }
