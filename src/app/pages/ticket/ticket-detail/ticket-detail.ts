@@ -27,7 +27,7 @@ export class TicketDetail implements OnInit {
 
   detail = computed(() => this.ticket()?.details);
   knowledge = computed(() => this.ticket()?.knowledge);
-  articles = computed(() => this.ticket()?.articles ?? []);
+  procedures = computed(() => this.ticket()?.procedures ?? []);
   possibleTransitions = computed(() => this.ticket()?.possibleStatusTransitions ?? []);
 
   loading = signal(true);

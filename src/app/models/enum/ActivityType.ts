@@ -1,6 +1,6 @@
 export enum ActivityType {
   TICKET = 'TICKET',
   COMMENT = 'COMMENT',
-  ARTICLE = 'ARTICLE',
+  PROCEDURE = 'PROCEDURE',
   ASSIGNMENT = 'ASSIGNMENT',
 }

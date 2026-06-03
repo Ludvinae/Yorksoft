@@ -1,5 +1,5 @@
-type Article = {
-  idArticle : number;
+type Procedure = {
+  idProcedure : number;
   creationDate: Date | null;
   modificationDate: Date | null;
   content: string; // 1 <= size

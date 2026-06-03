@@ -1,5 +1,5 @@
-type TicketDetailArticle = {
-  idArticle: number;
+type TicketDetailProcedure = {
+  idProcedure: number;
   creationDate: Date;
   modificationDate: Date;
   title: string;

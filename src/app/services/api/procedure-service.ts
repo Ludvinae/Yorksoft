@@ -6,30 +6,30 @@ import { environment } from '../../../environments/environment';
 @Injectable({
   providedIn: 'root',
 })
-export class ArticleService {
+export class ProcedureService {
   private http = inject(HttpClient);
-  private apiUrl = `${environment.serverUrl}/article`;
+  private apiUrl = `${environment.serverUrl}/procedure`;
 
-  readonly articleList = signal<Article[]>([]);
+  readonly procedureList = signal<Procedure[]>([]);
 
   get(id: number) {
-    return this.http.get<Article>(`${this.apiUrl}/${id}`);
+    return this.http.get<Procedure>(`${this.apiUrl}/${id}`);
   }
 
   getAll() {
-    return this.http.get<Article[]>(`${this.apiUrl}/list`).pipe(
-      tap((articleList) => {
-        this.articleList.set(articleList);
+    return this.http.get<Procedure[]>(`${this.apiUrl}/list`).pipe(
+      tap((procedureList) => {
+        this.procedureList.set(procedureList);
       }),
     );
   }
 
-  create(article: Article) {
-    return this.http.post(`${this.apiUrl}`, article).pipe(tap(() => this.getAll().subscribe()));
+  create(procedure: Procedure) {
+    return this.http.post(`${this.apiUrl}`, procedure).pipe(tap(() => this.getAll().subscribe()));
   }
 
-  update(article: Article, id: number) {
-    return this.http.put(`${this.apiUrl}/${id}`, article).pipe(
+  update(procedure: Procedure, id: number) {
+    return this.http.put(`${this.apiUrl}/${id}`, procedure).pipe(
       tap((result) => {
         this.getAll().subscribe();
       }),

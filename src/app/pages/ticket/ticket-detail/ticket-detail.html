@@ -466,29 +466,29 @@
         <div class="card-body">
 
           <h2 class="card-title">
-            Articles connexes
+            Procedures connexes
           </h2>
 
-          @if (articles().length > 0) {
+          @if (procedures().length > 0) {
             <div class="space-y-4">
 
-              @for (article of articles(); track article.idArticle) {
+              @for (procedure of procedures(); track procedure.idProcedure) {
 
                 <div>
 
                   <h3 class="font-semibold leading-tight">
-                    {{ article.title }}
+                    {{ procedure.title }}
                   </h3>
 
                   <p class="text-sm opacity-70">
-                    {{ article.content }}
+                    {{ procedure.content }}
                   </p>
                 </div>
               }
             </div>
           } @else {
             <p class="font-semibold">
-              Aucun article correspondant trouvé
+              Aucun procedure correspondant trouvé
             </p>
           }
           <button class="btn btn-outline mt-4" routerLink="/knowledge">
