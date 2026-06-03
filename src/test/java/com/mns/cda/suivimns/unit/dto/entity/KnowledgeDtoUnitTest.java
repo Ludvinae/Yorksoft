@@ -24,7 +24,7 @@ public class KnowledgeDtoUnitTest {
     @Test
     public void KnowledgeWithBlankSubject_shouldNotBeValid() {
         List<Integer> list = new ArrayList<>();
-        KnowledgeDto knowledge = new KnowledgeDto(1, "", 1, list, list);
+        KnowledgeDto knowledge = new KnowledgeDto(1, "", 1, list, 1);
 
         boolean constraintExists = TestUtils.constraintViolationExists(
                 validator.validate(knowledge),
@@ -39,7 +39,7 @@ public class KnowledgeDtoUnitTest {
     public void knowledgeWithTooLongSubject_shouldNotBeValid() {
         String subject = "a".repeat(256);
         List<Integer> list = new ArrayList<>();
-        KnowledgeDto knowledge = new KnowledgeDto(1, subject, 1, list, list);
+        KnowledgeDto knowledge = new KnowledgeDto(1, subject, 1, list, 1);
 
         boolean constraintExists = TestUtils.constraintViolationExists(
                 validator.validate(knowledge),
@@ -53,7 +53,7 @@ public class KnowledgeDtoUnitTest {
     @Test
     public void validKnowledgeWithBlankTheme_shouldNotBeValid() {
         List<Integer> list = new ArrayList<>();
-        KnowledgeDto knowledge = new KnowledgeDto(1, "Test subject", null, list, list);
+        KnowledgeDto knowledge = new KnowledgeDto(1, "Test subject", null, list, 1);
 
         boolean constraintExists = TestUtils.constraintViolationExists(
                 validator.validate(knowledge),
@@ -69,7 +69,7 @@ public class KnowledgeDtoUnitTest {
     @Test
     public void knowledgeWithValidData_shouldBeValid() {
         List<Integer> list = new ArrayList<>();
-        KnowledgeDto knowledge = new KnowledgeDto(1, "Test subject", 1, list, list);
+        KnowledgeDto knowledge = new KnowledgeDto(1, "Test subject", 1, list, 1);
 
         Assertions.assertTrue(
                 validator.validate(knowledge).isEmpty(),

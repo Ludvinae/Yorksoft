@@ -60,7 +60,7 @@ public class TicketClassificationServiceUnitTest {
         assertEquals(theme, savedClassification.getTheme());
 
         assertEquals(
-                "BUG",
+                theme,
                 ticket.getCurrentTheme()
         );
     }
@@ -114,7 +114,7 @@ public class TicketClassificationServiceUnitTest {
 
         assertEquals(
                 "BUG",
-                ticket.getCurrentTheme()
+                ticket.getCurrentTheme().getCode()
         );
     }
 

@@ -33,7 +33,8 @@ public class TicketClassificationService {
         Theme theme = themeDao.findByCode(code)
                 .orElseThrow(ThemeNotFoundException::new);
 
-        if (theme.getCode().equals(ticket.getCurrentTheme().getCode())) {
+        if (ticket.getCurrentTheme() != null
+                && theme.getIdTheme().equals(ticket.getCurrentTheme().getIdTheme())) {
             return;
         }
 
