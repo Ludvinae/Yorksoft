@@ -58,13 +58,7 @@ public abstract class KnowledgeMapper {
                 .toList();
     }
 
-    protected List<Procedure> mapIdsToProcedures(List<Integer> ids) {
-        if (ids == null) return null;
 
-        return ids.stream()
-                .map(procedureDao::getReferenceById)
-                .toList();
-    }
 
 
     // Method helper pour ENTITE vers ID
@@ -80,13 +74,6 @@ public abstract class KnowledgeMapper {
                 .toList();
     }
 
-    protected List<Integer> mapProceduresToIds(List<Procedure> procedures) {
-        if (procedures == null) return null;
-
-        return procedures.stream()
-                .map(Procedure::getIdProcedure)
-                .toList();
-    }
 
     // Method helper pour Update
     @Mapping(target = "idKnowledge", ignore = true)
