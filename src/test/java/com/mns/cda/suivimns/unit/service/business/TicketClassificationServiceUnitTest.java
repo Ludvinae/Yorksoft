@@ -71,9 +71,8 @@ public class TicketClassificationServiceUnitTest {
         Ticket ticket = new Ticket();
         Theme theme = new Theme();
         theme.setCode("BUG");
+        theme.setIdTheme(1);
         ticket.setCurrentTheme(theme);
-
-
 
         when(themeDao.findByCode("BUG"))
                 .thenReturn(Optional.of(theme));
@@ -104,6 +103,7 @@ public class TicketClassificationServiceUnitTest {
 
         Ticket ticket = new Ticket();
         Theme theme = new Theme();
+        theme.setIdTheme(1);
         theme.setCode("BUG");
         ticket.setCurrentTheme(theme);
 

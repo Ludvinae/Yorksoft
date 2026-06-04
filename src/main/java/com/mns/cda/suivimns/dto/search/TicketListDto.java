@@ -17,7 +17,7 @@ public record TicketListDto(
     Integer callDuration,
     Integer currentPriority,
     StatusEnum currentStatus,
-    Theme currentTheme,
+    String themeDesignation,
     String clientFirstName,
     String clientLastName,
     String softwareName,

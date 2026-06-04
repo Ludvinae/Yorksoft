@@ -83,6 +83,7 @@ public abstract class TicketMapper {
     @Mapping(source="version.versionType.code", target="versionTypeCode")
     @Mapping(source="currentTechnician.idAppUser", target="idTechnician")
     @Mapping(source="currentManager.idAppUser", target="idManager")
+    @Mapping(source="currentTheme.designation", target="themeDesignation")
     public abstract TicketListDto toListDto(Ticket ticket);
 
 

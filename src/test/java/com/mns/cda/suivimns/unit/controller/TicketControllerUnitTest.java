@@ -67,7 +67,7 @@ class TicketControllerUnitTest {
         ticketDto = new TicketDto(
                 1, "Test title", "Test description", null,
                 null, null, 0, 85, 85,
-                theme, StatusEnum.OPEN, 1, 1, 1, 1, list, list,
+                1, StatusEnum.OPEN, 1, 1, 1, 1, list, list,
                 list, list);
 
         TicketDetailDto ticketDetailDto = new TicketDetailDto(1, "Test title",
@@ -118,7 +118,7 @@ class TicketControllerUnitTest {
         TicketListDto dto = new TicketListDto(
                 1, "Test title", "Test description", LocalDateTime.now(), LocalDateTime.now()
                 , null, null, false, 0, 50
-                , StatusEnum.OPEN, this.theme, "firstname", "lastname",
+                , StatusEnum.OPEN, "Test theme designation", "firstname", "lastname",
                 "Test software", "1.0.0", "r", null, null);
 
         Page<TicketListDto> page = new PageImpl<>(List.of(dto));

@@ -31,7 +31,7 @@ public class TicketDtoUnitTest {
         String title = "a".repeat(64);
         List<Integer> list = new ArrayList<>();
         TicketDto ticket = new TicketDto(1, title, "Test description", LocalDateTime.now(),
-                null, LocalDateTime.now(), null, 90, 90, theme, StatusEnum.OPEN, 1, 1,
+                null, LocalDateTime.now(), null, 90, 90, 1, StatusEnum.OPEN, 1, 1,
                 1, 1, list, list, list, list);
 
         boolean constraintExists = TestUtils.constraintViolationExists(
@@ -47,7 +47,7 @@ public class TicketDtoUnitTest {
     public void ticketWithBlankTitle_shouldNotBeValid() {
         List<Integer> list = new ArrayList<>();
         TicketDto ticket = new TicketDto(1, "", "Test description", LocalDateTime.now(),
-                null, LocalDateTime.now(), null, 90, 90, theme, StatusEnum.OPEN, 1, 1,
+                null, LocalDateTime.now(), null, 90, 90, 1, StatusEnum.OPEN, 1, 1,
                 1, 1, list, list, list, list);
 
         boolean constraintExists = TestUtils.constraintViolationExists(
@@ -63,7 +63,7 @@ public class TicketDtoUnitTest {
     public void ticketWithBlankDescription_shouldNotBeValid() {
         List<Integer> list = new ArrayList<>();
         TicketDto ticket = new TicketDto(1, "Test title", "", LocalDateTime.now(),
-                null, LocalDateTime.now(), null, 85, 85, theme, StatusEnum.OPEN, 1, 1,
+                null, LocalDateTime.now(), null, 85, 85, 1, StatusEnum.OPEN, 1, 1,
                 1, 1, list, list, list, list);
 
         boolean constraintExists = TestUtils.constraintViolationExists(
@@ -80,7 +80,7 @@ public class TicketDtoUnitTest {
     public void validTicketWithNullImpact_shouldNotBeValid() {
         List<Integer> list = new ArrayList<>();
         TicketDto ticket = new TicketDto(1, "Test title", "Test description", LocalDateTime.now(),
-                null, LocalDateTime.now(), null, 85, 85, theme, StatusEnum.OPEN, 1, 1,
+                null, LocalDateTime.now(), null, 85, 85, 1, StatusEnum.OPEN, 1, 1,
                 null, 1, list, list, list, list);
 
         boolean constraintExists = TestUtils.constraintViolationExists(
@@ -96,7 +96,7 @@ public class TicketDtoUnitTest {
     public void validTicketWithNullUrgency_shouldNotBeValid() {
         List<Integer> list = new ArrayList<>();
         TicketDto ticket = new TicketDto(1, "Test title", "Test description", LocalDateTime.now(),
-                null, LocalDateTime.now(), null, 100, 100, theme, StatusEnum.OPEN,1, 1,
+                null, LocalDateTime.now(), null, 100, 100, 1, StatusEnum.OPEN,1, 1,
                 1, null, list, list, list, list);
 
         boolean constraintExists = TestUtils.constraintViolationExists(
@@ -112,7 +112,7 @@ public class TicketDtoUnitTest {
     public void validTicketWithNullClient_shouldNotBeValid() {
         List<Integer> list = new ArrayList<>();
         TicketDto ticket = new TicketDto(1, "Test title", "Test description", LocalDateTime.now(),
-                null, LocalDateTime.now(), null, 100, 100, theme, StatusEnum.OPEN, 1, null,
+                null, LocalDateTime.now(), null, 100, 100, 1, StatusEnum.OPEN, 1, null,
                 1, 1, list, list, list, list);
 
         boolean constraintExists = TestUtils.constraintViolationExists(
@@ -131,7 +131,7 @@ public class TicketDtoUnitTest {
         List<Integer> list = new ArrayList<>();
         TicketDto ticket = new TicketDto(1, "Test title", "Test description", LocalDateTime.now(),
                 null, LocalDateTime.now(), null, 80, 80,
-                this.theme, StatusEnum.OPEN, 1, 1,
+                1, StatusEnum.OPEN, 1, 1,
                 1, 1, list, list, list, list);
 
         Assertions.assertTrue(

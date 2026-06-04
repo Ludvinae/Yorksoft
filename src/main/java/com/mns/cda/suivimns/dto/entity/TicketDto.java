@@ -20,7 +20,7 @@ public record TicketDto(
         Integer callDuration,
         Integer initialPriority,
         Integer currentPriority,
-        Theme currentTheme,
+        Integer idCurrentTheme,
         StatusEnum currentStatus,
         Integer idVersion,
         @NotNull(groups = {OnCreate.class}) Integer idClient,
