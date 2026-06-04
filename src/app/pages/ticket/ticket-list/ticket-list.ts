@@ -9,7 +9,6 @@ import { AssignTicketModal } from '../../../components/ticket/assign-ticket-moda
 import { BadgePriority } from '../../../components/ticket/badge-priority/badge-priority';
 import { BadgeSla } from '../../../components/ticket/badge-sla/badge-sla';
 import { StatusLabel } from '../../../pipe/StatusLabel';
-import { ThemeLabel } from '../../../pipe/ThemeLabel';
 
 @Component({
   selector: 'app-ticket-list',
@@ -22,7 +21,6 @@ import { ThemeLabel } from '../../../pipe/ThemeLabel';
     BadgePriority,
     BadgeSla,
     StatusLabel,
-    ThemeLabel,
   ],
   templateUrl: './ticket-list.html',
   styleUrl: './ticket-list.css',

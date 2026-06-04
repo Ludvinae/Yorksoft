@@ -19,7 +19,8 @@ type TicketDetailDto = {
   importance: number;
 
   // Details techniques
-  currentTheme: ThemeEnum;
+  idTheme: number;
+  themeCode: string;
   softwareName: string;
   idVersion: number;
   versionAbbreviatedLabel: string;

@@ -18,20 +18,16 @@
     minlength: 'Min 3 caractères'}">
   </app-field-text>
 
-  <app-field-select
+  <app-field-text
     labelKey="Code de dysfonctionnement"
     [control]="form.controls.code"
-    [options]="themeOptions"
-    valueField="code"
-    labelField="label"
     placeholder="Choisir un code"
     [errorMessages]="{
-    required: 'Le code est obligatoire'}"/>
+    required: 'Le code est obligatoire',
+    pattern: 'Le code doit être écrit en majuscule'}"/>
 
   <app-field-text labelKey="Description" placeholder="Description de la thématique"
                   [control]="form.controls.description"
-                  [errorMessages]="{}">
-  </app-field-text>
-
+                  [errorMessages]="{}"/>
 
 </app-generic-form-page>

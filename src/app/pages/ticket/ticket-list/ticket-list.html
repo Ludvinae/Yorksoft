@@ -94,7 +94,7 @@
             <tr>
               <td class="align-middle">{{ ticket.title }}</td>
               <td class="align-middle">{{ ticket.openDate | date: 'short'}}</td>
-              <td class="align-middle">{{ ticket.currentTheme | themeLabel }}</td>
+              <td class="align-middle">{{ ticket.themeDesignation }}</td>
               <td class="align-middle">{{ ticket.softwareName }}</td>
               <td class="align-middle">{{ ticket.versionNumber }} {{ ticket.versionTypeCode }}</td>
               <td class="align-middle">{{ ticket.currentStatus | statusLabel }}</td>

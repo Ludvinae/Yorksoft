@@ -13,7 +13,7 @@ import { KnowledgeSelector } from '../../../components/knowledge-selector/knowle
 
 @Component({
   selector: 'app-ticket-detail',
-  imports: [RouterLink, DatePipe, TicketComment, AssignTicketModal, FormsModule, KnowledgeSelector],
+  imports: [RouterLink, DatePipe, TicketComment, AssignTicketModal, FormsModule],
   templateUrl: './ticket-detail.html',
   styleUrl: './ticket-detail.css',
 })

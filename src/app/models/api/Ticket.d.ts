@@ -9,7 +9,7 @@ type Ticket = {
   callDuration: number | null;
   initialPriority: number;
   currentPriority: number;
-  currentTheme: ThemeEnum;
+  idCurrentTheme: number;
   currentStatus: StatusEnum;
   idVersion: number;
   idClient: number;

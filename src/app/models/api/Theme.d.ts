@@ -1,6 +1,6 @@
 type Theme = {
   idTheme: number;
   designation: string; // 3 <= size <= 127
-  code: ThemeEnum;
+  code: string;
   description: string | null;
 }

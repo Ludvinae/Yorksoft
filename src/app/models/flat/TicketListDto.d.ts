@@ -11,7 +11,7 @@ type TicketListDto = {
   callDuration: number;
   currentPriority: number;
   currentStatus: StatusEnum;
-  currentTheme: ThemeEnum;
+  themeDesignation: string;
   clientFirstName: string;
   clientLastName: string;
   softwareName: string;
