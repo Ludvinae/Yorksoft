@@ -7,7 +7,6 @@ import { FieldSelect } from '../../../components/form/field-select/field-select'
 import { FieldText } from '../../../components/form/field-text/field-text';
 import { GenericFormPage } from '../../../components/form/generic-form-page/generic-form-page';
 import { VersionService } from '../../../services/api/version-service';
-import { list } from 'postcss';
 import { ClientService } from '../../../services/api/client-service';
 
 @Component({
@@ -82,5 +81,4 @@ export class TicketEdit implements OnInit {
     });
   }
 
-  protected readonly list = list;
 }
