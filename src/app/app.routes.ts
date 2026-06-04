@@ -3,7 +3,6 @@ import { Login } from './pages/login/login';
 import { NotFound } from './pages/not-found/not-found';
 import { Knowledge } from './pages/knowledge/knowledge';
 import { Settings } from './pages/settings/settings';
-import { Dashboard } from './pages/dashboard/dashboard';
 import { SoftwareEdit } from './pages/admin/software/software-edit/software-edit';
 import { Admin } from './pages/admin/admin/admin';
 import { SoftwareDetail } from './pages/admin/software/software-detail/software-detail';
@@ -29,16 +28,11 @@ import { VersionDetail } from './pages/admin/version/version-detail/version-deta
 import { VersionTypeList } from './pages/admin/version-type/version-type-list/version-type-list';
 import { VersionTypeEdit } from './pages/admin/version-type/version-type-edit/version-type-edit';
 import { VersionTypeDetail } from './pages/admin/version-type/version-type-detail/version-type-detail';
-import { TicketList } from './pages/ticket/ticket-list/ticket-list';
-import { TicketEdit } from './pages/ticket/ticket-edit/ticket-edit';
-import { TicketDetail } from './pages/ticket/ticket-detail/ticket-detail';
 import { Forbidden } from './pages/forbidden/forbidden';
 import { technicianGuard } from './guards/technician-guard';
 import { clientGuard } from './guards/client-guard';
 import { employeeGuard } from './guards/employee-guard';
 import { adminGuard } from './guards/admin-guard';
-import { ClientList } from './pages/client/client-list/client-list';
-import { TicketNew } from './pages/ticket/ticket-new/ticket-new';
 
 export const routes: Routes = [
   {
@@ -48,37 +42,14 @@ export const routes: Routes = [
   },
   {
     path: 'dashboard',
-    component: Dashboard,
+    loadComponent: () => import('./pages/dashboard/dashboard').then((m) => m.Dashboard),
     title: 'Tableau de bord',
     canActivate: [clientGuard],
   },
-  {
-    path: 'ticket',
-    component: TicketList,
-    title: 'Tickets',
-    canActivate: [employeeGuard],
-  },
-  {
-    path: 'ticket/create',
-    component: TicketNew,
-    title: 'Nouveau ticket',
-    canActivate: [technicianGuard],
-  },
-  {
-    path: 'ticket/update/:id',
-    component: TicketEdit,
-    title: 'Modification de ticket',
-    canActivate: [technicianGuard],
-  },
-  {
-    path: 'ticket/:id',
-    component: TicketDetail,
-    title: 'Details du ticket',
-    canActivate: [technicianGuard],
-  },
+
   {
     path: 'clients',
-    component: ClientList,
+    loadComponent: () => import('./pages/client/client-list/client-list').then((m) => m.ClientList),
     title: 'Clients',
     canActivate: [employeeGuard],
   },
@@ -93,6 +64,39 @@ export const routes: Routes = [
     component: Settings,
     title: 'Réglages',
     canActivate: [clientGuard],
+  },
+  {
+    path: 'ticket',
+    children: [
+      {
+        path: '',
+        loadComponent: () =>
+          import('./pages/ticket/ticket-list/ticket-list')
+            .then(m => m.TicketList),
+        canActivate: [employeeGuard],
+      },
+      {
+        path: 'create',
+        loadComponent: () =>
+          import('./pages/ticket/ticket-new/ticket-new')
+            .then(m => m.TicketNew),
+        canActivate: [technicianGuard],
+      },
+      {
+        path: 'update/:id',
+        loadComponent: () =>
+          import('./pages/ticket/ticket-edit/ticket-edit')
+            .then(m => m.TicketEdit),
+        canActivate: [technicianGuard],
+      },
+      {
+        path: ':id',
+        loadComponent: () =>
+          import('./pages/ticket/ticket-detail/ticket-detail')
+            .then(m => m.TicketDetail),
+        canActivate: [technicianGuard],
+      },
+    ],
   },
   {
     path: 'admin',
