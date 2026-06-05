@@ -276,7 +276,8 @@ public interface TicketDao extends JpaRepository<Ticket, Integer>, JpaSpecificat
             t.idTicket, t.title, t.initialPriority, t.currentPriority, t.currentStatus,
             t.overdue, t.slaDeadline,
             c.idAppUser, CONCAT(c.firstName, ' ', c.lastName), c.email, c.phoneNumber, c.importance,
-            th.idTheme, th.code, s.name, v.idVersion, CONCAT(v.versionNumber, ' ', vt.code), t.openDate, t.closeDate,
+            th.idTheme, th.code, th.designation,
+            s.name, v.idVersion, CONCAT(v.versionNumber, ' ', vt.code), t.openDate, t.closeDate,
             t.description, t.solution,
             CONCAT(te.firstName, ' ', te.lastName), te.idAppUser, CONCAT(m.firstName, ' ', m.lastName), m.idAppUser, a.assignmentDate)
         FROM Ticket t

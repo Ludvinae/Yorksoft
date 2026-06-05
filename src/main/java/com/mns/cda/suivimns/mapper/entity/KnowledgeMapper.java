@@ -15,7 +15,9 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public abstract class KnowledgeMapper {
@@ -35,19 +37,24 @@ public abstract class KnowledgeMapper {
 
     @Mapping(target = "idTheme", source = "theme")
     @Mapping(target = "versionIds", source = "versionList")
+    @Mapping(target = "idProcedure", source = "procedure")
     public abstract KnowledgeDto toDto(Knowledge knowledge);
 
     //@Mapping(target = "idKnowledgeType", source = "knowledgeType")
     public abstract List<KnowledgeDto> toDtoList(List<Knowledge> knowledge);
 
     @Mapping(target="theme", source="idTheme")
-    @Mapping(target = "versionList", source = "versionIds")
+    @Mapping(target= "procedure", source = "idProcedure")
     public abstract Knowledge toEntity(KnowledgeDto dto);
 
 
     // Method helper pour ID vers ENTITE
     protected Theme mapIdToTheme(Integer id) {
         return themeDao.getReferenceById(id);
+    }
+
+    protected Procedure mapIdToProcedure(Integer id) {
+        return procedureDao.getReferenceById(id);
     }
 
     protected List<Version> mapIdsToVersions(List<Integer> ids) {
@@ -66,6 +73,10 @@ public abstract class KnowledgeMapper {
         return theme != null ? theme.getIdTheme() : null;
     }
 
+    protected Integer mapProcedureToId(Procedure procedure) {
+        return procedure != null ? procedure.getIdProcedure() : null;
+    }
+
     protected List<Integer> mapVersionsToIds(List<Version> versions) {
         if (versions == null) return null;
 
@@ -79,20 +90,23 @@ public abstract class KnowledgeMapper {
     @Mapping(target = "idKnowledge", ignore = true)
     @Mapping(target = "theme", source = "idTheme")
     @Mapping(target = "versionList", ignore = true)
+    @Mapping(target = "procedure", source = "idProcedure")
     public abstract void updateEntityFromDto(KnowledgeDto dto, @MappingTarget Knowledge entity);
 
     // Merge intelligent pour modifier la liste de versions en update
     @AfterMapping
-    protected void updateVersions(KnowledgeDto dto, @MappingTarget Knowledge entity) {
-        if (dto.versionIds() == null) return;
+    protected void updateVersions(
+            KnowledgeDto dto,
+            @MappingTarget Knowledge entity) {
 
-        List<Version> current = entity.getVersionList();
+        if (dto.versionIds() == null) {
+            return;
+        }
 
-        List<Version> updated = dto.versionIds().stream()
-                .map(versionDao::getReferenceById)
-                .toList();
-
-        current.clear();
-        current.addAll(updated);
+        entity.setVersionList(
+                dto.versionIds().stream()
+                        .map(versionDao::getReferenceById)
+                        .collect(Collectors.toList())
+        );
     }
 }

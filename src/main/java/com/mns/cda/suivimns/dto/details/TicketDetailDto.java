@@ -26,6 +26,7 @@ public record TicketDetailDto(
         // Détails techniques
         Integer idTheme,
         String themeCode,
+        String themeDesignation,
         String softwareName,
         Integer idVersion,
         String versionAbbreviatedLabel,

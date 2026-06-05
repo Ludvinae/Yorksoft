@@ -9,6 +9,8 @@ import java.util.List;
 public record KnowledgeDto(
         Integer idKnowledge,
         @NotBlank @Size(max = 255) String subject,
+        String description,
+        String resolution,
         @NotNull Integer idTheme,
         List<Integer> versionIds,
         Integer idProcedure
