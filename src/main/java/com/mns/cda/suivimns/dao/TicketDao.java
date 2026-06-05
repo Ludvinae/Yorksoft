@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface TicketDao extends JpaRepository<Ticket, Integer>, JpaSpecificationExecutor<Ticket> {
@@ -296,12 +297,14 @@ public interface TicketDao extends JpaRepository<Ticket, Integer>, JpaSpecificat
 
     @Query("""
         SELECT new com.mns.cda.suivimns.dto.details.TicketDetailKnowledge(
-            k.idKnowledge, k.subject)
-        FROM Knowledge k
-        JOIN k.versionList v ON v.idVersion = :idVersion
-        WHERE k.theme.code = :themeCode
+            k.idKnowledge, k.subject, k.description, k.resolution,
+            p.idProcedure, p.creationDate, p.modificationDate, p.title, p.content)
+        FROM Ticket t
+        JOIN t.knowledge k
+        LEFT JOIN k.procedure p
+        WHERE t.idTicket = :idTicket
     """)
-    TicketDetailKnowledge ticketKnowledge(String themeCode, Integer idVersion);
+    Optional<TicketDetailKnowledge> ticketKnowledge(Integer idTicket);
 
 
     @Query("""

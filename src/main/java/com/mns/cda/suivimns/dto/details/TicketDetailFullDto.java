@@ -8,7 +8,6 @@ public record TicketDetailFullDto(
         TicketDetailDto details,
         List<TicketDetailComment> comments,
         TicketDetailKnowledge knowledge,
-        List<TicketDetailProcedure> procedures,
         List<StatusEnum> possibleStatusTransitions
 ) {
 }

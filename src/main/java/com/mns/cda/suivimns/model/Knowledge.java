@@ -42,4 +42,10 @@ public class Knowledge {
 
     @OneToOne(mappedBy = "knowledge")
     protected Procedure procedure;
+
+    /*
+    @OneToMany(mappedBy = "knowledge")
+    protected List<Ticket> ticketList;
+
+     */
 }
