@@ -287,16 +287,6 @@
               </div>
             }
           </div>
-          <div>
-
-            <app-knowledge-selector [idTheme]="detail()!.idTheme"
-                                    [idVersion]="detail()!.idVersion"
-                                    [selectedKnowledge]="selectedKnowledge"
-                                    (knowledgeSelected)="onKnowledgeSelected($event)"
-                                    (createKnowledge)="openKnowledgeModal()"/>
-
-
-          </div>
 
         </div>
       </div>
@@ -475,7 +465,19 @@
       <div class="card bg-base-100 shadow-md border border-base-300">
         <div class="card-body">
 
-          <h2 class="card-title">
+          <div>
+            <h2 class="card-title">
+              Connaissance
+            </h2>
+            <app-knowledge-selector [idTheme]="detail()!.idTheme"
+                                    [idVersion]="detail()!.idVersion"
+                                    [selectedKnowledge]="selectedKnowledge"
+                                    (knowledgeSelected)="onKnowledgeSelected($event)"
+                                    (createKnowledge)="openKnowledgeModal()"/>
+
+          </div>
+
+          <h2 class="label-text font-semibold">
             Procedures connexes
           </h2>
 
