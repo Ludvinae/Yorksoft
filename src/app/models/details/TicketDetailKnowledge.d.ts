@@ -5,8 +5,8 @@ type TicketDetailKnowledge = {
   resolution: string;
 
   idProcedure: number;
-  creationDate: Date;
-  modificationDate: Date;
-  title: string;
-  content: string;
+  procedureCreationDate: Date;
+  procedureModificationDate: Date;
+  procedureTitle: string;
+  procedureContent: string;
 };

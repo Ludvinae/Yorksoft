@@ -471,20 +471,22 @@
             </h2>
             @if (knowledge()) {
               <p>{{ knowledge()?.subject }}</p>
+              <p>{{ knowledge()?.description }}</p>
+              <p>{{ knowledge()?.resolution }}</p>
               <h2 class="label-text font-semibold">
                 Procedures connexes
               </h2>
-              @if (knowledge()!.idProcedure) {
+              @if (knowledge()?.idProcedure) {
                 <div class="space-y-4">
 
                     <div>
 
                       <h3 class="font-semibold leading-tight">
-                        {{ knowledge()!.title }}
+                        {{ knowledge()!.procedureTitle }}
                       </h3>
 
                       <p class="text-sm opacity-70">
-                        {{ knowledge()!.content }}
+                        {{ knowledge()!.procedureContent }}
                       </p>
                     </div>
 
@@ -500,7 +502,7 @@
                                         [selectedKnowledge]="selectedKnowledge"
                                         (knowledgeSelected)="onKnowledgeSelected($event)"
                                         (createKnowledge)="openKnowledgeModal()"/>
-              }
+
 
               <h2 class="label-text font-semibold">
                 Procedures connexes
@@ -508,6 +510,7 @@
               <p class="font-semibold">
                 Aucun procedure correspondant trouvé
               </p>
+            }
           </div>
 
 
