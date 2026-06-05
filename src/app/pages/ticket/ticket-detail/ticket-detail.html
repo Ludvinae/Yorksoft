@@ -469,40 +469,48 @@
             <h2 class="card-title">
               Connaissance
             </h2>
-            <app-knowledge-selector [idTheme]="detail()!.idTheme"
-                                    [idVersion]="detail()!.idVersion"
-                                    [selectedKnowledge]="selectedKnowledge"
-                                    (knowledgeSelected)="onKnowledgeSelected($event)"
-                                    (createKnowledge)="openKnowledgeModal()"/>
+            @if (knowledge()) {
+              <p>{{ knowledge()?.subject }}</p>
+              <h2 class="label-text font-semibold">
+                Procedures connexes
+              </h2>
+              @if (knowledge()!.idProcedure) {
+                <div class="space-y-4">
 
+                    <div>
+
+                      <h3 class="font-semibold leading-tight">
+                        {{ knowledge()!.title }}
+                      </h3>
+
+                      <p class="text-sm opacity-70">
+                        {{ knowledge()!.content }}
+                      </p>
+                    </div>
+
+                </div>
+              } @else {
+                <p class="font-semibold">
+                  Aucun procedure correspondant trouvé
+                </p>
+              }
+            } @else {
+                <app-knowledge-selector [idTheme]="detail()!.idTheme"
+                                        [idVersion]="detail()!.idVersion"
+                                        [selectedKnowledge]="selectedKnowledge"
+                                        (knowledgeSelected)="onKnowledgeSelected($event)"
+                                        (createKnowledge)="openKnowledgeModal()"/>
+              }
+
+              <h2 class="label-text font-semibold">
+                Procedures connexes
+              </h2>
+              <p class="font-semibold">
+                Aucun procedure correspondant trouvé
+              </p>
           </div>
 
-          <h2 class="label-text font-semibold">
-            Procedures connexes
-          </h2>
 
-          @if (procedures().length > 0) {
-            <div class="space-y-4">
-
-              @for (procedure of procedures(); track procedure.idProcedure) {
-
-                <div>
-
-                  <h3 class="font-semibold leading-tight">
-                    {{ procedure.title }}
-                  </h3>
-
-                  <p class="text-sm opacity-70">
-                    {{ procedure.content }}
-                  </p>
-                </div>
-              }
-            </div>
-          } @else {
-            <p class="font-semibold">
-              Aucun procedure correspondant trouvé
-            </p>
-          }
           <button class="btn btn-outline mt-4" routerLink="/knowledge">
             BASE DE CONNAISSANCES
           </button>
