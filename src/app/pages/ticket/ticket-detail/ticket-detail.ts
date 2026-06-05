@@ -10,10 +10,20 @@ import { AuthService } from '../../../services/business/auth-service';
 import {AssignTicketModal} from '../../../components/ticket/assign-ticket-modal/assign-ticket-modal';
 import { FormsModule } from '@angular/forms';
 import { KnowledgeSelector } from '../../../components/knowledge-selector/knowledge-selector';
+import {KnowledgeService} from '../../../services/api/knowledge-service';
+import {KnowledgeCreateModal} from '../../../components/knowledge-create-modal/knowledge-create-modal';
 
 @Component({
   selector: 'app-ticket-detail',
-  imports: [RouterLink, DatePipe, TicketComment, AssignTicketModal, FormsModule],
+  imports: [
+    RouterLink,
+    DatePipe,
+    TicketComment,
+    AssignTicketModal,
+    FormsModule,
+    KnowledgeSelector,
+    KnowledgeCreateModal,
+  ],
   templateUrl: './ticket-detail.html',
   styleUrl: './ticket-detail.css',
 })
@@ -25,6 +35,7 @@ export class TicketDetail implements OnInit {
 
   ticket = signal<TicketDetailFullDto | null>(null);
   comments = signal<TicketDetailComment[]>([]);
+  protected showKnowledgeModal = signal(false);
 
   detail = computed(() => this.ticket()?.details);
   knowledge = computed(() => this.ticket()?.knowledge);
@@ -271,5 +282,36 @@ export class TicketDetail implements OnInit {
       this.auth.jwtInfo()?.role === 'ADMIN' ||
       this.auth.jwtInfo()?.role === 'MANAGER'
     );
+  }
+
+  protected selectedKnowledge?: KnowledgeSelect;
+
+  protected onKnowledgeSelected(knowledge: KnowledgeSelect): void {
+    this.selectedKnowledge = knowledge;
+
+    // future route PATCH ticket
+    // pour associer la connaissance
+  }
+
+
+
+  protected openKnowledgeModal(): void {
+    this.showKnowledgeModal.set(true);
+  }
+
+  protected closeKnowledgeModal(): void {
+    this.showKnowledgeModal.set(false);
+  }
+
+  protected onKnowledgeCreated(
+    knowledge: KnowledgeSelect
+  ): void {
+
+    this.selectedKnowledge = knowledge;
+
+    this.showKnowledgeModal.set(false);
+
+    this.onKnowledgeSelected(knowledge);
+
   }
 }

@@ -21,6 +21,7 @@ type TicketDetailDto = {
   // Details techniques
   idTheme: number;
   themeCode: string;
+  themeDesignation: string;
   softwareName: string;
   idVersion: number;
   versionAbbreviatedLabel: string;

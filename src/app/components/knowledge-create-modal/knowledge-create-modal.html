@@ -1,0 +1,114 @@
+<div class="modal modal-open">
+
+  <div class="modal-box max-w-3xl">
+
+    <h3 class="font-bold text-lg">
+      Nouvelle connaissance
+    </h3>
+
+  <form
+    [formGroup]="form"
+    class="space-y-4">
+
+    <div>
+
+      <label class="label">
+        <span class="label-text">
+          Sujet
+        </span>
+      </label>
+
+      <input
+        class="input input-bordered w-full"
+        formControlName="subject"
+      />
+
+    </div>
+
+    <div>
+
+      <label class="label">
+        <span class="label-text">
+          Description
+        </span>
+      </label>
+
+      <textarea
+        rows="4"
+        class="textarea textarea-bordered w-full"
+        formControlName="description">
+      </textarea>
+
+    </div>
+
+    <div>
+
+      <label class="label">
+        <span class="label-text">
+          Résolution résumée
+        </span>
+      </label>
+
+      <textarea
+        rows="4"
+        class="textarea textarea-bordered w-full"
+        formControlName="resolution">
+      </textarea>
+
+    </div>
+
+    <div class="grid grid-cols-2 gap-4">
+
+      <div>
+
+        <label class="label">
+          <span class="label-text">
+            Thématique
+          </span>
+        </label>
+
+        <input
+          class="input input-bordered w-full"
+          [value]="themeName"
+          disabled
+        />
+
+      </div>
+
+      <div>
+
+        <label class="label">
+          <span class="label-text">
+            Version
+          </span>
+        </label>
+
+        <input
+          class="input input-bordered w-full"
+          [value]="versionLabel"
+          disabled
+        />
+
+      </div>
+
+    </div>
+
+  </form>
+
+    <div class="modal-action">
+
+      <button
+        class="btn"
+        (click)="cancel()">
+        Annuler
+      </button>
+
+      <button
+        class="btn btn-primary"
+        (click)="save()">
+        Créer
+      </button>
+
+    </div>
+  </div>
+</div>

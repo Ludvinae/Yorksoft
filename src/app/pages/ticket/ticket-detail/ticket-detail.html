@@ -288,13 +288,14 @@
             }
           </div>
           <div>
-            <!--
+
             <app-knowledge-selector [idTheme]="detail()!.idTheme"
                                     [idVersion]="detail()!.idVersion"
-                                    [selectedKnowledge]="knowledge()"
+                                    [selectedKnowledge]="selectedKnowledge"
                                     (knowledgeSelected)="onKnowledgeSelected($event)"
-                                    (knowledgeCreated)="onKnowledgeCreated($event)"/>
-          -->
+                                    (createKnowledge)="openKnowledgeModal()"/>
+
+
           </div>
 
         </div>
@@ -510,6 +511,26 @@
     </div>
 
   </div>
+
+}
+
+@if(showKnowledgeModal()) {
+
+  <app-knowledge-create-modal
+
+    [idTheme]="detail()?.idTheme!"
+    [themeName]="detail()?.themeDesignation!"
+
+    [idVersion]="detail()?.idVersion!"
+    [versionLabel]="detail()?.versionAbbreviatedLabel!"
+
+    [ticketTitle]="detail()?.title ?? ''"
+    [ticketDescription]="detail()?.description ?? ''"
+
+    (close)="closeKnowledgeModal()"
+    (created)="onKnowledgeCreated($event)"
+
+  />
 
 }
 

@@ -25,7 +25,7 @@ export class KnowledgeService {
   }
 
   create(knowledge: Knowledge) {
-    return this.http.post(`${this.apiUrl}`, knowledge).pipe(tap(() => this.getAll().subscribe()));
+    return this.http.post<Knowledge>(`${this.apiUrl}`, knowledge).pipe(tap(() => this.getAll().subscribe()));
   }
 
   update(knowledge: Knowledge, id: number) {
@@ -46,7 +46,7 @@ export class KnowledgeService {
 
   searchKnowledge(request: KnowledgeSearch): Observable<KnowledgeSelect[]> {
     return this.http.post<KnowledgeSelect[]>(
-      `${this.apiUrl}/knowledge/search`,
+      `${this.apiUrl}/search`,
       request
     );
   }

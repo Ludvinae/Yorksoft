@@ -1,1 +1,64 @@
-<p>knowledge-selector works!</p>
+<div class="space-y-3">
+
+  <label class="label">
+    <span class="label-text font-semibold">
+      Connaissance associée
+    </span>
+  </label>
+
+  <input
+    type="text"
+    class="input input-bordered w-full"
+    placeholder="Rechercher une connaissance..."
+    [formControl]="searchControl"
+  />
+
+  @if(selectedKnowledge) {
+
+    <div class="alert alert-success">
+
+      <span>
+        Connaissance sélectionnée :
+        <strong>
+          {{ selectedKnowledge.subject }}
+        </strong>
+      </span>
+
+    </div>
+
+  }
+
+  @if(results.length > 0) {
+
+    <ul class="menu bg-base-200 rounded-box">
+
+      @for(
+        knowledge of results;
+        track knowledge.idKnowledge
+        ) {
+
+        <li>
+
+          <a
+            (click)="selectKnowledge(knowledge)"
+          >
+            {{ knowledge.subject }}
+          </a>
+
+        </li>
+
+      }
+
+    </ul>
+
+  }
+
+  <button
+    class="btn btn-outline btn-primary w-full"
+    type="button"
+    (click)="openCreateModal()"
+  >
+    + Créer une nouvelle connaissance
+  </button>
+
+</div>
