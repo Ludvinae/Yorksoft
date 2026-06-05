@@ -48,7 +48,8 @@ class KnowledgeControllerUnitTest {
         versions.add(1);
 
         knowledgeDto = new KnowledgeDto(
-                1, "Test subject", 1, versions, 1);
+                1, "Test subject", "Test description",
+                "Test resolution", 1, versions, 1);
 
     }
 
@@ -59,7 +60,8 @@ class KnowledgeControllerUnitTest {
     @WithMockUser(roles = "ADMIN")
     void shouldReturn400WhenCreateInvalid() throws Exception {
 
-        KnowledgeDto invalidDto = new KnowledgeDto(null,"", null, null, null);
+        KnowledgeDto invalidDto = new KnowledgeDto(null,"", "Test description",
+                "Test resolution", null, null, null);
 
         mockMvc.perform(post("/knowledge")
                         .with(csrf())
