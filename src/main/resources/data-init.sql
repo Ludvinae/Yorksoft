@@ -33,7 +33,7 @@ VALUES ( '0684545611', 'barbara.dupont99@gmail.com', 'Barbara', 'Dupont', '$2a$1
        ( '', 'kevin@creditmutuel.fr', 'Kevin', 'Martin', '$2a$10$V98VMxgV7myKHPE7eu7n3.GO8EUiqZGK/3ISjSriOFklF2Uvftx8u'),
        ('0355654525', 'jeanvaljean@yorksoft.fr', 'Jean', 'Valjean', '$2a$10$V98VMxgV7myKHPE7eu7n3.GO8EUiqZGK/3ISjSriOFklF2Uvftx8u'),
        ('0355657899', 'sandraschmidt@yorksoft.fr', 'Sandra', 'Schmidt', '$2a$10$V98VMxgV7myKHPE7eu7n3.GO8EUiqZGK/3ISjSriOFklF2Uvftx8u'),
-       ('0355657711', 'damienmuller@yorksoft.fr', 'Damien', 'Muller', '$2a$10$V98VMxgV7myKHPE7eu7n3.GO8EUiqZGK/3ISjSriOFklF2Uvftx8u'),
+       ('0355657711', 'thomasmuller@yorksoft.fr', 'Thomas', 'Muller', '$2a$10$V98VMxgV7myKHPE7eu7n3.GO8EUiqZGK/3ISjSriOFklF2Uvftx8u'),
        ('0355650001', 'patrickthierry@yorksoft.fr', 'Patrick', 'Thierry', '$2a$10$V98VMxgV7myKHPE7eu7n3.GO8EUiqZGK/3ISjSriOFklF2Uvftx8u' ),
        ('', 'jeanclaude@creditmutuel.fr', 'Jean-Claude', 'Convenant', '$2a$10$V98VMxgV7myKHPE7eu7n3.GO8EUiqZGK/3ISjSriOFklF2Uvftx8u'),
        ('', 'admin@yorksoft.fr', 'Super', 'Admin', '$2a$10$V98VMxgV7myKHPE7eu7n3.GO8EUiqZGK/3ISjSriOFklF2Uvftx8u'),
