@@ -1,12 +1,14 @@
-import { computed, Injectable, signal } from '@angular/core';
+import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import { TicketService } from '../api/ticket-service';
 import { TicketSearchCriteria } from '../../models/search/TicketSearchCriteria';
+import { TicketFilterState } from '../ui/ticket-filter-state';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TicketStoreService {
   constructor(private ticketService: TicketService) {}
+  private filterState = inject(TicketFilterState);
 
   // Filtres métier
   filters = signal<TicketSearchCriteria>({});
@@ -28,7 +30,10 @@ export class TicketStoreService {
 
   // Filtres réellement envoyés à l'API
   effectiveFilters = computed(() => {
-    const filters = { ...this.filters() };
+    const filters = {
+      ...this.filters(),
+      ...this.filterState.criteria(),
+    };
 
     if (filters.closedAfter || filters.closedBefore) {
       return filters;
@@ -56,6 +61,7 @@ export class TicketStoreService {
   }
 
   setFilters(filters: TicketSearchCriteria): void {
+    console.log('SET FILTERS', filters);
     this.filters.set(filters);
 
     this.page.set(0);
@@ -68,8 +74,8 @@ export class TicketStoreService {
     this.loadTickets();
   }
 
-  isFirstPage():boolean {
-    return this.page() <= 0
+  isFirstPage(): boolean {
+    return this.page() <= 0;
   }
 
   isLastPage(): boolean {
@@ -107,9 +113,13 @@ export class TicketStoreService {
     this.loadTickets();
   }
 
-
   loadTickets(): void {
     this.loading.set(true);
+    console.log('STORE FILTERS', this.filters());
+
+    console.log('SELECTED FILTER', this.filterState.selectedFilter());
+
+    console.log('CRITERIA', this.filterState.criteria());
 
     this.ticketService
       .getTickets(

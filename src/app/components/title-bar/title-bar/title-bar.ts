@@ -1,9 +1,10 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { TicketSearchCriteria } from '../../../models/search/TicketSearchCriteria';
 import { TicketStoreService } from '../../../services/business/ticket-store-service';
 import { AuthService } from '../../../services/business/auth-service';
 import { UserPreferencesService } from '../../../services/business/user-preferences-service';
+import { TicketFilterStateEnum } from '../../../models/enum/ticket-filter-state-enum';
+import { TicketFilterState } from '../../../services/ui/ticket-filter-state';
 
 @Component({
   selector: 'app-title-bar',
@@ -14,14 +15,14 @@ import { UserPreferencesService } from '../../../services/business/user-preferen
 export class TitleBar implements OnInit {
   auth = inject(AuthService);
   preferences = inject(UserPreferencesService);
+  filterState = inject(TicketFilterState);
 
-  buttonState = 'none';
+  buttonState = this.filterState.filter;
   currentUserRole: string | undefined = undefined;
 
   search = '';
   private searchTimeout: any;
 
-  filters: TicketSearchCriteria = {};
   showClosedTickets = true;
 
   constructor(public store: TicketStoreService) {}
@@ -40,42 +41,12 @@ export class TitleBar implements OnInit {
     }
   }
 
-  setFilter(filter: 'all' | 'assigned' | 'priority' | 'open'): void {
-    this.filters = {};
+  setFilter(filter: TicketFilterStateEnum): void {
+    this.store.resetFilters();
 
-    switch (filter) {
-      case 'open':
-        this.store.setFilters({
-          statuses: ['OPEN'],
-        });
-        this.buttonState = 'open';
-        break;
+    this.filterState.setFilter(filter);
 
-      case 'assigned':
-        // prevoir le cas ou pas d'id user
-        this.store.setFilters({
-          assignedTo: this.auth.jwtInfo()?.id,
-        });
-        this.buttonState = 'assigned';
-        break;
-
-      case 'priority':
-        this.store.setFilters({
-          priorityGreaterThan: 65,
-        });
-        this.buttonState = 'priority';
-        break;
-
-      case 'all':
-        this.store.setFilters({});
-        this.buttonState = 'all';
-        break;
-
-      default:
-        this.store.resetFilters();
-        this.buttonState = 'none';
-        break;
-    }
+    this.store.loadTickets();
   }
 
   // Fonction de recherche sur le titre, avec debounce 300ms
@@ -94,4 +65,6 @@ export class TitleBar implements OnInit {
 
     this.store.setShowClosedTickets(this.showClosedTickets);
   }
+
+  protected readonly TicketFilterStateEnum = TicketFilterStateEnum;
 }

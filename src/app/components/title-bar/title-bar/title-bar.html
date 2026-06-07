@@ -48,8 +48,8 @@
   <!-- Filters -->
   <button
     class="btn"
-    [class.btn-neutral]="buttonState == 'all'"
-    (click)="setFilter('all')">
+    [class.btn-neutral]="buttonState() === TicketFilterStateEnum.ALL"
+    (click)="setFilter(TicketFilterStateEnum.ALL)">
 
     Tous
   </button>
@@ -57,8 +57,8 @@
   @if (currentUserRole == "TECHNICIAN") {
     <button
       class="btn"
-      [class.btn-neutral]="buttonState == 'assigned'"
-      (click)="setFilter('assigned')">
+      [class.btn-neutral]="buttonState() === TicketFilterStateEnum.ASSIGNED"
+      (click)="setFilter(TicketFilterStateEnum.ASSIGNED)">
 
       Attribués
     </button>
@@ -66,8 +66,8 @@
   @else if (currentUserRole == 'MANAGER') {
     <button
       class="btn"
-       [class.btn-neutral]="buttonState == 'open'"
-      (click)="setFilter('open')">
+       [class.btn-neutral]="buttonState() === TicketFilterStateEnum.OPEN"
+      (click)="setFilter(TicketFilterStateEnum.OPEN)">
 
       A attribuer
     </button>
@@ -75,8 +75,8 @@
   @else if (currentUserRole == 'DIRECTOR') {
     <button
       class="btn"
-      [class.btn-neutral]="buttonState == 'open'"
-      (click)="setFilter('open')">
+      [class.btn-neutral]="buttonState() === TicketFilterStateEnum.OPEN"
+      (click)="setFilter(TicketFilterStateEnum.OPEN)">
 
       A attribuer
     </button>
@@ -84,8 +84,8 @@
 
   <button
     class="btn"
-    [class.btn-neutral]="buttonState == 'priority'"
-    (click)="setFilter('priority')">
+    [class.btn-neutral]="buttonState() === TicketFilterStateEnum.PRIORITY"
+    (click)="setFilter(TicketFilterStateEnum.PRIORITY)">
 
     Prioritaires
   </button>
