@@ -122,7 +122,7 @@ class SuiviMnsApplicationTests {
         TicketAssignmentDto assignment = new TicketAssignmentDto(1, "");
 
         mvc.perform(post("/ticket/" + newTicket.idTicket() + "/assign").contentType(MediaType.APPLICATION_JSON)
-                .with(user(principalManager)).)
+                .with(user(principalManager)))
                 .andExpect(status().isOk());
     }
 
