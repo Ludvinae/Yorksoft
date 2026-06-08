@@ -96,8 +96,8 @@ export class TicketService {
     );
   }
 
-  assign(idTicket: number, idTechnician: number, idManager: number, statusReason: string) {
-    const assignment: TicketAssignment = { idTechnician, idManager, statusReason };
+  assign(idTicket: number, idTechnician: number, statusReason: string) {
+    const assignment: TicketAssignment = { idTechnician: idTechnician, statusReason: statusReason };
 
     return this.http.post(`${this.apiUrl}/${idTicket}/assign`, assignment).pipe(
       tap((result) => {

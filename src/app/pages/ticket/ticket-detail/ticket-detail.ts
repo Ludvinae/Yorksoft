@@ -185,7 +185,6 @@ export class TicketDetail implements OnInit {
         request$ = this.ticketService.assign(
           this.id()!,
           payload.idAppUser,
-          this.auth.jwtInfo()!.id,
           payload.reason,
         );
         break;

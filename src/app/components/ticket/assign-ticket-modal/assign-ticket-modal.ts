@@ -81,7 +81,7 @@ export class AssignTicketModal implements OnInit {
     const idManager: number = this.authService.jwtInfo()!.id;
 
     this.ticketService
-      .assign(this.ticket.idTicket, technician.idTechnician, idManager, this.reassignmentReason)
+      .assign(this.ticket.idTicket, technician.idTechnician, this.reassignmentReason)
       .subscribe({
         next: () => {
           this.loadTechnicians();
