@@ -1,14 +1,11 @@
 package com.mns.cda.suivimns.integration;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.mns.cda.suivimns.dao.ClientDao;
-import com.mns.cda.suivimns.dao.TechnicianDao;
-import com.mns.cda.suivimns.dao.TicketDao;
 import com.mns.cda.suivimns.dto.entity.TicketDto;
+import com.mns.cda.suivimns.dto.workflow.StateChangeJustification;
 import com.mns.cda.suivimns.dto.workflow.TicketAssignmentDto;
 import com.mns.cda.suivimns.dto.workflow.TicketCreationDto;
+import com.mns.cda.suivimns.dto.workflow.TicketDescriptionDto;
 import com.mns.cda.suivimns.model.*;
 import com.mns.cda.suivimns.security.AppUserDetails;
 import lombok.RequiredArgsConstructor;
@@ -99,6 +96,19 @@ class SuiviMnsApplicationTests {
                 .andExpect(status().isCreated());
     }
 
+    @Test
+    @WithMockUser("CLIENT")
+    public void callCreateNewTicketWithClient_shouldReturnCode403() throws Exception {
+
+        TicketCreationDto ticket = new TicketCreationDto("Title", "description",
+                1, 1, 1, 1, 1, 1);
+        String jsonCreation = mapper.writeValueAsString(ticket);
+
+        mvc.perform(post("/ticket")
+                        .contentType(MediaType.APPLICATION_JSON).content(jsonCreation))
+                .andExpect(status().isForbidden());
+    }
+
 
     @Test
     @WithUserDetails("jeanvaljean@yorksoft.fr")
@@ -115,6 +125,7 @@ class SuiviMnsApplicationTests {
         manager.setIdAppUser(4);
         AppUserDetails principalManager = new AppUserDetails(manager);
 
+        // Creation de ticket
         TicketCreationDto ticket = new TicketCreationDto("Title", "description",
                 1, 1, 1, 1, 1, 1);
         String jsonCreation = mapper.writeValueAsString(ticket);
@@ -122,10 +133,9 @@ class SuiviMnsApplicationTests {
         String newTicketJson = mvc.perform(post("/ticket")
                 .contentType(MediaType.APPLICATION_JSON).with(user(principalTech)).content(jsonCreation)).andReturn().getResponse().getContentAsString();
 
-        //TicketDto newTicket = mapper.readValue(newTicketJson, new TypeReference<TicketDto>(){});
         TicketDto newTicket = mapper.readValue(newTicketJson, TicketDto.class);
-        System.out.println(newTicket);
 
+        // Assignation
         TicketAssignmentDto assignment = new TicketAssignmentDto(5, "");
         String assignmentJson = mapper.writeValueAsString(assignment);
 
@@ -135,4 +145,202 @@ class SuiviMnsApplicationTests {
     }
 
 
+    @Test
+    @WithUserDetails("sandraschmidt@yorksoft.fr")
+    public void callStartProgressWithTechnician_shouldReturnCode200() throws Exception {
+
+        Technician technician = new Technician();
+        technician.setEmail( "technician@test.fr");
+        technician.setIdAppUser(5);
+        technician.setRank((byte) 1);
+        AppUserDetails principalTech = new AppUserDetails(technician);
+
+        Manager manager = new Manager();
+        manager.setEmail( "manager@test.fr");
+        manager.setIdAppUser(4);
+        AppUserDetails principalManager = new AppUserDetails(manager);
+
+        // Creation de ticket
+        TicketCreationDto ticket = new TicketCreationDto("Title", "description",
+                1, 1, 1, 1, 1, 1);
+        String jsonCreation = mapper.writeValueAsString(ticket);
+
+        String newTicketJson = mvc.perform(post("/ticket")
+                .contentType(MediaType.APPLICATION_JSON).with(user(principalTech)).content(jsonCreation))
+                .andReturn().getResponse().getContentAsString();
+
+        TicketDto newTicket = mapper.readValue(newTicketJson, TicketDto.class);
+
+        // Assignation
+        TicketAssignmentDto assignment = new TicketAssignmentDto(5, "");
+        String assignmentJson = mapper.writeValueAsString(assignment);
+
+        String assignedTicket = mvc.perform(post("/ticket/" + newTicket.idTicket() + "/assign").contentType(MediaType.APPLICATION_JSON)
+                        .with(user(principalManager)).content(assignmentJson))
+                .andReturn().getResponse().getContentAsString();
+
+        // Prise en charge
+        mvc.perform(post("/ticket/" + newTicket.idTicket() + "/start-progress").contentType(MediaType.APPLICATION_JSON)
+                .with(user(principalTech)).content(assignedTicket))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser("TECHNICIAN")
+    public void callUpdateDescriptionWithTechnician_shouldReturnCode200() throws Exception {
+
+        Technician technician = new Technician();
+        technician.setEmail( "sandraschmidt@yorksoft.fr");
+        technician.setIdAppUser(5);
+        technician.setRank((byte) 1);
+        AppUserDetails principalTech = new AppUserDetails(technician);
+
+        Manager manager = new Manager();
+        manager.setEmail( "manager@test.fr");
+        manager.setIdAppUser(4);
+        AppUserDetails principalManager = new AppUserDetails(manager);
+
+        // Creation de ticket
+        TicketCreationDto ticket = new TicketCreationDto("Title", "description",
+                1, 1, 1, 1, 1, 1);
+        String jsonCreation = mapper.writeValueAsString(ticket);
+
+        String newTicketJson = mvc.perform(post("/ticket")
+                        .contentType(MediaType.APPLICATION_JSON).with(user(principalTech)).content(jsonCreation))
+                .andReturn().getResponse().getContentAsString();
+
+        TicketDto newTicket = mapper.readValue(newTicketJson, TicketDto.class);
+
+        // Assignation
+        TicketAssignmentDto assignment = new TicketAssignmentDto(5, "");
+        String assignmentJson = mapper.writeValueAsString(assignment);
+
+        mvc.perform(post("/ticket/" + newTicket.idTicket() + "/assign")
+                .contentType(MediaType.APPLICATION_JSON).with(user(principalManager)).content(assignmentJson));
+
+        String justification = mapper.writeValueAsString(new StateChangeJustification(""));
+
+        // Prise en charge
+        mvc.perform(post("/ticket/" + newTicket.idTicket() + "/start-progress")
+                .contentType(MediaType.APPLICATION_JSON).with(user(principalTech)).content(justification));
+
+        TicketDescriptionDto description = new TicketDescriptionDto("", "Solution pour l'incident");
+        String descriptionJson = mapper.writeValueAsString(description);
+
+        // Update ticket with solution
+        mvc.perform(patch("/ticket/" + newTicket.idTicket() + "/description")
+                .contentType(MediaType.APPLICATION_JSON).with(user(principalTech)).content(descriptionJson))
+                .andExpect(status().isOk());
+
+    }
+
+    @Test
+    @WithMockUser("TECHNICIAN")
+    public void callSolveTicketWithTechnician_shouldReturnCode200() throws Exception {
+
+        Technician technician = new Technician();
+        technician.setEmail( "sandraschmidt@yorksoft.fr");
+        technician.setIdAppUser(5);
+        technician.setRank((byte) 1);
+        AppUserDetails principalTech = new AppUserDetails(technician);
+
+        Manager manager = new Manager();
+        manager.setEmail( "manager@test.fr");
+        manager.setIdAppUser(4);
+        AppUserDetails principalManager = new AppUserDetails(manager);
+
+        // Creation de ticket
+        TicketCreationDto ticket = new TicketCreationDto("Title", "description",
+                1, 1, 1, 1, 1, 1);
+        String jsonCreation = mapper.writeValueAsString(ticket);
+
+        String newTicketJson = mvc.perform(post("/ticket")
+                        .contentType(MediaType.APPLICATION_JSON).with(user(principalTech)).content(jsonCreation))
+                .andReturn().getResponse().getContentAsString();
+
+        TicketDto newTicket = mapper.readValue(newTicketJson, TicketDto.class);
+
+        // Assignation
+        TicketAssignmentDto assignment = new TicketAssignmentDto(5, "");
+        String assignmentJson = mapper.writeValueAsString(assignment);
+
+        mvc.perform(post("/ticket/" + newTicket.idTicket() + "/assign")
+                .contentType(MediaType.APPLICATION_JSON).with(user(principalManager)).content(assignmentJson));
+
+        String justification = mapper.writeValueAsString(new StateChangeJustification(""));
+
+        // Prise en charge
+        mvc.perform(post("/ticket/" + newTicket.idTicket() + "/start-progress")
+                .contentType(MediaType.APPLICATION_JSON).with(user(principalTech)).content(justification));
+
+        // Update ticket with solution
+        TicketDescriptionDto description = new TicketDescriptionDto("", "Solution pour l'incident");
+        String descriptionJson = mapper.writeValueAsString(description);
+
+        mvc.perform(patch("/ticket/" + newTicket.idTicket() + "/description")
+                        .contentType(MediaType.APPLICATION_JSON).with(user(principalTech)).content(descriptionJson));
+
+        // Solve ticket
+        mvc.perform(post("/ticket/" + newTicket.idTicket() + "/solve")
+                .contentType(MediaType.APPLICATION_JSON).with(user(principalTech)).content(justification))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithUserDetails("sandraschmidt@yorksoft.fr")
+    public void callCloseTicketWithTechnician_shouldReturnCode200() throws Exception {
+
+        Technician technician = new Technician();
+        technician.setEmail( "technician@test.fr");
+        technician.setIdAppUser(5);
+        technician.setRank((byte) 1);
+        AppUserDetails principalTech = new AppUserDetails(technician);
+
+        Manager manager = new Manager();
+        manager.setEmail( "manager@test.fr");
+        manager.setIdAppUser(4);
+        AppUserDetails principalManager = new AppUserDetails(manager);
+
+        // Creation de ticket
+        TicketCreationDto ticket = new TicketCreationDto("Title", "description",
+                1, 1, 1, 1, 1, 1);
+        String jsonCreation = mapper.writeValueAsString(ticket);
+
+        String newTicketJson = mvc.perform(post("/ticket")
+                        .contentType(MediaType.APPLICATION_JSON).with(user(principalTech)).content(jsonCreation))
+                .andReturn().getResponse().getContentAsString();
+
+        TicketDto newTicket = mapper.readValue(newTicketJson, TicketDto.class);
+
+        // Assignation
+        TicketAssignmentDto assignment = new TicketAssignmentDto(5, "Justification");
+        String assignmentJson = mapper.writeValueAsString(assignment);
+
+        mvc.perform(post("/ticket/" + newTicket.idTicket() + "/assign")
+                .contentType(MediaType.APPLICATION_JSON).with(user(principalManager)).content(assignmentJson));
+
+        String justification = mapper.writeValueAsString(new StateChangeJustification(""));
+
+
+        // Prise en charge
+        mvc.perform(post("/ticket/" + newTicket.idTicket() + "/start-progress")
+                .contentType(MediaType.APPLICATION_JSON).with(user(principalTech)).content(justification));
+
+
+        // Update ticket with solution
+        TicketDescriptionDto description = new TicketDescriptionDto("", "Solution pour l'incident");
+        String descriptionJson = mapper.writeValueAsString(description);
+
+        mvc.perform(patch("/ticket/" + newTicket.idTicket() + "/description")
+                .contentType(MediaType.APPLICATION_JSON).with(user(principalTech)).content(descriptionJson));
+
+        // Solve ticket
+        mvc.perform(post("/ticket/" + newTicket.idTicket() + "/solve")
+                        .contentType(MediaType.APPLICATION_JSON).with(user(principalTech)).content(justification));
+
+
+        mvc.perform(post("/ticket/" + newTicket.idTicket() + "/close")
+                .contentType(MediaType.APPLICATION_JSON).with(user(principalTech)).content(justification))
+                .andExpect(status().isOk());
+    }
 }
