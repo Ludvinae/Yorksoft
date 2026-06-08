@@ -14,6 +14,7 @@ import com.mns.cda.suivimns.security.AppUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -32,7 +33,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class SuiviMnsApplicationTests {
 
     private final WebApplicationContext context;
-    private ObjectMapper mapper = JsonMapper.builder().build();
+    // private ObjectMapper mapper = JsonMapper.builder().build();
+    @Autowired
+    private ObjectMapper mapper;
     private MockMvc mvc;
 
     @BeforeEach
@@ -103,10 +106,13 @@ class SuiviMnsApplicationTests {
 
         Technician technician = new Technician();
         technician.setEmail( "technician@test.fr");
+        technician.setIdAppUser(5);
+        technician.setRank((byte) 1);
         AppUserDetails principalTech = new AppUserDetails(technician);
 
         Manager manager = new Manager();
         manager.setEmail( "manager@test.fr");
+        manager.setIdAppUser(4);
         AppUserDetails principalManager = new AppUserDetails(manager);
 
         TicketCreationDto ticket = new TicketCreationDto("Title", "description",
@@ -116,13 +122,15 @@ class SuiviMnsApplicationTests {
         String newTicketJson = mvc.perform(post("/ticket")
                 .contentType(MediaType.APPLICATION_JSON).with(user(principalTech)).content(jsonCreation)).andReturn().getResponse().getContentAsString();
 
-        TicketDto newTicket = mapper.readValue(newTicketJson, new TypeReference<TicketDto>(){});
+        //TicketDto newTicket = mapper.readValue(newTicketJson, new TypeReference<TicketDto>(){});
+        TicketDto newTicket = mapper.readValue(newTicketJson, TicketDto.class);
         System.out.println(newTicket);
 
-        TicketAssignmentDto assignment = new TicketAssignmentDto(1, "");
+        TicketAssignmentDto assignment = new TicketAssignmentDto(5, "");
+        String assignmentJson = mapper.writeValueAsString(assignment);
 
         mvc.perform(post("/ticket/" + newTicket.idTicket() + "/assign").contentType(MediaType.APPLICATION_JSON)
-                .with(user(principalManager)))
+                .with(user(principalManager)).content(assignmentJson))
                 .andExpect(status().isOk());
     }
 
