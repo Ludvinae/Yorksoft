@@ -262,12 +262,12 @@ public class TicketService  {
         return ticketMapper.toDto(ticketChanged);
     }
 
-    public TicketDto setWaitingStatus(Integer idTicket, TicketWaitDto dto) {
+    public TicketDto setWaitingStatus(Integer idTicket, TicketWaitDto dto, AppUserDetails principal) {
 
         // Récupère le ticket par l'id
         Ticket ticket = getTicket(idTicket);
 
-        Technician technician = technicianDao.findById(dto.idTechnician())
+        Technician technician = technicianDao.findById(principal.getId())
                 .orElseThrow(TechnicianNotFoundException::new);
 
         if (dto.waitingStatus() != StatusEnum.WAITING_CLIENT

@@ -321,16 +321,17 @@ class TicketControllerUnitTest {
     @WithMockUser(roles = "TECHNICIAN")
     void shouldSetWaitingStatus() throws Exception {
 
-        TicketWaitDto dto = new TicketWaitDto(1, StatusEnum.WAITING_CLIENT, "Details insuffisants");
+        TicketWaitDto dto = new TicketWaitDto( StatusEnum.WAITING_CLIENT, "Details insuffisants");
 
-        when(ticketService.setWaitingStatus(eq(1), any())).thenReturn(ticketDto);
+        when(ticketService.setWaitingStatus(eq(1), any(), any(AppUserDetails.class))).thenReturn(ticketDto);
 
         mockMvc.perform(post("/ticket/1/wait")
+                        .with(user("sandraschmidt@yorksoft.fr"))
                                 .with(csrf())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isOk());
 
-        verify(ticketService).setWaitingStatus(eq(1), any());
+        verify(ticketService).setWaitingStatus(eq(1), any(), any(AppUserDetails.class));
     }
 }

@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public record TicketWaitDto(
-        @NotNull Integer idTechnician,
         @NotNull StatusEnum waitingStatus,
         @NotBlank String statusReason
 ) {

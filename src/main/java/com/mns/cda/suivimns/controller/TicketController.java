@@ -224,10 +224,11 @@ public class TicketController {
     @IsTechnician
     public TicketDto setWaitingStatus(
             @PathVariable Integer id,
-            @RequestBody @Valid TicketWaitDto dto
+            @RequestBody @Valid TicketWaitDto dto,
+            @AuthenticationPrincipal AppUserDetails principal
     ) {
 
-        return ticketService.setWaitingStatus(id, dto);
+        return ticketService.setWaitingStatus(id, dto, principal);
     }
 
 }
