@@ -6,9 +6,11 @@ import com.mns.cda.suivimns.model.groups.OnCreate;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
 
 public record TicketDto(
         Integer idTicket,
@@ -31,4 +33,5 @@ public record TicketDto(
         List<Integer> themeIds,
         List<Integer> historyIds
 ) {
+
 }

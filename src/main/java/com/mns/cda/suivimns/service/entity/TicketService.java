@@ -178,13 +178,13 @@ public class TicketService  {
      * @param assignmentDto
      * @return
      */
-    public TicketDto assignTicket(Integer idTicket, TicketAssignmentDto assignmentDto) {
+    public TicketDto assignTicket(Integer idTicket, TicketAssignmentDto assignmentDto, AppUserDetails principal) {
 
         // Récupère le ticket par l'id
         Ticket ticket = getTicket(idTicket);
 
         // Récupère le technicien et le manager
-        Manager manager = managerDao.findById(assignmentDto.idManager())
+        Manager manager = managerDao.findById(principal.getId())
                 .orElseThrow(ManagerNotFoundException::new);
         Technician technician = technicianDao.findById(assignmentDto.idTechnician())
                 .orElseThrow(TechnicianNotFoundException::new);

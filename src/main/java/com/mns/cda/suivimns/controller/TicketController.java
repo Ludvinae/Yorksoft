@@ -132,8 +132,9 @@ public class TicketController {
     @PostMapping("/{id}/assign")
     @IsManager
     public ResponseEntity<TicketDto> assign(@PathVariable Integer id,
-                                            @RequestBody @Valid TicketAssignmentDto assignment) {
-        return new ResponseEntity<>(ticketService.assignTicket(id, assignment), HttpStatus.OK);
+                                            @RequestBody @Valid TicketAssignmentDto assignment,
+                                            @AuthenticationPrincipal AppUserDetails principal) {
+        return new ResponseEntity<>(ticketService.assignTicket(id, assignment, principal), HttpStatus.OK);
     }
 
 

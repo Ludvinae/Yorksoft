@@ -29,7 +29,6 @@ public class TicketAssignmentDtoUnitTest {
     void shouldValidateValidDto() {
         TicketAssignmentDto dto = new TicketAssignmentDto(
                 1,
-                2,
                 "Re-assigned to a specialist technician"
         );
 
@@ -44,7 +43,6 @@ public class TicketAssignmentDtoUnitTest {
     void shouldFailWhenIdTechnicianIsNull() {
         TicketAssignmentDto dto = new TicketAssignmentDto(
                 null,
-                2,
                 "Reason"
         );
 
@@ -61,34 +59,13 @@ public class TicketAssignmentDtoUnitTest {
 
     }
 
-    @Test
-    @DisplayName("Should fail when idManager is null")
-    void shouldFailWhenIdManagerIsNull() {
-        TicketAssignmentDto dto = new TicketAssignmentDto(
-                1,
-                null,
-                "Reason"
-        );
 
-        Set<ConstraintViolation<TicketAssignmentDto>> violations =
-                validator.validate(dto);
-
-        assertThat(violations).hasSize(1);
-
-        ConstraintViolation<TicketAssignmentDto> violation =
-                violations.iterator().next();
-
-        assertThat(violation.getPropertyPath().toString())
-                .isEqualTo("idManager");
-
-    }
 
     @Test
     @DisplayName("Should validate when statusReason is null")
     void shouldValidateWhenStatusReasonIsNull() {
         TicketAssignmentDto dto = new TicketAssignmentDto(
                 1,
-                2,
                 null
         );
 
@@ -106,7 +83,6 @@ public class TicketAssignmentDtoUnitTest {
 
         TicketAssignmentDto dto = new TicketAssignmentDto(
                 1,
-                2,
                 longReason
         );
 
@@ -130,7 +106,6 @@ public class TicketAssignmentDtoUnitTest {
 
         TicketAssignmentDto dto = new TicketAssignmentDto(
                 1,
-                2,
                 reason
         );
 

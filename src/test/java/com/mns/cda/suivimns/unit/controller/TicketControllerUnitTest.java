@@ -10,7 +10,9 @@ import com.mns.cda.suivimns.dto.search.TicketListDto;
 import com.mns.cda.suivimns.dto.workflow.*;
 import com.mns.cda.suivimns.enumerate.StatusEnum;
 import com.mns.cda.suivimns.exception.TicketNotFoundException;
+import com.mns.cda.suivimns.model.Manager;
 import com.mns.cda.suivimns.model.Theme;
+import com.mns.cda.suivimns.security.AppUserDetails;
 import com.mns.cda.suivimns.service.business.TicketDetailService;
 import com.mns.cda.suivimns.service.entity.TicketService;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,6 +24,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -31,6 +34,7 @@ import java.util.List;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -76,10 +80,12 @@ class TicketControllerUnitTest {
                 1, "BUG", "Bug", "Test software", 1, "1.0.0 r",
                 LocalDateTime.now(), null, "Test description", null, null,
                 null, null, null, null);
-        TicketDetailKnowledge ticketDetailKnowledge = new TicketDetailKnowledge(1, "Test subject");
+        TicketDetailKnowledge ticketDetailKnowledge = new TicketDetailKnowledge(1, "Test subject",
+                "Test description", "Test resolution", 1, LocalDateTime.now(),
+                LocalDateTime.now(), "Test title", "Test content");
 
         ticketDetailFullDto = new TicketDetailFullDto(ticketDetailDto,
-                List.of(), ticketDetailKnowledge, List.of(), List.of(StatusEnum.ASSIGNED));
+                List.of(), ticketDetailKnowledge, List.of(StatusEnum.ASSIGNED));
     }
 
     // ===================
@@ -222,18 +228,24 @@ class TicketControllerUnitTest {
     @WithMockUser(roles = "MANAGER")
     void shouldAssignTicket() throws Exception {
 
-        TicketAssignmentDto dto = new TicketAssignmentDto(1,2,"Assignation");
+        Manager manager = new Manager();
+        manager.setIdAppUser(1);
+        manager.setEmail( "manager@test.fr");
+        AppUserDetails principal = new AppUserDetails(manager);
 
-        when(ticketService.assignTicket(eq(1),any())).thenReturn(ticketDto);
+        TicketAssignmentDto dto = new TicketAssignmentDto(1,"Assignation");
+
+        when(ticketService.assignTicket(eq(1),any(TicketAssignmentDto.class), any(AppUserDetails.class))).thenReturn(ticketDto);
 
         mockMvc.perform(post("/ticket/1/assign")
+                                .with(user(principal))
                                 .with(csrf())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(dto)))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        verify(ticketService).assignTicket(eq(1), any());
+        verify(ticketService).assignTicket(eq(1), any(TicketAssignmentDto.class), any(AppUserDetails.class));
     }
 
     @Test
