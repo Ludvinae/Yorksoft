@@ -3,6 +3,8 @@ package com.mns.cda.suivimns.mapper.entity;
 import com.mns.cda.suivimns.dao.ClientDao;
 import com.mns.cda.suivimns.dao.SoftwareDao;
 import com.mns.cda.suivimns.dto.entity.LicenseDto;
+import com.mns.cda.suivimns.exception.ClientNotFoundException;
+import com.mns.cda.suivimns.exception.SoftwareNotFoundException;
 import com.mns.cda.suivimns.model.Client;
 import com.mns.cda.suivimns.model.License;
 import com.mns.cda.suivimns.model.Software;
@@ -36,11 +38,11 @@ public abstract class LicenseMapper {
 
     // Method helper pour ID vers ENTITE
     protected Software mapIdToSoftware(Integer id) {
-        return softwareDao.getReferenceById(id);
+        return softwareDao.findById(id).orElseThrow(SoftwareNotFoundException::new);
     }
 
     protected Client mapIdToClient(Integer id) {
-        return clientDao.getReferenceById(id);
+        return clientDao.findById(id).orElseThrow(ClientNotFoundException::new);
     }
 
     // Method helper pour ENTITE vers ID

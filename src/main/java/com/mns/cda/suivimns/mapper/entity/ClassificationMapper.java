@@ -3,6 +3,8 @@ package com.mns.cda.suivimns.mapper.entity;
 import com.mns.cda.suivimns.dao.ThemeDao;
 import com.mns.cda.suivimns.dao.TicketDao;
 import com.mns.cda.suivimns.dto.entity.ClassificationDto;
+import com.mns.cda.suivimns.exception.ThemeNotFoundException;
+import com.mns.cda.suivimns.exception.TicketNotFoundException;
 import com.mns.cda.suivimns.model.Classification;
 import com.mns.cda.suivimns.model.Theme;
 import com.mns.cda.suivimns.model.Ticket;
@@ -46,10 +48,10 @@ public abstract class ClassificationMapper {
     }
 
     protected Ticket mapIdToTicket(Integer id) {
-        return ticketDao.getReferenceById(id);
+        return ticketDao.findById(id).orElseThrow(TicketNotFoundException::new);
     }
 
     protected Theme mapIdToTheme(Integer id) {
-        return themeDao.getReferenceById(id);
+        return themeDao.findById(id).orElseThrow(ThemeNotFoundException::new);
     }
 }

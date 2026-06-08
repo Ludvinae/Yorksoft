@@ -3,6 +3,8 @@ package com.mns.cda.suivimns.mapper.entity;
 import com.mns.cda.suivimns.dao.SoftwareDao;
 import com.mns.cda.suivimns.dao.VersionTypeDao;
 import com.mns.cda.suivimns.dto.entity.VersionDto;
+import com.mns.cda.suivimns.exception.SoftwareNotFoundException;
+import com.mns.cda.suivimns.exception.VersionTypeNotFoundException;
 import com.mns.cda.suivimns.model.Software;
 import com.mns.cda.suivimns.model.Version;
 import com.mns.cda.suivimns.model.VersionType;
@@ -34,11 +36,11 @@ public abstract class VersionMapper {
 
     // Method helper pour ID vers ENTITE
     protected VersionType mapVersionType(Integer id) {
-        return versionTypeDao.getReferenceById(id);
+        return versionTypeDao.findById(id).orElseThrow(VersionTypeNotFoundException::new);
     }
 
     protected Software mapSoftware(Integer id) {
-        return softwareDao.getReferenceById(id);
+        return softwareDao.findById(id).orElseThrow(SoftwareNotFoundException::new);
     }
 
 

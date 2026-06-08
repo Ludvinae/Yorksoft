@@ -5,6 +5,8 @@ import com.mns.cda.suivimns.dao.ThemeDao;
 import com.mns.cda.suivimns.dao.VersionDao;
 import com.mns.cda.suivimns.dto.entity.KnowledgeDto;
 import com.mns.cda.suivimns.dto.search.KnowledgeSelect;
+import com.mns.cda.suivimns.exception.ProcedureNotFoundException;
+import com.mns.cda.suivimns.exception.ThemeNotFoundException;
 import com.mns.cda.suivimns.model.Procedure;
 import com.mns.cda.suivimns.model.Knowledge;
 import com.mns.cda.suivimns.model.Theme;
@@ -50,11 +52,11 @@ public abstract class KnowledgeMapper {
 
     // Method helper pour ID vers ENTITE
     protected Theme mapIdToTheme(Integer id) {
-        return themeDao.getReferenceById(id);
+        return themeDao.findById(id).orElseThrow(ThemeNotFoundException::new);
     }
 
     protected Procedure mapIdToProcedure(Integer id) {
-        return procedureDao.getReferenceById(id);
+        return procedureDao.findById(id).orElseThrow(ProcedureNotFoundException::new);
     }
 
     protected List<Version> mapIdsToVersions(List<Integer> ids) {

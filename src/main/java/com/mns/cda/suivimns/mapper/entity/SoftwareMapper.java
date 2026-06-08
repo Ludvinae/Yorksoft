@@ -2,6 +2,7 @@ package com.mns.cda.suivimns.mapper.entity;
 
 import com.mns.cda.suivimns.dao.SoftwareTypeDao;
 import com.mns.cda.suivimns.dto.entity.SoftwareDto;
+import com.mns.cda.suivimns.exception.SoftwareTypeNotFoundException;
 import com.mns.cda.suivimns.model.Software;
 import com.mns.cda.suivimns.model.SoftwareType;
 import org.mapstruct.Mapper;
@@ -29,7 +30,7 @@ public abstract class SoftwareMapper {
 
     // Method helper pour ID vers ENTITE
     protected SoftwareType mapIdToSoftwareType(Integer id) {
-        return softwareTypeDao.getReferenceById(id);
+        return softwareTypeDao.findById(id).orElseThrow(SoftwareTypeNotFoundException::new);
     }
 
     // Method helper pour ENTITE vers ID

@@ -3,6 +3,8 @@ package com.mns.cda.suivimns.mapper.entity;
 import com.mns.cda.suivimns.dao.KnowledgeDao;
 import com.mns.cda.suivimns.dao.TechnicianDao;
 import com.mns.cda.suivimns.dto.entity.ProcedureDto;
+import com.mns.cda.suivimns.exception.KnowledgeNotFoundException;
+import com.mns.cda.suivimns.exception.TechnicianNotFoundException;
 import com.mns.cda.suivimns.model.Procedure;
 import com.mns.cda.suivimns.model.Knowledge;
 import com.mns.cda.suivimns.model.Technician;
@@ -34,11 +36,11 @@ public abstract class ProcedureMapper {
 
     // Method helper pour ID vers ENTITE
     protected Knowledge mapIdToKnowledge(Integer id) {
-        return knowledgeDao.getReferenceById(id);
+        return knowledgeDao.findById(id).orElseThrow(KnowledgeNotFoundException::new);
     }
 
     protected Technician mapIdToTechnician(Integer id) {
-        return technicianDao.getReferenceById(id);
+        return technicianDao.findById(id).orElseThrow(TechnicianNotFoundException::new);
     }
 
     // Method helper pour ENTITE vers ID

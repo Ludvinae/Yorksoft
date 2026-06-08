@@ -193,6 +193,9 @@ public class TicketService  {
 
         metricsService.refreshTicketMetrics(ticketAssigned);
 
+        System.out.println("Principal id = " + principal.getId());
+        System.out.println("Assigned technician = " + assignmentDto.idTechnician());
+
         return ticketMapper.toDto(ticketAssigned);
     }
 

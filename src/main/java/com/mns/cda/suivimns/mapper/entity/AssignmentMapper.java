@@ -4,6 +4,9 @@ import com.mns.cda.suivimns.dao.ManagerDao;
 import com.mns.cda.suivimns.dao.TechnicianDao;
 import com.mns.cda.suivimns.dao.TicketDao;
 import com.mns.cda.suivimns.dto.entity.AssignmentDto;
+import com.mns.cda.suivimns.exception.ManagerNotFoundException;
+import com.mns.cda.suivimns.exception.TechnicianNotFoundException;
+import com.mns.cda.suivimns.exception.TicketNotFoundException;
 import com.mns.cda.suivimns.model.Assignment;
 import com.mns.cda.suivimns.model.Manager;
 import com.mns.cda.suivimns.model.Technician;
@@ -42,15 +45,15 @@ public abstract class AssignmentMapper {
 
     // Method helper pour ID vers ENTITE
     protected Ticket mapIdToTicket(Integer id) {
-        return ticketDao.getReferenceById(id);
+        return ticketDao.findById(id).orElseThrow(TicketNotFoundException::new);
     }
 
     protected Manager mapIdToManager(Integer id) {
-        return managerDao.getReferenceById(id);
+        return managerDao.findById(id).orElseThrow(ManagerNotFoundException::new);
     }
 
     protected Technician mapIdToTechnician(Integer id) {
-        return technicianDao.getReferenceById(id);
+        return technicianDao.findById(id).orElseThrow(TechnicianNotFoundException::new);
     }
 
     // Method helper pour ENTITE vers ID

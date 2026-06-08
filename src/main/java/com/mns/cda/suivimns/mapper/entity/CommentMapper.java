@@ -3,6 +3,8 @@ package com.mns.cda.suivimns.mapper.entity;
 import com.mns.cda.suivimns.dao.AppUserDao;
 import com.mns.cda.suivimns.dao.TicketDao;
 import com.mns.cda.suivimns.dto.entity.CommentDto;
+import com.mns.cda.suivimns.exception.AppUserNotFoundException;
+import com.mns.cda.suivimns.exception.TicketNotFoundException;
 import com.mns.cda.suivimns.model.AppUser;
 import com.mns.cda.suivimns.model.Comment;
 import com.mns.cda.suivimns.model.Ticket;
@@ -36,11 +38,11 @@ public abstract class CommentMapper {
 
     // Method helper pour ID vers ENTITE
     protected Ticket mapIdToTicket(Integer id) {
-        return ticketDao.getReferenceById(id);
+        return ticketDao.findById(id).orElseThrow(TicketNotFoundException::new);
     }
 
     protected AppUser mapIdToAppUser(Integer id) {
-        return appUserDao.getReferenceById(id);
+        return appUserDao.findById(id).orElseThrow(AppUserNotFoundException::new);
     }
 
     // Method helper pour ENTITE vers ID

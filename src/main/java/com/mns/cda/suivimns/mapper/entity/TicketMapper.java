@@ -4,6 +4,10 @@ import com.mns.cda.suivimns.dao.*;
 import com.mns.cda.suivimns.dto.entity.TicketDto;
 import com.mns.cda.suivimns.dto.search.TicketListDto;
 import com.mns.cda.suivimns.dto.workflow.TicketCreationDto;
+import com.mns.cda.suivimns.exception.ClientNotFoundException;
+import com.mns.cda.suivimns.exception.ImpactNotFoundException;
+import com.mns.cda.suivimns.exception.UrgencyNotFoundException;
+import com.mns.cda.suivimns.exception.VersionNotFoundException;
 import com.mns.cda.suivimns.model.*;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
@@ -90,19 +94,19 @@ public abstract class TicketMapper {
 
     // Method helper pour ID vers ENTITE
     protected Version mapIdToVersion(Integer id) {
-        return versionDao.getReferenceById(id);
+        return versionDao.findById(id).orElseThrow(VersionNotFoundException::new);
     }
 
     protected Client mapIdToClient(Integer id) {
-        return clientDao.getReferenceById(id);
+        return clientDao.findById(id).orElseThrow(ClientNotFoundException::new);
     }
 
     protected Impact mapIdToImpact(Integer id) {
-        return impactDao.getReferenceById(id);
+        return impactDao.findById(id).orElseThrow(ImpactNotFoundException::new);
     }
 
     protected Urgency mapIdTourgency(Integer id) {
-        return urgencyDao.getReferenceById(id);
+        return urgencyDao.findById(id).orElseThrow(UrgencyNotFoundException::new);
     }
 
     protected List<Comment> mapIdsToComments(List<Integer> ids) {
