@@ -46,11 +46,7 @@ public class AppUserController {
     @IsDirector
     public ResponseEntity<AppUserDto> getById(@PathVariable int id) {
 
-        try {
-            return new ResponseEntity<>(appUserService.findById(id) , HttpStatus.OK);
-        } catch (AppUserNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(appUserService.findById(id) , HttpStatus.OK);
     }
 
 
@@ -70,12 +66,8 @@ public class AppUserController {
     @DeleteMapping("/{id}")
     @IsAdmin
     public ResponseEntity<Void> delete(@PathVariable int id) {
-        try {
-            appUserService.delete(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (AppUserNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        appUserService.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
     
 
@@ -88,16 +80,8 @@ public class AppUserController {
     @PatchMapping("/{id}")
     @IsAdmin
     public ResponseEntity<AppUserDto> update(@PathVariable int id, @RequestBody @Valid AppUserDto dto) {
-
-        try {
-            AppUserDto user = appUserService.update(id, dto);
-            return new ResponseEntity<>(user, HttpStatus.OK);
-        } catch (AppUserNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            // IMPLEMENTER TEST UNICITE EMAIL !!!
-        } catch (EmailAlreadyUsedException e) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-        }
+        AppUserDto user = appUserService.update(id, dto);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
 
@@ -110,13 +94,7 @@ public class AppUserController {
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PatchMapping("/{id}/password")
     public ResponseEntity<Void> patch(@PathVariable int id, @RequestBody PasswordDto dto) {
-        try {
-            appUserService.updatePassword(id, dto);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (AppUserNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (BadPasswordException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        appUserService.updatePassword(id, dto);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

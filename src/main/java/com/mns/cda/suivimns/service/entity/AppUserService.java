@@ -28,7 +28,7 @@ public class AppUserService {
         return appUserMapper.toDtoList(appUserDao.findAll());
     }
 
-    public AppUserDto findById(int id) throws AppUserNotFoundException {
+    public AppUserDto findById(int id) {
         AppUser appUser = appUserDao.findById(id)
                 .orElseThrow(AppUserNotFoundException::new);
 
@@ -55,15 +55,14 @@ public class AppUserService {
         appUserDao.save(appUser);
     }
 
-    public void delete(int id) throws AppUserNotFoundException {
+    public void delete(int id) {
         AppUser appUser = appUserDao.findById(id)
                 .orElseThrow(AppUserNotFoundException::new);
 
         appUserDao.delete(appUser);
     }
 
-    public AppUserDto update(int id, AppUserDto dto)
-            throws AppUserNotFoundException, EmailAlreadyUsedException {
+    public AppUserDto update(int id, AppUserDto dto) {
 
         if (appUserDao.existsByEmail(dto.email())) {
             throw new EmailAlreadyUsedException();
@@ -78,8 +77,7 @@ public class AppUserService {
         return appUserMapper.toDto(appUserDao.save(currentAppUser));
     }
 
-    public void updatePassword(int id, PasswordDto dto)
-            throws AppUserNotFoundException, BadPasswordException {
+    public void updatePassword(int id, PasswordDto dto) {
 
         AppUser user = appUserDao.findById(id)
                 .orElseThrow(AppUserNotFoundException::new);

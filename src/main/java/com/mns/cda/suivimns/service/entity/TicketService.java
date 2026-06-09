@@ -221,6 +221,10 @@ public class TicketService  {
         // Récupère le ticket par l'id
         Ticket ticket = getTicket(idTicket);
 
+        if (ticket.getCurrentTechnician() == null) {
+            throw new AssignmentConflictException();
+        }
+
         Technician technician = technicianDao.findById(principal.getId())
                 .orElseThrow(TechnicianNotFoundException::new);
 
@@ -235,6 +239,10 @@ public class TicketService  {
 
     public TicketDto resumeTicket(Integer idTicket, StateChangeJustification justification, AppUserDetails principal) {
         Ticket ticket = getTicket(idTicket);
+
+        if (ticket.getCurrentTechnician() == null) {
+            throw new IllegalStatusTransitionException();
+        }
 
         AppUser user = appUserDao.findById(principal.getId())
                 .orElseThrow(AppUserNotFoundException::new);

@@ -1,4 +1,4 @@
 package com.mns.cda.suivimns.exception;
 
-public class TicketNotFoundException extends RuntimeException {
+public class TicketNotFoundException extends RessourceNotFoundException {
 }

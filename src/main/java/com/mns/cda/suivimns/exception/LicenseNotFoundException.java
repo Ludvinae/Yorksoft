@@ -1,4 +1,4 @@
 package com.mns.cda.suivimns.exception;
 
-public class LicenseNotFoundException extends RuntimeException {
+public class LicenseNotFoundException extends RessourceNotFoundException {
 }

@@ -1,5 +1,5 @@
 package com.mns.cda.suivimns.exception;
 
 // Custom exception
-public class VersionNotFoundException extends RuntimeException {
+public class VersionNotFoundException extends RessourceNotFoundException {
 }

@@ -46,12 +46,18 @@ public class GlobalExceptionInterceptor {
         return new ErrorResponseDto(400, "ILLEGAL_STATE", "Statut invalide");
     }
 
-
-    @ExceptionHandler(TicketNotFoundException.class)
+    @ExceptionHandler(AppUserNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponseDto handleMissingTicket(TicketNotFoundException ex) {
+    public ErrorResponseDto handleMissingUser(AppUserNotFoundException ex) {
 
-        return new ErrorResponseDto(404, "TICKET_NOT_FOUND", "Impossible de retrouver ce ticket");
+        return new ErrorResponseDto(404, "USER_NOT_FOUND", "Impossible de retrouver cette utilisateur");
+    }
+
+    @ExceptionHandler(RessourceNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponseDto handleMissingRessource(RessourceNotFoundException ex) {
+
+        return new ErrorResponseDto(404, "RESSOURCE_NOT_FOUND", "Impossible de retrouver cette ressource");
     }
 
     @ExceptionHandler(IllegalStatusTransitionException.class)
@@ -74,27 +80,16 @@ public class GlobalExceptionInterceptor {
         );
     }
 
-    @ExceptionHandler(AppUserNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponseDto handleAppUserNotFound(
-            AppUserNotFoundException ex
-    ) {
-        return new ErrorResponseDto(
-                404,
-                "USER_NOT_FOUND",
-                "L'utilisateur n'existe pas"
-        );
-    }
 
     @ExceptionHandler(AssignmentConflictException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponseDto handleTechnicianAlreadyAssigned(
+    public ErrorResponseDto handleTechnicianAssignmentConflict(
             AssignmentConflictException ex
     ) {
         return new ErrorResponseDto(
                 409,
                 "ASSIGNMENT_CONFLICT",
-                "Le technicien est déja attribué"
+                "Technicien non assigné ou déja assigné"
         );
     }
 
@@ -120,12 +115,6 @@ public class GlobalExceptionInterceptor {
     }
 
 
-    @ExceptionHandler(StatusNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponseDto handleMissingStatus(StatusNotFoundException ex) {
-
-        return new ErrorResponseDto(404, "STATUS_NOT_FOUND", "Impossible de retrouver ce statut");
-    }
 
     @ExceptionHandler(InvalidSortCriteriaException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -164,5 +153,38 @@ public class GlobalExceptionInterceptor {
 
         return new ErrorResponseDto(400, "MISSING_JUSTIFICATION",
                 "Transition requires a justification");
+    }
+
+    @ExceptionHandler(UnauthorizedTechnicianException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ErrorResponseDto handleUnauthorizedTechnician(UnauthorizedTechnicianException ex) {
+
+        return new ErrorResponseDto(403, "UNAUTHORIZED_TECHNICIAN",
+                "This technician can't handle this ressource");
+    }
+
+    @ExceptionHandler(TicketAlreadyClosedException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorResponseDto handleEditingClosedTicket(TicketAlreadyClosedException ex) {
+
+        return new ErrorResponseDto(409, "TICKET_ALREADY_CLOSED",
+                "Can't edit a closed ticket");
+    }
+
+    // A ameliorer pour eviter de reveler des informations
+    @ExceptionHandler(EmailAlreadyUsedException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorResponseDto handleEmailConflict(EmailAlreadyUsedException ex) {
+
+        return new ErrorResponseDto(409, "EMAIL_UNAVAILABLE",
+                "Email déja utilisé");
+    }
+
+    @ExceptionHandler(BadPasswordException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponseDto handleWrongPassword(BadPasswordException ex) {
+
+        return new ErrorResponseDto(400, "BAD_PASSWORD",
+                "Mot de passe incorrect");
     }
 }
