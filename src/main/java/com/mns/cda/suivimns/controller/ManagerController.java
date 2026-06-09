@@ -48,12 +48,7 @@ public class ManagerController {
     @GetMapping("/{id}")
     @IsDirector
     public ResponseEntity<ManagerDto> getById(@PathVariable int id) {
-
-        try {
-            return new ResponseEntity<>(managerService.findById(id) , HttpStatus.OK);
-        } catch (ManagerNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(managerService.findById(id) , HttpStatus.OK);
     }
 
     /* Replaced by route in Auth controller
@@ -74,14 +69,8 @@ public class ManagerController {
     @DeleteMapping("/{id}")
     @IsManager
     public ResponseEntity<Void> delete(@PathVariable int id, @AuthenticationPrincipal AppUserDetails userDetails) {
-        try {
-            managerService.delete(id, userDetails);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (ManagerNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (AccountNotOwnedException e) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
+        managerService.delete(id, userDetails);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 
@@ -96,18 +85,8 @@ public class ManagerController {
     @IsManager
     public ResponseEntity<ManagerDto> update(@PathVariable int id, @RequestBody @Valid ManagerDto dto,
                                              @AuthenticationPrincipal AppUserDetails userDetails) {
-
-        try {
-            ManagerDto user = managerService.update(id, dto, userDetails);
-            return new ResponseEntity<>(user, HttpStatus.OK);
-        } catch (ManagerNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            // IMPLEMENTER TEST UNICITE EMAIL !!!
-        } catch (EmailAlreadyUsedException e) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-        } catch (AccountNotOwnedException e) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
+        ManagerDto user = managerService.update(id, dto, userDetails);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
 
@@ -122,15 +101,7 @@ public class ManagerController {
     @IsManager
     public ResponseEntity<Void> patch(@PathVariable int id, @RequestBody PasswordDto dto,
                                       @AuthenticationPrincipal AppUserDetails userDetails) {
-        try {
-            managerService.updatePassword(id, dto, userDetails);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (ManagerNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (BadPasswordException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } catch (AccountNotOwnedException e) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
+        managerService.updatePassword(id, dto, userDetails);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

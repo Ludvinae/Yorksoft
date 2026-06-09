@@ -57,12 +57,7 @@ public class TechnicianController {
     @GetMapping("/{id}")
     @IsDirector
     public ResponseEntity<TechnicianDto> getById(@PathVariable int id) {
-
-        try {
-            return new ResponseEntity<>(technicianService.findById(id) , HttpStatus.OK);
-        } catch (TechnicianNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(technicianService.findById(id) , HttpStatus.OK);
     }
 
 
@@ -84,14 +79,8 @@ public class TechnicianController {
     @DeleteMapping("/{id}")
     @IsTechnician
     public ResponseEntity<Void> delete(@PathVariable int id, @AuthenticationPrincipal AppUserDetails userDetails) {
-        try {
-            technicianService.delete(id, userDetails);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (TechnicianNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (AccountNotOwnedException e) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
+        technicianService.delete(id, userDetails);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 
@@ -105,18 +94,8 @@ public class TechnicianController {
     @IsTechnician
     public ResponseEntity<TechnicianDto> update(@PathVariable int id, @RequestBody @Valid TechnicianDto dto,
                                                 @AuthenticationPrincipal AppUserDetails userDetails) {
-
-        try {
-            TechnicianDto user = technicianService.update(id, dto, userDetails);
-            return new ResponseEntity<>(user, HttpStatus.OK);
-        } catch (TechnicianNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            // IMPLEMENTER TEST UNICITE EMAIL !!!
-        } catch (EmailAlreadyUsedException e) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-        } catch (AccountNotOwnedException e) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
+        TechnicianDto user = technicianService.update(id, dto, userDetails);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
 
@@ -131,15 +110,7 @@ public class TechnicianController {
     @IsTechnician
     public ResponseEntity<Void> patch(@PathVariable int id, @RequestBody PasswordDto dto,
                                       @AuthenticationPrincipal AppUserDetails userDetails) {
-        try {
-            technicianService.updatePassword(id, dto, userDetails);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (TechnicianNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (BadPasswordException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } catch (AccountNotOwnedException e) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
+        technicianService.updatePassword(id, dto, userDetails);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

@@ -48,12 +48,7 @@ public class DirectorController {
     @GetMapping("/{id}")
     @IsDirector
     public ResponseEntity<DirectorDto> getById(@PathVariable int id) {
-
-        try {
-            return new ResponseEntity<>(directorService.findById(id) , HttpStatus.OK);
-        } catch (DirectorNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(directorService.findById(id) , HttpStatus.OK);
     }
 
     /* Replaced by route in Auth controller
@@ -74,14 +69,8 @@ public class DirectorController {
     @DeleteMapping("/{id}")
     @IsDirector
     public ResponseEntity<Void> delete(@PathVariable int id, @AuthenticationPrincipal AppUserDetails userDetails) {
-        try {
-            directorService.delete(id, userDetails);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (DirectorNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (AccountNotOwnedException e) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
+        directorService.delete(id, userDetails);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 
@@ -95,18 +84,8 @@ public class DirectorController {
     @IsDirector
     public ResponseEntity<DirectorDto> update(@PathVariable int id, @RequestBody @Valid DirectorDto dto,
                                               @AuthenticationPrincipal AppUserDetails userDetails) {
-
-        try {
-            DirectorDto user = directorService.update(id, dto, userDetails);
-            return new ResponseEntity<>(user, HttpStatus.OK);
-        } catch (DirectorNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            // IMPLEMENTER TEST UNICITE EMAIL !!!
-        } catch (EmailAlreadyUsedException e) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-        } catch (AccountNotOwnedException e) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
+        DirectorDto user = directorService.update(id, dto, userDetails);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
 
@@ -121,15 +100,7 @@ public class DirectorController {
     @IsDirector
     public ResponseEntity<Void> patch(@PathVariable int id, @RequestBody PasswordDto dto,
                                       @AuthenticationPrincipal AppUserDetails userDetails) {
-        try {
-            directorService.updatePassword(id, dto, userDetails);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (DirectorNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (BadPasswordException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } catch (AccountNotOwnedException e) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
+        directorService.updatePassword(id, dto, userDetails);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

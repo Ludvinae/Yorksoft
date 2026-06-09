@@ -54,12 +54,7 @@ public class SoftwareController {
     @GetMapping("/{id}")
     @IsTechnician
     public ResponseEntity<SoftwareDto> findById(@PathVariable Integer id) {
-
-        try {
-            return new ResponseEntity<>(softwareService.findById(id) , HttpStatus.OK);
-        } catch (SoftwareNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(softwareService.findById(id) , HttpStatus.OK);
     }
 
     @Operation(summary = "Récupérer les details d'un logiciel par son ID")
@@ -69,12 +64,7 @@ public class SoftwareController {
     @GetMapping("/{id}/detail")
     @IsTechnician
     public ResponseEntity<SoftwareDetailDto> findByIdDetail(@PathVariable Integer id) {
-
-        try {
-            return new ResponseEntity<>(softwareService.findByIdDetail(id) , HttpStatus.OK);
-        } catch (SoftwareNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(softwareService.findByIdDetail(id) , HttpStatus.OK);
     }
 
 
@@ -96,13 +86,8 @@ public class SoftwareController {
     @DeleteMapping("/{id}")
     @IsAdmin
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
-
-        try {
-            softwareService.delete(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (SoftwareNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        softwareService.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 
@@ -115,10 +100,6 @@ public class SoftwareController {
     @PutMapping("/{id}")
     @IsManager
     public ResponseEntity<SoftwareDto> update(@PathVariable Integer id, @RequestBody @Valid SoftwareDto softwareToUpdate) {
-        try {
-            return new ResponseEntity<>(softwareService.update(id, softwareToUpdate), HttpStatus.OK);
-        } catch (SoftwareNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(softwareService.update(id, softwareToUpdate), HttpStatus.OK);
     }
 }

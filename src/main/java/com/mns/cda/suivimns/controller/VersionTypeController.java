@@ -45,12 +45,7 @@ public class VersionTypeController {
     @GetMapping("/{id}")
     @IsTechnician
     public ResponseEntity<VersionTypeDto> getById(@PathVariable Integer id) {
-
-        try {
-            return new ResponseEntity<>(versionTypeService.findById(id) , HttpStatus.OK);
-        } catch (VersionTypeNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(versionTypeService.findById(id) , HttpStatus.OK);
     }
 
 
@@ -74,13 +69,8 @@ public class VersionTypeController {
     @DeleteMapping("/{id}")
     @IsAdmin
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
-
-        try {
-            versionTypeService.delete(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (VersionTypeNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        versionTypeService.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 
@@ -94,10 +84,6 @@ public class VersionTypeController {
     @PutMapping("/{id}")
     @IsManager
     public ResponseEntity<VersionTypeDto> update(@PathVariable Integer id, @RequestBody @Valid VersionTypeDto typeToUpdate) {
-        try {
-            return new ResponseEntity<>(versionTypeService.update(id, typeToUpdate), HttpStatus.OK);
-        } catch (VersionTypeNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(versionTypeService.update(id, typeToUpdate), HttpStatus.OK);
     }
 }

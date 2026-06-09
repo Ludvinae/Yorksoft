@@ -44,11 +44,7 @@ public class ClientController {
             @PageableDefault(size = 10, sort = "lastName", direction = Sort.Direction.ASC)
             Pageable pageable
     ) {
-        try {
-            return new ResponseEntity<>(clientService.search(criteria, pageable) , HttpStatus.OK);
-        } catch (InvalidSortCriteriaException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        return new ResponseEntity<>(clientService.search(criteria, pageable) , HttpStatus.OK);
     }
 
 
@@ -58,12 +54,7 @@ public class ClientController {
     @GetMapping("/{id}")
     @IsDirector
     public ResponseEntity<ClientDto> getById(@PathVariable int id) {
-
-        try {
-            return new ResponseEntity<>(clientService.findById(id) , HttpStatus.OK);
-        } catch (ClientNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(clientService.findById(id) , HttpStatus.OK);
     }
 
 
@@ -85,14 +76,8 @@ public class ClientController {
     @DeleteMapping("/{id}")
     @IsClient
     public ResponseEntity<Void> delete(@PathVariable int id, @AuthenticationPrincipal AppUserDetails userDetails) {
-        try {
-            clientService.delete(id, userDetails);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (ClientNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (AccountNotOwnedException e) {
-            return new  ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
+        clientService.delete(id, userDetails);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 
@@ -106,18 +91,8 @@ public class ClientController {
     @IsClient
     public ResponseEntity<ClientDto> update(@PathVariable int id, @RequestBody @Valid ClientDto dto,
                                             @AuthenticationPrincipal AppUserDetails userDetails) {
-
-        try {
-            ClientDto user = clientService.update(id, dto, userDetails);
-            return new ResponseEntity<>(user, HttpStatus.OK);
-        } catch (ClientNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            // IMPLEMENTER TEST UNICITE EMAIL !!!
-        } catch (EmailAlreadyUsedException e) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-        } catch (AccountNotOwnedException e) {
-            return new  ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
+        ClientDto user = clientService.update(id, dto, userDetails);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
 
@@ -132,15 +107,7 @@ public class ClientController {
     @IsClient
     public ResponseEntity<Void> patch(@PathVariable int id, @RequestBody PasswordDto dto,
                                       @AuthenticationPrincipal AppUserDetails userDetails) {
-        try {
-            clientService.updatePassword(id, dto, userDetails);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (ClientNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (BadPasswordException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } catch (AccountNotOwnedException e) {
-            return new  ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
+        clientService.updatePassword(id, dto, userDetails);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

@@ -41,12 +41,7 @@ public class LicenseController {
     @GetMapping("/{id}")
     @IsDirector
     public ResponseEntity<LicenseDto> getById(@PathVariable int id) {
-
-        try {
-            return new ResponseEntity<>(licenseService.findById(id) , HttpStatus.OK);
-        } catch (LicenseNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(licenseService.findById(id) , HttpStatus.OK);
     }
 
 
@@ -66,12 +61,8 @@ public class LicenseController {
     @DeleteMapping("/{id}")
     @IsAdmin
     public ResponseEntity<Void> delete(@PathVariable int id) {
-        try {
-            licenseService.delete(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (LicenseNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        licenseService.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 
@@ -83,10 +74,6 @@ public class LicenseController {
     @PutMapping("/{id}")
     @IsDirector
     public ResponseEntity<LicenseDto> update(@PathVariable int id, @RequestBody @Valid LicenseDto licenseToUpdate) {
-        try {
-            return new ResponseEntity<>(licenseService.update(id, licenseToUpdate), HttpStatus.OK);
-        } catch (LicenseNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(licenseService.update(id, licenseToUpdate), HttpStatus.OK);
     }
 }

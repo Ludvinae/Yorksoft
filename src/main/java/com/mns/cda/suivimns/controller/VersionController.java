@@ -64,11 +64,7 @@ public class VersionController {
     @GetMapping("/{id}")
     @IsTechnician
     public ResponseEntity<VersionDto> findById(@PathVariable Integer id) {
-        try {
-            return new ResponseEntity<>(versionService.findById(id) , HttpStatus.OK);
-        } catch (VersionNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(versionService.findById(id) , HttpStatus.OK);
     }
 
     @Operation(summary = "Récupérer une version par son ID avec les données des entités liées")
@@ -78,11 +74,7 @@ public class VersionController {
     @GetMapping("/{id}/detail")
     @IsTechnician
     public ResponseEntity<VersionDetailDto> findByIdDetail(@PathVariable Integer id) {
-        try {
-            return new ResponseEntity<>(versionService.findByIdDetail(id) , HttpStatus.OK);
-        } catch (VersionNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(versionService.findByIdDetail(id) , HttpStatus.OK);
     }
 
 
@@ -104,12 +96,8 @@ public class VersionController {
     @DeleteMapping("/{id}")
     @IsAdmin
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
-        try {
-            versionService.delete(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (VersionNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        versionService.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 
@@ -123,10 +111,6 @@ public class VersionController {
     @PutMapping("/{id}")
     @IsManager
     public ResponseEntity<VersionDto> update(@PathVariable Integer id, @RequestBody @Valid VersionDto versionToUpdate) {
-        try {
-            return new ResponseEntity<>(versionService.update(id, versionToUpdate), HttpStatus.OK);
-        } catch (VersionNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(versionService.update(id, versionToUpdate), HttpStatus.OK);
     }
 }

@@ -83,41 +83,33 @@ public class AuthController {
     @PostMapping("/log-in")
     public ResponseEntity<String> logIn(
             @RequestBody UserLoginDto user) {
-        try {
-            AppUserDetails appUser = (AppUserDetails) authenticationProvider
-                    .authenticate(new UsernamePasswordAuthenticationToken(
-                            user.email(),
-                            user.password())
-                    ).getPrincipal();
+        AppUserDetails appUser = (AppUserDetails) authenticationProvider
+                .authenticate(new UsernamePasswordAuthenticationToken(user.email(), user.password())).getPrincipal();
 
-            // HERITAGE
-            String role = appUser.getManager() != null
-                    ? "MANAGER"
-                    : appUser.getTechnician() != null
-                        ? "TECHNICIAN"
-                        : appUser.getClient() != null
-                            ? "CLIENT"
-                            : appUser.getDirector() != null
-                                ? "DIRECTOR"
-                                : "ADMIN";
+        // HERITAGE
+        String role = appUser.getManager() != null
+                ? "MANAGER"
+                : appUser.getTechnician() != null
+                ? "TECHNICIAN"
+                : appUser.getClient() != null
+                ? "CLIENT"
+                : appUser.getDirector() != null
+                ? "DIRECTOR"
+                : "ADMIN";
 
-            String name = appUser.getName();
-            int id =  appUser.getId();
-            String rank = appUser.getRank();
+        String name = appUser.getName();
+        int id =  appUser.getId();
+        String rank = appUser.getRank();
 
-            String jwt = Jwts.builder()
-                    .setSubject(user.email())
-                    //.addClaims(Map.of("role", appUser.getUser().getRole().getName()))
-                    .addClaims(Map.of("role", role))
-                    .addClaims(Map.of("name", name))
-                    .addClaims(Map.of("id", id))
-                    .addClaims(Map.of("rank", rank))
-                    .signWith(SignatureAlgorithm.HS256, jwtSecret)
-                    .compact();
-            return new ResponseEntity<>(jwt, HttpStatus.OK);
-
-        } catch (AuthenticationException e) {
-            return new ResponseEntity<>( HttpStatus.UNAUTHORIZED);
-        }
+        String jwt = Jwts.builder()
+                .setSubject(user.email())
+                //.addClaims(Map.of("role", appUser.getUser().getRole().getName()))
+                .addClaims(Map.of("role", role))
+                .addClaims(Map.of("name", name))
+                .addClaims(Map.of("id", id))
+                .addClaims(Map.of("rank", rank))
+                .signWith(SignatureAlgorithm.HS256, jwtSecret)
+                .compact();
+        return new ResponseEntity<>(jwt, HttpStatus.OK);
     }
 }

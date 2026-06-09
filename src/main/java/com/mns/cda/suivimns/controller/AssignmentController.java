@@ -41,11 +41,7 @@ public class AssignmentController {
     @IsManager
     public ResponseEntity<AssignmentDto> getById(@PathVariable int id) {
 
-        try {
-            return new ResponseEntity<>(assignmentService.findById(id) , HttpStatus.OK);
-        } catch (AssignmentNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(assignmentService.findById(id) , HttpStatus.OK);
     }
 
     /* Fait dans le controller du ticket

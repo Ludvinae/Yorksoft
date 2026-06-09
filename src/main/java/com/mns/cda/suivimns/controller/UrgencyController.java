@@ -44,12 +44,7 @@ public class UrgencyController {
     @GetMapping("/{id}")
     @IsTechnician
     public ResponseEntity<UrgencyDto> findById(@PathVariable Integer id) {
-
-        try {
-            return new ResponseEntity<>(urgencyService.findById(id) , HttpStatus.OK);
-        } catch (UrgencyNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(urgencyService.findById(id) , HttpStatus.OK);
     }
 
 
@@ -71,13 +66,8 @@ public class UrgencyController {
     @DeleteMapping("/{id}")
     @IsAdmin
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
-
-        try {
-            urgencyService.delete(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (UrgencyNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        urgencyService.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 
@@ -90,10 +80,6 @@ public class UrgencyController {
     @PutMapping("/{id}")
     @IsManager
     public ResponseEntity<UrgencyDto> update(@PathVariable Integer id, @RequestBody @Valid UrgencyDto urgencyToUpdate) {
-        try {
-            return new ResponseEntity<>(urgencyService.update(id, urgencyToUpdate), HttpStatus.OK);
-        } catch (UrgencyNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(urgencyService.update(id, urgencyToUpdate), HttpStatus.OK);
     }
 }

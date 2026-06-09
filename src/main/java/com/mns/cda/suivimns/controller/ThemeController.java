@@ -42,12 +42,7 @@ public class ThemeController {
     @GetMapping("/{id}")
     @IsTechnician
     public ResponseEntity<ThemeDto> getById(@PathVariable int id) {
-
-        try {
-            return new ResponseEntity<>(themeService.findById(id) , HttpStatus.OK);
-        } catch (ThemeNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(themeService.findById(id) , HttpStatus.OK);
     }
 
 
@@ -67,12 +62,8 @@ public class ThemeController {
     @DeleteMapping("/{id}")
     @IsAdmin
     public ResponseEntity<Void> delete(@PathVariable int id) {
-        try {
-            themeService.delete(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (ThemeNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        themeService.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 
@@ -84,10 +75,6 @@ public class ThemeController {
     @PutMapping("/{id}")
     @IsManager
     public ResponseEntity<ThemeDto> update(@PathVariable int id, @RequestBody @Valid ThemeDto themeToUpdate) {
-        try {
-            return new ResponseEntity<>(themeService.update(id, themeToUpdate), HttpStatus.OK);
-        } catch (ThemeNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(themeService.update(id, themeToUpdate), HttpStatus.OK);
     }
 }

@@ -43,12 +43,7 @@ public class SoftwareTypeController {
     @GetMapping("/{id}")
     @IsTechnician
     public ResponseEntity<SoftwareTypeDto> getById(@PathVariable int id) {
-
-        try {
-            return new ResponseEntity<>(softwareTypeService.findById(id) , HttpStatus.OK);
-        } catch (SoftwareTypeNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(softwareTypeService.findById(id) , HttpStatus.OK);
     }
 
 
@@ -68,12 +63,8 @@ public class SoftwareTypeController {
     @DeleteMapping("/{id}")
     @IsAdmin
     public ResponseEntity<Void> delete(@PathVariable int id) {
-        try {
-            softwareTypeService.delete(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (SoftwareTypeNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        softwareTypeService.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 
@@ -85,10 +76,6 @@ public class SoftwareTypeController {
     @PutMapping("/{id}")
     @IsManager
     public ResponseEntity<SoftwareTypeDto> update(@PathVariable int id, @RequestBody @Valid SoftwareTypeDto softwareTypeToUpdate) {
-        try {
-            return new ResponseEntity<>(softwareTypeService.update(id, softwareTypeToUpdate), HttpStatus.OK);
-        } catch (SoftwareTypeNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(softwareTypeService.update(id, softwareTypeToUpdate), HttpStatus.OK);
     }
 }

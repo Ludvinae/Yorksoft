@@ -45,12 +45,7 @@ public class ProcedureController {
     @GetMapping("/{id}")
     @IsTechnician
     public ResponseEntity<ProcedureDto> getById(@PathVariable int id) {
-
-        try {
-            return new ResponseEntity<>(procedureService.findById(id) , HttpStatus.OK);
-        } catch (ProcedureNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(procedureService.findById(id) , HttpStatus.OK);
     }
 
 
@@ -71,12 +66,8 @@ public class ProcedureController {
     @DeleteMapping("/{id}")
     @IsAdmin
     public ResponseEntity<Void> delete(@PathVariable int id, @AuthenticationPrincipal AppUserDetails user) {
-        try {
-            procedureService.delete(id, user);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (ProcedureNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        procedureService.delete(id, user);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 
@@ -89,10 +80,6 @@ public class ProcedureController {
     @IsTechnician
     public ResponseEntity<ProcedureDto> update(@PathVariable int id, @RequestBody @Valid ProcedureDto procedureToUpdate,
                                              @AuthenticationPrincipal AppUserDetails userDetails) {
-        try {
-            return new ResponseEntity<>(procedureService.update(id, procedureToUpdate, userDetails), HttpStatus.OK);
-        } catch (ProcedureNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(procedureService.update(id, procedureToUpdate, userDetails), HttpStatus.OK);
     }
 }

@@ -31,12 +31,7 @@ public class DashboardController {
     @IsEmployee
     public ResponseEntity<DashboardDto> getStats(@PathVariable Integer timeframeInDays,
                                                  @AuthenticationPrincipal AppUserDetails principal) {
-        try {
-            return new ResponseEntity<>(dashboardService.getStats(timeframeInDays, principal), HttpStatus.OK);
-        }
-        catch (AuthenticationException e) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
+        return new ResponseEntity<>(dashboardService.getStats(timeframeInDays, principal), HttpStatus.OK);
     }
 
 

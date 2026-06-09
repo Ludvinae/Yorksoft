@@ -40,12 +40,7 @@ public class ClassificationController {
     @GetMapping("/{idClassification}")
     @IsManager
     public ResponseEntity<ClassificationDto> getById(@PathVariable int idClassification) {
-
-        try {
-            return new ResponseEntity<>(classificationService.findById(idClassification) , HttpStatus.OK);
-        } catch (ClassificationNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(classificationService.findById(idClassification) , HttpStatus.OK);
     }
 
     // Asignation d'une thematique a un ticket fait par le ticket directement ?

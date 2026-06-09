@@ -45,12 +45,7 @@ public class KnowledgeController {
     @GetMapping("/{id}")
     @IsTechnician
     public ResponseEntity<KnowledgeDto> getById(@PathVariable int id) {
-
-        try {
-            return new ResponseEntity<>(knowledgeService.findById(id) , HttpStatus.OK);
-        } catch (KnowledgeNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(knowledgeService.findById(id) , HttpStatus.OK);
     }
 
 
@@ -70,12 +65,8 @@ public class KnowledgeController {
     @DeleteMapping("/{id}")
     @IsAdmin
     public ResponseEntity<Void> delete(@PathVariable int id) {
-        try {
-            knowledgeService.delete(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (KnowledgeNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        knowledgeService.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 
@@ -87,11 +78,7 @@ public class KnowledgeController {
     @PutMapping("/{id}")
     @IsTechnician
     public ResponseEntity<KnowledgeDto> update(@PathVariable int id, @RequestBody @Valid KnowledgeDto knowledgeToUpdate) {
-        try {
-            return new ResponseEntity<>(knowledgeService.update(id, knowledgeToUpdate), HttpStatus.OK);
-        } catch (KnowledgeNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(knowledgeService.update(id, knowledgeToUpdate), HttpStatus.OK);
     }
 
     @PostMapping("search")

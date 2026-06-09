@@ -39,12 +39,7 @@ public class HistoryController {
     @GetMapping("/{id}")
     @IsManager
     public ResponseEntity<HistoryDto> getById(@PathVariable int id) {
-
-        try {
-            return new ResponseEntity<>(historyService.findById(id) , HttpStatus.OK);
-        } catch (HistoryNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(historyService.findById(id) , HttpStatus.OK);
     }
 
 

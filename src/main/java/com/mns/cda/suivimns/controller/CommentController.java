@@ -45,12 +45,7 @@ public class CommentController {
     @GetMapping("/{id}")
     @IsEmployee
     public ResponseEntity<CommentDto> getById(@PathVariable int id) {
-
-        try {
-            return new ResponseEntity<>(commentService.findById(id) , HttpStatus.OK);
-        } catch (CommentNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(commentService.findById(id) , HttpStatus.OK);
     }
 
 
@@ -71,12 +66,8 @@ public class CommentController {
     @DeleteMapping("/{id}")
     @IsAdmin
     public ResponseEntity<Void> delete(@PathVariable int id, @AuthenticationPrincipal AppUserDetails userDetail) {
-        try {
-            commentService.delete(id, userDetail);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (CommentNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        commentService.delete(id, userDetail);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 
@@ -89,10 +80,6 @@ public class CommentController {
     @IsUser
     public ResponseEntity<TicketDetailComment> update(@PathVariable int id, @RequestBody @Valid CommentEditDto commentToUpdate,
                                              @AuthenticationPrincipal AppUserDetails userDetail) {
-        try {
-            return new ResponseEntity<>(commentService.update(id, commentToUpdate, userDetail), HttpStatus.OK);
-        } catch (CommentNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(commentService.update(id, commentToUpdate, userDetail), HttpStatus.OK);
     }
 }

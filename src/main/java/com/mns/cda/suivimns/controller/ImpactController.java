@@ -42,12 +42,7 @@ public class ImpactController {
     @GetMapping("/{id}")
     @IsTechnician
     public ResponseEntity<ImpactDto> getById(@PathVariable int id) {
-
-        try {
-            return new ResponseEntity<>(impactService.findById(id) , HttpStatus.OK);
-        } catch (ImpactNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(impactService.findById(id) , HttpStatus.OK);
     }
 
 
@@ -67,12 +62,8 @@ public class ImpactController {
     @DeleteMapping("/{id}")
     @IsAdmin
     public ResponseEntity<Void> delete(@PathVariable int id) {
-        try {
-            impactService.delete(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (ImpactNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        impactService.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 
@@ -84,10 +75,6 @@ public class ImpactController {
     @PutMapping("/{id}")
     @IsManager
     public ResponseEntity<ImpactDto> update(@PathVariable int id, @RequestBody @Valid ImpactDto impactToUpdate) {
-        try {
-            return new ResponseEntity<>(impactService.update(id, impactToUpdate), HttpStatus.OK);
-        } catch (ImpactNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(impactService.update(id, impactToUpdate), HttpStatus.OK);
     }
 }

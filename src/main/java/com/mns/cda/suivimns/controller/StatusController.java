@@ -56,12 +56,7 @@ public class StatusController {
     @GetMapping("/{id}")
     @IsTechnician
     public ResponseEntity<StatusDto> getById(@PathVariable int id) {
-
-        try {
-            return new ResponseEntity<>(statusService.findById(id) , HttpStatus.OK);
-        } catch (StatusNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(statusService.findById(id) , HttpStatus.OK);
     }
 
 
@@ -81,12 +76,8 @@ public class StatusController {
     @DeleteMapping("/{id}")
     @IsAdmin
     public ResponseEntity<Void> delete(@PathVariable int id) {
-        try {
-            statusService.delete(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (StatusNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        statusService.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 
@@ -98,10 +89,6 @@ public class StatusController {
     @PutMapping("/{id}")
     @IsManager
     public ResponseEntity<StatusDto> update(@PathVariable int id, @RequestBody @Valid StatusDto statusToUpdate) {
-        try {
-            return new ResponseEntity<>(statusService.update(id, statusToUpdate), HttpStatus.OK);
-        } catch (StatusNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(statusService.update(id, statusToUpdate), HttpStatus.OK);
     }
 }
