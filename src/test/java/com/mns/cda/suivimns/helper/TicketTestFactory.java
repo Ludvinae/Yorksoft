@@ -65,6 +65,11 @@ public class TicketTestFactory {
         return ticketService.setWaitingStatus(idTicket, waitDto, technicianDetails);
     }
 
+    private TicketDto takeBackInCharge(AppUserDetails technicianDetails, int idTicket) {
+        return ticketService.resumeTicket(idTicket, justification, technicianDetails);
+    }
+
+
     private void updateTicketSolution(AppUserDetails technicianDetails, int idTicket) {
         TicketDescriptionDto description = new TicketDescriptionDto("Description", "Solution");
 
@@ -98,9 +103,27 @@ public class TicketTestFactory {
         return takeTicketInCharge(technicianDetails, id);
     }
 
-    public TicketDto solved(AppUserDetails technicianDetails, AppUserDetails managerDetails) {
+    public TicketDto waiting(AppUserDetails technicianDetails, AppUserDetails managerDetails) {
         Integer id = inProgress(technicianDetails, managerDetails).idTicket();
-        updateTicketSolution(managerDetails, id);
+
+        return setTicketWaiting(technicianDetails, id);
+    }
+
+    public TicketDto resumeProgress(AppUserDetails technicianDetails, AppUserDetails managerDetails) {
+        Integer id = waiting(technicianDetails, managerDetails).idTicket();
+
+        return takeBackInCharge(technicianDetails, id);
+    }
+
+    public Integer solutionUpdated(AppUserDetails technicianDetails, AppUserDetails managerDetails) {
+        Integer id = inProgress(technicianDetails, managerDetails).idTicket();
+        updateTicketSolution(technicianDetails, id);
+
+        return id;
+    }
+
+    public TicketDto solved(AppUserDetails technicianDetails, AppUserDetails managerDetails) {
+        Integer id = solutionUpdated(technicianDetails, managerDetails);
 
         return solveTicket(technicianDetails, id);
     }

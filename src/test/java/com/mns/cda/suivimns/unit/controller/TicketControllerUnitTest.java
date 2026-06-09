@@ -10,7 +10,9 @@ import com.mns.cda.suivimns.dto.search.TicketListDto;
 import com.mns.cda.suivimns.dto.workflow.*;
 import com.mns.cda.suivimns.enumerate.StatusEnum;
 import com.mns.cda.suivimns.exception.TicketNotFoundException;
+import com.mns.cda.suivimns.helper.TicketTestFactory;
 import com.mns.cda.suivimns.model.Manager;
+import com.mns.cda.suivimns.model.Technician;
 import com.mns.cda.suivimns.model.Theme;
 import com.mns.cda.suivimns.security.AppUserDetails;
 import com.mns.cda.suivimns.service.business.TicketDetailService;
@@ -318,20 +320,26 @@ class TicketControllerUnitTest {
     }
 
     @Test
-    @WithMockUser(roles = "TECHNICIAN")
     void shouldSetWaitingStatus() throws Exception {
 
         TicketWaitDto dto = new TicketWaitDto( StatusEnum.WAITING_CLIENT, "Details insuffisants");
 
-        when(ticketService.setWaitingStatus(eq(1), any(), any(AppUserDetails.class))).thenReturn(ticketDto);
+        Technician tech = new Technician();
+        tech.setIdAppUser(5);
+        tech.setEmail("sandraschmidt@yorksoft.fr");
+        tech.setRank((byte)1);
+
+        AppUserDetails principal = new AppUserDetails(tech);
+
+        when(ticketService.setWaitingStatus(eq(1), any(TicketWaitDto.class), any(AppUserDetails.class))).thenReturn(ticketDto);
 
         mockMvc.perform(post("/ticket/1/wait")
-                        .with(user("sandraschmidt@yorksoft.fr"))
+                        .with(user(principal))
                                 .with(csrf())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isOk());
 
-        verify(ticketService).setWaitingStatus(eq(1), any(), any(AppUserDetails.class));
+        verify(ticketService).setWaitingStatus(eq(1), any(TicketWaitDto.class), any(AppUserDetails.class));
     }
 }

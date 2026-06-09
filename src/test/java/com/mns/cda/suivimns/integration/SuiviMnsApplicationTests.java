@@ -150,47 +150,18 @@ class SuiviMnsApplicationTests {
     @WithUserDetails("sandraschmidt@yorksoft.fr")
     public void callSetWaitingStatusWithAssignedTechnician_shouldReturnCode200() throws Exception {
 
-        Technician technician = new Technician();
-        technician.setEmail( "technician@test.fr");
-        technician.setIdAppUser(5);
-        technician.setRank((byte) 1);
-        AppUserDetails principalTech = new AppUserDetails(technician);
-
-        Manager manager = new Manager();
-        manager.setEmail( "manager@test.fr");
-        manager.setIdAppUser(4);
-        AppUserDetails principalManager = new AppUserDetails(manager);
-
-        // Creation de ticket
-        TicketCreationDto ticket = new TicketCreationDto("Title", "description",
-                1, 1, 1, 1, 1, 1);
-        String jsonCreation = mapper.writeValueAsString(ticket);
-
-        String newTicketJson = mvc.perform(post("/ticket")
-                        .contentType(MediaType.APPLICATION_JSON).with(user(principalTech)).content(jsonCreation))
-                .andReturn().getResponse().getContentAsString();
-
-        TicketDto newTicket = mapper.readValue(newTicketJson, TicketDto.class);
-
-        // Assignation
-        TicketAssignmentDto assignment = new TicketAssignmentDto(5, "");
-        String assignmentJson = mapper.writeValueAsString(assignment);
-
-        String assignedTicket = mvc.perform(post("/ticket/" + newTicket.idTicket() + "/assign").contentType(MediaType.APPLICATION_JSON)
-                        .with(user(principalManager)).content(assignmentJson))
-                .andReturn().getResponse().getContentAsString();
-
-        // Prise en charge
-        mvc.perform(post("/ticket/" + newTicket.idTicket() + "/start-progress").contentType(MediaType.APPLICATION_JSON)
-                        .with(user(principalTech)).content(assignedTicket));
+        Integer id = testFactory.inProgress(testFactory.getTechnicianN1Principal(), testFactory.getManagerPrincipal())
+                .idTicket();
 
         // Set ticket to WAITING_CLIENT
         TicketWaitDto waitDto = new TicketWaitDto(StatusEnum.WAITING_CLIENT,
                 "Not enough infos");
         String waitDtoJson =  mapper.writeValueAsString(waitDto);
 
-        mvc.perform(post("/ticket/" + newTicket.idTicket() + "/wait")
-                .contentType(MediaType.APPLICATION_JSON).with(user(principalTech)).content(waitDtoJson))
+        mvc.perform(post("/ticket/" + id + "/wait")
+                .contentType(MediaType.APPLICATION_JSON)
+                        .with(user(testFactory.getTechnicianN1Principal()))
+                        .content(waitDtoJson))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -199,66 +170,43 @@ class SuiviMnsApplicationTests {
     @WithUserDetails("sandraschmidt@yorksoft.fr")
     public void callResumeProgressWithAssignedTechnician_shouldReturnCode200() throws Exception {
 
-        Technician technician = new Technician();
-        technician.setEmail( "technician@test.fr");
-        technician.setIdAppUser(5);
-        technician.setRank((byte) 1);
-        AppUserDetails principalTech = new AppUserDetails(technician);
+        Integer id = testFactory.waiting(testFactory.getTechnicianN1Principal(), testFactory.getManagerPrincipal())
+                .idTicket();
 
-        Manager manager = new Manager();
-        manager.setEmail( "manager@test.fr");
-        manager.setIdAppUser(4);
-        AppUserDetails principalManager = new AppUserDetails(manager);
-
-        // Creation de ticket
-        TicketCreationDto ticket = new TicketCreationDto("Title", "description",
-                1, 1, 1, 1, 1, 1);
-        String jsonCreation = mapper.writeValueAsString(ticket);
-
-        String newTicketJson = mvc.perform(post("/ticket")
-                        .contentType(MediaType.APPLICATION_JSON).with(user(principalTech)).content(jsonCreation))
-                .andReturn().getResponse().getContentAsString();
-
-        TicketDto newTicket = mapper.readValue(newTicketJson, TicketDto.class);
-
-        // Assignation
-        TicketAssignmentDto assignment = new TicketAssignmentDto(5, "");
-        String assignmentJson = mapper.writeValueAsString(assignment);
-
-        String assignedTicket = mvc.perform(post("/ticket/" + newTicket.idTicket() + "/assign").contentType(MediaType.APPLICATION_JSON)
-                        .with(user(principalManager)).content(assignmentJson))
-                .andReturn().getResponse().getContentAsString();
-
-        // Prise en charge
-        String justification = mapper.writeValueAsString(new StateChangeJustification(""));
-
-        mvc.perform(post("/ticket/" + newTicket.idTicket() + "/start-progress").contentType(MediaType.APPLICATION_JSON)
-                .with(user(principalTech)).content(assignedTicket));
-
-        // Set ticket to WAITING_CLIENT
-        TicketWaitDto waitDto = new TicketWaitDto(StatusEnum.WAITING_CLIENT,
-                "Not enough infos");
-        String waitDtoJson =  mapper.writeValueAsString(waitDto);
-
-        mvc.perform(post("/ticket/" + newTicket.idTicket() + "/wait")
-                        .contentType(MediaType.APPLICATION_JSON).with(user(principalTech)).content(waitDtoJson))
-                .andExpect(status().isOk());
+        String json = mapper.writeValueAsString(new StateChangeJustification("Reason"));
 
         // Reprends la prise en charge
-        mvc.perform(post("/ticket/" + newTicket.idTicket() + "/resume-progress")
-                .contentType(MediaType.APPLICATION_JSON).with(user(principalTech)).content(justification))
+        mvc.perform(post("/ticket/" + id + "/resume-progress")
+                .contentType(MediaType.APPLICATION_JSON)
+                        .with(user(testFactory.getTechnicianN1Principal()))
+                        .content(json))
                 .andDo(print())
                 .andExpect(status().isOk());
 
     }
 
 
+    @Test
+    @WithMockUser("TECHNICIAN")
+    public void callUpdateDescriptionWithTechnician_shouldReturnCode200() throws Exception {
+        Integer id = testFactory.inProgress(testFactory.getTechnicianN1Principal(), testFactory.getManagerPrincipal())
+                .idTicket();
+
+        String json = mapper.writeValueAsString(new TicketDescriptionDto("Description", "Solution"));
+
+        mvc.perform(patch("/ticket/" + id + "/description")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .with(user(testFactory.getTechnicianN1Principal()))
+                        .content(json))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
 
     @Test
     @WithMockUser("TECHNICIAN")
     public void callSolveTicketWithTechnician_shouldReturnCode200() throws Exception {
-        Integer id = testFactory.inProgress(testFactory.getTechnicianN1Principal(), testFactory.getManagerPrincipal())
-                .idTicket();
+        Integer id = testFactory.solutionUpdated(testFactory.getTechnicianN1Principal(), testFactory.getManagerPrincipal());
 
         String json = mapper.writeValueAsString(new StateChangeJustification("Reason"));
 
