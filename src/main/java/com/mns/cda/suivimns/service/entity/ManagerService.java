@@ -40,6 +40,10 @@ public class ManagerService  {
     }
 
     public ManagerDto save(ManagerDto dto) {
+        if (appUserDao.existsByEmail(dto.email())) {
+            throw new EmailAlreadyUsedException();
+        }
+
         Manager manager = managerMapper.toEntity(dto);
         manager.setIdAppUser(null);
         Manager saved = managerDao.save(manager);
@@ -48,6 +52,10 @@ public class ManagerService  {
     }
 
     public void insert(Manager manager) {
+        if (appUserDao.existsByEmail(manager.getEmail())) {
+            throw new EmailAlreadyUsedException();
+        }
+
         manager.setIdAppUser(null);
 
         // Encodage du password avant de l'inserer en base de données

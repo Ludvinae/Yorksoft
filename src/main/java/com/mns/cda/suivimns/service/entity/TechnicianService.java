@@ -42,6 +42,10 @@ public class TechnicianService  {
     }
 
     public TechnicianDto save(TechnicianDto dto) {
+        if (appUserDao.existsByEmail(dto.email())) {
+            throw new EmailAlreadyUsedException();
+        }
+
         Technician technician = technicianMapper.toEntity(dto);
         technician.setIdAppUser(null);
         technician.setPhoneNumber(technician.getPhoneNumber().trim());
@@ -52,6 +56,10 @@ public class TechnicianService  {
     }
 
     public void insert(Technician technician) {
+        if (appUserDao.existsByEmail(technician.getEmail())) {
+            throw new EmailAlreadyUsedException();
+        }
+
         technician.setIdAppUser(null);
         technician.setPhoneNumber(technician.getPhoneNumber().trim());
 
@@ -75,7 +83,7 @@ public class TechnicianService  {
 
     public TechnicianDto update(int id, TechnicianDto dto, AppUserDetails userDetails) {
 
-        if (appUserDao.existsByEmail(dto.email())) {
+        if (appUserDao.existsByEmail(dto.email()) && !userDetails.getEmail().equals(dto.email())) {
             throw new EmailAlreadyUsedException();
         }
 

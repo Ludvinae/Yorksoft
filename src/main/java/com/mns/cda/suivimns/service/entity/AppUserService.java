@@ -8,6 +8,7 @@ import com.mns.cda.suivimns.exception.BadPasswordException;
 import com.mns.cda.suivimns.exception.EmailAlreadyUsedException;
 import com.mns.cda.suivimns.mapper.entity.AppUserMapper;
 import com.mns.cda.suivimns.model.AppUser;
+import com.mns.cda.suivimns.security.AppUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -36,6 +37,10 @@ public class AppUserService {
     }
 
     public AppUserDto save(AppUserDto dto) {
+        if (appUserDao.existsByEmail(dto.email())) {
+            throw new EmailAlreadyUsedException();
+        }
+
         AppUser appUser = appUserMapper.toEntity(dto);
         appUser.setIdAppUser(null);
         appUser.setPhoneNumber(appUser.getPhoneNumber().trim());
@@ -46,8 +51,13 @@ public class AppUserService {
     }
 
     public void insert(AppUser appUser) {
+        if (appUserDao.existsByEmail(appUser.getEmail())) {
+            throw new EmailAlreadyUsedException();
+        }
+
         appUser.setIdAppUser(null);
         appUser.setPhoneNumber(appUser.getPhoneNumber().trim());
+
 
         // Encodage du password avant de l'inserer en base de données
         appUser.setPassword(encoder.encode(appUser.getPassword()));
@@ -62,9 +72,9 @@ public class AppUserService {
         appUserDao.delete(appUser);
     }
 
-    public AppUserDto update(int id, AppUserDto dto) {
+    public AppUserDto update(int id, AppUserDto dto, AppUserDetails userDetails) {
 
-        if (appUserDao.existsByEmail(dto.email())) {
+        if (appUserDao.existsByEmail(dto.email()) && !userDetails.getEmail().equals(dto.email())) {
             throw new EmailAlreadyUsedException();
         }
 

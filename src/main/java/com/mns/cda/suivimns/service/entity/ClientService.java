@@ -6,11 +6,9 @@ import com.mns.cda.suivimns.dto.entity.ClientDto;
 import com.mns.cda.suivimns.dto.flat.PasswordDto;
 import com.mns.cda.suivimns.dto.search.ClientListDto;
 import com.mns.cda.suivimns.dto.search.ClientSearchCriteria;
-import com.mns.cda.suivimns.exception.AccountNotOwnedException;
-import com.mns.cda.suivimns.exception.BadPasswordException;
-import com.mns.cda.suivimns.exception.ClientNotFoundException;
-import com.mns.cda.suivimns.exception.EmailAlreadyUsedException;
+import com.mns.cda.suivimns.exception.*;
 import com.mns.cda.suivimns.mapper.entity.ClientMapper;
+import com.mns.cda.suivimns.model.AppUser;
 import com.mns.cda.suivimns.model.Client;
 import com.mns.cda.suivimns.security.AppUserDetails;
 import com.mns.cda.suivimns.service.search.ClientQueryService;
@@ -46,6 +44,10 @@ public class ClientService {
     }
 
     public ClientDto save(ClientDto dto) {
+        if (appUserDao.existsByEmail(dto.email())) {
+            throw new EmailAlreadyUsedException();
+        }
+
         Client client = clientMapper.toEntity(dto);
         client.setIdAppUser(null);
         client.setPhoneNumber(client.getPhoneNumber().trim());
@@ -55,6 +57,10 @@ public class ClientService {
     }
 
     public void insert(Client client) {
+        if (appUserDao.existsByEmail(client.getEmail())) {
+            throw new EmailAlreadyUsedException();
+        }
+
         client.setIdAppUser(null);
         client.setPhoneNumber(client.getPhoneNumber().trim());
 
@@ -78,7 +84,7 @@ public class ClientService {
 
     public ClientDto update(int id, ClientDto dto, AppUserDetails userDetails) {
 
-        if (appUserDao.existsByEmail(dto.email())) {
+        if (appUserDao.existsByEmail(dto.email()) && !userDetails.getEmail().equals(dto.email())) {
             throw new EmailAlreadyUsedException();
         }
 
