@@ -5,6 +5,8 @@ import com.mns.cda.suivimns.exception.*;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -102,17 +104,17 @@ public class GlobalExceptionInterceptor {
     }
 
     @ExceptionHandler(InvalidUserRoleException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ErrorResponseDto handleInvalidRole(InvalidUserRoleException ex) {
 
-        return new ErrorResponseDto(500, "INVALID_USER_ROLE", "Role non reconnu par le serveur");
+        return new ErrorResponseDto(401, "INVALID_USER_ROLE", "Role non reconnu par le serveur");
     }
 
     @ExceptionHandler(InvalidStatusException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponseDto handleInvalidRole(InvalidStatusException ex) {
 
-        return new ErrorResponseDto(500, "INVALID_STATUS", "Statut non reconnu par le serveur");
+        return new ErrorResponseDto(400, "INVALID_STATUS", "Statut non reconnu par le serveur");
     }
 
 
@@ -212,6 +214,30 @@ public class GlobalExceptionInterceptor {
 
         return new ErrorResponseDto(500, "INCOHERENT_HISTORYD",
                 "Problème d'incoherence de l'historique");
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ErrorResponseDto handleAccessDenied(
+            AccessDeniedException ex) {
+
+        return new ErrorResponseDto(
+                403,
+                "ACCESS_DENIED",
+                "Accès refusé"
+        );
+    }
+
+    @ExceptionHandler(AuthenticationCredentialsNotFoundException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ErrorResponseDto handleAuthenticationError(
+            AuthenticationCredentialsNotFoundException ex) {
+
+        return new ErrorResponseDto(
+                401,
+                "UNAUTHORIZED",
+                "Authentification requise"
+        );
     }
 
     // Interception automatique des exceptions non gérés plus haut

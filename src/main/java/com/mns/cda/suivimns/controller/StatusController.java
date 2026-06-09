@@ -2,6 +2,7 @@ package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.entity.StatusDto;
 import com.mns.cda.suivimns.enumerate.StatusEnum;
+import com.mns.cda.suivimns.exception.InvalidStatusException;
 import com.mns.cda.suivimns.exception.StatusNotFoundException;
 import com.mns.cda.suivimns.security.IsAdmin;
 import com.mns.cda.suivimns.security.IsManager;
@@ -45,8 +46,14 @@ public class StatusController {
     @ApiResponse(responseCode = "200", description = "Set récupérée avec succès")
     @GetMapping("/allowed-transitions/{status}")
     @IsTechnician
-    public Set<StatusEnum> getPossibleTransitions(@PathVariable StatusEnum status) {
-        return transition.getAllowedTransitions(status);
+    public Set<StatusEnum> getPossibleTransitions(@PathVariable String status) {
+        StatusEnum currentStatus;
+        try {
+            currentStatus = StatusEnum.valueOf(status);
+        } catch (Exception ex) {
+            throw new InvalidStatusException();
+        }
+        return transition.getAllowedTransitions(currentStatus);
     }
 
 

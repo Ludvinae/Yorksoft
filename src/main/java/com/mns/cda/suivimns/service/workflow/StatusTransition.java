@@ -1,6 +1,7 @@
 package com.mns.cda.suivimns.service.workflow;
 
 import com.mns.cda.suivimns.enumerate.StatusEnum;
+import com.mns.cda.suivimns.exception.InvalidStatusException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -61,5 +62,16 @@ public class StatusTransition {
             }
         }
         return allowedTransitions;
+    }
+
+    public Set<StatusEnum> getAllowedTransitionsFromString(String current) throws InvalidStatusException {
+        StatusEnum currentStatus;
+
+        try {
+            currentStatus = StatusEnum.valueOf(current);
+        } catch (Exception ex) {
+            throw new InvalidStatusException();
+        }
+        return getAllowedTransitions(currentStatus);
     }
 }

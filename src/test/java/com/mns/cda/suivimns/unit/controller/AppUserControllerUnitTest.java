@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.AppUserController;
 import com.mns.cda.suivimns.dto.entity.AppUserDto;
 import com.mns.cda.suivimns.exception.AppUserNotFoundException;
+import com.mns.cda.suivimns.model.Admin;
+import com.mns.cda.suivimns.security.AppUserDetails;
 import com.mns.cda.suivimns.service.entity.AppUserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,6 +20,7 @@ import java.util.List;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -181,31 +184,46 @@ class AppUserControllerUnitTest {
     // UPDATE - OK
     // =========================
     @Test
-    @WithMockUser(roles = "ADMIN")
     void shouldUpdate() throws Exception {
 
-        when(appUserService.update(eq(1), any(AppUserDto.class))).thenReturn(appUserDto);
+        Admin admin = new Admin();
+        admin.setIdAppUser(1);
+        admin.setEmail("admin@test.fr");
+
+        AppUserDetails principal = new AppUserDetails(admin);
+
+        when(appUserService.update(eq(1), any(AppUserDto.class), any(AppUserDetails.class)))
+                .thenReturn(appUserDto);
 
         mockMvc.perform(patch("/user/1")
+                        .with(user(principal))
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(appUserDto)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.email").value("Test@email.com"));
+
+        verify(appUserService).update(eq(1), any(AppUserDto.class), any(AppUserDetails.class));
     }
 
     // =========================
     // UPDATE - NOT FOUND
     // =========================
     @Test
-    @WithMockUser(roles = "ADMIN")
     void shouldReturn404WhenUpdateFails() throws Exception {
 
-        when(appUserService.update(eq(1), any(AppUserDto.class)))
+        Admin admin = new Admin();
+        admin.setIdAppUser(1);
+        admin.setEmail("admin@test.fr");
+
+        AppUserDetails principal = new AppUserDetails(admin);
+
+        when(appUserService.update(eq(1), any(AppUserDto.class), any(AppUserDetails.class)))
                 .thenThrow(new AppUserNotFoundException());
 
         mockMvc.perform(patch("/user/1")
+                        .with(user(principal))
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(appUserDto)))

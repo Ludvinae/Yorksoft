@@ -5,6 +5,7 @@ import com.mns.cda.suivimns.dto.flat.PasswordDto;
 import com.mns.cda.suivimns.exception.AppUserNotFoundException;
 import com.mns.cda.suivimns.exception.BadPasswordException;
 import com.mns.cda.suivimns.exception.EmailAlreadyUsedException;
+import com.mns.cda.suivimns.security.AppUserDetails;
 import com.mns.cda.suivimns.security.IsAdmin;
 import com.mns.cda.suivimns.security.IsDirector;
 import com.mns.cda.suivimns.service.entity.AppUserService;
@@ -16,6 +17,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -79,8 +81,9 @@ public class AppUserController {
             @ApiResponse(responseCode = "400", description = "Email déja utilisé")})
     @PatchMapping("/{id}")
     @IsAdmin
-    public ResponseEntity<AppUserDto> update(@PathVariable int id, @RequestBody @Valid AppUserDto dto) {
-        AppUserDto user = appUserService.update(id, dto);
+    public ResponseEntity<AppUserDto> update(@PathVariable int id, @RequestBody @Valid AppUserDto dto,
+                                             @AuthenticationPrincipal AppUserDetails principal) {
+        AppUserDto user = appUserService.update(id, dto, principal);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
