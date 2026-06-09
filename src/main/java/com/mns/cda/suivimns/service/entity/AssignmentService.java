@@ -21,7 +21,7 @@ public class AssignmentService {
         return assignmentMapper.toDtoList(assignmentDao.findAll());
     }
 
-    public AssignmentDto findById(int id) throws AssignmentNotFoundException {
+    public AssignmentDto findById(int id) {
         Assignment assignment = assignmentDao.findById(id)
                 .orElseThrow(AssignmentNotFoundException::new);
 

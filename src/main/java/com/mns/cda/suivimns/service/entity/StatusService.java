@@ -21,7 +21,7 @@ public class StatusService {
         return statusMapper.toDtoList(statusDao.findAll());
     }
 
-    public StatusDto findById(int id) throws StatusNotFoundException {
+    public StatusDto findById(int id) {
         Status status = statusDao.findById(id)
                 .orElseThrow(StatusNotFoundException::new);
 
@@ -36,14 +36,14 @@ public class StatusService {
         return statusMapper.toDto(saved);
     }
 
-    public void delete(int id) throws StatusNotFoundException {
+    public void delete(int id) {
         Status status = statusDao.findById(id)
                 .orElseThrow(StatusNotFoundException::new);
 
         statusDao.delete(status);
     }
 
-    public StatusDto update(int id, StatusDto statusToUpdate) throws StatusNotFoundException {
+    public StatusDto update(int id, StatusDto statusToUpdate) {
 
         Status currentStatus = statusDao.findById(id)
                 .orElseThrow(StatusNotFoundException::new);

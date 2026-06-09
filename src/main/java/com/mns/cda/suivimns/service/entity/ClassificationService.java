@@ -26,7 +26,7 @@ public class ClassificationService {
         return classificationMapper.toDtoList(classificationDao.findAll());
     }
 
-    public ClassificationDto findById(int idClassification) throws ClassificationNotFoundException {
+    public ClassificationDto findById(int idClassification) {
 
         Classification classification = classificationDao.findById(idClassification)
                 .orElseThrow(ClassificationNotFoundException::new);

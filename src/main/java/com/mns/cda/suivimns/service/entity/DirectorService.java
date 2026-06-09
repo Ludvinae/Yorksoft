@@ -34,7 +34,7 @@ public class DirectorService  {
         return directorMapper.toDtoList(directorDao.findAll());
     }
 
-    public DirectorDto findById(int id) throws DirectorNotFoundException {
+    public DirectorDto findById(int id) {
         Director director = directorDao.findById(id)
                 .orElseThrow(DirectorNotFoundException::new);
 
@@ -61,7 +61,7 @@ public class DirectorService  {
         appUserDao.save(director);
     }
 
-    public void delete(int id, AppUserDetails userDetails) throws DirectorNotFoundException, AccountNotOwnedException {
+    public void delete(int id, AppUserDetails userDetails) {
         Director director = directorDao.findById(id)
                 .orElseThrow(DirectorNotFoundException::new);
 
@@ -73,8 +73,7 @@ public class DirectorService  {
         directorDao.delete(director);
     }
 
-    public DirectorDto update(int id, DirectorDto dto, AppUserDetails userDetails)
-            throws DirectorNotFoundException, EmailAlreadyUsedException, AccountNotOwnedException {
+    public DirectorDto update(int id, DirectorDto dto, AppUserDetails userDetails) {
 
         if (appUserDao.existsByEmail(dto.email())) {
             throw new EmailAlreadyUsedException();
@@ -94,8 +93,7 @@ public class DirectorService  {
         return directorMapper.toDto(directorDao.save(currentDirector));
     }
 
-    public void updatePassword(int id, PasswordDto dto, AppUserDetails userDetails)
-            throws DirectorNotFoundException, BadPasswordException, AccountNotOwnedException {
+    public void updatePassword(int id, PasswordDto dto, AppUserDetails userDetails) {
 
         Director user = directorDao.findById(id)
                 .orElseThrow(DirectorNotFoundException::new);

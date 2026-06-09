@@ -26,7 +26,7 @@ public class KnowledgeService  {
         return knowledgeMapper.toDtoList(knowledgeDao.findAll());
     }
 
-    public KnowledgeDto findById(int id) throws KnowledgeNotFoundException {
+    public KnowledgeDto findById(int id) {
         Knowledge knowledge = knowledgeDao.findById(id)
                 .orElseThrow(KnowledgeNotFoundException::new);
 
@@ -41,14 +41,14 @@ public class KnowledgeService  {
         return knowledgeMapper.toDto(saved);
     }
 
-    public void delete(int id) throws KnowledgeNotFoundException {
+    public void delete(int id) {
         Knowledge knowledge = knowledgeDao.findById(id)
                 .orElseThrow(KnowledgeNotFoundException::new);
 
         knowledgeDao.delete(knowledge);
     }
 
-    public KnowledgeDto update(int id, KnowledgeDto knowledgeToUpdate) throws KnowledgeNotFoundException {
+    public KnowledgeDto update(int id, KnowledgeDto knowledgeToUpdate) {
 
         Knowledge currentKnowledge = knowledgeDao.findById(id)
                 .orElseThrow(KnowledgeNotFoundException::new);

@@ -21,7 +21,7 @@ public class ThemeService {
         return themeMapper.toDtoList(themeDao.findAll());
     }
 
-    public ThemeDto findById(int id) throws ThemeNotFoundException {
+    public ThemeDto findById(int id) {
         Theme theme = themeDao.findById(id)
                 .orElseThrow(ThemeNotFoundException::new);
 
@@ -36,14 +36,14 @@ public class ThemeService {
         return themeMapper.toDto(saved);
     }
 
-    public void delete(int id) throws ThemeNotFoundException {
+    public void delete(int id) {
         Theme theme = themeDao.findById(id)
                 .orElseThrow(ThemeNotFoundException::new);
 
         themeDao.delete(theme);
     }
 
-    public ThemeDto update(int id, ThemeDto themeToUpdate) throws ThemeNotFoundException {
+    public ThemeDto update(int id, ThemeDto themeToUpdate) {
 
         Theme currentTheme = themeDao.findById(id)
                 .orElseThrow(ThemeNotFoundException::new);

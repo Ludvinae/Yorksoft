@@ -28,8 +28,7 @@ public class DashboardService {
     private final SecurityService securityService;
     private final ActivityService activityService;
 
-    public DashboardDto getStats(Integer timeframeInDays, AppUserDetails principal)
-            throws AuthenticationException {
+    public DashboardDto getStats(Integer timeframeInDays, AppUserDetails principal) {
 
         int timeframe = (timeframeInDays != null && timeframeInDays > 0)
                 ? timeframeInDays : 30;

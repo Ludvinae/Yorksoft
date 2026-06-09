@@ -38,7 +38,7 @@ public class ClientService {
         return clientMapper.toDtoList(clientDao.findAll());
     }
 
-    public ClientDto findById(int id) throws ClientNotFoundException {
+    public ClientDto findById(int id) {
         Client client = clientDao.findById(id)
                 .orElseThrow(ClientNotFoundException::new);
 
@@ -64,7 +64,7 @@ public class ClientService {
         appUserDao.save(client);
     }
 
-    public void delete(int id, AppUserDetails userDetails) throws ClientNotFoundException, AccountNotOwnedException {
+    public void delete(int id, AppUserDetails userDetails) {
         Client client = clientDao.findById(id)
                 .orElseThrow(ClientNotFoundException::new);
 
@@ -76,8 +76,7 @@ public class ClientService {
         clientDao.delete(client);
     }
 
-    public ClientDto update(int id, ClientDto dto, AppUserDetails userDetails)
-            throws ClientNotFoundException, EmailAlreadyUsedException, AccountNotOwnedException {
+    public ClientDto update(int id, ClientDto dto, AppUserDetails userDetails) {
 
         if (appUserDao.existsByEmail(dto.email())) {
             throw new EmailAlreadyUsedException();
@@ -97,8 +96,7 @@ public class ClientService {
         return clientMapper.toDto(clientDao.save(currentClient));
     }
 
-    public void updatePassword(int id, PasswordDto dto, AppUserDetails userDetails)
-            throws ClientNotFoundException, BadPasswordException, AccountNotOwnedException {
+    public void updatePassword(int id, PasswordDto dto, AppUserDetails userDetails) {
 
         Client user = clientDao.findById(id)
                 .orElseThrow(ClientNotFoundException::new);

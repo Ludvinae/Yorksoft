@@ -21,7 +21,7 @@ public class SoftwareTypeService  {
         return softwareTypeMapper.toDtoList(softwareTypeDao.findAll());
     }
 
-    public SoftwareTypeDto findById(int id) throws SoftwareTypeNotFoundException {
+    public SoftwareTypeDto findById(int id) {
         SoftwareType softwareType = softwareTypeDao.findById(id)
                 .orElseThrow(SoftwareTypeNotFoundException::new);
 
@@ -36,14 +36,14 @@ public class SoftwareTypeService  {
         return softwareTypeMapper.toDto(saved);
     }
 
-    public void delete(int id) throws SoftwareTypeNotFoundException {
+    public void delete(int id) {
         SoftwareType softwareType = softwareTypeDao.findById(id)
                 .orElseThrow(SoftwareTypeNotFoundException::new);
 
         softwareTypeDao.delete(softwareType);
     }
 
-    public SoftwareTypeDto update(int id, SoftwareTypeDto softwareTypeToUpdate) throws SoftwareTypeNotFoundException {
+    public SoftwareTypeDto update(int id, SoftwareTypeDto softwareTypeToUpdate) {
 
         SoftwareType currentSoftwareType = softwareTypeDao.findById(id)
                 .orElseThrow(SoftwareTypeNotFoundException::new);

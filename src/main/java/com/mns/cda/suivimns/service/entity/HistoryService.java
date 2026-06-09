@@ -34,7 +34,7 @@ public class HistoryService {
         return historyMapper.toDtoList(historyDao.findAll());
     }
 
-    public HistoryDto findById(int id) throws HistoryNotFoundException {
+    public HistoryDto findById(int id) {
         History history = historyDao.findById(id)
                 .orElseThrow(HistoryNotFoundException::new);
 
@@ -43,8 +43,7 @@ public class HistoryService {
 
 
     // METHODS
-    public void addHistory(Ticket ticket, AppUser user, StatusEnum newStatus, String reason)
-            throws StatusNotFoundException {
+    public void addHistory(Ticket ticket, AppUser user, StatusEnum newStatus, String reason) {
 
         History history = new History();
 

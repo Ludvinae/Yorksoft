@@ -31,7 +31,6 @@ public class TicketService  {
 
     protected final TicketMapper ticketMapper;
     protected final TicketPriorityService priorityService;
-    protected final TicketStatusService statusService;
     protected final TicketAssignmentService assignmentService;
     protected final TicketClassificationService classificationService;
     protected final TicketOpeningService openingService;

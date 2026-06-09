@@ -26,14 +26,14 @@ public class SoftwareService {
         return softwareDao.findAllDetail();
     }
 
-    public SoftwareDto findById(int id) throws SoftwareNotFoundException {
+    public SoftwareDto findById(int id) {
         Software software = softwareDao.findById(id)
                 .orElseThrow(SoftwareNotFoundException::new);
 
         return softwareMapper.toDto(software);
     }
 
-    public SoftwareDetailDto findByIdDetail(int id) throws SoftwareNotFoundException {
+    public SoftwareDetailDto findByIdDetail(int id) {
         return softwareDao.findByIdDetail(id);
     }
 
@@ -45,14 +45,14 @@ public class SoftwareService {
         return softwareMapper.toDto(saved);
     }
 
-    public void delete(int id) throws SoftwareNotFoundException {
+    public void delete(int id) {
         Software software = softwareDao.findById(id)
                 .orElseThrow(SoftwareNotFoundException::new);
 
         softwareDao.delete(software);
     }
 
-    public SoftwareDto update(int id, SoftwareDto softwareToUpdate) throws SoftwareNotFoundException {
+    public SoftwareDto update(int id, SoftwareDto softwareToUpdate) {
 
         Software currentSoftware = softwareDao.findById(id)
                 .orElseThrow(SoftwareNotFoundException::new);

@@ -32,14 +32,14 @@ public class VersionService  {
         return versionDao.findAllBySoftware(idSoftware);
     }
 
-    public VersionDto findById(int id) throws VersionNotFoundException {
+    public VersionDto findById(int id) {
         Version version = versionDao.findById(id)
                 .orElseThrow(VersionNotFoundException::new);
 
         return versionMapper.toDto(version);
     }
 
-    public VersionDetailDto findByIdDetail(int id) throws VersionNotFoundException {
+    public VersionDetailDto findByIdDetail(int id) {
         return versionDao.findByIdDetail(id);
     }
 
@@ -51,14 +51,14 @@ public class VersionService  {
         return versionMapper.toDto(saved);
     }
 
-    public void delete(int id) throws VersionNotFoundException {
+    public void delete(int id) {
         Version version = versionDao.findById(id)
                 .orElseThrow(VersionNotFoundException::new);
 
         versionDao.delete(version);
     }
 
-    public VersionDto update(int id, VersionDto versionToUpdate) throws VersionNotFoundException {
+    public VersionDto update(int id, VersionDto versionToUpdate) {
 
         Version currentVersion = versionDao.findById(id)
                 .orElseThrow(VersionNotFoundException::new);

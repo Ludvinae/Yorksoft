@@ -196,4 +196,12 @@ public class GlobalExceptionInterceptor {
         return new ErrorResponseDto(401, "UNAUTHORIZED_USER",
                 "User have to be logged in");
     }
+
+    @ExceptionHandler(AccountNotOwnedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ErrorResponseDto handleAccountNotOwned(AccountNotOwnedException ex) {
+
+        return new ErrorResponseDto(403, "RESSOURCE_NOT_OWNED",
+                "User doesn't own this ressource");
+    }
 }

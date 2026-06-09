@@ -24,8 +24,7 @@ public class TicketQueryService {
     private final TicketDao ticketDao;
     private final TicketMapper ticketMapper;
 
-    public Page<TicketListDto> search(TicketSearchCriteria criteria, Pageable pageable)
-            throws InvalidSortCriteriaException {
+    public Page<TicketListDto> search(TicketSearchCriteria criteria, Pageable pageable) {
 
         validateSort(pageable);
 
@@ -53,7 +52,7 @@ public class TicketQueryService {
                 .map(ticketMapper::toListDto);
     }
 
-    private void validateSort(Pageable pageable) throws InvalidSortCriteriaException {
+    private void validateSort(Pageable pageable) {
         for (Sort.Order order : pageable.getSort()) {
             if (!ALLOWED_SORTS.contains(order.getProperty())) {
                 throw new InvalidSortCriteriaException();

@@ -23,8 +23,7 @@ public class ClientQueryService {
     private final ClientDao clientDao;
     private final ClientMapper clientMapper;
 
-    public Page<ClientListDto> search(ClientSearchCriteria criteria, Pageable pageable)
-            throws InvalidSortCriteriaException {
+    public Page<ClientListDto> search(ClientSearchCriteria criteria, Pageable pageable) {
 
         validateSort(pageable);
 
@@ -40,7 +39,7 @@ public class ClientQueryService {
                 .map(clientMapper::toListDto);
     }
 
-    private void validateSort(Pageable pageable) throws InvalidSortCriteriaException {
+    private void validateSort(Pageable pageable) {
         for (Sort.Order order : pageable.getSort()) {
             if (!ALLOWED_SORTS.contains(order.getProperty())) {
                 throw new InvalidSortCriteriaException();

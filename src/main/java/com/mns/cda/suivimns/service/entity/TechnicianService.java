@@ -34,7 +34,7 @@ public class TechnicianService  {
         return technicianMapper.toDtoList(technicianDao.findAll());
     }
 
-    public TechnicianDto findById(int id) throws TechnicianNotFoundException {
+    public TechnicianDto findById(int id) {
         Technician technician = technicianDao.findById(id)
                 .orElseThrow(TechnicianNotFoundException::new);
 
@@ -61,7 +61,7 @@ public class TechnicianService  {
         appUserDao.save(technician);
     }
 
-    public void delete(int id, AppUserDetails userDetails) throws TechnicianNotFoundException, AccountNotOwnedException {
+    public void delete(int id, AppUserDetails userDetails) {
         Technician technician = technicianDao.findById(id)
                 .orElseThrow(TechnicianNotFoundException::new);
 
@@ -73,8 +73,7 @@ public class TechnicianService  {
         technicianDao.delete(technician);
     }
 
-    public TechnicianDto update(int id, TechnicianDto dto, AppUserDetails userDetails)
-            throws TechnicianNotFoundException, EmailAlreadyUsedException, AccountNotOwnedException {
+    public TechnicianDto update(int id, TechnicianDto dto, AppUserDetails userDetails) {
 
         if (appUserDao.existsByEmail(dto.email())) {
             throw new EmailAlreadyUsedException();
@@ -94,8 +93,7 @@ public class TechnicianService  {
         return technicianMapper.toDto(technicianDao.save(currentTechnician));
     }
 
-    public void updatePassword(int id, PasswordDto dto, AppUserDetails userDetails)
-            throws TechnicianNotFoundException, BadPasswordException, AccountNotOwnedException {
+    public void updatePassword(int id, PasswordDto dto, AppUserDetails userDetails) {
 
         Technician user = technicianDao.findById(id)
                 .orElseThrow(TechnicianNotFoundException::new);

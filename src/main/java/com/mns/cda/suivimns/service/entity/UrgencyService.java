@@ -21,7 +21,7 @@ public class UrgencyService  {
         return urgencyMapper.toDtoList(urgencyDao.findAll());
     }
 
-    public UrgencyDto findById(int id) throws UrgencyNotFoundException {
+    public UrgencyDto findById(int id) {
         Urgency urgency = urgencyDao.findById(id)
                 .orElseThrow(UrgencyNotFoundException::new);
 
@@ -36,14 +36,14 @@ public class UrgencyService  {
         return urgencyMapper.toDto(saved);
     }
 
-    public void delete(int id) throws UrgencyNotFoundException {
+    public void delete(int id) {
         Urgency urgency = urgencyDao.findById(id)
                 .orElseThrow(UrgencyNotFoundException::new);
 
         urgencyDao.delete(urgency);
     }
 
-    public UrgencyDto update(int id, UrgencyDto urgencyToUpdate) throws UrgencyNotFoundException {
+    public UrgencyDto update(int id, UrgencyDto urgencyToUpdate) {
 
         Urgency currentUrgency = urgencyDao.findById(id)
                 .orElseThrow(UrgencyNotFoundException::new);

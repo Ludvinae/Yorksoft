@@ -40,7 +40,7 @@ public class CommentService  {
         return commentMapper.toDtoList(commentDao.findAll());
     }
 
-    public CommentDto findById(int id) throws CommentNotFoundException {
+    public CommentDto findById(int id) {
         Comment comment = commentDao.findById(id)
                 .orElseThrow(CommentNotFoundException::new);
 

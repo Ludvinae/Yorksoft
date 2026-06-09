@@ -32,7 +32,7 @@ public class ManagerService  {
         return managerMapper.toDtoList(managerDao.findAll());
     }
 
-    public ManagerDto findById(int id) throws ManagerNotFoundException {
+    public ManagerDto findById(int id) {
         Manager manager = managerDao.findById(id)
                 .orElseThrow(ManagerNotFoundException::new);
 
@@ -56,7 +56,7 @@ public class ManagerService  {
         appUserDao.save(manager);
     }
 
-    public void delete(int id, AppUserDetails userDetails) throws ManagerNotFoundException, AccountNotOwnedException {
+    public void delete(int id, AppUserDetails userDetails) {
         Manager manager = managerDao.findById(id)
                 .orElseThrow(ManagerNotFoundException::new);
 
@@ -68,8 +68,7 @@ public class ManagerService  {
         managerDao.delete(manager);
     }
 
-    public ManagerDto update(int id, ManagerDto dto, AppUserDetails userDetails)
-            throws ManagerNotFoundException, EmailAlreadyUsedException, AccountNotOwnedException {
+    public ManagerDto update(int id, ManagerDto dto, AppUserDetails userDetails) {
 
         if (appUserDao.existsByEmail(dto.email()) && !userDetails.getEmail().equals(dto.email())) {
             throw new EmailAlreadyUsedException();
@@ -88,8 +87,7 @@ public class ManagerService  {
         return managerMapper.toDto(managerDao.save(currentManager));
     }
 
-    public void updatePassword(int id, PasswordDto dto, AppUserDetails userDetails)
-            throws ManagerNotFoundException, BadPasswordException, AccountNotOwnedException {
+    public void updatePassword(int id, PasswordDto dto, AppUserDetails userDetails) {
 
         Manager user = managerDao.findById(id)
                 .orElseThrow(ManagerNotFoundException::new);

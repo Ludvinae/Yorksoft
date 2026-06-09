@@ -21,7 +21,7 @@ public class LicenseService  {
         return licenseMapper.toDtoList(licenseDao.findAll());
     }
 
-    public LicenseDto findById(int id) throws LicenseNotFoundException {
+    public LicenseDto findById(int id) {
         License license = licenseDao.findById(id)
                 .orElseThrow(LicenseNotFoundException::new);
 
@@ -36,14 +36,14 @@ public class LicenseService  {
         return licenseMapper.toDto(saved);
     }
 
-    public void delete(int id) throws LicenseNotFoundException {
+    public void delete(int id) {
         License license = licenseDao.findById(id)
                 .orElseThrow(LicenseNotFoundException::new);
 
         licenseDao.delete(license);
     }
 
-    public LicenseDto update(int id, LicenseDto licenseToUpdate) throws LicenseNotFoundException {
+    public LicenseDto update(int id, LicenseDto licenseToUpdate) {
 
         License currentLicense = licenseDao.findById(id)
                 .orElseThrow(LicenseNotFoundException::new);

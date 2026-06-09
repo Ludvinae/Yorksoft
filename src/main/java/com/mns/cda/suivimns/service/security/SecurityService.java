@@ -10,10 +10,7 @@ public class SecurityService {
 
     private boolean hasRole(String role) {
 
-        Authentication authentication =
-                SecurityContextHolder
-                        .getContext()
-                        .getAuthentication();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         return authentication.getAuthorities()
                 .stream()

@@ -21,7 +21,7 @@ public class ImpactService  {
         return impactMapper.toDtoList(impactDao.findAll());
     }
 
-    public ImpactDto findById(int id) throws ImpactNotFoundException {
+    public ImpactDto findById(int id) {
         Impact impact = impactDao.findById(id)
                 .orElseThrow(ImpactNotFoundException::new);
 
@@ -36,14 +36,14 @@ public class ImpactService  {
         return impactMapper.toDto(saved);
     }
 
-    public void delete(int id) throws ImpactNotFoundException {
+    public void delete(int id) {
         Impact impact = impactDao.findById(id)
                 .orElseThrow(ImpactNotFoundException::new);
 
         impactDao.delete(impact);
     }
 
-    public ImpactDto update(int id, ImpactDto impactToUpdate) throws ImpactNotFoundException {
+    public ImpactDto update(int id, ImpactDto impactToUpdate) {
 
         Impact currentImpact = impactDao.findById(id)
                 .orElseThrow(ImpactNotFoundException::new);

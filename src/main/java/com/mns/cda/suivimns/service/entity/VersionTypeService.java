@@ -21,7 +21,7 @@ public class VersionTypeService {
         return typeMapper.toDtoList(versionTypeDao.findAll());
     }
 
-    public VersionTypeDto findById(int id) throws VersionTypeNotFoundException {
+    public VersionTypeDto findById(int id) {
         VersionType type = versionTypeDao.findById(id)
                 .orElseThrow(VersionTypeNotFoundException::new);
 
@@ -40,14 +40,14 @@ public class VersionTypeService {
         return typeMapper.toDto(saved);
     }
 
-    public void delete(int id) throws VersionTypeNotFoundException {
+    public void delete(int id) {
         VersionType type = versionTypeDao.findById(id)
                 .orElseThrow(VersionTypeNotFoundException::new);
 
         versionTypeDao.delete(type);
     }
 
-    public VersionTypeDto update(int id, VersionTypeDto versionTypeToUpdate) throws VersionTypeNotFoundException {
+    public VersionTypeDto update(int id, VersionTypeDto versionTypeToUpdate) {
 
         VersionType type = versionTypeDao.findById(id)
                 .orElseThrow(VersionTypeNotFoundException::new);
