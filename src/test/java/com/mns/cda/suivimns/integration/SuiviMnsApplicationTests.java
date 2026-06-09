@@ -129,6 +129,41 @@ class SuiviMnsApplicationTests {
                 .andExpect(status().isOk());
     }
 
+    @Test
+    @WithUserDetails("sandraschmidt@yorksoft.fr")
+    public void callAssignWithTechnician_shouldReturn403() throws Exception {
+        Integer id = testFactory.open(testFactory.getTechnicianN1Principal())
+                .idTicket();
+
+        TicketAssignmentDto assignment = new TicketAssignmentDto(
+                testFactory.getManagerPrincipal().getId(), "");
+        String assignmentJson = mapper.writeValueAsString(assignment);
+
+        mvc.perform(post("/ticket/" + id + "/assign").contentType(MediaType.APPLICATION_JSON)
+                        .with(user(testFactory.getTechnicianN1Principal()))
+                        .content(assignmentJson))
+                .andDo(print())
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithUserDetails("jeanvaljean@yorksoft.fr")
+    public void callAssignUnknownTechnician_shouldReturn404() throws Exception {
+
+        Integer id = testFactory.open(testFactory.getTechnicianN1Principal())
+                .idTicket();
+
+        TicketAssignmentDto assignment = new TicketAssignmentDto(
+                1, "");
+        String assignmentJson = mapper.writeValueAsString(assignment);
+
+        mvc.perform(post("/ticket/" + id+ "/assign").contentType(MediaType.APPLICATION_JSON)
+                        .with(user(testFactory.getManagerPrincipal()))
+                        .content(assignmentJson))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
 
     @Test
     @WithUserDetails("sandraschmidt@yorksoft.fr")
@@ -144,6 +179,38 @@ class SuiviMnsApplicationTests {
                         .content(json))
                 .andDo(print())
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithUserDetails("sandraschmidt@yorksoft.fr")
+    public void callStartProgressWithOtherTechnician_shouldReturn403() throws Exception {
+        Integer id = testFactory.assigned(testFactory.getTechnicianN3Principal(), testFactory.getManagerPrincipal())
+                .idTicket();
+
+        String json = mapper.writeValueAsString(new StateChangeJustification("Reason"));
+
+        mvc.perform(post("/ticket/" + id + "/start-progress")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .with(user(testFactory.getTechnicianN1Principal()))
+                        .content(json))
+                .andDo(print())
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithUserDetails("sandraschmidt@yorksoft.fr")
+    public void callStartProgressWithUnassignedTicket_shouldReturn409() throws Exception {
+        Integer id = testFactory.open(testFactory.getTechnicianN3Principal())
+                .idTicket();
+
+        String json = mapper.writeValueAsString(new StateChangeJustification("Reason"));
+
+        mvc.perform(post("/ticket/" + id + "/start-progress")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .with(user(testFactory.getTechnicianN1Principal()))
+                        .content(json))
+                .andDo(print())
+                .andExpect(status().isConflict());
     }
 
     @Test
@@ -221,6 +288,22 @@ class SuiviMnsApplicationTests {
 
     @Test
     @WithUserDetails("sandraschmidt@yorksoft.fr")
+    public void callSolveInProgressTicketWithoutSolution_shouldReturn409() throws Exception {
+        Integer id = testFactory.inProgress(testFactory.getTechnicianN1Principal(), testFactory.getManagerPrincipal()).idTicket();
+
+        String json = mapper.writeValueAsString(new StateChangeJustification("Reason"));
+
+        mvc.perform(post("/ticket/" + id + "/solve")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .with(user(testFactory.getTechnicianN1Principal()))
+                        .content(json))
+                .andDo(print())
+                .andExpect(status().isConflict());
+    }
+
+
+    @Test
+    @WithUserDetails("sandraschmidt@yorksoft.fr")
     public void closeSolvedTicketWithTechnician_shouldReturnCode200() throws Exception {
 
         Integer id = testFactory.solved(testFactory.getTechnicianN1Principal(), testFactory.getManagerPrincipal())
@@ -235,5 +318,38 @@ class SuiviMnsApplicationTests {
                 .andDo(print())
                 .andExpect(status().isOk());
     }
+
+    @Test
+    @WithUserDetails("sandraschmidt@yorksoft.fr")
+    public void callCloseInProgressTicket_shouldReturn400() throws Exception {
+        Integer id = testFactory.inProgress(testFactory.getTechnicianN1Principal(), testFactory.getManagerPrincipal())
+                .idTicket();
+
+        String json = mapper.writeValueAsString(new StateChangeJustification("Reason"));
+
+        mvc.perform(post("/ticket/" + id + "/close")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .with(user(testFactory.getTechnicianN1Principal()))
+                        .content(json))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithUserDetails("sandraschmidt@yorksoft.fr")
+    public void callCloseClosedTicket_shouldReturn409() throws Exception {
+        Integer id = testFactory.closed(testFactory.getTechnicianN1Principal(), testFactory.getManagerPrincipal())
+                .idTicket();
+
+        String json = mapper.writeValueAsString(new StateChangeJustification("Reason"));
+
+        mvc.perform(post("/ticket/" + id + "/close")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .with(user(testFactory.getTechnicianN1Principal()))
+                        .content(json))
+                .andDo(print())
+                .andExpect(status().isConflict());
+    }
+
 
 }
