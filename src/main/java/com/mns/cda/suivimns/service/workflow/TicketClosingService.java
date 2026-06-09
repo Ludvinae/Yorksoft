@@ -2,7 +2,7 @@ package com.mns.cda.suivimns.service.workflow;
 
 import com.mns.cda.suivimns.enumerate.ActivityType;
 import com.mns.cda.suivimns.enumerate.StatusEnum;
-import com.mns.cda.suivimns.exception.TicketAlreadyClosedException;
+import com.mns.cda.suivimns.exception.TicketNotEditableException;
 import com.mns.cda.suivimns.model.AppUser;
 import com.mns.cda.suivimns.model.Ticket;
 import com.mns.cda.suivimns.service.entity.ActivityService;
@@ -26,7 +26,7 @@ public class TicketClosingService {
     @Transactional
     public Ticket closeTicket(Ticket ticket, AppUser user, String closingReason) {
         if (isNotEditable(ticket)) {
-            throw new TicketAlreadyClosedException();
+            throw new TicketNotEditableException();
         }
 
         Ticket ticketChanged = statusService.changeStatus(ticket, StatusEnum.CLOSED, user, closingReason);

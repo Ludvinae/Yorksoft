@@ -132,6 +132,14 @@ public class GlobalExceptionInterceptor {
                 "Le ticket doit contenir une solution afin de pouvoir être considéré résolu");
     }
 
+    @ExceptionHandler(TicketNotEditableException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorResponseDto handleEditingClosedTicket(TicketNotEditableException ex) {
+
+        return new ErrorResponseDto(409, "NOT_EDITABLE",
+                "Ticket déja clos");
+    }
+
     @ExceptionHandler(TicketNotEditableInCurrentStateException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponseDto handleMissingSolution(TicketNotEditableInCurrentStateException ex) {
@@ -164,13 +172,6 @@ public class GlobalExceptionInterceptor {
                 "This technician can't handle this ressource");
     }
 
-    @ExceptionHandler(TicketAlreadyClosedException.class)
-    @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponseDto handleEditingClosedTicket(TicketAlreadyClosedException ex) {
-
-        return new ErrorResponseDto(409, "TICKET_ALREADY_CLOSED",
-                "Can't edit a closed ticket");
-    }
 
     // A ameliorer pour eviter de reveler des informations
     @ExceptionHandler(EmailAlreadyUsedException.class)
@@ -197,11 +198,31 @@ public class GlobalExceptionInterceptor {
                 "User have to be logged in");
     }
 
-    @ExceptionHandler(AccountNotOwnedException.class)
+    @ExceptionHandler(RessourceNotOwnedException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ErrorResponseDto handleAccountNotOwned(AccountNotOwnedException ex) {
+    public ErrorResponseDto handleAccountNotOwned(RessourceNotOwnedException ex) {
 
         return new ErrorResponseDto(403, "RESSOURCE_NOT_OWNED",
                 "User doesn't own this ressource");
+    }
+
+    @ExceptionHandler(IncoherentHistoryTimeException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponseDto handleIncoherentHistory(IncoherentHistoryTimeException ex) {
+
+        return new ErrorResponseDto(500, "INCOHERENT_HISTORYD",
+                "Problème d'incoherence de l'historique");
+    }
+
+    // Interception automatique des exceptions non gérés plus haut
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponseDto handleUnexpectedException(Exception ex) {
+
+        return new ErrorResponseDto(
+                500,
+                "INTERNAL_ERROR",
+                "Une erreur interne est survenue"
+        );
     }
 }
