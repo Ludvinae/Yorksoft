@@ -14,6 +14,7 @@ export class BadgePriority implements OnInit {
   }
 
   @Input() priority: number = 0;
+  @Input() size: string = "sm"
 
   label: string = "";
   color: string = "";

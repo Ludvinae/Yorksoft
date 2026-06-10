@@ -23,9 +23,7 @@
           {{ detail()?.currentStatus }}
         </div>
 
-        <div class="badge badge-outline">
-          {{ detail()?.currentPriority }}
-        </div>
+        <app-badge-priority [priority]="detail()!.currentPriority" size="md"/>
 
         <span class="text-lg">
         Ticket #{{ detail()?.idTicket }}
@@ -210,8 +208,9 @@
                 <button
                   class="btn btn-sm btn-ghost"
                   (click)="startDescriptionEdit()">
-                  Modifier
+                  <i class="ph ph-pencil-simple"></i>
                 </button>
+
               }
             </div>
 
@@ -248,10 +247,25 @@
               </h2>
 
               @if (canEditSolution()) {
+                <!--
                 <button
                   class="btn btn-sm btn-ghost"
                   (click)="editingSolution = !editingSolution">
                   Modifier
+                </button>
+                -->
+
+
+                @if (detail()?.currentStatus !== 'IN_PROGRESS') {
+                  <p class="text-xs text-warning mt-2">
+                    La procédure de résolution ne peut être renseignée qu'une fois le ticket pris en charge par un technicien.
+                  </p>
+                }
+                <button
+                  class="btn btn-sm btn-ghost"
+                  [disabled]="detail()?.currentStatus !== 'IN_PROGRESS'"
+                  (click)="startSolutionEdit()">
+                  <i class="ph ph-pencil-simple"></i>
                 </button>
               }
             </div>

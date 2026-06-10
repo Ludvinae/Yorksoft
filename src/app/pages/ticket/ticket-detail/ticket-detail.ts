@@ -12,6 +12,7 @@ import { FormsModule } from '@angular/forms';
 import { KnowledgeSelector } from '../../../components/knowledge-selector/knowledge-selector';
 import {KnowledgeService} from '../../../services/api/knowledge-service';
 import {KnowledgeCreateModal} from '../../../components/knowledge-create-modal/knowledge-create-modal';
+import {BadgePriority} from '../../../components/ticket/badge-priority/badge-priority';
 
 @Component({
   selector: 'app-ticket-detail',
@@ -23,6 +24,7 @@ import {KnowledgeCreateModal} from '../../../components/knowledge-create-modal/k
     FormsModule,
     KnowledgeSelector,
     KnowledgeCreateModal,
+    BadgePriority,
   ],
   templateUrl: './ticket-detail.html',
   styleUrl: './ticket-detail.css',
@@ -182,11 +184,7 @@ export class TicketDetail implements OnInit {
         break;
 
       case StatusEnum.ASSIGNED:
-        request$ = this.ticketService.assign(
-          this.id()!,
-          payload.idAppUser,
-          payload.reason,
-        );
+        request$ = this.ticketService.assign(this.id()!, payload.idAppUser, payload.reason);
         break;
 
       default:
@@ -291,8 +289,6 @@ export class TicketDetail implements OnInit {
     // pour associer la connaissance
   }
 
-
-
   protected openKnowledgeModal(): void {
     this.showKnowledgeModal.set(true);
   }
@@ -301,15 +297,11 @@ export class TicketDetail implements OnInit {
     this.showKnowledgeModal.set(false);
   }
 
-  protected onKnowledgeCreated(
-    knowledge: KnowledgeSelect
-  ): void {
-
+  protected onKnowledgeCreated(knowledge: KnowledgeSelect): void {
     this.selectedKnowledge = knowledge;
 
     this.showKnowledgeModal.set(false);
 
     this.onKnowledgeSelected(knowledge);
-
   }
 }

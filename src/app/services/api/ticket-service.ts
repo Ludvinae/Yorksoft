@@ -122,7 +122,7 @@ export class TicketService {
   }
 
   waitClient(idTicket: number, justification: TicketTransition) {
-    const payload = {idTechnician: justification.idAppUser,
+    const payload = {
       waitingStatus: StatusEnum.WAITING_CLIENT,
       statusReason: justification.reason}
     return this.http.post(`${this.apiUrl}/${idTicket}/wait`, payload);
