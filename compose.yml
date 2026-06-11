@@ -25,12 +25,15 @@ services:
       - backend
 
   front:
-    image: bchamplon/suivi-mns-26-front:0.0.1
+    image: bchamplon/suivi-mns-26-front:latest
     ports:
       - "80:80"
+    networks:
+      - frontend
 
 volumes:
   postgres_data:
 
 networks:
   backend:
+  frontend:
