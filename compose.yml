@@ -23,6 +23,7 @@ services:
       - postgres
     networks:
       - backend
+      - frontend
 
   front:
     image: bchamplon/suivi-mns-26-front:latest
