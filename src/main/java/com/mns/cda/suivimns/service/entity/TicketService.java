@@ -55,11 +55,11 @@ public class TicketService  {
         return ticketDao.findById(idTicket).orElseThrow(TicketNotFoundException::new);
     }
 
-    private void validateTechnicianAccess(Ticket ticket, Integer userId, String role) {
-        if ("ADMIN".equals(role)) {
+    private void validateTechnicianAccess(Ticket ticket, AppUserDetails principal) {
+        if ("ADMIN".equals(principal.getUserRole())) {
             return;
         }
-        if (!Objects.equals(ticket.getCurrentTechnician().getIdAppUser(), userId)) {
+        if (!Objects.equals(ticket.getCurrentTechnician().getIdAppUser(), principal.getId())) {
             throw new UnauthorizedTechnicianException();
         }
     }
@@ -116,7 +116,7 @@ public class TicketService  {
         }
 
         if (!"MANAGER".equals(principal.getUserRole())) {
-            validateTechnicianAccess(currentTicket, principal.getId(), principal.getUserRole());
+            validateTechnicianAccess(currentTicket, principal);
         }
 
         if (StringUtils.hasText(ticketToUpdate.description())
@@ -205,7 +205,7 @@ public class TicketService  {
         AppUser user = appUserDao.findById(principal.getId())
                 .orElseThrow(AppUserNotFoundException::new);
 
-        validateTechnicianAccess(ticket, principal.getId(), principal.getUserRole());
+        validateTechnicianAccess(ticket, principal);
 
         Ticket ticketClosed = closingService.closeTicket(ticket, user, justification.reason());
 
@@ -227,7 +227,7 @@ public class TicketService  {
         Technician technician = technicianDao.findById(principal.getId())
                 .orElseThrow(TechnicianNotFoundException::new);
 
-        validateTechnicianAccess(ticket, principal.getId(), principal.getUserRole());
+        validateTechnicianAccess(ticket, principal);
 
         Ticket ticketChanged = progressService.takeTicketInCharge(ticket, technician, justification.reason());
 
@@ -246,7 +246,7 @@ public class TicketService  {
         AppUser user = appUserDao.findById(principal.getId())
                 .orElseThrow(AppUserNotFoundException::new);
 
-        validateTechnicianAccess(ticket, principal.getId(), principal.getUserRole());
+        validateTechnicianAccess(ticket, principal);
 
         Ticket ticketChanged = progressService.resumeTicket(ticket, user, justification.reason());
 
@@ -263,7 +263,7 @@ public class TicketService  {
         Technician technician = technicianDao.findById(principal.getId())
                 .orElseThrow(TechnicianNotFoundException::new);
 
-        validateTechnicianAccess(ticket, principal.getId(), principal.getUserRole());
+        validateTechnicianAccess(ticket, principal);
 
         Ticket ticketChanged = solvedService.proposeSolution(ticket, technician, justification.reason());
 

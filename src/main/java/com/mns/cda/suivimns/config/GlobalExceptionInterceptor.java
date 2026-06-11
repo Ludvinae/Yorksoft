@@ -212,7 +212,7 @@ public class GlobalExceptionInterceptor {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponseDto handleIncoherentHistory(IncoherentHistoryTimeException ex) {
 
-        return new ErrorResponseDto(500, "INCOHERENT_HISTORYD",
+        return new ErrorResponseDto(500, "INCOHERENT_HISTORY",
                 "Problème d'incoherence de l'historique");
     }
 

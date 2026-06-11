@@ -13,6 +13,7 @@ public record DashboardTechnicianDto(
     int closedThisWeek,
 
     Double meanTimeToSolveTickets,
+    Double resolutionRatio,
 
     List<UserActivity> activities
 

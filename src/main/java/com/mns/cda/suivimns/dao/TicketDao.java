@@ -72,6 +72,27 @@ public interface TicketDao extends JpaRepository<Ticket, Integer>, JpaSpecificat
     int countClosedSinceDate(int id, LocalDateTime startDate);
 
 
+    @Query("""
+        SELECT COUNT(DISTINCT(t))
+        FROM Ticket t
+        JOIN t.currentTechnician ct ON ct.idAppUser = :id
+        JOIN t.assignmentList a
+        JOIN a.technician te ON te.idAppUser = :id
+        WHERE t.closeDate IS NOT null
+        AND a.assignmentDate > :startDate
+    """)
+    Integer closedTicketCount(int  id, LocalDateTime startDate);
+
+    @Query("""
+        SELECT COUNT(DISTINCT(t))
+        FROM Ticket t
+        JOIN t.assignmentList a
+        JOIN a.technician te ON te.idAppUser = :id
+        WHERE a.assignmentDate > :startDate
+    """)
+    Integer totalTicketCount(int  id, LocalDateTime startDate);
+
+
     @Query(value = """
         SELECT AVG(ticket_duration)
         FROM (
