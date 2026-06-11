@@ -1,3 +1,3 @@
 export const environment = {
-  serverUrl: 'localhost:8080',
+  serverUrl: 'back.cda-benoit.stagiairesmns.fr:8080',
 };
