@@ -7,6 +7,7 @@ type DashboardTechnicianDto = {
   closedThisWeek: number;
 
   meanTimeToSolveTickets: number | null;
+  resolutionRatio: number | null;
 
   activities: UserActivity[];
 };

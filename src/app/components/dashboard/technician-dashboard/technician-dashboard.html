@@ -109,8 +109,14 @@
                     </div>
 
                     <div class="p-4 flex flex-col items-center justify-center">
-                      <span class="text-sm opacity-70">Par technicien</span>
-                      <span class="text-5xl font-black">12.6</span>
+                      <span class="text-sm opacity-70">Taux résolution</span>
+                      @if (dashboard.resolutionRatio != null) {
+                        <span class="text-5xl font-black">
+                         {{ dashboard.resolutionRatio | percent }}
+                        </span>
+                      } @else {
+                        <span class="text-5xl font-black">-</span>
+                      }
                     </div>
 
                     <div class="p-4 flex flex-col items-center justify-center">

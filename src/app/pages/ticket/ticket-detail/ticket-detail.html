@@ -255,12 +255,6 @@
                 </button>
                 -->
 
-
-                @if (detail()?.currentStatus !== 'IN_PROGRESS') {
-                  <p class="text-xs text-warning mt-2">
-                    La procédure de résolution ne peut être renseignée qu'une fois le ticket pris en charge par un technicien.
-                  </p>
-                }
                 <button
                   class="btn btn-sm btn-ghost"
                   [disabled]="detail()?.currentStatus !== 'IN_PROGRESS'"
@@ -299,6 +293,11 @@
                   Enregistrer
                 </button>
               </div>
+            }
+            @if (detail()?.currentStatus !== 'IN_PROGRESS' && !detail()?.solution) {
+              <p class="text-xs text-warning mt-2">
+                La procédure de résolution ne peut être renseignée qu'une fois le ticket pris en charge par un technicien.
+              </p>
             }
           </div>
 
