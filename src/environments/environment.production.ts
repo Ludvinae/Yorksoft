@@ -1,3 +1,3 @@
 export const environment = {
-  serverUrl: "app",
+  serverUrl: "app:8080",
 };
