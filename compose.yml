@@ -3,33 +3,33 @@ services:
     image: postgres:18
     container_name: postgres_container_suivi
     environment:
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: root
-      POSTGRES_DB: db
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
       TZ: UTC
-    # Ports a supprimer en production
-    ports:
-      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql
     networks:
       - backend
+    restart: unless-stopped
 
   app:
-    image: bchamplon/suivi-mns-26-back:latest
-    ports:
-      - "8080:8080"
+    image: bchamplon/suivi-mns-back:latest
+    env_file:
+      - .env
     depends_on:
       - postgres
     networks:
       - backend
+    restart: unless-stopped
 
   front:
-    image: bchamplon/suivi-mns-26-front:latest
+    image: bchamplon/suivi-mns-front:latest
     ports:
       - "80:80"
     networks:
       - backend
+    restart: unless-stopped
 
 volumes:
   postgres_data:
