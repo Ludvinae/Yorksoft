@@ -71,8 +71,8 @@ jobs:
 
       - name: Build image
         run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/suivi-mns-back:${{ github.sha }}
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/suivi-mns-back:latest
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/suivi-mns-back:${{ github.sha }} .
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/suivi-mns-back:latest .
 
       - name: Push image
         run: |
