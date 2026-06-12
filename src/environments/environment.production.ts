@@ -1,3 +1,3 @@
 export const environment = {
-  serverUrl: "http://cda-benoit.stagiairesmns.fr",
+  serverUrl: "https://cda-benoit.stagiairesmns.fr",
 };
