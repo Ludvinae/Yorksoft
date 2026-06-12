@@ -31,6 +31,15 @@ jobs:
           cache: maven
 
       - name: Run tests
+        env:
+          DB_HOST: localhost
+          DB_PORT: 5432
+          DB_NAME: testdb
+          DB_USER: ${{ secrets.POSTGRES_USER }}
+          DB_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          JWT_SECRET: test-secret
+          DDL_AUTO: validate
+          SQL_INIT_MODE: never
         run: |
           chmod +x mvnw
           ./mvnw test
