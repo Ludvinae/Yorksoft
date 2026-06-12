@@ -25,7 +25,8 @@ jobs:
 
     - name: Build the Docker images
       run: |
-        docker build -t  ${{ secrets.DOCKER_USERNAME }}/suivi-mns-front:latest . -t  ${{ secrets.DOCKER_USERNAME }}/suivi-mns-front:${{ github.sha }} . 
+        docker build -t  ${{ secrets.DOCKER_USERNAME }}/suivi-mns-front:latest . 
+        docker build -t  ${{ secrets.DOCKER_USERNAME }}/suivi-mns-front:${{ github.sha }} . 
         
     - name: Push the Docker images
       run: |
