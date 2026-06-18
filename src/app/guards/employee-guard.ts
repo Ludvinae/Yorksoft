@@ -16,7 +16,7 @@ export const employeeGuard: CanActivateFn = (route, state) => {
     authService.jwtInfo()?.role != 'DIRECTOR' &&
     authService.jwtInfo()?.role != 'MANAGER'
   ) {
-    return router.parseUrl('/forbidden');
+    return router.parseUrl('/');
   }
 
   return true;

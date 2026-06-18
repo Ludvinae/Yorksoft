@@ -15,7 +15,7 @@ export const technicianGuard: CanActivateFn = (route, state) => {
     authService.jwtInfo()?.role != 'ADMIN' &&
     authService.jwtInfo()?.role != 'MANAGER'
   ) {
-    return router.parseUrl('/forbidden');
+    return router.parseUrl('/');
   }
 
   return true;

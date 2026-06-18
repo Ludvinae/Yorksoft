@@ -68,6 +68,7 @@ export const routes: Routes = [
   },
   {
     path: 'admin',
+    canActivate: [employeeGuard],
     loadChildren: () =>
       import('./pages/admin/admin.routes')
         .then(m => m.ADMIN_ROUTES)
@@ -76,10 +77,12 @@ export const routes: Routes = [
     path: 'forbidden',
     component: Forbidden,
     title: 'Accès interdit',
+    canActivate: [clientGuard],
   },
   {
     path: '**',
     component: NotFound,
     title: 'Page indisponible',
+    canActivate: [clientGuard],
   },
 ];
