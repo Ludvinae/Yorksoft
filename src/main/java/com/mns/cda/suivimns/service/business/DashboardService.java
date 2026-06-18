@@ -127,7 +127,6 @@ public class DashboardService {
         double close = ticketDao.closedTicketCount(id, startDate) * 1.0;
         Integer total = ticketDao.totalTicketCount(id, startDate);
         Double resolution = total > 0 ? close / total : null;
-        System.out.println("close: " + close + " | total: " + total + " | resolution: " + resolution);
 
         List<UserActivity> activities = activityService.activityFeed(id);
 
