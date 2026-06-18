@@ -24,7 +24,15 @@ export class Login {
       this.authService.login(this.form.value as { email: string; password: string }).subscribe({
         next: (jwt) => {
           // this.notification.open("connexion réussie", "valid");
-          this.router.navigate(['/dashboard']);
+          if (this.authService.redirectUrl) {
+            const redirectUrl = this.authService.redirectUrl || '/';
+
+            this.authService.redirectUrl = null;
+
+            this.router.navigateByUrl(redirectUrl);
+          } else {
+            this.router.navigate(['/dashboard']);
+          }
         },
         error: (err) => {
           // this.notification.open("Mauvais login / mot de passe", "error")

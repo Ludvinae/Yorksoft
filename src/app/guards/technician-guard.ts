@@ -7,6 +7,7 @@ export const technicianGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
 
   if (authService.jwtInfo() == null) {
+    authService.redirectUrl = state.url;
     return router.parseUrl('/');
   }
 
@@ -15,6 +16,7 @@ export const technicianGuard: CanActivateFn = (route, state) => {
     authService.jwtInfo()?.role != 'ADMIN' &&
     authService.jwtInfo()?.role != 'MANAGER'
   ) {
+    authService.redirectUrl = state.url;
     return router.parseUrl('/');
   }
 

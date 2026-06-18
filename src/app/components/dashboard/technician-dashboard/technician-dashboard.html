@@ -47,7 +47,7 @@
                       [value]="dashboard.assignedCriticalTickets"
                       icon="ph ph-fast-forward"
                       colorClass="text-warning"
-                      [filters]="{ statuses: ['CLOSED'], isNotClosed: true, assignedTo: jwt()!.id  }"
+                      [filters]="{ isNotClosed: true, assignedTo: jwt()!.id }"
                     />
 
                     <app-kpi-card

@@ -13,6 +13,8 @@ export class AuthService {
 
   readonly jwtInfo = signal<JwtInfo | null>(null);
 
+  redirectUrl: string | null = null;
+
   constructor() {
     this.decodeJwt();
   }
