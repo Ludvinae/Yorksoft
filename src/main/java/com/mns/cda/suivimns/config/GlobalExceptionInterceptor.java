@@ -2,6 +2,8 @@ package com.mns.cda.suivimns.config;
 
 import com.mns.cda.suivimns.dto.config.ErrorResponseDto;
 import com.mns.cda.suivimns.exception.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionInterceptor {
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponseDto constraintViolationInterceptor(MethodArgumentNotValidException ex) {
@@ -29,6 +33,7 @@ public class GlobalExceptionInterceptor {
                     .append(" | ");
         }
 
+        logger.error(message.toString());
         return new ErrorResponseDto(
                 400, "BAD_REQUEST", message.toString()
         );
@@ -245,6 +250,7 @@ public class GlobalExceptionInterceptor {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponseDto handleUnexpectedException(Exception ex) {
 
+        logger.error("Unexpected error", ex);
         return new ErrorResponseDto(
                 500,
                 "INTERNAL_ERROR",

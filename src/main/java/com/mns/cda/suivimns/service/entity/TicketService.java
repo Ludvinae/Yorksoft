@@ -15,6 +15,8 @@ import com.mns.cda.suivimns.service.business.*;
 import com.mns.cda.suivimns.service.search.TicketQueryService;
 import com.mns.cda.suivimns.service.workflow.*;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -48,6 +50,7 @@ public class TicketService  {
     protected final TechnicianDao technicianDao;
     protected final AppUserDao appUserDao;
 
+    private static final Logger logger = LoggerFactory.getLogger(TicketService.class);
 
     // Helper methods
 
@@ -67,17 +70,29 @@ public class TicketService  {
     // Controller logic
 
     public List<TicketDto> findAll() {
-        return ticketMapper.toDtoList(ticketDao.findAll());
+        logger.debug("Fetching all tickets");
+
+        List<Ticket> tickets = ticketDao.findAll();
+
+        logger.info("Tickets fetched: {}", tickets.size());
+
+        return ticketMapper.toDtoList(tickets);
     }
 
     public TicketDto findById(int id) {
+        logger.debug("Fetching ticket id={}", id);
+
         Ticket ticket = getTicket(id);
+
+        logger.info("Ticket {} retrieved (status={})", id, ticket.getCurrentStatus());
 
         return ticketMapper.toDto(ticket);
     }
 
 
     public TicketDto save(TicketCreationDto dto, AppUserDetails principal) {
+
+        logger.info("Creating ticket by userId={} themeId={}", principal.getId(), dto.idTheme());
 
         Ticket ticket = ticketMapper.creationToEntity(dto);
         ticket.setOverdue(false);
@@ -86,32 +101,44 @@ public class TicketService  {
 
         Ticket ticketSaved = ticketDao.save(ticket);
 
+        logger.info("Ticket created id={} by userId={}", ticketSaved.getIdTicket(), principal.getId());
+
         AppUser creator = appUserDao.findById(principal.getId())
-            .orElseThrow(AppUserNotFoundException::new);
+                .orElseThrow(AppUserNotFoundException::new);
 
         openingService.initializeStatus(ticketSaved, creator);
 
-        Theme theme = themeDao.findById(dto.idTheme()).orElseThrow(ThemeNotFoundException::new);
+        Theme theme = themeDao.findById(dto.idTheme())
+                .orElseThrow(ThemeNotFoundException::new);
+
         classificationService.classify(ticketSaved, theme.getCode());
 
         metricsService.refreshTicketMetrics(ticketSaved);
+
+        logger.debug("Ticket {} initialized (priority, status, classification done)", ticketSaved.getIdTicket());
 
         return ticketMapper.toDto(ticketSaved);
     }
 
     public void delete(int id) {
+        logger.warn("Deleting ticket id={}", id);
+
         Ticket ticket = getTicket(id);
 
         ticketDao.delete(ticket);
+
+        logger.info("Ticket {} deleted", id);
     }
 
     public TicketDetailFullDto update(int id, TicketDescriptionDto ticketToUpdate, AppUserDetails principal) {
 
         boolean isEdited = false;
 
+        logger.info("Updating ticket id={} by userId={}", id, principal.getId());
         Ticket currentTicket = getTicket(id);
 
         if (isNotEditable(currentTicket)) {
+            logger.warn("Attempt to update non editable ticket id={}", id);
             throw new TicketNotEditableException();
         }
 
@@ -127,6 +154,7 @@ public class TicketService  {
                 throw new TicketNotEditableInCurrentStateException();
             }
 
+            logger.info("Ticket {} description updated", id);
             currentTicket.setDescription(ticketToUpdate.description());
             isEdited = true;
         }
@@ -138,11 +166,13 @@ public class TicketService  {
                 throw new TicketNotEditableInCurrentStateException();
             }
 
+            logger.info("Ticket {} solution updated", id);
             currentTicket.setSolution(ticketToUpdate.solution());
             isEdited = true;
         }
 
         if (!isEdited) {
+            logger.warn("Update called but no changes applied on ticket id={}", id);
             throw new IllegalArgumentException();
         }
 
@@ -179,6 +209,13 @@ public class TicketService  {
      */
     public TicketDto assignTicket(Integer idTicket, TicketAssignmentDto assignmentDto, AppUserDetails principal) {
 
+        logger.info(
+                "Assigning ticket id={} to technicianId={} by managerId={}",
+                idTicket,
+                assignmentDto.idTechnician(),
+                principal.getId()
+        );
+
         // Récupère le ticket par l'id
         Ticket ticket = getTicket(idTicket);
 
@@ -192,13 +229,14 @@ public class TicketService  {
 
         metricsService.refreshTicketMetrics(ticketAssigned);
 
-        System.out.println("Principal id = " + principal.getId());
-        System.out.println("Assigned technician = " + assignmentDto.idTechnician());
+        logger.debug("Ticket {} assigned successfully", idTicket);
 
         return ticketMapper.toDto(ticketAssigned);
     }
 
     public TicketDto closeTicket(Integer idTicket, StateChangeJustification justification, AppUserDetails principal) {
+
+        logger.info("Closing ticket id={} by userId={}", idTicket, principal.getId());
         // Récupère le ticket par l'id
         Ticket ticket = getTicket(idTicket);
 
@@ -211,12 +249,14 @@ public class TicketService  {
 
         metricsService.refreshTicketMetrics(ticketClosed);
 
+        logger.warn("Ticket {} closed with reason: {}", idTicket, justification.reason());
         return  ticketMapper.toDto(ticketClosed);
     }
 
 
     public TicketDto takeTicketInCharge(Integer idTicket, StateChangeJustification justification, AppUserDetails principal) {
 
+        logger.info("Taking ticket in charge id={} by technicianId={}", idTicket, principal.getId());
         // Récupère le ticket par l'id
         Ticket ticket = getTicket(idTicket);
 
@@ -233,10 +273,12 @@ public class TicketService  {
 
         metricsService.refreshTicketMetrics(ticketChanged);
 
+        logger.warn("Ticket {} cannot be taken in charge (no assigned technician)", idTicket);
         return ticketMapper.toDto(ticketChanged);
     }
 
     public TicketDto resumeTicket(Integer idTicket, StateChangeJustification justification, AppUserDetails principal) {
+
         Ticket ticket = getTicket(idTicket);
 
         if (ticket.getCurrentTechnician() == null) {
@@ -252,11 +294,13 @@ public class TicketService  {
 
         metricsService.refreshTicketMetrics(ticketChanged);
 
+        logger.info("Resuming ticket id={} by userId={}", idTicket, principal.getId());
         return ticketMapper.toDto(ticketChanged);
     }
 
     public TicketDto solveTicket(Integer idTicket, StateChangeJustification justification, AppUserDetails principal) {
 
+        logger.info("Proposing solution for ticket id={} by technicianId={}", idTicket, principal.getId());
         // Récupère le ticket par l'id
         Ticket ticket = getTicket(idTicket);
 
@@ -269,11 +313,18 @@ public class TicketService  {
 
         metricsService.refreshTicketMetrics(ticketChanged);
 
+        logger.warn("Ticket {} moved to SOLVED state", idTicket);
         return ticketMapper.toDto(ticketChanged);
     }
 
     public TicketDto setWaitingStatus(Integer idTicket, TicketWaitDto dto, AppUserDetails principal) {
 
+        logger.info(
+                "Setting waiting status for ticket id={} to {} by technicianId={}",
+                idTicket,
+                dto.waitingStatus(),
+                principal.getId()
+        );
         // Récupère le ticket par l'id
         Ticket ticket = getTicket(idTicket);
 
@@ -289,6 +340,7 @@ public class TicketService  {
 
         metricsService.refreshTicketMetrics(ticketChanged);
 
+        logger.warn("Ticket {} is now waiting: {}", idTicket, dto.waitingStatus());
         return ticketMapper.toDto(ticketChanged);
     }
 
