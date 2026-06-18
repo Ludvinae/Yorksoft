@@ -7,11 +7,14 @@ import com.mns.cda.suivimns.model.Manager;
 import com.mns.cda.suivimns.model.Technician;
 import com.mns.cda.suivimns.model.Director;
 import com.mns.cda.suivimns.security.AppUserDetails;
+import com.mns.cda.suivimns.security.IsAdmin;
 import com.mns.cda.suivimns.service.entity.*;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,11 +38,14 @@ public class AuthController {
 
     protected final AuthenticationProvider authenticationProvider;
 
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
+
     @Value("${jwt.secret}")
     private String jwtSecret;
 
     // Should be removed once security is set-up
     @PostMapping("/sign-in")
+    @IsAdmin
     public ResponseEntity<AppUser> signIn(@RequestBody @Valid AppUser userToInsert) {
 
         userService.insert(userToInsert);
@@ -48,6 +54,7 @@ public class AuthController {
     }
 
     @PostMapping("/client")
+    @IsAdmin
     public ResponseEntity<Client> createClient(@RequestBody @Valid Client userToInsert) {
 
         clientService.insert(userToInsert);
@@ -64,6 +71,7 @@ public class AuthController {
     }
 
     @PostMapping("/technician")
+    @IsAdmin
     public ResponseEntity<Technician> createClient(@RequestBody @Valid  Technician userToInsert) {
 
         technicianService.insert(userToInsert);
@@ -72,6 +80,7 @@ public class AuthController {
     }
 
     @PostMapping("/director")
+    @IsAdmin
     public ResponseEntity<Director> createDirector(@RequestBody @Valid  Director userToInsert) {
 
         directorService.insert(userToInsert);
@@ -83,6 +92,7 @@ public class AuthController {
     @PostMapping("/log-in")
     public ResponseEntity<String> logIn(
             @RequestBody UserLoginDto user) {
+        logger.debug("Tentative de connexion de {}", user.email());
         try {
             AppUserDetails appUser = (AppUserDetails) authenticationProvider
                     .authenticate(new UsernamePasswordAuthenticationToken(user.email(), user.password())).getPrincipal();
@@ -111,8 +121,11 @@ public class AuthController {
                     .addClaims(Map.of("rank", rank))
                     .signWith(SignatureAlgorithm.HS256, jwtSecret)
                     .compact();
+
+            logger.info("Connexion réussie pour {}: {}", user.email(), role);
             return new ResponseEntity<>(jwt, HttpStatus.OK);
         } catch (AuthenticationException e) {
+            logger.warn("Échec de connexion : {}", user.email());
             return new ResponseEntity<>( HttpStatus.UNAUTHORIZED);
         }
     }
