@@ -9,6 +9,8 @@ import com.mns.cda.suivimns.exception.KnowledgeNotFoundException;
 import com.mns.cda.suivimns.mapper.entity.KnowledgeMapper;
 import com.mns.cda.suivimns.model.Knowledge;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,8 @@ public class KnowledgeService  {
     protected final KnowledgeDao knowledgeDao;
     protected final KnowledgeMapper knowledgeMapper;
 
+    private static final Logger logger = LoggerFactory.getLogger(KnowledgeService.class);
+
     public List<KnowledgeDto> findAll() {
         return knowledgeMapper.toDtoList(knowledgeDao.findAll());
     }
@@ -34,10 +38,16 @@ public class KnowledgeService  {
     }
 
     public KnowledgeDto save(KnowledgeDto dto) {
+        logger.debug("Saving knowledge: {}, for theme {}", dto.subject(), dto.idTheme());
+
         Knowledge knowledge = knowledgeMapper.toEntity(dto);
         knowledge.setIdKnowledge(null);
+        knowledge.setProcedure(null);
+
+        System.out.println(knowledge);
         Knowledge saved = knowledgeDao.save(knowledge);
 
+        System.out.println(saved);
         return knowledgeMapper.toDto(saved);
     }
 

@@ -46,7 +46,8 @@ public abstract class KnowledgeMapper {
     public abstract List<KnowledgeDto> toDtoList(List<Knowledge> knowledge);
 
     @Mapping(target="theme", source="idTheme")
-    @Mapping(target= "procedure", source = "idProcedure")
+    @Mapping(target= "procedure", ignore=true)
+    @Mapping(target = "versionList", source = "versionIds")
     public abstract Knowledge toEntity(KnowledgeDto dto);
 
 

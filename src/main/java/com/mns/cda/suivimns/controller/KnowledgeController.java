@@ -55,6 +55,7 @@ public class KnowledgeController {
     @PostMapping
     @IsTechnician
     public ResponseEntity<KnowledgeDto> create(@RequestBody @Valid KnowledgeDto knowledge) {
+        System.out.println(knowledge);
         return new ResponseEntity<>(knowledgeService.save(knowledge), HttpStatus.CREATED);
     }
 
