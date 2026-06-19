@@ -43,7 +43,9 @@ export class AssignTicketModal implements OnInit {
   reassignmentReason = '';
 
   ngOnInit(): void {
-    this.loadTechnicians();
+    if (this.authService.jwtInfo()?.role === 'MANAGER') {
+      this.loadTechnicians();
+    }
   }
 
   open(): void {
