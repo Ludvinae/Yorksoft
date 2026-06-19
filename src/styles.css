@@ -20,3 +20,7 @@
 .form-error {
   color: red;
 }
+
+.text-outline {
+  text-shadow: #000000AA 0 0 1px;
+}
