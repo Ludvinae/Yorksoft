@@ -380,7 +380,7 @@
             <div class="flex flex-row flex-wrap gap-3 justify-center mt-2">
               @if (detail()?.currentTechnicianFullName == this.auth.jwtInfo()?.name || this.auth.jwtInfo()?.role == 'ADMIN') {
 
-                @if (possibleTransitions().includes('SOLVED')) {
+                @if (possibleTransitions().includes('SOLVED') && detail()?.solution != null) {
                   <button class="btn btn-secondary btn-xs" (click)="openActionModal(StatusEnum.SOLVED)">
                     Résoudre
                   </button>
