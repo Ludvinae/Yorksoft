@@ -26,6 +26,9 @@ export class AuthService {
         tap((jwt) => {
           localStorage.setItem('jwt', jwt);
           this.decodeJwt();
+
+          const theme = localStorage.getItem(`theme_${this.jwtInfo()?.id}`) ?? "default";
+          document.documentElement.setAttribute('data-theme', theme);
         }),
       );
   }

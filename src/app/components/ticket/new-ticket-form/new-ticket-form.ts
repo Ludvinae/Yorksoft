@@ -50,6 +50,12 @@ export class NewTicketForm implements OnInit {
     description: ['', [Validators.required, Validators.minLength(20)]],
   });
 
+  themeForm: FormGroup<ThemeForm> = this.formBuilder.group({
+    designation: ["", Validators.required],
+    code: ["", Validators.required],
+    description: ["", ],
+  })
+
   listSoftware = toSignal(this.softwareService.getAll(), { initialValue: [] });
   listImpact = toSignal(this.impactService.getAll(), { initialValue: [] });
   listUrgency = toSignal(this.urgencyService.getAll(), { initialValue: [] });
@@ -60,7 +66,7 @@ export class NewTicketForm implements OnInit {
   createdTicketId = signal<number | null>(null);
   isSubmitting = signal(false);
 
-  listVersion: VersionSelectDto[] = [];
+  listVersion = signal<VersionSelectDto[]>([]);
 
   ngOnInit(): void {
     this.ticketForm.get('idSoftware')?.valueChanges.subscribe((idSoftware) => {
@@ -140,7 +146,7 @@ export class NewTicketForm implements OnInit {
 
   loadVersions(softwareId: number): void {
     this.versionService.getAllBySoftware(softwareId).subscribe((versions) => {
-      this.listVersion = versions;
+      this.listVersion.set(versions)
     });
   }
 
@@ -153,7 +159,7 @@ export class NewTicketForm implements OnInit {
     if (!idSoftware) {
       versionControl?.disable();
 
-      this.listVersion = [];
+      this.listVersion.set([]);
 
       return;
     }
@@ -165,5 +171,13 @@ export class NewTicketForm implements OnInit {
     setTimeout(() => {
       versionControl?.enable();
     });
+  }
+
+  openCreateThematiqueModal(): void {
+    const modal = document.getElementById(
+      'createThemeModal'
+    ) as HTMLDialogElement;
+
+    modal.showModal();
   }
 }

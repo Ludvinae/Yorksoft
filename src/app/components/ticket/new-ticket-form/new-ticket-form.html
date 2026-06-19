@@ -31,7 +31,7 @@
       <app-field-select
         labelKey="Version"
         [control]="ticketForm.controls.idVersion"
-        [options]="listVersion"
+        [options]="listVersion()"
         valueField="idVersion"
         labelField="displayLabel"
         placeholder="Choisir une version"
@@ -65,15 +65,24 @@
         [errorMessages]="{
     required: 'L\'urgence est obligatoire'}"/>
 
-      <app-field-select
-        labelKey="Thématique"
-        [control]="ticketForm.controls.idTheme"
-        [options]="listTheme()"
-        valueField="idTheme"
-        labelField="designation"
-        placeholder="Choisir la thématique"
-        [errorMessages]="{
+      <div>
+        <app-field-select
+          labelKey="Thématique"
+          [control]="ticketForm.controls.idTheme"
+          [options]="listTheme()"
+          valueField="idTheme"
+          labelField="designation"
+          placeholder="Choisir la thématique"
+          [errorMessages]="{
     required: 'La thématique est obligatoire'}"/>
+        <button
+          type="button"
+          class="btn btn-outline"
+          (click)="openCreateThematiqueModal()">
+            ➕
+        </button>
+      </div>
+
     </div>
   </fieldset>
 
@@ -115,6 +124,30 @@
   </button>
 
 </form>
+
+<dialog class="modal">
+  <form>
+    <h2>Thématique</h2>
+
+    <label>Désignation</label>
+    <app-field-text  labelKey="designation"
+                     [control]="themeForm.controls.designation"
+                     [errorMessages]="{
+    required: 'La désignation est obligatoire'}"/>
+
+    <label>Code</label>
+    <app-field-text  labelKey="code"
+                     [control]="themeForm.controls.code"
+                     [errorMessages]="{
+    required: 'Le code est obligatoire'}"/>
+
+    <label>Description</label>
+    <app-field-text  labelKey="description"
+                     [control]="themeForm.controls.description"
+                     [errorMessages]="{}"/>
+
+  </form>
+</dialog>
 
 
 

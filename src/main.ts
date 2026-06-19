@@ -6,4 +6,6 @@ import localeFr from '@angular/common/locales/fr';
 
 registerLocaleData(localeFr);
 
+document.documentElement.setAttribute('data-theme', 'default');
+
 bootstrapApplication(App, appConfig).catch((err) => console.error(err));
