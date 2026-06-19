@@ -7,7 +7,7 @@
         <legend class="fieldset-legend">Login</legend>
 
         <label class="label" for="email">Email</label>
-        <input type="email" class="input" placeholder="Email@company.com" formControlName="email"/>
+        <input id="email" type="email" class="input" placeholder="Email@company.com" formControlName="email"/>
 
         @if (isFieldInvalid('email')) {
           @if (form.get('email')?.hasError('required')) {
@@ -18,7 +18,7 @@
         }
 
         <label class="label" for="password">Password</label>
-        <input type="password" class="input" placeholder="Password" formControlName="password"/>
+        <input id="password" type="password" class="input" placeholder="Password" formControlName="password"/>
 
         @if (isFieldInvalid('password')) {
           @if (form.get("password")?.hasError('required')) {

@@ -19,7 +19,7 @@ export const clientGuard: CanActivateFn = (route, state) => {
     authService.jwtInfo()?.role == 'MANAGER'
   ) {
     authService.redirectUrl = state.url;
-    return router.parseUrl('/');
+    return router.parseUrl('/forbidden');
   }
 
   return true;
