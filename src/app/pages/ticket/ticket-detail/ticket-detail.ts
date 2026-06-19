@@ -304,4 +304,6 @@ export class TicketDetail implements OnInit {
 
     this.onKnowledgeSelected(knowledge);
   }
+
+  protected readonly console = console;
 }
