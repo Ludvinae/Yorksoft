@@ -96,9 +96,18 @@
         <div class="card bg-base-100 shadow-md border border-base-300">
           <div class="card-body">
 
-            <h2 class="card-title">
-              Informations sur le client
-            </h2>
+
+            <div class="flex flex-row justify-between items-center">
+              <h2 class="card-title">
+                Informations sur le client
+              </h2>
+              <button
+                class="btn btn-sm btn-ghost"
+                (click)="startClientEdit()">
+                <i class="ph ph-pencil-simple"></i>
+              </button>
+            </div>
+
 
             <div class="space-y-2 text-sm">
 
@@ -146,9 +155,16 @@
         <div class="card bg-base-100 shadow-md border border-base-300">
           <div class="card-body">
 
-            <h2 class="card-title">
-              Détails techniques
-            </h2>
+            <div class="flex flex-row justify-between items-center">
+              <h2 class="card-title">
+                Détails techniques
+              </h2>
+              <button
+                class="btn btn-sm btn-ghost"
+                (click)="startDetailsEdit()">
+                <i class="ph ph-pencil-simple"></i>
+              </button>
+            </div>
 
             <div class="space-y-2 text-sm">
 

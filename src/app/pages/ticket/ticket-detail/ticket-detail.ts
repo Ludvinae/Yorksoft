@@ -306,4 +306,12 @@ export class TicketDetail implements OnInit {
   }
 
   protected readonly console = console;
+
+  startClientEdit() {
+
+  }
+
+  startDetailsEdit() {
+
+  }
 }
