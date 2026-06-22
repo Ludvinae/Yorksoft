@@ -151,7 +151,7 @@
                   <input
                     type="text"
                     class="input input-sm input-ghost text-right font-semibold"
-                    [(ngModel)]="detail()?.clientEmail"
+                    formControlName="email"
                     [readonly]="!isEditingClient">
                 </div>
 
@@ -160,7 +160,7 @@
                   <input
                     type="text"
                     class="input input-sm input-ghost text-right font-semibold"
-                    [(ngModel)]="detail()?.clientPhone"
+                    formControlName="phone"
                     [readonly]="!isEditingClient">
                 </div>
 
@@ -169,7 +169,7 @@
                   <input
                     type="text"
                     class="input input-sm input-ghost text-right font-semibold"
-                    [(ngModel)]="detail()?.importance"
+                    formControlName="importance"
                     [readonly]="!isEditingClient">
                 </div>
               </form>
