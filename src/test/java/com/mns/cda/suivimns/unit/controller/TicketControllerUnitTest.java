@@ -78,7 +78,7 @@ class TicketControllerUnitTest {
 
         TicketDetailDto ticketDetailDto = new TicketDetailDto(1, "Test title",
                 50, 50, StatusEnum.OPEN, false, null,
-                1, "Test Test", "test@test.com", "", (byte) 0,
+                1, "Test", "Blarg", "test@test.com", "", (byte) 0,
                 1, "BUG", "Bug", "Test software", 1, "1.0.0 r",
                 LocalDateTime.now(), null, "Test description", null, null,
                 null, null, null, null);
