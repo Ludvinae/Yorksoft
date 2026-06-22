@@ -18,7 +18,8 @@ public record TicketDetailDto(
 
         // Client
         Integer idClient,
-        String clientFullName,
+        String clientFirstName,
+        String clientLastName,
         String clientEmail,
         String clientPhone,
         Byte importance,
