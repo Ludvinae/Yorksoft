@@ -48,7 +48,7 @@ export class ClientService {
     return this.http.post(`${this.apiUrl}`, client).pipe(tap(() => this.getAll().subscribe()));
   }
 
-  update(client: Client, id: number) {
+  update(id: number, client: Client) {
     return this.http.put(`${this.apiUrl}/${id}`, client).pipe(
       tap((result) => {
         this.getAll().subscribe();

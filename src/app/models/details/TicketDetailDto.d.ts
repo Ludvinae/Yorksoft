@@ -13,7 +13,8 @@ type TicketDetailDto = {
 
   // Client
   idClient: number;
-  clientFullName: string;
+  clientFirstName: string;
+  clientLastName: string;
   clientEmail: string;
   clientPhone: string;
   importance: number;

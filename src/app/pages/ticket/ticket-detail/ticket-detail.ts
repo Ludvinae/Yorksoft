@@ -8,11 +8,12 @@ import { TicketComment } from '../../../components/comments/ticket-comment/ticke
 import { StatusEnum } from '../../../models/enum/StatusEnum';
 import { AuthService } from '../../../services/business/auth-service';
 import {AssignTicketModal} from '../../../components/ticket/assign-ticket-modal/assign-ticket-modal';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { KnowledgeSelector } from '../../../components/knowledge-selector/knowledge-selector';
 import {KnowledgeService} from '../../../services/api/knowledge-service';
 import {KnowledgeCreateModal} from '../../../components/knowledge-create-modal/knowledge-create-modal';
 import {BadgePriority} from '../../../components/ticket/badge-priority/badge-priority';
+import { ClientService } from '../../../services/api/client-service';
 
 @Component({
   selector: 'app-ticket-detail',
@@ -25,6 +26,7 @@ import {BadgePriority} from '../../../components/ticket/badge-priority/badge-pri
     KnowledgeSelector,
     KnowledgeCreateModal,
     BadgePriority,
+    ReactiveFormsModule,
   ],
   templateUrl: './ticket-detail.html',
   styleUrl: './ticket-detail.css',
@@ -34,6 +36,8 @@ export class TicketDetail implements OnInit {
   ticketService = inject(TicketService);
   routeBuilder = inject(RouteBuilderService);
   auth = inject(AuthService);
+  fb = inject(FormBuilder);
+  clientService = inject (ClientService);
 
   ticket = signal<TicketDetailFullDto | null>(null);
   comments = signal<TicketDetailComment[]>([]);
@@ -102,6 +106,7 @@ export class TicketDetail implements OnInit {
       .subscribe({
         next: () => {
           this.loading.set(false);
+          this.fillClientForm();
         },
         error: () => {
           this.loading.set(false);
@@ -307,11 +312,84 @@ export class TicketDetail implements OnInit {
 
   protected readonly console = console;
 
-  startClientEdit() {
+  isEditingClient = false;
+  clientForm = this.fb.group({
+    id: [0],
+    firstName: ['', Validators.required],
+    lastName: ['', Validators.required],
+    email: ['', [Validators.required, Validators.email]],
+    phone: [''],
+    importance: [0],
+  });
 
+  private fillClientForm(): void {
+    const detail = this.detail();
+
+    if (!detail) {
+      return;
+    }
+
+    this.clientForm.patchValue({
+      id: this.detail()?.idClient,
+      firstName: this.detail()?.clientFirstName,
+      lastName: this.detail()?.clientLastName,
+      email: this.detail()?.clientEmail,
+      phone: this.detail()?.clientPhone,
+      importance: this.detail()?.importance,
+    });
   }
 
-  startDetailsEdit() {
-
+  startClientEdit(): void {
+    this.resetClientForm();
+    this.isEditingClient = true;
   }
+
+  cancelClientEdit(): void {
+    this.resetClientForm();
+    this.isEditingClient = false;
+  }
+
+  private resetClientForm(): void {
+    const detail = this.detail();
+
+    if (!detail) {
+      return;
+    }
+
+    this.clientForm.patchValue({
+      id: this.detail()?.idClient,
+      firstName: this.detail()?.clientFirstName,
+      lastName: this.detail()?.clientLastName,
+      email: this.detail()?.clientEmail,
+      phone: this.detail()?.clientPhone,
+      importance: this.detail()?.importance,
+    });
+  }
+
+  saveClientEdit(): void {
+    if (this.clientForm.invalid) {
+      this.clientForm.markAllAsTouched();
+      return;
+    }
+
+    const formValue = this.clientForm.getRawValue();
+
+    const request: Client = {
+      idAppUser: formValue.id ? formValue.id : 0,
+      firstName: formValue.firstName,
+      lastName: formValue.lastName,
+      email: formValue.email ? formValue.email : '',
+      phoneNumber: formValue.phone,
+      importance: formValue.importance ? formValue.importance : 0,
+    };
+
+    this.clientService.update(this.detail()!.idClient, request).subscribe({
+      next: () => {
+        this.isEditingClient = false;
+        this.loadTicket();
+      },
+    });
+  }
+
+  startDetailsEdit() {}
 }
