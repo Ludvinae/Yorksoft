@@ -1,6 +1,7 @@
 package com.mns.cda.suivimns.controller;
 
 import com.mns.cda.suivimns.dto.entity.AppUserDto;
+import com.mns.cda.suivimns.dto.flat.NewPasswordDto;
 import com.mns.cda.suivimns.dto.flat.PasswordDto;
 import com.mns.cda.suivimns.exception.AppUserNotFoundException;
 import com.mns.cda.suivimns.exception.BadPasswordException;
@@ -87,17 +88,34 @@ public class AppUserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
+    
+    @Operation(summary = "Changer son propre mot de passe",
+            description = "Compare le champ 'oldPassword' avec le mot de passe, " +
+                    "et si identique le remplace avec la valeur du champ 'newPassword'")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Mot de passe mis à jour"),
+            @ApiResponse(responseCode = "404", description = "Utilisateur non trouvé"),
+            @ApiResponse(responseCode = "400", description = "Données invalides")})
+    @PatchMapping("/password")
+    public ResponseEntity<Void> patch(@RequestBody PasswordDto dto,
+                                      @AuthenticationPrincipal AppUserDetails principal) {
+        appUserService.updatePassword(principal, dto);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 
     @Operation(summary = "Changer le mot de passe d'un utilisateur",
-                description = "Compare le champ 'oldPassword' avec le mot de passe, " +
-                        "et si identique le remplace avec la valeur du champ 'newPassword'")
+                description = "Remplace directement le mot de passe de l'utilisateur ciblé par la valeur " +
+                        "du champ 'newPassword', sans vérification de l'ancien mot de passe (réservé aux admins)")
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Mot de passe mis à jour"),
             @ApiResponse(responseCode = "404", description = "Utilisateur non trouvé"),
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PatchMapping("/{id}/password")
-    public ResponseEntity<Void> patch(@PathVariable int id, @RequestBody PasswordDto dto) {
+    @IsAdmin
+    public ResponseEntity<Void> patch(@PathVariable int id, @RequestBody @Valid NewPasswordDto dto) {
         appUserService.updatePassword(id, dto);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+
 }

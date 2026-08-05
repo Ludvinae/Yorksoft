@@ -2,6 +2,7 @@ package com.mns.cda.suivimns.service.entity;
 
 import com.mns.cda.suivimns.dao.AppUserDao;
 import com.mns.cda.suivimns.dto.entity.AppUserDto;
+import com.mns.cda.suivimns.dto.flat.NewPasswordDto;
 import com.mns.cda.suivimns.dto.flat.PasswordDto;
 import com.mns.cda.suivimns.exception.AppUserNotFoundException;
 import com.mns.cda.suivimns.exception.BadPasswordException;
@@ -9,12 +10,13 @@ import com.mns.cda.suivimns.exception.EmailAlreadyUsedException;
 import com.mns.cda.suivimns.mapper.entity.AppUserMapper;
 import com.mns.cda.suivimns.model.AppUser;
 import com.mns.cda.suivimns.security.AppUserDetails;
+import com.mns.cda.suivimns.service.security.SecurityService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +26,7 @@ public class AppUserService {
     protected final AppUserDao appUserDao;
     protected final AppUserMapper appUserMapper;
     protected final PasswordEncoder encoder;
+    protected final SecurityService security;
 
     public List<AppUserDto> findAll() {
         return appUserMapper.toDtoList(appUserDao.findAll());
@@ -87,17 +90,28 @@ public class AppUserService {
         return appUserMapper.toDto(appUserDao.save(currentAppUser));
     }
 
-    public void updatePassword(int id, PasswordDto dto) {
+    public void updatePassword(int id, NewPasswordDto dto) {
 
         AppUser user = appUserDao.findById(id)
                 .orElseThrow(AppUserNotFoundException::new);
 
+        // Changement de mot de passe par un admin : pas besoin de l'ancien mot de passe
+        user.setPassword(encoder.encode(dto.newPassword()));
+
+        appUserDao.save(user);
+    }
+
+    public void updatePassword(AppUserDetails principal, PasswordDto dto) {
+
+        AppUser user = appUserDao.findById(principal.getId())
+                .orElseThrow(AppUserNotFoundException::new);
+
         // vérifier ancien mot de passe
-        if (!Objects.equals(user.getPassword(), dto.oldPassword())) {
+        if (!encoder.matches(dto.oldPassword(), user.getPassword())) {
             throw new BadPasswordException();
         }
 
-        user.setPassword(dto.newPassword());
+        user.setPassword(encoder.encode(dto.newPassword()));
 
         appUserDao.save(user);
     }
