@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { Tab } from './tab';
+import { provideRouter } from '@angular/router';
 
 describe('Tab', () => {
   let component: Tab;
@@ -9,6 +10,7 @@ describe('Tab', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [Tab],
+      providers: [provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(Tab);

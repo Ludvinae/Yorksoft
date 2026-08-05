@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { NavMobile } from './nav-mobile';
+import { provideRouter } from '@angular/router';
 
 describe('NavMobile', () => {
   let component: NavMobile;
@@ -9,6 +10,7 @@ describe('NavMobile', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [NavMobile],
+      providers: [provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(NavMobile);

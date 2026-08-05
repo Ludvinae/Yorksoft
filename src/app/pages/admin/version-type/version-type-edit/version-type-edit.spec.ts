@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { VersionTypeEdit } from './version-type-edit';
+import { provideRouter } from '@angular/router';
 
 describe('VersionTypeEdit', () => {
   let component: VersionTypeEdit;
@@ -9,6 +10,7 @@ describe('VersionTypeEdit', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [VersionTypeEdit],
+      providers: [provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(VersionTypeEdit);

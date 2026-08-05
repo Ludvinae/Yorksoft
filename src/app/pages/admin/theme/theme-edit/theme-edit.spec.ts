@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ThemeEdit } from './theme-edit';
+import { provideRouter } from '@angular/router';
 
 describe('ThemeEdit', () => {
   let component: ThemeEdit;
@@ -9,6 +10,7 @@ describe('ThemeEdit', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ThemeEdit],
+      providers: [provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ThemeEdit);

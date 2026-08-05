@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { KnowledgeCreateModal } from './knowledge-create-modal';
+import { provideRouter } from '@angular/router';
 
 describe('KnowledgeCreateModal', () => {
   let component: KnowledgeCreateModal;
@@ -9,6 +10,7 @@ describe('KnowledgeCreateModal', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [KnowledgeCreateModal],
+      providers: [provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(KnowledgeCreateModal);

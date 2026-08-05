@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CommentForm } from './comment-form';
+import { provideRouter } from '@angular/router';
 
 describe('CommentForm', () => {
   let component: CommentForm;
@@ -9,6 +10,7 @@ describe('CommentForm', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [CommentForm],
+      providers: [provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(CommentForm);

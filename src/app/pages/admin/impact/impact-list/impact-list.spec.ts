@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ImpactList } from './impact-list';
+import { provideRouter } from '@angular/router';
 
 describe('ImpactList', () => {
   let component: ImpactList;
@@ -9,6 +10,7 @@ describe('ImpactList', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ImpactList],
+      providers: [provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ImpactList);

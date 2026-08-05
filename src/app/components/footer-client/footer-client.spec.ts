@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FooterClient } from './footer-client';
+import { provideRouter } from '@angular/router';
 
 describe('FooterClient', () => {
   let component: FooterClient;
@@ -9,6 +10,7 @@ describe('FooterClient', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [FooterClient],
+      providers: [provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(FooterClient);

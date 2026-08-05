@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SoftwareTypeList } from './software-type-list';
+import { provideRouter } from '@angular/router';
 
 describe('SoftwareTypeList', () => {
   let component: SoftwareTypeList;
@@ -9,6 +10,7 @@ describe('SoftwareTypeList', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [SoftwareTypeList],
+      providers: [provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SoftwareTypeList);

@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { HeaderEditModal } from './header-edit-modal';
+import { provideRouter } from '@angular/router';
 
 describe('HeaderEditModal', () => {
   let component: HeaderEditModal;
@@ -9,6 +10,7 @@ describe('HeaderEditModal', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [HeaderEditModal],
+      providers: [provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(HeaderEditModal);
