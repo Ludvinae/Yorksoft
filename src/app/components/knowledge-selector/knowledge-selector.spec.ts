@@ -1,7 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { KnowledgeSelector } from './knowledge-selector';
-import { provideRouter } from '@angular/router';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClient } from '@angular/common/http';
 
 describe('KnowledgeSelector', () => {
   let component: KnowledgeSelector;
@@ -10,7 +11,7 @@ describe('KnowledgeSelector', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [KnowledgeSelector],
-      providers: [provideRouter([])],
+      providers: [provideHttpClient(), provideHttpClientTesting()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(KnowledgeSelector);

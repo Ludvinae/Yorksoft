@@ -2,6 +2,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ListDesktop } from './list-desktop';
 import { provideRouter } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 describe('ListDesktop', () => {
   let component: ListDesktop;
@@ -10,7 +12,7 @@ describe('ListDesktop', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ListDesktop],
-      providers: [provideRouter([])],
+      providers: [provideRouter([]), provideHttpClient(), provideHttpClientTesting()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ListDesktop);

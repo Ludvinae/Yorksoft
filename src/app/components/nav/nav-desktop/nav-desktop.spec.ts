@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { NavDesktop } from './nav-desktop';
-import { provideRouter } from '@angular/router';
+import { provideRouter, Router } from '@angular/router';
 
 describe('NavDesktop', () => {
   let component: NavDesktop;
@@ -15,6 +15,7 @@ describe('NavDesktop', () => {
 
     fixture = TestBed.createComponent(NavDesktop);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput('router', TestBed.inject(Router));
     await fixture.whenStable();
   });
 

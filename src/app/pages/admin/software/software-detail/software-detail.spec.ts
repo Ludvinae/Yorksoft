@@ -2,6 +2,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SoftwareDetail } from './software-detail';
 import { provideRouter } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 describe('SoftwareDetail', () => {
   let component: SoftwareDetail;
@@ -10,7 +12,7 @@ describe('SoftwareDetail', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [SoftwareDetail],
-      providers: [provideRouter([])],
+      providers: [provideRouter([]), provideHttpClient(), provideHttpClientTesting()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SoftwareDetail);

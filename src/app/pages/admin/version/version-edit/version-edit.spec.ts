@@ -2,6 +2,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { VersionEdit } from './version-edit';
 import { provideRouter } from '@angular/router';
+import {provideHttpClientTesting} from '@angular/common/http/testing';
+import {provideHttpClient} from '@angular/common/http';
 
 describe('VersionEdit', () => {
   let component: VersionEdit;
@@ -10,7 +12,7 @@ describe('VersionEdit', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [VersionEdit],
-      providers: [provideRouter([])],
+      providers: [provideRouter([]), provideHttpClient(), provideHttpClientTesting()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(VersionEdit);
