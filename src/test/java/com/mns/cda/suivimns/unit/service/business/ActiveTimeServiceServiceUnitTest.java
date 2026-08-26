@@ -38,7 +38,6 @@ public class ActiveTimeServiceServiceUnitTest {
                 Instant.parse("2026-05-11T12:00:00Z"),
                 ZoneId.systemDefault()
         );
-
         service = new ActiveTimeService(historyDao, clock);
     }
 

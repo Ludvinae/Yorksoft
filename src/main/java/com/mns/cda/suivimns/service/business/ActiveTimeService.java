@@ -20,9 +20,7 @@ public class ActiveTimeService {
     private final Clock clock;
 
     public Long getActiveTimeInSeconds(Integer idTicket, List<StatusEnum> statuses) {
-
         List<History> historyList= historyDao.findAllActiveByIdTicket(idTicket, statuses);
-
         long activeTimeInSeconds = 0;
 
         for (History history:historyList){
@@ -31,9 +29,7 @@ public class ActiveTimeService {
                     ? history.getEndDate()
                     : LocalDateTime.now(clock);
 
-            if (end.isBefore(start)) {
-                throw new IncoherentHistoryTimeException();
-            }
+            if (end.isBefore(start)) {throw new IncoherentHistoryTimeException();}
 
             activeTimeInSeconds += Duration.between(start, end).getSeconds();
         }

@@ -209,12 +209,8 @@ public class TicketService  {
      */
     public TicketDto assignTicket(Integer idTicket, TicketAssignmentDto assignmentDto, AppUserDetails principal) {
 
-        logger.info(
-                "Assigning ticket id={} to technicianId={} by managerId={}",
-                idTicket,
-                assignmentDto.idTechnician(),
-                principal.getId()
-        );
+        logger.info("Assigning ticket id={} to technicianId={} by managerId={}",
+                idTicket, assignmentDto.idTechnician(), principal.getId());
 
         // Récupère le ticket par l'id
         Ticket ticket = getTicket(idTicket);
@@ -225,10 +221,10 @@ public class TicketService  {
         Technician technician = technicianDao.findById(assignmentDto.idTechnician())
                 .orElseThrow(TechnicianNotFoundException::new);
 
-        Ticket ticketAssigned = assignmentService.assignTicket(ticket, manager, technician, assignmentDto.statusReason());
+        Ticket ticketAssigned = assignmentService
+                .assignTicket(ticket, manager, technician, assignmentDto.statusReason());
 
         metricsService.refreshTicketMetrics(ticketAssigned);
-
         logger.debug("Ticket {} assigned successfully", idTicket);
 
         return ticketMapper.toDto(ticketAssigned);

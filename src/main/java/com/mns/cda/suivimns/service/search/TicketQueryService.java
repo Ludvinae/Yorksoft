@@ -25,7 +25,6 @@ public class TicketQueryService {
     private final TicketMapper ticketMapper;
 
     public Page<TicketListDto> search(TicketSearchCriteria criteria, Pageable pageable) {
-
         validateSort(pageable);
 
         Specification<Ticket> spec = Specification
@@ -46,10 +45,7 @@ public class TicketQueryService {
                 .and(TicketSpecification.isNotClosed(criteria.isNotClosed()))
                 .and(TicketSpecification.isOverdue(criteria.isOverdue()));
 
-
-        return ticketDao
-                .findAll(spec, pageable)
-                .map(ticketMapper::toListDto);
+        return ticketDao.findAll(spec, pageable).map(ticketMapper::toListDto);
     }
 
     private void validateSort(Pageable pageable) {

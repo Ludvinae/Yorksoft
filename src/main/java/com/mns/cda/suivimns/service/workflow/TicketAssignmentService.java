@@ -32,39 +32,30 @@ public class TicketAssignmentService {
     }
 
     @Transactional
-    public Ticket assignTicket(Ticket ticket, Manager manager,
-                               Technician technician, String statusReason) {
-
+    public Ticket assignTicket(Ticket ticket, Manager manager, Technician technician, String statusReason) {
         // Verifier que le ticket n'est pas déja attribué à ce technicien
         Integer currentTechnicianId = (ticket.getCurrentTechnician() != null
                 ? ticket.getCurrentTechnician().getIdAppUser() : null);
         if (Objects.equals(technician.getIdAppUser(), currentTechnicianId)) {
             throw new AssignmentConflictException();
         }
-
         // Marque l'affectation actuelle comme finie si elle existe
         closeCurrentAssignment(ticket.getIdTicket());
-
         // Changer l'état du ticket
         Ticket ticketChanged = ticketStatusService.changeStatus(ticket, StatusEnum.ASSIGNED, manager, statusReason);
-
         // Créer la nouvelle affectation
         Assignment assignment = new Assignment();
         assignment.setTicket(ticketChanged);
         assignment.setTechnician(technician);
         assignment.setManager(manager);
-
         assignmentDao.save(assignment);
-
         // Mettre à jour le ticket avec le technicien assigné, et le manager ayant créé l'affectation
         ticketChanged.setCurrentTechnician(technician);
         ticketChanged.setCurrentManager(manager);
-
         activityService.log(manager, "A attribué le ticket #" + ticket.getIdTicket() +
                 " à " + technician.getFirstName() + " " + technician.getLastName(), ActivityType.ASSIGNMENT);
         activityService.log(technician, "A reçu l'attribution du ticket #" + ticket.getIdTicket(),
                 ActivityType.ASSIGNMENT);
-
         return ticketChanged;
     }
 }
