@@ -12,6 +12,7 @@
     } @else if (storeService.clients().length == 0) {
       <span>Aucun client ne corresponds à ces critères</span>
     } @else {
+      <div class="overflow-x-auto">
       <table class="table table-sm">
         <thead>
         <tr>
@@ -68,6 +69,7 @@
           }
         </tbody>
       </table>
+      </div>
     }
 
 
