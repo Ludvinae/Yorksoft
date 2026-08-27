@@ -24,7 +24,7 @@ export class DirectorService {
     );
   }
 
-  create(director: Director) {
+  create(director: DirectorCreateDto) {
     return this.http.post(`${this.apiUrl}`, director).pipe(tap(() => this.getAll().subscribe()));
   }
 

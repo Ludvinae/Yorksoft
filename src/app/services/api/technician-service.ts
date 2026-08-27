@@ -33,7 +33,7 @@ export class TechnicianService {
     );
   }
 
-  create(technician: Technician) {
+  create(technician: TechnicianCreateDto) {
     return this.http.post(`${this.apiUrl}`, technician).pipe(tap(() => this.getAll().subscribe()));
   }
 

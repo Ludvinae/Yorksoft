@@ -24,7 +24,7 @@ export class ManagerService {
     );
   }
 
-  create(manager: Manager) {
+  create(manager: ManagerCreateDto) {
     return this.http.post(`${this.apiUrl}`, manager).pipe(tap(() => this.getAll().subscribe()));
   }
 
