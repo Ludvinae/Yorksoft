@@ -5,6 +5,8 @@ import com.mns.cda.suivimns.controller.AppUserController;
 import com.mns.cda.suivimns.dto.account.NewUserDto;
 import com.mns.cda.suivimns.dto.entity.AppUserDto;
 import com.mns.cda.suivimns.exception.AppUserNotFoundException;
+import com.mns.cda.suivimns.exception.LastAdminException;
+import com.mns.cda.suivimns.exception.SelfDeletionException;
 import com.mns.cda.suivimns.model.Admin;
 import com.mns.cda.suivimns.security.AppUserDetails;
 import com.mns.cda.suivimns.service.entity.AppUserService;
@@ -158,33 +160,86 @@ class AppUserControllerUnitTest {
     // DELETE - OK
     // =========================
     @Test
-    @WithMockUser(roles = "ADMIN")
     void shouldDelete() throws Exception {
 
-        doNothing().when(appUserService).delete(1);
+        Admin admin = new Admin();
+        admin.setIdAppUser(99);
+        admin.setEmail("admin@test.fr");
+        AppUserDetails principal = new AppUserDetails(admin);
+
+        doNothing().when(appUserService).delete(eq(1), any(AppUserDetails.class));
 
         mockMvc.perform(delete("/user/1")
+                        .with(user(principal))
                         .with(csrf()))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
-        verify(appUserService).delete(1);
+        verify(appUserService).delete(eq(1), any(AppUserDetails.class));
     }
 
     // =========================
     // DELETE - NOT FOUND
     // =========================
     @Test
-    @WithMockUser(roles = "ADMIN")
     void shouldReturn404WhenDeleteNotFound() throws Exception {
 
+        Admin admin = new Admin();
+        admin.setIdAppUser(99);
+        admin.setEmail("admin@test.fr");
+        AppUserDetails principal = new AppUserDetails(admin);
+
         doThrow(new AppUserNotFoundException())
-                .when(appUserService).delete(1);
+                .when(appUserService).delete(eq(1), any(AppUserDetails.class));
 
         mockMvc.perform(delete("/user/1")
+                        .with(user(principal))
                         .with(csrf()))
                 .andDo(print())
                 .andExpect(status().isNotFound());
+    }
+
+    // =========================
+    // DELETE - CANNOT DELETE SELF
+    // =========================
+    @Test
+    void shouldReturn400WhenAdminDeletesOwnAccount() throws Exception {
+
+        // L'admin authentifie a le meme id que la ressource ciblee par l'URL
+        Admin admin = new Admin();
+        admin.setIdAppUser(1);
+        admin.setEmail("admin@test.fr");
+        AppUserDetails principal = new AppUserDetails(admin);
+
+        doThrow(new SelfDeletionException())
+                .when(appUserService).delete(eq(1), any(AppUserDetails.class));
+
+        mockMvc.perform(delete("/user/1")
+                        .with(user(principal))
+                        .with(csrf()))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    // =========================
+    // DELETE - LAST ADMIN
+    // =========================
+    @Test
+    void shouldReturn409WhenDeletingLastAdmin() throws Exception {
+
+        Admin admin = new Admin();
+        admin.setIdAppUser(99);
+        admin.setEmail("admin@test.fr");
+        AppUserDetails principal = new AppUserDetails(admin);
+
+        doThrow(new LastAdminException())
+                .when(appUserService).delete(eq(1), any(AppUserDetails.class));
+
+        mockMvc.perform(delete("/user/1")
+                        .with(user(principal))
+                        .with(csrf()))
+                .andDo(print())
+                .andExpect(status().isConflict());
     }
 
     // =========================

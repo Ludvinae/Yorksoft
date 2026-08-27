@@ -69,8 +69,8 @@ public class AppUserController {
             @ApiResponse(responseCode = "404", description = "Utilisateur non trouvée")})
     @DeleteMapping("/{id}")
     @IsAdmin
-    public ResponseEntity<Void> delete(@PathVariable int id) {
-        appUserService.delete(id);
+    public ResponseEntity<Void> delete(@PathVariable int id, @AuthenticationPrincipal AppUserDetails principal) {
+        appUserService.delete(id, principal);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
     

@@ -213,6 +213,22 @@ public class GlobalExceptionInterceptor {
                 "User doesn't own this ressource");
     }
 
+    @ExceptionHandler(SelfDeletionException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponseDto handleSelfDeletion(SelfDeletionException ex) {
+
+        return new ErrorResponseDto(400, "CANNOT_DELETE_SELF",
+                "Un utilisateur ne peut pas supprimer son propre compte");
+    }
+
+    @ExceptionHandler(LastAdminException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorResponseDto handleLastAdmin(LastAdminException ex) {
+
+        return new ErrorResponseDto(409, "LAST_ADMIN",
+                "Impossible de supprimer le dernier compte administrateur");
+    }
+
     @ExceptionHandler(IncoherentHistoryTimeException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponseDto handleIncoherentHistory(IncoherentHistoryTimeException ex) {

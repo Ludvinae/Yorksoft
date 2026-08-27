@@ -1,5 +1,6 @@
 package com.mns.cda.suivimns.service.entity;
 
+import com.mns.cda.suivimns.dao.AdminDao;
 import com.mns.cda.suivimns.dao.AppUserDao;
 import com.mns.cda.suivimns.dto.account.NewUserDto;
 import com.mns.cda.suivimns.dto.entity.AppUserDto;
@@ -8,7 +9,10 @@ import com.mns.cda.suivimns.dto.flat.PasswordDto;
 import com.mns.cda.suivimns.exception.AppUserNotFoundException;
 import com.mns.cda.suivimns.exception.BadPasswordException;
 import com.mns.cda.suivimns.exception.EmailAlreadyUsedException;
+import com.mns.cda.suivimns.exception.LastAdminException;
+import com.mns.cda.suivimns.exception.SelfDeletionException;
 import com.mns.cda.suivimns.mapper.entity.AppUserMapper;
+import com.mns.cda.suivimns.model.Admin;
 import com.mns.cda.suivimns.model.AppUser;
 import com.mns.cda.suivimns.security.AppUserDetails;
 import com.mns.cda.suivimns.service.security.SecurityService;
@@ -25,6 +29,7 @@ public class AppUserService {
 
 
     protected final AppUserDao appUserDao;
+    protected final AdminDao adminDao;
     protected final AppUserMapper appUserMapper;
     protected final PasswordEncoder encoder;
     protected final SecurityService security;
@@ -72,9 +77,20 @@ public class AppUserService {
         appUserDao.save(appUser);
     }
 
-    public void delete(int id) {
+    public void delete(int id, AppUserDetails principal) {
+
+        // Un admin ne peut pas se supprimer lui-meme
+        if (principal.getId() == id) {
+            throw new SelfDeletionException();
+        }
+
         AppUser appUser = appUserDao.findById(id)
                 .orElseThrow(AppUserNotFoundException::new);
+
+        // On ne peut pas supprimer le dernier compte admin restant
+        if (appUser instanceof Admin && adminDao.count() <= 1) {
+            throw new LastAdminException();
+        }
 
         appUserDao.delete(appUser);
     }
