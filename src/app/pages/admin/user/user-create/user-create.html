@@ -1,0 +1,68 @@
+<app-generic-form-page
+  title="Créer un utilisateur"
+  [loading]="loading()"
+  [error]="error()"
+  submitLabel="Créer"
+  (submitForm)="onSubmit()"
+  [formGroup]="form"
+  [routeId]="routeId()"
+  [isEditMode]="false">
+
+  <!-- champs -->
+
+  <app-field-select
+    labelKey="Rôle"
+    [control]="form.controls.role"
+    [options]="roleOptions"
+    valueField="code"
+    labelField="label"
+    placeholder="Choisir un rôle"
+    [errorMessages]="{
+    required: 'Le rôle est obligatoire'}"/>
+
+  <app-field-text labelKey="Prénom" placeholder="Jean"
+                  [control]="form.controls.firstName"
+                  [errorMessages]="{
+    required: 'Le prénom est obligatoire',
+    maxlength: 'Max 127 caractères'}">
+  </app-field-text>
+
+  <app-field-text labelKey="Nom" placeholder="Dupont"
+                  [control]="form.controls.lastName"
+                  [errorMessages]="{
+    required: 'Le nom est obligatoire',
+    maxlength: 'Max 127 caractères'}">
+  </app-field-text>
+
+  <app-field-text labelKey="Email" type="email" placeholder="jean.dupont@entreprise.fr"
+                  [control]="form.controls.email"
+                  [errorMessages]="{
+    required: 'L\'email est obligatoire',
+    email: 'L\'email doit être valide',
+    maxlength: 'Max 127 caractères'}">
+  </app-field-text>
+
+  <app-field-text labelKey="Téléphone" placeholder="0600000000"
+                  [control]="form.controls.phoneNumber"
+                  [errorMessages]="{
+    maxlength: 'Max 31 caractères'}">
+  </app-field-text>
+
+  <app-field-text labelKey="Mot de passe" type="password" placeholder="••••••••"
+                  [control]="form.controls.password"
+                  [errorMessages]="{
+    required: 'Le mot de passe est obligatoire',
+    minlength: 'Min 8 caractères',
+    maxlength: 'Max 127 caractères'}">
+  </app-field-text>
+
+  @if (isTechnician()) {
+    <app-field-text labelKey="Rang" type="number" placeholder="1"
+                    [control]="form.controls.rank"
+                    [errorMessages]="{
+      required: 'Le rang est obligatoire pour un technicien',
+      min: 'Le rang doit être supérieur à 0'}">
+    </app-field-text>
+  }
+
+</app-generic-form-page>

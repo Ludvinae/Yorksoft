@@ -4,6 +4,11 @@ import { adminGuard } from '../../guards/admin-guard';
 
 export const ADMIN_ROUTES: Routes = [
   {
+    path: 'user/create',
+    loadComponent: () => import('./user/user-create/user-create').then((m) => m.UserCreate),
+    canActivate: [adminGuard],
+  },
+  {
     path: '',
     loadComponent: () => import('./admin/admin').then((m) => m.Admin),
     canActivate: [employeeGuard],

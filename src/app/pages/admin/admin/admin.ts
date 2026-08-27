@@ -19,5 +19,6 @@ export class Admin {
     { label: "Niveaux d'urgence", link: this.baseRoute + '/urgency' },
     { label: 'Thématiques', link: this.baseRoute + '/theme' },
     { label: 'Statuts de ticket', link: this.baseRoute + '/status' },
+    { label: 'Utilisateurs', link: this.baseRoute + '/user/create' },
   ];
 }
