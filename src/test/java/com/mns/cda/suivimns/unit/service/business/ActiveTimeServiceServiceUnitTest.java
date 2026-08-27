@@ -36,7 +36,7 @@ public class ActiveTimeServiceServiceUnitTest {
     void setUp() {
         clock = Clock.fixed(
                 Instant.parse("2026-05-11T12:00:00Z"),
-                ZoneId.systemDefault()
+                ZoneId.of("Europe/Paris")
         );
         service = new ActiveTimeService(historyDao, clock);
     }
