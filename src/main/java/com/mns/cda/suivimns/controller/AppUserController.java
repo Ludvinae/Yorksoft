@@ -1,5 +1,6 @@
 package com.mns.cda.suivimns.controller;
 
+import com.mns.cda.suivimns.dto.account.NewUserDto;
 import com.mns.cda.suivimns.dto.entity.AppUserDto;
 import com.mns.cda.suivimns.dto.flat.NewPasswordDto;
 import com.mns.cda.suivimns.dto.flat.PasswordDto;
@@ -58,7 +59,7 @@ public class AppUserController {
             @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PostMapping
     @IsAdmin
-    public ResponseEntity<AppUserDto> create(@RequestBody @Valid AppUserDto appUser) {
+    public ResponseEntity<AppUserDto> create(@RequestBody @Valid NewUserDto appUser) {
         return new ResponseEntity<>(appUserService.save(appUser), HttpStatus.CREATED);
     }
 

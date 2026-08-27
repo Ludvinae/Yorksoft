@@ -63,6 +63,7 @@ public class AuthController {
     }
 
     @PostMapping("/manager")
+    @IsAdmin
     public ResponseEntity<Manager> createManager(@RequestBody @Valid  Manager userToInsert) {
 
         managerService.insert(userToInsert);

@@ -1,6 +1,7 @@
 package com.mns.cda.suivimns.service.entity;
 
 import com.mns.cda.suivimns.dao.AppUserDao;
+import com.mns.cda.suivimns.dto.account.NewUserDto;
 import com.mns.cda.suivimns.dto.entity.AppUserDto;
 import com.mns.cda.suivimns.dto.flat.NewPasswordDto;
 import com.mns.cda.suivimns.dto.flat.PasswordDto;
@@ -39,14 +40,17 @@ public class AppUserService {
         return appUserMapper.toDto(appUser);
     }
 
-    public AppUserDto save(AppUserDto dto) {
+    public AppUserDto save(NewUserDto dto) {
         if (appUserDao.existsByEmail(dto.email())) {
             throw new EmailAlreadyUsedException();
         }
 
-        AppUser appUser = appUserMapper.toEntity(dto);
+        AppUser appUser = appUserMapper.toNewEntity(dto);
         appUser.setIdAppUser(null);
         appUser.setPhoneNumber(appUser.getPhoneNumber().trim());
+
+        // Encodage du password avant de l'inserer en base de données
+        appUser.setPassword(encoder.encode(appUser.getPassword()));
 
         AppUser saved = appUserDao.save(appUser);
 
