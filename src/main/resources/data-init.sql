@@ -53,17 +53,19 @@ VALUES ( '0684545611', 'barbara.dupont99@gmail.com', 'Barbara', 'Dupont', '$2a$1
        ('0355653155', 'chloe.noel@yorksoft.fr', 'Chloé', 'Noël', '$2a$10$V98VMxgV7myKHPE7eu7n3.GO8EUiqZGK/3ISjSriOFklF2Uvftx8u'),
        ('0355659808', 'maxime.picard@yorksoft.fr', 'Maxime', 'Picard', '$2a$10$V98VMxgV7myKHPE7eu7n3.GO8EUiqZGK/3ISjSriOFklF2Uvftx8u'),
        ('0355655118', 'sarah.vionelli@yorksoft.fr', 'Sarah', 'Vionelli', '$2a$10$V98VMxgV7myKHPE7eu7n3.GO8EUiqZGK/3ISjSriOFklF2Uvftx8u'),
-       ('0355651788', 'alice.pfund@yorksoft.fr', 'Alice', 'Pfund', '$2a$10$V98VMxgV7myKHPE7eu7n3.GO8EUiqZGK/3ISjSriOFklF2Uvftx8u');
+       ('0355651788', 'alice.pfund@yorksoft.fr', 'Alice', 'Pfund', '$2a$10$V98VMxgV7myKHPE7eu7n3.GO8EUiqZGK/3ISjSriOFklF2Uvftx8u'),
+       ('', 'guest-technician@jury.fr', 'Test', 'Technicien', '$2a$10$T0VOfEeDE8MFZ77kNcyTD.ABZv3MazJYyfaTmIOsBu7MEKaiYm1kO'),
+       ('', 'guest-manager@jury.fr', 'Test', 'Manager', '$2a$10$T0VOfEeDE8MFZ77kNcyTD.ABZv3MazJYyfaTmIOsBu7MEKaiYm1kO');
 
 INSERT INTO admin (id_app_user)
 VALUES (9);
 
 INSERT INTO manager (id_app_user)
-VALUES (4);
+VALUES (4), (28);
 
 INSERT INTO technician (id_app_user, rank)
 VALUES (5, 1), (6, 3), (23, 1), (24, 2),
-       (25, 1), (26, 2);
+       (25, 1), (26, 2), (27, 1);
 
 INSERT INTO director (id_app_user)
 VALUES (7);
