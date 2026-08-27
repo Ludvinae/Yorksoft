@@ -10,6 +10,7 @@ import com.mns.cda.suivimns.mapper.entity.DirectorMapper;
 import com.mns.cda.suivimns.model.AppUser;
 import com.mns.cda.suivimns.model.Director;
 import com.mns.cda.suivimns.security.AppUserDetails;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -55,6 +56,7 @@ public class DirectorService  {
         return directorMapper.toDto(saved);
     }
 
+    @Transactional
     public void insert(Director director, AppUserDetails principal) {
         if (appUserDao.existsByEmail(director.getEmail())) {
             throw new EmailAlreadyUsedException();

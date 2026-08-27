@@ -15,6 +15,7 @@ import com.mns.cda.suivimns.mapper.entity.TechnicianMapper;
 import com.mns.cda.suivimns.model.AppUser;
 import com.mns.cda.suivimns.model.Technician;
 import com.mns.cda.suivimns.security.AppUserDetails;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -59,6 +60,7 @@ public class TechnicianService  {
         return technicianMapper.toDto(saved);
     }
 
+    @Transactional
     public void insert(Technician technician, AppUserDetails principal) {
         if (appUserDao.existsByEmail(technician.getEmail())) {
             throw new EmailAlreadyUsedException();

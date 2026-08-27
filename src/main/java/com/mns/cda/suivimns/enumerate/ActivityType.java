@@ -5,5 +5,6 @@ public enum ActivityType {
     COMMENT,
     PROCEDURE,
     ASSIGNMENT,
-    USER
+    USER,
+    OTHER
 }

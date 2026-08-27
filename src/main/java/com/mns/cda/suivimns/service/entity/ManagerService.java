@@ -14,6 +14,7 @@ import com.mns.cda.suivimns.mapper.entity.ManagerMapper;
 import com.mns.cda.suivimns.model.AppUser;
 import com.mns.cda.suivimns.model.Manager;
 import com.mns.cda.suivimns.security.AppUserDetails;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -55,6 +56,7 @@ public class ManagerService  {
         return managerMapper.toDto(saved);
     }
 
+    @Transactional
     public void insert(Manager manager, AppUserDetails principal) {
         if (appUserDao.existsByEmail(manager.getEmail())) {
             throw new EmailAlreadyUsedException();
