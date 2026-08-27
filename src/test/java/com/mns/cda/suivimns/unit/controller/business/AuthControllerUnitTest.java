@@ -6,9 +6,11 @@ import com.mns.cda.suivimns.dto.account.NewUserDto;
 import com.mns.cda.suivimns.mapper.entity.DirectorMapper;
 import com.mns.cda.suivimns.mapper.entity.ManagerMapper;
 import com.mns.cda.suivimns.mapper.entity.TechnicianMapper;
+import com.mns.cda.suivimns.model.Admin;
 import com.mns.cda.suivimns.model.Director;
 import com.mns.cda.suivimns.model.Manager;
 import com.mns.cda.suivimns.model.Technician;
+import com.mns.cda.suivimns.security.AppUserDetails;
 import com.mns.cda.suivimns.service.entity.AppUserService;
 import com.mns.cda.suivimns.service.entity.ClientService;
 import com.mns.cda.suivimns.service.entity.DirectorService;
@@ -24,14 +26,12 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -76,12 +76,18 @@ class AuthControllerUnitTest {
     private org.springframework.data.jpa.mapping.JpaMetamodelMappingContext jpaMetamodelMappingContext;
 
     private NewUserDto newUserDto;
+    private AppUserDetails adminPrincipal;
 
     @BeforeEach
     void setUp() {
         newUserDto = new NewUserDto(
                 "Test firstName", "Test lastName",
                 "Test@email.com", "Test phoneNumber", "TestPassword123", null);
+
+        Admin admin = new Admin();
+        admin.setIdAppUser(99);
+        admin.setEmail("admin@test.fr");
+        adminPrincipal = new AppUserDetails(admin);
     }
 
     // =========================
@@ -138,7 +144,6 @@ class AuthControllerUnitTest {
     // MANAGER
     // =========================
     @Test
-    @WithMockUser(roles = "ADMIN")
     void shouldCreateManager() throws Exception {
 
         Manager manager = new Manager();
@@ -148,19 +153,20 @@ class AuthControllerUnitTest {
         when(managerMapper.toNewEntity(any(NewUserDto.class))).thenReturn(manager);
 
         mockMvc.perform(post("/manager")
+                        .with(user(adminPrincipal))
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(newUserDto)))
                 .andDo(print())
                 .andExpect(status().isCreated());
 
-        verify(managerService).insert(manager);
+        verify(managerService).insert(manager, adminPrincipal);
     }
 
     // Un manager n'a pas de champ "rank" (contrairement a Technician) : fournir cette valeur
-    // en trop dans le JSON ne doit pas faire echouer la creation, elle doit simplement etre ignoree.
+    // dans le DTO ne doit pas faire echouer la creation, elle doit simplement etre ignoree
+    // par ManagerMapper (aucune propriete correspondante sur l'entite Manager).
     @Test
-    @WithMockUser(roles = "ADMIN")
     void shouldIgnoreRankFieldWhenCreatingManager() throws Exception {
 
         Manager manager = new Manager();
@@ -169,29 +175,25 @@ class AuthControllerUnitTest {
 
         when(managerMapper.toNewEntity(any(NewUserDto.class))).thenReturn(manager);
 
-        Map<String, Object> payload = new LinkedHashMap<>();
-        payload.put("firstName", "Test firstName");
-        payload.put("lastName", "Test lastName");
-        payload.put("email", "Test@email.com");
-        payload.put("phoneNumber", "Test phoneNumber");
-        payload.put("password", "TestPassword123");
-        payload.put("rank", 3);
+        NewUserDto dtoWithRank = new NewUserDto(
+                "Test firstName", "Test lastName",
+                "Test@email.com", "Test phoneNumber", "TestPassword123", (byte) 3);
 
         mockMvc.perform(post("/manager")
+                        .with(user(adminPrincipal))
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(payload)))
+                        .content(objectMapper.writeValueAsString(dtoWithRank)))
                 .andDo(print())
                 .andExpect(status().isCreated());
 
-        verify(managerService).insert(manager);
+        verify(managerService).insert(manager, adminPrincipal);
     }
 
     // =========================
     // DIRECTOR
     // =========================
     @Test
-    @WithMockUser(roles = "ADMIN")
     void shouldCreateDirector() throws Exception {
 
         Director director = new Director();
@@ -201,19 +203,19 @@ class AuthControllerUnitTest {
         when(directorMapper.toNewEntity(any(NewUserDto.class))).thenReturn(director);
 
         mockMvc.perform(post("/director")
+                        .with(user(adminPrincipal))
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(newUserDto)))
                 .andDo(print())
                 .andExpect(status().isCreated());
 
-        verify(directorService).insert(director);
+        verify(directorService).insert(director, adminPrincipal);
     }
 
     // Meme verification que pour /manager : un director n'a pas de champ "rank",
-    // en fournir un dans le corps de la requete ne doit pas empecher la creation.
+    // en fournir un dans le DTO ne doit pas empecher la creation.
     @Test
-    @WithMockUser(roles = "ADMIN")
     void shouldIgnoreRankFieldWhenCreatingDirector() throws Exception {
 
         Director director = new Director();
@@ -222,29 +224,25 @@ class AuthControllerUnitTest {
 
         when(directorMapper.toNewEntity(any(NewUserDto.class))).thenReturn(director);
 
-        Map<String, Object> payload = new LinkedHashMap<>();
-        payload.put("firstName", "Test firstName");
-        payload.put("lastName", "Test lastName");
-        payload.put("email", "Test@email.com");
-        payload.put("phoneNumber", "Test phoneNumber");
-        payload.put("password", "TestPassword123");
-        payload.put("rank", 3);
+        NewUserDto dtoWithRank = new NewUserDto(
+                "Test firstName", "Test lastName",
+                "Test@email.com", "Test phoneNumber", "TestPassword123", (byte) 3);
 
         mockMvc.perform(post("/director")
+                        .with(user(adminPrincipal))
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(payload)))
+                        .content(objectMapper.writeValueAsString(dtoWithRank)))
                 .andDo(print())
                 .andExpect(status().isCreated());
 
-        verify(directorService).insert(director);
+        verify(directorService).insert(director, adminPrincipal);
     }
 
     // =========================
     // TECHNICIAN
     // =========================
     @Test
-    @WithMockUser(roles = "ADMIN")
     void shouldCreateTechnician() throws Exception {
 
         Technician technician = new Technician();
@@ -255,12 +253,13 @@ class AuthControllerUnitTest {
         when(technicianMapper.toNewEntity(any(NewUserDto.class))).thenReturn(technician);
 
         mockMvc.perform(post("/technician")
+                        .with(user(adminPrincipal))
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(newUserDto)))
                 .andDo(print())
                 .andExpect(status().isCreated());
 
-        verify(technicianService).insert(technician);
+        verify(technicianService).insert(technician, adminPrincipal);
     }
 }

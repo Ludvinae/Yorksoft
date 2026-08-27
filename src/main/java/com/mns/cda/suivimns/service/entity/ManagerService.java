@@ -4,11 +4,14 @@ import com.mns.cda.suivimns.dao.AppUserDao;
 import com.mns.cda.suivimns.dao.ManagerDao;
 import com.mns.cda.suivimns.dto.entity.ManagerDto;
 import com.mns.cda.suivimns.dto.flat.PasswordDto;
+import com.mns.cda.suivimns.enumerate.ActivityType;
 import com.mns.cda.suivimns.exception.AccountNotOwnedException;
+import com.mns.cda.suivimns.exception.AppUserNotFoundException;
 import com.mns.cda.suivimns.exception.BadPasswordException;
 import com.mns.cda.suivimns.exception.EmailAlreadyUsedException;
 import com.mns.cda.suivimns.exception.ManagerNotFoundException;
 import com.mns.cda.suivimns.mapper.entity.ManagerMapper;
+import com.mns.cda.suivimns.model.AppUser;
 import com.mns.cda.suivimns.model.Manager;
 import com.mns.cda.suivimns.security.AppUserDetails;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +30,7 @@ public class ManagerService  {
     protected final ManagerMapper managerMapper;
     protected final AppUserDao appUserDao;
     protected final PasswordEncoder encoder;
+    protected final ActivityService activityService;
 
     public List<ManagerDto> findAll() {
         return managerMapper.toDtoList(managerDao.findAll());
@@ -51,7 +55,7 @@ public class ManagerService  {
         return managerMapper.toDto(saved);
     }
 
-    public void insert(Manager manager) {
+    public void insert(Manager manager, AppUserDetails principal) {
         if (appUserDao.existsByEmail(manager.getEmail())) {
             throw new EmailAlreadyUsedException();
         }
@@ -62,6 +66,10 @@ public class ManagerService  {
         manager.setPassword(encoder.encode(manager.getPassword()));
 
         appUserDao.save(manager);
+
+        AppUser admin = appUserDao.findById(principal.getId()).orElseThrow(AppUserNotFoundException::new);
+        activityService.log(admin, "A créé un compte manager pour " +
+                manager.getFirstName() + " " + manager.getLastName(), ActivityType.USER);
     }
 
     public void delete(int id, AppUserDetails userDetails) {

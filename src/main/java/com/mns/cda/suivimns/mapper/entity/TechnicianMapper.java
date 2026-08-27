@@ -17,8 +17,8 @@ public abstract class TechnicianMapper {
 
     public abstract Technician toEntity(TechnicianDto dto);
 
-    // Rang par defaut a la creation (modifiable ensuite via PATCH)
-    @Mapping(target = "rank", constant = "1")
+    // Rang fourni par le client si present, sinon valeur par defaut (1)
+    @Mapping(target = "rank", source = "rank", defaultValue = "1")
     public abstract Technician toNewEntity(NewUserDto dto);
 
     // Method helper pour Update

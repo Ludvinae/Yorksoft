@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
@@ -72,31 +73,34 @@ public class AuthController {
 
     @PostMapping("/manager")
     @IsAdmin
-    public ResponseEntity<Manager> createManager(@RequestBody @Valid NewUserDto dto) {
+    public ResponseEntity<Manager> createManager(@RequestBody @Valid NewUserDto dto,
+                                                  @AuthenticationPrincipal AppUserDetails principal) {
 
         Manager userToInsert = managerMapper.toNewEntity(dto);
-        managerService.insert(userToInsert);
+        managerService.insert(userToInsert, principal);
 
         return new ResponseEntity<>(userToInsert, HttpStatus.CREATED);
     }
 
     @PostMapping("/technician")
     @IsAdmin
-    public ResponseEntity<Technician> createTechnician(@RequestBody @Valid NewUserDto dto) {
+    public ResponseEntity<Technician> createTechnician(@RequestBody @Valid NewUserDto dto,
+                                                        @AuthenticationPrincipal AppUserDetails principal) {
 
         // Rang par defaut a la creation, modifiable ensuite via PATCH
         Technician userToInsert = technicianMapper.toNewEntity(dto);
-        technicianService.insert(userToInsert);
+        technicianService.insert(userToInsert, principal);
 
         return new ResponseEntity<>(userToInsert, HttpStatus.CREATED);
     }
 
     @PostMapping("/director")
     @IsAdmin
-    public ResponseEntity<Director> createDirector(@RequestBody @Valid NewUserDto dto) {
+    public ResponseEntity<Director> createDirector(@RequestBody @Valid NewUserDto dto,
+                                                    @AuthenticationPrincipal AppUserDetails principal) {
 
         Director userToInsert = directorMapper.toNewEntity(dto);
-        directorService.insert(userToInsert);
+        directorService.insert(userToInsert, principal);
 
         return new ResponseEntity<>(userToInsert, HttpStatus.CREATED);
     }

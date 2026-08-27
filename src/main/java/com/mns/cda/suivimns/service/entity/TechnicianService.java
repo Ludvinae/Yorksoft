@@ -5,11 +5,14 @@ import com.mns.cda.suivimns.dao.TechnicianDao;
 import com.mns.cda.suivimns.dto.entity.TechnicianDto;
 import com.mns.cda.suivimns.dto.flat.PasswordDto;
 import com.mns.cda.suivimns.dto.flat.TechnicianWorkloadDetailedDto;
+import com.mns.cda.suivimns.enumerate.ActivityType;
 import com.mns.cda.suivimns.exception.AccountNotOwnedException;
+import com.mns.cda.suivimns.exception.AppUserNotFoundException;
 import com.mns.cda.suivimns.exception.BadPasswordException;
 import com.mns.cda.suivimns.exception.EmailAlreadyUsedException;
 import com.mns.cda.suivimns.exception.TechnicianNotFoundException;
 import com.mns.cda.suivimns.mapper.entity.TechnicianMapper;
+import com.mns.cda.suivimns.model.AppUser;
 import com.mns.cda.suivimns.model.Technician;
 import com.mns.cda.suivimns.security.AppUserDetails;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +32,7 @@ public class TechnicianService  {
     protected final TechnicianMapper technicianMapper;
     protected final AppUserDao appUserDao;
     protected final PasswordEncoder encoder;
+    protected final ActivityService activityService;
 
     public List<TechnicianDto> findAll() {
         return technicianMapper.toDtoList(technicianDao.findAll());
@@ -55,7 +59,7 @@ public class TechnicianService  {
         return technicianMapper.toDto(saved);
     }
 
-    public void insert(Technician technician) {
+    public void insert(Technician technician, AppUserDetails principal) {
         if (appUserDao.existsByEmail(technician.getEmail())) {
             throw new EmailAlreadyUsedException();
         }
@@ -67,6 +71,10 @@ public class TechnicianService  {
         technician.setPassword(encoder.encode(technician.getPassword()));
 
         appUserDao.save(technician);
+
+        AppUser admin = appUserDao.findById(principal.getId()).orElseThrow(AppUserNotFoundException::new);
+        activityService.log(admin, "A créé un compte technicien pour " +
+                technician.getFirstName() + " " + technician.getLastName(), ActivityType.USER);
     }
 
     public void delete(int id, AppUserDetails userDetails) {

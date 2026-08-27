@@ -4,6 +4,7 @@ import com.mns.cda.suivimns.dao.AppUserDao;
 import com.mns.cda.suivimns.dao.DirectorDao;
 import com.mns.cda.suivimns.dto.entity.DirectorDto;
 import com.mns.cda.suivimns.dto.flat.PasswordDto;
+import com.mns.cda.suivimns.enumerate.ActivityType;
 import com.mns.cda.suivimns.exception.*;
 import com.mns.cda.suivimns.mapper.entity.DirectorMapper;
 import com.mns.cda.suivimns.model.AppUser;
@@ -27,6 +28,7 @@ public class DirectorService  {
     protected final DirectorMapper directorMapper;
     protected final AppUserDao appUserDao;
     protected final PasswordEncoder encoder;
+    protected final ActivityService activityService;
 
     public List<DirectorDto> findAll() {
         return directorMapper.toDtoList(directorDao.findAll());
@@ -53,7 +55,7 @@ public class DirectorService  {
         return directorMapper.toDto(saved);
     }
 
-    public void insert(Director director) {
+    public void insert(Director director, AppUserDetails principal) {
         if (appUserDao.existsByEmail(director.getEmail())) {
             throw new EmailAlreadyUsedException();
         }
@@ -65,6 +67,10 @@ public class DirectorService  {
         director.setPassword(encoder.encode(director.getPassword()));
 
         appUserDao.save(director);
+
+        AppUser admin = appUserDao.findById(principal.getId()).orElseThrow(AppUserNotFoundException::new);
+        activityService.log(admin, "A créé un compte directeur pour " +
+                director.getFirstName() + " " + director.getLastName(), ActivityType.USER);
     }
 
     public void delete(int id, AppUserDetails userDetails) {

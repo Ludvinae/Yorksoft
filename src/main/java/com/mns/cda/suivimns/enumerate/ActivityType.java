@@ -4,5 +4,6 @@ public enum ActivityType {
     TICKET,
     COMMENT,
     PROCEDURE,
-    ASSIGNMENT
+    ASSIGNMENT,
+    USER
 }
