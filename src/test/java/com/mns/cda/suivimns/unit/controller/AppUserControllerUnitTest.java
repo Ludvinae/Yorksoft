@@ -55,7 +55,7 @@ class AppUserControllerUnitTest {
 
         newUserDto = new NewUserDto(
                 "Test firstName", "Test lastName",
-                "Test@email.com", "Test phoneNumber", "TestPassword123");
+                "Test@email.com", "Test phoneNumber", "TestPassword123", (byte) 1);
     }
 
     // =========================
@@ -78,7 +78,8 @@ class AppUserControllerUnitTest {
     @WithMockUser(roles = "ADMIN")
     void shouldReturn400WhenCreateInvalid() throws Exception {
 
-        NewUserDto invalidDto = new NewUserDto("", null, "wrong email format", null, null);
+        NewUserDto invalidDto = new NewUserDto("", null, "wrong email format",
+                null, null, (byte) 1);
 
         mockMvc.perform(post("/user")
                         .with(csrf())
