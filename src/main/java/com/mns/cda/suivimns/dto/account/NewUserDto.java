@@ -10,5 +10,6 @@ public record NewUserDto (
     @NotBlank
     @Email(message="Courriel invalide") @Size(max = 127) String email, // Unique
     @Size(max = 31) String phoneNumber,
-    @NotBlank @Size(min = 3, max = 127) String password
+    @NotBlank @Size(min = 3, max = 127) String password,
+    Byte rank
 ) {}

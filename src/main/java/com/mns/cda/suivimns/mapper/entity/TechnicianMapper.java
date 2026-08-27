@@ -1,5 +1,6 @@
 package com.mns.cda.suivimns.mapper.entity;
 
+import com.mns.cda.suivimns.dto.account.NewUserDto;
 import com.mns.cda.suivimns.dto.entity.TechnicianDto;
 import com.mns.cda.suivimns.model.Technician;
 import org.mapstruct.Mapper;
@@ -15,6 +16,10 @@ public abstract class TechnicianMapper {
     public abstract List<TechnicianDto> toDtoList(List<Technician> technicianList);
 
     public abstract Technician toEntity(TechnicianDto dto);
+
+    // Rang par defaut a la creation (modifiable ensuite via PATCH)
+    @Mapping(target = "rank", constant = "1")
+    public abstract Technician toNewEntity(NewUserDto dto);
 
     // Method helper pour Update
     @Mapping(target = "idAppUser", ignore = true)

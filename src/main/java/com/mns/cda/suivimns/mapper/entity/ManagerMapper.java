@@ -1,5 +1,6 @@
 package com.mns.cda.suivimns.mapper.entity;
 
+import com.mns.cda.suivimns.dto.account.NewUserDto;
 import com.mns.cda.suivimns.dto.entity.ManagerDto;
 import com.mns.cda.suivimns.model.Manager;
 import org.mapstruct.Mapper;
@@ -15,6 +16,8 @@ public abstract class ManagerMapper {
     public abstract List<ManagerDto> toDtoList(List<Manager> managerList);
 
     public abstract Manager toEntity(ManagerDto dto);
+
+    public abstract Manager toNewEntity(NewUserDto dto);
 
     // Method helper pour Update
     @Mapping(target = "idAppUser", ignore = true)

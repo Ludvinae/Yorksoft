@@ -1,6 +1,10 @@
 package com.mns.cda.suivimns.controller.business;
 
+import com.mns.cda.suivimns.dto.account.NewUserDto;
 import com.mns.cda.suivimns.dto.flat.UserLoginDto;
+import com.mns.cda.suivimns.mapper.entity.DirectorMapper;
+import com.mns.cda.suivimns.mapper.entity.ManagerMapper;
+import com.mns.cda.suivimns.mapper.entity.TechnicianMapper;
 import com.mns.cda.suivimns.model.AppUser;
 import com.mns.cda.suivimns.model.Client;
 import com.mns.cda.suivimns.model.Manager;
@@ -36,6 +40,10 @@ public class AuthController {
     protected final ManagerService managerService;
     protected  final DirectorService directorService;
 
+    protected final TechnicianMapper technicianMapper;
+    protected final ManagerMapper managerMapper;
+    protected final DirectorMapper directorMapper;
+
     protected final AuthenticationProvider authenticationProvider;
 
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
@@ -64,8 +72,9 @@ public class AuthController {
 
     @PostMapping("/manager")
     @IsAdmin
-    public ResponseEntity<Manager> createManager(@RequestBody @Valid  Manager userToInsert) {
+    public ResponseEntity<Manager> createManager(@RequestBody @Valid NewUserDto dto) {
 
+        Manager userToInsert = managerMapper.toNewEntity(dto);
         managerService.insert(userToInsert);
 
         return new ResponseEntity<>(userToInsert, HttpStatus.CREATED);
@@ -73,8 +82,10 @@ public class AuthController {
 
     @PostMapping("/technician")
     @IsAdmin
-    public ResponseEntity<Technician> createClient(@RequestBody @Valid  Technician userToInsert) {
+    public ResponseEntity<Technician> createTechnician(@RequestBody @Valid NewUserDto dto) {
 
+        // Rang par defaut a la creation, modifiable ensuite via PATCH
+        Technician userToInsert = technicianMapper.toNewEntity(dto);
         technicianService.insert(userToInsert);
 
         return new ResponseEntity<>(userToInsert, HttpStatus.CREATED);
@@ -82,8 +93,9 @@ public class AuthController {
 
     @PostMapping("/director")
     @IsAdmin
-    public ResponseEntity<Director> createDirector(@RequestBody @Valid  Director userToInsert) {
+    public ResponseEntity<Director> createDirector(@RequestBody @Valid NewUserDto dto) {
 
+        Director userToInsert = directorMapper.toNewEntity(dto);
         directorService.insert(userToInsert);
 
         return new ResponseEntity<>(userToInsert, HttpStatus.CREATED);
