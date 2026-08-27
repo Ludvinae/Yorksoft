@@ -2,6 +2,7 @@ package com.mns.cda.suivimns.unit.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.AppUserController;
+import com.mns.cda.suivimns.dto.account.NewUserDto;
 import com.mns.cda.suivimns.dto.entity.AppUserDto;
 import com.mns.cda.suivimns.exception.AppUserNotFoundException;
 import com.mns.cda.suivimns.model.Admin;
@@ -43,6 +44,7 @@ class AppUserControllerUnitTest {
 
 
     private AppUserDto appUserDto;
+    private NewUserDto newUserDto;
 
     @BeforeEach
     void setUp() {
@@ -50,6 +52,10 @@ class AppUserControllerUnitTest {
         appUserDto = new AppUserDto(
                 1, "Test firstName", "Test lastName",
                 "Test@email.com", "Test phoneNumber");
+
+        newUserDto = new NewUserDto(
+                "Test firstName", "Test lastName",
+                "Test@email.com", "Test phoneNumber", "TestPassword123");
     }
 
     // =========================
@@ -61,7 +67,7 @@ class AppUserControllerUnitTest {
 
         mockMvc.perform(post("/user")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(appUserDto)))
+                        .content(objectMapper.writeValueAsString(newUserDto)))
                 .andExpect(status().isForbidden());
     }
 
@@ -72,7 +78,7 @@ class AppUserControllerUnitTest {
     @WithMockUser(roles = "ADMIN")
     void shouldReturn400WhenCreateInvalid() throws Exception {
 
-        AppUserDto invalidDto = new AppUserDto(null,"", null, "wrong email format",null);
+        NewUserDto invalidDto = new NewUserDto("", null, "wrong email format", null, null);
 
         mockMvc.perform(post("/user")
                         .with(csrf())
@@ -135,12 +141,12 @@ class AppUserControllerUnitTest {
     @WithMockUser(roles = "ADMIN")
     void shouldCreate() throws Exception {
 
-        when(appUserService.save(any(AppUserDto.class))).thenReturn(appUserDto);
+        when(appUserService.save(any(NewUserDto.class))).thenReturn(appUserDto);
 
         mockMvc.perform(post("/user")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(appUserDto)))
+                        .content(objectMapper.writeValueAsString(newUserDto)))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.idAppUser").value(1))
