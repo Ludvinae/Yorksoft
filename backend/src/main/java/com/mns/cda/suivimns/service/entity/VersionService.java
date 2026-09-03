@@ -1,0 +1,70 @@
+package com.mns.cda.suivimns.service.entity;
+
+import com.mns.cda.suivimns.dao.VersionDao;
+import com.mns.cda.suivimns.dto.entity.VersionDto;
+import com.mns.cda.suivimns.dto.flat.VersionDetailDto;
+import com.mns.cda.suivimns.dto.flat.VersionSelectDto;
+import com.mns.cda.suivimns.exception.VersionNotFoundException;
+import com.mns.cda.suivimns.mapper.entity.VersionMapper;
+import com.mns.cda.suivimns.model.Version;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+public class VersionService  {
+
+    protected final VersionDao versionDao;
+    protected final VersionMapper versionMapper;
+
+    public List<VersionDto> findAll() {
+        return versionMapper.toDtoList(versionDao.findAll());
+    }
+
+    public List<VersionDetailDto> findAllDetail() {
+        return versionDao.findAllDetail();
+    }
+
+    public List<VersionSelectDto> findAllBySoftware(Integer idSoftware) {
+
+        return versionDao.findAllBySoftware(idSoftware);
+    }
+
+    public VersionDto findById(int id) {
+        Version version = versionDao.findById(id)
+                .orElseThrow(VersionNotFoundException::new);
+
+        return versionMapper.toDto(version);
+    }
+
+    public VersionDetailDto findByIdDetail(int id) {
+        return versionDao.findByIdDetail(id);
+    }
+
+    public VersionDto save(VersionDto dto) {
+        Version version = versionMapper.toEntity(dto);
+        version.setIdVersion(null);
+        Version saved = versionDao.save(version);
+
+        return versionMapper.toDto(saved);
+    }
+
+    public void delete(int id) {
+        Version version = versionDao.findById(id)
+                .orElseThrow(VersionNotFoundException::new);
+
+        versionDao.delete(version);
+    }
+
+    public VersionDto update(int id, VersionDto versionToUpdate) {
+
+        Version currentVersion = versionDao.findById(id)
+                .orElseThrow(VersionNotFoundException::new);
+
+        versionMapper.updateEntityFromDto(versionToUpdate, currentVersion);
+
+        return versionMapper.toDto(versionDao.save(currentVersion));
+    }
+}

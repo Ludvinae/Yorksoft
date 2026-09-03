@@ -1,0 +1,6 @@
+.env
+.example.env
+target/*
+!target/*.jar
+.git
+.github

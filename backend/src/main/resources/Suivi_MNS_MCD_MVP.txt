@@ -1,0 +1,255 @@
+CREATE TABLE STATUT(
+   id_statut SERIAL,
+   designation VARCHAR(63) NOT NULL,
+   ordre_affichage SMALLINT,
+   code VARCHAR(31) NOT NULL,
+   PRIMARY KEY(id_statut),
+   UNIQUE(code)
+);
+
+CREATE TABLE IMPACT(
+   id_impact SERIAL,
+   designation VARCHAR(63) NOT NULL,
+   facteur_priorisation SMALLINT,
+   description VARCHAR(255),
+   PRIMARY KEY(id_impact),
+   UNIQUE(designation)
+);
+
+CREATE TABLE THEMATIQUE(
+   id_thematique SERIAL,
+   designation VARCHAR(127) NOT NULL,
+   description TEXT,
+   PRIMARY KEY(id_thematique),
+   UNIQUE(designation)
+);
+
+CREATE TABLE CONNAISSANCE(
+   id_connaissance SERIAL,
+   sujet VARCHAR(255) NOT NULL,
+   description VARCHAR(255),
+   resume_resolution VARCHAR(255),
+   id_thematique INTEGER NOT NULL,
+   PRIMARY KEY(id_connaissance),
+   FOREIGN KEY(id_thematique) REFERENCES THEMATIQUE(id_thematique)
+);
+
+CREATE TABLE URGENCE(
+   id_urgence SERIAL,
+   designation VARCHAR(63) NOT NULL,
+   facteur_priorisation SMALLINT,
+   description TEXT,
+   PRIMARY KEY(id_urgence),
+   UNIQUE(designation)
+);
+
+CREATE TABLE TYPE_LOGICIEL(
+   id_type_logiciel SERIAL,
+   designation VARCHAR(127) NOT NULL,
+   PRIMARY KEY(id_type_logiciel)
+);
+
+CREATE TABLE TYPE_VERSION(
+   id_type_version SERIAL,
+   designation VARCHAR(127) NOT NULL,
+   code VARCHAR(3) NOT NULL,
+   malus_urgence SMALLINT,
+   PRIMARY KEY(id_type_version)
+);
+
+CREATE TABLE UTILISATEUR(
+   id_utilisateur SERIAL,
+   prenom VARCHAR(127),
+   nom VARCHAR(127),
+   telephone VARCHAR(15),
+   courriel VARCHAR(127),
+   mot_de_passe VARCHAR(255),
+   PRIMARY KEY(id_utilisateur),
+   UNIQUE(courriel)
+);
+
+CREATE TABLE ADMIN(
+   id_admin SERIAL,
+   id_utilisateur INTEGER NOT NULL,
+   PRIMARY KEY(id_admin),
+   UNIQUE(id_utilisateur),
+   FOREIGN KEY(id_utilisateur) REFERENCES UTILISATEUR(id_utilisateur)
+);
+
+CREATE TABLE ACTIVITE(
+   id_activite SERIAL,
+   horodatage TIMESTAMP NOT NULL,
+   description VARCHAR(255) NOT NULL,
+   id_utilisateur INTEGER NOT NULL,
+   PRIMARY KEY(id_activite),
+   FOREIGN KEY(id_utilisateur) REFERENCES UTILISATEUR(id_utilisateur)
+);
+
+CREATE TABLE LOGICIEL(
+   id_logiciel SERIAL,
+   nom VARCHAR(127) NOT NULL,
+   description TEXT,
+   id_type_logiciel INTEGER NOT NULL,
+   PRIMARY KEY(id_logiciel),
+   FOREIGN KEY(id_type_logiciel) REFERENCES TYPE_LOGICIEL(id_type_logiciel)
+);
+
+CREATE TABLE CLIENT(
+   id_client SERIAL,
+   importance SMALLINT,
+   id_utilisateur INTEGER NOT NULL,
+   PRIMARY KEY(id_client),
+   UNIQUE(id_utilisateur),
+   FOREIGN KEY(id_utilisateur) REFERENCES UTILISATEUR(id_utilisateur)
+);
+
+CREATE TABLE VERSION(
+   id_version SERIAL,
+   numero VARCHAR(63) NOT NULL,
+   date_publication TIMESTAMP NOT NULL,
+   id_type_version INTEGER NOT NULL,
+   id_logiciel INTEGER NOT NULL,
+   PRIMARY KEY(id_version),
+   FOREIGN KEY(id_type_version) REFERENCES TYPE_VERSION(id_type_version),
+   FOREIGN KEY(id_logiciel) REFERENCES LOGICIEL(id_logiciel)
+);
+
+CREATE TABLE Licence(
+   id_licence SERIAL,
+   numero_license VARCHAR(127) NOT NULL,
+   date_expiration DATE,
+   nombre_postes INTEGER,
+   id_client INTEGER,
+   id_logiciel INTEGER NOT NULL,
+   PRIMARY KEY(id_licence),
+   UNIQUE(numero_license),
+   FOREIGN KEY(id_client) REFERENCES CLIENT(id_client),
+   FOREIGN KEY(id_logiciel) REFERENCES LOGICIEL(id_logiciel)
+);
+
+CREATE TABLE TECHNICIEN(
+   id_technicien SERIAL,
+   rang SMALLINT NOT NULL,
+   id_utilisateur INTEGER NOT NULL,
+   PRIMARY KEY(id_technicien),
+   UNIQUE(id_utilisateur),
+   FOREIGN KEY(id_utilisateur) REFERENCES UTILISATEUR(id_utilisateur)
+);
+
+CREATE TABLE MANAGER(
+   id_manager SERIAL,
+   id_utilisateur INTEGER NOT NULL,
+   PRIMARY KEY(id_manager),
+   UNIQUE(id_utilisateur),
+   FOREIGN KEY(id_utilisateur) REFERENCES UTILISATEUR(id_utilisateur)
+);
+
+CREATE TABLE DIRECTEUR(
+   id_directeur SERIAL,
+   id_utilisateur INTEGER NOT NULL,
+   PRIMARY KEY(id_directeur),
+   UNIQUE(id_utilisateur),
+   FOREIGN KEY(id_utilisateur) REFERENCES UTILISATEUR(id_utilisateur)
+);
+
+CREATE TABLE TICKET(
+   id_ticket SERIAL,
+   date_ouverture TIMESTAMP NOT NULL,
+   date_fermeture TIMESTAMP,
+   date_modification TIMESTAMP,
+   titre VARCHAR(63) NOT NULL,
+   description TEXT NOT NULL,
+   solution TEXT,
+   duree_appel INTEGER,
+   priorite_initiale_C VARCHAR(31) NOT NULL,
+   priorite_actuelle_C VARCHAR(31) NOT NULL,
+   statut_actuel_C VARCHAR(63) NOT NULL,
+   thematique_actuelle_C VARCHAR(63) NOT NULL,
+   technicien_actuel_C VARCHAR(127),
+   manager_actuel_C VARCHAR(127),
+   temps_actif_secondes_C BIGINT,
+   date_limite_sla_C TIMESTAMP,
+   en_retard_C BOOLEAN NOT NULL,
+   id_connaissance INTEGER,
+   id_version INTEGER NOT NULL,
+   id_urgence INTEGER NOT NULL,
+   id_client INTEGER NOT NULL,
+   id_impact INTEGER NOT NULL,
+   PRIMARY KEY(id_ticket),
+   FOREIGN KEY(id_connaissance) REFERENCES CONNAISSANCE(id_connaissance),
+   FOREIGN KEY(id_version) REFERENCES VERSION(id_version),
+   FOREIGN KEY(id_urgence) REFERENCES URGENCE(id_urgence),
+   FOREIGN KEY(id_client) REFERENCES CLIENT(id_client),
+   FOREIGN KEY(id_impact) REFERENCES IMPACT(id_impact)
+);
+
+CREATE TABLE COMMENTAIRE(
+   id_commentaire SERIAL,
+   contenu TEXT NOT NULL,
+   date_envoi TIMESTAMP NOT NULL,
+   derniere_modification TIMESTAMP,
+   id_utilisateur INTEGER NOT NULL,
+   id_ticket INTEGER NOT NULL,
+   PRIMARY KEY(id_commentaire),
+   FOREIGN KEY(id_utilisateur) REFERENCES UTILISATEUR(id_utilisateur),
+   FOREIGN KEY(id_ticket) REFERENCES TICKET(id_ticket)
+);
+
+CREATE TABLE HISTORIQUE(
+   id_historique SERIAL,
+   date_debut TIMESTAMP NOT NULL,
+   date_fin TIMESTAMP,
+   raison_statut VARCHAR(255),
+   id_utilisateur INTEGER NOT NULL,
+   id_ticket INTEGER NOT NULL,
+   id_statut INTEGER NOT NULL,
+   PRIMARY KEY(id_historique),
+   FOREIGN KEY(id_utilisateur) REFERENCES UTILISATEUR(id_utilisateur),
+   FOREIGN KEY(id_ticket) REFERENCES TICKET(id_ticket),
+   FOREIGN KEY(id_statut) REFERENCES STATUT(id_statut)
+);
+
+CREATE TABLE PROCEDURE_(
+   id_procedure SERIAL,
+   titre VARCHAR(255),
+   date_creation TIMESTAMP NOT NULL,
+   date_modification TIMESTAMP,
+   contenu TEXT,
+   id_technicien INTEGER NOT NULL,
+   id_connaissance INTEGER NOT NULL,
+   PRIMARY KEY(id_procedure),
+   UNIQUE(id_connaissance),
+   FOREIGN KEY(id_technicien) REFERENCES TECHNICIEN(id_technicien),
+   FOREIGN KEY(id_connaissance) REFERENCES CONNAISSANCE(id_connaissance)
+);
+
+CREATE TABLE AFFECTATION(
+   id_affectation SERIAL,
+   date_affectation TIMESTAMP NOT NULL,
+   date_fin TIMESTAMP,
+   id_manager INTEGER NOT NULL,
+   id_technicien INTEGER NOT NULL,
+   id_ticket INTEGER NOT NULL,
+   PRIMARY KEY(id_affectation),
+   FOREIGN KEY(id_manager) REFERENCES MANAGER(id_manager),
+   FOREIGN KEY(id_technicien) REFERENCES TECHNICIEN(id_technicien),
+   FOREIGN KEY(id_ticket) REFERENCES TICKET(id_ticket)
+);
+
+CREATE TABLE Classification(
+   id_classification SERIAL,
+   date_association TIMESTAMP NOT NULL,
+   id_thematique INTEGER NOT NULL,
+   id_ticket INTEGER NOT NULL,
+   PRIMARY KEY(id_classification),
+   FOREIGN KEY(id_thematique) REFERENCES THEMATIQUE(id_thematique),
+   FOREIGN KEY(id_ticket) REFERENCES TICKET(id_ticket)
+);
+
+CREATE TABLE Documenter(
+   id_connaissance INTEGER,
+   id_version INTEGER,
+   PRIMARY KEY(id_connaissance, id_version),
+   FOREIGN KEY(id_connaissance) REFERENCES CONNAISSANCE(id_connaissance),
+   FOREIGN KEY(id_version) REFERENCES VERSION(id_version)
+);

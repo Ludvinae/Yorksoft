@@ -1,0 +1,109 @@
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+        ports:
+          - 5432:5432
+        options:
+          --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: maven
+
+      - name: Run tests
+        run: |
+          chmod +x mvnw
+          ./mvnw test
+
+      - name: Package application
+        run: |
+          chmod +x mvnw
+          ./mvnw clean package -DskipTests
+
+      - name: Upload JAR artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app
+          path: target/**.jar
+
+  docker-build:
+    runs-on: ubuntu-latest
+    needs: build-test
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t suivi-mns-back:${{ github.sha }} .
+
+  docker-push:
+    runs-on: ubuntu-latest
+    needs: build-test
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build image
+        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/suivi-mns-back:${{ github.sha }} .
+
+      - name: Push image
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/suivi-mns-back:${{ github.sha }}
+
+  deploy:
+    runs-on: self-hosted
+    needs: docker-push
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Copy docker compose
+        uses: garygrossgarten/github-action-scp@release
+        with:
+          local: compose.yml
+          remote: /opt/suivi_mns/compose.yml
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          privateKey: ${{ secrets.SERVER_SSH_KEY }}
+
+      - name: Deploy on server
+        uses: garygrossgarten/github-action-ssh@release
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          privateKey: ${{ secrets.SERVER_SSH_KEY }}
+          command: |
+            echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/suivi-mns-back:${{ github.sha }}
+            docker stop suivi-mns-back || true
+            docker rm suivi-mns-back || true
+            cd /opt/suivi_mns
+            docker compose up -d

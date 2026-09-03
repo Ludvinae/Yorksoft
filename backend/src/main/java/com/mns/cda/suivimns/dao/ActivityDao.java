@@ -1,0 +1,24 @@
+package com.mns.cda.suivimns.dao;
+
+import com.mns.cda.suivimns.dto.dashboard.activity.UserActivity;
+import com.mns.cda.suivimns.model.Activity;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface ActivityDao extends JpaRepository<Activity, Integer> {
+
+    @Query("""
+        SELECT new com.mns.cda.suivimns.dto.dashboard.activity.UserActivity(
+            a.idActivity, a.description, a.timestamp, a.activityType
+            )
+        FROM Activity a
+        JOIN a.user u ON u.idAppUser = :userId
+        ORDER BY a.timestamp DESC
+        LIMIT 20
+    """)
+    List<UserActivity> activityFeed(Integer userId);
+}
