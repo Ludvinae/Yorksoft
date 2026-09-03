@@ -1,0 +1,26 @@
+@import "tailwindcss";
+@import "@phosphor-icons/web/regular";
+@plugin "daisyui";
+
+@plugin "daisyui" {
+  themes: all;
+}
+
+.window {
+  width: 100%;
+}
+
+.container {
+  max-width: 90%;
+  min-width:  350px;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-error {
+  color: red;
+}
+
+.text-outline {
+  text-shadow: #000000AA 0 0 1px;
+}

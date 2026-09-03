@@ -1,0 +1,22 @@
+<section class="flex flex-col gap-4">
+  <header class="flex justify-between items-center">
+    <h2 class="text-xl font-semibold">Commentaires</h2>
+
+    <span class="text-sm opacity-70">
+      {{ comments().length }} messages
+    </span>
+  </header>
+
+  <div class="flex flex-col gap-3">
+    @for (comment of comments(); track comment.idComment) {
+      <app-comment-card
+        [comment]="comment"
+        [isEditing]="editingCommentId() === comment.idComment"
+        (edit)="startEdit(comment.idComment)"
+        (cancel)="cancelEdit()"
+        (save)="updateComment(comment.idComment, $event)"/>
+    }
+  </div>
+
+  <app-comment-form (submitComment)="createComment($event)"/>
+</section>

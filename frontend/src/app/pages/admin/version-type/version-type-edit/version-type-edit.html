@@ -1,0 +1,36 @@
+<app-generic-form-page
+  [title]="versionTypeEdit() ? 'Modifier le type de version de logiciel' : 'Créer le type de version de logiciel'"
+  [loading]="loading()"
+  [error]="error()"
+  [submitLabel]="versionTypeEdit() ? 'Modifier' : 'Créer'"
+  (submitForm)="onSubmit()"
+  [formGroup]="form"
+  [routeId] = "routeId()"
+  [isEditMode] = "isEditMode()"
+>
+
+  <!-- champs -->
+
+  <app-field-text labelKey="Libellé" placeholder="Release"
+                  [control]="form.controls.designation"
+                  [errorMessages]="{
+    required: 'Le libellé est obligatoire',
+    minlength: 'Min 1 caractère',
+    maxlength: 'Max 127 caractères'}">
+  </app-field-text>
+
+  <app-field-text labelKey="Abbréviation" placeholder="r"
+                  [control]="form.controls.code"
+                  [errorMessages]="{
+    required: 'Le code est obligatoire',
+    minlength: 'Min 1 caractère',
+    maxlength: 'Max 3 caractères'}">
+  </app-field-text>
+
+  <app-field-text labelKey="Malus sur l'urgence"
+                  [control]="form.controls.urgencyMalus"
+                  [errorMessages]="{
+    required: 'Entrez unu valeur d\'urgence'}">
+  </app-field-text>
+
+</app-generic-form-page>

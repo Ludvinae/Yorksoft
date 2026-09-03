@@ -1,0 +1,20 @@
+<app-title title="Versions de logiciels" route="version"></app-title>
+
+<app-generic-list
+  [data]="versionList()"
+  [columns]="[{ label: 'Numéro de version', field: 'versionNumber' },
+              {label: 'Type de version', field: 'versionTypeDesignation'},
+              {label: 'Logiciel', field: 'softwareName'},
+              {label: 'Date de parution', field: 'publicationDate'}]"
+  [baseRoute]="'/admin/version'"
+  [idField]="'idVersion'"
+  [itemTemplate]="versionCard"
+  (deleteItem)="onDelete($event)">
+</app-generic-list>
+
+<ng-template #versionCard let-version >
+  <h3 class="font-bold text-lg">{{ version.versionNumber }} {{ version.versionTypeDesignation }}</h3>
+  <H4>{{ version.softwareName }}</H4>
+  <p class="text-sm">Date de parution : {{ version.publicationDate }}</p>
+
+</ng-template>

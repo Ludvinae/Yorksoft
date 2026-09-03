@@ -1,0 +1,30 @@
+<div class="p-4">
+
+  @if (title) {
+    <h1 class="text-3xl mb-4">{{ title }}</h1>
+  }
+
+  @if (loading) {
+    <div class="flex justify-center items-center h-40">
+      <span class="loading loading-spinner loading-lg"></span>
+    </div>
+  } @else {
+    <div class="card bg-base-200 shadow p-6">
+      <ng-content></ng-content>
+    </div>
+  }
+
+  @if (error) {
+    <div class="alert alert-error">{{ error }}</div>
+  }
+
+</div>
+
+<div class="mt-4 inline mx-3">
+  <button class="btn btn-sm mb-4" [routerLink]="updateRoute">
+    Modifier
+  </button>
+  <button class="btn btn-sm mb-4" routerLink="../">
+    Retour
+  </button>
+</div>

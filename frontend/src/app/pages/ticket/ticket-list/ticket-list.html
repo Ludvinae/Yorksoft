@@ -1,0 +1,139 @@
+<div class="flex flex-col h-screen">
+
+<app-title-bar ></app-title-bar>
+
+  <app-assign-ticket-modal [ticket]="selectedTicket" (assigned)="onAssigned()"/>
+
+  <div class="flex-1">
+
+    @if (storeService.loading()) {
+      <div>
+        <span class="loading loading-spinner loading-xl"></span>
+      </div>
+
+    } @else if (storeService.tickets().length == 0) {
+      <span>Aucun ticket ne corresponds à ces critères</span>
+    } @else {
+
+      <div class="overflow-x-auto">
+      <table class="table table-xs">
+        <thead>
+        <tr>
+          <th class="cursor-pointer select-none" (click)="storeService.setSort('title')">
+            <div class="flex items-center gap-2">
+              Titre
+              @if (isSorted("title")) {
+                <span>{{ isAsc() ? '▲' : '▼' }}</span>
+              }
+            </div>
+          </th>
+          <th class="cursor-pointer select-none" (click)="storeService.setSort('openDate')">
+            <div class="flex items-center gap-2">
+              Ouvert le
+              @if (isSorted("openDate")) {
+                <span>{{ isAsc() ? '▲' : '▼' }}</span>
+              }
+            </div>
+          </th>
+          <th class="cursor-pointer select-none" (click)="storeService.setSort('currentTheme')">
+            <div class="flex items-center gap-2">
+              Thématique
+              @if (isSorted("currentTheme")) {
+                <span>{{ isAsc() ? '▲' : '▼' }}</span>
+              }
+            </div>
+          </th>
+          <th class="cursor-pointer select-none" (click)="storeService.setSort('version.software.name')">
+            <div class="flex items-center gap-2">
+              Logiciel
+              @if (isSorted("version.software.name")) {
+                <span>{{ isAsc() ? '▲' : '▼' }}</span>
+              }
+            </div>
+          </th>
+          <th class="cursor-pointer select-none" (click)="storeService.setSort('version.versionNumber')">
+            <div class="flex items-center gap-2">
+              Version
+              @if (isSorted("version.versionNumber")) {
+                <span>{{ isAsc() ? '▲' : '▼' }}</span>
+              }
+            </div>
+          </th>
+          <th class="cursor-pointer select-none" (click)="storeService.setSort('currentStatus')">
+            <div class="flex items-center gap-2">
+              Statut
+              @if (isSorted("currentStatus")) {
+                <span>{{ isAsc() ? '▲' : '▼' }}</span>
+              }
+            </div>
+          </th>
+          <th class="cursor-pointer select-none" (click)="storeService.setSort('currentPriority')">
+            <div class="flex items-center gap-2">
+              Priorité
+              @if (isSorted("currentPriority")) {
+                <span>{{ isAsc() ? '▲' : '▼' }}</span>
+              }
+            </div>
+          </th>
+          <th class="cursor-pointer select-none" (click)="storeService.setSort('slaDeadline')">
+            <div class="flex items-center gap-2">
+              SLA
+              @if (isSorted("slaDeadline")) {
+                <span>{{ isAsc() ? '▲' : '▼' }}</span>
+              }
+            </div>
+          </th>
+          <th>
+            <div class="flex items-center gap-2">
+              Actions
+            </div>
+          </th>
+        </tr>
+        </thead>
+        <tbody>
+          @for(ticket of storeService.tickets(); track ticket.idTicket) {
+            <tr>
+              <td class="align-middle">{{ ticket.title }}</td>
+              <td class="align-middle">{{ ticket.openDate | date: 'short'}}</td>
+              <td class="align-middle">{{ ticket.themeDesignation }}</td>
+              <td class="align-middle">{{ ticket.softwareName }}</td>
+              <td class="align-middle">{{ ticket.versionNumber }} {{ ticket.versionTypeCode }}</td>
+              <td class="align-middle">{{ ticket.currentStatus | statusLabel }}</td>
+              <td class="align-middle"><app-badge-priority [priority]="ticket.currentPriority"/></td>
+              <td class="align-middle">
+                <app-badge-sla [overdue]="ticket.overdue"
+                               [predictedDeadline]="ticket.predictedDeadline"
+                               [priority]="ticket.currentPriority"/>
+              </td>
+              <td class="align-middle">
+                <div class="flex items-center gap-1">
+                  <button type="button" class="btn btn-square btn-xs" [routerLink]="[baseRoute, ticket.idTicket]">
+                    👁️
+                  </button>
+                  @if (ticket.closeDate) {
+                    <button class="btn btn-square btn-xs btn-disabled" title="Clôturé">
+                      🔒
+                    </button>
+                  } @else if (ticket.idTechnician) {
+                    <button type="button" class="btn btn-square btn-xs" (click)="assign(ticket)" title="Réassigner">
+                      ☑
+                    </button>
+                  } @else {
+                    <button type="button" class="btn btn-square btn-xs" (click)="assign(ticket)" title="Assigner">
+                      ✅
+                    </button>
+                  }
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+      </div>
+    }
+
+
+  </div>
+
+  <app-footer-ticket></app-footer-ticket>
+</div>

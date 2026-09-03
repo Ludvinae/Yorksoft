@@ -1,0 +1,18 @@
+<app-title title="Statuts de ticket" route="status"></app-title>
+
+<app-generic-list
+  [data]="statusList()"
+  [columns]="[{ label: 'Libellé', field: 'designation' },
+              { label: 'Code', field: 'code'},
+              { label: 'Ordre d\'affichage', field: 'displayOrder'}]"
+  [baseRoute]="'/admin/status'"
+  [idField]="'idStatus'"
+  [itemTemplate]="statusCard"
+  (deleteItem)="onDelete($event)">
+</app-generic-list>
+
+<ng-template #statusCard let-status >
+  <h3 class="font-bold text-lg">{{ status.designation }} ({{ status.code }})</h3>
+  <p>Ordre d'affichage : {{ status.displayOrder }}</p>
+
+</ng-template>

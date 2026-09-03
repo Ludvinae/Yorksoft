@@ -1,0 +1,36 @@
+<div class="overflow-x-auto">
+<table class="table w-full">
+  <thead>
+  <tr>
+    @for (col of columns; track col.label) {
+      <th>{{ col.label }}</th>
+    }
+    <th>Actions</th>
+  </tr>
+  </thead>
+
+  <tbody>
+    @for (item of data; track item) {
+      <tr class="hover:bg-base-300">
+        @for (col of columns; track col.label) {
+          <td>{{ getValue(item, col.field) }}</td>
+        }
+
+        <td>
+          <button type="button" class="btn btn-sm" [routerLink]="[baseRoute, getId(item)]">
+            👁️
+          </button>
+
+          <button type="button" class="btn btn-sm" [routerLink]="[baseRoute, 'update', getId(item)]">
+            ✏️
+          </button>
+
+          <button type="button" class="btn btn-sm" (click)="delete(getId(item))">
+            ❌
+          </button>
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>
+</div>

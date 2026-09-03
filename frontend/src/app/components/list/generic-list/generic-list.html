@@ -1,0 +1,17 @@
+@if (isMobile()) {
+  <app-mobile-card-list
+    [data]="data"
+    [itemTemplate]="itemTemplate"
+    [baseRoute]="baseRoute"
+    [idField]="idField"
+    (deleteItem)="deleteItem.emit($event)">
+  </app-mobile-card-list>
+} @else {
+  <app-desktop-table
+    [data]="data"
+    [baseRoute]="baseRoute"
+    [idField]="idField"
+    [columns]="columns"
+    (deleteItem)="deleteItem.emit($event)">
+  </app-desktop-table>
+}

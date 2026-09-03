@@ -1,0 +1,45 @@
+<div class="flex flex-col h-screen">
+
+  @if (!createdTicket) {
+
+    @if (!selectedClient) {
+
+      <app-client-search
+        (clientValidated)="onClientValidated($event)"
+      />
+
+    } @else {
+
+      <app-new-ticket-form
+        [client]="selectedClient"
+        (createdTicket)="onTicketCreated($event)"
+      />
+
+    }
+
+  } @else {
+
+    <div class="alert alert-success shadow-lg">
+
+      <div class="flex flex-col gap-2">
+        <span class="font-bold">
+          Ticket créé avec succès
+        </span>
+        <span>
+          Le ticket #{{ createdTicket.idTicket }}
+          a bien été enregistré.
+        </span>
+      </div>
+      <div>
+        <button class="btn btn-primary" routerLink="/ticket/{{ createdTicket.idTicket }}">
+          Voir le ticket
+        </button>
+
+        <button class="btn btn-outline" routerLink="/ticket/create">
+          Nouveau ticket
+        </button>
+      </div>
+
+    </div>
+  }
+</div>

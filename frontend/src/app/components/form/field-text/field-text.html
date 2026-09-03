@@ -1,0 +1,15 @@
+
+<fieldset class="fieldset w-full">
+  <legend class="fieldset-legend">{{ labelKey }}</legend>
+
+  <input
+    [type]="type"
+    class="input w-full"
+    [placeholder]="placeholder"
+    [formControl]="control"
+  />
+
+  @if (errorMessage) {
+    <span class="form-error">{{ errorMessage }}</span>
+  }
+</fieldset>

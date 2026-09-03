@@ -1,0 +1,65 @@
+<div class="flex flex-row px-2">
+  <div class="mx-5">
+    <h1 class="text-5xl font-bold">Nouveau ticket</h1>
+    <p>Sélectionnez un client pour commencer</p>
+  </div>
+  <div class="mx-5">
+    <button
+      class="btn btn-primary mt-6 self-end"
+      [disabled]="!selectedClient"
+      (click)="continue()">
+      Continuer
+    </button>
+  </div>
+</div>
+
+
+<div class="flex items-center gap-4 mb-6">
+  <!-- Search -->
+  <label class="input input-bordered flex items-center gap-2 w-full max-w-xl">
+
+    <input
+      type="text"
+      class="grow"
+      placeholder="Rechercher un client..."
+      [ngModel]="search"
+      (ngModelChange)="onSearch($event)"
+    />
+
+    <svg xmlns="http://www.w3.org/2000/svg"
+         class="h-5 w-5 opacity-70"
+         fill="none"
+         viewBox="0 0 24 24"
+         stroke="currentColor">
+
+      <path stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M21 21l-4.35-4.35m0 0
+             A7.5 7.5 0 103.5 10.5
+             a7.5 7.5 0 0013.15 6.15z"/>
+    </svg>
+  </label>
+
+</div>
+<div class="flex flex-col gap-2 overflow-y-auto max-w-100">
+  @for (client of storeService.clients(); track client.idAppUser) {
+
+    <div class="card p-4 border cursor-pointer transition-all "
+
+         [class.bg-primary]="selectedClient?.idAppUser === client.idAppUser"
+         [class.border-primary]="selectedClient?.idAppUser === client.idAppUser"
+
+         [class.bg-base-200]="selectedClient?.idAppUser !== client.idAppUser"
+         [class.hover:bg-base-300]="selectedClient?.idAppUser !== client.idAppUser"
+
+         (click)="selectClient(client)">
+
+      <div class="flex justify-between">
+        <span class="font-semibold">{{ client.firstName }} {{ client.lastName }}</span>
+        <span class="text-sm opacity-70">{{ client.email }}</span>
+      </div>
+
+    </div>
+  }
+</div>

@@ -1,0 +1,79 @@
+<!-- Header -->
+<div class="flex flex-wrap items-center justify-between gap-2 mb-8">
+  <h1 class="text-5xl font-bold">Clients</h1>
+
+  <button class="btn btn-ghost btn-circle">
+    <svg xmlns="http://www.w3.org/2000/svg"
+         class="h-7 w-7"
+         fill="none"
+         viewBox="0 0 24 24"
+         stroke="currentColor">
+      <path stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11
+                   a6.002 6.002 0 00-4-5.659V5
+                   a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159
+                   c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1
+                   a3 3 0 11-6 0v-1m6 0H9"/>
+    </svg>
+  </button>
+</div>
+
+<!-- Search + filters -->
+<div class="flex flex-wrap items-center gap-4 mb-6">
+
+  <!-- Search -->
+
+  <label class="input input-bordered flex items-center gap-2 w-full max-w-xl">
+
+    <input
+      type="text"
+      class="grow"
+      placeholder="Rechercher un client..."
+      [ngModel]="search"
+      (ngModelChange)="onSearch($event)"
+    />
+
+    <svg xmlns="http://www.w3.org/2000/svg"
+         class="h-5 w-5 opacity-70"
+         fill="none"
+         viewBox="0 0 24 24"
+         stroke="currentColor">
+
+      <path stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M21 21l-4.35-4.35m0 0
+             A7.5 7.5 0 103.5 10.5
+             a7.5 7.5 0 0013.15 6.15z"/>
+    </svg>
+
+  </label>
+
+  <!-- Filters -->
+  <button
+    class="btn"
+    [class.btn-neutral]="buttonState == 'all'"
+    (click)="setFilter('all')">
+
+    Tous
+  </button>
+
+  <button
+    class="btn"
+    [class.btn-neutral]="buttonState == 'asking'"
+    (click)="setFilter('asking')">
+
+    En demande
+  </button>
+
+  <button
+    class="btn"
+    [class.btn-neutral]="buttonState == 'important'"
+    (click)="setFilter('important')">
+
+    Importants
+  </button>
+
+</div>

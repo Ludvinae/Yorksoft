@@ -1,0 +1,623 @@
+
+@if (!detail()) {
+  <div class="flex justify-between m-2">
+    <div class="items-center">
+      <span class="loading loading-ring loading-xl"></span>
+      <span class="loading loading-ring loading-xl"></span>
+      <span class="loading loading-ring loading-xl"></span>
+    </div>
+    <button class="btn btn-outline btn-sm" routerLink="/ticket">
+      Retour
+    </button>
+  </div>
+
+} @else {
+
+  <!-- HEADER -->
+  <div class="flex flex-col  m-2">
+
+    <div class="flex justify-between">
+
+      <div class="flex items-center gap-3">
+        <div class="badge badge-outline">
+          {{ detail()?.currentStatus }}
+        </div>
+
+        <app-badge-priority [priority]="detail()!.currentPriority" size="md"/>
+
+        <span class="text-lg">
+        Ticket #{{ detail()?.idTicket }}
+        </span>
+      </div>
+
+      <div>
+        <button class="btn btn-outline btn-sm" routerLink="/ticket">
+          Retour
+        </button>
+      </div>
+
+    </div>
+
+    <h1 class="text-2xl font-bold">
+      {{ detail()?.title }}
+    </h1>
+
+  </div>
+
+  <!-- MODAL -->
+  <div>
+    <app-assign-ticket-modal #assignModal [ticket]="ticketAssign()" (assigned)="onAssigned()"/>
+
+    <dialog #actionModal class="modal">
+
+      <div class="modal-box">
+
+        <h3 class="font-bold text-xl mb-4">
+          <!--{{ getActionLabel(selectedAction()) }}-->
+          Action
+        </h3>
+
+        <textarea
+          class="textarea textarea-bordered w-full min-h-40"
+          placeholder="Entrer une justification..."
+          [value]="justification()"
+          (input)="justification.set($any($event.target).value)"
+        ></textarea>
+
+        <div class="modal-action">
+
+          <button class="btn" (click)="actionModal.close()">
+            Annuler
+          </button>
+
+          <button class="btn btn-primary" (click)="confirmAction(actionModal)">
+            Confirmer
+          </button>
+
+        </div>
+
+      </div>
+
+    </dialog>
+  </div>
+  <!-- MAIN GRID -->
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+    <!-- LEFT -->
+    <div class="lg:col-span-8 flex flex-col gap-6">
+
+      <!-- TOP INFO -->
+      <div class="grid md:grid-cols-2 gap-6">
+
+        <!-- CLIENT -->
+        <div class="card bg-base-100 shadow-md border border-base-300">
+          <div class="card-body">
+
+
+            <div class="flex flex-row justify-between items-center">
+              <h2 class="card-title">
+                Informations sur le client
+              </h2>
+              @if (isEditingClient) {
+                <div class="flex gap-2">
+                  <button class="btn btn-sm btn-success">Enregistrer</button>
+                  <button class="btn btn-sm btn-ghost">Annuler</button>
+                </div>
+              } @else {
+                <button
+                  class="btn btn-sm btn-ghost"
+                  (click)="startClientEdit()">
+                  <i class="ph ph-pencil-simple"></i>
+                </button>
+              }
+
+            </div>
+
+
+            <div class="space-y-2 text-sm">
+              <form [formGroup]="clientForm">
+                <div class="flex justify-between">
+                  <span>ID</span>
+                  <input
+                    type="text"
+                    class="input input-sm input-ghost text-right font-semibold"
+                    formControlName="id"
+                    [readonly]="!isEditingClient">
+                </div>
+
+                <div class="flex justify-between">
+                  <span>Nom</span>
+                  <input
+                    type="text"
+                    formControlName="lastName"
+                    class="input input-sm input-ghost text-right font-semibold"
+                    [readonly]="!isEditingClient">
+                </div>
+
+                <div class="flex justify-between">
+                  <span>Prénom</span>
+                  <input
+                    type="text"
+                    formControlName="firstName"
+                    class="input input-sm input-ghost text-right font-semibold"
+                    [readonly]="!isEditingClient">
+                </div>
+
+                <div class="flex justify-between">
+                  <span>Courriel</span>
+                  <input
+                    type="text"
+                    class="input input-sm input-ghost text-right font-semibold"
+                    formControlName="email"
+                    [readonly]="!isEditingClient">
+                </div>
+
+                <div class="flex justify-between">
+                  <span>Téléphone</span>
+                  <input
+                    type="text"
+                    class="input input-sm input-ghost text-right font-semibold"
+                    formControlName="phone"
+                    [readonly]="!isEditingClient">
+                </div>
+
+                <div class="flex justify-between">
+                  <span>Importance</span>
+                  <input
+                    type="text"
+                    class="input input-sm input-ghost text-right font-semibold"
+                    formControlName="importance"
+                    [readonly]="!isEditingClient">
+                </div>
+              </form>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- TECHNICAL -->
+        <div class="card bg-base-100 shadow-md border border-base-300">
+          <div class="card-body">
+
+            <div class="flex flex-row justify-between items-center">
+              <h2 class="card-title">
+                Détails techniques
+              </h2>
+              <button
+                class="btn btn-sm btn-ghost"
+                (click)="startDetailsEdit()">
+                <i class="ph ph-pencil-simple"></i>
+              </button>
+            </div>
+
+            <div class="space-y-2 text-sm">
+
+              <div class="flex justify-between">
+                <span>Thématique</span>
+                <span class="font-semibold">
+                  {{ detail()?.themeCode }}
+                </span>
+              </div>
+
+              <div class="flex justify-between">
+                <span>Logiciel</span>
+                <span class="font-semibold">
+                  {{ detail()?.softwareName }}
+                </span>
+              </div>
+
+              <div class="flex justify-between">
+                <span>Version</span>
+                <span class="font-semibold">
+                  {{ detail()?.versionAbbreviatedLabel }}
+                </span>
+              </div>
+
+              <div class="flex justify-between">
+                <span>Date de création</span>
+                <span class="font-semibold">
+                  {{ detail()?.openDate | date: 'fullDate' }}
+                </span>
+              </div>
+
+              <div class="flex justify-between">
+                <span>Heure</span>
+                <span class="font-semibold">
+                  {{ detail()?.openDate | date: 'shortTime' }}
+                </span>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- DESCRIPTION -->
+      <div class="card bg-base-100 shadow-md border border-base-300">
+        <div class="card-body">
+
+          <div>
+            <div class="flex justify-between items-center">
+              <h2 class="card-title">
+                Description de l’incident
+              </h2>
+
+              @if (canEditDescription()) {
+                <button
+                  class="btn btn-sm btn-ghost"
+                  (click)="startDescriptionEdit()">
+                  <i class="ph ph-pencil-simple"></i>
+                </button>
+
+              }
+            </div>
+
+            @if (!editingDescription) {
+              <div class="bg-base-200 rounded-xl p-4 leading-relaxed whitespace-pre-line">
+                {{ detail()?.description }}
+              </div>
+            } @else {
+              <textarea
+                class="textarea textarea-bordered w-full"
+                [(ngModel)]="editedDescription">
+              </textarea>
+
+              <div class="flex justify-end gap-2 mt-2">
+                <button
+                  class="btn btn-ghost"
+                  (click)="cancelDescriptionEdit()">
+                  Annuler
+                </button>
+
+                <button
+                  class="btn btn-primary"
+                  (click)="saveDescription()">
+                  Enregistrer
+                </button>
+              </div>
+            }
+          </div>
+
+          <div>
+            <div class="flex justify-between items-center">
+              <h2 class="card-title">
+                Protocole de résolution
+              </h2>
+
+              @if (canEditSolution()) {
+                <!--
+                <button
+                  class="btn btn-sm btn-ghost"
+                  (click)="editingSolution = !editingSolution">
+                  Modifier
+                </button>
+                -->
+
+                <button
+                  class="btn btn-sm btn-ghost"
+                  [disabled]="detail()?.currentStatus !== 'IN_PROGRESS'"
+                  (click)="startSolutionEdit()">
+                  <i class="ph ph-pencil-simple"></i>
+                </button>
+              }
+            </div>
+
+            @if (!editingSolution) {
+              @if (detail()?.solution) {
+                <div class="bg-base-200 rounded-xl p-4 leading-relaxed whitespace-pre-line">
+                  {{ detail()?.solution }}
+                </div>
+              } @else {
+                <div class="alert alert-info">
+                  Aucune procédure de résolution n'a encore été documentée.
+                </div>
+              }
+            } @else {
+              <textarea
+                class="textarea textarea-bordered w-full"
+                [(ngModel)]="editedSolution">
+              </textarea>
+
+              <div class="flex justify-end gap-2 mt-2">
+                <button
+                  class="btn btn-ghost"
+                  (click)="cancelSolutionEdit()">
+                  Annuler
+                </button>
+
+                <button
+                  class="btn btn-primary"
+                  (click)="saveSolution()">
+                  Enregistrer
+                </button>
+              </div>
+            }
+            @if (detail()?.currentStatus !== 'IN_PROGRESS' && !detail()?.solution) {
+              <p class="text-xs text-warning mt-2">
+                La procédure de résolution ne peut être renseignée qu'une fois le ticket pris en charge par un technicien.
+              </p>
+            }
+          </div>
+
+        </div>
+      </div>
+
+      <!-- COMMENTS -->
+      @if (id() ) {
+        <app-ticket-comment [comments]="comments()" [ticketId]="id()!"
+                            (commentCreated)="onCommentCreated($event)"
+                            (commentUpdated)="onCommentUpdated($event)"/>
+      }
+      <!--
+      <div class="card bg-base-100 shadow-md border border-base-300">
+        <div class="card-body">
+
+          <div class="flex justify-between items-center">
+            <h2 class="card-title">
+              Commentaires
+            </h2>
+
+            <span class="text-sm opacity-70">
+              {{ comments()!.length }} messages
+            </span>
+          </div>
+
+          <div class="space-y-4">
+
+            @for (comment of comments(); track comment.idComment) {
+
+              <div class="bg-base-200 rounded-xl p-4">
+
+                <div class="flex justify-between items-start mb-2">
+
+                  <div>
+                    <p class="font-bold">
+                      {{ comment.authorFullName }}
+                    </p>
+
+                    <p class="text-sm opacity-70">
+                      Role placeholder
+                    </p>
+
+                  </div>
+
+                  <span class="text-sm opacity-60">
+                    {{ comment.dateSent }}
+                  </span>
+
+                </div>
+
+                <p class="leading-relaxed">
+                  {{ comment.content }}
+                </p>
+
+              </div>
+
+            }
+
+          </div>
+
+        </div>
+      </div>
+      -->
+
+    </div>
+
+    <!-- RIGHT SIDEBAR -->
+    <div class="lg:col-span-4 flex flex-col gap-6">
+
+      <!-- ACTIONS -->
+      <div class="card bg-base-100 shadow-md border border-base-300">
+        <div class="card-body">
+
+          <h2 class="card-title justify-center">
+            Actions disponibles sur le ticket
+          </h2>
+
+          @if (possibleTransitions().length > 0) {
+            <div class="flex flex-row flex-wrap gap-3 justify-center mt-2">
+              @if (detail()?.currentTechnicianFullName == this.auth.jwtInfo()?.name || this.auth.jwtInfo()?.role == 'ADMIN') {
+
+                @if (possibleTransitions().includes('SOLVED') && detail()?.solution != null) {
+                  <button class="btn btn-secondary btn-xs" (click)="openActionModal(StatusEnum.SOLVED)">
+                    Résoudre
+                  </button>
+                }
+                @if (possibleTransitions().includes('CLOSED')) {
+                  <button class="btn btn-secondary btn-xs" (click)="openActionModal(StatusEnum.CLOSED)">
+                    Clore
+                  </button>
+                }
+                @if (possibleTransitions().includes('WAITING_CLIENT')) {
+                  <button class="btn btn-secondary btn-xs" (click)="openActionModal(StatusEnum.WAITING_CLIENT)">
+                    Attente client
+                  </button>
+                }
+                @if (possibleTransitions().includes('WAITING_THIRD_PARTY')) {
+                  <button class="btn btn-secondary btn-xs" (click)="openActionModal(StatusEnum.WAITING_THIRD_PARTY)">
+                    Attente tiers
+                  </button>
+                }
+
+                @if (possibleTransitions().includes('IN_PROGRESS')) {
+                  <button class="btn btn-secondary btn-xs"  (click)="openActionModal(StatusEnum.IN_PROGRESS)">
+                    {{ detail()?.currentStatus === StatusEnum.ASSIGNED ? 'Prendre' : 'Reprendre' }} en charge
+                  </button>
+                }
+              }
+
+              @if (this.auth.jwtInfo()?.role == 'ADMIN' || this.auth.jwtInfo()?.role == 'MANAGER') {
+
+                @if (possibleTransitions().includes('ASSIGNED')) {
+                  @if (detail()?.currentTechnicianFullName != null) {
+                    <button class="btn btn-secondary btn-sm" (click)="openActionModal(StatusEnum.ASSIGNED)">
+                      Réassigner
+                    </button>
+                  } @else {
+                    <button class="btn btn-secondary btn-sm" (click)="openActionModal(StatusEnum.ASSIGNED)">
+                      Assigner
+                    </button>
+                  }
+                }
+              }
+
+            </div>
+          }
+
+        </div>
+      </div>
+
+      <!-- ASSIGNATION -->
+      <div class="card bg-base-100 shadow-md border border-base-300">
+        <div class="card-body">
+
+          <h2 class="card-title">
+            Affectation
+          </h2>
+
+          @if (detail()?.currentTechnicianFullName) {
+          <div class="space-y-4">
+            <div class="flex flex-row justify-between">
+              <div>
+                <p class="text-sm opacity-70">
+                  Technicien
+                </p>
+                <p class="font-semibold">
+                  {{ detail()?.currentTechnicianFullName }}
+                </p>
+              </div>
+              <div>
+                <p class="text-sm opacity-70">
+                  Attribué par
+                </p>
+
+                <p class="font-semibold">
+                  {{ detail()?.currentManagerFullName }}
+                </p>
+              </div>
+            </div>
+
+
+            <div class="flex justify-between text-sm">
+              <span>{{ detail()?.assignmentDate | date: 'medium' }}</span>
+            </div>
+
+          </div>
+          } @else {
+            <p class="font-semibold">
+              Aucune affectation
+            </p>
+          }
+
+        </div>
+      </div>
+
+      <!-- KNOWLEDGE -->
+      <div class="card bg-base-100 shadow-md border border-base-300">
+        <div class="card-body">
+
+          <div>
+            <h2 class="card-title">
+              Connaissance
+            </h2>
+            @if (knowledge()) {
+              <p>{{ knowledge()?.subject }}</p>
+              <p>{{ knowledge()?.description }}</p>
+              <p>{{ knowledge()?.resolution }}</p>
+              <h2 class="label-text font-semibold">
+                Procedures connexes
+              </h2>
+              @if (knowledge()?.idProcedure) {
+                <div class="space-y-4">
+
+                    <div>
+
+                      <h3 class="font-semibold leading-tight">
+                        {{ knowledge()!.procedureTitle }}
+                      </h3>
+
+                      <p class="text-sm opacity-70">
+                        {{ knowledge()!.procedureContent }}
+                      </p>
+                    </div>
+
+                </div>
+              } @else {
+                <p class="font-semibold">
+                  Aucun procedure correspondant trouvé
+                </p>
+              }
+            } @else {
+                <app-knowledge-selector [idTheme]="detail()!.idTheme"
+                                        [idVersion]="detail()!.idVersion"
+                                        [selectedKnowledge]="selectedKnowledge"
+                                        (knowledgeSelected)="onKnowledgeSelected($event)"
+                                        (createKnowledge)="openKnowledgeModal()"/>
+
+
+              <h2 class="label-text font-semibold">
+                Procedures connexes
+              </h2>
+              <p class="font-semibold">
+                Aucun procedure correspondant trouvé
+              </p>
+            }
+          </div>
+
+
+          <button class="btn btn-outline mt-4" routerLink="/knowledge">
+            BASE DE CONNAISSANCES
+          </button>
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+}
+
+@if(showKnowledgeModal()) {
+
+  <app-knowledge-create-modal
+
+    [idTheme]="detail()?.idTheme!"
+    [themeName]="detail()?.themeDesignation!"
+
+    [idVersion]="detail()?.idVersion!"
+    [versionLabel]="detail()?.versionAbbreviatedLabel!"
+
+    [ticketTitle]="detail()?.title ?? ''"
+    [ticketDescription]="detail()?.description ?? ''"
+
+    (close)="closeKnowledgeModal()"
+    (created)="onKnowledgeCreated($event)"
+
+  />
+
+}
+
+<!--
+@if (ticket()) {
+  <app-detail-page [loading]="loading()" [error]="error()" [title]="label()"
+                   [updateRoute]="updateRoute">
+
+    <h2 class="text-2xl font-bold">{{ ticket()?.title }} {{ ticket()?.currentStatus }}</h2>
+    <h3>Thématique : {{ ticket()?.currentTheme }}</h3>
+    <p>Sorti le : {{ ticket()?.modificationDate }}</p>
+
+  </app-detail-page>
+
+} @else {
+  <span class="loading loading-ring loading-xl"></span>
+  <span class="loading loading-ring loading-xl"></span>
+  <span class="loading loading-ring loading-xl"></span>
+}
+-->
+
+
+
+

@@ -1,0 +1,77 @@
+<app-generic-form-page
+  [title]="softwareEdit() ? 'Modifier le logiciel' : 'Créer le logiciel'"
+  [loading]="loading()"
+  [error]="error()"
+  [submitLabel]="softwareEdit() ? 'Modifier' : 'Créer'"
+  (submitForm)="onSubmit()"
+  [formGroup]="form"
+  [routeId] = "routeId()"
+  [isEditMode] = "isEditMode()"
+>
+
+  <!-- champs -->
+
+  <app-field-text labelKey="Nom du logiciel" placeholder="Nom"
+                  [control]="form.controls.name"
+                  [errorMessages]="{
+    required: 'Le nom est obligatoire',
+    maxlength: 'Max 127 caractères',
+    minlenght: 'Min 1 caractère'}">
+  </app-field-text>
+
+  <app-field-select
+    labelKey="Type de logiciel"
+    [control]="form.controls.idSoftwareType"
+    [options]="listSoftwareType()"
+    valueField="idSoftwareType"
+    labelField="designation"
+    placeholder="Choisir un type"
+    [errorMessages]="{
+    required: 'Le type est obligatoire'
+  }"/>
+
+  <app-field-text labelKey="Description du logiciel"
+                  [control]="form.controls.description"
+                  [errorMessages]="{}">
+  </app-field-text>
+
+</app-generic-form-page>
+
+
+<!--
+<form [formGroup]="form" (ngSubmit)="onCreate()" >
+  <fieldset class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
+    <legend class="fieldset-legend">Creation de logiciel</legend>
+
+    <label class="label">Nom</label>
+    <input type="text" class="input" placeholder="Nom du logiciel" formControlName="name"/>
+
+
+    @if (form.get('name')?.hasError('required')) {
+      <span class="form-error">Le nom est obligatoire</span>
+    } @else if (form.get('name')?.hasError('maxlength')) {
+      <span class="form-error">Le nom doit comporter un maximum de 127 caracteres</span>
+    }
+
+    <label class="label">Description</label>
+    <textarea class="textarea h-24" placeholder="Description du logiciel" formControlName="description"></textarea>
+
+
+    <span class="label">Type</span>
+    <select class="select" formControlName="idSoftwareType">
+      <option disabled [ngValue]="null">Type de logiciel</option>
+      @for (softwareType of listSoftwareType(); track softwareType.idSoftwareType) {
+        <option [value]="softwareType.idSoftwareType">{{ softwareType.designation }}</option>
+      }
+    </select>
+
+
+    <div >
+      <button type="button" class="btn btn-secondary mx-3" routerLink="/admin/software" >Annuler</button>
+      <button type="submit" class="btn btn-primary mx-3">{{ softwareEdit() ? 'Modifier' : 'Créer' }}</button>
+    </div>
+
+
+  </fieldset>
+</form>
+-->

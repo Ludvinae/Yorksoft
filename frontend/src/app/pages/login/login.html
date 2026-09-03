@@ -1,0 +1,36 @@
+<div class="container">
+  <div class="login">
+    <H1>YorkSoft</H1>
+    <H2>Connectez-vous au portail employé</H2>
+    <form autocomplete="on" [formGroup]="form" (ngSubmit)="onLogin()">
+      <fieldset class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4" >
+        <legend class="fieldset-legend">Login</legend>
+
+        <label class="label" for="email">Email</label>
+        <input id="email" type="email" class="input" placeholder="Email@company.com" formControlName="email"/>
+
+        @if (isFieldInvalid('email')) {
+          @if (form.get('email')?.hasError('required')) {
+            <span class="form-error">L'email est obligatoire</span>
+          } @else if (form.get('email')?.hasError('email')) {
+            <span class="form-error">L'email doit etre valide</span>
+          }
+        }
+
+        <label class="label" for="password">Password</label>
+        <input id="password" type="password" class="input" placeholder="Password" formControlName="password"/>
+
+        @if (isFieldInvalid('password')) {
+          @if (form.get("password")?.hasError('required')) {
+            <span class="form-error">Le mot de passe est obligatoire</span>
+          }
+        }
+
+        <button class="btn btn-neutral mt-4" type="submit">Login</button>
+      </fieldset>
+    </form>
+
+  </div>
+</div>
+
+

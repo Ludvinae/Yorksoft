@@ -1,0 +1,33 @@
+<app-generic-form-page
+  [title]="urgencyEdit() ? 'Modifier l\'urgence du dysfonctionnement' : 'Créer l\'urgence du dysfonctionnement'"
+  [loading]="loading()"
+  [error]="error()"
+  [submitLabel]="urgencyEdit() ? 'Modifier' : 'Créer'"
+  (submitForm)="onSubmit()"
+  [formGroup]="form"
+  [routeId] = "routeId()"
+  [isEditMode] = "isEditMode()"
+>
+
+  <!-- champs -->
+
+  <app-field-text labelKey="Libellé" placeholder="Moyen"
+                  [control]="form.controls.designation"
+                  [errorMessages]="{
+    required: 'Le libellé est obligatoire',
+    maxlength: 'Max 63 caractères',
+    minlength: 'Min 1 caractère'}">
+  </app-field-text>
+
+  <app-field-text labelKey="Facteur de priorité" placeholder="1"
+                  [control]="form.controls.priorityFactor"
+                  [errorMessages]="{
+    required: 'Entrez une priorité'}">
+  </app-field-text>
+
+  <app-field-text labelKey="Description" placeholder="Description de l'urgence"
+                  [control]="form.controls.description"
+                  [errorMessages]="{}">
+  </app-field-text>
+
+</app-generic-form-page>

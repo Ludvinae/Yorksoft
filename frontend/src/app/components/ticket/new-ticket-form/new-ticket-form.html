@@ -1,0 +1,153 @@
+<div class="flex flex-row px-2">
+  <div class="mx-5">
+    <h1 class="text-5xl font-bold">Nouveau ticket</h1>
+    <p>Remplissez le formulaire</p>
+  </div>
+</div>
+<div class="alert alert-info mb-4">
+  Ticket pour :
+  <strong>
+    {{ client.firstName }} {{ client.lastName }}
+  </strong>
+</div>
+
+<form [formGroup]="ticketForm"  (ngSubmit)="onSubmit()" class="card bg-base-200 p-6 shadow flex flex-col gap-8">
+
+  <fieldset class="fieldset bg-base-200 border-base-300 rounded-box border p-6">
+    <legend class="legend text-lg font-semibold">
+      Contexte logiciel
+    </legend>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+      <app-field-select
+        labelKey="Logiciel"
+        [control]="ticketForm.controls.idSoftware"
+        [options]="listSoftware()"
+        valueField="idSoftware"
+        labelField="name"
+        placeholder="Choisir un logiciel"
+        [errorMessages]="{
+    required: 'Le logiciel est obligatoire'}"/>
+
+      <app-field-select
+        labelKey="Version"
+        [control]="ticketForm.controls.idVersion"
+        [options]="listVersion()"
+        valueField="idVersion"
+        labelField="displayLabel"
+        placeholder="Choisir une version"
+        [errorMessages]="{
+    required: 'La Version est obligatoire'}"/>
+    </div>
+  </fieldset>
+
+  <fieldset class="fieldset bg-base-200 border-base-300 rounded-box border p-6">
+    <legend class="legend text-lg font-semibold">
+      Qualification du ticket
+    </legend>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <app-field-select
+        labelKey="Impact"
+        [control]="ticketForm.controls.idImpact"
+        [options]="listImpact()"
+        valueField="idImpact"
+        labelField="designation"
+        placeholder="Choisir l'impact"
+        [errorMessages]="{
+    required: 'L\'impact est obligatoire'}"/>
+
+      <app-field-select
+        labelKey="Urgence"
+        [control]="ticketForm.controls.idUrgency"
+        [options]="listUrgency()"
+        valueField="idUrgency"
+        labelField="designation"
+        placeholder="Choisir l'urgence"
+        [errorMessages]="{
+    required: 'L\'urgence est obligatoire'}"/>
+
+      <div>
+        <app-field-select
+          labelKey="Thématique"
+          [control]="ticketForm.controls.idTheme"
+          [options]="listTheme()"
+          valueField="idTheme"
+          labelField="designation"
+          placeholder="Choisir la thématique"
+          [errorMessages]="{
+    required: 'La thématique est obligatoire'}"/>
+        <button
+          type="button"
+          class="btn btn-outline"
+          (click)="openCreateThematiqueModal()">
+            ➕
+        </button>
+      </div>
+
+    </div>
+  </fieldset>
+
+  <fieldset class="fieldset bg-base-200 border-base-300 rounded-box border p-6">
+    <legend class="legend text-lg font-semibold">
+      Contenu
+    </legend>
+    <div class="flex flex-col gap-4">
+      <app-field-text  labelKey="Titre du ticket"
+                       [control]="ticketForm.controls.title"
+                       [errorMessages]="{
+    required: 'Le titre est obligatoire',
+    minLength: 'Min 3 caractères',
+    maxlength: 'Max 63 caractères'}"></app-field-text>
+
+      <app-field-textarea labelKey="Description du ticket"
+                          [control]="ticketForm.controls.description"
+                          [errorMessages]="{
+    required: 'La description est obligatoire',
+    minLength: 'Min 20 caractères'}">
+      </app-field-textarea>
+    </div>
+  </fieldset>
+
+  @if (errorMessage()) {
+    <div class="alert alert-error">
+      <span>
+        {{ errorMessage() }}
+      </span>
+    </div>
+  }
+  <button type="submit" class="btn btn-primary"
+    [disabled]="ticketForm.invalid || isSubmitting()">
+
+    @if (isSubmitting()) {
+      <span class="loading loading-spinner loading-sm"></span>
+    }
+    Envoyer
+  </button>
+
+</form>
+
+<dialog class="modal">
+  <form>
+    <h2>Thématique</h2>
+
+    <label>Désignation</label>
+    <app-field-text  labelKey="designation"
+                     [control]="themeForm.controls.designation"
+                     [errorMessages]="{
+    required: 'La désignation est obligatoire'}"/>
+
+    <label>Code</label>
+    <app-field-text  labelKey="code"
+                     [control]="themeForm.controls.code"
+                     [errorMessages]="{
+    required: 'Le code est obligatoire'}"/>
+
+    <label>Description</label>
+    <app-field-text  labelKey="description"
+                     [control]="themeForm.controls.description"
+                     [errorMessages]="{}"/>
+
+  </form>
+</dialog>
+
+
+

@@ -1,0 +1,23 @@
+
+<app-generic-form-page
+  [title]="softwareTypeEdit() ? 'Modifier le type de logiciel' : 'Créer le type de logiciel'"
+  [loading]="loading()"
+  [error]="error()"
+  [submitLabel]="softwareTypeEdit() ? 'Modifier' : 'Créer'"
+  (submitForm)="onSubmit()"
+  [formGroup]="form"
+  [routeId] = "routeId()"
+  [isEditMode]="isEditMode()"
+>
+
+  <!-- champs -->
+
+  <app-field-text labelKey="Nom du type de logiciel" placeholder="Nom du type"
+                  [control]="form.controls.designation"
+                  [errorMessages]="{
+    required: 'Le nom est obligatoire',
+    maxlength: 'Max 127 caractères',
+    minlength: 'Minimum 3 caractères'}">
+  </app-field-text>
+
+</app-generic-form-page>

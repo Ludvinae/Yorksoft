@@ -1,0 +1,79 @@
+<div class="flex flex-col h-screen">
+
+  <app-title-client ></app-title-client>
+
+  <div class="flex-1">
+
+    @if (storeService.loading()) {
+      <div>
+        <span class="loading loading-spinner loading-xl"></span>
+      </div>
+
+    } @else if (storeService.clients().length == 0) {
+      <span>Aucun client ne corresponds à ces critères</span>
+    } @else {
+      <div class="overflow-x-auto">
+      <table class="table table-sm">
+        <thead>
+        <tr>
+          <th class="cursor-pointer select-none" (click)="storeService.setSort('firstName')">
+            <div class="flex items-center gap-2">
+              Prénom
+              @if (isSorted("firstName")) {
+                <span>{{ isAsc() ? '▲' : '▼' }}</span>
+              }
+            </div>
+          </th>
+          <th class="cursor-pointer select-none" (click)="storeService.setSort('lastName')">
+            <div class="flex items-center gap-2">
+              Nom
+              @if (isSorted("lastName")) {
+                <span>{{ isAsc() ? '▲' : '▼' }}</span>
+              }
+            </div>
+          </th>
+          <th class="cursor-pointer select-none" (click)="storeService.setSort('email')">
+            <div class="flex items-center gap-2">
+              Courriel
+              @if (isSorted("email")) {
+                <span>{{ isAsc() ? '▲' : '▼' }}</span>
+              }
+            </div>
+          </th>
+          <th class="cursor-pointer select-none" (click)="storeService.setSort('phoneNumber')">
+            <div class="flex items-center gap-2">
+              Téléphone
+              @if (isSorted("phoneNumber")) {
+                <span>{{ isAsc() ? '▲' : '▼' }}</span>
+              }
+            </div>
+          </th>
+          <th class="cursor-pointer select-none" (click)="storeService.setSort('importance')">
+            <div class="flex items-center gap-2">
+              Importance
+              @if (isSorted("importance")) {
+                <span>{{ isAsc() ? '▲' : '▼' }}</span>
+              }
+            </div>
+        </tr>
+        </thead>
+        <tbody>
+          @for(client of storeService.clients(); track client.idAppUser) {
+            <tr>
+              <td>{{ client.firstName }}</td>
+              <td>{{ client.lastName }}</td>
+              <td>{{ client.email }}</td>
+              <td>{{ client.phoneNumber }}</td>
+              <td>{{ client.importance }} </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+      </div>
+    }
+
+
+  </div>
+
+  <app-footer-client></app-footer-client>
+</div>

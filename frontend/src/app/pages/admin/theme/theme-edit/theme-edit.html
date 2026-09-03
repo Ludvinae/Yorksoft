@@ -1,0 +1,33 @@
+<app-generic-form-page
+  [title]="themeEdit() ? 'Modifier une thématique de dysfonctionnement' : 'Créer une thématique de dysfcontionnement '"
+  [loading]="loading()"
+  [error]="error()"
+  [submitLabel]="themeEdit() ? 'Modifier' : 'Créer'"
+  (submitForm)="onSubmit()"
+  [formGroup]="form"
+  [routeId] = "routeId()"
+  [isEditMode] = "isEditMode()">
+
+  <!-- champs -->
+
+  <app-field-text labelKey="Libellé" placeholder="Erreur de manipulation"
+                  [control]="form.controls.designation"
+                  [errorMessages]="{
+    required: 'Le libellé est obligatoire',
+    maxlength: 'Max 127 caractères',
+    minlength: 'Min 3 caractères'}">
+  </app-field-text>
+
+  <app-field-text
+    labelKey="Code de dysfonctionnement"
+    [control]="form.controls.code"
+    placeholder="Choisir un code"
+    [errorMessages]="{
+    required: 'Le code est obligatoire',
+    pattern: 'Le code doit être écrit en majuscule'}"/>
+
+  <app-field-text labelKey="Description" placeholder="Description de la thématique"
+                  [control]="form.controls.description"
+                  [errorMessages]="{}"/>
+
+</app-generic-form-page>

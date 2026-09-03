@@ -1,0 +1,17 @@
+<app-title title="Urgence de résolution" route="urgency"></app-title>
+
+<app-generic-list
+  [data]="urgencyList()"
+  [columns]="[{ label: 'Libellé', field: 'designation' },
+              {label: 'Description', field: 'description'},
+              {label: 'Facteur de priorité', field: 'priorityFactor'}]"
+  [baseRoute]="'/admin/urgency'"
+  [idField]="'idUrgency'"
+  [itemTemplate]="urgencyCard"
+  (deleteItem)="onDelete($event)">
+</app-generic-list>
+
+<ng-template #urgencyCard let-urgency >
+  <h3 class="font-bold text-lg">{{ urgency.name }} (Priorité : {{ urgency.priorityFactor }})</h3>
+  <p>{{ urgency.description }}</p>
+</ng-template>

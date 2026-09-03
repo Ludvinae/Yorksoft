@@ -1,0 +1,17 @@
+<app-title title="Thématiques de classification" route="theme"></app-title>
+
+<app-generic-list
+  [data]="themeList()"
+  [columns]="[{ label: 'Libellé', field: 'designation' },
+              { label: 'Code', field: 'code' },
+              { label: 'Description', field: 'description'}]"
+  [baseRoute]="'/admin/theme'"
+  [idField]="'idTheme'"
+  [itemTemplate]="themeCard"
+  (deleteItem)="onDelete($event)">
+</app-generic-list>
+
+<ng-template #themeCard let-theme >
+  <h3 class="font-bold text-lg">{{ theme.designation }} ({{ theme.code }})</h3>
+  <p>{{ theme.description }}</p>
+</ng-template>

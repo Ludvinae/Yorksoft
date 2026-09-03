@@ -1,0 +1,34 @@
+
+<app-generic-form-page
+  [title]="impactEdit() ? 'Modifier l\'impact du dysfonctionnement' : 'Créer l\'impact du dysfonctionnement'"
+  [loading]="loading()"
+  [error]="error()"
+  [submitLabel]="impactEdit() ? 'Modifier' : 'Créer'"
+  (submitForm)="onSubmit()"
+  [formGroup]="form"
+  [routeId] = "routeId()"
+  [isEditMode] = "isEditMode()"
+>
+
+  <!-- champs -->
+
+  <app-field-text labelKey="Libellé" placeholder="Moyen"
+                  [control]="form.controls.designation"
+                  [errorMessages]="{
+    required: 'Le numéro est obligatoire',
+    maxlength: 'Max 63 caractères',
+    minlength: 'Min 1 caractère'}">
+  </app-field-text>
+
+  <app-field-text labelKey="Facteur de priorité" placeholder="1"
+                  [control]="form.controls.priorityFactor"
+                  [errorMessages]="{
+    required: 'Le facteur de priorité est obligatoire'}">
+  </app-field-text>
+
+  <app-field-text labelKey="Description"
+                  [control]="form.controls.description"
+                  [errorMessages]="{}">
+  </app-field-text>
+
+</app-generic-form-page>

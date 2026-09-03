@@ -1,0 +1,21 @@
+
+<fieldset class="fieldset w-full">
+  <legend class="fieldset-legend">{{ labelKey }}</legend>
+
+  <select class="select w-full" [formControl]="control">
+    <option [ngValue]="null" disabled>
+      {{ placeholder }}
+    </option>
+    @if (options) {
+      @for (option of options; track getValue(option)) {
+        <option [ngValue]="getValue(option)">
+          {{ getLabel(option) }}
+        </option>
+      }
+    }
+  </select>
+
+  @if (errorMessage) {
+    <span class="form-error">{{ errorMessage }}</span>
+  }
+</fieldset>

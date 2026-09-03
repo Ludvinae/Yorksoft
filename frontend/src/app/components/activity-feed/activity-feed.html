@@ -1,0 +1,52 @@
+
+<div class="card bg-base-100 shadow">
+  <div class="card-body">
+    <h2 class="card-title">
+      Activité récente
+    </h2>
+
+    <div class="space-y-3">
+
+      @for (activity of activities; track activity.idActivity) {
+
+        <div class="flex gap-3 items-start">
+
+          <div class="mt-1">
+            @if (activity.activityType == ActivityType.TICKET) {
+              <i class="ph ph-ticket text-xl"></i>
+            } @else if (activity.activityType == ActivityType.PROCEDURE) {
+              <i class="ph ph-article text-xl"></i>
+            } @else if (activity.activityType == ActivityType.COMMENT) {
+              <i class="ph ph-chat text-xl"></i>
+            } @else if (activity.activityType == ActivityType.ASSIGNMENT) {
+              <i class="ph ph-hand-deposit text-xl"></i>
+            } @else {
+              <i class="ph ph-bookmark text-xl"></i>
+            }
+          </div>
+
+          <div class="flex-1">
+
+            <p class="text-sm">
+              {{ activity.activityDescription }}
+            </p>
+
+            <p class="text-xs text-base-content/60">
+              {{ activity.activityTimestamp | timesAgo }}
+            </p>
+
+          </div>
+
+        </div>
+
+      } @empty {
+
+        <div class="alert alert-info">
+          <span>Aucune activité récente.</span>
+        </div>
+
+      }
+
+    </div>
+  </div>
+</div>

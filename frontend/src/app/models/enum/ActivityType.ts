@@ -1,0 +1,6 @@
+export enum ActivityType {
+  TICKET = 'TICKET',
+  COMMENT = 'COMMENT',
+  PROCEDURE = 'PROCEDURE',
+  ASSIGNMENT = 'ASSIGNMENT',
+}

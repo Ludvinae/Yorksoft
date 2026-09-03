@@ -1,0 +1,70 @@
+<div class="card bg-base-100 border border-base-300">
+  <div class="card-body p-4">
+
+    @if (comment) {
+      <div class="flex items-start gap-3">
+
+        <div class="avatar placeholder">
+          <div class="bg-neutral text-neutral-content rounded w-12">
+            <span>
+              <img src="https://ui-avatars.com/api/?name={{ comment.authorFullName }}" />
+            </span>
+          </div>
+        </div>
+
+        <div class="flex-1">
+
+          <div class="flex justify-between items-center">
+
+            <div class="flex items-center gap-2">
+              <span class="font-semibold">
+                {{ comment.authorFullName }}
+              </span>
+
+              <span class="text-sm opacity-70">
+                {{ comment.authorRole | userRoleLabel:comment.authorRank }}
+              </span>
+            </div>
+
+            @if (wasEdited()) {
+              <span class="text-xs opacity-60">
+                {{ comment.dateSent | date:'dd/MM/yyyy HH:mm' }}
+              </span>
+              <span class="text-xs italic opacity-60">
+                modifié à {{ comment.lastModification | date:'dd/MM/yyyy HH:mm' }}
+              </span>
+            } @else {
+              <span class="text-xs opacity-60">
+                {{ comment.dateSent | date:'dd/MM/yyyy HH:mm' }}
+              </span>
+            }
+
+          </div>
+
+          <div>
+            @if (!isEditing()) {
+              <p class="mt-2 whitespace-pre-line">
+                {{ comment.content }}
+              </p>
+
+              @if (comment.authorFullName == currentUserName) {
+                <button class="btn btn-xs" (click)="edit.emit()">
+                  Modifier
+                </button>
+              }
+            } @else {
+
+              <app-comment-form [initialValue]="comment.content"
+                submitLabel="Enregistrer"
+                (submitComment)="save.emit($event)"
+                (cancel)="cancel.emit()"/>
+
+            }
+
+          </div>
+
+        </div>
+      </div>
+    }
+  </div>
+</div>

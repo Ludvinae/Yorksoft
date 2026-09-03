@@ -1,0 +1,20 @@
+
+@if (versionType()) {
+  <app-detail-page [loading]="loading()" [error]="error()" [title]="label()"
+                   [updateRoute]="updateRoute">
+
+    <h2 class="text-2xl font-bold">{{ versionType()?.designation }} </h2>
+    <p>Abbréviation : {{ versionType()?.code }}</p>
+    <p>Malus d'urgence : {{ versionType()?.urgencyMalus }}</p>
+
+  </app-detail-page>
+
+} @else {
+  <span class="loading loading-ring loading-xl"></span>
+  <span class="loading loading-ring loading-xl"></span>
+  <span class="loading loading-ring loading-xl"></span>
+}
+
+
+
+

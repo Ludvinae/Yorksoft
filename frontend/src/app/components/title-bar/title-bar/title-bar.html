@@ -1,0 +1,93 @@
+<!-- Header -->
+<div class="flex flex-wrap items-center justify-between gap-2 mb-8">
+  <h1 class="text-5xl font-bold">Tickets</h1>
+
+  <label class="label cursor-pointer gap-2">
+    <span class="label-text">Afficher les tickets clos</span>
+
+    <input
+      type="checkbox"
+      class="toggle toggle-primary"
+      [(ngModel)]="showClosedTickets"
+      (change)="onClosedToggleChange()"
+    />
+  </label>
+</div>
+
+<!-- Search + filters -->
+<div class="flex flex-wrap items-center gap-4 mb-6">
+
+  <!-- Search -->
+
+  <label class="input input-bordered flex items-center gap-2 w-full max-w-xl">
+
+    <input
+      type="text"
+      class="grow"
+      placeholder="Rechercher un ticket..."
+      [ngModel]="search"
+      (ngModelChange)="onSearch($event)"
+    />
+
+    <svg xmlns="http://www.w3.org/2000/svg"
+         class="h-5 w-5 opacity-70"
+         fill="none"
+         viewBox="0 0 24 24"
+         stroke="currentColor">
+
+      <path stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M21 21l-4.35-4.35m0 0
+             A7.5 7.5 0 103.5 10.5
+             a7.5 7.5 0 0013.15 6.15z"/>
+    </svg>
+
+  </label>
+
+  <!-- Filters -->
+  <button
+    class="btn"
+    [class.btn-neutral]="buttonState() === TicketFilterStateEnum.ALL"
+    (click)="setFilter(TicketFilterStateEnum.ALL)">
+
+    Tous
+  </button>
+
+  @if (currentUserRole == "TECHNICIAN") {
+    <button
+      class="btn"
+      [class.btn-neutral]="buttonState() === TicketFilterStateEnum.ASSIGNED"
+      (click)="setFilter(TicketFilterStateEnum.ASSIGNED)">
+
+      Attribués
+    </button>
+  }
+  @else if (currentUserRole == 'MANAGER') {
+    <button
+      class="btn"
+       [class.btn-neutral]="buttonState() === TicketFilterStateEnum.OPEN"
+      (click)="setFilter(TicketFilterStateEnum.OPEN)">
+
+      A attribuer
+    </button>
+  }
+  @else if (currentUserRole == 'DIRECTOR') {
+    <button
+      class="btn"
+      [class.btn-neutral]="buttonState() === TicketFilterStateEnum.OPEN"
+      (click)="setFilter(TicketFilterStateEnum.OPEN)">
+
+      A attribuer
+    </button>
+  }
+
+  <button
+    class="btn"
+    [class.btn-neutral]="buttonState() === TicketFilterStateEnum.PRIORITY"
+    (click)="setFilter(TicketFilterStateEnum.PRIORITY)">
+
+    Prioritaires
+  </button>
+
+</div>

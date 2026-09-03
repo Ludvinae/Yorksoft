@@ -1,0 +1,18 @@
+
+<!-- dashboard.page.html -->
+<div>
+
+  <!-- HEADER -->
+  <div class="flex flex-wrap items-center justify-between gap-2">
+    <h1 class="text-5xl font-bold">Tableau de bord</h1>
+
+    <div class="text-right">
+      <p class="text-lg font-medium">
+        {{ currentDate | date:'EEEE d MMMM yyyy':'':'fr' }}
+      </p>
+    </div>
+  </div>
+
+  <app-dashboard-switch/>
+
+</div>

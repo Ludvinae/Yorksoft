@@ -1,0 +1,87 @@
+<div class="flex flex-col h-full bg-base-200">
+
+  <!-- HEADER (close button) -->
+  <div class="flex items-center justify-between p-4 border-b border-base-300">
+
+    <span class="font-semibold text-lg">
+      Menu
+    </span>
+
+    <button
+      class="btn btn-ghost btn-circle text-xl"
+      (click)="close()"
+      aria-label="Fermer le menu"
+    >
+      ✕
+    </button>
+
+  </div>
+
+  <!-- NAVIGATION -->
+  <nav class="flex-1 p-4 space-y-2">
+
+    <a routerLink="/dashboard"
+       (click)="navigate()"
+       routerLinkActive="text-primary-content"
+       class="block px-4 py-3 rounded-lg hover:bg-base-300 transition">
+      Dashboard
+    </a>
+
+    <a routerLink="/ticket"
+       (click)="navigate()"
+       routerLinkActive="text-primary-content"
+       class="block px-4 py-3 rounded-lg hover:bg-base-300 transition">
+      Tickets
+    </a>
+
+    <a routerLink="/clients"
+       (click)="navigate()"
+       routerLinkActive="text-primary-content"
+       class="block px-4 py-3 rounded-lg hover:bg-base-300 transition">
+      Clients
+    </a>
+
+    <a routerLink="/knowledge"
+       (click)="navigate()"
+       routerLinkActive="text-primary-content"
+       class="block px-4 py-3 rounded-lg hover:bg-base-300 transition">
+      Connaissances
+    </a>
+
+    <a routerLink="/admin"
+       (click)="navigate()"
+       routerLinkActive="text-primary-content"
+       class="block px-4 py-3 rounded-lg hover:bg-base-300 transition">
+      Admin
+    </a>
+
+    <a routerLink="/settings"
+       (click)="navigate()"
+       routerLinkActive="text-primary-content"
+       class="block px-4 py-3 rounded-lg hover:bg-base-300 transition">
+      Réglages
+    </a>
+
+  </nav>
+
+  <!-- ACTIONS -->
+  <div class="p-4 border-t border-base-300 space-y-3">
+
+    <button
+      class="btn btn-primary w-full"
+      (click)="navigate()"
+      routerLink="/ticket/create"
+    >
+      ➕ Nouveau ticket
+    </button>
+
+    <button
+      class="btn btn-ghost w-full text-error"
+      (click)="logout()"
+    >
+      Se déconnecter
+    </button>
+
+  </div>
+
+</div>
