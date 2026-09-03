@@ -1,10 +1,5 @@
-# Suivi MNS 
+# Suivi MNS — Backend
 
-## MCD
+Spring Boot REST API for the Suivi MNS project.
 
-![Suivi_MNS_MCD_MVP.jpg](src/main/resources/Suivi_MNS_MCD_MVP.jpg)
-
-
-## MLD
-
-![Suivi_MNS_MLD_MVP.jpg](src/main/resources/Suivi_MNS_MLD_MVP.jpg)
+Full documentation (setup, architecture, API): see the [root README](../README.md) and the [docs/](../docs/) folder.
