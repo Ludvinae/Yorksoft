@@ -7,7 +7,7 @@ The backend embeds [springdoc-openapi](https://springdoc.org/). Once the applica
 - Swagger UI: `http://localhost:8080/swagger-ui.html`
 - Raw OpenAPI spec: `http://localhost:8080/api-docs`
 
-This document doesn't duplicate that auto-generated reference: it gives the overview (authentication, roles, resources) needed to use it effectively.
+The API surfaces over 100 routes across the resources below (all backed by generated Swagger docs). This document doesn't duplicate that auto-generated reference: it gives the overview (authentication, roles, resources) needed to use it effectively.
 
 ## Authentication
 
@@ -54,7 +54,7 @@ All routes are relative to the backend root (`http://localhost:8080` locally). S
 | Resource | Base route | Description |
 |---|---|---|
 | Authentication | `/log-in` | Login, JWT issuance |
-| Tickets | `/ticket` | Full ticket lifecycle |
+| Tickets | `/ticket` | Full ticket lifecycle — plus explicit action routes: `/ticket/{id}/assign`, `/start-progress`, `/wait`, `/resume-progress`, `/solve`, `/close` (each enforces the legal-transition rules from [ARCHITECTURE.md](ARCHITECTURE.md#ticket-lifecycle) instead of a generic status `PATCH`) |
 | Assignments | `/assignment` | Assigning tickets to technicians |
 | Comments | `/comment` | Discussion thread on a ticket |
 | History | `/history` | Activity log (audit trail) |
@@ -73,4 +73,13 @@ All routes are relative to the backend root (`http://localhost:8080` locally). S
 
 ## Error format
 
-Business and validation errors are caught by the backend's `exception` layer and returned with a consistent HTTP status (`400` validation, `401`/`403` security, `404` resource not found, `500` unexpected error).
+Business and validation errors are caught by the backend's `exception` layer and returned with a consistent HTTP status, body shape, and no internal detail leakage:
+
+| Status | Meaning |
+|---|---|
+| `400 Bad Request` | Invalid input (failed DTO validation, illegal status transition) |
+| `401 Unauthorized` | Missing or invalid authentication |
+| `403 Forbidden` | Authenticated, but the role/ownership check fails |
+| `404 Not Found` | Referenced resource doesn't exist |
+| `409 Conflict` | Valid request, but it conflicts with the resource's current state (e.g. resolving a ticket with no solution recorded yet) |
+| `500 Internal Server Error` | Unexpected error |

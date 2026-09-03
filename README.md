@@ -4,12 +4,15 @@ Web-based ticketing (support/helpdesk) application built as part of a **CDA (Con
 
 A client reports an incident on a software product they use; the support team (technician → manager → director) qualifies it, assigns it, works it and closes it, with SLA tracking and automatic prioritization.
 
+The business context is a fictional software vendor, **YorkSoft** (hence the repo's name), whose support desk needed a shared, traceable way to track client requests instead of scattered phone/email follow-ups.
+
 > Stack: **Angular 21** (Tailwind CSS + DaisyUI) · **Spring Boot 3** (Java 17, Hibernate) · **PostgreSQL** (Docker)
 
 ## Table of contents
 
 - [Features](#features)
 - [Tech stack](#tech-stack)
+- [Design](#design)
 - [Getting started](#getting-started)
 - [Documentation](#documentation)
 - [Project status](#project-status)
@@ -36,6 +39,14 @@ A client reports an incident on a software product they use; the support team (t
 | **CI/CD** | GitHub Actions (build, tests, Docker image, deployment) |
 
 Design rationale and details: see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+
+## Design
+
+The UX was designed mobile-first in Figma before implementation, then adapted to a desktop-first layout for what turned out to be the primary use case (a support team working the queue day to day). These are the original design-phase mockups, not live screenshots — the shipped UI follows this structure but is rougher around the edges in places.
+
+![Mobile flow mockup: login, dashboard, client selection, ticket creation, ticket list, ticket detail](docs/assets/mockup-mobile-flow.png)
+
+![Desktop ticket list mockup](docs/assets/mockup-desktop-tickets.png)
 
 ## Getting started
 
@@ -77,15 +88,22 @@ The app is served on `http://localhost:4200` and calls the API on `http://localh
 
 ## Project status
 
-The core business logic (ticket lifecycle, reference data, dashboards) works end to end. Still in progress:
+The core ticket workflow (open → assign → work → resolve → close, with priority, SLA and history) works end to end and is backed by a substantial automated test suite (backend unit + integration tests via JUnit/MockMvc, frontend unit tests via Vitest — see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md#testing)). Still in progress or not started:
 
-- Role-based dashboards: many KPIs and charts are still to be built
+**Features**
+- Role-based dashboards: functional for managers, still very incomplete for directors and admins, and many planned KPIs/charts aren't built for any role yet
 - Internal user management beyond account creation (edit, deactivate)
 - Knowledge base UI (the backend exists, the dedicated UI is still to be built)
+- Client-facing portal (clients currently go through a technician, not the app directly)
 - Notifications and alerts (approaching/breached SLA, new assignments...)
-- General UI polish
-- **GDPR and accessibility (RGAA/WCAG) compliance** — not addressed yet, planned as a dedicated workstream
-- **Security hardening**: short-lived JWTs with refresh/auto-renewal (tokens currently don't expire), and a systematic review against the OWASP Top 10
+- Mobile responsive ticket list — the mobile layout still renders the desktop table instead of a card-based view
+- Internationalization — the app is French-only today
+
+**Engineering hardening**
+- **Security**: short-lived JWTs with refresh/auto-renewal (tokens currently don't expire and can't be revoked before that), a stricter CORS policy, and a systematic review against the OWASP Top 10
+- **Data**: a schema migration tool (Flyway/Liquibase) instead of Hibernate `ddl-auto`, and an automated, tested backup/restore procedure (none exists yet)
+- **GDPR and accessibility (RGAA/WCAG) compliance** — not addressed yet: no defined retention policy, no right-to-erasure flow, no formal accessibility audit
+- Deeper frontend tests (current ones mostly check that components construct, not real interaction behavior) and some browser-driven end-to-end coverage
 
 ## Author
 
