@@ -7,6 +7,7 @@ import com.mns.cda.suivimns.dto.dashboard.graphs.TicketStatusStatDto;
 import com.mns.cda.suivimns.dto.details.TicketDetailComment;
 import com.mns.cda.suivimns.dto.details.TicketDetailDto;
 import com.mns.cda.suivimns.dto.details.TicketDetailKnowledge;
+import com.mns.cda.suivimns.dto.details.TicketDetailProcedure;
 import com.mns.cda.suivimns.model.Ticket;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -317,14 +318,24 @@ public interface TicketDao extends JpaRepository<Ticket, Integer>, JpaSpecificat
 
     @Query("""
         SELECT new com.mns.cda.suivimns.dto.details.TicketDetailKnowledge(
-            k.idKnowledge, k.subject, k.description, k.resolution,
-            p.idProcedure, p.creationDate, p.modificationDate, p.title, p.content)
+            k.idKnowledge, k.subject, k.description, k.resolution)
         FROM Ticket t
         JOIN t.knowledge k
-        LEFT JOIN k.procedure p
         WHERE t.idTicket = :idTicket
     """)
     Optional<TicketDetailKnowledge> ticketKnowledge(Integer idTicket);
+
+
+    @Query("""
+        SELECT new com.mns.cda.suivimns.dto.details.TicketDetailProcedure(
+            p.idProcedure, p.creationDate, p.modificationDate, p.title, p.content)
+        FROM Ticket t
+        JOIN t.knowledge k
+        JOIN k.procedureList p
+        WHERE t.idTicket = :idTicket
+        ORDER BY p.creationDate DESC
+    """)
+    List<TicketDetailProcedure> ticketKnowledgeProcedures(Integer idTicket);
 
 
 

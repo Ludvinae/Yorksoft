@@ -13,6 +13,6 @@ public record KnowledgeDto(
         String resolution,
         @NotNull Integer idTheme,
         List<Integer> versionIds,
-        Integer idProcedure
+        List<Integer> procedureIds
 ) {
 }

@@ -1,11 +1,9 @@
 package com.mns.cda.suivimns.mapper.entity;
 
-import com.mns.cda.suivimns.dao.ProcedureDao;
 import com.mns.cda.suivimns.dao.ThemeDao;
 import com.mns.cda.suivimns.dao.VersionDao;
 import com.mns.cda.suivimns.dto.entity.KnowledgeDto;
 import com.mns.cda.suivimns.dto.search.KnowledgeSelect;
-import com.mns.cda.suivimns.exception.ProcedureNotFoundException;
 import com.mns.cda.suivimns.exception.ThemeNotFoundException;
 import com.mns.cda.suivimns.model.Procedure;
 import com.mns.cda.suivimns.model.Knowledge;
@@ -30,23 +28,20 @@ public abstract class KnowledgeMapper {
     @Autowired
     protected VersionDao versionDao;
 
-    @Autowired
-    protected ProcedureDao procedureDao;
-
     public abstract KnowledgeSelect toKnowledgeSelect(Knowledge knowledge);
 
     public abstract List<KnowledgeSelect> toKnowledgeSelectList(List<Knowledge> knowledgeList);
 
     @Mapping(target = "idTheme", source = "theme")
     @Mapping(target = "versionIds", source = "versionList")
-    @Mapping(target = "idProcedure", source = "procedure")
+    @Mapping(target = "procedureIds", source = "procedureList")
     public abstract KnowledgeDto toDto(Knowledge knowledge);
 
     //@Mapping(target = "idKnowledgeType", source = "knowledgeType")
     public abstract List<KnowledgeDto> toDtoList(List<Knowledge> knowledge);
 
     @Mapping(target="theme", source="idTheme")
-    @Mapping(target= "procedure", ignore=true)
+    @Mapping(target= "procedureList", ignore=true)
     @Mapping(target = "versionList", source = "versionIds")
     public abstract Knowledge toEntity(KnowledgeDto dto);
 
@@ -54,10 +49,6 @@ public abstract class KnowledgeMapper {
     // Method helper pour ID vers ENTITE
     protected Theme mapIdToTheme(Integer id) {
         return themeDao.findById(id).orElseThrow(ThemeNotFoundException::new);
-    }
-
-    protected Procedure mapIdToProcedure(Integer id) {
-        return procedureDao.findById(id).orElseThrow(ProcedureNotFoundException::new);
     }
 
     protected List<Version> mapIdsToVersions(List<Integer> ids) {
@@ -76,10 +67,6 @@ public abstract class KnowledgeMapper {
         return theme != null ? theme.getIdTheme() : null;
     }
 
-    protected Integer mapProcedureToId(Procedure procedure) {
-        return procedure != null ? procedure.getIdProcedure() : null;
-    }
-
     protected List<Integer> mapVersionsToIds(List<Version> versions) {
         if (versions == null) return null;
 
@@ -88,12 +75,20 @@ public abstract class KnowledgeMapper {
                 .toList();
     }
 
+    protected List<Integer> mapProceduresToIds(List<Procedure> procedures) {
+        if (procedures == null) return null;
+
+        return procedures.stream()
+                .map(Procedure::getIdProcedure)
+                .toList();
+    }
+
 
     // Method helper pour Update
     @Mapping(target = "idKnowledge", ignore = true)
     @Mapping(target = "theme", source = "idTheme")
     @Mapping(target = "versionList", ignore = true)
-    @Mapping(target = "procedure", source = "idProcedure")
+    @Mapping(target = "procedureList", ignore = true)
     public abstract void updateEntityFromDto(KnowledgeDto dto, @MappingTarget Knowledge entity);
 
     // Merge intelligent pour modifier la liste de versions en update

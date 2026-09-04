@@ -1,6 +1,6 @@
 package com.mns.cda.suivimns.dto.details;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
 public record TicketDetailKnowledge(
         Integer idKnowledge,
@@ -8,10 +8,9 @@ public record TicketDetailKnowledge(
         String description,
         String resolution,
 
-        Integer idProcedure,
-        LocalDateTime procedureCreationDate,
-        LocalDateTime procedureModificationDAte,
-        String procedureTitle,
-        String procedureContent
+        List<TicketDetailProcedure> procedures
 ) {
+    public TicketDetailKnowledge(Integer idKnowledge, String subject, String description, String resolution) {
+        this(idKnowledge, subject, description, resolution, List.of());
+    }
 }

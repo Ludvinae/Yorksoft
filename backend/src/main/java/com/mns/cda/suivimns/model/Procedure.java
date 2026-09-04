@@ -39,13 +39,13 @@ public class Procedure {
     @Column(nullable = false)
     protected String title;
 
-    @OneToOne(optional = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "id_knowledge", nullable = false)
-    protected Knowledge knowledge;
-
     @ManyToOne
     @OnDelete(action = OnDeleteAction.SET_NULL)
     @JoinColumn(name = "id_technician")
     protected Technician technician;
+
+    @ManyToOne(optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "id_knowledge", nullable = false)
+    protected Knowledge knowledge;
 }

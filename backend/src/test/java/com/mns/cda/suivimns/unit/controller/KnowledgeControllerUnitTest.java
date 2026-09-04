@@ -49,7 +49,7 @@ class KnowledgeControllerUnitTest {
 
         knowledgeDto = new KnowledgeDto(
                 1, "Test subject", "Test description",
-                "Test resolution", 1, versions, 1);
+                "Test resolution", 1, versions, versions);
 
     }
 

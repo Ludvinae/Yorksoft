@@ -34,7 +34,11 @@ public class TicketDetailService {
         }
 
         TicketDetailDto details = ticketDao.ticketDetail(idTicket);
-        TicketDetailKnowledge knowledge = ticketDao.ticketKnowledge(idTicket).orElse(null);
+        TicketDetailKnowledge knowledge = ticketDao.ticketKnowledge(idTicket)
+                .map(k -> new TicketDetailKnowledge(
+                        k.idKnowledge(), k.subject(), k.description(), k.resolution(),
+                        ticketDao.ticketKnowledgeProcedures(idTicket)))
+                .orElse(null);
 
 
         List<TicketDetailComment> comments = ticketDao.ticketDetailComments(idTicket);

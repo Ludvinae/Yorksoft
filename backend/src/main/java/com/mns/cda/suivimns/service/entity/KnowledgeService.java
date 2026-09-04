@@ -42,12 +42,9 @@ public class KnowledgeService  {
 
         Knowledge knowledge = knowledgeMapper.toEntity(dto);
         knowledge.setIdKnowledge(null);
-        knowledge.setProcedure(null);
 
-        System.out.println(knowledge);
         Knowledge saved = knowledgeDao.save(knowledge);
 
-        System.out.println(saved);
         return knowledgeMapper.toDto(saved);
     }
 

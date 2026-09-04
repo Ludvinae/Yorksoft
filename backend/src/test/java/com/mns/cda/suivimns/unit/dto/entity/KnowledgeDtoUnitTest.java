@@ -25,7 +25,7 @@ public class KnowledgeDtoUnitTest {
     public void KnowledgeWithBlankSubject_shouldNotBeValid() {
         List<Integer> list = new ArrayList<>();
         KnowledgeDto knowledge = new KnowledgeDto(1, "", "Test description",
-                "Test resolution", 1, list, 1);
+                "Test resolution", 1, list, list);
 
         boolean constraintExists = TestUtils.constraintViolationExists(
                 validator.validate(knowledge),
@@ -41,7 +41,7 @@ public class KnowledgeDtoUnitTest {
         String subject = "a".repeat(256);
         List<Integer> list = new ArrayList<>();
         KnowledgeDto knowledge = new KnowledgeDto(1, subject, "Test description",
-                "Test resolution", 1, list, 1);
+                "Test resolution", 1, list, list);
 
         boolean constraintExists = TestUtils.constraintViolationExists(
                 validator.validate(knowledge),
@@ -56,7 +56,7 @@ public class KnowledgeDtoUnitTest {
     public void validKnowledgeWithBlankTheme_shouldNotBeValid() {
         List<Integer> list = new ArrayList<>();
         KnowledgeDto knowledge = new KnowledgeDto(1, "Test subject", "Test description",
-                "Test resolution", null, list, 1);
+                "Test resolution", null, list, list);
 
         boolean constraintExists = TestUtils.constraintViolationExists(
                 validator.validate(knowledge),
@@ -73,7 +73,7 @@ public class KnowledgeDtoUnitTest {
     public void knowledgeWithValidData_shouldBeValid() {
         List<Integer> list = new ArrayList<>();
         KnowledgeDto knowledge = new KnowledgeDto(1, "Test subject", "Test description",
-                "Test resolution", 1, list, 1);
+                "Test resolution", 1, list, list);
 
         Assertions.assertTrue(
                 validator.validate(knowledge).isEmpty(),

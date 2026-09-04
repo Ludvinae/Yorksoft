@@ -5,6 +5,7 @@ import com.mns.cda.suivimns.controller.TicketController;
 import com.mns.cda.suivimns.dto.details.TicketDetailDto;
 import com.mns.cda.suivimns.dto.details.TicketDetailFullDto;
 import com.mns.cda.suivimns.dto.details.TicketDetailKnowledge;
+import com.mns.cda.suivimns.dto.details.TicketDetailProcedure;
 import com.mns.cda.suivimns.dto.entity.TicketDto;
 import com.mns.cda.suivimns.dto.search.TicketListDto;
 import com.mns.cda.suivimns.dto.workflow.*;
@@ -82,9 +83,10 @@ class TicketControllerUnitTest {
                 1, "BUG", "Bug", "Test software", 1, "1.0.0 r",
                 LocalDateTime.now(), null, "Test description", null, null,
                 null, null, null, null);
-        TicketDetailKnowledge ticketDetailKnowledge = new TicketDetailKnowledge(1, "Test subject",
-                "Test description", "Test resolution", 1, LocalDateTime.now(),
+        TicketDetailProcedure ticketDetailProcedure = new TicketDetailProcedure(1, LocalDateTime.now(),
                 LocalDateTime.now(), "Test title", "Test content");
+        TicketDetailKnowledge ticketDetailKnowledge = new TicketDetailKnowledge(1, "Test subject",
+                "Test description", "Test resolution", List.of(ticketDetailProcedure));
 
         ticketDetailFullDto = new TicketDetailFullDto(ticketDetailDto,
                 List.of(), ticketDetailKnowledge, List.of(StatusEnum.ASSIGNED));
