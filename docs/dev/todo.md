@@ -19,6 +19,7 @@ Sources as of now: `README.md` ("Project status" section), `docs/ARCHITECTURE.md
 ## Backend
 
 - [ ] Internal user management beyond account creation (edit, deactivate) — API side
+- [ ] Proper password management: stop baking pre-hashed passwords into `data-init.sql` (dev-profile seeding via the app's own `PasswordEncoder`, or a documented hash-generation script); add self-service "forgot password" (email token) instead of admin-only reset; brute-force protection on `/log-in` (rate limiting / lockout); consistent, enforced password policy (currently `NewUserDto` allows 3 chars while `PasswordDto`/`NewPasswordDto` require 8, and no complexity rule exists anywhere)
 - [ ] Notifications / alerts backend (approaching/breached SLA detection, new-assignment events...)
 - [ ] Short-lived JWTs + automatic refresh flow (tokens currently never expire); decide `localStorage` vs `HttpOnly` cookie (and the CSRF strategy that comes with it)
 - [ ] Server-side JWT invalidation (blacklist/revocation) instead of just deleting the token from `localStorage` on logout — a stolen token currently stays valid until this changes
