@@ -19,13 +19,15 @@ Sources as of now: `README.md` ("Project status" section), `docs/ARCHITECTURE.md
 ## Backend
 
 - [ ] Internal user management beyond account creation (edit, deactivate) — API side
-- [ ] Proper password management: stop baking pre-hashed passwords into `data-init.sql` (dev-profile seeding via the app's own `PasswordEncoder`, or a documented hash-generation script); add self-service "forgot password" (email token) instead of admin-only reset; brute-force protection on `/log-in` (rate limiting / lockout); consistent, enforced password policy (currently `NewUserDto` allows 3 chars while `PasswordDto`/`NewPasswordDto` require 8, and no complexity rule exists anywhere)
+- [ ] Proper password management: add self-service "forgot password" (email token) instead of admin-only reset; brute-force protection on `/log-in` (rate limiting / lockout); consistent, enforced password policy (currently `NewUserDto` allows 3 chars while `PasswordDto`/`NewPasswordDto` require 8, and no complexity rule exists anywhere). Seed-data hashing is done — `DemoPasswordSeeder` rehashes the `{seed-*}` placeholders left in `data-init.sql` through the app's own `PasswordEncoder` at startup, one plaintext per role via `app.seed.demo-*-password` in `application-dev.properties`. Still missing: those same `app.seed.demo-*-password` properties aren't in `backend/.env.example`, so the default env-var-driven profile (`cp .env.example .env`) seeds `data-init.sql` without ever setting the demo passwords, leaving accounts stuck on the placeholder
 - [ ] Notifications / alerts backend (approaching/breached SLA detection, new-assignment events...)
 - [ ] Short-lived JWTs + automatic refresh flow (tokens currently never expire); decide `localStorage` vs `HttpOnly` cookie (and the CSRF strategy that comes with it)
 - [ ] Server-side JWT invalidation (blacklist/revocation) instead of just deleting the token from `localStorage` on logout — a stolen token currently stays valid until this changes
 - [ ] Restrict CORS to the frontend's origin (currently `allowedOrigins: *`)
+- [ ] `JwtFilter` doesn't catch JWT parsing/validation exceptions — an invalid/stale `Authorization` header (e.g. a token signed under a rotated `jwt.secret`) throws and aborts the whole request (including `/sign-in`, since the filter runs on every route) instead of just skipping authentication
 - [ ] OWASP Top 10 security review (never formally done)
 - [ ] Migrate the schema to a versioned migration tool (Flyway/Liquibase) instead of `ddl-auto`
+- [ ] Activity icons: `ActivityType.iconAddress` / `UserActivity.activityTypeIcon` already exist on the backend but aren't consumed — `frontend/.../models/dashboard/activity/UserActivity.d.ts` still has the old `activityType: ActivityType` enum field, and `activity-feed.html` hardcodes the icon per type via an if/else instead of using the address the backend sends; update the frontend model to carry `activityTypeIcon` and have the icon come from that value
 - [ ] Known bug: SLA/timestamp display off by ~2 hours on a deployed environment, not reproducible locally — suspected UTC vs. `Europe/Paris` mismatch; keep timestamps in UTC end-to-end and only convert at the display layer
 
 ## Other
