@@ -335,10 +335,18 @@ VALUES (5, 1, '2026-04-11 09:12:00'),
 INSERT INTO knowledge_versions (id_version, id_knowledge)
 VALUES (3, 1);
 
-INSERT INTO activity (id_app_user, timestamp, description, activity_type)
-VALUES (5, NOW(), 'A écrit un commentaire sur le ticket #1', 'COMMENT'),
-       (6, '2024-04-06 09:08:07', 'A publié un procedure sur la connaissance #1', 'PROCEDURE'),
-       (24, '2026-05-21 15:32:00', 'A ouvert le ticket #17', 'TICKET')
+INSERT INTO activity_type (designation, name, icon_address)
+VALUES ('TICKET', 'Ticket', 'ph-ticket'),
+       ('COMMENT', 'Commentaire', 'ph-chat'),
+       ('PROCEDURE', 'Procédure', 'ph-article'),
+       ('ASSIGNMENT', 'Attribution', 'ph-hand-deposit'),
+       ('USER', 'Utilisateur', 'ph-user'),
+       ('OTHER', 'Autre', 'ph-bookmark');
+
+INSERT INTO activity (id_app_user, timestamp, description, id_activity_type)
+VALUES (5, NOW(), 'A écrit un commentaire sur le ticket #1', 2),
+       (6, '2024-04-06 09:08:07', 'A publié un procedure sur la connaissance #1', 3),
+       (24, '2026-05-21 15:32:00', 'A ouvert le ticket #17', 1)
 
 
 
