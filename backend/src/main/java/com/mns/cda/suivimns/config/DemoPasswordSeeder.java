@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 /**
- * Turns the {seed-role} placeholders left in data-init.sql into real
+ * Turns the {seed-role} placeholders left in data-init.sql / data-prod.sql into real
  * bcrypt hashes, using the app's own PasswordEncoder. Runs after SQL init and
  * is a no-op wherever the placeholders aren't found — e.g. a schema seeded
  * from a real environment.
