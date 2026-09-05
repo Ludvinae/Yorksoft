@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "shell": "bash",
+            "command": "git rev-parse --is-inside-work-tree >/dev/null 2>&1 || exit 0; changes=$(git status --porcelain 2>/dev/null); if [ -z \"$changes\" ]; then exit 0; fi; today=$(date +%Y-%m-%d); logged=$(grep -c \"^## $today\" docs/dev/journal.md 2>/dev/null); logged=${logged:-0}; if [ \"$logged\" -eq 0 ]; then printf \"{\\\"systemMessage\\\": \\\"Reminder: docs/dev/journal.md has no entry for %s yet - add one summarizing this session before wrapping up.\\\"}\" \"$today\"; fi; exit 0"
+          }
+        ]
+      }
+    ]
+  }
+}
