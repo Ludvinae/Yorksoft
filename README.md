@@ -20,7 +20,7 @@ The business context is a fictional software vendor, **YorkSoft** (hence the rep
 ## Features
 
 - **Full ticket lifecycle**: opening, qualification (theme/urgency/impact), automatic priority and SLA calculation, assignment, handling, on-hold states (waiting on client / third party), resolution, closing.
-- **Role-based dashboards**: KPIs and charts for administrators, directors, managers and technicians.
+- **Role-based dashboards**: KPIs, charts and a recent-activity feed for administrators, directors, managers and technicians.
 - **Business reference data management** (full CRUD, admin-only): software and software types, versions and version types, themes, urgency levels, impact levels, statuses.
 - **Client records** and management of the software licenses tied to them.
 - **Comment thread and activity history** on every ticket, for traceability of exchanges and actions.
@@ -38,7 +38,7 @@ The business context is a fictional software vendor, **YorkSoft** (hence the rep
 | **API documentation** | Auto-generated OpenAPI / Swagger UI (springdoc) |
 | **CI/CD** | GitHub Actions (build, tests, Docker image, deployment) |
 
-Design rationale and details: see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+Design rationale and details: see [Documentation](#documentation) below.
 
 ## Design
 
@@ -83,8 +83,10 @@ The app is served on `http://localhost:4200` and calls the API on `http://localh
 
 ## Documentation
 
-- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — architecture, tech choices, data model (MCD/MLD), roles and security
-- [docs/API.md](docs/API.md) — authentication, roles, REST API resources
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — project-wide overview, security model, known issues
+- [backend/docs/ARCHITECTURE.md](backend/docs/ARCHITECTURE.md) — backend stack, data model (MCD/MLD), ticket lifecycle
+- [backend/docs/API.md](backend/docs/API.md) — authentication, roles, REST API resources
+- [frontend/docs/ARCHITECTURE.md](frontend/docs/ARCHITECTURE.md) — frontend stack, project layout
 
 ## Project status
 

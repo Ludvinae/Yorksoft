@@ -31,7 +31,7 @@ Authorization: Bearer <jwt>
 
 The token embeds the user's role (`role`), id (`id`), name (`name`) and rank (`rank`), derived from the account subtype (`Admin` / `Director` / `Manager` / `Technician` / `Client`).
 
-> The current implementation issues tokens with no expiration claim — see [ARCHITECTURE.md](ARCHITECTURE.md#security) for the planned fix (short-lived JWTs + refresh).
+> The current implementation issues tokens with no expiration claim — see [../../docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md#security) for the planned fix (short-lived JWTs + refresh).
 
 A `401 Unauthorized` is returned on failed authentication; a `403 Forbidden` if the JWT's role lacks the rights required on the called route.
 
@@ -45,7 +45,7 @@ A `401 Unauthorized` is returned on failed authentication; a `403 Forbidden` if 
 | `TECHNICIAN` | Works assigned tickets |
 | `CLIENT` | Opens and tracks their own tickets |
 
-Permissions are enforced on the backend (`@IsAdmin`, `@IsManager`, `@IsTechnician`, `@IsDirector`, `@IsClient`, `@IsEmployee`, `@IsUser` annotations — see [ARCHITECTURE.md](ARCHITECTURE.md#security)), not only hidden in the frontend.
+Permissions are enforced on the backend (`@IsAdmin`, `@IsManager`, `@IsTechnician`, `@IsDirector`, `@IsClient`, `@IsEmployee`, `@IsUser` annotations — see [../../docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md#security)), not only hidden in the frontend.
 
 ## Main resources
 
@@ -69,7 +69,7 @@ All routes are relative to the backend root (`http://localhost:8080` locally). S
 | Themes | `/theme` | Ticket theme reference data |
 | Urgency / Impact | `/urgency`, `/impact` | Reference data used in priority calculation |
 | Statuses | `/status` | Status reference data |
-| Dashboards | `/dashboard/{timeframeInDays}` | Aggregated KPIs per role |
+| Dashboards | `/dashboard/{timeframeInDays}` | Aggregated KPIs and recent-activity feed per role |
 
 ## Error format
 

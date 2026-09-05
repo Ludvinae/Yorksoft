@@ -1,3 +1,0 @@
-- [Dev journal auto-update](feedback_dev_journal.md) — add an entry to docs/dev/journal.md at end of each session, automatically
-- [Dev todo list](project_dev_todo_list.md) — docs/dev/todo.md is the feature backlog (front/back/other), keep it current
-- [Docs language](feedback_docs_language.md) — all project documentation must be written in English, even if the session is in French
