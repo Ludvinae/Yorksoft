@@ -12,14 +12,17 @@ import com.mns.cda.suivimns.model.Technician;
 import com.mns.cda.suivimns.model.Director;
 import com.mns.cda.suivimns.security.AppUserDetails;
 import com.mns.cda.suivimns.security.IsAdmin;
+import com.mns.cda.suivimns.security.LoginAttemptService;
 import com.mns.cda.suivimns.service.entity.*;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -46,6 +49,7 @@ public class AuthController {
     protected final DirectorMapper directorMapper;
 
     protected final AuthenticationProvider authenticationProvider;
+    protected final LoginAttemptService loginAttemptService;
 
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
@@ -108,11 +112,26 @@ public class AuthController {
 
     @PostMapping("/log-in")
     public ResponseEntity<String> logIn(
-            @RequestBody UserLoginDto user) {
+            @RequestBody UserLoginDto user,
+            HttpServletRequest request) {
+
+        String email = user.email() == null ? "" : user.email().toLowerCase();
+        String attemptKey = request.getRemoteAddr() + ":" + email;
+
+        if (loginAttemptService.isBlocked(attemptKey)) {
+            long retryAfterSeconds = loginAttemptService.secondsUntilUnblocked(attemptKey);
+            logger.warn("Trop de tentatives de connexion pour {}, blocage encore {}s", user.email(), retryAfterSeconds);
+            return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
+                    .header(HttpHeaders.RETRY_AFTER, String.valueOf(retryAfterSeconds))
+                    .build();
+        }
+
         logger.debug("Tentative de connexion de {}", user.email());
         try {
             AppUserDetails appUser = (AppUserDetails) authenticationProvider
                     .authenticate(new UsernamePasswordAuthenticationToken(user.email(), user.password())).getPrincipal();
+
+            loginAttemptService.registerSuccess(attemptKey);
 
             // HERITAGE
             String role = appUser.getManager() != null
@@ -142,6 +161,7 @@ public class AuthController {
             logger.info("Connexion réussie pour {}: {}", user.email(), role);
             return new ResponseEntity<>(jwt, HttpStatus.OK);
         } catch (AuthenticationException e) {
+            loginAttemptService.registerFailure(attemptKey);
             logger.warn("Échec de connexion : {}", user.email());
             return new ResponseEntity<>( HttpStatus.UNAUTHORIZED);
         }

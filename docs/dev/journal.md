@@ -2,6 +2,11 @@
 
 History of design/architecture decisions, session milestones, and choices made along the way — **not** a code changelog (see git history for that). Organized by date, most recent session on top. Update at the end of each work session with Claude.
 
+## 2026-09-08
+
+- Fixed `JwtFilter`: it ran on every route (including public ones like `/log-in`) but didn't catch JWT parsing/validation exceptions, so an invalid/expired/mis-signed `Authorization` header (e.g. after rotating the JWT secret) made the whole request fail instead of just staying unauthenticated. Now catches `JwtException`/`IllegalArgumentException`/`UsernameNotFoundException`, clears the security context, and lets the chain continue; also guards the `Bearer ` prefix before `substring(7)` to avoid a `StringIndexOutOfBoundsException` on a malformed header. Added `JwtFilterUnitTest`.
+- Added anti-brute-force protection on `/log-in`: `LoginAttemptService`, an in-memory fixed-window counter keyed by `IP:email` (`app.login.max-attempts`, default 5; `app.login.window-seconds`, default 600). Blocked requests get `429` + `Retry-After`; a successful login resets the counter for that key. Decision: hand-rolled `ConcurrentHashMap` counter instead of Bucket4j — app isn't deployed behind a load balancer or multiple instances, so in-memory state resetting on redeploy isn't a concern, and avoiding the extra dependency was preferred. Window is fixed (resets entirely once expired), not sliding — deemed sufficient for basic brute-force protection. Added `LoginAttemptServiceUnitTest`.
+
 ## 2026-09-05
 
 - Added `docs/RULES.md`: no code change without an explicit request (ask when in doubt), and documentation must live in the `/docs` folder matching its scope (root = general/cross-cutting, `backend/docs` / `frontend/docs` = app-specific).
