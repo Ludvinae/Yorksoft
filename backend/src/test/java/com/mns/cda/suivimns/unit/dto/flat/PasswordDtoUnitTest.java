@@ -104,7 +104,7 @@ public class PasswordDtoUnitTest {
 
     @Test
     public void appUserWithValidData_shouldBeValid() {
-        PasswordDto password = new PasswordDto("Test old password", "Test new password");
+        PasswordDto password = new PasswordDto("Testoldpassword1", "Testnewpassword1");
 
         Assertions.assertTrue(
                 validator.validate(password).isEmpty(),
