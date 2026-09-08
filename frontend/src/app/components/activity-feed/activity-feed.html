@@ -12,17 +12,7 @@
         <div class="flex gap-3 items-start">
 
           <div class="mt-1">
-            @if (activity.activityType == ActivityType.TICKET) {
-              <i class="ph ph-ticket text-xl"></i>
-            } @else if (activity.activityType == ActivityType.PROCEDURE) {
-              <i class="ph ph-article text-xl"></i>
-            } @else if (activity.activityType == ActivityType.COMMENT) {
-              <i class="ph ph-chat text-xl"></i>
-            } @else if (activity.activityType == ActivityType.ASSIGNMENT) {
-              <i class="ph ph-hand-deposit text-xl"></i>
-            } @else {
-              <i class="ph ph-bookmark text-xl"></i>
-            }
+            <i class = "ph text-xl" [class]="activity.activityTypeIcon"></i>
           </div>
 
           <div class="flex-1">

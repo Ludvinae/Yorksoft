@@ -3,4 +3,6 @@ export enum ActivityType {
   COMMENT = 'COMMENT',
   PROCEDURE = 'PROCEDURE',
   ASSIGNMENT = 'ASSIGNMENT',
+  USER = 'USER',
+  OTHER = 'OTHER',
 }

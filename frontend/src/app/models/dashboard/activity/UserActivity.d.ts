@@ -4,4 +4,6 @@ type UserActivity = {
   activityDescription: string;
   activityTimestamp: Date;
   activityType: ActivityType;
+  activityTypeName: string;
+  activityTypeIcon: string;
 }
