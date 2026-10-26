@@ -1,4 +1,54 @@
-<app-title-client>
+<app-title-bar
+  title="Clients"
+  searchPlaceholder="Rechercher un client..."
+  (search)="onSearch($event)">
+
+  <div pageActions>
+    <button class="btn btn-ghost btn-circle">
+      <svg xmlns="http://www.w3.org/2000/svg"
+           class="h-7 w-7"
+           fill="none"
+           viewBox="0 0 24 24"
+           stroke="currentColor">
+        <path stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11
+                     a6.002 6.002 0 00-4-5.659V5
+                     a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159
+                     c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1
+                     a3 3 0 11-6 0v-1m6 0H9"/>
+      </svg>
+    </button>
+  </div>
+
+  <div filters class="flex flex-wrap items-center gap-2">
+
+    <button
+      class="btn"
+      [class.btn-neutral]="buttonState == 'all'"
+      (click)="setFilter('all')">
+
+      Tous
+    </button>
+
+    <button
+      class="btn"
+      [class.btn-neutral]="buttonState == 'asking'"
+      (click)="setFilter('asking')">
+
+      En demande
+    </button>
+
+    <button
+      class="btn"
+      [class.btn-neutral]="buttonState == 'important'"
+      (click)="setFilter('important')">
+
+      Importants
+    </button>
+
+  </div>
 
   <div class="flex-1">
 
@@ -75,4 +125,4 @@
 
   <app-footer-client></app-footer-client>
 
-</app-title-client>
+</app-title-bar>

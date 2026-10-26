@@ -9,6 +9,11 @@ import { AssignTicketModal } from '../../../components/ticket/assign-ticket-moda
 import { BadgePriority } from '../../../components/ticket/badge-priority/badge-priority';
 import { BadgeSla } from '../../../components/ticket/badge-sla/badge-sla';
 import { StatusLabel } from '../../../pipe/StatusLabel';
+import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../../services/business/auth-service';
+import { UserPreferencesService } from '../../../services/business/user-preferences-service';
+import { TicketFilterState } from '../../../services/ui/ticket-filter-state';
+import { TicketFilterStateEnum } from '../../../models/enum/ticket-filter-state-enum';
 
 @Component({
   selector: 'app-ticket-list',
@@ -21,6 +26,7 @@ import { StatusLabel } from '../../../pipe/StatusLabel';
     BadgePriority,
     BadgeSla,
     StatusLabel,
+    FormsModule,
   ],
   templateUrl: './ticket-list.html',
   styleUrl: './ticket-list.css',
@@ -28,14 +34,33 @@ import { StatusLabel } from '../../../pipe/StatusLabel';
 export class TicketList implements OnInit {
   ticketService = inject(TicketService);
   storeService = inject(TicketStoreService);
+  auth = inject(AuthService);
+  preferences = inject(UserPreferencesService);
+  filterState = inject(TicketFilterState);
 
   baseRoute = '/ticket/';
   selectedTicket: TicketAssignDto | null = null;
+
+  buttonState = this.filterState.filter;
+  currentUserRole: string | undefined = undefined;
+  showClosedTickets = true;
 
   @ViewChild(AssignTicketModal)
   assignModal!: AssignTicketModal;
 
   ngOnInit() {
+    const preference = this.preferences.getPreferences();
+    this.currentUserRole = this.auth.jwtInfo()?.role;
+
+    this.showClosedTickets = preference.showClosedTickets;
+    this.storeService.setShowClosedTickets(this.showClosedTickets);
+
+    if (!this.showClosedTickets) {
+      this.storeService.updateFilters({
+        statusesExcluded: ['CLOSED'],
+      });
+    }
+
     this.storeService.loadTickets();
   }
 
@@ -95,4 +120,26 @@ export class TicketList implements OnInit {
       return remainingMs < 1000 * 60 * 60 * 18; // 18h restantes
     }
   }
+
+  setFilter(filter: TicketFilterStateEnum): void {
+    this.storeService.resetFilters();
+
+    this.filterState.setFilter(filter);
+
+    this.storeService.loadTickets();
+  }
+
+  onSearch(value: string): void {
+    this.storeService.updateFilters({ keyword: value });
+  }
+
+  onClosedToggleChange(): void {
+    this.preferences.updatePreferences({
+      showClosedTickets: this.showClosedTickets,
+    });
+
+    this.storeService.setShowClosedTickets(this.showClosedTickets);
+  }
+
+  protected readonly TicketFilterStateEnum = TicketFilterStateEnum;
 }

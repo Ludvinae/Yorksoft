@@ -1,30 +1,20 @@
-<app-page-header title="Tickets">
+<app-page-header [title]="title">
 
   <div pageActions>
-    <label class="label cursor-pointer gap-2">
-      <span class="label-text">Afficher les tickets clos</span>
-
-      <input
-        type="checkbox"
-        class="toggle toggle-primary"
-        [(ngModel)]="showClosedTickets"
-        (change)="onClosedToggleChange()"
-      />
-    </label>
+    <ng-content select="[pageActions]"></ng-content>
   </div>
 
   <!-- Search + filters -->
   <div class="flex flex-wrap items-center gap-4 mb-6 shrink-0">
 
     <!-- Search -->
-
     <label class="input input-bordered flex items-center gap-2 w-full max-w-xl">
 
       <input
         type="text"
         class="grow"
-        placeholder="Rechercher un ticket..."
-        [ngModel]="search"
+        [placeholder]="searchPlaceholder"
+        [ngModel]="searchValue"
         (ngModelChange)="onSearch($event)"
       />
 
@@ -45,49 +35,7 @@
     </label>
 
     <!-- Filters -->
-    <button
-      class="btn"
-      [class.btn-neutral]="buttonState() === TicketFilterStateEnum.ALL"
-      (click)="setFilter(TicketFilterStateEnum.ALL)">
-
-      Tous
-    </button>
-
-    @if (currentUserRole == "TECHNICIAN") {
-      <button
-        class="btn"
-        [class.btn-neutral]="buttonState() === TicketFilterStateEnum.ASSIGNED"
-        (click)="setFilter(TicketFilterStateEnum.ASSIGNED)">
-
-        Attribués
-      </button>
-    }
-    @else if (currentUserRole == 'MANAGER') {
-      <button
-        class="btn"
-         [class.btn-neutral]="buttonState() === TicketFilterStateEnum.OPEN"
-        (click)="setFilter(TicketFilterStateEnum.OPEN)">
-
-        A attribuer
-      </button>
-    }
-    @else if (currentUserRole == 'DIRECTOR') {
-      <button
-        class="btn"
-        [class.btn-neutral]="buttonState() === TicketFilterStateEnum.OPEN"
-        (click)="setFilter(TicketFilterStateEnum.OPEN)">
-
-        A attribuer
-      </button>
-    }
-
-    <button
-      class="btn"
-      [class.btn-neutral]="buttonState() === TicketFilterStateEnum.PRIORITY"
-      (click)="setFilter(TicketFilterStateEnum.PRIORITY)">
-
-      Prioritaires
-    </button>
+    <ng-content select="[filters]"></ng-content>
 
   </div>
 
