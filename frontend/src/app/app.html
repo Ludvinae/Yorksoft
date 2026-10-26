@@ -13,14 +13,16 @@
       />
 
       <!-- CONTENT -->
-      <div class="drawer-content flex flex-col h-screen">
+      <div class="drawer-content flex flex-col h-dvh">
 
         <app-header-mobile
+          class="shrink-0"
           [isOpen]="isDrawerOpen"
           (toggleMenu)="toggleDrawer()"
         ></app-header-mobile>
 
-        <div class="flex-1">
+        <!-- 7rem = header-mobile's h-28: keep in sync. Tells page-header how much height is left below the header. -->
+        <div class="flex-1 min-h-0 overflow-y-auto [--page-height:calc(100dvh-7rem)]">
           <router-outlet></router-outlet>
         </div>
 

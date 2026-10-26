@@ -1,16 +1,12 @@
-<div class="flex flex-row px-2">
-  <div class="mx-5">
-    <h1 class="text-5xl font-bold">Nouveau ticket</h1>
-    <p>Sélectionnez un client pour commencer</p>
-  </div>
-  <div class="mx-5">
-    <button
-      class="btn btn-primary mt-6 self-end"
-      [disabled]="!selectedClient"
-      (click)="continue()">
-      Continuer
-    </button>
-  </div>
+<div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+  <p class="text-base-content/70">Sélectionnez un client pour commencer</p>
+
+  <button
+    class="btn btn-primary"
+    [disabled]="!selectedClient"
+    (click)="continue()">
+    Continuer
+  </button>
 </div>
 
 

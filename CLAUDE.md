@@ -30,7 +30,7 @@ Each has its own `Dockerfile` and `compose.yml`; there is no unified root `docke
 - Dev server: `npm start` (http://localhost:4200, calls the API at http://localhost:8080 — see `src/environments/environment.development.ts`)
 - Build: `npm run build`
 - Run all tests (Vitest): `npm test`
-- Run a single test file: `npx vitest run src/app/path/to/file.spec.ts`
+- Run a single test file: `npx ng test --watch=false --include src/app/path/to/file.spec.ts` (don't call `npx vitest` directly — Vitest is configured by Angular's `@angular/build:unit-test` builder, so running it bare fails with `describe is not defined`)
 - No lint script is configured. `.prettierrc` exists but isn't wired to an npm script.
 
 ## Architecture

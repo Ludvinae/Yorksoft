@@ -3,10 +3,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ClientSearch } from '../../../components/ticket/client-search/client-search';
 import { NewTicketForm } from '../../../components/ticket/new-ticket-form/new-ticket-form';
 import { RouterLink } from '@angular/router';
+import { PageHeader } from '../../../components/layout/page-header/page-header';
 
 @Component({
   selector: 'app-ticket-new',
-  imports: [ReactiveFormsModule, FormsModule, ClientSearch, NewTicketForm, RouterLink],
+  imports: [ReactiveFormsModule, FormsModule, ClientSearch, NewTicketForm, RouterLink, PageHeader],
   templateUrl: './ticket-new.html',
   styleUrl: './ticket-new.css',
 })

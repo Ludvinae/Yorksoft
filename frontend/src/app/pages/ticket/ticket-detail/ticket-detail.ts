@@ -14,6 +14,7 @@ import {KnowledgeService} from '../../../services/api/knowledge-service';
 import {KnowledgeCreateModal} from '../../../components/knowledge-create-modal/knowledge-create-modal';
 import {BadgePriority} from '../../../components/ticket/badge-priority/badge-priority';
 import { ClientService } from '../../../services/api/client-service';
+import { PageHeader } from '../../../components/layout/page-header/page-header';
 
 @Component({
   selector: 'app-ticket-detail',
@@ -27,6 +28,7 @@ import { ClientService } from '../../../services/api/client-service';
     KnowledgeCreateModal,
     BadgePriority,
     ReactiveFormsModule,
+    PageHeader,
   ],
   templateUrl: './ticket-detail.html',
   styleUrl: './ticket-detail.css',
