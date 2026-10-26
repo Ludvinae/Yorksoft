@@ -1,4 +1,4 @@
-<app-title title="Type de logiciels" route="software-type"></app-title>
+<app-title title="Type de logiciels" route="software-type">
 
 <app-generic-list
   [data]="softwareTypeList()"
@@ -12,3 +12,5 @@
 <ng-template #softwareTypeCard let-softwareType >
   <h3 class="font-bold text-lg">{{ softwareType.designation }}</h3>
 </ng-template>
+
+</app-title>

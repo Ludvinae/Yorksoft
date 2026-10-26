@@ -1,9 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { AuthService } from '../../services/business/auth-service';
+import { PageHeader } from '../../components/layout/page-header/page-header';
 
 @Component({
   selector: 'app-settings',
-  imports: [],
+  imports: [PageHeader],
   templateUrl: './settings.html',
   styleUrl: './settings.css',
 })

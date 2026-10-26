@@ -1,5 +1,10 @@
-<h1 class="text-3xl">{{ title }}</h1>
-<div class="inline">
-  <button type="button" class="btn btn-primary btn-sm mx-3" [routerLink]="createRoute">Créer</button>
-  <button type="button" class="btn btn-secondary btn-sm mx-3" routerLink="../">Retour</button>
-</div>
+<app-page-header [title]="title">
+
+  <div pageActions>
+    <button type="button" class="btn btn-primary btn-sm" [routerLink]="createRoute">Créer</button>
+    <button type="button" class="btn btn-secondary btn-sm" routerLink="../">Retour</button>
+  </div>
+
+  <ng-content></ng-content>
+
+</app-page-header>

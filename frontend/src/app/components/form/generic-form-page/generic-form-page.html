@@ -1,54 +1,50 @@
+<app-page-header [title]="title ?? ''">
 
-<!-- titre -->
-@if (title) {
-  <h1 class="text-3xl mb-4">{{ title }}</h1>
-}
+  <fieldset class="fieldset bg-base-200 border-base-300 rounded-box max-w-2xl border p-4">
 
-<fieldset class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
+    <legend class="fieldset-legend">{{ routeId }}</legend>
 
-  <legend class="fieldset-legend">{{ routeId }}</legend>
-
-
-
-  <!-- loading -->
-  @if (loading) {
-    <div class="flex justify-center items-center h-40">
-      <span class="loading loading-spinner loading-lg"></span>
-    </div>
-  } @else {
-
-    <!-- erreur -->
-    @if (error) {
-      <div class="alert alert-error mb-4">
-        {{ error }}
+    <!-- loading -->
+    @if (loading) {
+      <div class="flex justify-center items-center h-40">
+        <span class="loading loading-spinner loading-lg"></span>
       </div>
-    }
+    } @else {
 
-    <!-- formulaire -->
-    <form [formGroup]="formGroup" (ngSubmit)="onSubmit()" class="card bg-base-200 p-6 shadow">
+      <!-- erreur -->
+      @if (error) {
+        <div class="alert alert-error mb-4">
+          {{ error }}
+        </div>
+      }
 
-      <!-- contenu projeté -->
-      <ng-content></ng-content>
+      <!-- formulaire -->
+      <form [formGroup]="formGroup" (ngSubmit)="onSubmit()" class="card bg-base-200 p-6 shadow">
 
-      <!-- actions -->
-      <div class="flex gap-2 mt-4">
-        <button type="submit" class="btn btn-primary">
-          {{ submitLabel }}
-        </button>
+        <!-- contenu projeté -->
+        <ng-content></ng-content>
 
-        @if (isEditMode) {
-          <button type="button" class="btn" routerLink="../../">
+        <!-- actions -->
+        <div class="flex gap-2 mt-4">
+          <button type="submit" class="btn btn-primary">
+            {{ submitLabel }}
+          </button>
+
+          @if (isEditMode) {
+            <button type="button" class="btn" routerLink="../../">
+              Annuler
+            </button>
+          } @else {
+          <button type="button" class="btn" routerLink="../">
             Annuler
           </button>
-        } @else {
-        <button type="button" class="btn" routerLink="../">
-          Annuler
-        </button>
-        }
+          }
 
-      </div>
+        </div>
 
-    </form>
-  }
+      </form>
+    }
 
-</fieldset>
+  </fieldset>
+
+</app-page-header>

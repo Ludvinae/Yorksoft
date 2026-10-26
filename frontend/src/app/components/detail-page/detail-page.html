@@ -1,8 +1,13 @@
-<div class="p-4">
+<app-page-header [title]="title ?? ''">
 
-  @if (title) {
-    <h1 class="text-3xl mb-4">{{ title }}</h1>
-  }
+  <div pageActions>
+    <button class="btn btn-sm" [routerLink]="updateRoute">
+      Modifier
+    </button>
+    <button class="btn btn-sm" routerLink="../">
+      Retour
+    </button>
+  </div>
 
   @if (loading) {
     <div class="flex justify-center items-center h-40">
@@ -15,16 +20,7 @@
   }
 
   @if (error) {
-    <div class="alert alert-error">{{ error }}</div>
+    <div class="alert alert-error mt-4">{{ error }}</div>
   }
 
-</div>
-
-<div class="mt-4 inline mx-3">
-  <button class="btn btn-sm mb-4" [routerLink]="updateRoute">
-    Modifier
-  </button>
-  <button class="btn btn-sm mb-4" routerLink="../">
-    Retour
-  </button>
-</div>
+</app-page-header>

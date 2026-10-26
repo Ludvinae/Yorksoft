@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
+import { PageHeader } from '../../components/layout/page-header/page-header';
 
 @Component({
   selector: 'app-knowledge',
-  imports: [],
+  imports: [PageHeader],
   templateUrl: './knowledge.html',
   styleUrl: './knowledge.css',
 })

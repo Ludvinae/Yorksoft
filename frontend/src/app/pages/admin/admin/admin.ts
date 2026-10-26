@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { AdminMenu, AdminMenuItems } from '../../../components/admin/admin-menu/admin-menu';
+import { PageHeader } from '../../../components/layout/page-header/page-header';
 
 @Component({
   selector: 'app-admin',
-  imports: [AdminMenu],
+  imports: [AdminMenu, PageHeader],
   templateUrl: './admin.html',
   styleUrl: './admin.css',
 })

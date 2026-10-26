@@ -1,10 +1,11 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { PageHeader } from '../../layout/page-header/page-header';
 
 @Component({
   selector: 'app-generic-form-page',
-  imports: [FormsModule, RouterLink, ReactiveFormsModule],
+  imports: [FormsModule, RouterLink, ReactiveFormsModule, PageHeader],
   templateUrl: './generic-form-page.html',
   styleUrl: './generic-form-page.css',
 })
