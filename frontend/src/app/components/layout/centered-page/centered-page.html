@@ -1,0 +1,13 @@
+<div class="min-h-screen flex flex-col items-center justify-center gap-2 p-6 text-center">
+
+  <h1 class="text-3xl font-bold">{{ title }}</h1>
+
+  @if (subtitle) {
+    <h2 class="text-base text-base-content/70">{{ subtitle }}</h2>
+  }
+
+  <div class="mt-4">
+    <ng-content></ng-content>
+  </div>
+
+</div>

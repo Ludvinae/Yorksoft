@@ -58,6 +58,9 @@ public class SecurityConfig {
         corsConfiguration.setAllowedOrigins(List.of("*"));
         corsConfiguration.setAllowedMethods(List.of("GET", "POST", "DELETE", "PUT", "PATCH"));
         corsConfiguration.setAllowedHeaders(List.of("*"));
+        // Expose Retry-After pour que le frontend puisse afficher le delai d'attente
+        // en cas de blocage anti-brute-force (429) sur /log-in
+        corsConfiguration.setExposedHeaders(List.of("Retry-After"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", corsConfiguration);

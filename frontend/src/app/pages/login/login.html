@@ -1,7 +1,4 @@
-<div class="container">
-  <div class="login">
-    <H1>YorkSoft</H1>
-    <H2>Connectez-vous au portail employé</H2>
+<app-centered-page title="YorkSoft" subtitle="Connectez-vous au portail employé">
     <form autocomplete="on" [formGroup]="form" (ngSubmit)="onLogin()">
       <fieldset class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4" >
         <legend class="fieldset-legend">Login</legend>
@@ -29,8 +26,5 @@
         <button class="btn btn-neutral mt-4" type="submit">Login</button>
       </fieldset>
     </form>
-
-  </div>
-</div>
-
+</app-centered-page>
 

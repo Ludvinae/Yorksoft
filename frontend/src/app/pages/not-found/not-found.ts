@@ -1,10 +1,11 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../services/business/auth-service';
+import { CenteredPage } from '../../components/layout/centered-page/centered-page';
 
 @Component({
   selector: 'app-not-found',
-  imports: [RouterLink],
+  imports: [RouterLink, CenteredPage],
   templateUrl: './not-found.html',
   styleUrl: './not-found.css',
 })

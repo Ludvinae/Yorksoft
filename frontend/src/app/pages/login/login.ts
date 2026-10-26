@@ -1,11 +1,13 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from '../../services/business/auth-service';
+import { CenteredPage } from '../../components/layout/centered-page/centered-page';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CenteredPage],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
@@ -34,9 +36,15 @@ export class Login {
             this.router.navigate(['/dashboard']);
           }
         },
-        error: (err) => {
-          // this.notification.open("Mauvais login / mot de passe", "error")
-          alert('Mauvais login / mot de passe');
+        error: (err: HttpErrorResponse) => {
+          if (err.status === 429) {
+            const retryAfter = err.headers.get('Retry-After');
+            const wait = retryAfter ? ` Réessayez dans ${retryAfter}s.` : '';
+            alert(`Trop de tentatives de connexion.${wait}`);
+          } else {
+            // this.notification.open("Mauvais login / mot de passe", "error")
+            alert('Mauvais login / mot de passe');
+          }
         },
       });
     }
