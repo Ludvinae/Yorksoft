@@ -5,10 +5,11 @@ import { AuthService } from '../../../services/business/auth-service';
 import { UserPreferencesService } from '../../../services/business/user-preferences-service';
 import { TicketFilterStateEnum } from '../../../models/enum/ticket-filter-state-enum';
 import { TicketFilterState } from '../../../services/ui/ticket-filter-state';
+import { PageHeader } from '../../layout/page-header/page-header';
 
 @Component({
   selector: 'app-title-bar',
-  imports: [ReactiveFormsModule, FormsModule],
+  imports: [ReactiveFormsModule, FormsModule, PageHeader],
   templateUrl: './title-bar.html',
   styleUrl: './title-bar.css',
 })

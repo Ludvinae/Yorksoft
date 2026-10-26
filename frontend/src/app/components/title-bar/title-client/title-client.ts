@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { ClientStoreService } from '../../../services/business/client-store-service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { PageHeader } from '../../layout/page-header/page-header';
 
 @Component({
   selector: 'app-title-client',
-  imports: [ReactiveFormsModule, FormsModule],
+  imports: [ReactiveFormsModule, FormsModule, PageHeader],
   templateUrl: './title-client.html',
   styleUrl: './title-client.css',
 })
