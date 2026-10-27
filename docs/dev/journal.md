@@ -2,6 +2,14 @@
 
 History of design/architecture decisions, session milestones, and choices made along the way — **not** a code changelog (see git history for that). Organized by date, most recent session on top. Update at the end of each work session with Claude.
 
+## 2026-10-27
+
+- Second-row dashboard KPIs (time/throughput: résolution, prise en charge, appels…) moved onto the shared `kpi-card` on all four role dashboards, closing the 2026-10-26 open item about their misaligned values. `kpi-card` was generalized rather than forking a second "stat" component: `filters` is now optional (no filters = not clickable, no hover), `icon` optional, `value` nullable (renders `-`) with a `suffix` input for units. Icons were added to the second row for visual consistency with the first. Admin/director (and part of technician) second-row values are still hardcoded placeholders — only their markup was migrated.
+- KPI titles are forced to one line (`whitespace-nowrap truncate`, full title in a tooltip) so cards in a row keep equal height. Tried `text-xs` to make long titles fit; user found it too small, kept `text-sm`.
+- `ticket-new` wizard adapted to the `page-header` layout. Decision (user-chosen, mixed approach): step navigation actions go in the header's `pageActions` slot ("Continuer" on step 1, new "Changer de client" on step 2), but "Envoyer" stays at the bottom of the form, matching `generic-form-page`'s convention for long forms. Since a child component can't project into the parent's header slot, the wizard state (selected vs. confirmed client) moved up from `client-search` into `TicketNew`. Also added a DaisyUI `steps` indicator in place of the per-step help sentences, and a common `max-w-3xl` content width.
+- Fixed two `ticket-new` bugs found during the review: "Nouveau ticket" on the success screen routed to the current route (a no-op in Angular, so the wizard never reset) — now resets state in place; the theme "+" button looked up a non-existent dialog id. The modal was also only a stub (no submit/close), so it was completed (create → selects the new theme). Decision: the "+" is shown only to MANAGER/ADMIN, because `POST /theme` is `@IsManager` and technicians (who can also reach `ticket-new`) would just get a 403.
+- Hosting + CI/CD adaptation was initially logged here, then moved to `docs/dev/todo.md` at the user's request: backlog items don't belong in the journal.
+
 ## 2026-10-26
 
 - Fixed sidebar active-tab text color: `text-accent-content` is only guaranteed contrasted against `bg-accent`, not against the sidebar's actual `bg-base-200`, so on some DaisyUI themes the active tab label became illegible. Replaced with `bg-base-300 text-base-content font-semibold` (theme-safe pair) on both `nav-desktop` and `nav-mobile`; removed the now-dead `.text-outline` text-shadow workaround from `styles.css`.
