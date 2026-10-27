@@ -37,35 +37,41 @@
 
                 <div class="grid grid-cols-1 sm:grid-cols-3 sm:divide-x divide-y border rounded-xl overflow-hidden">
 
-                  <div class="p-4 flex flex-col items-center justify-center">
-                    <span class="text-sm opacity-70">Résolution</span>
-                    <span class="text-5xl font-black">80m</span>
-                  </div>
+                  <app-kpi-card
+                    title="Résolution"
+                    value="80m"
+                    icon="ph ph-check-circle"
+                  />
 
-                  <div class="p-4 flex flex-col items-center justify-center">
-                    <span class="text-sm opacity-70">Prise en charge</span>
-                    <span class="text-5xl font-black">40m</span>
-                  </div>
+                  <app-kpi-card
+                    title="Prise en charge"
+                    value="40m"
+                    icon="ph ph-hand-pointing"
+                  />
 
-                  <div class="p-4 flex flex-col items-center justify-center">
-                    <span class="text-sm opacity-70">Appels</span>
-                    <span class="text-5xl font-black">214s</span>
-                  </div>
+                  <app-kpi-card
+                    title="Appels"
+                    value="214s"
+                    icon="ph ph-phone"
+                  />
 
-                  <div class="p-4 flex flex-col items-center justify-center">
-                    <span class="text-sm opacity-70">Par technicien</span>
-                    <span class="text-5xl font-black">12.6</span>
-                  </div>
+                  <app-kpi-card
+                    title="Par technicien"
+                    value="12.6"
+                    icon="ph ph-users"
+                  />
 
-                  <div class="p-4 flex flex-col items-center justify-center">
-                    <span class="text-sm opacity-70">Résolus / jour</span>
-                    <span class="text-5xl font-black">14</span>
-                  </div>
+                  <app-kpi-card
+                    title="Résolus / jour"
+                    value="14"
+                    icon="ph ph-calendar-dot"
+                  />
 
-                  <div class="p-4 flex flex-col items-center justify-center">
-                    <span class="text-sm opacity-70">Clos / semaine</span>
-                    <span class="text-5xl font-black">122</span>
-                  </div>
+                  <app-kpi-card
+                    title="Clos / semaine"
+                    value="122"
+                    icon="ph ph-calendar-dots"
+                  />
 
                 </div>
               </div>

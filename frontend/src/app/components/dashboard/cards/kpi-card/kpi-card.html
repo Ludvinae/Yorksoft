@@ -1,21 +1,28 @@
 <!-- dashboard-kpi-card.component.html -->
 
-<div class="group flex justify-between items-center gap-4 p-2 transition-all duration-200
-            hover:bg-base-200 hover:shadow-md cursor-pointer card border border-base-300"
+<div class="group flex justify-between items-center gap-4 p-2 card border border-base-300"
+  [class]="filters ? 'transition-all duration-200 hover:bg-base-200 hover:shadow-md cursor-pointer' : ''"
   (click)="navigateToTickets()">
 
-  <div class="flex flex-col items-center">
-    <span class="text-sm opacity-70">
+  <div class="flex flex-col items-center min-w-0">
+    <span class="text-sm opacity-70 whitespace-nowrap truncate max-w-full" [title]="title">
       {{ title }}
     </span>
 
     <span class="text-2xl font-black" [class]="colorClass">
-      {{ value }}
+      @if (value != null) {
+        {{ value }}{{ suffix }}
+      } @else {
+        -
+      }
     </span>
   </div>
 
-  <div class="text-4xl opacity-70 group-hover:scale-110 transition-transform">
-    <i [class]="icon"></i>
-  </div>
+  @if (icon) {
+    <div class="text-4xl opacity-70 transition-transform"
+      [class]="filters ? 'group-hover:scale-110' : ''">
+      <i [class]="icon"></i>
+    </div>
+  }
 
 </div>

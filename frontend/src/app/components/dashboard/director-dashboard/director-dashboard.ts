@@ -1,11 +1,13 @@
 import { Component, inject, OnInit, Signal } from '@angular/core';
 import { DashboardService } from '../../../services/business/dashboard-service';
 import {ActivityFeed} from "../../activity-feed/activity-feed";
+import { KpiCard } from '../cards/kpi-card/kpi-card';
 
 @Component({
   selector: 'app-director-dashboard',
     imports: [
-        ActivityFeed
+        ActivityFeed,
+        KpiCard,
     ],
   templateUrl: './director-dashboard.html',
   styleUrl: './director-dashboard.css',

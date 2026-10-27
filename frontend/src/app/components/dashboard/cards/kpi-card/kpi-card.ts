@@ -11,15 +11,21 @@ import { TicketSearchCriteria } from '../../../../models/search/TicketSearchCrit
 })
 export class KpiCard {
   @Input({ required: true }) title!: string;
-  @Input({ required: true }) value!: string | number;
-  @Input({ required: true }) icon!: string;
-  @Input() filters: TicketSearchCriteria = {};
+  /** Shown as "-" when null (e.g. no data yet). */
+  @Input({ required: true }) value!: string | number | null;
+  /** Unit appended to the value (e.g. "m"), not shown when value is null. */
+  @Input() suffix = '';
+  @Input() icon?: string;
+  /** When set, clicking the card opens the ticket list with these filters; otherwise the card is not clickable. */
+  @Input() filters?: TicketSearchCriteria;
   @Input() colorClass = '';
 
   private router = inject(Router);
   private ticketStore = inject(TicketStoreService);
 
   navigateToTickets(): void {
+    if (!this.filters) return;
+
     this.ticketStore.setFilters(this.filters);
 
     this.router.navigate(['/ticket']);
