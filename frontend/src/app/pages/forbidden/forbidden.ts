@@ -1,22 +1,11 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
-import { AuthService } from '../../services/business/auth-service';
+import { Component } from '@angular/core';
 import { CenteredPage } from '../../components/layout/centered-page/centered-page';
+import { BackButton } from '../../components/layout/back-button/back-button';
 
 @Component({
   selector: 'app-forbidden',
-  imports: [RouterLink, CenteredPage],
+  imports: [CenteredPage, BackButton],
   templateUrl: './forbidden.html',
   styleUrl: './forbidden.css',
 })
-export class Forbidden implements OnInit {
-  auth = inject(AuthService);
-
-  route = signal<string>('/');
-
-  ngOnInit(): void {
-    if (this.auth.jwtInfo()) {
-      this.route.set('/dashboard');
-    }
-  }
-}
+export class Forbidden {}
