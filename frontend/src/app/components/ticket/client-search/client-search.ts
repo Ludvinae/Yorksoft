@@ -1,25 +1,28 @@
-import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { ClientStoreService } from '../../../services/business/client-store-service';
 
+/** Searchable client list; the parent page decides when the selection is confirmed. */
 @Component({
   selector: 'app-client-search',
-  imports: [ReactiveFormsModule, FormsModule],
+  imports: [FormsModule],
   templateUrl: './client-search.html',
   styleUrl: './client-search.css',
 })
 export class ClientSearch implements OnInit {
+  @Input() selectedClient: ClientListDto | null = null;
+
   @Output()
-  clientValidated = new EventEmitter<ClientListDto>();
+  clientSelected = new EventEmitter<ClientListDto>();
 
   storeService = inject(ClientStoreService);
 
   search = '';
   private searchTimeout: any;
 
-  selectedClient: ClientListDto | null = null;
-
   ngOnInit() {
+    // The store outlives this component: keep the input in sync with the filter it still applies
+    this.search = this.storeService.filters().keyword ?? '';
     this.storeService.loadClients();
   }
 
@@ -33,11 +36,6 @@ export class ClientSearch implements OnInit {
 
   selectClient(client: ClientListDto): void {
     this.selectedClient = client;
-  }
-
-  continue(): void {
-    if (!this.selectedClient) return;
-
-    this.clientValidated.emit(this.selectedClient);
+    this.clientSelected.emit(client);
   }
 }

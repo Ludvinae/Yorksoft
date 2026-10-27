@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output, signal } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output, signal, ViewChild } from '@angular/core';
 import { FieldSelect } from '../../form/field-select/field-select';
 import { FieldText } from '../../form/field-text/field-text';
 import { FieldTextarea } from '../../form/field-textarea/field-textarea';
@@ -59,7 +59,17 @@ export class NewTicketForm implements OnInit {
   listSoftware = toSignal(this.softwareService.getAll(), { initialValue: [] });
   listImpact = toSignal(this.impactService.getAll(), { initialValue: [] });
   listUrgency = toSignal(this.urgencyService.getAll(), { initialValue: [] });
-  listTheme = toSignal(this.themeService.getAll(), { initialValue: [] });
+  // Read from the service's signal (not a one-shot toSignal) so a theme created from the modal shows up
+  listTheme = this.themeService.themeList;
+
+  @ViewChild('themeModal') themeModal!: ElementRef<HTMLDialogElement>;
+  themeErrorMessage = signal<string | null>(null);
+  isCreatingTheme = signal(false);
+
+  get canCreateTheme(): boolean {
+    const role = this.auth.jwtInfo()?.role;
+    return role === 'MANAGER' || role === 'ADMIN';
+  }
 
   errorMessage = signal<string | null>(null);
   ticketCreated = signal(false);
@@ -69,6 +79,8 @@ export class NewTicketForm implements OnInit {
   listVersion = signal<VersionSelectDto[]>([]);
 
   ngOnInit(): void {
+    this.themeService.getAll().subscribe();
+
     this.ticketForm.get('idSoftware')?.valueChanges.subscribe((idSoftware) => {
       this.onSoftwareChange(idSoftware as number | null);
     });
@@ -173,11 +185,41 @@ export class NewTicketForm implements OnInit {
     });
   }
 
-  openCreateThematiqueModal(): void {
-    const modal = document.getElementById(
-      'createThemeModal'
-    ) as HTMLDialogElement;
+  openCreateThemeModal(): void {
+    this.themeForm.reset({ designation: '', code: '', description: '' });
+    this.themeErrorMessage.set(null);
+    this.themeModal.nativeElement.showModal();
+  }
 
-    modal.showModal();
+  createTheme(): void {
+    if (this.themeForm.invalid || this.isCreatingTheme()) return;
+
+    this.isCreatingTheme.set(true);
+    this.themeErrorMessage.set(null);
+
+    const { designation, code, description } = this.themeForm.getRawValue() as {
+      designation: string;
+      code: string;
+      description: string;
+    };
+    const theme: Theme = { idTheme: 0, designation, code, description: description || null };
+
+    this.themeService.create(theme).subscribe({
+      next: (created) => {
+        this.isCreatingTheme.set(false);
+        this.themeModal.nativeElement.close();
+        // Select the new theme in the ticket form
+        this.ticketForm.controls.idTheme.setValue(created.idTheme);
+      },
+      error: (err) => {
+        console.error(err);
+        this.isCreatingTheme.set(false);
+        this.themeErrorMessage.set(
+          err.status === 403
+            ? 'Vous n’avez pas les droits nécessaires.'
+            : 'La création de la thématique a échoué.',
+        );
+      },
+    });
   }
 }

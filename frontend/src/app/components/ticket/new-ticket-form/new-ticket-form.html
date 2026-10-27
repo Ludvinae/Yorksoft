@@ -1,5 +1,3 @@
-<p class="text-base-content/70 mb-4">Remplissez le formulaire</p>
-
 <div class="alert alert-info mb-4">
   Ticket pour :
   <strong>
@@ -61,8 +59,9 @@
         [errorMessages]="{
     required: 'L\'urgence est obligatoire'}"/>
 
-      <div>
+      <div class="flex items-end gap-2">
         <app-field-select
+          class="flex-1"
           labelKey="Thématique"
           [control]="ticketForm.controls.idTheme"
           [options]="listTheme()"
@@ -71,12 +70,16 @@
           placeholder="Choisir la thématique"
           [errorMessages]="{
     required: 'La thématique est obligatoire'}"/>
-        <button
-          type="button"
-          class="btn btn-outline"
-          (click)="openCreateThematiqueModal()">
-            ➕
-        </button>
+        <!-- Theme creation is manager/admin only on the API (@IsManager) -->
+        @if (canCreateTheme) {
+          <button
+            type="button"
+            class="btn btn-outline btn-square"
+            title="Nouvelle thématique"
+            (click)="openCreateThemeModal()">
+            <i class="ph ph-plus"></i>
+          </button>
+        }
       </div>
 
     </div>
@@ -121,29 +124,44 @@
 
 </form>
 
-<dialog class="modal">
-  <form>
-    <h2>Thématique</h2>
+<dialog #themeModal class="modal">
+  <div class="modal-box">
+    <h3 class="font-bold text-xl mb-4">Nouvelle thématique</h3>
 
-    <label>Désignation</label>
-    <app-field-text  labelKey="designation"
-                     [control]="themeForm.controls.designation"
-                     [errorMessages]="{
+    <form [formGroup]="themeForm" (ngSubmit)="createTheme()" class="flex flex-col gap-4">
+      <app-field-text labelKey="Désignation"
+                      [control]="themeForm.controls.designation"
+                      [errorMessages]="{
     required: 'La désignation est obligatoire'}"/>
 
-    <label>Code</label>
-    <app-field-text  labelKey="code"
-                     [control]="themeForm.controls.code"
-                     [errorMessages]="{
+      <app-field-text labelKey="Code"
+                      [control]="themeForm.controls.code"
+                      [errorMessages]="{
     required: 'Le code est obligatoire'}"/>
 
-    <label>Description</label>
-    <app-field-text  labelKey="description"
-                     [control]="themeForm.controls.description"
-                     [errorMessages]="{}"/>
+      <app-field-text labelKey="Description"
+                      [control]="themeForm.controls.description"
+                      [errorMessages]="{}"/>
 
+      @if (themeErrorMessage()) {
+        <div class="alert alert-error">
+          <span>{{ themeErrorMessage() }}</span>
+        </div>
+      }
+
+      <div class="modal-action">
+        <button type="button" class="btn" (click)="themeModal.close()">Annuler</button>
+        <button type="submit" class="btn btn-primary" [disabled]="themeForm.invalid || isCreatingTheme()">
+          @if (isCreatingTheme()) {
+            <span class="loading loading-spinner loading-sm"></span>
+          }
+          Créer
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <form method="dialog" class="modal-backdrop">
+    <button>Fermer</button>
   </form>
 </dialog>
-
-
-

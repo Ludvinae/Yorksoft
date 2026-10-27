@@ -1,46 +1,71 @@
 <app-page-header title="Nouveau ticket">
 
-  @if (!createdTicket) {
+  <div pageActions>
+    @if (!createdTicket) {
+      @if (!confirmedClient) {
+        <button class="btn btn-primary btn-sm" [disabled]="!selectedClient" (click)="continue()">
+          Continuer
+        </button>
+      } @else {
+        <button class="btn btn-outline btn-sm" (click)="changeClient()">
+          Changer de client
+        </button>
+      }
+    }
+  </div>
 
-    @if (!selectedClient) {
+  <div class="w-full max-w-3xl">
 
-      <app-client-search
-        (clientValidated)="onClientValidated($event)"
-      />
+    <!-- WIZARD STEPS -->
+    <ul class="steps w-full mb-6">
+      <li class="step step-primary">Client</li>
+      <li class="step" [class.step-primary]="confirmedClient">Ticket</li>
+    </ul>
+
+    @if (!createdTicket) {
+
+      @if (!confirmedClient) {
+
+        <app-client-search
+          [selectedClient]="selectedClient"
+          (clientSelected)="onClientSelected($event)"
+        />
+
+      } @else {
+
+        <app-new-ticket-form
+          [client]="confirmedClient"
+          (createdTicket)="onTicketCreated($event)"
+        />
+
+      }
 
     } @else {
 
-      <app-new-ticket-form
-        [client]="selectedClient"
-        (createdTicket)="onTicketCreated($event)"
-      />
+      <div class="alert alert-success shadow-lg">
 
+        <div class="flex flex-col gap-2">
+          <span class="font-bold">
+            Ticket créé avec succès
+          </span>
+          <span>
+            Le ticket #{{ createdTicket.idTicket }}
+            a bien été enregistré.
+          </span>
+        </div>
+        <div class="flex gap-2">
+          <button class="btn btn-primary" routerLink="/ticket/{{ createdTicket.idTicket }}">
+            Voir le ticket
+          </button>
+
+          <button class="btn btn-outline" (click)="reset()">
+            Nouveau ticket
+          </button>
+        </div>
+
+      </div>
     }
 
-  } @else {
-
-    <div class="alert alert-success shadow-lg">
-
-      <div class="flex flex-col gap-2">
-        <span class="font-bold">
-          Ticket créé avec succès
-        </span>
-        <span>
-          Le ticket #{{ createdTicket.idTicket }}
-          a bien été enregistré.
-        </span>
-      </div>
-      <div>
-        <button class="btn btn-primary" routerLink="/ticket/{{ createdTicket.idTicket }}">
-          Voir le ticket
-        </button>
-
-        <button class="btn btn-outline" routerLink="/ticket/create">
-          Nouveau ticket
-        </button>
-      </div>
-
-    </div>
-  }
+  </div>
 
 </app-page-header>
