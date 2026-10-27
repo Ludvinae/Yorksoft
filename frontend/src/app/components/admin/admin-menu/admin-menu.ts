@@ -1,17 +1,23 @@
 import { Component, Input } from '@angular/core';
-import { AdminMenuButton } from '../admin-menu-button/admin-menu-button';
+import { RouterLink } from '@angular/router';
 
 export type AdminMenuItems = {
   label: string;
   link: string;
 };
 
+export type AdminMenuGroup = {
+  title: string;
+  items: AdminMenuItems[];
+};
+
+/** Admin entry points, one titled column of stacked buttons per group (same look as the theme picker in settings). */
 @Component({
   selector: 'app-admin-menu',
-  imports: [AdminMenuButton],
+  imports: [RouterLink],
   templateUrl: './admin-menu.html',
   styleUrl: './admin-menu.css',
 })
 export class AdminMenu {
-  @Input({ required: true }) items!: AdminMenuItems[];
+  @Input({ required: true }) groups!: AdminMenuGroup[];
 }
