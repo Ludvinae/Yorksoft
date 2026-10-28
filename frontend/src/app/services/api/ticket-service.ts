@@ -88,6 +88,10 @@ export class TicketService {
     return this.http.patch<TicketDetailFullDto>(`${this.apiUrl}/${id}/description`, payload)
   }
 
+  linkKnowledge(id: number, idKnowledge: number) {
+    return this.http.patch<TicketDetailFullDto>(`${this.apiUrl}/${id}/knowledge`, { idKnowledge });
+  }
+
   delete(id: number) {
     return this.http.delete(`${this.apiUrl}/${id}`).pipe(
       tap((result) => {

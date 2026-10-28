@@ -4,9 +4,13 @@ type TicketDetailKnowledge = {
   description: string;
   resolution: string;
 
+  procedures: TicketDetailProcedure[];
+};
+
+type TicketDetailProcedure = {
   idProcedure: number;
-  procedureCreationDate: Date;
-  procedureModificationDate: Date;
-  procedureTitle: string;
-  procedureContent: string;
+  creationDate: Date;
+  modificationDate: Date;
+  title: string;
+  content: string;
 };

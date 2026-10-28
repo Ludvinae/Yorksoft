@@ -288,12 +288,45 @@ export class TicketDetail implements OnInit {
   }
 
   protected selectedKnowledge?: KnowledgeSelect;
+  protected editingKnowledge = signal(false);
+  protected knowledgeError = signal<string | undefined>(undefined);
+
+  // Same rights as the backend: assigned technician, manager or admin, on a ticket not yet closed
+  canEditKnowledge(): boolean {
+    return this.canEditSolution() && this.detail()?.currentStatus !== StatusEnum.CLOSED;
+  }
+
+  protected startKnowledgeEdit(): void {
+    this.selectedKnowledge = undefined;
+    this.knowledgeError.set(undefined);
+    this.editingKnowledge.set(true);
+  }
+
+  protected cancelKnowledgeEdit(): void {
+    this.knowledgeError.set(undefined);
+    this.editingKnowledge.set(false);
+  }
 
   protected onKnowledgeSelected(knowledge: KnowledgeSelect): void {
-    this.selectedKnowledge = knowledge;
+    const ticketId = this.detail()?.idTicket;
 
-    // future route PATCH ticket
-    // pour associer la connaissance
+    if (!ticketId) {
+      return;
+    }
+
+    this.selectedKnowledge = knowledge;
+    this.knowledgeError.set(undefined);
+
+    this.ticketService.linkKnowledge(ticketId, knowledge.idKnowledge).subscribe({
+      next: (updatedTicket) => {
+        this.ticket.set(updatedTicket);
+        this.editingKnowledge.set(false);
+        this.selectedKnowledge = undefined;
+      },
+      error: () => {
+        this.knowledgeError.set("Impossible d'associer cette connaissance au ticket.");
+      },
+    });
   }
 
   protected openKnowledgeModal(): void {
@@ -305,8 +338,6 @@ export class TicketDetail implements OnInit {
   }
 
   protected onKnowledgeCreated(knowledge: KnowledgeSelect): void {
-    this.selectedKnowledge = knowledge;
-
     this.showKnowledgeModal.set(false);
 
     this.onKnowledgeSelected(knowledge);
