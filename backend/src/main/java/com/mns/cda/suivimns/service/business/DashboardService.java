@@ -69,7 +69,9 @@ public class DashboardService {
 
         UserHealthStats userHealth = new UserHealthStats(
                 appUserDao.countUsersWithoutRole(),
-                appUserDao.countUsersWithMultipleRoles()
+                appUserDao.countUsersWithMultipleRoles(),
+                // "{seed-role}" placeholders that DemoPasswordSeeder didn't rehash: those accounts can't log in
+                appUserDao.countByPasswordStartingWith("{seed-")
         );
 
         List<UserActivity> activities = activityService.activityFeed(id);

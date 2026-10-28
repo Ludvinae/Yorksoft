@@ -5,6 +5,7 @@ package com.mns.cda.suivimns.dto.dashboard.admin;
  */
 public record UserHealthStats(
         long withoutRole,
-        long multipleRoles
+        long multipleRoles,
+        long uninitializedPasswords
 ) {
 }

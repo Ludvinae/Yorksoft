@@ -42,4 +42,6 @@ public interface AppUserDao extends JpaRepository<AppUser, Integer> {
         ) multi
     """, nativeQuery = true)
     long countUsersWithMultipleRoles();
+
+    long countByPasswordStartingWith(String prefix);
 }
