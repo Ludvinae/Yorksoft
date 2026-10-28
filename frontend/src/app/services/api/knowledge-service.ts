@@ -1,5 +1,5 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
@@ -42,6 +42,18 @@ export class KnowledgeService {
         this.getAll().subscribe();
       }),
     );
+  }
+
+  getArticles(search: string, idTheme: number | null): Observable<KnowledgeArticle[]> {
+    let params = new HttpParams();
+    if (search.trim()) params = params.set('search', search.trim());
+    if (idTheme != null) params = params.set('idTheme', idTheme);
+
+    return this.http.get<KnowledgeArticle[]>(`${this.apiUrl}/articles`, { params });
+  }
+
+  updateArticle(id: number, article: KnowledgeArticleUpdate) {
+    return this.http.put<Knowledge>(`${this.apiUrl}/${id}`, article);
   }
 
   searchKnowledge(request: KnowledgeSearch): Observable<KnowledgeSelect[]> {

@@ -1,1 +1,164 @@
-<app-page-header title="Base de connaissances"></app-page-header>
+<app-title-bar
+  title="Base de connaissances"
+  searchPlaceholder="Rechercher un article..."
+  (search)="onSearch($event)">
+
+  <div filters class="flex flex-wrap items-center gap-2">
+    <select
+      class="select select-bordered"
+      aria-label="Filtrer par thématique"
+      [ngModel]="idTheme()"
+      (ngModelChange)="onThemeChange($event)">
+      <option [ngValue]="null">Toutes les thématiques</option>
+      @for (theme of themes(); track theme.idTheme) {
+        <option [ngValue]="theme.idTheme">{{ theme.designation }}</option>
+      }
+    </select>
+  </div>
+
+  <div class="flex-1">
+
+    @if (loading()) {
+      <span class="loading loading-spinner loading-xl"></span>
+
+    } @else if (loadError()) {
+      <div class="alert alert-error">
+        <span>{{ loadError() }}</span>
+      </div>
+
+    } @else if (articles().length === 0) {
+      <span>Aucun article ne correspond à ces critères</span>
+
+    } @else {
+      <p class="text-sm opacity-70 mb-3">
+        {{ articles().length }} article{{ articles().length > 1 ? 's' : '' }}
+      </p>
+
+      <div class="space-y-4">
+        @for (article of articles(); track article.idKnowledge) {
+          <div class="card bg-base-100 border border-base-300">
+            <div class="card-body p-4 gap-3">
+
+              @if (editingId() === article.idKnowledge) {
+                <!-- Edit mode -->
+                <form [formGroup]="editForm" class="space-y-3" (ngSubmit)="saveEdit(article.idKnowledge)">
+
+                  @if (editError()) {
+                    <div class="alert alert-error">
+                      <span>{{ editError() }}</span>
+                    </div>
+                  }
+
+                  <label class="block">
+                    <span class="label-text">Sujet</span>
+                    <input class="input input-bordered w-full" formControlName="subject" />
+                    @if (editForm.controls.subject.touched && editForm.controls.subject.invalid) {
+                      <span class="text-error text-sm">Le sujet est obligatoire (255 caractères max).</span>
+                    }
+                  </label>
+
+                  <label class="block">
+                    <span class="label-text">Thématique</span>
+                    <select class="select select-bordered w-full" formControlName="idTheme">
+                      @for (theme of themes(); track theme.idTheme) {
+                        <option [ngValue]="theme.idTheme">{{ theme.designation }}</option>
+                      }
+                    </select>
+                  </label>
+
+                  <label class="block">
+                    <span class="label-text">Description</span>
+                    <textarea rows="3" class="textarea textarea-bordered w-full" formControlName="description"></textarea>
+                  </label>
+
+                  <label class="block">
+                    <span class="label-text">Résolution</span>
+                    <textarea rows="3" class="textarea textarea-bordered w-full" formControlName="resolution"></textarea>
+                  </label>
+
+                  <div class="flex justify-end gap-2">
+                    <button type="button" class="btn" (click)="cancelEdit()">Annuler</button>
+                    <button type="submit" class="btn btn-primary" [disabled]="saving()">
+                      @if (saving()) {
+                        <span class="loading loading-spinner loading-sm"></span>
+                      }
+                      Enregistrer
+                    </button>
+                  </div>
+                </form>
+
+              } @else {
+                <!-- Read mode -->
+                <div class="flex items-start justify-between gap-2">
+                  <div class="min-w-0">
+                    <h2 class="card-title text-lg leading-tight">{{ article.subject }}</h2>
+                    <div class="flex flex-wrap items-center gap-2 mt-1 text-sm">
+                      <span class="badge badge-primary badge-outline">{{ article.themeName }}</span>
+                      @for (version of article.versions; track version) {
+                        <span class="badge badge-ghost">{{ version }}</span>
+                      }
+                    </div>
+                    <p class="text-sm opacity-70 mt-1">
+                      <i class="ph ph-user"></i>
+                      Créé par {{ article.authorName ?? 'un auteur inconnu' }}
+                    </p>
+                  </div>
+
+                  @if (canEdit()) {
+                    <button class="btn btn-sm btn-ghost shrink-0" title="Modifier l'article" (click)="startEdit(article)">
+                      <i class="ph ph-pencil-simple"></i>
+                    </button>
+                  }
+                </div>
+
+                @if (article.description) {
+                  <p>{{ article.description }}</p>
+                }
+
+                @if (expandedId() === article.idKnowledge) {
+                  <div class="space-y-3 border-t border-base-300 pt-3">
+                    <div>
+                      <h3 class="font-semibold">Résolution</h3>
+                      <p>{{ article.resolution || 'Aucune résolution renseignée' }}</p>
+                    </div>
+
+                    <div>
+                      <h3 class="font-semibold">Procédures</h3>
+                      @if (article.procedures.length) {
+                        <div class="space-y-3 mt-1">
+                          @for (procedure of article.procedures; track procedure.idProcedure) {
+                            <div class="bg-base-200 rounded-box p-3">
+                              <p class="font-semibold leading-tight">{{ procedure.title }}</p>
+                              <p class="text-xs opacity-70">
+                                {{ procedure.authorName ?? 'Auteur inconnu' }}
+                                @if (procedure.creationDate) {
+                                  · {{ procedure.creationDate | date: 'mediumDate' }}
+                                }
+                              </p>
+                              <p class="text-sm mt-1 whitespace-pre-line">{{ procedure.content }}</p>
+                            </div>
+                          }
+                        </div>
+                      } @else {
+                        <p class="opacity-70">Aucune procédure associée</p>
+                      }
+                    </div>
+                  </div>
+                }
+
+                <div>
+                  <button class="btn btn-sm btn-link px-0" (click)="toggleExpanded(article.idKnowledge)">
+                    {{ expandedId() === article.idKnowledge ? 'Masquer les détails' : 'Voir la résolution et les procédures' }}
+                  </button>
+                </div>
+              }
+
+            </div>
+          </div>
+        }
+      </div>
+    }
+
+  </div>
+
+</app-title-bar>
