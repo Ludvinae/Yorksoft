@@ -33,6 +33,12 @@ public class Knowledge {
     @OnDelete(action= OnDeleteAction.CASCADE)
     protected Theme theme;
 
+    // Who wrote the article; null for seeded/legacy rows or once the account is deleted
+    @ManyToOne
+    @JoinColumn(name = "id_author")
+    @OnDelete(action = OnDeleteAction.SET_NULL)
+    protected AppUser author;
+
     @ManyToMany
     @JoinTable(name = "knowledge_versions",
             joinColumns = @JoinColumn(name = "id_knowledge"),

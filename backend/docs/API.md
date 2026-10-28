@@ -59,7 +59,7 @@ All routes are relative to the backend root (`http://localhost:8080` locally). S
 | Comments | `/comment` | Discussion thread on a ticket |
 | History | `/history` | Activity log (audit trail) |
 | Classification | `/classification` | Ticket's theme/urgency/impact tagging |
-| Knowledge base | `/knowledge` | Knowledge articles linked to tickets |
+| Knowledge base | `/knowledge` | Knowledge articles linked to tickets — `GET /knowledge/articles?search=&idTheme=` returns full articles (theme, author, versions, procedures) for the knowledge base page, readable by every employee role; the author is set from the JWT on `POST /knowledge` |
 | Procedures | `/procedure` | Resolution procedures |
 | Clients | `/client` | Client accounts |
 | Internal users | `/user`, `/manager`, `/technician`, `/director` | Internal accounts by role |

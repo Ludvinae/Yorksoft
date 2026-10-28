@@ -2,9 +2,12 @@ package com.mns.cda.suivimns.mapper.entity;
 
 import com.mns.cda.suivimns.dao.ThemeDao;
 import com.mns.cda.suivimns.dao.VersionDao;
+import com.mns.cda.suivimns.dto.details.KnowledgeArticleDto;
+import com.mns.cda.suivimns.dto.details.KnowledgeArticleProcedure;
 import com.mns.cda.suivimns.dto.entity.KnowledgeDto;
 import com.mns.cda.suivimns.dto.search.KnowledgeSelect;
 import com.mns.cda.suivimns.exception.ThemeNotFoundException;
+import com.mns.cda.suivimns.model.AppUser;
 import com.mns.cda.suivimns.model.Procedure;
 import com.mns.cda.suivimns.model.Knowledge;
 import com.mns.cda.suivimns.model.Theme;
@@ -15,7 +18,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,7 +46,48 @@ public abstract class KnowledgeMapper {
     @Mapping(target="theme", source="idTheme")
     @Mapping(target= "procedureList", ignore=true)
     @Mapping(target = "versionList", source = "versionIds")
+    @Mapping(target = "author", ignore = true)
     public abstract Knowledge toEntity(KnowledgeDto dto);
+
+    // Article complet pour la page base de connaissance
+    public KnowledgeArticleDto toArticle(Knowledge knowledge) {
+        List<String> versions = knowledge.getVersionList() == null ? List.of()
+                : knowledge.getVersionList().stream()
+                    .map(v -> v.getSoftware() != null
+                            ? v.getSoftware().getName() + " " + v.getVersionNumber()
+                            : v.getVersionNumber())
+                    .distinct()
+                    .sorted()
+                    .toList();
+
+        List<KnowledgeArticleProcedure> procedures = knowledge.getProcedureList() == null ? List.of()
+                : knowledge.getProcedureList().stream()
+                    .sorted(Comparator.comparing(Procedure::getCreationDate,
+                            Comparator.nullsLast(Comparator.naturalOrder())))
+                    .map(p -> new KnowledgeArticleProcedure(
+                            p.getIdProcedure(), p.getTitle(), p.getContent(),
+                            p.getCreationDate(), p.getModificationDate(),
+                            fullName(p.getTechnician())))
+                    .toList();
+
+        return new KnowledgeArticleDto(
+                knowledge.getIdKnowledge(),
+                knowledge.getSubject(),
+                knowledge.getDescription(),
+                knowledge.getResolution(),
+                mapThemeToId(knowledge.getTheme()),
+                knowledge.getTheme() != null ? knowledge.getTheme().getDesignation() : null,
+                fullName(knowledge.getAuthor()),
+                versions,
+                procedures);
+    }
+
+    public abstract List<KnowledgeArticleDto> toArticleList(List<Knowledge> knowledgeList);
+
+    protected String fullName(AppUser user) {
+        if (user == null) return null;
+        return (user.getFirstName() + " " + user.getLastName()).trim();
+    }
 
 
     // Method helper pour ID vers ENTITE
@@ -89,6 +133,7 @@ public abstract class KnowledgeMapper {
     @Mapping(target = "theme", source = "idTheme")
     @Mapping(target = "versionList", ignore = true)
     @Mapping(target = "procedureList", ignore = true)
+    @Mapping(target = "author", ignore = true)
     public abstract void updateEntityFromDto(KnowledgeDto dto, @MappingTarget Knowledge entity);
 
     // Merge intelligent pour modifier la liste de versions en update

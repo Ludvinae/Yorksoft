@@ -151,6 +151,11 @@ VALUES(
        'Vérifier la connectivité réseau et les paramètres de connexion.',
        7);
 
+-- Authors of the seeded knowledge articles (technicians 5 & 6, manager 4)
+UPDATE knowledge SET id_author = 5 WHERE id_knowledge IN (1, 3, 5, 7, 9);
+UPDATE knowledge SET id_author = 6 WHERE id_knowledge IN (2, 4, 6, 8);
+UPDATE knowledge SET id_author = 4 WHERE id_knowledge = 10;
+
 INSERT INTO ticket (title, open_date, call_duration, current_priority, initial_priority, close_date, modification_date,
                     description, id_client, id_urgency, id_impact, id_version, current_status, id_current_theme,
                     id_current_manager, id_current_technician, overdue, id_knowledge)

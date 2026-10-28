@@ -4,6 +4,7 @@ import com.mns.cda.suivimns.dto.entity.ThemeDto;
 import com.mns.cda.suivimns.exception.ThemeNotFoundException;
 import com.mns.cda.suivimns.security.IsAdmin;
 import com.mns.cda.suivimns.security.IsManager;
+import com.mns.cda.suivimns.security.IsEmployee;
 import com.mns.cda.suivimns.security.IsTechnician;
 import com.mns.cda.suivimns.service.entity.ThemeService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,7 +31,7 @@ public class ThemeController {
             description = "Récupere la liste complète de thématique de la base")
     @ApiResponse(responseCode = "200", description = "Liste récupérée avec succés")
     @GetMapping("/list")
-    @IsTechnician
+    @IsEmployee
     public List<ThemeDto> getAll() {
         return themeService.findAll();
     }

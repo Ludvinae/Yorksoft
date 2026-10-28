@@ -1,10 +1,13 @@
 package com.mns.cda.suivimns.controller;
 
+import com.mns.cda.suivimns.dto.details.KnowledgeArticleDto;
 import com.mns.cda.suivimns.dto.entity.KnowledgeDto;
 import com.mns.cda.suivimns.dto.search.KnowledgeSelect;
 import com.mns.cda.suivimns.dto.search.KnowledgeSearch;
 import com.mns.cda.suivimns.exception.KnowledgeNotFoundException;
+import com.mns.cda.suivimns.security.AppUserDetails;
 import com.mns.cda.suivimns.security.IsAdmin;
+import com.mns.cda.suivimns.security.IsEmployee;
 import com.mns.cda.suivimns.security.IsTechnician;
 import com.mns.cda.suivimns.service.entity.KnowledgeService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,6 +18,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,6 +43,18 @@ public class KnowledgeController {
     }
 
 
+    @Operation(summary = "Récupere les articles de la base de connaissance",
+                description = "Articles complets (thématique, auteur, versions, procédures), filtrés par texte " +
+                        "(sujet ou description) et/ou par thématique, triés par thématique puis sujet")
+    @ApiResponse(responseCode = "200", description = "Liste récupérée avec succés")
+    @GetMapping("/articles")
+    @IsEmployee
+    public List<KnowledgeArticleDto> getArticles(@RequestParam(required = false) String search,
+                                                 @RequestParam(required = false) Integer idTheme) {
+        return knowledgeService.searchArticles(search, idTheme);
+    }
+
+
     @Operation(summary = "Récupére une connaissance en fonction de son ID")
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Connaissance trouvée"),
                     @ApiResponse(responseCode = "404", description = "Connaissance non trouvée")})
@@ -54,9 +70,9 @@ public class KnowledgeController {
                     @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PostMapping
     @IsTechnician
-    public ResponseEntity<KnowledgeDto> create(@RequestBody @Valid KnowledgeDto knowledge) {
-        System.out.println(knowledge);
-        return new ResponseEntity<>(knowledgeService.save(knowledge), HttpStatus.CREATED);
+    public ResponseEntity<KnowledgeDto> create(@RequestBody @Valid KnowledgeDto knowledge,
+                                               @AuthenticationPrincipal AppUserDetails principal) {
+        return new ResponseEntity<>(knowledgeService.save(knowledge, principal), HttpStatus.CREATED);
     }
 
 

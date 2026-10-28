@@ -2,6 +2,7 @@ package com.mns.cda.suivimns.unit.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mns.cda.suivimns.controller.KnowledgeController;
+import com.mns.cda.suivimns.dto.details.KnowledgeArticleDto;
 import com.mns.cda.suivimns.dto.entity.KnowledgeDto;
 import com.mns.cda.suivimns.exception.KnowledgeNotFoundException;
 import com.mns.cda.suivimns.service.entity.KnowledgeService;
@@ -87,6 +88,38 @@ class KnowledgeControllerUnitTest {
     }
 
     // =========================
+    // ARTICLES (knowledge base page)
+    // =========================
+    @Test
+    @WithMockUser(roles = "DIRECTOR")
+    void shouldReturnArticlesFilteredByThemeAndSearch() throws Exception {
+
+        KnowledgeArticleDto article = new KnowledgeArticleDto(1, "Test subject", "Test description",
+                "Test resolution", 2, "Bug", "Sandra Schmidt", List.of("Logiciel 1.0"), List.of());
+
+        when(knowledgeService.searchArticles("outlook", 2)).thenReturn(List.of(article));
+
+        mockMvc.perform(get("/knowledge/articles").param("search", "outlook").param("idTheme", "2"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].subject").value("Test subject"))
+                .andExpect(jsonPath("$[0].themeName").value("Bug"))
+                .andExpect(jsonPath("$[0].authorName").value("Sandra Schmidt"));
+    }
+
+    @Test
+    @WithMockUser(roles = "TECHNICIAN")
+    void shouldReturnAllArticlesWithoutFilters() throws Exception {
+
+        when(knowledgeService.searchArticles(null, null)).thenReturn(List.of());
+
+        mockMvc.perform(get("/knowledge/articles"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isEmpty());
+
+        verify(knowledgeService).searchArticles(null, null);
+    }
+
+    // =========================
     // GET BY ID - OK
     // =========================
     @Test
@@ -124,7 +157,7 @@ class KnowledgeControllerUnitTest {
     @WithMockUser(roles = "ADMIN")
     void shouldCreate() throws Exception {
 
-        when(knowledgeService.save(any(KnowledgeDto.class))).thenReturn(knowledgeDto);
+        when(knowledgeService.save(any(KnowledgeDto.class), any())).thenReturn(knowledgeDto);
 
         mockMvc.perform(post("/knowledge")
                         .with(csrf())
