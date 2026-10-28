@@ -68,7 +68,8 @@ public class DashboardService {
         );
 
         UserHealthStats userHealth = new UserHealthStats(
-                appUserDao.countUsersWithoutRole()
+                appUserDao.countUsersWithoutRole(),
+                appUserDao.countUsersWithMultipleRoles()
         );
 
         List<UserActivity> activities = activityService.activityFeed(id);

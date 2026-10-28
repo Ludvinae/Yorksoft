@@ -24,4 +24,22 @@ public interface AppUserDao extends JpaRepository<AppUser, Integer> {
         AND NOT EXISTS (SELECT 1 FROM client r WHERE r.id_app_user = u.id_app_user)
     """, nativeQuery = true)
     long countUsersWithoutRole();
+
+    // A user in several role tables silently gets the first one AppUserDetailsService finds
+    @Query(value = """
+        SELECT COUNT(*)
+        FROM (
+            SELECT roles.id_app_user
+            FROM (
+                SELECT id_app_user FROM admin
+                UNION ALL SELECT id_app_user FROM director
+                UNION ALL SELECT id_app_user FROM manager
+                UNION ALL SELECT id_app_user FROM technician
+                UNION ALL SELECT id_app_user FROM client
+            ) roles
+            GROUP BY roles.id_app_user
+            HAVING COUNT(*) > 1
+        ) multi
+    """, nativeQuery = true)
+    long countUsersWithMultipleRoles();
 }
