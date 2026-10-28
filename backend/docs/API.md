@@ -54,7 +54,7 @@ All routes are relative to the backend root (`http://localhost:8080` locally). S
 | Resource | Base route | Description |
 |---|---|---|
 | Authentication | `/log-in` | Login, JWT issuance |
-| Tickets | `/ticket` | Full ticket lifecycle — plus explicit action routes: `/ticket/{id}/assign`, `/start-progress`, `/wait`, `/resume-progress`, `/solve`, `/close` (each enforces the legal-transition rules from [ARCHITECTURE.md](ARCHITECTURE.md#ticket-lifecycle) instead of a generic status `PATCH`) |
+| Tickets | `/ticket` | Full ticket lifecycle — plus explicit action routes: `/ticket/{id}/assign`, `/start-progress`, `/wait`, `/resume-progress`, `/solve`, `/close` (each enforces the legal-transition rules from [ARCHITECTURE.md](ARCHITECTURE.md#ticket-lifecycle) instead of a generic status `PATCH`); `PATCH /ticket/{id}/knowledge` (`{ "idKnowledge": n }`) links a knowledge article to the ticket (assigned technician, manager or admin; `409` once the ticket is closed) |
 | Assignments | `/assignment` | Assigning tickets to technicians |
 | Comments | `/comment` | Discussion thread on a ticket |
 | History | `/history` | Activity log (audit trail) |

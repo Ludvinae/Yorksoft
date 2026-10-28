@@ -224,6 +224,36 @@ class TicketControllerUnitTest {
         verify(ticketService).update(eq(1), any(), any());
     }
 
+    @Test
+    @WithMockUser(roles = "TECHNICIAN")
+    void shouldLinkKnowledgeToTicket() throws Exception {
+
+        TicketKnowledgeDto dto = new TicketKnowledgeDto(3);
+
+        when(ticketService.linkKnowledge(eq(1), any(), any())).thenReturn(ticketDetailFullDto);
+
+        mockMvc.perform(patch("/ticket/1/knowledge")
+                                .with(csrf())
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isOk());
+
+        verify(ticketService).linkKnowledge(eq(1), eq(dto), any());
+    }
+
+    @Test
+    @WithMockUser(roles = "TECHNICIAN")
+    void shouldRejectKnowledgeLinkWithoutId() throws Exception {
+
+        mockMvc.perform(patch("/ticket/1/knowledge")
+                                .with(csrf())
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{}"))
+                .andExpect(status().isBadRequest());
+
+        verify(ticketService, never()).linkKnowledge(anyInt(), any(), any());
+    }
+
     // ===================
     // WORKFLOW
     // ==================

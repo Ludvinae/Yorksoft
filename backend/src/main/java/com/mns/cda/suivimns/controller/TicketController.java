@@ -122,6 +122,21 @@ public class TicketController {
         return new ResponseEntity<>(ticketService.update(id, ticketToUpdate, principal), HttpStatus.OK);
     }
 
+    @Operation(summary = "Associe une connaissance à un ticket",
+            description = "Lie une connaissance existante au ticket (remplace la connaissance déjà associée)")
+    @ApiResponses({@ApiResponse(responseCode = "200", description = "Connaissance associée"),
+            @ApiResponse(responseCode = "400", description = "Données invalides"),
+            @ApiResponse(responseCode = "403", description = "Autorisations insuffisantes"),
+            @ApiResponse(responseCode = "404", description = "Ticket ou connaissance non trouvé"),
+            @ApiResponse(responseCode = "409", description = "Ticket clos, non modifiable")})
+    @PatchMapping("/{id}/knowledge")
+    @IsTechnician
+    public ResponseEntity<TicketDetailFullDto> linkKnowledge(@PathVariable int id, @RequestBody @Valid TicketKnowledgeDto dto,
+                                                             @AuthenticationPrincipal AppUserDetails principal) {
+
+        return new ResponseEntity<>(ticketService.linkKnowledge(id, dto, principal), HttpStatus.OK);
+    }
+
 
     // Workflow
     @Operation(summary = "Assigne un ticket à un technicien par un manager")

@@ -49,6 +49,7 @@ public class TicketService  {
     protected final ManagerDao managerDao;
     protected final TechnicianDao technicianDao;
     protected final AppUserDao appUserDao;
+    protected final KnowledgeDao knowledgeDao;
 
     private static final Logger logger = LoggerFactory.getLogger(TicketService.class);
 
@@ -62,7 +63,8 @@ public class TicketService  {
         if ("ADMIN".equals(principal.getUserRole())) {
             return;
         }
-        if (!Objects.equals(ticket.getCurrentTechnician().getIdAppUser(), principal.getId())) {
+        if (ticket.getCurrentTechnician() == null
+                || !Objects.equals(ticket.getCurrentTechnician().getIdAppUser(), principal.getId())) {
             throw new UnauthorizedTechnicianException();
         }
     }
@@ -178,6 +180,33 @@ public class TicketService  {
 
         metricsService.refreshTicketMetrics(currentTicket);
         ticketDao.save(currentTicket);
+
+        return detailService.getTicketDetails(id, principal);
+    }
+
+    /**
+     * Associe une connaissance existante à un ticket (remplace l'éventuelle connaissance déjà liée).
+     * Mêmes droits que l'édition de la description : technicien assigné, manager ou admin, ticket non clos.
+     */
+    public TicketDetailFullDto linkKnowledge(int id, TicketKnowledgeDto dto, AppUserDetails principal) {
+
+        logger.info("Linking knowledge id={} to ticket id={} by userId={}", dto.idKnowledge(), id, principal.getId());
+        Ticket ticket = getTicket(id);
+
+        if (isNotEditable(ticket)) {
+            logger.warn("Attempt to link knowledge to non editable ticket id={}", id);
+            throw new TicketNotEditableException();
+        }
+
+        if (!"MANAGER".equals(principal.getUserRole())) {
+            validateTechnicianAccess(ticket, principal);
+        }
+
+        Knowledge knowledge = knowledgeDao.findById(dto.idKnowledge())
+                .orElseThrow(KnowledgeNotFoundException::new);
+
+        ticket.setKnowledge(knowledge);
+        ticketDao.save(ticket);
 
         return detailService.getTicketDetails(id, principal);
     }
