@@ -18,7 +18,7 @@
               title="Fermés sans date de fin"
               [value]="dashboard.ticketHealth.closedWithoutEndDate"
               icon="ph ph-warning"
-              colorClass="text-error"
+              [colorClass]="healthColor(dashboard.ticketHealth.closedWithoutEndDate, 'text-error')"
               [filters]="{ statuses: ['CLOSED'], isNotClosed: true }"
             />
 
@@ -26,7 +26,7 @@
               title="Ouverts avec date de clôture"
               [value]="dashboard.ticketHealth.openWithCloseDate"
               icon="ph ph-calendar-x"
-              colorClass="text-error"
+              [colorClass]="healthColor(dashboard.ticketHealth.openWithCloseDate, 'text-error')"
               [filters]="{
                 statuses: ['OPEN', 'ASSIGNED', 'IN_PROGRESS', 'WAITING_CLIENT', 'WAITING_THIRD_PARTY', 'SOLVED'],
                 isNotClosed: false
@@ -37,7 +37,7 @@
               title="Statut désynchronisé"
               [value]="dashboard.ticketHealth.statusMismatch"
               icon="ph ph-arrows-clockwise"
-              colorClass="text-error"
+              [colorClass]="healthColor(dashboard.ticketHealth.statusMismatch, 'text-error')"
               [filters]="{ hasStatusMismatch: true }"
             />
 
@@ -45,7 +45,7 @@
               title="Affectations incohérentes"
               [value]="dashboard.ticketHealth.assignmentIssues"
               icon="ph ph-user-switch"
-              colorClass="text-error"
+              [colorClass]="healthColor(dashboard.ticketHealth.assignmentIssues, 'text-error')"
               [filters]="{ hasAssignmentIssue: true }"
             />
 
@@ -53,7 +53,7 @@
               title="SLA dépassé non signalé"
               [value]="dashboard.ticketHealth.unflaggedSlaBreaches"
               icon="ph ph-alarm"
-              colorClass="text-warning"
+              [colorClass]="healthColor(dashboard.ticketHealth.unflaggedSlaBreaches, 'text-warning')"
               [filters]="{ hasUnflaggedSlaBreach: true }"
             />
 
@@ -61,7 +61,7 @@
               title="Sans client ou version"
               [value]="dashboard.ticketHealth.orphans"
               icon="ph ph-link-break"
-              colorClass="text-warning"
+              [colorClass]="healthColor(dashboard.ticketHealth.orphans, 'text-warning')"
               [filters]="{ isOrphan: true }"
             />
 
@@ -76,35 +76,35 @@
               title="Sans rôle"
               [value]="dashboard.userHealth.withoutRole"
               icon="ph ph-user-circle-dashed"
-              colorClass="text-error"
+              [colorClass]="healthColor(dashboard.userHealth.withoutRole, 'text-error')"
             />
 
             <app-kpi-card
               title="Rôles multiples"
               [value]="dashboard.userHealth.multipleRoles"
               icon="ph ph-users-three"
-              colorClass="text-error"
+              [colorClass]="healthColor(dashboard.userHealth.multipleRoles, 'text-error')"
             />
 
             <app-kpi-card
               title="Mot de passe non initialisé"
               [value]="dashboard.userHealth.uninitializedPasswords"
               icon="ph ph-key"
-              colorClass="text-error"
+              [colorClass]="healthColor(dashboard.userHealth.uninitializedPasswords, 'text-error')"
             />
 
             <app-kpi-card
               title="Employés inactifs depuis 90 jours"
               [value]="dashboard.userHealth.inactiveEmployees"
               icon="ph ph-clock-countdown"
-              colorClass="text-warning"
+              [colorClass]="healthColor(dashboard.userHealth.inactiveEmployees, 'text-warning')"
             />
 
             <app-kpi-card
               title="Employés jamais actifs"
               [value]="dashboard.userHealth.neverActiveEmployees"
               icon="ph ph-user-minus"
-              colorClass="text-warning"
+              [colorClass]="healthColor(dashboard.userHealth.neverActiveEmployees, 'text-warning')"
             />
 
             <app-kpi-card

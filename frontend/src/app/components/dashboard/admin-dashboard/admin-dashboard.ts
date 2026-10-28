@@ -14,6 +14,11 @@ export class AdminDashboard implements OnInit {
 
   readonly dashboard = this.dashboardService.dashboard as Signal<DashboardAdminDto | null>;
 
+  /** Anomaly KPIs: green when there is nothing to report, otherwise their alert color. */
+  healthColor(value: number, alertClass: string): string {
+    return value === 0 ? 'text-success' : alertClass;
+  }
+
   /** Above this many admin accounts, the "Comptes admin" KPI is highlighted. */
   static readonly MAX_ADMINS = 5;
 
