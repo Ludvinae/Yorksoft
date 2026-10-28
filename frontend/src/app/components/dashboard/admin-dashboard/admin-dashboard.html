@@ -2,86 +2,109 @@
   <div class="grid lg:grid-cols-12 gap-4">
     <div class="col-span-9">
       <!-- KPI SECTION -->
+      <!-- Cards with a null value are KPIs not implemented yet (rendered as "-") -->
       <div class="card bg-base-100">
-        <div class="card-body gap-6">
+        <div class="card-body p-4 gap-4">
 
-          <h2 class="text-3xl font-bold text-center">
-            Indicateurs de performance
+          <h2 class="text-2xl font-bold text-center">
+            Santé des données
           </h2>
 
-          <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
+          <!-- TICKETS -->
+          <h3 class="text-lg font-bold">Tickets</h3>
 
-            <!-- TICKETS -->
-            <div class="card border border-base-300 bg-base-100">
-              <div class="card-body p-4">
+          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
 
-                <h3 class="text-2xl font-bold text-center mb-4">
-                  Tickets
-                </h3>
+            <app-kpi-card
+              title="Fermés sans date de fin"
+              [value]="dashboard.ticketHealth.closedWithoutEndDate"
+              icon="ph ph-warning"
+              colorClass="text-error"
+              [filters]="{ statuses: ['CLOSED'], isNotClosed: true }"
+            />
 
-                <div class="grid grid-cols-1 border rounded-xl overflow-hidden">
+            <app-kpi-card
+              title="Ouverts avec date de clôture"
+              [value]="null"
+              icon="ph ph-calendar-x"
+              colorClass="text-error"
+            />
 
-                  <app-kpi-card
-                    title="Fermés sans date de fin"
-                    [value]="dashboard.closedTicketsWithoutEndDate"
-                    icon="ph ph-warning"
-                    colorClass="text-error"
-                    [filters]="{ statuses: ['CLOSED'], isNotClosed: true }"
-                  />
+            <app-kpi-card
+              title="Statut désynchronisé"
+              [value]="null"
+              icon="ph ph-arrows-clockwise"
+              colorClass="text-error"
+            />
 
-                </div>
-              </div>
-            </div>
+            <app-kpi-card
+              title="Affectations incohérentes"
+              [value]="null"
+              icon="ph ph-user-switch"
+              colorClass="text-error"
+            />
 
-            <!-- TEMPS -->
-            <div class="card border border-base-300 bg-base-100">
-              <div class="card-body p-4">
+            <app-kpi-card
+              title="SLA dépassé non signalé"
+              [value]="null"
+              icon="ph ph-alarm"
+              colorClass="text-warning"
+            />
 
-                <h3 class="text-2xl font-bold text-center mb-4">
-                  Temps moyen
-                </h3>
+            <app-kpi-card
+              title="Sans client ou version"
+              [value]="null"
+              icon="ph ph-link-break"
+              colorClass="text-warning"
+            />
 
-                <div class="grid grid-cols-1 sm:grid-cols-3 sm:divide-x divide-y border rounded-xl overflow-hidden">
+          </div>
 
-                  <app-kpi-card
-                    title="Résolution"
-                    value="80m"
-                    icon="ph ph-check-circle"
-                  />
+          <!-- UTILISATEURS -->
+          <h3 class="text-lg font-bold">Utilisateurs</h3>
 
-                  <app-kpi-card
-                    title="Prise en charge"
-                    value="40m"
-                    icon="ph ph-hand-pointing"
-                  />
+          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
 
-                  <app-kpi-card
-                    title="Appels"
-                    value="214s"
-                    icon="ph ph-phone"
-                  />
+            <app-kpi-card
+              title="Sans rôle"
+              [value]="null"
+              icon="ph ph-user-circle-dashed"
+              colorClass="text-error"
+            />
 
-                  <app-kpi-card
-                    title="Par technicien"
-                    value="12.6"
-                    icon="ph ph-users"
-                  />
+            <app-kpi-card
+              title="Rôles multiples"
+              [value]="null"
+              icon="ph ph-users-three"
+              colorClass="text-error"
+            />
 
-                  <app-kpi-card
-                    title="Résolus / jour"
-                    value="14"
-                    icon="ph ph-calendar-dot"
-                  />
+            <app-kpi-card
+              title="Mot de passe non initialisé"
+              [value]="null"
+              icon="ph ph-key"
+              colorClass="text-error"
+            />
 
-                  <app-kpi-card
-                    title="Clos / semaine"
-                    value="122"
-                    icon="ph ph-calendar-dots"
-                  />
+            <app-kpi-card
+              title="Inactifs depuis 90 jours"
+              [value]="null"
+              icon="ph ph-clock-countdown"
+              colorClass="text-warning"
+            />
 
-                </div>
-              </div>
-            </div>
+            <app-kpi-card
+              title="Jamais actifs"
+              [value]="null"
+              icon="ph ph-user-minus"
+              colorClass="text-warning"
+            />
+
+            <app-kpi-card
+              title="Comptes admin"
+              [value]="null"
+              icon="ph ph-shield-check"
+            />
 
           </div>
 

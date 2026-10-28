@@ -1,0 +1,3 @@
+type TicketHealthStats = {
+  closedWithoutEndDate: number;
+};

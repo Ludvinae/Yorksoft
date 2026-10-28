@@ -1,11 +1,12 @@
 package com.mns.cda.suivimns.dto.dashboard;
 
 import com.mns.cda.suivimns.dto.dashboard.activity.UserActivity;
+import com.mns.cda.suivimns.dto.dashboard.admin.TicketHealthStats;
 
 import java.util.List;
 
 public record DashboardAdminDto(
-        int closedTicketsWithoutEndDate,
+        TicketHealthStats ticketHealth,
 
         List<UserActivity> activities
 ) implements DashboardDto {

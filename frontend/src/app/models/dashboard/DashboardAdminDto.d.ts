@@ -1,5 +1,5 @@
 type DashboardAdminDto = {
-  closedTicketsWithoutEndDate: number;
+  ticketHealth: TicketHealthStats;
 
   activities: List<UserActivity>;
 };

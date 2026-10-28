@@ -3,6 +3,7 @@ package com.mns.cda.suivimns.service.business;
 import com.mns.cda.suivimns.dao.TicketDao;
 import com.mns.cda.suivimns.dto.dashboard.*;
 import com.mns.cda.suivimns.dto.dashboard.activity.UserActivity;
+import com.mns.cda.suivimns.dto.dashboard.admin.TicketHealthStats;
 import com.mns.cda.suivimns.dto.dashboard.graphs.SoftwareStatDto;
 import com.mns.cda.suivimns.dto.dashboard.graphs.TechnicianWorkloadDto;
 import com.mns.cda.suivimns.dto.dashboard.graphs.ThemeStatDto;
@@ -53,11 +54,13 @@ public class DashboardService {
     private DashboardAdminDto getAdminStats(LocalDateTime startDate, AppUserDetails principal) {
         Integer id = principal.getId();
 
-        int closed = ticketDao.closedTicketsWithoutEndDate();
+        TicketHealthStats ticketHealth = new TicketHealthStats(
+                ticketDao.closedTicketsWithoutEndDate()
+        );
 
         List<UserActivity> activities = activityService.activityFeed(id);
 
-        return new DashboardAdminDto(closed, activities);
+        return new DashboardAdminDto(ticketHealth, activities);
     }
 
     private DashboardDirectorDto getDirectorStats(LocalDateTime startDate, AppUserDetails principal) {
