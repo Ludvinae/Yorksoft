@@ -29,3 +29,10 @@ The backlog lives on the project's Trello dashboard (board "Yorksoft"), not in t
 
 - Quand l'utilisateur a masqué les tickets clos dans la liste, `TicketStoreService.effectiveFilters` force `statusesExcluded = ['CLOSED']`, y compris sur les filtres posés par une carte KPI du dashboard.
 - Conséquence : la carte admin « Fermés sans date de fin » (`statuses: ['CLOSED']`) ouvre une liste vide. Les filtres venant d'une carte KPI devraient passer outre cette préférence.
+
+## Tâche planifiée de recalcul du SLA
+
+- Aujourd'hui `overdue` et `slaDeadline` ne sont recalculés que lors d'une action sur le ticket (`TicketMetricsService.refreshTicketMetrics`, appelé par `TicketService`) : un ticket laissé sans action après son échéance garde `overdue = false`.
+- Ajouter un `@Scheduled` (ex. toutes les 5 min) qui recalcule les métriques des tickets où le SLA court (OPEN, ASSIGNED, IN_PROGRESS).
+- Effets : la carte « En retard » du dashboard manager devient fiable, et le KPI admin « SLA dépassé non signalé » ne devrait plus dépasser 0 que si la tâche ne tourne plus.
+- Attention au bug connu de décalage de ~2h : `SlaService` utilise `LocalDateTime.now()` (fuseau de la JVM).
