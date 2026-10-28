@@ -1,10 +1,12 @@
 package com.mns.cda.suivimns.service.business;
 
+import com.mns.cda.suivimns.dao.AppUserDao;
 import com.mns.cda.suivimns.dao.TicketDao;
 import com.mns.cda.suivimns.dao.search.TicketSpecification;
 import com.mns.cda.suivimns.dto.dashboard.*;
 import com.mns.cda.suivimns.dto.dashboard.activity.UserActivity;
 import com.mns.cda.suivimns.dto.dashboard.admin.TicketHealthStats;
+import com.mns.cda.suivimns.dto.dashboard.admin.UserHealthStats;
 import com.mns.cda.suivimns.dto.dashboard.graphs.SoftwareStatDto;
 import com.mns.cda.suivimns.dto.dashboard.graphs.TechnicianWorkloadDto;
 import com.mns.cda.suivimns.dto.dashboard.graphs.ThemeStatDto;
@@ -27,6 +29,7 @@ import java.util.List;
 public class DashboardService {
 
     private final TicketDao ticketDao;
+    private final AppUserDao appUserDao;
     private final SecurityService securityService;
     private final ActivityService activityService;
 
@@ -64,9 +67,13 @@ public class DashboardService {
                 ticketDao.count(TicketSpecification.isOrphan(true))
         );
 
+        UserHealthStats userHealth = new UserHealthStats(
+                appUserDao.countUsersWithoutRole()
+        );
+
         List<UserActivity> activities = activityService.activityFeed(id);
 
-        return new DashboardAdminDto(ticketHealth, activities);
+        return new DashboardAdminDto(ticketHealth, userHealth, activities);
     }
 
     private DashboardDirectorDto getDirectorStats(LocalDateTime startDate, AppUserDetails principal) {
