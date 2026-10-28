@@ -126,16 +126,17 @@ export class TicketService {
   }
 
   waitClient(idTicket: number, justification: TicketTransition) {
+    // The backend expects the status code, not the StatusEnum display label
     const payload = {
-      waitingStatus: StatusEnum.WAITING_CLIENT,
-      statusReason: justification.reason}
+      waitingStatus: 'WAITING_CLIENT',
+      statusReason: justification.reason,
+    };
     return this.http.post(`${this.apiUrl}/${idTicket}/wait`, payload);
   }
 
   waitThirdParty(idTicket: number, justification: TicketTransition) {
     const payload = {
-      idTechnician: justification.idAppUser,
-      waitingStatus: StatusEnum.WAITING_THIRD_PARTY,
+      waitingStatus: 'WAITING_THIRD_PARTY',
       statusReason: justification.reason,
     };
     return this.http.post(`${this.apiUrl}/${idTicket}/wait`, payload);

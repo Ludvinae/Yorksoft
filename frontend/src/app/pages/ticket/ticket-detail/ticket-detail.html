@@ -46,6 +46,12 @@
           (input)="justification.set($any($event.target).value)"
         ></textarea>
 
+        @if (actionError()) {
+          <div class="alert alert-error mt-4">
+            <span>{{ actionError() }}</span>
+          </div>
+        }
+
         <div class="modal-action">
 
           <button class="btn" (click)="actionModal.close()">

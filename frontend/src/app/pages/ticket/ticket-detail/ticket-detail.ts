@@ -62,6 +62,7 @@ export class TicketDetail implements OnInit {
 
   selectedAction = signal<StatusEnum | null>(null);
   justification = signal('');
+  actionError = signal<string | undefined>(undefined);
 
   ticketAssign = computed((): TicketAssignDto | null => {
     if (this.ticket() != null) {
@@ -153,6 +154,7 @@ export class TicketDetail implements OnInit {
 
     this.selectedAction.set(action);
     this.justification.set('');
+    this.actionError.set(undefined);
     this.actionModal.nativeElement.showModal();
   }
 
@@ -208,6 +210,9 @@ export class TicketDetail implements OnInit {
         modal.close();
 
         this.loadTicket();
+      },
+      error: () => {
+        this.actionError.set("L'action n'a pas pu être effectuée.");
       },
     });
   }
