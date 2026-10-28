@@ -291,6 +291,15 @@ public interface TicketDao extends JpaRepository<Ticket, Integer>, JpaSpecificat
     """)
     int closedTicketsWithoutEndDate();
 
+    // Only CLOSED sets a close date: any other non-terminal status keeping one is inconsistent
+    @Query("""
+        SELECT COUNT(t)
+        FROM Ticket t
+        WHERE t.currentStatus NOT IN ('CLOSED', 'REJECTED')
+        AND t.closeDate IS NOT null
+    """)
+    int openTicketsWithCloseDate();
+
 
     // Details des tickets
     @Query("""

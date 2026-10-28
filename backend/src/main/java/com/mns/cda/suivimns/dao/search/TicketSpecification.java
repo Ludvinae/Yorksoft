@@ -97,9 +97,12 @@ public class TicketSpecification {
                 idAppUser == null ? null : cb.equal(root.get("currentTechnician").get("idAppUser"), idAppUser);
     }
 
+    /** true: no close date; false: has a close date (whatever the status). */
     public static Specification<Ticket> isNotClosed(Boolean isNotClosed) {
-        return (root, query, cb) ->
-                isNotClosed == null ? null : cb.isNull(root.get("closeDate"));
+        return (root, query, cb) -> {
+            if (isNotClosed == null) return null;
+            return isNotClosed ? cb.isNull(root.get("closeDate")) : cb.isNotNull(root.get("closeDate"));
+        };
     }
 
     public static Specification<Ticket> isOverdue(Boolean hasExceededSla) {

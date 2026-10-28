@@ -55,7 +55,8 @@ public class DashboardService {
         Integer id = principal.getId();
 
         TicketHealthStats ticketHealth = new TicketHealthStats(
-                ticketDao.closedTicketsWithoutEndDate()
+                ticketDao.closedTicketsWithoutEndDate(),
+                ticketDao.openTicketsWithCloseDate()
         );
 
         List<UserActivity> activities = activityService.activityFeed(id);

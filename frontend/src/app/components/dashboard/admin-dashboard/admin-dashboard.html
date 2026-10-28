@@ -25,9 +25,13 @@
 
             <app-kpi-card
               title="Ouverts avec date de clôture"
-              [value]="null"
+              [value]="dashboard.ticketHealth.openWithCloseDate"
               icon="ph ph-calendar-x"
               colorClass="text-error"
+              [filters]="{
+                statuses: ['OPEN', 'ASSIGNED', 'IN_PROGRESS', 'WAITING_CLIENT', 'WAITING_THIRD_PARTY', 'SOLVED'],
+                isNotClosed: false
+              }"
             />
 
             <app-kpi-card
