@@ -60,9 +60,10 @@
 
             <app-kpi-card
               title="Sans client ou version"
-              [value]="null"
+              [value]="dashboard.ticketHealth.orphans"
               icon="ph ph-link-break"
               colorClass="text-warning"
+              [filters]="{ isOrphan: true }"
             />
 
           </div>

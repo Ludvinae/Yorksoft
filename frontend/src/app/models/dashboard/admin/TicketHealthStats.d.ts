@@ -4,4 +4,5 @@ type TicketHealthStats = {
   statusMismatch: number;
   assignmentIssues: number;
   unflaggedSlaBreaches: number;
+  orphans: number;
 };

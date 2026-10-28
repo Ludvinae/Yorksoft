@@ -46,7 +46,8 @@ public class TicketQueryService {
                 .and(TicketSpecification.isOverdue(criteria.isOverdue()))
                 .and(TicketSpecification.hasStatusMismatch(criteria.hasStatusMismatch()))
                 .and(TicketSpecification.hasAssignmentIssue(criteria.hasAssignmentIssue()))
-                .and(TicketSpecification.hasUnflaggedSlaBreach(criteria.hasUnflaggedSlaBreach()));
+                .and(TicketSpecification.hasUnflaggedSlaBreach(criteria.hasUnflaggedSlaBreach()))
+                .and(TicketSpecification.isOrphan(criteria.isOrphan()));
 
         return ticketDao.findAll(spec, pageable).map(ticketMapper::toListDto);
     }

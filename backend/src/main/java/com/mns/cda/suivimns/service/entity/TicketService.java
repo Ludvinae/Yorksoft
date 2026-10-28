@@ -222,7 +222,7 @@ public class TicketService  {
                     criteria.createdAfter(), criteria.createdBefore(), criteria.closedAfter(),
                     criteria.closedBefore(), criteria.isNotClosed(), criteria.isOverdue(),
                     criteria.hasStatusMismatch(), criteria.hasAssignmentIssue(),
-                    criteria.hasUnflaggedSlaBreach());
+                    criteria.hasUnflaggedSlaBreach(), criteria.isOrphan());
             return queryService.search(newCriteria, pageable);
         }
         return queryService.search(criteria, pageable);

@@ -8,6 +8,7 @@ public record TicketHealthStats(
         int openWithCloseDate,
         long statusMismatch,
         long assignmentIssues,
-        long unflaggedSlaBreaches
+        long unflaggedSlaBreaches,
+        long orphans
 ) {
 }

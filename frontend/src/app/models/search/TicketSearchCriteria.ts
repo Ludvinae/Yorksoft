@@ -36,4 +36,6 @@ export interface TicketSearchCriteria {
   hasAssignmentIssue?: boolean;
 
   hasUnflaggedSlaBreach?: boolean;
+
+  isOrphan?: boolean;
 }

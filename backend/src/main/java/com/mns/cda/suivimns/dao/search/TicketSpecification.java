@@ -206,4 +206,18 @@ public class TicketSpecification {
             return hasUnflaggedSlaBreach ? breach : cb.not(breach);
         };
     }
+
+    /**
+     * Client and version are required when opening a ticket, so a missing one means it was deleted
+     * afterwards (SET_NULL) or edited directly in the database.
+     * true: tickets missing either; false: tickets with both.
+     */
+    public static Specification<Ticket> isOrphan(Boolean isOrphan) {
+        return (root, query, cb) -> {
+            if (isOrphan == null) return null;
+
+            Predicate orphan = cb.or(cb.isNull(root.get("client")), cb.isNull(root.get("version")));
+            return isOrphan ? orphan : cb.not(orphan);
+        };
+    }
 }
