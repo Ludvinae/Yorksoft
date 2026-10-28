@@ -2,6 +2,13 @@
 
 History of design/architecture decisions, session milestones, and choices made along the way — **not** a code changelog (see git history for that). Organized by date, most recent session on top. Update at the end of each work session with Claude.
 
+## 2026-10-28
+
+- Admin dashboard KPIs redesigned as data/site-health indicators, in two rows of 6 cards: Tickets (closed without end date — existing; open with a close date; `currentStatus` out of sync with the active `History` row; incoherent assignments; SLA past deadline but not flagged `overdue`; orphan tickets without client/version) and Users (no valid role subtype; password still a `{seed-…}` placeholder; inactive 90 days and never active — both derived from `Activity`, since `AppUser` has no last-login field; accounts with multiple role subtypes, which `AuthController.logIn` silently resolves to whichever role it checks first; admin account count, as a security signal when there is only one or too many). License KPIs and "overloaded technicians" were rejected — the latter is a manager/director concern, not an admin one.
+- `DashboardAdminDto` will group KPIs into two nested records (`TicketHealthStats`, `UserHealthStats`) rather than a flat list of fields. The hardcoded "Temps moyen" placeholder section is dropped from the admin dashboard. `UserHealthStats` is only added with the first user KPI, to avoid shipping fields that are always zero: until then, not-yet-implemented cards are rendered with a `null` value (`-`).
+- API response time / 5xx metrics deferred to the later charts work: Actuator's Micrometer meters are in-memory and reset on restart, so plotting them over time needs periodic snapshots persisted in the DB.
+- Open decision (deferred): how to test the anomaly-detection queries. They detect states the seed data never contains, so meaningful tests need deliberately inconsistent fixtures in DB-backed integration tests (the suite has only `SuiviMnsApplicationTests` today) — more setup than service-level unit tests with mocked DAOs. To be decided later.
+
 ## 2026-10-27
 
 - Second-row dashboard KPIs (time/throughput: résolution, prise en charge, appels…) moved onto the shared `kpi-card` on all four role dashboards, closing the 2026-10-26 open item about their misaligned values. `kpi-card` was generalized rather than forking a second "stat" component: `filters` is now optional (no filters = not clickable, no hover), `icon` optional, `value` nullable (renders `-`) with a `suffix` input for units. Icons were added to the second row for visual consistency with the first. Admin/director (and part of technician) second-row values are still hardcoded placeholders — only their markup was migrated.
