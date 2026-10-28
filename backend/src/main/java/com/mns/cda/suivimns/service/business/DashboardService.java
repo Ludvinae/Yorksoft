@@ -59,7 +59,8 @@ public class DashboardService {
                 ticketDao.closedTicketsWithoutEndDate(),
                 ticketDao.openTicketsWithCloseDate(),
                 ticketDao.count(TicketSpecification.hasStatusMismatch(true)),
-                ticketDao.count(TicketSpecification.hasAssignmentIssue(true))
+                ticketDao.count(TicketSpecification.hasAssignmentIssue(true)),
+                ticketDao.count(TicketSpecification.hasUnflaggedSlaBreach(true))
         );
 
         List<UserActivity> activities = activityService.activityFeed(id);

@@ -25,6 +25,7 @@ public record TicketSearchCriteria(
         Boolean isNotClosed,
         Boolean isOverdue,
         Boolean hasStatusMismatch,
-        Boolean hasAssignmentIssue
+        Boolean hasAssignmentIssue,
+        Boolean hasUnflaggedSlaBreach
 ) {
 }

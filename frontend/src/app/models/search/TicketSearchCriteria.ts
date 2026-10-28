@@ -34,4 +34,6 @@ export interface TicketSearchCriteria {
   hasStatusMismatch?: boolean;
 
   hasAssignmentIssue?: boolean;
+
+  hasUnflaggedSlaBreach?: boolean;
 }

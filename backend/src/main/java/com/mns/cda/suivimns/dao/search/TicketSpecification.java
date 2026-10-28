@@ -172,7 +172,8 @@ public class TicketSpecification {
             Predicate missingAssignment = cb.and(
                     cb.equal(activeCount, 0L),
                     cb.or(cb.isNotNull(root.get("currentTechnician")),
-                            cb.not(root.get("currentStatus").in(StatusEnum.OPEN, StatusEnum.REJECTED))));
+                            cb.and(cb.isNotNull(root.get("currentStatus")),
+                                    cb.not(root.get("currentStatus").in(StatusEnum.OPEN, StatusEnum.REJECTED)))));
             Predicate assignedWhileOpen = cb.and(
                     cb.greaterThan(activeCount, 0L),
                     cb.equal(root.get("currentStatus"), StatusEnum.OPEN));
@@ -184,6 +185,25 @@ public class TicketSpecification {
                     cb.exists(wrongTechnician),
                     cb.exists(endBeforeStart));
             return hasAssignmentIssue ? issue : cb.not(issue);
+        };
+    }
+
+    /**
+     * SLA deadline passed but the ticket isn't flagged overdue, among statuses where the SLA clock runs
+     * (it's paused while waiting). "now" comes from the JVM, like the deadline computed in SlaService.
+     * true: such tickets; false: all others.
+     */
+    public static Specification<Ticket> hasUnflaggedSlaBreach(Boolean hasUnflaggedSlaBreach) {
+        return (root, query, cb) -> {
+            if (hasUnflaggedSlaBreach == null) return null;
+
+            Predicate breach = cb.and(
+                    root.get("currentStatus").in(StatusEnum.OPEN, StatusEnum.ASSIGNED, StatusEnum.IN_PROGRESS),
+                    // explicit null check so that cb.not(breach) keeps tickets without a deadline
+                    cb.isNotNull(root.get("slaDeadline")),
+                    cb.lessThan(root.get("slaDeadline"), LocalDateTime.now()),
+                    cb.isFalse(root.get("overdue")));
+            return hasUnflaggedSlaBreach ? breach : cb.not(breach);
         };
     }
 }

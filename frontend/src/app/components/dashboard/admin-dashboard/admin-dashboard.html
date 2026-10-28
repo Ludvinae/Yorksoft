@@ -52,9 +52,10 @@
 
             <app-kpi-card
               title="SLA dépassé non signalé"
-              [value]="null"
+              [value]="dashboard.ticketHealth.unflaggedSlaBreaches"
               icon="ph ph-alarm"
               colorClass="text-warning"
+              [filters]="{ hasUnflaggedSlaBreach: true }"
             />
 
             <app-kpi-card
