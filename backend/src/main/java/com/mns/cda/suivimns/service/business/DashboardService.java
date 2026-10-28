@@ -71,7 +71,9 @@ public class DashboardService {
                 appUserDao.countUsersWithoutRole(),
                 appUserDao.countUsersWithMultipleRoles(),
                 // "{seed-role}" placeholders that DemoPasswordSeeder didn't rehash: those accounts can't log in
-                appUserDao.countByPasswordStartingWith("{seed-")
+                appUserDao.countByPasswordStartingWith("{seed-"),
+                appUserDao.countEmployeesInactiveSince(LocalDateTime.now().minusDays(90)),
+                appUserDao.countEmployeesNeverActive()
         );
 
         List<UserActivity> activities = activityService.activityFeed(id);

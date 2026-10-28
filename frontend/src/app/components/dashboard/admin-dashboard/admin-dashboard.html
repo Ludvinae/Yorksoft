@@ -95,15 +95,15 @@
             />
 
             <app-kpi-card
-              title="Inactifs depuis 90 jours"
-              [value]="null"
+              title="Employés inactifs depuis 90 jours"
+              [value]="dashboard.userHealth.inactiveEmployees"
               icon="ph ph-clock-countdown"
               colorClass="text-warning"
             />
 
             <app-kpi-card
-              title="Jamais actifs"
-              [value]="null"
+              title="Employés jamais actifs"
+              [value]="dashboard.userHealth.neverActiveEmployees"
               icon="ph ph-user-minus"
               colorClass="text-warning"
             />
