@@ -134,6 +134,10 @@ public class AuthController {
             loginAttemptService.registerSuccess(attemptKey);
 
             // HERITAGE
+            // The final "ADMIN" branch is not a real fallback: AppUserDetailsService only finds users through the
+            // role subtype tables, so a user with no role is rejected (401) before reaching this point.
+            // AppUserDetails carries a single subtype (client > technician > manager > director > admin), so
+            // the order of these checks doesn't matter.
             String role = appUser.getManager() != null
                     ? "MANAGER"
                     : appUser.getTechnician() != null
