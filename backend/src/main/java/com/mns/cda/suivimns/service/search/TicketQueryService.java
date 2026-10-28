@@ -43,7 +43,8 @@ public class TicketQueryService {
                 .and(TicketSpecification.priorityLessThan(criteria.priorityLessThan()))
                 .and(TicketSpecification.assignedTo(criteria.assignedTo()))
                 .and(TicketSpecification.isNotClosed(criteria.isNotClosed()))
-                .and(TicketSpecification.isOverdue(criteria.isOverdue()));
+                .and(TicketSpecification.isOverdue(criteria.isOverdue()))
+                .and(TicketSpecification.hasStatusMismatch(criteria.hasStatusMismatch()));
 
         return ticketDao.findAll(spec, pageable).map(ticketMapper::toListDto);
     }

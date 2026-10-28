@@ -220,7 +220,8 @@ public class TicketService  {
                     criteria.statuses(), criteria.statusesExcluded(), criteria.priorityGreaterThan(),
                     criteria.priorityLessThan(), criteria.priorityEquals(), criteria.assignedTo(),
                     criteria.createdAfter(), criteria.createdBefore(), criteria.closedAfter(),
-                    criteria.closedBefore(), criteria.isNotClosed(), criteria.isOverdue());
+                    criteria.closedBefore(), criteria.isNotClosed(), criteria.isOverdue(),
+                    criteria.hasStatusMismatch());
             return queryService.search(newCriteria, pageable);
         }
         return queryService.search(criteria, pageable);

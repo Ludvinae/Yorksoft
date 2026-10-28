@@ -1,6 +1,7 @@
 package com.mns.cda.suivimns.service.business;
 
 import com.mns.cda.suivimns.dao.TicketDao;
+import com.mns.cda.suivimns.dao.search.TicketSpecification;
 import com.mns.cda.suivimns.dto.dashboard.*;
 import com.mns.cda.suivimns.dto.dashboard.activity.UserActivity;
 import com.mns.cda.suivimns.dto.dashboard.admin.TicketHealthStats;
@@ -56,7 +57,8 @@ public class DashboardService {
 
         TicketHealthStats ticketHealth = new TicketHealthStats(
                 ticketDao.closedTicketsWithoutEndDate(),
-                ticketDao.openTicketsWithCloseDate()
+                ticketDao.openTicketsWithCloseDate(),
+                ticketDao.count(TicketSpecification.hasStatusMismatch(true))
         );
 
         List<UserActivity> activities = activityService.activityFeed(id);

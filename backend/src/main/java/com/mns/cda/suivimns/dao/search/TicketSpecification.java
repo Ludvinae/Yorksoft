@@ -1,8 +1,11 @@
 package com.mns.cda.suivimns.dao.search;
 
 import com.mns.cda.suivimns.enumerate.StatusEnum;
+import com.mns.cda.suivimns.model.History;
 import com.mns.cda.suivimns.model.Ticket;
 import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.Subquery;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.StringUtils;
 
@@ -109,5 +112,30 @@ public class TicketSpecification {
 
         return (root, query, cb) ->
                 hasExceededSla == null ? null : root.get("overdue").in(hasExceededSla);
+    }
+
+    /**
+     * A ticket must have exactly one active History row (endDate null) whose status matches currentStatus.
+     * true: tickets breaking that rule; false: tickets respecting it.
+     */
+    public static Specification<Ticket> hasStatusMismatch(Boolean hasStatusMismatch) {
+        return (root, query, cb) -> {
+            if (hasStatusMismatch == null) return null;
+
+            Subquery<Long> activeCount = query.subquery(Long.class);
+            Root<History> active = activeCount.from(History.class);
+            activeCount.select(cb.count(active))
+                    .where(cb.equal(active.get("ticket"), root), cb.isNull(active.get("endDate")));
+
+            Subquery<Integer> matching = query.subquery(Integer.class);
+            Root<History> match = matching.from(History.class);
+            matching.select(match.get("idHistory"))
+                    .where(cb.equal(match.get("ticket"), root),
+                            cb.isNull(match.get("endDate")),
+                            cb.equal(match.get("status").get("code"), root.get("currentStatus")));
+
+            Predicate mismatch = cb.or(cb.notEqual(activeCount, 1L), cb.not(cb.exists(matching)));
+            return hasStatusMismatch ? mismatch : cb.not(mismatch);
+        };
     }
 }

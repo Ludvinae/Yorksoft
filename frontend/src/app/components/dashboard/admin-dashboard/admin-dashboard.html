@@ -36,9 +36,10 @@
 
             <app-kpi-card
               title="Statut désynchronisé"
-              [value]="null"
+              [value]="dashboard.ticketHealth.statusMismatch"
               icon="ph ph-arrows-clockwise"
               colorClass="text-error"
+              [filters]="{ hasStatusMismatch: true }"
             />
 
             <app-kpi-card
