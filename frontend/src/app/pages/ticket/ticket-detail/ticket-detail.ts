@@ -48,6 +48,11 @@ export class TicketDetail implements OnInit {
   detail = computed(() => this.ticket()?.details);
   knowledge = computed(() => this.ticket()?.knowledge);
   possibleTransitions = computed(() => this.ticket()?.possibleStatusTransitions ?? []);
+  // The backend sends the status code ('ASSIGNED'), whereas StatusEnum values are display labels ('Assigné'):
+  // compare against the code, never against StatusEnum.X
+  currentStatusCode = computed(
+    () => this.detail()?.currentStatus as unknown as keyof typeof StatusEnum | undefined,
+  );
 
   loading = signal(true);
   error = signal<string | undefined>(undefined);
@@ -167,7 +172,7 @@ export class TicketDetail implements OnInit {
 
     switch (action) {
       case StatusEnum.IN_PROGRESS:
-        if (this.detail()?.currentStatus === StatusEnum.ASSIGNED) {
+        if (this.currentStatusCode() === 'ASSIGNED') {
           request$ = this.ticketService.progressStart(this.id()!, payload);
           break;
         } else {
@@ -293,7 +298,7 @@ export class TicketDetail implements OnInit {
 
   // Same rights as the backend: assigned technician, manager or admin, on a ticket not yet closed
   canEditKnowledge(): boolean {
-    return this.canEditSolution() && this.detail()?.currentStatus !== StatusEnum.CLOSED;
+    return this.canEditSolution() && this.currentStatusCode() !== 'CLOSED';
   }
 
   protected startKnowledgeEdit(): void {

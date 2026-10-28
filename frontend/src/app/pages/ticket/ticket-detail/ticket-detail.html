@@ -425,7 +425,7 @@
 
                 @if (possibleTransitions().includes('IN_PROGRESS')) {
                   <button class="btn btn-secondary btn-xs"  (click)="openActionModal(StatusEnum.IN_PROGRESS)">
-                    {{ detail()?.currentStatus === StatusEnum.ASSIGNED ? 'Prendre' : 'Reprendre' }} en charge
+                    {{ currentStatusCode() === 'ASSIGNED' ? 'Prendre' : 'Reprendre' }} en charge
                   </button>
                 }
               }
