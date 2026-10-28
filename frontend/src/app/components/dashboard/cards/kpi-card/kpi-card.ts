@@ -1,8 +1,8 @@
-import { Component, inject, Input } from '@angular/core';
-import { Router } from '@angular/router';
-import { TicketStoreService } from '../../../../services/business/ticket-store-service';
-import { TicketSearchCriteria } from '../../../../models/search/TicketSearchCriteria';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
+/**
+ * Presentation-only KPI tile: the page using it decides the color (colorClass) and what a click does (cardClick).
+ */
 @Component({
   selector: 'app-kpi-card',
   imports: [],
@@ -16,18 +16,16 @@ export class KpiCard {
   /** Unit appended to the value (e.g. "m"), not shown when value is null. */
   @Input() suffix = '';
   @Input() icon?: string;
-  /** When set, clicking the card opens the ticket list with these filters; otherwise the card is not clickable. */
-  @Input() filters?: TicketSearchCriteria;
   @Input() colorClass = '';
 
-  private router = inject(Router);
-  private ticketStore = inject(TicketStoreService);
+  /** The card is clickable (hover styles, pointer) only when the parent listens to this output. */
+  @Output() cardClick = new EventEmitter<void>();
 
-  navigateToTickets(): void {
-    if (!this.filters) return;
+  get clickable(): boolean {
+    return this.cardClick.observed;
+  }
 
-    this.ticketStore.setFilters(this.filters);
-
-    this.router.navigate(['/ticket']);
+  onClick(): void {
+    if (this.clickable) this.cardClick.emit();
   }
 }

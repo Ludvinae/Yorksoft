@@ -2,6 +2,7 @@ import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import { TicketService } from '../api/ticket-service';
 import { TicketSearchCriteria } from '../../models/search/TicketSearchCriteria';
 import { TicketFilterState } from '../ui/ticket-filter-state';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -9,6 +10,7 @@ import { TicketFilterState } from '../ui/ticket-filter-state';
 export class TicketStoreService {
   constructor(private ticketService: TicketService) {}
   private filterState = inject(TicketFilterState);
+  private router = inject(Router);
 
   // Filtres métier
   filters = signal<TicketSearchCriteria>({});
@@ -58,6 +60,12 @@ export class TicketStoreService {
 
   resetFilters(): void {
     this.filters.set({});
+  }
+
+  /** Opens the ticket list with these filters (e.g. from a dashboard KPI card). */
+  openList(filters: TicketSearchCriteria): void {
+    this.setFilters(filters);
+    this.router.navigate(['/ticket']);
   }
 
   setFilters(filters: TicketSearchCriteria): void {

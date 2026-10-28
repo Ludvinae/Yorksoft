@@ -19,7 +19,7 @@
               [value]="dashboard.ticketHealth.closedWithoutEndDate"
               icon="ph ph-warning"
               [colorClass]="healthColor(dashboard.ticketHealth.closedWithoutEndDate, 'text-error')"
-              [filters]="{ statuses: ['CLOSED'], isNotClosed: true }"
+              (cardClick)="ticketStore.openList({ statuses: ['CLOSED'], isNotClosed: true })"
             />
 
             <app-kpi-card
@@ -27,10 +27,10 @@
               [value]="dashboard.ticketHealth.openWithCloseDate"
               icon="ph ph-calendar-x"
               [colorClass]="healthColor(dashboard.ticketHealth.openWithCloseDate, 'text-error')"
-              [filters]="{
+              (cardClick)="ticketStore.openList({
                 statuses: ['OPEN', 'ASSIGNED', 'IN_PROGRESS', 'WAITING_CLIENT', 'WAITING_THIRD_PARTY', 'SOLVED'],
                 isNotClosed: false
-              }"
+              })"
             />
 
             <app-kpi-card
@@ -38,7 +38,7 @@
               [value]="dashboard.ticketHealth.statusMismatch"
               icon="ph ph-arrows-clockwise"
               [colorClass]="healthColor(dashboard.ticketHealth.statusMismatch, 'text-error')"
-              [filters]="{ hasStatusMismatch: true }"
+              (cardClick)="ticketStore.openList({ hasStatusMismatch: true })"
             />
 
             <app-kpi-card
@@ -46,7 +46,7 @@
               [value]="dashboard.ticketHealth.assignmentIssues"
               icon="ph ph-user-switch"
               [colorClass]="healthColor(dashboard.ticketHealth.assignmentIssues, 'text-error')"
-              [filters]="{ hasAssignmentIssue: true }"
+              (cardClick)="ticketStore.openList({ hasAssignmentIssue: true })"
             />
 
             <app-kpi-card
@@ -54,7 +54,7 @@
               [value]="dashboard.ticketHealth.unflaggedSlaBreaches"
               icon="ph ph-alarm"
               [colorClass]="healthColor(dashboard.ticketHealth.unflaggedSlaBreaches, 'text-warning')"
-              [filters]="{ hasUnflaggedSlaBreach: true }"
+              (cardClick)="ticketStore.openList({ hasUnflaggedSlaBreach: true })"
             />
 
             <app-kpi-card
@@ -62,7 +62,7 @@
               [value]="dashboard.ticketHealth.orphans"
               icon="ph ph-link-break"
               [colorClass]="healthColor(dashboard.ticketHealth.orphans, 'text-warning')"
-              [filters]="{ isOrphan: true }"
+              (cardClick)="ticketStore.openList({ isOrphan: true })"
             />
 
           </div>

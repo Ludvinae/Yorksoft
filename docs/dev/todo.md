@@ -8,11 +8,11 @@ The backlog lives on the project's Trello dashboard (board "Yorksoft"), not in t
 - Le backend a déjà les routes `/procedure` (création/modification par technicien, modification limitée à l'auteur ou un admin, suppression admin) : il reste surtout le frontend (formulaire, boutons, rafraîchissement de l'article) et à vérifier les droits côté UI.
 - Bonus possible : créer un nouvel article depuis cette page (aujourd'hui uniquement depuis la fiche ticket).
 
-## Cartes KPI redirigeant vers la liste des clients
+## Page « Utilisateurs » pour l'admin
 
-- Aujourd'hui `kpi-card` ne sait rediriger que vers la liste des tickets (input `filters` de type `TicketSearchCriteria`, appliqué via `TicketStoreService`).
-- L'adapter pour qu'une carte puisse aussi ouvrir la liste des clients avec des filtres pré-appliqués (critères de recherche client + store/service correspondant).
-- Cas d'usage : rendre cliquables les KPI de la rangée « Utilisateurs » du dashboard admin.
+- Il n'existe aucune liste des employés ni de l'ensemble des comptes : seulement la liste des clients (`/clients`) et la création d'utilisateur côté admin. Or les KPI de la rangée « Utilisateurs » du dashboard admin concernent surtout des employés (sans rôle, rôles multiples, mot de passe non initialisé, employés inactifs / jamais actifs, comptes admin).
+- Créer une page admin listant tous les comptes avec leur(s) rôle(s), avec une route backend paginée et filtrable (un filtre par KPI, sur le modèle de `TicketSearchCriteria` / `TicketSpecification` — attention, le rôle se lit dans les tables des sous-types, cf. les requêtes natives de `AppUserDao`).
+- Puis rendre les cartes « Utilisateurs » cliquables : `kpi-card` émet déjà `cardClick`, il suffit que le dashboard admin navigue vers cette page avec le bon filtre.
 
 ## Page d'édition des clients
 

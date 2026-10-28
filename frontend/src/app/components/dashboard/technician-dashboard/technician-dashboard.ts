@@ -1,6 +1,7 @@
 import { Component, inject, OnInit, Signal } from '@angular/core';
 import { KpiCard } from '../cards/kpi-card/kpi-card';
 import { DashboardService } from '../../../services/business/dashboard-service';
+import { TicketStoreService } from '../../../services/business/ticket-store-service';
 import { AuthService } from '../../../services/business/auth-service';
 import { DecimalPipe, PercentPipe} from '@angular/common';
 import {ActivityFeed} from '../../activity-feed/activity-feed';
@@ -13,6 +14,7 @@ import {ActivityFeed} from '../../activity-feed/activity-feed';
 })
 export class TechnicianDashboard implements OnInit {
   dashboardService = inject(DashboardService);
+  ticketStore = inject(TicketStoreService);
   auth = inject(AuthService);
 
   readonly dashboard = this.dashboardService.dashboard as Signal<DashboardTechnicianDto | null>;

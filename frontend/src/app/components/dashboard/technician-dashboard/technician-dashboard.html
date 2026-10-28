@@ -31,7 +31,7 @@
                       [value]="dashboard.assignedOpenTickets"
                       icon="ph ph-book-open"
                       colorClass="text-info"
-                      [filters]="{ isNotClosed: true, assignedTo: jwt()!.id }"
+                      (cardClick)="ticketStore.openList({ isNotClosed: true, assignedTo: jwt()!.id })"
                     />
 
                     <app-kpi-card
@@ -39,7 +39,7 @@
                       [value]="dashboard.assignedWaitingTickets"
                       icon="ph ph-hourglass"
                       colorClass="text-success"
-                      [filters]="{ statuses: ['WAITING_CLIENT', 'WAITING_THIRD_PARTY'], assignedTo: jwt()!.id  }"
+                      (cardClick)="ticketStore.openList({ statuses: ['WAITING_CLIENT', 'WAITING_THIRD_PARTY'], assignedTo: jwt()!.id  })"
                     />
 
                     <app-kpi-card
@@ -47,7 +47,7 @@
                       [value]="dashboard.assignedCriticalTickets"
                       icon="ph ph-fast-forward"
                       colorClass="text-warning"
-                      [filters]="{ isNotClosed: true, assignedTo: jwt()!.id }"
+                      (cardClick)="ticketStore.openList({ isNotClosed: true, assignedTo: jwt()!.id })"
                     />
 
                     <app-kpi-card
@@ -55,7 +55,7 @@
                       [value]="dashboard.assignedOverdueTickets"
                       icon="ph ph-alarm"
                       colorClass="text-error"
-                      [filters]="{ isOverdue: true, isNotClosed: true, assignedTo: jwt()!.id  }"
+                      (cardClick)="ticketStore.openList({ isOverdue: true, isNotClosed: true, assignedTo: jwt()!.id  })"
                     />
 
                     <app-kpi-card
@@ -63,7 +63,7 @@
                       [value]="dashboard.closedToday"
                       icon="ph ph-calendar-dot"
                       colorClass="text-success"
-                      [filters]="{ closedAfter: today.toString(), statuses: ['CLOSED'], assignedTo: jwt()!.id  }"
+                      (cardClick)="ticketStore.openList({ closedAfter: today.toString(), statuses: ['CLOSED'], assignedTo: jwt()!.id  })"
                     />
 
                     <app-kpi-card
@@ -71,7 +71,7 @@
                       [value]="dashboard.closedThisWeek"
                       icon="ph ph-calendar-dots"
                       colorClass="text-success"
-                      [filters]="{ closedAfter: startOfWeek.toString(), statuses: ['CLOSED'], assignedTo: jwt()!.id  }"
+                      (cardClick)="ticketStore.openList({ closedAfter: startOfWeek.toString(), statuses: ['CLOSED'], assignedTo: jwt()!.id  })"
                     />
 
 
