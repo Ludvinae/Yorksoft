@@ -4,4 +4,5 @@ type UserHealthStats = {
   uninitializedPasswords: number;
   inactiveEmployees: number;
   neverActiveEmployees: number;
+  admins: number;
 };

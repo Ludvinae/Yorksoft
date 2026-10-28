@@ -8,6 +8,7 @@ public record UserHealthStats(
         long multipleRoles,
         long uninitializedPasswords,
         long inactiveEmployees,
-        long neverActiveEmployees
+        long neverActiveEmployees,
+        long admins
 ) {
 }

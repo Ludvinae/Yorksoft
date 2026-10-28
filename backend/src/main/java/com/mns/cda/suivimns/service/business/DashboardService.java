@@ -1,5 +1,6 @@
 package com.mns.cda.suivimns.service.business;
 
+import com.mns.cda.suivimns.dao.AdminDao;
 import com.mns.cda.suivimns.dao.AppUserDao;
 import com.mns.cda.suivimns.dao.TicketDao;
 import com.mns.cda.suivimns.dao.search.TicketSpecification;
@@ -30,6 +31,7 @@ public class DashboardService {
 
     private final TicketDao ticketDao;
     private final AppUserDao appUserDao;
+    private final AdminDao adminDao;
     private final SecurityService securityService;
     private final ActivityService activityService;
 
@@ -73,7 +75,8 @@ public class DashboardService {
                 // "{seed-role}" placeholders that DemoPasswordSeeder didn't rehash: those accounts can't log in
                 appUserDao.countByPasswordStartingWith("{seed-"),
                 appUserDao.countEmployeesInactiveSince(LocalDateTime.now().minusDays(90)),
-                appUserDao.countEmployeesNeverActive()
+                appUserDao.countEmployeesNeverActive(),
+                adminDao.count()
         );
 
         List<UserActivity> activities = activityService.activityFeed(id);
