@@ -221,7 +221,7 @@ public class TicketService  {
                     criteria.priorityLessThan(), criteria.priorityEquals(), criteria.assignedTo(),
                     criteria.createdAfter(), criteria.createdBefore(), criteria.closedAfter(),
                     criteria.closedBefore(), criteria.isNotClosed(), criteria.isOverdue(),
-                    criteria.hasStatusMismatch());
+                    criteria.hasStatusMismatch(), criteria.hasAssignmentIssue());
             return queryService.search(newCriteria, pageable);
         }
         return queryService.search(criteria, pageable);

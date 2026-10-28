@@ -6,6 +6,7 @@ package com.mns.cda.suivimns.dto.dashboard.admin;
 public record TicketHealthStats(
         int closedWithoutEndDate,
         int openWithCloseDate,
-        long statusMismatch
+        long statusMismatch,
+        long assignmentIssues
 ) {
 }

@@ -58,7 +58,8 @@ public class DashboardService {
         TicketHealthStats ticketHealth = new TicketHealthStats(
                 ticketDao.closedTicketsWithoutEndDate(),
                 ticketDao.openTicketsWithCloseDate(),
-                ticketDao.count(TicketSpecification.hasStatusMismatch(true))
+                ticketDao.count(TicketSpecification.hasStatusMismatch(true)),
+                ticketDao.count(TicketSpecification.hasAssignmentIssue(true))
         );
 
         List<UserActivity> activities = activityService.activityFeed(id);

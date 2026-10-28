@@ -1,6 +1,7 @@
 package com.mns.cda.suivimns.dao.search;
 
 import com.mns.cda.suivimns.enumerate.StatusEnum;
+import com.mns.cda.suivimns.model.Assignment;
 import com.mns.cda.suivimns.model.History;
 import com.mns.cda.suivimns.model.Ticket;
 import jakarta.persistence.criteria.Predicate;
@@ -136,6 +137,53 @@ public class TicketSpecification {
 
             Predicate mismatch = cb.or(cb.notEqual(activeCount, 1L), cb.not(cb.exists(matching)));
             return hasStatusMismatch ? mismatch : cb.not(mismatch);
+        };
+    }
+
+    /**
+     * The active Assignment (endDate null) must be unique and match currentTechnician. An assignment is only
+     * ended by a reassignment, so every status reached through ASSIGNED keeps one; OPEN never has one.
+     * true: tickets breaking those rules; false: tickets respecting them.
+     */
+    public static Specification<Ticket> hasAssignmentIssue(Boolean hasAssignmentIssue) {
+        return (root, query, cb) -> {
+            if (hasAssignmentIssue == null) return null;
+
+            Subquery<Long> activeCount = query.subquery(Long.class);
+            Root<Assignment> active = activeCount.from(Assignment.class);
+            activeCount.select(cb.count(active))
+                    .where(cb.equal(active.get("ticket"), root), cb.isNull(active.get("endDate")));
+
+            Subquery<Integer> wrongTechnician = query.subquery(Integer.class);
+            Root<Assignment> wrong = wrongTechnician.from(Assignment.class);
+            wrongTechnician.select(wrong.get("idAssignment"))
+                    .where(cb.equal(wrong.get("ticket"), root),
+                            cb.isNull(wrong.get("endDate")),
+                            cb.or(cb.isNull(wrong.get("technician")),
+                                    cb.isNull(root.get("currentTechnician")),
+                                    cb.notEqual(wrong.get("technician"), root.get("currentTechnician"))));
+
+            Subquery<Integer> endBeforeStart = query.subquery(Integer.class);
+            Root<Assignment> dates = endBeforeStart.from(Assignment.class);
+            endBeforeStart.select(dates.get("idAssignment"))
+                    .where(cb.equal(dates.get("ticket"), root),
+                            cb.lessThan(dates.get("endDate"), dates.get("assignmentDate")));
+
+            Predicate missingAssignment = cb.and(
+                    cb.equal(activeCount, 0L),
+                    cb.or(cb.isNotNull(root.get("currentTechnician")),
+                            cb.not(root.get("currentStatus").in(StatusEnum.OPEN, StatusEnum.REJECTED))));
+            Predicate assignedWhileOpen = cb.and(
+                    cb.greaterThan(activeCount, 0L),
+                    cb.equal(root.get("currentStatus"), StatusEnum.OPEN));
+
+            Predicate issue = cb.or(
+                    cb.greaterThan(activeCount, 1L),
+                    missingAssignment,
+                    assignedWhileOpen,
+                    cb.exists(wrongTechnician),
+                    cb.exists(endBeforeStart));
+            return hasAssignmentIssue ? issue : cb.not(issue);
         };
     }
 }

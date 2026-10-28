@@ -32,4 +32,6 @@ export interface TicketSearchCriteria {
   isOverdue?: boolean;
 
   hasStatusMismatch?: boolean;
+
+  hasAssignmentIssue?: boolean;
 }

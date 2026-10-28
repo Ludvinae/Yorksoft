@@ -24,6 +24,7 @@ public record TicketSearchCriteria(
         LocalDate closedBefore,
         Boolean isNotClosed,
         Boolean isOverdue,
-        Boolean hasStatusMismatch
+        Boolean hasStatusMismatch,
+        Boolean hasAssignmentIssue
 ) {
 }

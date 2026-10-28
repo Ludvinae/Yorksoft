@@ -44,9 +44,10 @@
 
             <app-kpi-card
               title="Affectations incohérentes"
-              [value]="null"
+              [value]="dashboard.ticketHealth.assignmentIssues"
               icon="ph ph-user-switch"
               colorClass="text-error"
+              [filters]="{ hasAssignmentIssue: true }"
             />
 
             <app-kpi-card
