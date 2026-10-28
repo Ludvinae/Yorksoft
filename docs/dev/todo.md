@@ -19,3 +19,8 @@ The backlog lives on the project's Trello dashboard (board "Yorksoft"), not in t
 - Ajouter une page d'édition des clients, accessible via un bouton depuis la liste des clients (`pages/client/client-list`).
 - Le composant `pages/client/client-edit` existe déjà mais n'est qu'un squelette généré (« client-edit works! »), sans route : il reste à le brancher et à construire le formulaire.
 - Côté backend, `PATCH /client/{id}` existe déjà : mais `@IsClient` n'autorise que CLIENT et ADMIN : à élargir si les techniciens/managers doivent aussi voir le bouton.
+
+## Base de connaissances : affichage en liste sur desktop
+
+- Sur desktop, remplacer l'affichage en cartes de la page Base de connaissances (`pages/knowledge`) par un format liste.
+- Garder les cartes sur mobile, sur le modèle des listes de tickets qui ont déjà des composants desktop et mobile distincts (`components/list/desktop-table` / `mobile-card-list`).
