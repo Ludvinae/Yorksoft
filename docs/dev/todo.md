@@ -24,3 +24,8 @@ The backlog lives on the project's Trello dashboard (board "Yorksoft"), not in t
 
 - Sur desktop, remplacer l'affichage en cartes de la page Base de connaissances (`pages/knowledge`) par un format liste.
 - Garder les cartes sur mobile, sur le modèle des listes de tickets qui ont déjà des composants desktop et mobile distincts (`components/list/desktop-table` / `mobile-card-list`).
+
+## Filtres du dashboard écrasés par « masquer les tickets clos »
+
+- Quand l'utilisateur a masqué les tickets clos dans la liste, `TicketStoreService.effectiveFilters` force `statusesExcluded = ['CLOSED']`, y compris sur les filtres posés par une carte KPI du dashboard.
+- Conséquence : la carte admin « Fermés sans date de fin » (`statuses: ['CLOSED']`) ouvre une liste vide. Les filtres venant d'une carte KPI devraient passer outre cette préférence.
