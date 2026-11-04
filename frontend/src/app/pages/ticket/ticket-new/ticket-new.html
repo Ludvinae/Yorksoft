@@ -52,8 +52,20 @@
             Le ticket #{{ createdTicket.idTicket }}
             a bien été enregistré.
           </span>
+          @if (selfAssignError()) {
+            <span class="text-error">{{ selfAssignError() }}</span>
+          }
         </div>
         <div class="flex gap-2">
+          @if (canSelfAssign) {
+            <button class="btn btn-primary" [disabled]="selfAssigning()" (click)="selfAssign()">
+              @if (selfAssigning()) {
+                <span class="loading loading-spinner loading-sm"></span>
+              }
+              M'attribuer et prendre en charge
+            </button>
+          }
+
           <button class="btn btn-primary" routerLink="/ticket/{{ createdTicket.idTicket }}">
             Voir le ticket
           </button>
