@@ -48,6 +48,7 @@ export class TicketDetail implements OnInit {
   detail = computed(() => this.ticket()?.details);
   knowledge = computed(() => this.ticket()?.knowledge);
   possibleTransitions = computed(() => this.ticket()?.possibleStatusTransitions ?? []);
+  canSelfAssign = computed(() => this.ticket()?.canSelfAssign ?? false);
   // The backend sends the status code ('ASSIGNED'), whereas StatusEnum values are display labels ('Assigné'):
   // compare against the code, never against StatusEnum.X
   currentStatusCode = computed(
@@ -63,6 +64,8 @@ export class TicketDetail implements OnInit {
   selectedAction = signal<StatusEnum | null>(null);
   justification = signal('');
   actionError = signal<string | undefined>(undefined);
+  selfAssigning = signal(false);
+  selfAssignError = signal<string | undefined>(undefined);
 
   ticketAssign = computed((): TicketAssignDto | null => {
     if (this.ticket() != null) {
@@ -213,6 +216,28 @@ export class TicketDetail implements OnInit {
       },
       error: () => {
         this.actionError.set("L'action n'a pas pu être effectuée.");
+      },
+    });
+  }
+
+  selfAssign(): void {
+    const id = this.id();
+
+    if (!id || this.selfAssigning()) {
+      return;
+    }
+
+    this.selfAssigning.set(true);
+    this.selfAssignError.set(undefined);
+
+    this.ticketService.selfAssign(id).subscribe({
+      next: () => {
+        this.selfAssigning.set(false);
+        this.loadTicket();
+      },
+      error: () => {
+        this.selfAssigning.set(false);
+        this.selfAssignError.set("Impossible de vous attribuer ce ticket.");
       },
     });
   }

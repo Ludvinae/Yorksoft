@@ -110,6 +110,15 @@ export class TicketService {
     );
   }
 
+  // Assigne et prend en charge un ticket ouvert par le technicien connecté, s'il en est le créateur
+  selfAssign(idTicket: number) {
+    return this.http.post(`${this.apiUrl}/${idTicket}/self-assign`, { reason: null }).pipe(
+      tap(() => {
+        this.getAll().subscribe();
+      }),
+    );
+  }
+
   solve(idTicket: number, justification: TicketTransition) {
     const payload = { idTechnician: justification.idAppUser, statusReason: justification.reason };
     return this.http.post(`${this.apiUrl}/${idTicket}/solve`, payload);

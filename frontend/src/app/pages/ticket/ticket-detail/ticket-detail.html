@@ -406,6 +406,15 @@
 
           @if (possibleTransitions().length > 0) {
             <div class="flex flex-row flex-wrap gap-3 justify-center mt-2">
+              @if (canSelfAssign()) {
+                <button class="btn btn-primary btn-sm" [disabled]="selfAssigning()" (click)="selfAssign()">
+                  @if (selfAssigning()) {
+                    <span class="loading loading-spinner loading-xs"></span>
+                  }
+                  M'attribuer et prendre en charge
+                </button>
+              }
+
               @if (detail()?.currentTechnicianFullName == this.auth.jwtInfo()?.name || this.auth.jwtInfo()?.role == 'ADMIN') {
 
                 @if (possibleTransitions().includes('SOLVED') && detail()?.solution != null) {
@@ -452,6 +461,10 @@
               }
 
             </div>
+          }
+
+          @if (selfAssignError()) {
+            <p class="text-error text-sm text-center mt-2">{{ selfAssignError() }}</p>
           }
 
         </div>
