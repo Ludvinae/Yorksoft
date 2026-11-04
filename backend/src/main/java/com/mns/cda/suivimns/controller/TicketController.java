@@ -208,6 +208,24 @@ public class TicketController {
     }
 
 
+    @Operation(summary = "Le technicien créateur d'un ticket ouvert se l'attribue et le prend en charge")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Ticket assigné et pris en charge"),
+            @ApiResponse(responseCode = "403", description = "Autorisations insuffisantes"),
+            @ApiResponse(responseCode = "404", description = "Ticket ou technicien introuvable"),
+            @ApiResponse(responseCode = "409", description = "Transition interdite")
+    })
+    @PostMapping("/{id}/self-assign")
+    @IsTechnician
+    public TicketDto selfAssign(
+            @PathVariable Integer id,
+            @RequestBody(required = false) @Valid StateChangeJustification justification,
+            @AuthenticationPrincipal AppUserDetails principal
+    ) {
+        return ticketService.selfAssignTicket(id, justification, principal);
+    }
+
+
     @Operation(summary = "Propose une solution pour le ticket")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Solution proposée"),
@@ -245,5 +263,4 @@ public class TicketController {
 
         return ticketService.setWaitingStatus(id, dto, principal);
     }
-
 }

@@ -371,7 +371,21 @@ public class TicketService  {
         return ticketMapper.toDto(ticketChanged);
     }
 
+    public TicketDto selfAssignTicket(Integer idTicket, StateChangeJustification justification, AppUserDetails principal) {
 
+        logger.info("Self-assigning ticket id={} by technicianId={}", idTicket, principal.getId());
+        Ticket ticket = getTicket(idTicket);
+
+        Technician technician = technicianDao.findById(principal.getId())
+                .orElseThrow(TechnicianNotFoundException::new);
+
+        String reason = justification != null ? justification.reason() : null;
+        Ticket ticketChanged = assignmentService.selfAssignTicket(ticket, technician, reason);
+
+        metricsService.refreshTicketMetrics(ticketChanged);
+
+        return ticketMapper.toDto(ticketChanged);
+    }
 
 
 }

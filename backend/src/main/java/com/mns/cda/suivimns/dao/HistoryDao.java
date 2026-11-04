@@ -33,4 +33,6 @@ public interface HistoryDao extends JpaRepository<History, Integer> {
             AND h.status.code IN :statuses
     """)
     List<History> findAllActiveByIdTicket(@Param("idTicket") Integer idTicket, @Param("statuses") List<StatusEnum> statuses);
+
+    Optional<History> findFirstByTicketIdTicketAndStatusCodeOrderByStartDateAsc(Integer idTicket, StatusEnum code);
 }
