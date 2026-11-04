@@ -110,6 +110,12 @@ export class TicketService {
     );
   }
 
+  // Body attendu par les routes solve / start-progress / resume-progress / close (StateChangeJustification côté backend).
+  // L'auteur de la transition est déduit du JWT, inutile d'envoyer son id.
+  private toJustification(justification: TicketTransition) {
+    return { reason: justification.reason };
+  }
+
   // Assigne et prend en charge un ticket ouvert par le technicien connecté, s'il en est le créateur
   selfAssign(idTicket: number) {
     return this.http.post(`${this.apiUrl}/${idTicket}/self-assign`, { reason: null }).pipe(
@@ -120,18 +126,15 @@ export class TicketService {
   }
 
   solve(idTicket: number, justification: TicketTransition) {
-    const payload = { idTechnician: justification.idAppUser, statusReason: justification.reason };
-    return this.http.post(`${this.apiUrl}/${idTicket}/solve`, payload);
+    return this.http.post(`${this.apiUrl}/${idTicket}/solve`, this.toJustification(justification));
   }
 
   progressStart(idTicket: number, justification: TicketTransition) {
-    const payload = { idAppUser: justification.idAppUser, statusReason: justification.reason };
-    return this.http.post(`${this.apiUrl}/${idTicket}/start-progress`, payload);
+    return this.http.post(`${this.apiUrl}/${idTicket}/start-progress`, this.toJustification(justification));
   }
 
   progressResume(idTicket: number, justification: TicketTransition) {
-    const payload = { idAppUser: justification.idAppUser, statusReason: justification.reason };
-    return this.http.post(`${this.apiUrl}/${idTicket}/resume-progress`, payload);
+    return this.http.post(`${this.apiUrl}/${idTicket}/resume-progress`, this.toJustification(justification));
   }
 
   waitClient(idTicket: number, justification: TicketTransition) {
@@ -152,7 +155,6 @@ export class TicketService {
   }
 
   close(idTicket: number, justification: TicketTransition) {
-    const payload = { idAppUser: justification.idAppUser, closingReason: justification.reason };
-    return this.http.post(`${this.apiUrl}/${idTicket}/close`, payload);
+    return this.http.post(`${this.apiUrl}/${idTicket}/close`, this.toJustification(justification));
   }
 }
