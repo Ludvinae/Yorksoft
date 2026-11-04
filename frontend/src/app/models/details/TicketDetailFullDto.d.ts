@@ -4,4 +4,5 @@ type TicketDetailFullDto = {
   comments: TicketDetailComment[];
   knowledge: TicketDetailKnowledge;
   possibleStatusTransitions: StatusEnum[];
+  canSelfAssign: boolean;
 };

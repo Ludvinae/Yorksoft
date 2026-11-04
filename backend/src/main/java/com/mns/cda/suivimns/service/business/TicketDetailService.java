@@ -9,6 +9,7 @@ import com.mns.cda.suivimns.exception.TicketNotFoundException;
 import com.mns.cda.suivimns.model.Ticket;
 import com.mns.cda.suivimns.security.AppUserDetails;
 import com.mns.cda.suivimns.service.workflow.StatusTransition;
+import com.mns.cda.suivimns.service.workflow.TicketAssignmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,14 +22,15 @@ public class TicketDetailService {
 
     private final TicketDao ticketDao;
     private final StatusTransition transition;
+    private final TicketAssignmentService assignmentService;
 
     public TicketDetailFullDto getTicketDetails(Integer idTicket, AppUserDetails principal) {
         if (principal.getUserRole() == null) {
             throw new InvalidUserRoleException();
         }
+        Ticket requestedTicket = ticketDao.findById(idTicket).orElseThrow(TicketNotFoundException::new);
         if (Objects.equals(principal.getUserRole(), "CLIENT")) {
-            Ticket requestedTicket = ticketDao.findById(idTicket).orElseThrow(TicketNotFoundException::new);
-            if (principal.getId() != requestedTicket.getClient().getIdAppUser()) {
+            if (!Objects.equals(principal.getId(), requestedTicket.getClient().getIdAppUser())) {
                 throw new TicketAccessDeniedException();
             }
         }
@@ -44,6 +46,8 @@ public class TicketDetailService {
         List<TicketDetailComment> comments = ticketDao.ticketDetailComments(idTicket);
         List<StatusEnum> statusList = transition.getAllowedTransitions(details.currentStatus()).stream().toList();
 
-        return new  TicketDetailFullDto(details, comments, knowledge, statusList);
+        boolean canSelfAssign = assignmentService.canSelfAssign(requestedTicket, principal.getId());
+
+        return new TicketDetailFullDto(details, comments, knowledge, statusList, canSelfAssign);
     }
 }

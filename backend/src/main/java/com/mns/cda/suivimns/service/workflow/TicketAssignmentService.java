@@ -2,6 +2,7 @@ package com.mns.cda.suivimns.service.workflow;
 
 import com.mns.cda.suivimns.dao.AssignmentDao;
 import com.mns.cda.suivimns.dao.HistoryDao;
+import com.mns.cda.suivimns.dao.TechnicianDao;
 import com.mns.cda.suivimns.enumerate.ActivityType;
 import com.mns.cda.suivimns.enumerate.StatusEnum;
 import com.mns.cda.suivimns.exception.AssignmentConflictException;
@@ -23,6 +24,7 @@ public class TicketAssignmentService {
 
     private final AssignmentDao assignmentDao;
     private final HistoryDao historyDao;
+    private final TechnicianDao technicianDao;
     private final TicketStatusService ticketStatusService;
     private final ActivityService activityService;
     private final TicketProgressService ticketProgressService;
@@ -60,19 +62,33 @@ public class TicketAssignmentService {
         return ticketChanged;
     }
 
+    private boolean isTicketCreator(Ticket ticket, Integer idUser) {
+        // Le créateur est l'acteur de l'entrée d'historique OPEN
+        return historyDao
+                .findFirstByTicketIdTicketAndStatusCodeOrderByStartDateAsc(ticket.getIdTicket(), StatusEnum.OPEN)
+                .map(History::getActor)
+                .map(actor -> Objects.equals(actor.getIdAppUser(), idUser))
+                .orElse(false);
+    }
+
+    /**
+     * Indique si l'utilisateur peut s'attribuer le ticket : il doit être technicien,
+     * en être le créateur, et le ticket doit être ouvert sans technicien assigné.
+     */
+    public boolean canSelfAssign(Ticket ticket, Integer idUser) {
+        return ticket.getCurrentStatus() == StatusEnum.OPEN
+                && ticket.getCurrentTechnician() == null
+                && technicianDao.existsById(idUser)
+                && isTicketCreator(ticket, idUser);
+    }
+
     @Transactional
     public Ticket selfAssignTicket(Ticket ticket, Technician technician, String statusReason) {
         // Verifier que le ticket est ouvert et sans technicien assigné
         if (ticket.getCurrentStatus() != StatusEnum.OPEN) throw new IllegalStatusTransitionException();
         if (ticket.getCurrentTechnician() != null) throw new AssignmentConflictException();
-        // Verifier que le technicien est bien le créateur du ticket (acteur de l'historique OPEN)
-        AppUser creator = historyDao
-                .findFirstByTicketIdTicketAndStatusCodeOrderByStartDateAsc(ticket.getIdTicket(), StatusEnum.OPEN)
-                .map(History::getActor)
-                .orElse(null);
-        if (creator == null || !Objects.equals(technician.getIdAppUser(), creator.getIdAppUser())) {
-            throw new UnauthorizedTechnicianException();
-        }
+        // Verifier que le technicien est bien le créateur du ticket
+        if (!isTicketCreator(ticket, technician.getIdAppUser())) throw new UnauthorizedTechnicianException();
         // Changer l'état du ticket
         Ticket ticketChanged = ticketStatusService.changeStatus(ticket, StatusEnum.ASSIGNED, technician, statusReason);
         // Créer la nouvelle affectation (pas de manager : auto-attribution)

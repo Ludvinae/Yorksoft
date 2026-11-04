@@ -8,6 +8,7 @@ public record TicketDetailFullDto(
         TicketDetailDto details,
         List<TicketDetailComment> comments,
         TicketDetailKnowledge knowledge,
-        List<StatusEnum> possibleStatusTransitions
+        List<StatusEnum> possibleStatusTransitions,
+        boolean canSelfAssign
 ) {
 }
