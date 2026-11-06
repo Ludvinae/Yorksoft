@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -11,7 +11,7 @@ import { CenteredPage } from '../../components/layout/centered-page/centered-pag
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
-export class Login {
+export class Login implements OnInit {
   formBuilder = inject(FormBuilder);
   authService = inject(AuthService);
   router = inject(Router);
@@ -20,6 +20,34 @@ export class Login {
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required]],
   });
+
+  // Public demo: shown only when the backend allows trial accounts
+  readonly demo = signal<DemoStatus | null>(null);
+  readonly startingDemo = signal(false);
+
+  ngOnInit(): void {
+    this.authService.getDemoStatus().subscribe({
+      next: (status) => this.demo.set(status.enabled ? status : null),
+      error: () => this.demo.set(null),
+    });
+  }
+
+  onStartDemo(): void {
+    this.startingDemo.set(true);
+    this.authService.startDemo().subscribe({
+      next: () => this.router.navigate(['/dashboard']),
+      error: (err: HttpErrorResponse) => {
+        this.startingDemo.set(false);
+        if (err.status === 429) {
+          const retryAfter = Number(err.headers.get('Retry-After'));
+          const wait = retryAfter ? ` Réessayez dans ${Math.ceil(retryAfter / 60)} min.` : '';
+          alert(`Trop de comptes d'essai créés depuis votre connexion.${wait}`);
+        } else {
+          alert("Impossible de créer un compte d'essai pour le moment, réessayez plus tard.");
+        }
+      },
+    });
+  }
 
   onLogin(): void {
     if (this.form.valid) {

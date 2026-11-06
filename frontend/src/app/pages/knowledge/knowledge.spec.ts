@@ -12,6 +12,7 @@ const article: KnowledgeArticle = {
   resolution: 'Archiver des messages',
   idTheme: 2,
   themeName: 'Bug',
+  idAuthor: 4,
   authorName: 'Sandra Schmidt',
   versions: ['Logiciel 1.0'],
   procedures: [],

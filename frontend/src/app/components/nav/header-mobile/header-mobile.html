@@ -48,11 +48,17 @@
     </div>
 
 
-    <!-- date -->
+    <!-- date (replaced by a reminder for trial accounts: the demo data is fictitious) -->
     <div class="mt-auto text-right pb-2">
-      <p class="text-xs text-base-content/60">
-        {{ today | date:'EEEE d MMMM yyyy' }}
-      </p>
+      @if (auth.isTrialAccount()) {
+        <span class="badge badge-warning badge-sm" title="Compte d'essai : les clients, employés et tickets affichés sont fictifs">
+          Démo · données fictives
+        </span>
+      } @else {
+        <p class="text-xs text-base-content/60">
+          {{ today | date:'EEEE d MMMM yyyy' }}
+        </p>
+      }
     </div>
 
   </div>

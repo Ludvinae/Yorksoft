@@ -6,6 +6,7 @@ type KnowledgeArticle = {
   resolution: string | null;
   idTheme: number;
   themeName: string;
+  idAuthor: number | null;
   authorName: string | null;
   versions: string[];
   procedures: KnowledgeArticleProcedure[];

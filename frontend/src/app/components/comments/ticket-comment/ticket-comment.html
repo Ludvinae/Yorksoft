@@ -18,5 +18,9 @@
     }
   </div>
 
-  <app-comment-form (submitComment)="createComment($event)"/>
+  @if (authService.isTrialAccount()) {
+    <p class="text-sm opacity-70">Les commentaires ne sont pas disponibles avec un compte d'essai.</p>
+  } @else {
+    <app-comment-form (submitComment)="createComment($event)"/>
+  }
 </section>

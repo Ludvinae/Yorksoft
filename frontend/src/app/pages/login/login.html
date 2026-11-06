@@ -26,5 +26,24 @@
         <button class="btn btn-neutral mt-4" type="submit">Login</button>
       </fieldset>
     </form>
+
+    @if (demo(); as demo) {
+      <div class="bg-base-200 border-base-300 rounded-box w-xs border p-4 mt-4 flex flex-col gap-2">
+        <p class="font-semibold">Découvrir l'application</p>
+        <p class="text-sm opacity-70">
+          Testez YorkSoft avec un compte technicien d'essai, sans inscription&nbsp;: créez des tickets,
+          prenez-les en charge et résolvez-les. Le compte et ses données sont supprimés après {{ demo.ttlHours }}&nbsp;h.
+        </p>
+        <p class="text-sm opacity-70">
+          Les clients, employés et tickets de la démo sont fictifs.
+        </p>
+        <button class="btn btn-primary" type="button" [disabled]="startingDemo()" (click)="onStartDemo()">
+          @if (startingDemo()) {
+            <span class="loading loading-spinner loading-sm"></span>
+          }
+          Essayer en tant que technicien
+        </button>
+      </div>
+    }
 </app-centered-page>
 

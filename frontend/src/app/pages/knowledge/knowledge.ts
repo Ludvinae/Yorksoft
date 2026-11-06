@@ -39,6 +39,13 @@ export class Knowledge implements OnInit, OnDestroy {
     return role === 'TECHNICIAN' || role === 'MANAGER' || role === 'ADMIN';
   });
 
+  // Trial accounts can only edit the articles they wrote (backend returns 403 otherwise)
+  canEditArticle(article: KnowledgeArticle): boolean {
+    if (!this.canEdit()) return false;
+    if (!this.authService.isTrialAccount()) return true;
+    return article.idAuthor === this.authService.jwtInfo()?.id;
+  }
+
   readonly editForm = this.fb.nonNullable.group({
     subject: ['', [Validators.required, Validators.maxLength(255)]],
     description: [''],
