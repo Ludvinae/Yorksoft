@@ -1,0 +1,36 @@
+@if (isEmpty()) {
+  <p class="h-80 flex items-center justify-center opacity-60">Aucun ticket clos avec un délai SLA sur la période</p>
+} @else {
+  @if (totals().ratio != null) {
+    <p class="text-sm text-center opacity-70">
+      {{ totals().onTime }} dans les délais, {{ totals().late }} en retard
+    </p>
+  }
+  <div class="h-80">
+    <canvas baseChart type="bar" [data]="chartData()" [options]="chartOptions"></canvas>
+  </div>
+
+  <details class="mt-2 text-sm">
+    <summary class="cursor-pointer opacity-70">Voir les données</summary>
+    <div class="max-h-60 overflow-y-auto mt-2">
+      <table class="table table-xs">
+        <thead>
+          <tr>
+            <th>{{ unit() === 'month' ? 'Mois' : 'Semaine' }}</th>
+            <th class="text-right">Dans les délais</th>
+            <th class="text-right">En retard</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (point of points(); track point.date; let i = $index) {
+            <tr>
+              <td>{{ labels()[i] }}</td>
+              <td class="text-right tabular-nums">{{ point.onTime }}</td>
+              <td class="text-right tabular-nums">{{ point.late }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </details>
+}

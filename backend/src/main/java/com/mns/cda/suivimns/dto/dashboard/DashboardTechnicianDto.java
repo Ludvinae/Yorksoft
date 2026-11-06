@@ -1,6 +1,7 @@
 package com.mns.cda.suivimns.dto.dashboard;
 
 import com.mns.cda.suivimns.dto.dashboard.activity.UserActivity;
+import com.mns.cda.suivimns.dto.dashboard.graphs.SlaPointDto;
 import com.mns.cda.suivimns.dto.dashboard.graphs.TicketEvolutionPointDto;
 import com.mns.cda.suivimns.dto.dashboard.graphs.TicketStatusStatDto;
 
@@ -31,6 +32,11 @@ public record DashboardTechnicianDto(
     // "day" or "week": the evolution chart switches to weekly points past a month
     String evolutionUnit,
     List<TicketEvolutionPointDto> evolution,
+    // Active tickets by age since opening: [< 1 day, 1-3 days, 3-7 days, 7 days and more]
+    List<Long> activeTicketsByAge,
+    // "week" or "month"
+    String slaUnit,
+    List<SlaPointDto> sla,
 
     List<UserActivity> activities
 ) implements DashboardDto {}

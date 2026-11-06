@@ -5,22 +5,33 @@
 const SERIES_LIGHT = ['#2a78d6', '#eb6834'];
 const SERIES_DARK = ['#3987e5', '#d95926'];
 
+// Ordinal one-hue ramp (validated): the more prominent step goes to the "more" end, so it flips in dark themes
+const ORDINAL_LIGHT = ['#86b6ef', '#5598e7', '#2a78d6', '#1c5cab'];
+const ORDINAL_DARK = ['#1c5cab', '#2a78d6', '#5598e7', '#86b6ef'];
+
+// Status colors are fixed (never themed) and always shown with a label
+export const STATUS_GOOD = '#0ca30c';
+export const STATUS_CRITICAL = '#d03b3b';
+
 export type ChartTheme = {
   text: string;
   grid: string;
   surface: string;
   series: string[];
+  ordinal: string[];
 };
 
 export function readChartTheme(): ChartTheme {
   const css = getComputedStyle(document.documentElement);
   const surface = css.getPropertyValue('--color-base-100').trim() || '#ffffff';
+  const dark = isDark(surface);
 
   return {
     text: css.getPropertyValue('--color-base-content').trim() || '#1f2937',
     grid: css.getPropertyValue('--color-base-300').trim() || '#e5e7eb',
     surface,
-    series: isDark(surface) ? SERIES_DARK : SERIES_LIGHT,
+    series: dark ? SERIES_DARK : SERIES_LIGHT,
+    ordinal: dark ? ORDINAL_DARK : ORDINAL_LIGHT,
   };
 }
 

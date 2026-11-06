@@ -11,6 +11,7 @@ import com.mns.cda.suivimns.dto.dashboard.admin.UserHealthStats;
 import com.mns.cda.suivimns.dto.dashboard.graphs.SoftwareStatDto;
 import com.mns.cda.suivimns.dto.dashboard.graphs.TechnicianWorkloadDto;
 import com.mns.cda.suivimns.dto.dashboard.graphs.ThemeStatDto;
+import com.mns.cda.suivimns.dto.dashboard.graphs.SlaPointDto;
 import com.mns.cda.suivimns.dto.dashboard.graphs.TicketEvolutionPointDto;
 import com.mns.cda.suivimns.dto.dashboard.graphs.TicketStatusStatDto;
 import com.mns.cda.suivimns.security.AppUserDetails;
@@ -167,12 +168,15 @@ public class DashboardService {
         List<TicketStatusStatDto> statusStats = ticketDao.countAssignedTicketsByStatus(id);
         String unit = timeframeInDays <= 31 ? "day" : "week";
         List<TicketEvolutionPointDto> evolution = buildEvolution(id, startDate, unit);
+        List<Long> byAge = countActiveTicketsByAge(id, now);
+        String slaUnit = timeframeInDays <= 90 ? "week" : "month";
+        List<SlaPointDto> sla = buildSla(id, startDate, slaUnit);
 
         List<UserActivity> activities = activityService.activityFeed(id);
 
         return new DashboardTechnicianDto(open, waiting, critical, overdue, closedDay, closedWeek,
                 timeframeInDays, timeToSolve, responseTime, resolution, closedInPeriod, closedPerDay, closedPerWeek,
-                statusStats, unit, evolution, activities);
+                statusStats, unit, evolution, byAge, slaUnit, sla, activities);
     }
 
     /**
@@ -198,11 +202,46 @@ public class DashboardService {
         return points;
     }
 
+    private List<Long> countActiveTicketsByAge(int id, LocalDateTime now) {
+        Long[] counts = {0L, 0L, 0L, 0L};
+        for (Object[] row : ticketDao.countActiveTicketsByAge(id, now)) {
+            counts[((Number) row[0]).intValue()] = ((Number) row[1]).longValue();
+        }
+        return List.of(counts);
+    }
+
+    /**
+     * One point per week (Monday) or month from startDate to today, including empty ones.
+     */
+    private List<SlaPointDto> buildSla(int id, LocalDateTime startDate, String unit) {
+        Map<LocalDate, long[]> byBucket = new HashMap<>();
+        for (Object[] row : ticketDao.countSlaRespectByPeriod(id, startDate, unit)) {
+            byBucket.put(toLocalDate(row[0]), new long[]{((Number) row[1]).longValue(), ((Number) row[2]).longValue()});
+        }
+
+        boolean monthly = "month".equals(unit);
+        LocalDate bucket = monthly
+                ? startDate.toLocalDate().withDayOfMonth(1)
+                : startDate.toLocalDate().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        LocalDate end = LocalDate.now();
+
+        List<SlaPointDto> points = new ArrayList<>();
+        while (!bucket.isAfter(end)) {
+            long[] counts = byBucket.getOrDefault(bucket, new long[]{0, 0});
+            points.add(new SlaPointDto(bucket, counts[0], counts[1]));
+            bucket = monthly ? bucket.plusMonths(1) : bucket.plusWeeks(1);
+        }
+        return points;
+    }
+
+    private static LocalDate toLocalDate(Object value) {
+        return value instanceof java.sql.Date sqlDate ? sqlDate.toLocalDate() : (LocalDate) value;
+    }
+
     private static Map<LocalDate, Long> toCountByBucket(List<Object[]> rows) {
         Map<LocalDate, Long> counts = new HashMap<>();
         for (Object[] row : rows) {
-            LocalDate date = row[0] instanceof java.sql.Date sqlDate ? sqlDate.toLocalDate() : (LocalDate) row[0];
-            counts.put(date, ((Number) row[1]).longValue());
+            counts.put(toLocalDate(row[0]), ((Number) row[1]).longValue());
         }
         return counts;
     }

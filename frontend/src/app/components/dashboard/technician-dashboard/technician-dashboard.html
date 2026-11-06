@@ -182,6 +182,26 @@
               </div>
             </div>
 
+            <!-- AGE -->
+            <div class="card border border-base-300">
+              <div class="card-body">
+                <h3 class="card-title justify-center">
+                  Âge de mes tickets actifs
+                </h3>
+                <app-technician-age-chart [counts]="dashboard.activeTicketsByAge" />
+              </div>
+            </div>
+
+            <!-- SLA -->
+            <div class="card border border-base-300">
+              <div class="card-body">
+                <h3 class="card-title justify-center">
+                  Respect du SLA <span class="font-normal opacity-70">({{ periodLabel() }})</span>
+                </h3>
+                <app-technician-sla-chart [points]="dashboard.sla" [unit]="dashboard.slaUnit" />
+              </div>
+            </div>
+
           </div>
         </div>
       </div>

@@ -314,6 +314,35 @@ public interface TicketDao extends JpaRepository<Ticket, Integer>, JpaSpecificat
     """, nativeQuery = true)
     List<Object[]> countClosedByPeriod(int id, LocalDateTime startDate, String unit);
 
+    // Active tickets by age since opening: bucket 0 = under 1 day, 1 = 1-3 days, 2 = 3-7 days, 3 = 7 days and more.
+    // "now" comes from the JVM, which also writes open_date (zone-less LocalDateTime)
+    @Query(value = """
+        SELECT CASE
+                   WHEN open_date > CAST(:now AS timestamp) - INTERVAL '1 day' THEN 0
+                   WHEN open_date > CAST(:now AS timestamp) - INTERVAL '3 days' THEN 1
+                   WHEN open_date > CAST(:now AS timestamp) - INTERVAL '7 days' THEN 2
+                   ELSE 3
+               END AS bucket,
+               COUNT(*)
+        FROM ticket
+        WHERE id_current_technician = :id
+          AND close_date IS NULL
+        GROUP BY bucket
+    """, nativeQuery = true)
+    List<Object[]> countActiveTicketsByAge(int id, LocalDateTime now);
+
+    @Query(value = """
+        SELECT CAST(date_trunc(CAST(:unit AS text), close_date) AS date) AS bucket,
+               SUM(CASE WHEN close_date <= sla_deadline THEN 1 ELSE 0 END),
+               SUM(CASE WHEN close_date > sla_deadline THEN 1 ELSE 0 END)
+        FROM ticket
+        WHERE id_current_technician = :id
+          AND close_date >= :startDate
+          AND sla_deadline IS NOT NULL
+        GROUP BY bucket
+    """, nativeQuery = true)
+    List<Object[]> countSlaRespectByPeriod(int id, LocalDateTime startDate, String unit);
+
     @Query("""
         SELECT new com.mns.cda.suivimns.dto.dashboard.graphs.SoftwareStatDto(
             s.name, COUNT(t))

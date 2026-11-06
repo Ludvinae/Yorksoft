@@ -7,13 +7,15 @@ import { DecimalPipe, PercentPipe } from '@angular/common';
 import { ActivityFeed } from '../../activity-feed/activity-feed';
 import { TechnicianEvolutionChart } from '../cards/technician-evolution-chart/technician-evolution-chart';
 import { TechnicianStatusChart } from '../cards/technician-status-chart/technician-status-chart';
+import { TechnicianAgeChart } from '../cards/technician-age-chart/technician-age-chart';
+import { TechnicianSlaChart } from '../cards/technician-sla-chart/technician-sla-chart';
 
 // Same threshold as the backend's "critical" count (TicketDao.countAssignedCriticalTickets)
 const CRITICAL_PRIORITY = 75;
 
 @Component({
   selector: 'app-technician-dashboard',
-  imports: [KpiCard, DecimalPipe, ActivityFeed, PercentPipe, TechnicianEvolutionChart, TechnicianStatusChart],
+  imports: [KpiCard, DecimalPipe, ActivityFeed, PercentPipe, TechnicianEvolutionChart, TechnicianStatusChart, TechnicianAgeChart, TechnicianSlaChart],
   templateUrl: './technician-dashboard.html',
   styleUrl: './technician-dashboard.css',
 })
