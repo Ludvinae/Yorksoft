@@ -28,7 +28,10 @@
     </form>
 
     @if (demo(); as demo) {
-      <div class="bg-base-200 border-base-300 rounded-box w-xs border p-4 mt-4 flex flex-col gap-2">
+      <!-- Under the login form on small screens; inset on the right of the screen from xl (narrower screens would overlap the form) -->
+      <aside class="bg-base-200 border-base-300 rounded-box w-xs border p-4 mt-4 flex flex-col gap-2
+                    xl:fixed xl:right-8 xl:top-1/2 xl:-translate-y-1/2 xl:mt-0 xl:text-left xl:shadow-lg
+                    xl:w-64 xl:min-h-[28rem] xl:p-6 xl:gap-4 xl:justify-center">
         <p class="font-semibold">Découvrir l'application</p>
         <p class="text-sm opacity-70">
           Testez YorkSoft avec un compte technicien d'essai, sans inscription&nbsp;: créez des tickets,
@@ -43,7 +46,7 @@
           }
           Essayer en tant que technicien
         </button>
-      </div>
+      </aside>
     }
 </app-centered-page>
 
