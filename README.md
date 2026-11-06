@@ -94,7 +94,7 @@ The app is served on `http://localhost:4200` and calls the API on `http://localh
 The core ticket workflow (open → assign → work → resolve → close, with priority, SLA and history) works end to end and is backed by a substantial automated test suite (backend unit + integration tests via JUnit/MockMvc, frontend unit tests via Vitest — see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md#testing)). Still in progress or not started:
 
 **Features**
-- Role-based dashboards: functional for managers, still very incomplete for directors and admins, and many planned KPIs/charts aren't built for any role yet
+- Role-based dashboards: functional for managers and technicians, still very incomplete for directors and admins, and many planned KPIs/charts aren't built for any role yet
 - Internal user management beyond account creation (edit, deactivate)
 - Knowledge base UI (the backend exists, the dedicated UI is still to be built)
 - Client-facing portal (clients currently go through a technician, not the app directly)
