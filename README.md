@@ -27,6 +27,7 @@ The business context is a fictional software vendor, **YorkSoft** (hence the rep
 - **Knowledge base**: linking resolution articles/procedures to tickets.
 - **Role-based authentication** (JWT) with five profiles: Admin, Director, Manager, Technician, Client.
 - Responsive UI with dedicated desktop/mobile views for ticket lists.
+- **Public demo mode** (optional): visitors can try the app with a temporary technician account, without signing up.
 
 ## Tech stack
 

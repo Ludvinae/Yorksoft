@@ -2,6 +2,15 @@
 
 History of design/architecture decisions, session milestones, and choices made along the way — **not** a code changelog (see git history for that). Organized by date, most recent session on top. Update at the end of each work session with Claude.
 
+## 2026-11-06
+
+- Public demo mode for the portfolio: a "try it" button on the login page creates a trial technician account with no sign-up and logs the visitor in. User-chosen over a sign-up form (friction, personal data/GDPR) and over shared per-role demo accounts. Off by default (`APP_DEMO_ENABLED`), on in the `dev` profile; never meant for a real deployment.
+- Cleanup: user chose to purge expired trial accounts (24 h, `APP_DEMO_TTL_HOURS`) with everything they created, rather than a nightly full reset of the database. The purge also makes the trial accounts' JWTs useless even though tokens never expire, since `JwtFilter` reloads the user on every request. Verified against the local dev DB: the ticket, history, assignment, classification, article and activity rows go away and the seed data stays untouched.
+- Purge only is safe if visitors can't alter shared seed data. User's rule: prefer existing technician ownership rules, and only restrict trial accounts where those rules can't cover it. Trial accounts are rank 0 technicians (real ones start at rank 1), not a new role. They can't comment (a comment can go on any ticket; user wants comments open for real technicians) and can only edit the knowledge articles they wrote. Deleting articles was already admin-only, and workflow actions (closing included) were already limited to the assigned technician.
+- Clarified closing rule (user): a technician closes a ticket they created only by self-assigning it and following the workflow, never one a manager assigned to another technician. A "creator can close" change made on a misreading was reverted; a unit test now locks the rule.
+- Abuse limits: 3 trial accounts per IP per hour, 200 active at most. Trial accounts are left out of the manager workload list. Deploy caveat: behind a reverse proxy, `getRemoteAddr()` is the proxy's IP, so `server.forward-headers-strategy` must be set or the per-IP limit becomes global (same issue already affects the login limiter).
+- At the user's request, the UI tells visitors the demo data (clients, employees, tickets) is fictitious: in the login page's demo box, in the desktop sidebar and as a mobile header badge for trial accounts.
+
 ## 2026-11-04
 
 - Technician self-assign route added (assign + start progress in one action, only on tickets the technician created). Goal: let a technician handle a ticket start to finish. A technician who takes a call and can solve it right away shouldn't have to wait for a manager to assign it, possibly to someone else. Restricting it to the creator is deliberate: self-assign is not meant to bypass manager assignment or let technicians pick which tickets they work on (risk of some cherry-picking easy tickets and leaving hard ones to possibly less skilled colleagues). Manager assignment stays the norm for everything else.
