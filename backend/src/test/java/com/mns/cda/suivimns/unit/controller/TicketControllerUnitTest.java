@@ -89,7 +89,7 @@ class TicketControllerUnitTest {
                 "Test description", "Test resolution", List.of(ticketDetailProcedure));
 
         ticketDetailFullDto = new TicketDetailFullDto(ticketDetailDto,
-                List.of(), ticketDetailKnowledge, List.of(StatusEnum.ASSIGNED), false);
+                List.of(), ticketDetailKnowledge, List.of(StatusEnum.ASSIGNED), false, false);
     }
 
     // ===================

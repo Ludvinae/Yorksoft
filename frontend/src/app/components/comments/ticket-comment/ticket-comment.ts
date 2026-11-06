@@ -23,7 +23,9 @@ export class TicketComment {
 
   readonly comments = input<TicketDetailComment[]>([]);
   readonly ticketId = input.required<number>();
+  readonly canComment = input(false);
   protected readonly isSubmitting = signal(false);
+  protected readonly errorMessage = signal<string | null>(null);
 
   protected readonly editingCommentId = signal<number | null>(null);
   readonly commentUpdated = output<TicketDetailComment>();
@@ -39,6 +41,7 @@ export class TicketComment {
     }
 
     this.isSubmitting.set(true);
+    this.errorMessage.set(null);
 
     this.commentService
       .createComment({
@@ -54,7 +57,14 @@ export class TicketComment {
         error: (error) => {
           console.error(error);
 
-          // toast plus tard
+          if (error.status === 429) {
+            // Trial accounts are limited to a number of comments per hour
+            const retryAfter = Number(error.headers?.get('Retry-After'));
+            const wait = retryAfter ? ` Réessayez dans ${Math.ceil(retryAfter / 60)} min.` : '';
+            this.errorMessage.set(`Limite de commentaires atteinte pour un compte d'essai.${wait}`);
+          } else {
+            this.errorMessage.set("Le commentaire n'a pas pu être envoyé.");
+          }
         },
       });
   }

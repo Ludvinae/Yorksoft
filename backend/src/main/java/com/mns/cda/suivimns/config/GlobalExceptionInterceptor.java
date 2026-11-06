@@ -5,6 +5,7 @@ import com.mns.cda.suivimns.exception.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -169,6 +170,31 @@ public class GlobalExceptionInterceptor {
 
         return new ErrorResponseDto(400, "MISSING_JUSTIFICATION",
                 "Transition requires a justification");
+    }
+
+    @ExceptionHandler(TrialAccountRestrictedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ErrorResponseDto handleTrialAccountRestricted(TrialAccountRestrictedException ex) {
+
+        return new ErrorResponseDto(403, "TRIAL_ACCOUNT_RESTRICTED",
+                "This action is not available with a trial account");
+    }
+
+    @ExceptionHandler(TrialRateLimitException.class)
+    public ResponseEntity<ErrorResponseDto> handleTrialRateLimit(TrialRateLimitException ex) {
+
+        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
+                .header(HttpHeaders.RETRY_AFTER, String.valueOf(ex.getRetryAfterSeconds()))
+                .body(new ErrorResponseDto(429, "TRIAL_RATE_LIMIT",
+                        "Too many actions with this trial account, please try again later"));
+    }
+
+    @ExceptionHandler(DemoUnavailableException.class)
+    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
+    public ErrorResponseDto handleDemoUnavailable(DemoUnavailableException ex) {
+
+        return new ErrorResponseDto(503, "DEMO_UNAVAILABLE",
+                "No trial account can be created right now, please try again later");
     }
 
     @ExceptionHandler(UnauthorizedTechnicianException.class)

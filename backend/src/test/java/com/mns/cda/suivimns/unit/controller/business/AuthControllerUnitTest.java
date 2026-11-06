@@ -11,6 +11,7 @@ import com.mns.cda.suivimns.model.Director;
 import com.mns.cda.suivimns.model.Manager;
 import com.mns.cda.suivimns.model.Technician;
 import com.mns.cda.suivimns.security.AppUserDetails;
+import com.mns.cda.suivimns.security.JwtService;
 import com.mns.cda.suivimns.security.LoginAttemptService;
 import com.mns.cda.suivimns.service.entity.AppUserService;
 import com.mns.cda.suivimns.service.entity.ClientService;
@@ -75,6 +76,9 @@ class AuthControllerUnitTest {
 
     @MockBean
     private LoginAttemptService loginAttemptService;
+
+    @MockBean
+    private JwtService jwtService;
 
     @MockBean
     private org.springframework.data.jpa.mapping.JpaMetamodelMappingContext jpaMetamodelMappingContext;

@@ -14,20 +14,35 @@
               Indicateurs de performance
             </h2>
 
-            <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
+            <!-- Period of "Mes statistiques" and of the evolution chart -->
+            <div class="flex flex-wrap items-center gap-3">
+              <span class="text-sm opacity-70">Période des statistiques et de l'évolution</span>
+              <div class="join" role="group" aria-label="Période">
+                @for (period of periods; track period.days) {
+                  <button type="button" class="btn btn-sm join-item"
+                          [class.btn-active]="timeframe() === period.days"
+                          [attr.aria-pressed]="timeframe() === period.days"
+                          (click)="selectPeriod(period.days)">
+                    {{ period.label }}
+                  </button>
+                }
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-4 transition-opacity" [class.opacity-60]="loading()">
 
               <!-- TICKETS -->
               <div class="card border border-base-300 bg-base-100">
                 <div class="card-body p-4">
 
                   <h3 class="text-2xl font-bold text-center mb-4">
-                    Tickets
+                    Mes tickets
                   </h3>
 
                   <div class="grid grid-cols-1 sm:grid-cols-3 sm:divide-x divide-y border rounded-xl overflow-hidden">
 
                     <app-kpi-card
-                      title="Ouverts"
+                      title="Actifs"
                       [value]="dashboard.assignedOpenTickets"
                       icon="ph ph-book-open"
                       colorClass="text-info"
@@ -38,7 +53,7 @@
                       title="En attente"
                       [value]="dashboard.assignedWaitingTickets"
                       icon="ph ph-hourglass"
-                      colorClass="text-success"
+                      colorClass="text-info"
                       (cardClick)="ticketStore.openList({ statuses: ['WAITING_CLIENT', 'WAITING_THIRD_PARTY'], assignedTo: jwt()!.id  })"
                     />
 
@@ -47,7 +62,7 @@
                       [value]="dashboard.assignedCriticalTickets"
                       icon="ph ph-fast-forward"
                       colorClass="text-warning"
-                      (cardClick)="ticketStore.openList({ isNotClosed: true, assignedTo: jwt()!.id })"
+                      (cardClick)="ticketStore.openList({ isNotClosed: true, priorityGreaterThan: criticalPriority, assignedTo: jwt()!.id })"
                     />
 
                     <app-kpi-card
@@ -59,7 +74,7 @@
                     />
 
                     <app-kpi-card
-                      title="Aujourd'hui"
+                      title="Clos aujourd'hui"
                       [value]="dashboard.closedToday"
                       icon="ph ph-calendar-dot"
                       colorClass="text-success"
@@ -67,7 +82,7 @@
                     />
 
                     <app-kpi-card
-                      title="Cette semaine"
+                      title="Clos cette semaine"
                       [value]="dashboard.closedThisWeek"
                       icon="ph ph-calendar-dots"
                       colorClass="text-success"
@@ -84,28 +99,23 @@
                 <div class="card-body p-4">
 
                   <h3 class="text-2xl font-bold text-center mb-4">
-                    Mes statistiques
+                    Mes statistiques <span class="text-base font-normal opacity-70">({{ periodLabel() }})</span>
                   </h3>
 
                   <div class="grid grid-cols-1 sm:grid-cols-3 sm:divide-x divide-y border rounded-xl overflow-hidden">
 
+                    <!-- Time actually spent in progress, not open -> close -->
                     <app-kpi-card
-                      title="Résolution"
-                      [value]="dashboard.meanTimeToSolveTickets ? (dashboard.meanTimeToSolveTickets / 60 | number: '1.0-0') : null"
-                      suffix="m"
+                      title="Temps de traitement"
+                      [value]="formatDuration(dashboard.meanTimeToSolveTickets)"
                       icon="ph ph-check-circle"
                     />
 
+                    <!-- From assignment to taking the ticket in charge -->
                     <app-kpi-card
                       title="Prise en charge"
-                      value="40m"
+                      [value]="formatDuration(dashboard.meanResponseTime)"
                       icon="ph ph-hand-pointing"
-                    />
-
-                    <app-kpi-card
-                      title="Appels"
-                      value="214s"
-                      icon="ph ph-phone"
                     />
 
                     <app-kpi-card
@@ -115,14 +125,20 @@
                     />
 
                     <app-kpi-card
-                      title="Résolus / jour"
-                      value="14"
+                      title="Clos sur la période"
+                      [value]="dashboard.closedInPeriod"
+                      icon="ph ph-archive"
+                    />
+
+                    <app-kpi-card
+                      title="Clos / jour"
+                      [value]="dashboard.closedPerDay | number: '1.0-1'"
                       icon="ph ph-calendar-dot"
                     />
 
                     <app-kpi-card
                       title="Clos / semaine"
-                      value="122"
+                      [value]="dashboard.closedPerWeek | number: '1.0-1'"
                       icon="ph ph-calendar-dots"
                     />
 
@@ -144,73 +160,48 @@
             Graphiques
           </h2>
 
-          <div class="grid grid-cols-1 2xl:grid-cols-2 gap-6">
+          <div class="grid grid-cols-1 2xl:grid-cols-2 gap-6 transition-opacity" [class.opacity-60]="loading()">
 
             <!-- EVOLUTION -->
             <div class="card border border-base-300">
               <div class="card-body">
-
                 <h3 class="card-title justify-center">
-                  Evolution des tickets
+                  Évolution <span class="font-normal opacity-70">({{ periodLabel() }})</span>
                 </h3>
-
-                <div class="h-80 flex items-center justify-center">
-                  <!-- ngx charts / chart.js -->
-                  <p class="opacity-50">
-                    Graphique évolution
-                  </p>
-                </div>
-
+                <app-technician-evolution-chart [points]="dashboard.evolution" [unit]="dashboard.evolutionUnit" />
               </div>
             </div>
 
-            <!-- PIE -->
+            <!-- STATUS -->
             <div class="card border border-base-300">
               <div class="card-body">
-
                 <h3 class="card-title justify-center">
-                  Répartition par statut
+                  Mes tickets actifs par statut
                 </h3>
-
-                <div class="h-80 flex items-center justify-center">
-
-                </div>
-
+                <app-technician-status-chart [stats]="dashboard.statusStats" />
               </div>
             </div>
 
-            <!-- LOGICIEL -->
+            <!-- AGE -->
             <div class="card border border-base-300">
               <div class="card-body">
-
                 <h3 class="card-title justify-center">
-                  Répartition par logiciel
+                  Âge de mes tickets actifs
                 </h3>
-
-                <div class="h-80 flex items-center justify-center">
-                  <p class="opacity-50">
-                    Bar chart logiciels
-                  </p>
-                </div>
-
+                <app-technician-age-chart [counts]="dashboard.activeTicketsByAge" />
               </div>
             </div>
 
-            <!-- THEMATIQUE -->
+            <!-- SLA -->
             <div class="card border border-base-300">
               <div class="card-body">
-
                 <h3 class="card-title justify-center">
-                  Répartition par thématique
+                  Respect du SLA <span class="font-normal opacity-70">({{ periodLabel() }})</span>
                 </h3>
-
-                <div class="h-80 flex items-center justify-center">
-                  <p class="opacity-50">
-                    Graphique thématiques
-                  </p>
-                </div>
+                <app-technician-sla-chart [points]="dashboard.sla" [unit]="dashboard.slaUnit" />
               </div>
             </div>
+
           </div>
         </div>
       </div>

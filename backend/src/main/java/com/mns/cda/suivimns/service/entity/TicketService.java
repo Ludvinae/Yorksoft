@@ -11,6 +11,7 @@ import com.mns.cda.suivimns.exception.*;
 import com.mns.cda.suivimns.mapper.entity.TicketMapper;
 import com.mns.cda.suivimns.model.*;
 import com.mns.cda.suivimns.security.AppUserDetails;
+import com.mns.cda.suivimns.security.TrialActionLimiter;
 import com.mns.cda.suivimns.service.business.*;
 import com.mns.cda.suivimns.service.search.TicketQueryService;
 import com.mns.cda.suivimns.service.workflow.*;
@@ -50,6 +51,7 @@ public class TicketService  {
     protected final TechnicianDao technicianDao;
     protected final AppUserDao appUserDao;
     protected final KnowledgeDao knowledgeDao;
+    protected final TrialActionLimiter trialActionLimiter;
 
     private static final Logger logger = LoggerFactory.getLogger(TicketService.class);
 
@@ -95,6 +97,7 @@ public class TicketService  {
     public TicketDto save(TicketCreationDto dto, AppUserDetails principal) {
 
         logger.info("Creating ticket by userId={} themeId={}", principal.getId(), dto.idTheme());
+        trialActionLimiter.check(principal, TrialActionLimiter.Action.TICKET);
 
         Ticket ticket = ticketMapper.creationToEntity(dto);
         ticket.setOverdue(false);

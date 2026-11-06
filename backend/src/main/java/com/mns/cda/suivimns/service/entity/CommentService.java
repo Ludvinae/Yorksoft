@@ -12,11 +12,14 @@ import com.mns.cda.suivimns.exception.AppUserNotFoundException;
 import com.mns.cda.suivimns.exception.CommentNotFoundException;
 import com.mns.cda.suivimns.exception.CommentNotOwnedException;
 import com.mns.cda.suivimns.exception.TicketNotFoundException;
+import com.mns.cda.suivimns.exception.UnauthorizedTechnicianException;
 import com.mns.cda.suivimns.mapper.entity.CommentMapper;
 import com.mns.cda.suivimns.model.AppUser;
 import com.mns.cda.suivimns.model.Comment;
 import com.mns.cda.suivimns.model.Ticket;
 import com.mns.cda.suivimns.security.AppUserDetails;
+import com.mns.cda.suivimns.security.TrialActionLimiter;
+import com.mns.cda.suivimns.service.workflow.TicketAssignmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +38,11 @@ public class CommentService  {
     protected final AppUserDao appUserDao;
 
     protected final ActivityService activityService;
+    protected final TicketAssignmentService assignmentService;
+    protected final TrialActionLimiter trialActionLimiter;
+
+    // Technicians below this rank (trial accounts are rank 0) may only comment the tickets they created or are assigned
+    private static final int MIN_RANK_TO_COMMENT_ANY_TICKET = 2;
 
     public List<CommentDto> findAll() {
         return commentMapper.toDtoList(commentDao.findAll());
@@ -47,8 +55,28 @@ public class CommentService  {
         return commentMapper.toDto(comment);
     }
 
+    /**
+     * Managers, directors and admins can comment any ticket, as can technicians of rank 2 and more.
+     * Rank 0 (trial accounts) and rank 1 technicians only comment tickets they created or are assigned to,
+     * which also keeps trial accounts away from the shared demo tickets.
+     */
+    public boolean canComment(Ticket ticket, AppUserDetails user) {
+        String role = user.getUserRole();
+        if ("CLIENT".equals(role)) return false;
+        if (!"TECHNICIAN".equals(role)) return true;
+
+        Byte rank = user.getTechnician().getRank();
+        if (rank != null && rank >= MIN_RANK_TO_COMMENT_ANY_TICKET) return true;
+
+        boolean assigned = ticket.getCurrentTechnician() != null
+                && Objects.equals(ticket.getCurrentTechnician().getIdAppUser(), user.getId());
+        return assigned || assignmentService.isTicketCreator(ticket, user.getId());
+    }
+
     public TicketDetailComment save(PostCommentDto dto, AppUserDetails appUser) {
         Ticket ticket = ticketDao.findById(dto.idTicket()).orElseThrow(TicketNotFoundException::new);
+        if (!canComment(ticket, appUser)) throw new UnauthorizedTechnicianException();
+        trialActionLimiter.check(appUser, TrialActionLimiter.Action.COMMENT);
 
         AppUser author = appUserDao.findById(appUser.getId()).orElseThrow(AppUserNotFoundException::new);
         String authorName = author.getFirstName() + " " + author.getLastName();

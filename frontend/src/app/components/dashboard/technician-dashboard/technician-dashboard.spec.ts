@@ -19,4 +19,11 @@ describe('TechnicianDashboard', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('formats durations in minutes, hours or days', () => {
+    expect(component.formatDuration(null)).toBeNull();
+    expect(component.formatDuration(1140)).toBe('19 min');
+    expect(component.formatDuration(9000)).toBe('2,5 h');
+    expect(component.formatDuration(3 * 86400)).toBe('3 j');
+  });
 });

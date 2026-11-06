@@ -147,6 +147,14 @@ export class NewTicketForm implements OnInit {
         this.errorMessage.set('Un ticket similaire existe déjà.');
         break;
 
+      case 429: {
+        // Trial accounts are limited to a number of tickets per hour
+        const retryAfter = Number(err.headers?.get('Retry-After'));
+        const wait = retryAfter ? ` Réessayez dans ${Math.ceil(retryAfter / 60)} min.` : '';
+        this.errorMessage.set(`Limite de tickets atteinte pour un compte d'essai.${wait}`);
+        break;
+      }
+
       case 500:
         this.errorMessage.set('Une erreur serveur est survenue.');
         break;

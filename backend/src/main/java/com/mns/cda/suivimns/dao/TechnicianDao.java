@@ -5,8 +5,10 @@ import com.mns.cda.suivimns.dto.flat.TechnicianWorkloadDetailedDto;
 import com.mns.cda.suivimns.model.Technician;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,6 +16,11 @@ import java.util.Optional;
 public interface TechnicianDao extends JpaRepository<Technician, Integer> {
 
     Optional<Technician> findByEmail(String email);
+
+    long countByDemoExpiresAtIsNotNull();
+
+    @Query("SELECT te.idAppUser FROM Technician te WHERE te.demoExpiresAt < :now")
+    List<Integer> findExpiredTrialAccountIds(@Param("now") LocalDateTime now);
 
 
     @Query("""
@@ -25,6 +32,7 @@ public interface TechnicianDao extends JpaRepository<Technician, Integer> {
             ON a.endDate IS null
         LEFT JOIN a.ticket t
             ON t.closeDate IS null
+        WHERE te.demoExpiresAt IS null
         GROUP BY te.idAppUser, te.firstName, te.lastName, te.rank
         ORDER BY COUNT(t), te.rank ASC
     """)

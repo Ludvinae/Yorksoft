@@ -39,6 +39,12 @@
         <p class="text-sm text-base-content/60">{{ auth.jwtInfo()?.role | titlecase }} {{ auth.jwtInfo()?.rank }}</p>
       </div>
     </div>
+
+    @if (auth.isTrialAccount()) {
+      <p class="mt-3 rounded-box bg-warning/15 p-2 text-xs">
+        Compte d'essai&nbsp;: les clients, employés et tickets affichés sont fictifs.
+      </p>
+    }
   </div>
 
   <!-- NAVIGATION -->

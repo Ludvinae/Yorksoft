@@ -8,6 +8,7 @@ import com.mns.cda.suivimns.dto.entity.KnowledgeDto;
 import com.mns.cda.suivimns.dto.search.KnowledgeSelect;
 import com.mns.cda.suivimns.dto.search.KnowledgeSearch;
 import com.mns.cda.suivimns.exception.KnowledgeNotFoundException;
+import com.mns.cda.suivimns.exception.TrialAccountRestrictedException;
 import com.mns.cda.suivimns.mapper.entity.KnowledgeMapper;
 import com.mns.cda.suivimns.model.Knowledge;
 import com.mns.cda.suivimns.security.AppUserDetails;
@@ -64,14 +65,23 @@ public class KnowledgeService  {
         knowledgeDao.delete(knowledge);
     }
 
-    public KnowledgeDto update(int id, KnowledgeDto knowledgeToUpdate) {
+    public KnowledgeDto update(int id, KnowledgeDto knowledgeToUpdate, AppUserDetails principal) {
 
         Knowledge currentKnowledge = knowledgeDao.findById(id)
                 .orElseThrow(KnowledgeNotFoundException::new);
 
+        // Trial accounts may only edit the articles they wrote, never the shared demo articles
+        if (principal.isTrialTechnician() && !isAuthor(currentKnowledge, principal)) {
+            throw new TrialAccountRestrictedException();
+        }
+
         knowledgeMapper.updateEntityFromDto(knowledgeToUpdate, currentKnowledge);
 
         return knowledgeMapper.toDto(knowledgeDao.save(currentKnowledge));
+    }
+
+    private static boolean isAuthor(Knowledge knowledge, AppUserDetails principal) {
+        return knowledge.getAuthor() != null && knowledge.getAuthor().getIdAppUser() == principal.getId();
     }
 
     @Transactional(readOnly = true)

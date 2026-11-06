@@ -112,6 +112,24 @@ public interface TicketDao extends JpaRepository<Ticket, Integer>, JpaSpecificat
     """, nativeQuery = true)
     Double meanTimeToSolveTickets(int id, LocalDateTime startDate);
 
+    // Average time between an assignment to the technician and the ticket's next move to IN_PROGRESS
+    // (close to zero for self-assigned tickets, which are taken in charge in the same action)
+    @Query(value = """
+        SELECT AVG(EXTRACT(EPOCH FROM (first_progress.start_date - a.assignment_date)))
+        FROM assignment a
+        JOIN LATERAL (
+            SELECT MIN(h.start_date) AS start_date
+            FROM history h
+            JOIN status s ON s.id_status = h.id_status
+            WHERE h.id_ticket = a.id_ticket
+              AND s.code = 'IN_PROGRESS'
+              AND h.start_date >= a.assignment_date
+        ) first_progress ON first_progress.start_date IS NOT NULL
+        WHERE a.id_technician = :id
+          AND a.assignment_date >= :startDate
+    """, nativeQuery = true)
+    Double meanResponseTime(int id, LocalDateTime startDate);
+
 
 
 
@@ -251,14 +269,79 @@ public interface TicketDao extends JpaRepository<Ticket, Integer>, JpaSpecificat
     @Query("""
         SELECT new com.mns.cda.suivimns.dto.dashboard.graphs.TicketStatusStatDto(
             t.currentStatus, COUNT(t), s.displayOrder)
-        FROM Ticket t
-        LEFT JOIN t.historyList h
-        LEFT JOIN h.status s
-        WHERE t.closeDate IS null
-        AND t.currentStatus = s.code
+        FROM Ticket t, Status s
+        WHERE s.code = t.currentStatus
+        AND t.closeDate IS null
         GROUP BY t.currentStatus, s.displayOrder
     """)
     List<TicketStatusStatDto> countTicketsByStatus();
+
+    // Technician dashboard charts
+
+    @Query("""
+        SELECT new com.mns.cda.suivimns.dto.dashboard.graphs.TicketStatusStatDto(
+            t.currentStatus, COUNT(t), s.displayOrder)
+        FROM Ticket t, Status s
+        WHERE s.code = t.currentStatus
+        AND t.closeDate IS null
+        AND t.currentTechnician.idAppUser = :id
+        GROUP BY t.currentStatus, s.displayOrder
+    """)
+    List<TicketStatusStatDto> countAssignedTicketsByStatus(int id);
+
+    // Tickets the technician took in charge (their first IN_PROGRESS entry on the ticket), per day or week
+    @Query(value = """
+        SELECT CAST(date_trunc(CAST(:unit AS text), first_start) AS date) AS bucket, COUNT(*)
+        FROM (
+            SELECT h.id_ticket, MIN(h.start_date) AS first_start
+            FROM history h
+            JOIN status s ON s.id_status = h.id_status
+            WHERE s.code = 'IN_PROGRESS'
+              AND h.id_app_user = :id
+            GROUP BY h.id_ticket
+        ) taken
+        WHERE first_start >= :startDate
+        GROUP BY bucket
+    """, nativeQuery = true)
+    List<Object[]> countTakenInChargeByPeriod(int id, LocalDateTime startDate, String unit);
+
+    @Query(value = """
+        SELECT CAST(date_trunc(CAST(:unit AS text), close_date) AS date) AS bucket, COUNT(*)
+        FROM ticket
+        WHERE id_current_technician = :id
+          AND close_date >= :startDate
+        GROUP BY bucket
+    """, nativeQuery = true)
+    List<Object[]> countClosedByPeriod(int id, LocalDateTime startDate, String unit);
+
+    // Active tickets by age since opening: bucket 0 = under 1 day, 1 = 1-3 days, 2 = 3-7 days, 3 = 7 days and more.
+    // "now" comes from the JVM, which also writes open_date (zone-less LocalDateTime)
+    @Query(value = """
+        SELECT CASE
+                   WHEN open_date > CAST(:now AS timestamp) - INTERVAL '1 day' THEN 0
+                   WHEN open_date > CAST(:now AS timestamp) - INTERVAL '3 days' THEN 1
+                   WHEN open_date > CAST(:now AS timestamp) - INTERVAL '7 days' THEN 2
+                   ELSE 3
+               END AS bucket,
+               COUNT(*)
+        FROM ticket
+        WHERE id_current_technician = :id
+          AND close_date IS NULL
+        GROUP BY bucket
+    """, nativeQuery = true)
+    List<Object[]> countActiveTicketsByAge(int id, LocalDateTime now);
+
+    @Query(value = """
+        SELECT CAST(date_trunc(CAST(:unit AS text), close_date) AS date) AS bucket,
+               SUM(CASE WHEN close_date <= sla_deadline THEN 1 ELSE 0 END),
+               SUM(CASE WHEN close_date > sla_deadline THEN 1 ELSE 0 END)
+        FROM ticket
+        WHERE id_current_technician = :id
+          AND close_date >= :startDate
+          AND sla_deadline IS NOT NULL
+        GROUP BY bucket
+    """, nativeQuery = true)
+    List<Object[]> countSlaRespectByPeriod(int id, LocalDateTime startDate, String unit);
 
     @Query("""
         SELECT new com.mns.cda.suivimns.dto.dashboard.graphs.SoftwareStatDto(

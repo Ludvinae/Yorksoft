@@ -8,6 +8,7 @@ import com.mns.cda.suivimns.exception.TicketAccessDeniedException;
 import com.mns.cda.suivimns.exception.TicketNotFoundException;
 import com.mns.cda.suivimns.model.Ticket;
 import com.mns.cda.suivimns.security.AppUserDetails;
+import com.mns.cda.suivimns.service.entity.CommentService;
 import com.mns.cda.suivimns.service.workflow.StatusTransition;
 import com.mns.cda.suivimns.service.workflow.TicketAssignmentService;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class TicketDetailService {
     private final TicketDao ticketDao;
     private final StatusTransition transition;
     private final TicketAssignmentService assignmentService;
+    private final CommentService commentService;
 
     public TicketDetailFullDto getTicketDetails(Integer idTicket, AppUserDetails principal) {
         if (principal.getUserRole() == null) {
@@ -47,7 +49,8 @@ public class TicketDetailService {
         List<StatusEnum> statusList = transition.getAllowedTransitions(details.currentStatus()).stream().toList();
 
         boolean canSelfAssign = assignmentService.canSelfAssign(requestedTicket, principal.getId());
+        boolean canComment = commentService.canComment(requestedTicket, principal);
 
-        return new TicketDetailFullDto(details, comments, knowledge, statusList, canSelfAssign);
+        return new TicketDetailFullDto(details, comments, knowledge, statusList, canSelfAssign, canComment);
     }
 }

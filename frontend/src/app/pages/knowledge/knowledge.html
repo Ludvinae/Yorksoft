@@ -104,7 +104,7 @@
                     </p>
                   </div>
 
-                  @if (canEdit()) {
+                  @if (canEditArticle(article)) {
                     <button class="btn btn-sm btn-ghost shrink-0" title="Modifier l'article" (click)="startEdit(article)">
                       <i class="ph ph-pencil-simple"></i>
                     </button>

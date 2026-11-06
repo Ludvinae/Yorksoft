@@ -94,8 +94,9 @@ public class KnowledgeController {
                     @ApiResponse(responseCode = "400", description = "Données invalides")})
     @PutMapping("/{id}")
     @IsTechnician
-    public ResponseEntity<KnowledgeDto> update(@PathVariable int id, @RequestBody @Valid KnowledgeDto knowledgeToUpdate) {
-        return new ResponseEntity<>(knowledgeService.update(id, knowledgeToUpdate), HttpStatus.OK);
+    public ResponseEntity<KnowledgeDto> update(@PathVariable int id, @RequestBody @Valid KnowledgeDto knowledgeToUpdate,
+                                               @AuthenticationPrincipal AppUserDetails principal) {
+        return new ResponseEntity<>(knowledgeService.update(id, knowledgeToUpdate, principal), HttpStatus.OK);
     }
 
     @PostMapping("search")
