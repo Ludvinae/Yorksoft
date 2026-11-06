@@ -2,6 +2,11 @@
 
 History of design/architecture decisions, session milestones, and choices made along the way — **not** a code changelog (see git history for that). Organized by date, most recent session on top. Update at the end of each work session with Claude.
 
+## 2026-11-04
+
+- Technician self-assign route added (assign + start progress in one action, only on tickets the technician created). Goal: let a technician handle a ticket start to finish. A technician who takes a call and can solve it right away shouldn't have to wait for a manager to assign it, possibly to someone else. Restricting it to the creator is deliberate: self-assign is not meant to bypass manager assignment or let technicians pick which tickets they work on (risk of some cherry-picking easy tickets and leaving hard ones to possibly less skilled colleagues). Manager assignment stays the norm for everything else.
+- Frontend exposes it in two places: the ticket detail page (shown when the backend's `canSelfAssign` flag is set) and the ticket-created screen of the `ticket-new` wizard, which is the call-taking moment the feature targets.
+
 ## 2026-10-28
 
 - Admin dashboard KPIs redesigned as data/site-health indicators, in two rows of 6 cards: Tickets (closed without end date — existing; open with a close date; `currentStatus` out of sync with the active `History` row; incoherent assignments; SLA past deadline but not flagged `overdue`; orphan tickets without client/version) and Users (no valid role subtype; password still a `{seed-…}` placeholder; inactive 90 days and never active — both derived from `Activity`, since `AppUser` has no last-login field; accounts with multiple role subtypes, which silently get the first role `AppUserDetailsService` finds; admin account count, as a security signal when there is only one or too many). License KPIs and "overloaded technicians" were rejected — the latter is a manager/director concern, not an admin one.
