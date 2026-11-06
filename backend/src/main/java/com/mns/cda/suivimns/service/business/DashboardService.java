@@ -11,6 +11,7 @@ import com.mns.cda.suivimns.dto.dashboard.admin.UserHealthStats;
 import com.mns.cda.suivimns.dto.dashboard.graphs.SoftwareStatDto;
 import com.mns.cda.suivimns.dto.dashboard.graphs.TechnicianWorkloadDto;
 import com.mns.cda.suivimns.dto.dashboard.graphs.ThemeStatDto;
+import com.mns.cda.suivimns.dto.dashboard.graphs.TicketEvolutionPointDto;
 import com.mns.cda.suivimns.dto.dashboard.graphs.TicketStatusStatDto;
 import com.mns.cda.suivimns.security.AppUserDetails;
 import com.mns.cda.suivimns.service.entity.ActivityService;
@@ -22,7 +23,11 @@ import org.springframework.stereotype.Service;
 
 import java.time.temporal.TemporalAdjusters;
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 
 @Service
@@ -52,7 +57,7 @@ public class DashboardService {
             return getManagerStats(startDate, timeframe, principal);
         }
         if (securityService.isTechnician()) {
-            return getTechnicianStats(startDate, principal);
+            return getTechnicianStats(startDate, timeframe, principal);
         }
         throw new AuthenticationCredentialsNotFoundException("Authentication credentials not found");
     }
@@ -131,7 +136,7 @@ public class DashboardService {
                 closedDay, closedWeek, workload, status, software, theme, activities);
     }
 
-    private DashboardTechnicianDto  getTechnicianStats(LocalDateTime startDate, AppUserDetails principal) {
+    private DashboardTechnicianDto getTechnicianStats(LocalDateTime startDate, int timeframeInDays, AppUserDetails principal) {
         Integer id = principal.getId();
 
         LocalDateTime now = LocalDateTime.now();
@@ -140,6 +145,7 @@ public class DashboardService {
                 .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
                 .atStartOfDay();
 
+        // Current workload
         int open = ticketDao.countAssignedOpenTickets(id);
         int waiting = ticketDao.countAssignedWaitingTickets(id);
         int critical = ticketDao.countAssignedCriticalTickets(id);
@@ -147,14 +153,57 @@ public class DashboardService {
         int closedDay = ticketDao.countClosedSinceDate(id, today);
         int closedWeek = ticketDao.countClosedSinceDate(id, startOfWeek);
 
+        // Statistics over the selected period
         Double timeToSolve = ticketDao.meanTimeToSolveTickets(id, startDate);
+        Double responseTime = ticketDao.meanResponseTime(id, startDate);
         double close = ticketDao.closedTicketCount(id, startDate) * 1.0;
         Integer total = ticketDao.totalTicketCount(id, startDate);
         Double resolution = total > 0 ? close / total : null;
+        int closedInPeriod = ticketDao.countClosedSinceDate(id, startDate);
+        double closedPerDay = (double) closedInPeriod / timeframeInDays;
+        double closedPerWeek = closedPerDay * 7;
+
+        // Charts
+        List<TicketStatusStatDto> statusStats = ticketDao.countAssignedTicketsByStatus(id);
+        String unit = timeframeInDays <= 31 ? "day" : "week";
+        List<TicketEvolutionPointDto> evolution = buildEvolution(id, startDate, unit);
 
         List<UserActivity> activities = activityService.activityFeed(id);
 
-        return new DashboardTechnicianDto(open, waiting,  critical, overdue, closedDay, closedWeek,
-                timeToSolve, resolution, activities);
+        return new DashboardTechnicianDto(open, waiting, critical, overdue, closedDay, closedWeek,
+                timeframeInDays, timeToSolve, responseTime, resolution, closedInPeriod, closedPerDay, closedPerWeek,
+                statusStats, unit, evolution, activities);
+    }
+
+    /**
+     * One point per day (or per week, starting on Monday like Postgres' date_trunc) from startDate to today,
+     * including the empty ones so the chart's time axis has no gaps.
+     */
+    private List<TicketEvolutionPointDto> buildEvolution(int id, LocalDateTime startDate, String unit) {
+        Map<LocalDate, Long> taken = toCountByBucket(ticketDao.countTakenInChargeByPeriod(id, startDate, unit));
+        Map<LocalDate, Long> closed = toCountByBucket(ticketDao.countClosedByPeriod(id, startDate, unit));
+
+        boolean weekly = "week".equals(unit);
+        LocalDate bucket = weekly
+                ? startDate.toLocalDate().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+                : startDate.toLocalDate();
+        LocalDate end = LocalDate.now();
+
+        List<TicketEvolutionPointDto> points = new ArrayList<>();
+        while (!bucket.isAfter(end)) {
+            points.add(new TicketEvolutionPointDto(bucket,
+                    taken.getOrDefault(bucket, 0L), closed.getOrDefault(bucket, 0L)));
+            bucket = weekly ? bucket.plusWeeks(1) : bucket.plusDays(1);
+        }
+        return points;
+    }
+
+    private static Map<LocalDate, Long> toCountByBucket(List<Object[]> rows) {
+        Map<LocalDate, Long> counts = new HashMap<>();
+        for (Object[] row : rows) {
+            LocalDate date = row[0] instanceof java.sql.Date sqlDate ? sqlDate.toLocalDate() : (LocalDate) row[0];
+            counts.put(date, ((Number) row[1]).longValue());
+        }
+        return counts;
     }
 }
