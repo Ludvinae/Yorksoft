@@ -19,6 +19,8 @@ History of design/architecture decisions, session milestones, and choices made a
 - Bug found in the manager's status chart query: it joined the ticket history, so a ticket that went through its current status twice was counted twice; now joins `Status` on the code directly.
 - KPI cards with uneven border thickness (reported by the user) drafted in `todo.md`: creating the Trello card was blocked by the permission check.
 - At the user's request, the UI tells visitors the demo data (clients, employees, tickets) is fictitious: in the login page's demo box, in the desktop sidebar and as a mobile header badge for trial accounts.
+- Login page: on xl screens and up the trial account box is a narrower, taller inset on the right of the screen (user's request); below xl it stays under the form, since at lg width it would touch the centered form. Done in `login.html` only: `centered-page` is shared with the error pages.
+- Git push from Claude Code failed with `Permission denied (publickey)`: the user's `core.sshCommand` was the bare `ssh.exe`, which Git Bash resolves to its own OpenSSH, and that client can't see the Windows ssh-agent holding the key. Fixed with `git config --global core.sshCommand "C:/Windows/System32/OpenSSH/ssh.exe"` (user-approved); pushes from the session now work.
 
 ## 2026-11-04
 
