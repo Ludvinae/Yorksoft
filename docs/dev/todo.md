@@ -6,3 +6,7 @@ The backlog lives on the project's Trello dashboard (board "Yorksoft"), not in t
 
 On the dashboards, some borders between KPI cards are thicker than others.
 Lead (unverified): the KPI grids combine `border` with `sm:divide-x divide-y` on a multi-column `grid`. `divide-*` puts a border on every child but the first, regardless of grid rows, so some borders double up (e.g. the container border plus a first-row card's border). A grid with `gap-px` over a background in the border color would give even separators.
+
+## Enrich the demo dataset (Backend)
+
+`data-init.sql` has 17 tickets, a single closed one and no closed ticket with an SLA deadline, so the dashboard charts (evolution, SLA respect, ticket age) are nearly empty on a portfolio deploy. Add tickets spread over several months with a consistent history (assignments, status changes, close dates, SLA deadlines met and missed) for each seed technician.

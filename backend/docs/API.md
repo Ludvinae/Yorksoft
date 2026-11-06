@@ -79,7 +79,7 @@ All routes are relative to the backend root (`http://localhost:8080` locally). S
 | Themes | `/theme` | Ticket theme reference data |
 | Urgency / Impact | `/urgency`, `/impact` | Reference data used in priority calculation |
 | Statuses | `/status` | Status reference data |
-| Dashboards | `/dashboard/{timeframeInDays}` | Aggregated KPIs and recent-activity feed per role. For technicians: current workload on their assigned tickets, statistics over the period (time in progress, assignment → in progress, resolution ratio, closed per day/week; durations in seconds), active tickets by status and an evolution series (taken in charge / closed, daily up to 31 days, weekly beyond) |
+| Dashboards | `/dashboard/{timeframeInDays}` | Aggregated KPIs and recent-activity feed per role. For technicians: current workload on their assigned tickets, statistics over the period (time in progress, assignment → in progress, resolution ratio, closed per day/week; durations in seconds), active tickets by status and by age since opening, an evolution series (taken in charge / closed, daily up to 31 days, weekly beyond) and SLA respect of closed tickets (on time / late, weekly up to 90 days, monthly beyond) |
 
 ## Error format
 
