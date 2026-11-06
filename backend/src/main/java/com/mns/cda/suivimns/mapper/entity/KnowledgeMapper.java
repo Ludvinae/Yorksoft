@@ -77,6 +77,7 @@ public abstract class KnowledgeMapper {
                 knowledge.getResolution(),
                 mapThemeToId(knowledge.getTheme()),
                 knowledge.getTheme() != null ? knowledge.getTheme().getDesignation() : null,
+                knowledge.getAuthor() != null ? knowledge.getAuthor().getIdAppUser() : null,
                 fullName(knowledge.getAuthor()),
                 versions,
                 procedures);

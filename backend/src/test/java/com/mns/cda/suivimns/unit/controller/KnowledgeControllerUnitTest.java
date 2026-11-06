@@ -95,7 +95,7 @@ class KnowledgeControllerUnitTest {
     void shouldReturnArticlesFilteredByThemeAndSearch() throws Exception {
 
         KnowledgeArticleDto article = new KnowledgeArticleDto(1, "Test subject", "Test description",
-                "Test resolution", 2, "Bug", "Sandra Schmidt", List.of("Logiciel 1.0"), List.of());
+                "Test resolution", 2, "Bug", 4, "Sandra Schmidt", List.of("Logiciel 1.0"), List.of());
 
         when(knowledgeService.searchArticles("outlook", 2)).thenReturn(List.of(article));
 
@@ -208,7 +208,7 @@ class KnowledgeControllerUnitTest {
     @WithMockUser(roles = "ADMIN")
     void shouldUpdate() throws Exception {
 
-        when(knowledgeService.update(eq(1), any(KnowledgeDto.class))).thenReturn(knowledgeDto);
+        when(knowledgeService.update(eq(1), any(KnowledgeDto.class), any())).thenReturn(knowledgeDto);
 
         mockMvc.perform(put("/knowledge/1")
                         .with(csrf())
@@ -226,7 +226,7 @@ class KnowledgeControllerUnitTest {
     @WithMockUser(roles = "ADMIN")
     void shouldReturn404WhenUpdateFails() throws Exception {
 
-        when(knowledgeService.update(eq(1), any(KnowledgeDto.class)))
+        when(knowledgeService.update(eq(1), any(KnowledgeDto.class), any()))
                 .thenThrow(new KnowledgeNotFoundException());
 
         mockMvc.perform(put("/knowledge/1")

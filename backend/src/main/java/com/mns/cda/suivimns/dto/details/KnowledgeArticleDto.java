@@ -13,6 +13,7 @@ public record KnowledgeArticleDto(
         String resolution,
         Integer idTheme,
         String themeName,
+        Integer idAuthor,
         String authorName,
         List<String> versions,
         List<KnowledgeArticleProcedure> procedures

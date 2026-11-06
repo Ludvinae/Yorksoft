@@ -171,6 +171,22 @@ public class GlobalExceptionInterceptor {
                 "Transition requires a justification");
     }
 
+    @ExceptionHandler(TrialAccountRestrictedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ErrorResponseDto handleTrialAccountRestricted(TrialAccountRestrictedException ex) {
+
+        return new ErrorResponseDto(403, "TRIAL_ACCOUNT_RESTRICTED",
+                "This action is not available with a trial account");
+    }
+
+    @ExceptionHandler(DemoUnavailableException.class)
+    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
+    public ErrorResponseDto handleDemoUnavailable(DemoUnavailableException ex) {
+
+        return new ErrorResponseDto(503, "DEMO_UNAVAILABLE",
+                "No trial account can be created right now, please try again later");
+    }
+
     @ExceptionHandler(UnauthorizedTechnicianException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ErrorResponseDto handleUnauthorizedTechnician(UnauthorizedTechnicianException ex) {

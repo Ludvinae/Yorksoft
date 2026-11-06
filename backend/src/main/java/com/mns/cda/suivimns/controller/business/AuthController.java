@@ -12,16 +12,14 @@ import com.mns.cda.suivimns.model.Technician;
 import com.mns.cda.suivimns.model.Director;
 import com.mns.cda.suivimns.security.AppUserDetails;
 import com.mns.cda.suivimns.security.IsAdmin;
+import com.mns.cda.suivimns.security.JwtService;
 import com.mns.cda.suivimns.security.LoginAttemptService;
 import com.mns.cda.suivimns.service.entity.*;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,8 +28,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -50,11 +46,10 @@ public class AuthController {
 
     protected final AuthenticationProvider authenticationProvider;
     protected final LoginAttemptService loginAttemptService;
+    protected final JwtService jwtService;
 
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
-    @Value("${jwt.secret}")
-    private String jwtSecret;
 
     // Should be removed once security is set-up
     @PostMapping("/sign-in")
@@ -133,34 +128,8 @@ public class AuthController {
 
             loginAttemptService.registerSuccess(attemptKey);
 
-            // HERITAGE
-            // The final "ADMIN" branch is not a real fallback: AppUserDetailsService only finds users through the
-            // role subtype tables, so a user with no role is rejected (401) before reaching this point.
-            // AppUserDetails carries a single subtype (client > technician > manager > director > admin), so
-            // the order of these checks doesn't matter.
-            String role = appUser.getManager() != null
-                    ? "MANAGER"
-                    : appUser.getTechnician() != null
-                    ? "TECHNICIAN"
-                    : appUser.getClient() != null
-                    ? "CLIENT"
-                    : appUser.getDirector() != null
-                    ? "DIRECTOR"
-                    : "ADMIN";
-
-            String name = appUser.getName();
-            int id =  appUser.getId();
-            String rank = appUser.getRank();
-
-            String jwt = Jwts.builder()
-                    .setSubject(user.email())
-                    //.addClaims(Map.of("role", appUser.getUser().getRole().getName()))
-                    .addClaims(Map.of("role", role))
-                    .addClaims(Map.of("name", name))
-                    .addClaims(Map.of("id", id))
-                    .addClaims(Map.of("rank", rank))
-                    .signWith(SignatureAlgorithm.HS256, jwtSecret)
-                    .compact();
+            String role = JwtService.roleOf(appUser);
+            String jwt = jwtService.generateToken(appUser);
 
             logger.info("Connexion réussie pour {}: {}", user.email(), role);
             return new ResponseEntity<>(jwt, HttpStatus.OK);

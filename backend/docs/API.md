@@ -35,6 +35,15 @@ The token embeds the user's role (`role`), id (`id`), name (`name`) and rank (`r
 
 A `401 Unauthorized` is returned on failed authentication; a `403 Forbidden` if the JWT's role lacks the rights required on the called route.
 
+### Trial accounts (public demo)
+
+Public routes, meant for a portfolio deploy and disabled unless `APP_DEMO_ENABLED=true`:
+
+- `GET /demo` → `{ "enabled": bool, "ttlHours": n }`, used by the login page to show the "try it" button.
+- `POST /demo/technician` → `201` with a JWT as plain text (same format as `/log-in`) for a new trial technician: rank 0, generated name, `@demo.invalid` email, no usable password. `404` when the demo is disabled, `429` (with `Retry-After`) after 3 accounts per IP per hour, `503` when 200 trial accounts are already active.
+
+A trial account (rank `N0` in the JWT) can do everything a technician can on the tickets it creates, but gets `403 TRIAL_ACCOUNT_RESTRICTED` when posting a comment or editing a knowledge article it didn't write. It is purged, with everything it created, after `APP_DEMO_TTL_HOURS` (24 by default); its JWT stops working then.
+
 ## Roles
 
 | Role | Description |
@@ -53,13 +62,13 @@ All routes are relative to the backend root (`http://localhost:8080` locally). S
 
 | Resource | Base route | Description |
 |---|---|---|
-| Authentication | `/log-in` | Login, JWT issuance |
+| Authentication | `/log-in`, `/demo` | Login, JWT issuance; trial accounts for the public demo (see [Trial accounts](#trial-accounts-public-demo)) |
 | Tickets | `/ticket` | Full ticket lifecycle — plus explicit action routes: `/ticket/{id}/assign`, `/start-progress`, `/wait`, `/resume-progress`, `/solve`, `/close` (each enforces the legal-transition rules from [ARCHITECTURE.md](ARCHITECTURE.md#ticket-lifecycle) instead of a generic status `PATCH`); `PATCH /ticket/{id}/knowledge` (`{ "idKnowledge": n }`) links a knowledge article to the ticket (assigned technician, manager or admin; `409` once the ticket is closed) |
 | Assignments | `/assignment` | Assigning tickets to technicians |
 | Comments | `/comment` | Discussion thread on a ticket |
 | History | `/history` | Activity log (audit trail) |
 | Classification | `/classification` | Ticket's theme/urgency/impact tagging |
-| Knowledge base | `/knowledge` | Knowledge articles linked to tickets — `GET /knowledge/articles?search=&idTheme=` returns full articles (theme, author, versions, procedures) for the knowledge base page, readable by every employee role; the author is set from the JWT on `POST /knowledge` |
+| Knowledge base | `/knowledge` | Knowledge articles linked to tickets — `GET /knowledge/articles?search=&idTheme=` returns full articles (theme, author name and `idAuthor`, versions, procedures) for the knowledge base page, readable by every employee role; the author is set from the JWT on `POST /knowledge` |
 | Procedures | `/procedure` | Resolution procedures |
 | Clients | `/client` | Client accounts |
 | Internal users | `/user`, `/manager`, `/technician`, `/director` | Internal accounts by role |

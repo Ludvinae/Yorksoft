@@ -73,6 +73,14 @@ public class AppUserDetails implements UserDetails {
         this.id = admin.getIdAppUser();
     }
 
+    /**
+     * Trial accounts are rank 0 technicians: real technicians are always created with rank 1 or more
+     * (NewUserDto), so rank 0 is used to restrict actions that would alter shared demo data.
+     */
+    public boolean isTrialTechnician() {
+        return technician != null && technician.getRank() != null && technician.getRank() < 1;
+    }
+
     public String getUserRole() {
         if (this.getAdmin() != null) return "ADMIN";
         if (this.getManager() != null) return "MANAGER";

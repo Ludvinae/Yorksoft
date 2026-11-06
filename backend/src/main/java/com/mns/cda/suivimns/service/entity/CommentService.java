@@ -12,6 +12,7 @@ import com.mns.cda.suivimns.exception.AppUserNotFoundException;
 import com.mns.cda.suivimns.exception.CommentNotFoundException;
 import com.mns.cda.suivimns.exception.CommentNotOwnedException;
 import com.mns.cda.suivimns.exception.TicketNotFoundException;
+import com.mns.cda.suivimns.exception.TrialAccountRestrictedException;
 import com.mns.cda.suivimns.mapper.entity.CommentMapper;
 import com.mns.cda.suivimns.model.AppUser;
 import com.mns.cda.suivimns.model.Comment;
@@ -48,6 +49,9 @@ public class CommentService  {
     }
 
     public TicketDetailComment save(PostCommentDto dto, AppUserDetails appUser) {
+        // Comments can be posted on any ticket, so trial accounts can't use them (shared demo data)
+        if (appUser.isTrialTechnician()) throw new TrialAccountRestrictedException();
+
         Ticket ticket = ticketDao.findById(dto.idTicket()).orElseThrow(TicketNotFoundException::new);
 
         AppUser author = appUserDao.findById(appUser.getId()).orElseThrow(AppUserNotFoundException::new);

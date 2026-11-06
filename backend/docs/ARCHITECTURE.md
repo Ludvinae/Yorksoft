@@ -55,6 +55,8 @@ Alongside the ticket-scoped `History`, a separate `Activity` log records user-le
 
 `AppUser` is the parent class (JPA `JOINED` inheritance) for every account type: `Admin`, `Director`, `Manager`, `Technician`, `Client`. The role is derived from the account subtype at login time and encoded as a claim in the JWT (`role`, along with `name`, `id`, `rank`).
 
+Trial accounts from the public demo are `Technician`s with rank 0 (real technicians are created with rank 1 or more) and a `demoExpiresAt` date. `AppUserDetails.isTrialTechnician()` is used to block what would alter shared demo data and isn't already limited by technician ownership rules (comments, editing someone else's knowledge article). `DemoAccountService` creates them and, on a schedule, deletes expired accounts along with the tickets they created (identified by the actor of the `OPEN` history entry), their articles, procedures and activity.
+
 Each controller/method is protected by a business-level annotation (`@IsAdmin`, `@IsDirector`, `@IsManager`, `@IsTechnician`, `@IsClient`, `@IsEmployee`, `@IsUser`), which wraps Spring Security's `@PreAuthorize` — see `backend/src/main/java/com/mns/cda/suivimns/security`.
 
 ## Ticket lifecycle
