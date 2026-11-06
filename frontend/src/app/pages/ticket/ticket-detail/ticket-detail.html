@@ -335,6 +335,7 @@
       <!-- COMMENTS -->
       @if (id() ) {
         <app-ticket-comment [comments]="comments()" [ticketId]="id()!"
+                            [canComment]="ticket()?.canComment ?? false"
                             (commentCreated)="onCommentCreated($event)"
                             (commentUpdated)="onCommentUpdated($event)"/>
       }

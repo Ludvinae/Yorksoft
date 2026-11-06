@@ -1,19 +1,13 @@
 package com.mns.cda.suivimns.unit.service.entity;
 
 import com.mns.cda.suivimns.dao.AppUserDao;
-import com.mns.cda.suivimns.dao.CommentDao;
 import com.mns.cda.suivimns.dao.KnowledgeDao;
-import com.mns.cda.suivimns.dao.TicketDao;
 import com.mns.cda.suivimns.dto.entity.KnowledgeDto;
-import com.mns.cda.suivimns.dto.flat.PostCommentDto;
 import com.mns.cda.suivimns.exception.TrialAccountRestrictedException;
-import com.mns.cda.suivimns.mapper.entity.CommentMapper;
 import com.mns.cda.suivimns.mapper.entity.KnowledgeMapper;
 import com.mns.cda.suivimns.model.Knowledge;
 import com.mns.cda.suivimns.model.Technician;
 import com.mns.cda.suivimns.security.AppUserDetails;
-import com.mns.cda.suivimns.service.entity.ActivityService;
-import com.mns.cda.suivimns.service.entity.CommentService;
 import com.mns.cda.suivimns.service.entity.KnowledgeService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,17 +23,13 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 /**
- * Trial accounts (rank 0 technicians) can't alter shared demo data: no comments,
- * and only their own knowledge articles can be edited.
+ * Trial accounts (rank 0 technicians) can only edit their own knowledge articles.
+ * Comment rules by rank are covered by CommentPermissionUnitTest.
  */
 @ExtendWith(MockitoExtension.class)
 class TrialAccountRestrictionsUnitTest {
 
-    @Mock private CommentDao commentDao;
-    @Mock private CommentMapper commentMapper;
-    @Mock private TicketDao ticketDao;
     @Mock private AppUserDao appUserDao;
-    @Mock private ActivityService activityService;
     @Mock private KnowledgeDao knowledgeDao;
     @Mock private KnowledgeMapper knowledgeMapper;
 
@@ -47,17 +37,6 @@ class TrialAccountRestrictionsUnitTest {
     void onlyRankZeroTechniciansAreTrialAccounts() {
         assertTrue(new AppUserDetails(technician(1, (byte) 0)).isTrialTechnician());
         assertFalse(new AppUserDetails(technician(1, (byte) 1)).isTrialTechnician());
-    }
-
-    @Test
-    void trialAccountCannotComment() {
-        CommentService commentService = new CommentService(commentDao, commentMapper, ticketDao, appUserDao, activityService);
-        AppUserDetails trial = new AppUserDetails(technician(1, (byte) 0));
-
-        assertThrows(TrialAccountRestrictedException.class,
-                () -> commentService.save(new PostCommentDto("hello", 3), trial));
-
-        verifyNoInteractions(commentDao, activityService);
     }
 
     @Test

@@ -18,9 +18,13 @@
     }
   </div>
 
-  @if (authService.isTrialAccount()) {
-    <p class="text-sm opacity-70">Les commentaires ne sont pas disponibles avec un compte d'essai.</p>
-  } @else {
+  @if (errorMessage()) {
+    <div class="alert alert-error text-sm">{{ errorMessage() }}</div>
+  }
+
+  @if (canComment()) {
     <app-comment-form (submitComment)="createComment($event)"/>
+  } @else if (authService.jwtInfo()?.role === 'TECHNICIAN') {
+    <p class="text-sm opacity-70">Vous pouvez commenter les tickets que vous avez créés ou qui vous sont assignés.</p>
   }
 </section>

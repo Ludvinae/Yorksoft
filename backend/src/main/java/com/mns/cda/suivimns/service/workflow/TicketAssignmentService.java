@@ -62,7 +62,7 @@ public class TicketAssignmentService {
         return ticketChanged;
     }
 
-    private boolean isTicketCreator(Ticket ticket, Integer idUser) {
+    public boolean isTicketCreator(Ticket ticket, Integer idUser) {
         // Le créateur est l'acteur de l'entrée d'historique OPEN
         return historyDao
                 .findFirstByTicketIdTicketAndStatusCodeOrderByStartDateAsc(ticket.getIdTicket(), StatusEnum.OPEN)
