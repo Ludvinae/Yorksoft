@@ -2,6 +2,13 @@
 
 History of design/architecture decisions, session milestones, and choices made along the way — **not** a code changelog (see git history for that). Organized by date, most recent session on top. Update at the end of each work session with Claude.
 
+## 2026-11-09
+
+- Hosting decision (user): the app goes online as a portfolio showcase on a rented host and domain, with fictional seeded data; visitors only use the rank 0 trial technician account, never the seeded role accounts.
+- Data strategy for that deploy: `SQL_FILE=init` + `DDL_AUTO=create` + `SQL_INIT_MODE=always`, so the demo dataset is reset on every restart/deploy (fine for a showcase). Rejected `update` + `init`: `data-init.sql` has no `ON CONFLICT`/`NOT EXISTS` guards, so the 2nd boot would fail on duplicates. `SQL_FILE=prod` is not usable as-is either: `data-prod.sql` seeds only the admin, without the reference tables (`activity_type`, `status`, `urgency`...), and `ActivityService.log` throws without `activity_type` rows, so opening a ticket would fail.
+- Pre-launch audit findings: front serves HTTP only (port 80), `server_name` is hardcoded to the old school domain, CORS is `*`, the `deploy` job targets the old self-hosted runner/server, no legal notice page (mandatory for a public site in France), and seed dates are hardcoded (2024...) so the showcase ages (tickets all overdue, "last months" charts empty) unless dates become relative to `now()`.
+- Backlog moved to Trello: deploy blockers tagged with a new "Prod" label (data strategy, HTTPS, domain, secrets, host setup, CI/CD, CORS, timezone bug, legal page, demo data enrichment). Left out on purpose: config cleanup and KPI border bug (polish), JWT expiry/OWASP/backups (acceptable for fictional data reset on restart), and the `SQL_FILE=prod` cards (not needed for the showcase, kept for a possible real deploy). `todo.md` emptied per its own staging rule.
+
 ## 2026-11-06
 
 - Public demo mode for the portfolio: a "try it" button on the login page creates a trial technician account with no sign-up and logs the visitor in. User-chosen over a sign-up form (friction, personal data/GDPR) and over shared per-role demo accounts. Off by default (`APP_DEMO_ENABLED`), on in the `dev` profile; never meant for a real deployment.
