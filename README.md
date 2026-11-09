@@ -88,6 +88,7 @@ The app is served on `http://localhost:4200` and calls the API on `http://localh
 - [backend/docs/ARCHITECTURE.md](backend/docs/ARCHITECTURE.md) — backend stack, data model (MCD/MLD), ticket lifecycle
 - [backend/docs/API.md](backend/docs/API.md) — authentication, roles, REST API resources
 - [frontend/docs/ARCHITECTURE.md](frontend/docs/ARCHITECTURE.md) — frontend stack, project layout
+- [docs/SERVER_SETUP.md](docs/SERVER_SETUP.md) — VPS, domain and CI setup for the showcase deployment, remaining pre-launch tasks
 
 ## Project status
 
