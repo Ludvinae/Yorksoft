@@ -9,7 +9,9 @@ The showcase runs on fictional seeded data. Visitors only use the temporary tria
 | Piece | Where |
 |---|---|
 | Domain | `benoitchamplon.fr`, registered at OVH (DNS zone managed there) |
-| App URL | `https://yorksoft.benoitchamplon.fr` (the root domain is kept free for a future portfolio) |
+| App URL | `https://yorksoft.benoitchamplon.fr` |
+| Root domain | `benoitchamplon.fr` / `www`: OVH web hosting (100 MB, included with the domain), planned for a future static portfolio |
+| Email | OVH mailbox (15 GB, included with the domain), e.g. `contact@benoitchamplon.fr` |
 | Server | netcup VPS Lite (2 vCPU / 4 GB RAM, IPv4 + IPv6), Ubuntu 24.04 LTS or Debian 12 |
 | Stack | `backend/compose.yml`, copied to `/opt/suivi_mns/` by the CI `deploy` job |
 
@@ -22,7 +24,7 @@ Internet ──► Caddy (80/443, Let's Encrypt certificates)
                            └─► postgres (5432, not published)
 ```
 
-Only Caddy publishes ports. The Caddyfile is inlined in `backend/compose.yml` (`configs.caddyfile`), so the deploy job only has to copy that one file. Hosting another site on this VPS later (e.g. a portfolio on `benoitchamplon.fr`) means adding a block there.
+Only Caddy publishes ports. The Caddyfile is inlined in `backend/compose.yml` (`configs.caddyfile`), so the deploy job only has to copy that one file. Hosting another site on this VPS later means adding a block there (not needed for the portfolio, which goes on the OVH web hosting).
 
 ## 1. DNS (OVH)
 
@@ -39,7 +41,9 @@ Check propagation:
 nslookup yorksoft.benoitchamplon.fr 8.8.8.8
 ```
 
-Optional: an email redirect `contact@benoitchamplon.fr` → your personal mailbox (OVH → *Emails* → *Redirections*). The legal notice page uses this address as the contact for GDPR requests.
+Keep the records OVH created by default: the **MX** records (the mailbox depends on them) and the **A** records of the root domain and `www` (the OVH web hosting). Only add the `yorksoft` record. If the zone has a wildcard `*` record, the explicit `yorksoft` record still takes precedence.
+
+Email: create the mailbox included with the domain (OVH → *Emails*), e.g. `contact@benoitchamplon.fr`. It can send and receive (OVH webmail, or IMAP/SMTP in any mail client). The legal notice page uses this address as the contact for GDPR requests. No mail server is installed on the VPS.
 
 ## 2. VPS — first login and hardening
 
@@ -200,6 +204,8 @@ Delete the local `yorksoft-ci` private key once it is stored in GitHub.
 The `deploy` job runs on `ubuntu-latest`, copies `backend/compose.yml` to `/opt/suivi_mns/compose.yml`, then runs `docker compose pull && docker compose up -d --remove-orphans` and prunes old images.
 
 ## 6. Netcup data processing agreement (GDPR)
+
+Signed on 2026-11-09 with the answers below.
 
 netcup Customer Control Panel → *Master Data* → *Order Processing*:
 
