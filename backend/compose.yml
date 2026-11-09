@@ -29,7 +29,8 @@ services:
       - backend
     restart: unless-stopped
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health" ]
+      # The JRE Alpine image has no curl; busybox wget exits non-zero on HTTP errors
+      test: [ "CMD", "wget", "-q", "--spider", "http://localhost:8080/actuator/health" ]
       interval: 30s
       timeout: 5s
       retries: 3
@@ -37,14 +38,44 @@ services:
 
   front:
     image: bchamplon/suivi-mns-front:latest
-    ports:
-      - "80:80"
     networks:
       - backend
     restart: unless-stopped
 
+  # Single entry point: gets and renews the Let's Encrypt certificates and
+  # routes each domain to its container. Another site on this host (e.g. a
+  # portfolio on the root domain) only needs a new block in the Caddyfile below.
+  caddy:
+    image: caddy:2.10-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    configs:
+      - source: caddyfile
+        target: /etc/caddy/Caddyfile
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - front
+    networks:
+      - backend
+    restart: unless-stopped
+
+# Inline so the CI deploy job only has to copy this file to the server
+configs:
+  caddyfile:
+    content: |
+      yorksoft.benoitchamplon.fr {
+        reverse_proxy front:80
+      }
+
 volumes:
   postgres_data:
+  # Certificates: keep them across restarts to stay under Let's Encrypt rate limits
+  caddy_data:
+  caddy_config:
 
 networks:
   backend:

@@ -158,7 +158,8 @@ jobs:
   deploy:
     needs: [ backend-push, frontend-push ]
     if: always() && github.event_name == 'push' && (needs.backend-push.result == 'success' || needs.frontend-push.result == 'success')
-    runs-on: self-hosted
+    # The VPS is reachable over SSH from the internet, so a GitHub-hosted runner is enough
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -183,3 +184,5 @@ jobs:
             cd /opt/suivi_mns
             docker compose pull
             docker compose up -d --remove-orphans
+            # Every deploy pulls new images: drop the old ones so the disk doesn't fill up
+            docker image prune -f
