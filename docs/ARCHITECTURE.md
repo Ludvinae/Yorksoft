@@ -19,7 +19,7 @@ The repo is a monorepo: `backend/` and `frontend/` are two independently deploya
 - DTOs validate input (`@NotNull`, `@NotBlank`, `@Size`, `@Email`, `@Min`/`@Max`, `@Pattern` — e.g. passwords require 8–16 characters with at least one digit, one uppercase and one lowercase letter); JPA queries are parameterized (no string-concatenated SQL) and sortable fields are whitelisted (see [backend/docs/ARCHITECTURE.md](../backend/docs/ARCHITECTURE.md#search-filtering-and-pagination)); a global exception handler turns business/validation errors into a consistent response shape without leaking internal details.
 - **Known gaps, planned as upcoming work**:
   - JWTs currently carry no expiration claim and never expire; short-lived tokens with a refresh/auto-renewal flow are planned. The `localStorage` vs. `HttpOnly` cookie tradeoff (and the CSRF strategy that comes with a cookie) hasn't been decided yet.
-  - CORS is currently wide open (`allowedOrigins: *`) and should be restricted to the frontend's origin.
+  - CORS only allows the origins listed in `app.cors.allowed-origins` (`APP_CORS_ALLOWED_ORIGINS`): the production domain by default, `http://localhost:4200` in the `dev` profile. In production the front calls the API through `/api` on the same domain, so CORS doesn't come into play there.
   - No systematic review against the OWASP Top 10 has been done yet; this is planned as a dedicated hardening pass.
   - No GDPR / accessibility (RGAA/WCAG) compliance work has started yet: no defined data retention period, no right-to-erasure/anonymization flow, no formal accessibility audit.
   - No automated, tested backup/restore procedure exists. The Postgres Docker volume survives container recreation, but that is explicitly not a backup.

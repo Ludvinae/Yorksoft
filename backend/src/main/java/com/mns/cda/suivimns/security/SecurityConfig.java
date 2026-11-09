@@ -1,6 +1,7 @@
 package com.mns.cda.suivimns.security;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -31,6 +32,10 @@ public class SecurityConfig {
     protected final UserDetailsService userDetailsService;
     protected final JwtFilter jwtFilter;
 
+    // Origins allowed to call the API from a browser (comma-separated in the properties)
+    @Value("${app.cors.allowed-origins}")
+    private String[] allowedOrigins;
+
     @Bean
     public AuthenticationProvider authenticationProvider() {
 
@@ -55,7 +60,7 @@ public class SecurityConfig {
 
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedOrigins(List.of("*"));
+        corsConfiguration.setAllowedOrigins(List.of(allowedOrigins));
         corsConfiguration.setAllowedMethods(List.of("GET", "POST", "DELETE", "PUT", "PATCH"));
         corsConfiguration.setAllowedHeaders(List.of("*"));
         // Expose Retry-After pour que le frontend puisse afficher le delai d'attente

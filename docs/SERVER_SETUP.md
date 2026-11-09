@@ -244,6 +244,7 @@ Done in the repo:
 - HTTPS through Caddy, front no longer publishes port 80
 - Client IP forwarding (`server.forward-headers-strategy=native`)
 - CI `deploy` job on `ubuntu-latest`
+- CORS restricted to `https://yorksoft.benoitchamplon.fr` (`app.cors.allowed-origins`, overridable with `APP_CORS_ALLOWED_ORIGINS`; the `dev` profile allows `http://localhost:4200`)
 
 Still to do:
 
@@ -251,8 +252,6 @@ Still to do:
 - **Legal notice page** (frontend): mandatory for a public site in France — publisher, host (netcup GmbH), fictional demo data, personal data section matching section 6, contact address.
 - **Enrich the demo dataset** (backend): `data-init.sql` has 17 tickets and a single closed one, so the dashboard charts are nearly empty. Seed dates are hardcoded (2024…): use dates relative to `now()` so the demo doesn't age (tickets all overdue, empty "last months" charts).
 - **Timezone offset on SLA/timestamps** (backend): see `docs/ARCHITECTURE.md` "Known issues". Quick workaround noted on the card: `TZ=Europe/Paris` on the `app` service; the real fix is UTC end to end.
-- **Restrict CORS** (backend): `SecurityConfig` allows `*`. The front calls the API through `/api` on the same domain, so it can be limited to `https://yorksoft.benoitchamplon.fr`.
-
 Nice to have, not blocking:
 
 - Production config cleanup: `spring.jpa.show-sql=true` floods the logs; `frontend/compose.yml` is stale; decide whether Swagger UI / `/api-docs` stays public.- Uneven KPI card borders on the dashboards.

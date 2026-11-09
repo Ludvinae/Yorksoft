@@ -104,7 +104,7 @@ The core ticket workflow (open → assign → work → resolve → close, with p
 - Internationalization — the app is French-only today
 
 **Engineering hardening**
-- **Security**: short-lived JWTs with refresh/auto-renewal (tokens currently don't expire and can't be revoked before that), a stricter CORS policy, and a systematic review against the OWASP Top 10
+- **Security**: short-lived JWTs with refresh/auto-renewal (tokens currently don't expire and can't be revoked before that), and a systematic review against the OWASP Top 10
 - **Data**: a schema migration tool (Flyway/Liquibase) instead of Hibernate `ddl-auto`, and an automated, tested backup/restore procedure (none exists yet)
 - **GDPR and accessibility (RGAA/WCAG) compliance** — not addressed yet: no defined retention policy, no right-to-erasure flow, no formal accessibility audit
 - Deeper frontend tests (current ones mostly check that components construct, not real interaction behavior) and some browser-driven end-to-end coverage
