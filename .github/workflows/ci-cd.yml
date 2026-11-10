@@ -27,18 +27,8 @@ jobs:
     needs: changes
     if: needs.changes.outputs.backend == 'true'
     runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres:18
-        env:
-          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-
+    # No database here: Surefire only runs unit/** tests, which never start Spring.
+    # Add a postgres service back if integration tests are ever run in CI.
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -52,15 +42,6 @@ jobs:
 
       - name: Run tests
         working-directory: backend
-        env:
-          DB_HOST: localhost
-          DB_PORT: 5432
-          DB_NAME: testdb
-          DB_USER: ${{ secrets.POSTGRES_USER }}
-          DB_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-          JWT_SECRET: test-secret
-          DDL_AUTO: validate
-          SQL_INIT_MODE: never
         run: |
           chmod +x mvnw
           ./mvnw test
