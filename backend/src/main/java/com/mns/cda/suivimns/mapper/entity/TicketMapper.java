@@ -9,10 +9,12 @@ import com.mns.cda.suivimns.exception.ImpactNotFoundException;
 import com.mns.cda.suivimns.exception.UrgencyNotFoundException;
 import com.mns.cda.suivimns.exception.VersionNotFoundException;
 import com.mns.cda.suivimns.model.*;
+import org.mapstruct.BeanMapping;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.ReportingPolicy;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -52,12 +54,14 @@ public abstract class TicketMapper {
     @Mapping(target = "assignmentIds", source = "assignmentList")
     @Mapping(target = "themeIds", source = "classificationList")
     @Mapping(target = "historyIds", source = "historyList")
+    @Mapping(target = "idCurrentTheme", source = "currentTheme.idTheme")
     public abstract TicketDto toDto(Ticket ticket);
 
     //@Mapping(target = "idTicketType", source = "ticketType")
     public abstract List<TicketDto> toDtoList(List<Ticket> ticket);
 
 
+    @BeanMapping(unmappedTargetPolicy = ReportingPolicy.IGNORE)
     @Mapping(target = "version", source = "idVersion")
     @Mapping(target = "client", source = "idClient")
     @Mapping(target = "impact", source = "idImpact")
@@ -70,6 +74,7 @@ public abstract class TicketMapper {
 
 
     //Ticket creation
+    @BeanMapping(unmappedTargetPolicy = ReportingPolicy.IGNORE)
     @Mapping(target = "version", source = "idVersion")
     @Mapping(target = "client", source = "idClient")
     @Mapping(target = "impact", source = "idImpact")
@@ -202,6 +207,7 @@ public abstract class TicketMapper {
     }
 
     // Method helper pour Update
+    @BeanMapping(unmappedTargetPolicy = ReportingPolicy.IGNORE)
     @Mapping(target = "idTicket", ignore = true)
     @Mapping(target = "version", source = "idVersion")
     @Mapping(target = "client", source = "idClient")

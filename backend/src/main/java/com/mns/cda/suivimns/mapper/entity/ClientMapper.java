@@ -7,9 +7,11 @@ import com.mns.cda.suivimns.model.Client;
 import com.mns.cda.suivimns.model.License;
 import com.mns.cda.suivimns.model.Software;
 import com.mns.cda.suivimns.model.Ticket;
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
 import java.util.Objects;
@@ -20,6 +22,7 @@ public abstract class ClientMapper {
 
     public abstract List<ClientDto> toDtoList(List<Client> clientList);
 
+    @BeanMapping(unmappedTargetPolicy = ReportingPolicy.IGNORE)
     public abstract Client toEntity(ClientDto dto);
 
     // Pagination and filters
@@ -27,6 +30,7 @@ public abstract class ClientMapper {
     public abstract ClientListDto toListDto(Client client);
 
     // Method helper pour Update
+    @BeanMapping(unmappedTargetPolicy = ReportingPolicy.IGNORE)
     @Mapping(target = "idAppUser", ignore = true)
     @Mapping(target= "password", ignore = true)
     public abstract void updateEntityFromDto(ClientDto dto, @MappingTarget Client entity);

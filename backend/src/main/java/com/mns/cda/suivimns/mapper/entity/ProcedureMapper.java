@@ -8,9 +8,11 @@ import com.mns.cda.suivimns.exception.TechnicianNotFoundException;
 import com.mns.cda.suivimns.model.Procedure;
 import com.mns.cda.suivimns.model.Knowledge;
 import com.mns.cda.suivimns.model.Technician;
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.ReportingPolicy;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -30,6 +32,7 @@ public abstract class ProcedureMapper {
 
     public abstract List<ProcedureDto> toDtoList(List<Procedure> procedure);
 
+    @BeanMapping(unmappedTargetPolicy = ReportingPolicy.IGNORE)
     @Mapping(target="knowledge", source="idKnowledge")
     public abstract Procedure toEntity(ProcedureDto dto);
 
@@ -53,6 +56,7 @@ public abstract class ProcedureMapper {
     }
 
     // Method helper pour Update
+    @BeanMapping(unmappedTargetPolicy = ReportingPolicy.IGNORE)
     @Mapping(target = "idProcedure", ignore = true)
     @Mapping(target = "knowledge", source = "idKnowledge")
     public abstract void updateEntityFromDto(ProcedureDto dto, @MappingTarget Procedure entity);
