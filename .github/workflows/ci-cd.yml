@@ -18,10 +18,13 @@ jobs:
         id: filter
         with:
           filters: |
+            # A workflow change reruns both apps, so CI fixes get tested and deployed
             backend:
               - 'backend/**'
+              - '.github/workflows/**'
             frontend:
               - 'frontend/**'
+              - '.github/workflows/**'
 
   backend-test:
     needs: changes
