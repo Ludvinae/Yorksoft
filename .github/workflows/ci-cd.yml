@@ -168,5 +168,8 @@ jobs:
             cd /opt/suivi_mns
             docker compose pull
             docker compose up -d --remove-orphans
+            # Compose doesn't recreate a container when only an inline config's content changes:
+            # recreate Caddy so Caddyfile edits apply (a second of downtime, certificates are in a volume)
+            docker compose up -d --force-recreate --no-deps caddy
             # Every deploy pulls new images: drop the old ones so the disk doesn't fill up
             docker image prune -f
