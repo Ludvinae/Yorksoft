@@ -10,7 +10,7 @@ The showcase runs on fictional seeded data. Visitors only use the temporary tria
 |---|---|
 | Domain | `benoitchamplon.fr`, registered at OVH (DNS zone managed there) |
 | App URL | `https://yorksoft.benoitchamplon.fr` |
-| Root domain | `benoitchamplon.fr` / `www`: OVH web hosting (100 MB, included with the domain), planned for a future static portfolio |
+| Root domain | `benoitchamplon.fr` / `www`: static portfolio on GitHub Pages (repo `Ludvinae/Portfolio`), not on this server |
 | Email | OVH mailbox (15 GB, included with the domain), e.g. `contact@benoitchamplon.fr` |
 | Server | netcup VPS Lite (2 vCPU / 4 GB RAM, IPv4 + IPv6), Debian 13 (trixie), user `yorkhuul` |
 | Stack | `backend/compose.yml`, copied to `/opt/suivi_mns/` by the CI `deploy` job |
@@ -41,7 +41,7 @@ Check propagation:
 nslookup yorksoft.benoitchamplon.fr 8.8.8.8
 ```
 
-Keep the records OVH created by default: the **MX** records (the mailbox depends on them) and the **A** records of the root domain and `www` (the OVH web hosting). Only add the `yorksoft` record. If the zone has a wildcard `*` record, the explicit `yorksoft` record still takes precedence.
+Leave the **MX** records and the SPF TXT alone (the mailbox depends on them), and don't touch the root domain and `www` records: they point to GitHub Pages (4 A + 4 AAAA, `www` CNAME to `ludvinae.github.io`, plus the `_github-pages-challenge-ludvinae` TXT that verifies the domain). Only add the `yorksoft` record. If the zone has a wildcard `*` record, the explicit `yorksoft` record still takes precedence.
 
 Email: create the mailbox included with the domain (OVH → *Emails*), e.g. `contact@benoitchamplon.fr`. It can send and receive (OVH webmail, or IMAP/SMTP in any mail client). The legal notice page uses this address as the contact for GDPR requests. No mail server is installed on the VPS.
 
