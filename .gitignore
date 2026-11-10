@@ -3,3 +3,6 @@ docs/soutenance/
 docs/sujet/
 docs/context/
 .idea/
+
+secret/
+secret/*
