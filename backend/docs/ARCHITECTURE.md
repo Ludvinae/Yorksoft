@@ -79,6 +79,16 @@ The actors driving this lifecycle map directly onto the role model:
 
 Ticket search combines an open-ended set of optional filters (status, client, software, version, technician, dates, keyword, priority, SLA breach). Rather than a `findBy...` method per filter combination, `dao/search` builds each criterion as a `Specification` and composes only the ones present in the request; sortable fields are restricted to an explicit whitelist rather than accepting an arbitrary field name from the client. Dashboard aggregations use JPQL where the projection is simple and native SQL for time-based aggregates (e.g. average time-to-pickup via `EXTRACT(EPOCH FROM ...)`), trading some Postgres-specific coupling for readable aggregation queries.
 
+## Dates and time zones
+
+Every `LocalDateTime` (ticket dates, SLA deadline, history, comments, trial expiry) is a UTC value:
+
+- `SuiviMnsApplication.main` sets the JVM default zone to UTC, so `LocalDateTime.now()`, the `Clock` bean (`Clock.systemUTC()`) and JPA auditing produce UTC on a dev machine in `Europe/Paris` as on the server.
+- `config/TimeConfig` registers a Jackson serializer that writes `"2026-11-10T11:00:00Z"`. The `Z` tells the browser the value is UTC, so `new Date(...)` and Angular's `date` pipe show it in the visitor's zone. Without it, a browser reads the value as its own local time, which showed every time 1–2 hours off on the server (fixed 2026-11-10).
+- Incoming values with an offset (`…Z`, `…+01:00`) are converted to UTC; a value without one is taken as UTC.
+- `LocalDate` values (search filters, chart buckets, publication dates) carry no time and are left as is. Day boundaries computed on the backend (`LocalDate.now()`, `date_trunc` in dashboard queries) are UTC days, so an event between midnight and 1–2 a.m. Paris time counts for the previous day.
+- The SLA deadline is a plain duration added to `now()` (no business hours), so it doesn't depend on a zone.
+
 ## Testing
 
 Unit tests per layer (DTO validation, isolated service-level business rules like illegal status transitions or priority/SLA calculation, controller HTTP status + delegation, security/ownership checks) plus full-stack integration tests that boot the real Spring context and drive it through MockMvc with a real security config and a test-data factory — e.g. assign → pick up → hold/resume → resolve → close is covered end to end at the API level. Run with `./mvnw test`.
