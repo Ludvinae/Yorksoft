@@ -2,6 +2,15 @@
 
 History of design/architecture decisions, session milestones, and choices made along the way — **not** a code changelog (see git history for that). Organized by date, most recent session on top. Update at the end of each work session with Claude.
 
+## 2026-11-10
+
+- Server and domain set up (`docs/SERVER_SETUP.md` sections 1 to 6): DNS A record `yorksoft` → `62.83.92.92` (no wildcard in the zone, root domain stays on OVH hosting), VPS hardened (key-only SSH as `yorkhuul`, root and password login off, ufw 22/80/443, unattended-upgrades), Docker with capped logs, production `.env` with secrets generated on the server, GitHub `SERVER_*` secrets updated. Done through a one-shot bootstrap script run as root, leaving SSH hardening as a separate last step so a broken key can't lock the user out.
+- netcup image is Debian 13 (trixie), not Ubuntu: `sudo` isn't installed, so `usermod -aG sudo` failed and the script stopped before writing the SSH keys. Debian 13's `adduser` does accept an uppercase name, which left a duplicate `Yorkhuul` user owning `.env` (unreadable by the deploy user); removed. Guide updated with both pitfalls.
+- Bots were already brute-forcing root passwords within minutes of the server going up, which is why password login was turned off as soon as key login was confirmed.
+- Pasting multi-line commands into the user's terminal wrapped them into several lines and broke them; uploading a script and running a short one-liner worked instead.
+- Claude can't SSH as the user with `~/.ssh/id_ed25519` from its Bash (passphrase, BatchMode); server checks went through the CI key instead, whose local private copy was deleted once stored in GitHub.
+- First deploy deliberately held (user's choice): pushing the 4 local commits would put the site online, and the legal notice page (mandatory in France), richer demo data and the timezone fix come first.
+
 ## 2026-11-09
 
 - Hosting decision (user): the app goes online as a portfolio showcase on a rented host and domain, with fictional seeded data; visitors only use the rank 0 trial technician account, never the seeded role accounts.

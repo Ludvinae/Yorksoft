@@ -12,7 +12,7 @@ The showcase runs on fictional seeded data. Visitors only use the temporary tria
 | App URL | `https://yorksoft.benoitchamplon.fr` |
 | Root domain | `benoitchamplon.fr` / `www`: OVH web hosting (100 MB, included with the domain), planned for a future static portfolio |
 | Email | OVH mailbox (15 GB, included with the domain), e.g. `contact@benoitchamplon.fr` |
-| Server | netcup VPS Lite (2 vCPU / 4 GB RAM, IPv4 + IPv6), Ubuntu 24.04 LTS or Debian 12 |
+| Server | netcup VPS Lite (2 vCPU / 4 GB RAM, IPv4 + IPv6), Debian 13 (trixie), user `yorkhuul` |
 | Stack | `backend/compose.yml`, copied to `/opt/suivi_mns/` by the CI `deploy` job |
 
 Request path:
@@ -57,7 +57,8 @@ ssh root@<VPS_IP>
 
 ```bash
 apt update && apt full-upgrade -y
-adduser <user>                 # pick a strong password: sudo asks for it
+apt install -y sudo           # missing from the netcup Debian 13 image
+adduser <user>                 # lowercase name; pick a strong password: sudo asks for it
 usermod -aG sudo <user>
 ```
 
@@ -254,7 +255,7 @@ Done in the repo:
 
 Still to do:
 
-- **Server and domain**: sections 1 to 7 above.
+- **First deployment**: section 7 (DNS, VPS hardening, Docker, `.env` and GitHub secrets done on 2026-11-10).
 - **Legal notice page** (frontend): mandatory for a public site in France — publisher, host (netcup GmbH), fictional demo data, personal data section matching section 6, contact address.
 - **Enrich the demo dataset** (backend): `data-init.sql` has 17 tickets and a single closed one, so the dashboard charts are nearly empty. Seed dates are hardcoded (2024…): use dates relative to `now()` so the demo doesn't age (tickets all overdue, empty "last months" charts).
 - **Timezone offset on SLA/timestamps** (backend): see `docs/ARCHITECTURE.md` "Known issues". Quick workaround noted on the card: `TZ=Europe/Paris` on the `app` service; the real fix is UTC end to end.
