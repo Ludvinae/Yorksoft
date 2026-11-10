@@ -262,6 +262,14 @@ Prerequisites: DNS record resolves to the VPS, ports 80/443 open, `.env` in plac
 - **502 on `/api/`**: the backend is still starting or crashed — `docker compose logs app` (missing `.env` variable, DB not ready).
 - **Every visitor hits the trial account limit at once**: the client IP isn't forwarded. The chain relies on Caddy setting `X-Forwarded-For`, nginx appending to it, and `server.forward-headers-strategy=native` in `application.properties`.
 - **Old site still answering / no deploy**: check the `SERVER_*` secrets and that `<user>` is in the `docker` group.
+- **Can't log in with a seeded account** (`admin@yorksoft.fr`, …): on the server the passwords are the `APP_SEED_DEMO_*_PASSWORD` values of `/opt/suivi_mns/.env`, not the dev ones (`AdminPass1`…, which only exist in `application-dev.properties`). Read them from your machine:
+
+  ```bash
+  ssh yorkhuul@62.83.92.92 "grep APP_SEED_DEMO_ /opt/suivi_mns/.env"
+  ```
+
+  To check the backend got the same value as the file (prints the length + 1, e.g. `33` for a 32-char password): `ssh yorkhuul@62.83.92.92 "cd /opt/suivi_mns && docker compose exec -T app printenv APP_SEED_DEMO_ADMIN_PASSWORD | wc -c"`. The startup log line `Seeded password for N demo user(s)` confirms the seed ran; `still have the '{seed-…}' placeholder` means the variable is empty.
+- **Caddyfile change not applied**: Compose doesn't recreate a container when only an inline `configs` content changes. The CI `deploy` job forces it (`docker compose up -d --force-recreate --no-deps caddy`); by hand, run the same command.
 
 ## 8. Remaining before going live
 
