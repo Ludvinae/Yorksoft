@@ -10,7 +10,7 @@ export const routes: Routes = [
   {
     path: '',
     component: Login,
-    title: 'Login',
+    title: 'Connexion',
   },
   {
     path: 'dashboard',
