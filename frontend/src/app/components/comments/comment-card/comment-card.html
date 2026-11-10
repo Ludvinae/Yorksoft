@@ -4,13 +4,7 @@
     @if (comment) {
       <div class="flex items-start gap-3">
 
-        <div class="avatar placeholder">
-          <div class="bg-neutral text-neutral-content rounded w-12">
-            <span>
-              <img src="https://ui-avatars.com/api/?name={{ comment.authorFullName }}" />
-            </span>
-          </div>
-        </div>
+        <app-avatar [name]="comment.authorFullName" class="w-12 h-12 rounded" />
 
         <div class="flex-1">
 

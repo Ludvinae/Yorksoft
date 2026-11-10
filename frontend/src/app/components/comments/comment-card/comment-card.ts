@@ -3,10 +3,11 @@ import { DatePipe } from '@angular/common';
 import { UserRoleLabel } from '../../../pipe/UserRoleLabel';
 import { CommentForm } from '../comment-form/comment-form';
 import { AuthService } from '../../../services/business/auth-service';
+import { Avatar } from '../../avatar/avatar';
 
 @Component({
   selector: 'app-comment-card',
-  imports: [DatePipe, UserRoleLabel, CommentForm],
+  imports: [DatePipe, UserRoleLabel, CommentForm, Avatar],
   templateUrl: './comment-card.html',
   styleUrl: './comment-card.css',
 })

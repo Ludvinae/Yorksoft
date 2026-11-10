@@ -4,11 +4,7 @@
   <div class="flex flex-col items-center justify-center gap-1 p-2 text-center">
 
     <!-- Avatar carré -->
-    <div class="avatar">
-      <div class="w-8 h-8 rounded-lg">
-        <img src="https://ui-avatars.com/api/?name={{ auth.jwtInfo()?.name }}"  alt=""/>
-      </div>
-    </div>
+    <app-avatar [name]="auth.jwtInfo()?.name" class="w-8 h-8 rounded-lg text-xs" />
 
     <!-- User info -->
     <div class="leading-tight">

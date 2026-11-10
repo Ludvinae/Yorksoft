@@ -3,10 +3,11 @@ import { NavDesktop } from '../nav-desktop/nav-desktop';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../services/business/auth-service';
 import { TitleCasePipe } from '@angular/common';
+import { Avatar } from '../../avatar/avatar';
 
 @Component({
   selector: 'app-header-desktop',
-  imports: [NavDesktop, RouterLink, TitleCasePipe],
+  imports: [NavDesktop, RouterLink, TitleCasePipe, Avatar],
   templateUrl: './header-desktop.html',
   styleUrl: './header-desktop.css',
 })
