@@ -70,6 +70,8 @@ configs:
     content: |
       yorksoft.benoitchamplon.fr {
         reverse_proxy front:80
+        # HSTS: browsers stick to https for a year, even if a link or a typed URL says http
+        header Strict-Transport-Security "max-age=31536000"
         # Access logs with the visitor IP, kept 14 days (announced on the legal notice page).
         # Rotation is done by logrotate on the host (docs/SERVER_SETUP.md), so Caddy's own is off.
         log {
