@@ -57,6 +57,7 @@ services:
     volumes:
       - caddy_data:/data
       - caddy_config:/config
+      - /var/log/caddy:/var/log/caddy
     depends_on:
       - front
     networks:
@@ -69,6 +70,14 @@ configs:
     content: |
       yorksoft.benoitchamplon.fr {
         reverse_proxy front:80
+        # Access logs with the visitor IP, kept 14 days (announced on the legal notice page).
+        # Rotation is done by logrotate on the host (docs/SERVER_SETUP.md), so Caddy's own is off.
+        log {
+          output file /var/log/caddy/access.log {
+            roll_disabled
+          }
+          format json
+        }
       }
 
 volumes:

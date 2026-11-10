@@ -74,6 +74,12 @@ export const routes: Routes = [
         .then(m => m.ADMIN_ROUTES)
   },
   {
+    // Public: mandatory legal notice, reachable without logging in
+    path: 'mentions-legales',
+    loadComponent: () => import('./pages/legal-notice/legal-notice').then((m) => m.LegalNotice),
+    title: 'Mentions légales',
+  },
+  {
     path: 'forbidden',
     component: Forbidden,
     title: 'Accès interdit',

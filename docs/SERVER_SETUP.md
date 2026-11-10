@@ -117,7 +117,7 @@ sudo usermod -aG docker <user>  # lets the CI run docker compose without sudo
 
 Log out and back in, then check: `docker compose version`.
 
-Cap container log size (nginx access logs, which contain visitor IPs, go to the Docker logs):
+Cap container log size (Docker rotates by size only, with no time limit, so no container logs visitor IPs there: nginx has `access_log off`):
 
 ```bash
 sudo tee /etc/docker/daemon.json <<'EOF'
@@ -128,6 +128,28 @@ sudo tee /etc/docker/daemon.json <<'EOF'
 EOF
 sudo systemctl restart docker
 ```
+
+### 3.1 Access logs (visitor IPs, 14 days)
+
+Caddy writes one JSON line per request (visitor IP, date, URL, status, user agent; `Authorization` and cookies are redacted) to `/var/log/caddy/access.log`, bind-mounted from the host. Rotation is left to logrotate: rotated daily, deleted after 14 days. That is the retention announced on the legal notice page (`/mentions-legales`): change both together.
+
+```bash
+sudo tee /etc/logrotate.d/caddy <<'EOF'
+/var/log/caddy/*.log {
+    daily
+    rotate 14
+    maxage 14
+    missingok
+    notifempty
+    compress
+    delaycompress
+    copytruncate
+}
+EOF
+sudo logrotate --debug /etc/logrotate.d/caddy   # dry run: no error expected
+```
+
+`copytruncate` because Caddy keeps the file open and doesn't reopen it on a signal. To investigate an attack: `sudo zgrep <ip> /var/log/caddy/access.log*`.
 
 ## 4. Deployment directory and production `.env`
 
@@ -252,11 +274,11 @@ Done in the repo:
 - Client IP forwarding (`server.forward-headers-strategy=native`)
 - CI `deploy` job on `ubuntu-latest`
 - CORS restricted to `https://yorksoft.benoitchamplon.fr` (`app.cors.allowed-origins`, overridable with `APP_CORS_ALLOWED_ORIGINS`; the `dev` profile allows `http://localhost:4200`)
+- Legal notice page (`/mentions-legales`, linked from the login page and the menus); visitor IPs logged by Caddy only, 14 days (section 3.1); avatars generated locally instead of loaded from ui-avatars.com
 
 Still to do:
 
 - **First deployment**: section 7 (DNS, VPS hardening, Docker, `.env` and GitHub secrets done on 2026-11-10).
-- **Legal notice page** (frontend): mandatory for a public site in France — publisher, host (netcup GmbH), fictional demo data, personal data section matching section 6, contact address.
 - **Enrich the demo dataset** (backend): `data-init.sql` has 17 tickets and a single closed one, so the dashboard charts are nearly empty. Seed dates are hardcoded (2024…): use dates relative to `now()` so the demo doesn't age (tickets all overdue, empty "last months" charts).
 - **Timezone offset on SLA/timestamps** (backend): see `docs/ARCHITECTURE.md` "Known issues". Quick workaround noted on the card: `TZ=Europe/Paris` on the `app` service; the real fix is UTC end to end.
 Nice to have, not blocking:

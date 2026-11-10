@@ -1,0 +1,126 @@
+<main class="mx-auto max-w-3xl px-4 py-8 sm:px-6 sm:py-12">
+
+  <h1 class="text-3xl font-bold">Mentions légales</h1>
+  <p class="mt-2 text-sm text-base-content/70">Dernière mise à jour : 10 novembre 2026</p>
+
+  <div class="mt-8 space-y-10 leading-relaxed [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:mb-3 [&_h3]:font-semibold [&_h3]:mt-4 [&_h3]:mb-1 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:space-y-1 [&_p+p]:mt-2">
+
+    <section>
+      <h2>Présentation du site</h2>
+      <p>
+        YorkSoft est une application de démonstration de suivi de tickets d'assistance, réalisée
+        comme projet de portfolio. Elle n'a pas de vocation commerciale.
+      </p>
+      <p>
+        Les clients, employés, tickets et articles présents dans l'application sont
+        <strong>entièrement fictifs</strong>. Toute ressemblance avec des personnes ou des
+        entreprises existantes serait fortuite.
+      </p>
+    </section>
+
+    <section>
+      <h2>Éditeur et directeur de la publication</h2>
+      <p>
+        Benoit Champlon, particulier.<br>
+        Contact : <a class="link" [href]="'mailto:' + contactEmail">{{ contactEmail }}</a>
+      </p>
+    </section>
+
+    <section>
+      <h2>Hébergement</h2>
+      <p>
+        netcup GmbH<br>
+        Emmy-Noether-Straße 10, 76131 Karlsruhe, Allemagne<br>
+        Téléphone : +49 721 7540755-0<br>
+        Site : <a class="link" href="https://www.netcup.com" target="_blank" rel="noopener noreferrer">www.netcup.com</a>
+      </p>
+      <p>
+        Le nom de domaine et la messagerie sont fournis par OVH SAS, 2 rue Kellermann,
+        59100 Roubaix, France.
+      </p>
+    </section>
+
+    <section>
+      <h2>Données personnelles</h2>
+      <p>
+        Le responsable du traitement est l'éditeur du site. Aucun compte personnel n'est
+        nécessaire pour utiliser la démonstration et aucune donnée n'est vendue, cédée ou
+        utilisée à des fins publicitaires.
+      </p>
+
+      <h3>Données traitées</h3>
+      <ul>
+        <li>
+          <strong>Adresse IP et données de connexion</strong> (date, page demandée, navigateur),
+          enregistrées dans les journaux d'accès du serveur.
+        </li>
+        <li>
+          <strong>Adresse IP, en mémoire uniquement</strong>, pour limiter le nombre de comptes
+          d'essai et de tentatives de connexion par adresse.
+        </li>
+        <li>
+          <strong>Identifiants des comptes d'essai</strong>, générés automatiquement (nom
+          « Visiteur », adresse en <code>&#64;demo.invalid</code>, mot de passe aléatoire). Vous ne
+          saisissez aucune donnée pour vous connecter.
+        </li>
+        <li>
+          <strong>Texte que vous saisissez</strong> dans les tickets et commentaires de la
+          démonstration. N'y indiquez aucune information personnelle.
+        </li>
+      </ul>
+      <p>Aucune donnée sensible au sens de l'article 9 du RGPD n'est collectée.</p>
+
+      <h3>Finalités et base légale</h3>
+      <p>
+        Ces données servent uniquement au fonctionnement et à la sécurité du site (prévention des
+        abus, diagnostic en cas d'attaque). Le traitement repose sur l'intérêt légitime de
+        l'éditeur (article 6.1.f du RGPD).
+      </p>
+
+      <h3>Durées de conservation</h3>
+      <ul>
+        <li>Journaux d'accès du serveur : <strong>14 jours</strong>, puis suppression automatique.</li>
+        <li>
+          Adresses IP des limites anti-abus : en mémoire vive, jamais écrites sur disque, effacées
+          au redémarrage de l'application.
+        </li>
+        <li>
+          Comptes d'essai et tout ce qu'ils ont créé (tickets, commentaires, articles) :
+          <strong>supprimés 24 heures</strong> après leur création.
+        </li>
+      </ul>
+
+      <h3>Destinataires</h3>
+      <p>
+        Les données ne sont accessibles qu'à l'éditeur. Elles sont hébergées par netcup GmbH,
+        sous-traitant lié par un contrat de traitement des données, sur des serveurs situés dans
+        l'Union européenne. Aucune donnée n'est transférée hors de l'Union européenne.
+      </p>
+
+      <h3>Cookies et stockage local</h3>
+      <p>
+        Le site n'utilise aucun cookie, aucun outil de mesure d'audience et aucun traceur
+        publicitaire. Il enregistre dans votre navigateur (stockage local) votre jeton de
+        connexion, le thème et les préférences d'affichage choisis : ces éléments sont
+        strictement nécessaires au fonctionnement du service et ne nécessitent pas de
+        consentement. Ils sont effacés à la déconnexion (jeton) ou avec les données de
+        navigation.
+      </p>
+
+      <h3>Vos droits</h3>
+      <p>
+        Vous disposez d'un droit d'accès, de rectification, d'effacement, de limitation et
+        d'opposition sur vos données. Pour l'exercer, écrivez à
+        <a class="link" [href]="'mailto:' + contactEmail">{{ contactEmail }}</a>.
+        Vous pouvez aussi introduire une réclamation auprès de la CNIL
+        (<a class="link" href="https://www.cnil.fr" target="_blank" rel="noopener noreferrer">www.cnil.fr</a>).
+      </p>
+    </section>
+
+  </div>
+
+  <div class="mt-12">
+    <app-back-button />
+  </div>
+
+</main>

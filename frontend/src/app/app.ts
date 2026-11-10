@@ -6,6 +6,7 @@ import { HeaderDesktop } from './components/nav/header-desktop/header-desktop';
 import { HeaderMobile } from './components/nav/header-mobile/header-mobile';
 import { NavMobile } from './components/nav/nav-mobile/nav-mobile';
 import { filter } from 'rxjs';
+import { AuthService } from './services/business/auth-service';
 
 /**
  * Composant principal, gère le layout et injecte le header et le contenu des pages
@@ -20,6 +21,7 @@ import { filter } from 'rxjs';
 export class App {
   private breakpoint = inject(BreakpointSwitch);
   private router = inject(Router);
+  private auth = inject(AuthService);
 
   protected readonly title = signal('Suivi-MNS-Frontend');
   protected currentUrl = signal(this.router.url);
@@ -34,8 +36,9 @@ export class App {
     });
   }
 
+  // No menu on the login page, nor for logged-out visitors on public pages (legal notice)
   displayNav = computed(() => {
-    return this.currentUrl() !== '/';
+    return this.currentUrl() !== '/' && this.auth.jwtInfo() !== null;
   });
 
   toggleDrawer() {

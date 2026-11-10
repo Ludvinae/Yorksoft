@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from '../../services/business/auth-service';
@@ -7,7 +7,7 @@ import { CenteredPage } from '../../components/layout/centered-page/centered-pag
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, CenteredPage],
+  imports: [ReactiveFormsModule, CenteredPage, RouterLink],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
