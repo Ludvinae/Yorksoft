@@ -5,6 +5,7 @@ import com.mns.cda.suivimns.exception.DemoUnavailableException;
 import com.mns.cda.suivimns.model.Technician;
 import com.mns.cda.suivimns.security.AppUserDetails;
 import com.mns.cda.suivimns.service.business.DemoAccountService;
+import com.mns.cda.suivimns.service.business.DemoTicketGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,13 +31,14 @@ class DemoAccountServiceUnitTest {
 
     @Mock private TechnicianDao technicianDao;
     @Mock private PasswordEncoder passwordEncoder;
+    @Mock private DemoTicketGenerator ticketGenerator;
 
     private final Clock clock = Clock.fixed(Instant.parse("2026-11-06T10:00:00Z"), ZoneOffset.UTC);
     private DemoAccountService service;
 
     @BeforeEach
     void setUp() {
-        service = new DemoAccountService(technicianDao, passwordEncoder, clock);
+        service = new DemoAccountService(technicianDao, passwordEncoder, clock, ticketGenerator);
         ReflectionTestUtils.setField(service, "ttlHours", 24);
         ReflectionTestUtils.setField(service, "maxActiveAccounts", 10);
     }
@@ -63,6 +65,7 @@ class DemoAccountServiceUnitTest {
         assertEquals("hashed", created.getPassword());
         assertTrue(details.isTrialTechnician());
         assertEquals(42, details.getId());
+        verify(ticketGenerator).generateHistory(42);
     }
 
     @Test

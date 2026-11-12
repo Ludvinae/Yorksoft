@@ -40,6 +40,7 @@ public class DemoAccountService {
     private final TechnicianDao technicianDao;
     private final PasswordEncoder passwordEncoder;
     private final Clock clock;
+    private final DemoTicketGenerator ticketGenerator;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -81,7 +82,9 @@ public class DemoAccountService {
         technician.setDemoExpiresAt(LocalDateTime.now(clock).plusHours(ttlHours));
 
         Technician saved = technicianDao.save(technician);
-        logger.info("Trial account created: id={}, expires at {}", saved.getIdAppUser(), saved.getDemoExpiresAt());
+        int tickets = ticketGenerator.generateHistory(saved.getIdAppUser());
+        logger.info("Trial account created: id={}, expires at {}, {} past tickets generated",
+                saved.getIdAppUser(), saved.getDemoExpiresAt(), tickets);
 
         return new AppUserDetails(saved);
     }

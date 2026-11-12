@@ -280,7 +280,7 @@ VALUES (NOW(), null, 'Bonjour, pourriez vous préciser la nature de votre probl�
 INSERT INTO assignment (assignment_date, end_date, id_ticket, id_manager, id_technician)
 VALUES ('2026-04-11 09:27:00', null, 1, 4, 5),
        ('2026-03-11 15:08:08', null, 3, 4, 6),
-       ('2026-03-03 13:24', null,  4, 4, 5);
+       ('2026-05-05 10:16:42', null,  4, 4, 5);
 
 
 
@@ -351,7 +351,355 @@ VALUES ('TICKET', 'Ticket', 'ph-ticket'),
 INSERT INTO activity (id_app_user, timestamp, description, id_activity_type)
 VALUES (5, NOW(), 'A écrit un commentaire sur le ticket #1', 2),
        (6, '2024-04-06 09:08:07', 'A publié un procedure sur la connaissance #1', 3),
-       (24, '2026-05-21 15:32:00', 'A ouvert le ticket #17', 1)
+       (24, '2026-05-21 15:32:00', 'A ouvert le ticket #17', 1);
+
+-- The hand-written tickets above are dated around 2026-05-21: shift them so that day becomes yesterday,
+-- otherwise the demo ages and they drop out of the dashboards' periods. Rows already dated NOW() are left alone.
+WITH s AS (SELECT date_trunc('day', localtimestamp) - TIMESTAMP '2026-05-22 00:00:00' AS shift)
+UPDATE ticket SET open_date = open_date + s.shift, close_date = close_date + s.shift,
+                  modification_date = modification_date + s.shift
+FROM s WHERE open_date < TIMESTAMP '2026-06-01 00:00:00';
+
+WITH s AS (SELECT date_trunc('day', localtimestamp) - TIMESTAMP '2026-05-22 00:00:00' AS shift)
+UPDATE history SET start_date = start_date + s.shift, end_date = end_date + s.shift
+FROM s WHERE id_ticket <> 2;
+
+UPDATE history SET start_date = t.open_date
+FROM ticket t WHERE t.id_ticket = 2 AND history.id_ticket = 2;
+
+WITH s AS (SELECT date_trunc('day', localtimestamp) - TIMESTAMP '2026-05-22 00:00:00' AS shift)
+UPDATE assignment SET assignment_date = assignment_date + s.shift, end_date = end_date + s.shift FROM s;
+
+WITH s AS (SELECT date_trunc('day', localtimestamp) - TIMESTAMP '2026-05-22 00:00:00' AS shift)
+UPDATE classification SET affectation_date = affectation_date + s.shift FROM s WHERE id_ticket <> 2;
+
+UPDATE classification SET affectation_date = t.open_date
+FROM ticket t WHERE t.id_ticket = 2 AND classification.id_ticket = 2;
+
+WITH s AS (SELECT date_trunc('day', localtimestamp) - TIMESTAMP '2026-05-22 00:00:00' AS shift)
+UPDATE activity SET timestamp = timestamp + s.shift
+FROM s WHERE timestamp BETWEEN TIMESTAMP '2026-01-01 00:00:00' AND TIMESTAMP '2026-06-01 00:00:00';
+
+-- SLA fields of the hand-written tickets, as TicketMetricsService would store them: active time spent in
+-- OPEN/ASSIGNED/IN_PROGRESS, deadline from the last refresh (now for an open ticket, the solve for a closed one,
+-- since the refresh is skipped once the close date is set).
+UPDATE ticket t
+SET active_time_in_seconds = m.active,
+    sla_deadline = m.ref_time + make_interval(secs => m.sla - m.active),
+    overdue = m.active > m.sla
+FROM (SELECT tk.id_ticket,
+             CAST(SUM(CASE WHEN s.code IN ('OPEN', 'ASSIGNED', 'IN_PROGRESS')
+                           THEN EXTRACT(EPOCH FROM COALESCE(h.end_date, localtimestamp) - h.start_date)
+                           ELSE 0 END) AS bigint) AS active,
+             CASE WHEN tk.close_date IS NULL THEN localtimestamp
+                  ELSE MAX(h.start_date) FILTER (WHERE s.code = 'SOLVED') END AS ref_time,
+             CASE WHEN tk.current_priority <= 25 THEN 72 * 3600
+                  WHEN tk.current_priority <= 50 THEN 24 * 3600
+                  WHEN tk.current_priority <= 75 THEN 8 * 3600
+                  ELSE 2 * 3600 END AS sla
+      FROM ticket tk
+      JOIN history h ON h.id_ticket = tk.id_ticket
+      JOIN status s ON s.id_status = h.id_status
+      GROUP BY tk.id_ticket, tk.close_date, tk.current_priority) m
+WHERE t.id_ticket = m.id_ticket;
+
+-- Generates p_count past tickets spread over the last p_days days (more of them recently, on working days),
+-- each assigned to one of p_technicians and taken through the workflow as far as its timeline reaches now:
+-- OPEN -> ASSIGNED -> IN_PROGRESS [-> WAITING_* -> IN_PROGRESS] -> SOLVED -> CLOSED. Writes the ticket, its
+-- history, assignment, classification, comments, and the technician's activity, the way the workflow services
+-- would. About 82% of the closed tickets meet their SLA, and about 1 in 3 goes through a long wait (3 to 25 days, not
+-- counted in the SLA) so that each technician keeps some active tickets. p_opener is the user who opens every ticket (a trial
+-- account, so the purge deletes them); null lets the technician or the client open it.
+-- Deterministic: the same p_salt gives the same tickets (relative to now). Returns the number of tickets.
+-- Also called by DemoTicketGenerator for each new trial account: keep its signature in sync.
+-- Kept as one statement (no semicolon inside the body) because Spring splits the seed script on semicolons.
+CREATE OR REPLACE FUNCTION demo_generate_tickets(p_technicians integer[], p_count integer, p_days integer,
+                                                 p_salt text, p_opener integer)
+RETURNS integer
+LANGUAGE sql
+AS $$
+WITH ref AS (
+    SELECT localtimestamp AS now_ts,
+           (SELECT array_agg(id_app_user ORDER BY id_app_user) FROM client) AS clients,
+           (SELECT array_agg(id_app_user ORDER BY id_app_user) FROM manager) AS managers,
+           (SELECT array_agg(id_version ORDER BY id_version) FROM version) AS versions,
+           (SELECT array_agg(id_urgency ORDER BY priority_factor) FROM urgency) AS urgencies,
+           (SELECT array_agg(id_impact ORDER BY priority_factor) FROM impact) AS impacts,
+           (SELECT array_agg(id_theme ORDER BY id_theme) FROM theme) AS themes
+),
+draw AS (
+    SELECT n, k, ((hashtext(p_salt || ':' || n || ':' || k) & 2147483647) % 100000) / 100000.0 AS u
+    FROM generate_series(1, p_count) AS n,
+         unnest(ARRAY['day', 'hour', 'client', 'version', 'urgency', 'impact', 'theme', 'text', 'manager',
+                      'technician', 'opener', 'call', 'sla', 'budget', 'wait', 'wait_kind', 'wait_len',
+                      'knowledge', 'stall']) AS k
+),
+u AS (
+    SELECT n,
+           MAX(u) FILTER (WHERE k = 'day') AS day, MAX(u) FILTER (WHERE k = 'hour') AS hour,
+           MAX(u) FILTER (WHERE k = 'client') AS client, MAX(u) FILTER (WHERE k = 'version') AS version,
+           MAX(u) FILTER (WHERE k = 'urgency') AS urgency, MAX(u) FILTER (WHERE k = 'impact') AS impact,
+           MAX(u) FILTER (WHERE k = 'theme') AS theme, MAX(u) FILTER (WHERE k = 'text') AS text,
+           MAX(u) FILTER (WHERE k = 'manager') AS manager, MAX(u) FILTER (WHERE k = 'technician') AS technician,
+           MAX(u) FILTER (WHERE k = 'opener') AS opener, MAX(u) FILTER (WHERE k = 'call') AS call,
+           MAX(u) FILTER (WHERE k = 'sla') AS sla, MAX(u) FILTER (WHERE k = 'budget') AS budget,
+           MAX(u) FILTER (WHERE k = 'wait') AS wait, MAX(u) FILTER (WHERE k = 'wait_kind') AS wait_kind,
+           MAX(u) FILTER (WHERE k = 'wait_len') AS wait_len, MAX(u) FILTER (WHERE k = 'knowledge') AS knowledge,
+           MAX(u) FILTER (WHERE k = 'stall') AS stall
+    FROM draw GROUP BY n
+),
+picked AS (
+    SELECT u.*,
+           r.now_ts,
+           date_trunc('day', r.now_ts) - floor(p_days * power(u.day, 1.6)) * interval '1 day' AS day0,
+           r.clients[1 + floor(u.client * cardinality(r.clients))::int] AS id_client,
+           r.versions[1 + floor(u.version * cardinality(r.versions))::int] AS id_version,
+           r.urgencies[CASE WHEN u.urgency < 0.5 THEN 1 WHEN u.urgency < 0.85 THEN 2 ELSE 3 END] AS id_urgency,
+           r.impacts[CASE WHEN u.impact < 0.45 THEN 1 WHEN u.impact < 0.75 THEN 2
+                          WHEN u.impact < 0.93 THEN 3 ELSE 4 END] AS id_impact,
+           r.themes[1 + floor(u.theme * cardinality(r.themes))::int] AS id_theme,
+           r.managers[CASE WHEN u.manager < 0.8 THEN 1 ELSE cardinality(r.managers) END] AS id_manager,
+           p_technicians[1 + floor(u.technician * cardinality(p_technicians))::int] AS id_technician
+    FROM u CROSS JOIN ref r
+),
+scored AS (
+    SELECT p.*,
+           LEAST(p.day0 - CASE EXTRACT(ISODOW FROM p.day0) WHEN 6 THEN 1 WHEN 7 THEN 2 ELSE 0 END * interval '1 day'
+                     + interval '8 hours' + p.hour * interval '9 hours 30 minutes',
+                 p.now_ts - interval '5 minutes' - p.hour * interval '3 hours') AS t0,
+           COALESCE(p_opener, CASE WHEN p.opener < 0.6 THEN p.id_technician ELSE p.id_client END) AS id_opener,
+           floor(LEAST(GREATEST(im.priority_factor + c.importance, 0), 3) / 3.0 * 70
+                 + LEAST(GREATEST(ur.priority_factor - vt.urgency_malus, 0), 2) / 2.0 * 30)::int AS priority,
+           th.code AS theme_code,
+           p.stall < 0.35 OR p.wait < 0.25 AS has_wait,
+           CASE WHEN p.stall < 0.35 THEN 259200 + p.wait_len * 1900800
+                WHEN p.wait < 0.25 THEN 1800 + p.wait_len * 172800
+                ELSE 0 END AS wait_seconds,
+           CASE WHEN p.wait_kind < 0.7 THEN 'WAITING_CLIENT' ELSE 'WAITING_THIRD_PARTY' END AS wait_code
+    FROM picked p
+    JOIN impact im ON im.id_impact = p.id_impact
+    JOIN urgency ur ON ur.id_urgency = p.id_urgency
+    JOIN client c ON c.id_app_user = p.id_client
+    JOIN version v ON v.id_version = p.id_version
+    JOIN version_type vt ON vt.id_version_type = v.id_version_type
+    JOIN theme th ON th.id_theme = p.id_theme
+),
+budgeted AS (
+    SELECT s.*,
+           sla.seconds AS sla_seconds,
+           sla.seconds * CASE WHEN s.sla < 0.82 THEN 0.25 + 0.7 * s.budget ELSE 1.08 + 1.2 * s.budget END AS budget_seconds
+    FROM scored s
+    CROSS JOIN LATERAL (SELECT CASE WHEN s.priority <= 25 THEN 72 * 3600 WHEN s.priority <= 50 THEN 24 * 3600
+                                    WHEN s.priority <= 75 THEN 8 * 3600 ELSE 2 * 3600 END AS seconds) sla
+),
+timed AS (
+    SELECT b.*,
+           b.t0 + make_interval(secs => b.budget_seconds * 0.8 * 0.12) AS t1,
+           b.t0 + make_interval(secs => b.budget_seconds * 0.8 * 0.25) AS t2,
+           b.t0 + make_interval(secs => b.budget_seconds * 0.8 * CASE WHEN b.has_wait THEN 0.55 ELSE 1 END) AS t3,
+           b.t0 + make_interval(secs => b.budget_seconds * 0.8 * CASE WHEN b.has_wait THEN 0.55 ELSE 1 END
+                                        + b.wait_seconds) AS t4,
+           b.t0 + make_interval(secs => b.budget_seconds * 0.8
+                                        + b.wait_seconds) AS t5,
+           b.t0 + make_interval(secs => GREATEST(b.budget_seconds, b.budget_seconds * 0.8 + 300)
+                                        + b.wait_seconds) AS t6
+    FROM budgeted b
+),
+numbered AS (
+    SELECT t.*, nextval(pg_get_serial_sequence('ticket', 'id_ticket'))::integer AS id_ticket
+    FROM (SELECT * FROM timed ORDER BY t0) t
+),
+texts (theme_code, variant, title, description, solution) AS (
+    VALUES ('HANDLING_ERROR', 0, 'Fichier supprimé par erreur',
+            'Le client a supprimé un fichier de travail partagé et souhaite le récupérer.',
+            'Fichier restauré depuis la corbeille du serveur, procédure de récupération expliquée au client.'),
+           ('HANDLING_ERROR', 1, 'Saisie validée par erreur',
+            'Une saisie a été validée avec de mauvaises valeurs et n''est plus modifiable.',
+            'Écriture annulée depuis le menu d''administration puis ressaisie avec le client.'),
+           ('HANDLING_ERROR', 2, 'Mauvaise période exportée',
+            'Le client a exporté la mauvaise période et a écrasé son fichier précédent.',
+            'Export relancé sur la bonne période, ancien fichier récupéré depuis l''historique des versions.'),
+           ('SYSTEM_ERROR', 0, 'Erreur au démarrage de l''application',
+            'L''application se ferme dès l''ouverture avec un message d''erreur système.',
+            'Cache local corrompu supprimé, l''application démarre normalement.'),
+           ('SYSTEM_ERROR', 1, 'Plantage à l''enregistrement',
+            'Le logiciel se ferme sans message au moment d''enregistrer un document.',
+            'Droits d''écriture du dossier de travail rétablis.'),
+           ('SYSTEM_ERROR', 2, 'Service arrêté après mise à jour',
+            'Le service ne redémarre plus depuis l''installation de la dernière mise à jour.',
+            'Dépendance manquante réinstallée, service redémarré.'),
+           ('NETWORK_ISSUE', 0, 'Connexion au serveur perdue',
+            'Les postes perdent régulièrement la connexion au serveur de l''application.',
+            'Délai d''expiration du proxy augmenté, connexion stable depuis.'),
+           ('NETWORK_ISSUE', 1, 'Synchronisation hors ligne impossible',
+            'Les données saisies hors ligne ne remontent plus vers le serveur.',
+            'Pare-feu du client configuré pour autoriser le port de synchronisation.'),
+           ('NETWORK_ISSUE', 2, 'Accès distant refusé',
+            'Le client ne parvient plus à se connecter depuis l''extérieur de son entreprise.',
+            'Adresse IP publique du client ajoutée à la liste autorisée.'),
+           ('RESPONSE_TIME', 0, 'Lenteurs à l''ouverture des dossiers',
+            'L''ouverture d''un dossier prend plus d''une minute sur tous les postes.',
+            'Index de la base reconstruits, temps d''ouverture revenu à la normale.'),
+           ('RESPONSE_TIME', 1, 'Recherche très lente',
+            'La recherche de fiches met plusieurs minutes à afficher les résultats.',
+            'Filtre par défaut corrigé pour ne plus charger tout l''historique.'),
+           ('RESPONSE_TIME', 2, 'Rapports mensuels interminables',
+            'La génération des rapports mensuels n''aboutit plus avant la fin de la journée.',
+            'Génération planifiée la nuit, rapports disponibles le matin.'),
+           ('BUG', 0, 'Montants arrondis incorrectement',
+            'Les totaux affichés diffèrent de quelques centimes de la somme des lignes.',
+            'Correctif d''arrondi installé.'),
+           ('BUG', 1, 'Bouton de validation inactif',
+            'Le bouton Valider reste grisé alors que le formulaire est complet.',
+            'Contournement donné en attendant le correctif : valider avec la touche Entrée.'),
+           ('BUG', 2, 'Dates décalées d''un jour dans les exports',
+            'Les dates saisies apparaissent avec un jour de décalage dans les exports.',
+            'Fuseau horaire du poste corrigé, correctif prévu dans la prochaine version.'),
+           ('CONFIGURATION_ERROR', 0, 'Imprimante par défaut introuvable',
+            'Les impressions partent vers une imprimante qui n''existe plus.',
+            'Imprimante par défaut reconfigurée dans les paramètres du logiciel.'),
+           ('CONFIGURATION_ERROR', 1, 'Mauvais taux de TVA appliqué',
+            'Les factures utilisent un ancien taux de TVA.',
+            'Table des taux mise à jour dans le paramétrage.'),
+           ('CONFIGURATION_ERROR', 2, 'Licence non reconnue sur un nouveau poste',
+            'Le logiciel indique que la licence n''est pas valide sur un poste récemment installé.',
+            'Licence réaffectée au nouveau poste depuis le portail client.'),
+           ('OTHER_ISSUE', 0, 'Demande de formation',
+            'Le client souhaite une démonstration des nouvelles fonctionnalités.',
+            'Session de prise en main réalisée à distance avec le client.'),
+           ('OTHER_ISSUE', 1, 'Question sur la facturation',
+            'Le client ne comprend pas une ligne de sa dernière facture de maintenance.',
+            'Détail de la ligne expliqué, demande transmise au service commercial.'),
+           ('OTHER_ISSUE', 2, 'Création de comptes utilisateurs',
+            'Le client souhaite ajouter trois nouveaux utilisateurs.',
+            'Comptes créés et identifiants transmis au client.')
+),
+phases AS (
+    SELECT n.id_ticket, ph.seq, ph.code, ph.start_date,
+           CASE WHEN ph.end_date <= n.now_ts THEN ph.end_date END AS end_date,
+           ph.id_actor, ph.reason
+    FROM numbered n
+    CROSS JOIN LATERAL (
+        VALUES (1, 'OPEN', n.t0, n.t1, n.id_opener, CAST(NULL AS text)),
+               (2, 'ASSIGNED', n.t1, n.t2, n.id_manager, NULL),
+               (3, 'IN_PROGRESS', n.t2, n.t3, n.id_technician, NULL),
+               (4, n.wait_code, n.t3, n.t4, n.id_technician,
+                CASE WHEN n.wait_code = 'WAITING_CLIENT' THEN 'En attente de précisions du client'
+                     ELSE 'En attente d''un correctif de l''éditeur' END),
+               (5, 'IN_PROGRESS', n.t4, n.t5, n.id_technician, NULL),
+               (6, 'SOLVED', n.t5, n.t6, n.id_technician, NULL),
+               (7, 'CLOSED', n.t6, NULL, n.id_technician, 'Solution validée par le client')
+    ) AS ph (seq, code, start_date, end_date, id_actor, reason)
+    WHERE ph.start_date <= n.now_ts
+      AND (n.has_wait OR ph.seq NOT IN (4, 5))
+),
+ticket_rows AS (
+    SELECT n.*,
+           x.title, x.description, x.solution,
+           cur.code AS current_status, cur.start_date AS modification_date,
+           active.seconds AS active_seconds
+    FROM numbered n
+    JOIN texts x ON x.theme_code = n.theme_code AND x.variant = floor(n.text * 3)::int
+    CROSS JOIN LATERAL (SELECT code, start_date FROM phases ph
+                        WHERE ph.id_ticket = n.id_ticket ORDER BY seq DESC LIMIT 1) cur
+    CROSS JOIN LATERAL (
+        SELECT CAST(GREATEST(0, EXTRACT(EPOCH FROM LEAST(n.t1, n.now_ts) - n.t0))
+                    + GREATEST(0, EXTRACT(EPOCH FROM LEAST(n.t2, n.now_ts) - n.t1))
+                    + GREATEST(0, EXTRACT(EPOCH FROM LEAST(n.t3, n.now_ts) - n.t2))
+                    + CASE WHEN n.has_wait THEN GREATEST(0, EXTRACT(EPOCH FROM LEAST(n.t5, n.now_ts) - n.t4)) ELSE 0 END
+               AS bigint) AS seconds
+    ) active
+),
+new_tickets AS (
+    INSERT INTO ticket (id_ticket, title, open_date, call_duration, current_priority, initial_priority, close_date,
+                        modification_date, description, solution, id_client, id_urgency, id_impact, id_version,
+                        current_status, id_current_theme, id_current_manager, id_current_technician,
+                        active_time_in_seconds, sla_deadline, overdue, id_knowledge)
+    SELECT r.id_ticket, r.title, r.t0,
+           CASE WHEN r.id_opener <> r.id_client THEN 120 + floor(r.call * 1500)::int END,
+           r.priority, r.priority,
+           CASE WHEN r.t6 <= r.now_ts THEN r.t6 END,
+           r.modification_date, r.description,
+           CASE WHEN r.t5 <= r.now_ts THEN r.solution END,
+           r.id_client, r.id_urgency, r.id_impact, r.id_version,
+           r.current_status, r.id_theme,
+           CASE WHEN r.t1 <= r.now_ts THEN r.id_manager END,
+           CASE WHEN r.t1 <= r.now_ts THEN r.id_technician END,
+           r.active_seconds,
+           CASE WHEN r.t6 <= r.now_ts THEN r.t5 ELSE r.now_ts END + make_interval(secs => r.sla_seconds - r.active_seconds),
+           r.active_seconds > r.sla_seconds,
+           CASE WHEN r.t5 <= r.now_ts AND r.knowledge < 0.3
+                THEN (SELECT MIN(k.id_knowledge) FROM knowledge k WHERE k.id_theme = r.id_theme) END
+    FROM ticket_rows r
+    RETURNING id_ticket
+),
+new_history AS (
+    INSERT INTO history (id_ticket, id_status, id_app_user, start_date, end_date, status_reason)
+    SELECT ph.id_ticket, s.id_status, ph.id_actor, ph.start_date, ph.end_date, ph.reason
+    FROM phases ph JOIN status s ON s.code = ph.code
+),
+new_assignments AS (
+    INSERT INTO assignment (id_ticket, id_manager, id_technician, assignment_date, end_date)
+    SELECT id_ticket, id_manager, id_technician, t1, NULL FROM numbered WHERE t1 <= now_ts
+),
+new_classifications AS (
+    INSERT INTO classification (id_ticket, id_theme, affectation_date)
+    SELECT id_ticket, id_theme, t0 FROM numbered
+),
+comments AS (
+    SELECT id_ticket, t3 AS date_sent, id_technician AS id_author,
+           CASE WHEN wait_code = 'WAITING_CLIENT'
+                THEN 'Bonjour, pourriez-vous nous envoyer une capture d''écran du message affiché ?'
+                ELSE 'Nous avons transmis le problème à l''éditeur et revenons vers vous dès réception du correctif.'
+           END AS content
+    FROM numbered WHERE has_wait AND t3 <= now_ts
+    UNION ALL
+    SELECT id_ticket, t4 - interval '10 minutes', id_client, 'Voici la capture demandée, merci.'
+    FROM numbered WHERE has_wait AND wait_code = 'WAITING_CLIENT' AND t4 <= now_ts
+),
+new_comments AS (
+    INSERT INTO comment (id_ticket, id_app_user, date_sent, content)
+    SELECT id_ticket, id_author, date_sent, content FROM comments
+),
+new_activities AS (
+    INSERT INTO activity (id_app_user, timestamp, description, id_activity_type)
+    SELECT a.id_app_user, a.timestamp, a.description, at.id_activity_type
+    FROM (
+        SELECT ph.id_actor AS id_app_user, ph.start_date AS timestamp,
+               CASE ph.seq WHEN 1 THEN 'A ouvert le ticket #' || ph.id_ticket
+                           WHEN 3 THEN 'A pris en charge le ticket #' || ph.id_ticket
+                           WHEN 4 THEN 'A mis le ticket #' || ph.id_ticket || ' en attente d''un '
+                                       || CASE WHEN ph.code = 'WAITING_CLIENT' THEN 'client' ELSE 'tiers' END
+                           WHEN 5 THEN 'A repris en charge le ticket #' || ph.id_ticket
+                           WHEN 6 THEN 'A proposé une solution pour le ticket #' || ph.id_ticket
+                           ELSE 'A clos le ticket #' || ph.id_ticket END AS description,
+               'TICKET' AS designation
+        FROM phases ph
+        WHERE ph.seq <> 2 AND ph.id_actor = ANY (p_technicians)
+        UNION ALL
+        SELECT id_technician, t1, 'A reçu l''attribution du ticket #' || id_ticket, 'ASSIGNMENT'
+        FROM numbered WHERE t1 <= now_ts
+        UNION ALL
+        SELECT id_author, date_sent, 'A commenté le ticket #' || id_ticket, 'COMMENT'
+        FROM comments WHERE id_author = ANY (p_technicians)
+    ) a
+    JOIN activity_type at ON at.designation = a.designation
+)
+SELECT CAST(COUNT(*) AS integer) FROM new_tickets
+$$;
+
+-- Six months of history for the seeded technicians (about 35 tickets each)
+SELECT demo_generate_tickets((SELECT array_agg(id_app_user ORDER BY id_app_user) FROM technician),
+                             245, 182, 'seed', NULL);
+
+-- The managers' side of those assignments (the function only logs the technicians' activity)
+INSERT INTO activity (id_app_user, timestamp, description, id_activity_type)
+SELECT a.id_manager, a.assignment_date,
+       'A attribué le ticket #' || a.id_ticket || ' à ' || u.first_name || ' ' || u.last_name,
+       (SELECT id_activity_type FROM activity_type WHERE designation = 'ASSIGNMENT')
+FROM assignment a
+JOIN app_user u ON u.id_app_user = a.id_technician
+WHERE a.id_ticket > 17;
 
 
 
