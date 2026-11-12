@@ -12,7 +12,7 @@ The showcase runs on fictional seeded data. Visitors only use the temporary tria
 | App URL | `https://yorksoft.benoitchamplon.fr` |
 | Root domain | `benoitchamplon.fr` / `www`: static portfolio on GitHub Pages (repo `Ludvinae/Portfolio`), not on this server |
 | Email | OVH mailbox (15 GB, included with the domain), e.g. `contact@benoitchamplon.fr` |
-| Server | netcup VPS Lite (2 vCPU / 4 GB RAM, IPv4 + IPv6), Debian 13 (trixie), user `yorkhuul` |
+| Server | netcup VPS Lite (2 vCPU / 4 GB RAM, IPv4 + IPv6), Debian 13 (trixie). IP and SSH user: `secret/server.md` (not committed) |
 | Stack | `backend/compose.yml`, copied to `/opt/suivi_mns/` by the CI `deploy` job |
 
 Request path:
@@ -265,10 +265,10 @@ Prerequisites: DNS record resolves to the VPS, ports 80/443 open, `.env` in plac
 - **Can't log in with a seeded account** (`admin@yorksoft.fr`, …): on the server the passwords are the `APP_SEED_DEMO_*_PASSWORD` values of `/opt/suivi_mns/.env`, not the dev ones (`AdminPass1`…, which only exist in `application-dev.properties`). Read them from your machine:
 
   ```bash
-  ssh yorkhuul@62.83.92.92 "grep APP_SEED_DEMO_ /opt/suivi_mns/.env"
+  ssh <user>@<VPS_IP> "grep APP_SEED_DEMO_ /opt/suivi_mns/.env"
   ```
 
-  To check the backend got the same value as the file (prints the length + 1, e.g. `33` for a 32-char password): `ssh yorkhuul@62.83.92.92 "cd /opt/suivi_mns && docker compose exec -T app printenv APP_SEED_DEMO_ADMIN_PASSWORD | wc -c"`. The startup log line `Seeded password for N demo user(s)` confirms the seed ran; `still have the '{seed-…}' placeholder` means the variable is empty.
+  To check the backend got the same value as the file (prints the length + 1, e.g. `33` for a 32-char password): `ssh <user>@<VPS_IP> "cd /opt/suivi_mns && docker compose exec -T app printenv APP_SEED_DEMO_ADMIN_PASSWORD | wc -c"`. The startup log line `Seeded password for N demo user(s)` confirms the seed ran; `still have the '{seed-…}' placeholder` means the variable is empty.
 - **Caddyfile change not applied**: Compose doesn't recreate a container when only an inline `configs` content changes. The CI `deploy` job forces it (`docker compose up -d --force-recreate --no-deps caddy`); by hand, run the same command.
 
 ## 8. Remaining before going live
