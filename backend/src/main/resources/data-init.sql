@@ -407,9 +407,10 @@ WHERE t.id_ticket = m.id_ticket;
 -- each assigned to one of p_technicians and taken through the workflow as far as its timeline reaches now:
 -- OPEN -> ASSIGNED -> IN_PROGRESS [-> WAITING_* -> IN_PROGRESS] -> SOLVED -> CLOSED. Writes the ticket, its
 -- history, assignment, classification, comments, and the technician's activity, the way the workflow services
--- would. About 82% of the closed tickets meet their SLA, and about 1 in 3 goes through a long wait (3 to 25 days, not
--- counted in the SLA) so that each technician keeps some active tickets. p_opener is the user who opens every ticket (a trial
--- account, so the purge deletes them); null lets the technician or the client open it.
+-- would. The active time (OPEN, ASSIGNED, IN_PROGRESS) meets the SLA for about 82% of the tickets, and about
+-- 1 in 3 goes through a long wait (3 to 25 days, not counted in the SLA) so that each technician keeps some
+-- active tickets. p_opener is the user who opens every ticket (a trial account, so the purge deletes them),
+-- null lets the technician or the client open it.
 -- Deterministic: the same p_salt gives the same tickets (relative to now). Returns the number of tickets.
 -- Also called by DemoTicketGenerator for each new trial account: keep its signature in sync.
 -- Kept as one statement (no semicolon inside the body) because Spring splits the seed script on semicolons.
@@ -494,15 +495,14 @@ budgeted AS (
 ),
 timed AS (
     SELECT b.*,
-           b.t0 + make_interval(secs => b.budget_seconds * 0.8 * 0.12) AS t1,
-           b.t0 + make_interval(secs => b.budget_seconds * 0.8 * 0.25) AS t2,
-           b.t0 + make_interval(secs => b.budget_seconds * 0.8 * CASE WHEN b.has_wait THEN 0.55 ELSE 1 END) AS t3,
-           b.t0 + make_interval(secs => b.budget_seconds * 0.8 * CASE WHEN b.has_wait THEN 0.55 ELSE 1 END
+           b.t0 + make_interval(secs => b.budget_seconds * 0.12) AS t1,
+           b.t0 + make_interval(secs => b.budget_seconds * 0.25) AS t2,
+           b.t0 + make_interval(secs => b.budget_seconds * CASE WHEN b.has_wait THEN 0.55 ELSE 1 END) AS t3,
+           b.t0 + make_interval(secs => b.budget_seconds * CASE WHEN b.has_wait THEN 0.55 ELSE 1 END
                                         + b.wait_seconds) AS t4,
-           b.t0 + make_interval(secs => b.budget_seconds * 0.8
-                                        + b.wait_seconds) AS t5,
-           b.t0 + make_interval(secs => GREATEST(b.budget_seconds, b.budget_seconds * 0.8 + 300)
-                                        + b.wait_seconds) AS t6
+           b.t0 + make_interval(secs => b.budget_seconds + b.wait_seconds) AS t5,
+           b.t0 + make_interval(secs => b.budget_seconds + b.wait_seconds
+                                        + GREATEST(b.budget_seconds * 0.25, 300)) AS t6
     FROM budgeted b
 ),
 numbered AS (

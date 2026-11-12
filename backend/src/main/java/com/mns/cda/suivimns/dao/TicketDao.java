@@ -331,10 +331,13 @@ public interface TicketDao extends JpaRepository<Ticket, Integer>, JpaSpecificat
     """, nativeQuery = true)
     List<Object[]> countActiveTicketsByAge(int id, LocalDateTime now);
 
+    // On time / late from the active time (overdue), not close_date vs sla_deadline: the SLA clock stops at
+    // SOLVED, so the wait for the client to confirm before closing must not count. Metrics are no longer
+    // refreshed once the close date is set, so overdue is the value at the last active status.
     @Query(value = """
         SELECT CAST(date_trunc(CAST(:unit AS text), close_date) AS date) AS bucket,
-               SUM(CASE WHEN close_date <= sla_deadline THEN 1 ELSE 0 END),
-               SUM(CASE WHEN close_date > sla_deadline THEN 1 ELSE 0 END)
+               SUM(CASE WHEN NOT overdue THEN 1 ELSE 0 END),
+               SUM(CASE WHEN overdue THEN 1 ELSE 0 END)
         FROM ticket
         WHERE id_current_technician = :id
           AND close_date >= :startDate
