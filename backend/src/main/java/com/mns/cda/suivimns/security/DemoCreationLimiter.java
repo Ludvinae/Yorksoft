@@ -4,14 +4,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
- * Limits how many trial accounts one IP can create (3 per hour by default).
+ * Limits how many trial accounts one IP can create (10 per hour by default).
  */
 @Component
 public class DemoCreationLimiter {
 
     private final FixedWindowCounter counter;
 
-    public DemoCreationLimiter(@Value("${app.demo.max-accounts-per-ip:3}") int maxPerIp,
+    public DemoCreationLimiter(@Value("${app.demo.max-accounts-per-ip:10}") int maxPerIp,
                                @Value("${app.demo.ip-window-seconds:3600}") long windowSeconds) {
         this.counter = new FixedWindowCounter(maxPerIp, windowSeconds);
     }

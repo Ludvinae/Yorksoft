@@ -40,7 +40,7 @@ A `401 Unauthorized` is returned on failed authentication; a `403 Forbidden` if 
 Public routes, meant for a portfolio deploy and disabled unless `APP_DEMO_ENABLED=true`:
 
 - `GET /demo` → `{ "enabled": bool, "ttlHours": n }`, used by the login page to show the "try it" button.
-- `POST /demo/technician` → `201` with a JWT as plain text (same format as `/log-in`) for a new trial technician: rank 0, generated name, `@demo.invalid` email, no usable password. `404` when the demo is disabled, `429` (with `Retry-After`) after 3 accounts per IP per hour, `503` when 200 trial accounts are already active.
+- `POST /demo/technician` → `201` with a JWT as plain text (same format as `/log-in`) for a new trial technician: rank 0, generated name, `@demo.invalid` email, no usable password. `404` when the demo is disabled, `429` (with `Retry-After`) after 10 accounts per IP per hour, `503` when 200 trial accounts are already active.
 - Anti-flooding: a trial account can create 20 tickets and 20 comments per hour (`APP_DEMO_MAX_TICKETS_PER_HOUR`, `APP_DEMO_MAX_COMMENTS_PER_HOUR`); beyond that `POST /ticket` and `POST /comment` return `429 TRIAL_RATE_LIMIT` with `Retry-After`. Real accounts are never limited.
 
 A trial account (rank `N0` in the JWT) can do everything a technician can on the tickets it creates, and comments them like any rank 1 technician (see Comments below), but gets `403 TRIAL_ACCOUNT_RESTRICTED` when editing a knowledge article it didn't write. It is purged, with everything it created, after `APP_DEMO_TTL_HOURS` (24 by default); its JWT stops working then.
